@@ -99,7 +99,7 @@ class CassandraDef(object):
     devel_exists = True
     _apache_base_url = 'http://www.apache.org'
     _svn_base_url = 'https://svn.apache.org/repos/asf'
-    _apache_path = 'incubator/cassandra'
+    _apache_path = 'cassandra'
     _archive_prefix = 'apache-cassandra'
   
     @classmethod 
