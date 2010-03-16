@@ -99,7 +99,7 @@ class CassandraDef(object):
     devel_exists = True
     _apache_base_url = 'http://www.apache.org'
     _svn_base_url = 'https://svn.apache.org/repos/asf'
-    _apache_path = 'incubator/cassandra'
+    _apache_path = 'cassandra'
     _archive_prefix = 'apache-cassandra'
   
     @classmethod 
@@ -147,13 +147,11 @@ class CassandraDef(object):
     @classmethod 
     def changelog(cls):
         return "%s/%s/tags/cassandra-%s/CHANGES.txt" % \
-                (cls._svn_base_url, "cassandra", cls.stable_version)
-                #(cls._svn_base_url, cls._apache_path, cls.stable_version)
+                (cls._svn_base_url, cls._apache_path, cls.stable_version)
 
     @classmethod 
     def subversion_url(cls):
-        #return "%s/%s" % (cls._svn_base_url, cls._apache_path)
-        return "%s/%s" % (cls._svn_base_url, "cassandra")
+        return "%s/%s" % (cls._svn_base_url, cls._apache_path)
 
 CONTEXT = {
     'GENERATE_CLEAN_URLS': GENERATE_CLEAN_URLS,
