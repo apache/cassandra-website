@@ -92,8 +92,8 @@ SITE_POST_PROCESSORS = {
 }
 
 class CassandraDef(object):
-    stable_version = '0.6.1'
-    stable_release_date = '2010-04-18'
+    stable_version = '0.6.2'
+    stable_release_date = '2010-05-28'
     devel_version = '0.6.0-rc1'
     devel_release_date = '2010-03-31'
     devel_exists = False
