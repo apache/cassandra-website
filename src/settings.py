@@ -94,9 +94,9 @@ SITE_POST_PROCESSORS = {
 class CassandraDef(object):
     stable_version = '0.6.4'
     stable_release_date = '2010-07-30'
-    devel_version = '0.6.0-rc1'
-    devel_release_date = '2010-03-31'
-    devel_exists = False
+    devel_version = '0.7.0-beta1'
+    devel_release_date = '2010-08-13'
+    devel_exists = True
     _apache_base_url = 'http://www.apache.org'
     _svn_base_url = 'https://svn.apache.org/repos/asf'
     _apache_path = 'cassandra'
