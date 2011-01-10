@@ -92,11 +92,14 @@ SITE_POST_PROCESSORS = {
 }
 
 class CassandraDef(object):
-    stable_version = '0.6.8'
-    stable_release_date = '2010-11-12'
+    oldstable_version = '0.6.9'
+    oldstable_release_date = '2011-01-09'
+    oldstable_exists = True
+    stable_version = '0.7.0'
+    stable_release_date = '2011-01-09'
     devel_version = '0.7.0-rc4'
     devel_release_date = '2011-01-01'
-    devel_exists = True
+    devel_exists = False
     _apache_base_url = 'http://www.apache.org'
     _svn_base_url = 'https://svn.apache.org/repos/asf'
     _apache_path = 'cassandra'
@@ -155,12 +158,20 @@ class CassandraDef(object):
 
 CONTEXT = {
     'GENERATE_CLEAN_URLS': GENERATE_CLEAN_URLS,
+    'cassandra_oldstable': CassandraDef.oldstable_version,
+    'cassandra_oldstable_release_date': CassandraDef.oldstable_release_date,
     'cassandra_stable': CassandraDef.stable_version,
     'cassandra_stable_release_date': CassandraDef.stable_release_date,
     'cassandra_devel': CassandraDef.devel_version,
     'cassandra_devel_release_date': CassandraDef.devel_release_date,
     'subversion_url': CassandraDef.subversion_url(),
     'changelog': CassandraDef.changelog(),
+    'oldbin_filename': CassandraDef.binary_filename(
+            CassandraDef.oldstable_version),
+    'oldbin_download': CassandraDef.binary_url(CassandraDef.oldstable_version),
+    'oldsrc_filename': CassandraDef.source_filename(
+            CassandraDef.oldstable_version),
+    'oldsrc_download': CassandraDef.source_url(CassandraDef.oldstable_version),
     'binary_filename': CassandraDef.binary_filename(),
     'binary_download': CassandraDef.binary_url(),
     'source_filename': CassandraDef.source_filename(),
@@ -170,6 +181,10 @@ CONTEXT = {
     'devsrc_filename': CassandraDef.source_filename(CassandraDef.devel_version),
     'devsrc_download': CassandraDef.source_url(CassandraDef.devel_version),
     'keys_url': CassandraDef.keys_url(),
+    'oldstable_binary_artifacts_url': CassandraDef.binary_artifacts_url(
+            CassandraDef.oldstable_version),
+    'oldstable_source_artifacts_url': CassandraDef.source_artifacts_url(
+            CassandraDef.oldstable_version),
     'binary_artifacts_url': CassandraDef.binary_artifacts_url(),
     'source_artifacts_url': CassandraDef.source_artifacts_url(),
     'devel_binary_artifacts_url': CassandraDef.binary_artifacts_url(
@@ -177,6 +192,7 @@ CONTEXT = {
     'devel_source_artifacts_url': CassandraDef.source_artifacts_url(
             CassandraDef.devel_version),
     'devel_exists': CassandraDef.devel_exists,
+    'oldstable_exists': CassandraDef.oldstable_exists,
 }
 
 FILTER = { 
