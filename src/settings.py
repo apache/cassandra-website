@@ -97,9 +97,9 @@ class CassandraDef(object):
     oldstable_exists = True
     stable_version = '0.8.5'
     stable_release_date = '2011-09-08'
-    devel_version = '0.8.0-rc1'
-    devel_release_date = '2011-05-17'
-    devel_exists = False
+    devel_version = '1.0.0-beta1'
+    devel_release_date = '2011-09-15'
+    devel_exists = True
     _apache_base_url = 'http://www.apache.org'
     _svn_base_url = 'https://svn.apache.org/repos/asf'
     _apache_path = 'cassandra'
