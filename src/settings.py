@@ -95,6 +95,9 @@ class CassandraDef(object):
     oldstable_version = '0.8.7'
     oldstable_release_date = '2011-10-10'
     oldstable_exists = True
+    veryoldstable_version = '0.7.10'
+    veryoldstable_release_date = '2011-10-31'
+    veryoldstable_exists = True
     stable_version = '1.0.1'
     stable_release_date = '2011-10-31'
     devel_version = '1.0.0-rc2'
@@ -115,9 +118,14 @@ class CassandraDef(object):
 
     @classmethod 
     def binary_path(cls, version):
-	base_version = version.split('-')[0]
+        base_version = version.split('-')[0]
         return "%s/%s/%s" % \
             (cls._apache_path, base_version, cls.binary_filename(version))
+
+    @classmethod 
+    def branch(cls, version):
+        base_version = version.split('-')[0]
+        return base_version.rsplit('.', 1)[0]
 
     @classmethod 
     def binary_url(cls, version=stable_version):
@@ -160,6 +168,8 @@ CONTEXT = {
     'GENERATE_CLEAN_URLS': GENERATE_CLEAN_URLS,
     'cassandra_oldstable': CassandraDef.oldstable_version,
     'cassandra_oldstable_release_date': CassandraDef.oldstable_release_date,
+    'cassandra_veryoldstable': CassandraDef.veryoldstable_version,
+    'cassandra_veryoldstable_release_date': CassandraDef.veryoldstable_release_date,
     'cassandra_stable': CassandraDef.stable_version,
     'cassandra_stable_release_date': CassandraDef.stable_release_date,
     'cassandra_devel': CassandraDef.devel_version,
@@ -172,6 +182,12 @@ CONTEXT = {
     'oldsrc_filename': CassandraDef.source_filename(
             CassandraDef.oldstable_version),
     'oldsrc_download': CassandraDef.source_url(CassandraDef.oldstable_version),
+    'veryoldbin_filename': CassandraDef.binary_filename(
+            CassandraDef.veryoldstable_version),
+    'veryoldbin_download': CassandraDef.binary_url(CassandraDef.veryoldstable_version),
+    'oldsrc_filename': CassandraDef.source_filename(
+            CassandraDef.veryoldstable_version),
+    'oldsrc_download': CassandraDef.source_url(CassandraDef.veryoldstable_version),
     'binary_filename': CassandraDef.binary_filename(),
     'binary_download': CassandraDef.binary_url(),
     'source_filename': CassandraDef.source_filename(),
@@ -185,6 +201,10 @@ CONTEXT = {
             CassandraDef.oldstable_version),
     'oldstable_source_artifacts_url': CassandraDef.source_artifacts_url(
             CassandraDef.oldstable_version),
+    'veryoldstable_binary_artifacts_url': CassandraDef.binary_artifacts_url(
+            CassandraDef.veryoldstable_version),
+    'veryoldstable_source_artifacts_url': CassandraDef.source_artifacts_url(
+            CassandraDef.veryoldstable_version),
     'binary_artifacts_url': CassandraDef.binary_artifacts_url(),
     'source_artifacts_url': CassandraDef.source_artifacts_url(),
     'devel_binary_artifacts_url': CassandraDef.binary_artifacts_url(
@@ -193,6 +213,11 @@ CONTEXT = {
             CassandraDef.devel_version),
     'devel_exists': CassandraDef.devel_exists,
     'oldstable_exists': CassandraDef.oldstable_exists,
+    'veryoldstable_exists': CassandraDef.veryoldstable_exists,
+    'devel_branch': CassandraDef.branch(CassandraDef.devel_version),
+    'stable_branch': CassandraDef.branch(CassandraDef.stable_version),
+    'oldstable_branch': CassandraDef.branch(CassandraDef.oldstable_version),
+    'veryoldstable_branch': CassandraDef.branch(CassandraDef.veryoldstable_version),
 }
 
 FILTER = { 
