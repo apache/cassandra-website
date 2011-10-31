@@ -185,9 +185,9 @@ CONTEXT = {
     'veryoldbin_filename': CassandraDef.binary_filename(
             CassandraDef.veryoldstable_version),
     'veryoldbin_download': CassandraDef.binary_url(CassandraDef.veryoldstable_version),
-    'oldsrc_filename': CassandraDef.source_filename(
+    'veryoldsrc_filename': CassandraDef.source_filename(
             CassandraDef.veryoldstable_version),
-    'oldsrc_download': CassandraDef.source_url(CassandraDef.veryoldstable_version),
+    'veryoldsrc_download': CassandraDef.source_url(CassandraDef.veryoldstable_version),
     'binary_filename': CassandraDef.binary_filename(),
     'binary_download': CassandraDef.binary_url(),
     'source_filename': CassandraDef.source_filename(),
