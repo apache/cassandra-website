@@ -1,1 +1,5 @@
-$(document).ready(function(){$(".rc").corner();$("#tabs").tabs()});
+
+$(document).ready(function(){
+    $('.rc').corner();
+    $("#tabs").tabs();
+});
