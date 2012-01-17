@@ -105,6 +105,7 @@ class CassandraDef(object):
     devel_exists = False
     _apache_base_url = 'http://www.apache.org'
     _svn_base_url = 'https://svn.apache.org/repos/asf'
+    _git_url = 'http://git-wip-us.apache.org/repos/asf?p=cassandra.git'
     _apache_path = 'cassandra'
     _archive_prefix = 'apache-cassandra'
   
@@ -157,8 +158,8 @@ class CassandraDef(object):
 
     @classmethod 
     def changelog(cls):
-        return "%s/%s/tags/cassandra-%s/CHANGES.txt" % \
-                (cls._svn_base_url, cls._apache_path, cls.stable_version)
+        return "%s;a=blob_plain;f=CHANGES.txt;hb=refs/tags/cassandra-%s" % \
+                (cls._git_url, cls.stable_version)
 
     @classmethod 
     def subversion_url(cls):
