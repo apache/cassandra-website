@@ -1,17 +1,17 @@
 {% extends "skeleton/_base.html" %}
 {% block content %}
-<div class="span-16">
-{% if devel_exists or oldstable_exists %}
-  <h2 class="hdr">Downloads</h2>
-{% else %}
-  <h2 class="hdr">Download</h2>
-{% endif %}
+<div class="span-24">
+  <h2 class="hdr">Cassandra Server</h2>
+
+  Cassandra releases include the core server, the <a href="http://wiki.apache.org/cassandra/NodeTool">nodetool</a> administration command-line interface, and a development shell (<a href="http://cassandra.apache.org/doc/cql/CQL.html"><tt>cqlsh</tt></a> and the old <tt>cassandra-cli</tt>).
 
   <p>
   The latest stable release of Apache Cassandra is {{ cassandra_stable }}
   (released on {{ cassandra_stable_release_date }}).  <i>If you're just
   starting out, download this one.</i>
   </p>
+
+  Apache provides binary tarballs and Debian packages:
 
   <ul>
     <li>
@@ -25,16 +25,36 @@
     [<a href="{{ binary_artifacts_url }}.sha1">SHA1</a>]
     </li>
     <li>
-    <a class="filename" 
-       href="{{ source_download }}"
-       onclick="javascript: pageTracker._trackPageview('/clicks/source_download');">
-      {{ source_filename }}
-    </a>
-    [<a href="{{ source_artifacts_url }}.asc">PGP</a>]
-    [<a href="{{ source_artifacts_url }}.md5">MD5</a>]
-    [<a href="{{ source_artifacts_url }}.sha1">SHA1</a>]
+    <a href="http://wiki.apache.org/cassandra/DebianPackaging">Debian installation instructions</a>
     </li>
-  </ul> 
+  </ul>
+
+  <h2 class="hdr">Third Party Distributions</h2>
+
+  <ul>
+    <li><a href="http://www.datastax.com/products/community">DataStax Community</a> is available in Linux rpm, deb, and tar packages, a Windows MSI installer, and a Mac OS X binary.
+  </ul>
+
+  <h2 class="hdr">CQL Drivers</h3>
+  <p>
+  Starting with version 0.8, Cassandra supports
+  <a href="http://cassandra.apache.org/doc/cql/CQL.html">CQL</a> 
+  (Cassandra Query Language), an SQL-alike alternative to
+  the traditional 
+  <a href="http://wiki.apache.org/cassandra/ClientOptions">RPC interface</a>.  
+  Drivers are available for a variety of languages and can
+  be downloaded from their respective
+  <a href="http://code.google.com/a/apache-extras.org/hosting/search?q=label:cql">
+  Apache Extras hosted pages</a>.
+  </p>
+
+  <p>
+  New users to Cassandra should be sure to check out the
+  <a href="http://wiki.apache.org/cassandra/GettingStarted">Getting Started</a> 
+  guide.
+  </p>
+
+  <h2 class="hdr">Previous and Archived Cassandra Server Releases</h2>
 
   {% if oldstable_exists %}
   <p>
@@ -51,13 +71,9 @@
     [<a href="{{ oldstable_binary_artifacts_url }}.md5">MD5</a>]
     [<a href="{{ oldstable_binary_artifacts_url }}.sha1">SHA1</a>]
     </li>
-    <li>
-    <a class="filename" href="{{ oldsrc_download }}">{{ oldsrc_filename }}</a>
-    [<a href="{{ oldstable_source_artifacts_url }}.asc">PGP</a>]
-    [<a href="{{ oldstable_source_artifacts_url }}.md5">MD5</a>]
-    [<a href="{{ oldstable_source_artifacts_url }}.sha1">SHA1</a>]
-    </li>
   </ul>
+  {% endif %}
+
   {% if veryoldstable_exists %}
   <p>
   The lastest release on the {{ veryoldstable_branch }} branch is
@@ -71,14 +87,7 @@
     [<a href="{{ veryoldstable_binary_artifacts_url }}.md5">MD5</a>]
     [<a href="{{ veryoldstable_binary_artifacts_url }}.sha1">SHA1</a>]
     </li>
-    <li>
-    <a class="filename" href="{{ veryoldsrc_download }}">{{ veryoldsrc_filename }}</a>
-    [<a href="{{ veryoldstable_source_artifacts_url }}.asc">PGP</a>]
-    [<a href="{{ veryoldstable_source_artifacts_url }}.md5">MD5</a>]
-    [<a href="{{ veryoldstable_source_artifacts_url }}.sha1">SHA1</a>]
-    </li>
   </ul>
-  {% endif %}
   {% endif %}
 
   {% if devel_exists %}
@@ -94,60 +103,69 @@
     [<a href="{{ devel_binary_artifacts_url }}.md5">MD5</a>]
     [<a href="{{ devel_binary_artifacts_url }}.sha1">SHA1</a>]
     </li>
+  </ul>
+  {% endif %}
+
+  <p>
+    Older (unsupported) versions of Cassandra are
+    <a href="http://archive.apache.org/dist/cassandra/">archived here</a>.
+  </p>
+
+  <h2 class="hdr">Source</h2>
+  <p>
+  The Cassandra source code is available to download:
+
+  <ul>
+    <li>
+    <a class="filename" 
+       href="{{ source_download }}"
+       onclick="javascript: pageTracker._trackPageview('/clicks/source_download');">
+      {{ source_filename }}
+    </a>
+    [<a href="{{ source_artifacts_url }}.asc">PGP</a>]
+    [<a href="{{ source_artifacts_url }}.md5">MD5</a>]
+    [<a href="{{ source_artifacts_url }}.sha1">SHA1</a>]
+    </li>
+  {% if oldstable_exists %}
+    <li>
+    <a class="filename" href="{{ oldsrc_download }}">{{ oldsrc_filename }}</a>
+    [<a href="{{ oldstable_source_artifacts_url }}.asc">PGP</a>]
+    [<a href="{{ oldstable_source_artifacts_url }}.md5">MD5</a>]
+    [<a href="{{ oldstable_source_artifacts_url }}.sha1">SHA1</a>]
+    </li>
+  {% endif %}
+  {% if veryoldstable_exists %}
+    <li>
+    <a class="filename" href="{{ veryoldsrc_download }}">{{ veryoldsrc_filename }}</a>
+    [<a href="{{ veryoldstable_source_artifacts_url }}.asc">PGP</a>]
+    [<a href="{{ veryoldstable_source_artifacts_url }}.md5">MD5</a>]
+    [<a href="{{ veryoldstable_source_artifacts_url }}.sha1">SHA1</a>]
+    </li>
+  {% endif %}
+  {% if devel_exists %}
     <li>
     <a class="filename" href="{{ devsrc_download }}">{{ devsrc_filename }}</a>
     [<a href="{{ devel_source_artifacts_url }}.asc">PGP</a>]
     [<a href="{{ devel_source_artifacts_url }}.md5">MD5</a>]
     [<a href="{{ devel_source_artifacts_url }}.sha1">SHA1</a>]
     </li>
-  </ul>
   {% endif %}
+  </ul> 
 
-  <h3 class="hdr">CQL Drivers</h3>
-  <p>
-  New for 0.8 is CQL (Cassandra Query Language), an SQL-alike alternative to
-  the traditional <a href="http://wiki.apache.org/cassandra/ClientOptions">
-  RPC interface</a>.  Drivers are available for a variety of languages and can
-  be downloaded from their respective
-  <a href="http://code.google.com/a/apache-extras.org/hosting/search?q=label:cql">
-  Apache Extras hosted pages</a>.
-  </p>
-
-<p>
-New users to Cassandra should be sure to check out the "<a href="http://wiki.apache.org/cassandra/GettingStarted">Getting Started</a>" guide.
-</p>
-
-  <h2 class="hdr">Source Control</h2>
-  <p>
-  The Cassandra source code resides in the Apache Git repository. To check out a copy:
+  Development is done in the Apache Git repository. To check out a copy:
   </p>
   <blockquote class="hl">
       git clone http://git-wip-us.apache.org/repos/asf/cassandra.git
   </blockquote>
 
   <p>
+  Bleeding edge development snapshots of Cassandra are available from
+  <a href="https://builds.apache.org/job/Cassandra/lastSuccessfulBuild/artifact/cassandra/build/">Jenkins continuous integration</a>.
+  </p>
+
+  <p>
   Potential contributors should look over <a href="http://wiki.apache.org/cassandra">the wiki</a>,
   in particular <a href="http://wiki.apache.org/cassandra/HowToContribute">HowToContribute</a>.
-  </p>
- 
-</div>
-
-{% include "skeleton/_download.html" %}
- </p>
-
-
-<div class="span-7 prepend-1 prepend-top last">
-  <h3 class="hdr">Development Snapshots</h3>
-  <p>
-Bleeding edge development snapshots of Cassandra are available for direct download.
-  </p>
-  <p>
-    <a href="https://builds.apache.org/job/Cassandra/lastSuccessfulBuild/artifact/cassandra/build/">Latest trunk build</a> (Jenkins)
-  </p>
-  <h3 class="hdr">Archived Releases</h3>
-  <p>
-    Older (unsupported) versions of Cassandra are
-    <a href="http://archive.apache.org/dist/cassandra/">archived here</a>.
   </p>
 </div>
 {% endblock %}
