@@ -100,9 +100,9 @@ class CassandraDef(object):
     veryoldstable_exists = True
     stable_version = '1.0.7'
     stable_release_date = '2012-01-16'
-    devel_version = '1.0.0-rc2'
-    devel_release_date = '2011-10-04'
-    devel_exists = False
+    devel_version = '1.1.0-beta1'
+    devel_release_date = '2012-2-20'
+    devel_exists = True
     _apache_base_url = 'http://www.apache.org'
     _svn_base_url = 'https://svn.apache.org/repos/asf'
     _git_url = 'http://git-wip-us.apache.org/repos/asf?p=cassandra.git'
