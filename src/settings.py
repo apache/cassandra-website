@@ -43,11 +43,11 @@ APPEND_SLASH = False
 
 # {folder : extension : (processors)}
 # The processors are run in the given order and are chained.
-# Only a lone * is supported as an indicator for folders. Path 
+# Only a lone * is supported as an indicator for folders. Path
 # should be specified. No wildcard card support yet.
- 
-# Starting under the media folder. For example, if you have media/css under 
-# your site root,you should specify just css. If you have media/css/ie you 
+
+# Starting under the media folder. For example, if you have media/css under
+# your site root,you should specify just css. If you have media/css/ie you
 # should specify css/ie for the folder name. css/* is not supported (yet).
 
 # Extensions do not support wildcards.
@@ -61,10 +61,10 @@ MEDIA_PROCESSORS = {
                 'hydeengine.media_processors.YUICompressor',),
         '.sass':('hydeengine.media_processors.TemplateProcessor',
                 'hydeengine.media_processors.SASS',
-                'hydeengine.media_processors.YUICompressor',),                
+                'hydeengine.media_processors.YUICompressor',),
         '.less':('hydeengine.media_processors.TemplateProcessor',
                 'hydeengine.media_processors.LessCSS',
-                'hydeengine.media_processors.YUICompressor',),                
+                'hydeengine.media_processors.YUICompressor',),
         '.hss':(
                 'hydeengine.media_processors.TemplateProcessor',
                 'hydeengine.media_processors.HSS',
@@ -72,12 +72,12 @@ MEDIA_PROCESSORS = {
         '.js':(
                 'hydeengine.media_processors.TemplateProcessor',
                 'hydeengine.media_processors.YUICompressor',)
-    } 
+    }
 }
 
 CONTENT_PROCESSORS = {
     'prerendered/': {
-        '*.*' : 
+        '*.*' :
             ('hydeengine.content_processors.PassthroughProcessor',)
             }
 }
@@ -92,8 +92,8 @@ SITE_POST_PROCESSORS = {
 }
 
 class CassandraDef(object):
-    oldstable_version = '1.0.10'
-    oldstable_release_date = '2012-05-08'
+    oldstable_version = '1.0.11'
+    oldstable_release_date = '2012-07-31'
     oldstable_exists = True
     veryoldstable_version = '0.8.10'
     veryoldstable_release_date = '2012-02-13'
@@ -108,60 +108,60 @@ class CassandraDef(object):
     _git_url = 'http://git-wip-us.apache.org/repos/asf?p=cassandra.git'
     _apache_path = 'cassandra'
     _archive_prefix = 'apache-cassandra'
-  
-    @classmethod 
+
+    @classmethod
     def keys_url(cls):
         return "%s/dist/%s/KEYS" % (cls._apache_base_url, cls._apache_path)
- 
-    @classmethod 
+
+    @classmethod
     def binary_filename(cls, version=stable_version):
         return "%s-%s-bin.tar.gz" % (cls._archive_prefix, version)
 
-    @classmethod 
+    @classmethod
     def binary_path(cls, version):
         base_version = version.split('-')[0]
         return "%s/%s/%s" % \
             (cls._apache_path, base_version, cls.binary_filename(version))
 
-    @classmethod 
+    @classmethod
     def branch(cls, version):
         base_version = version.split('-')[0]
         return base_version.rsplit('.', 1)[0]
 
-    @classmethod 
+    @classmethod
     def binary_url(cls, version=stable_version):
         return "%s/dyn/closer.cgi?path=/%s"  % \
                 (cls._apache_base_url, cls.binary_path(version))
 
-    @classmethod 
+    @classmethod
     def binary_artifacts_url(cls, version=stable_version):
         return "%s/dist/%s" % (cls._apache_base_url, cls.binary_path(version))
 
-    @classmethod 
+    @classmethod
     def source_filename(cls, version=stable_version):
         return "%s-%s-src.tar.gz" % (cls._archive_prefix, version)
 
-    @classmethod 
+    @classmethod
     def source_path(cls, version):
 	base_version = version.split('-')[0]
         return "%s/%s/%s" % \
             (cls._apache_path, base_version, cls.source_filename(version))
 
-    @classmethod 
+    @classmethod
     def source_url(cls, version=stable_version):
         return "%s/dyn/closer.cgi?path=/%s"  % \
                 (cls._apache_base_url, cls.source_path(version))
 
-    @classmethod 
+    @classmethod
     def source_artifacts_url(cls, version=stable_version):
         return "%s/dist/%s" % (cls._apache_base_url, cls.source_path(version))
 
-    @classmethod 
+    @classmethod
     def changelog(cls):
         return "%s;a=blob_plain;f=CHANGES.txt;hb=refs/tags/cassandra-%s" % \
                 (cls._git_url, cls.stable_version)
 
-    @classmethod 
+    @classmethod
     def subversion_url(cls):
         return "%s/%s" % (cls._svn_base_url, cls._apache_path)
 
@@ -221,18 +221,18 @@ CONTEXT = {
     'veryoldstable_branch': CassandraDef.branch(CassandraDef.veryoldstable_version),
 }
 
-FILTER = { 
+FILTER = {
     'include': (".htaccess",),
     'exclude': (".*","*~")
-}        
+}
 
 
-#Processor Configuration 
+#Processor Configuration
 
-# 
+#
 #  Set this to the output of `which growlnotify`. If `which`  returns emtpy,
 #  install growlnotify from the Extras package that comes with the Growl disk image.
-# 
+#
 #
 GROWL = None
 
@@ -240,7 +240,7 @@ GROWL = None
 # want to compress JS/CSS. Project homepage:
 # http://developer.yahoo.com/yui/compressor/
 YUI_COMPRESSOR = "./lib/yuicompressor-2.4.1.jar"
-#YUI_COMPRESSOR = None 
+#YUI_COMPRESSOR = None
 
 # path for HSS, which is a preprocessor for CSS-like files (*.hss)
 # project page at http://ncannasse.fr/projects/hss
