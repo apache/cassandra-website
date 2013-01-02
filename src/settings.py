@@ -92,17 +92,17 @@ SITE_POST_PROCESSORS = {
 }
 
 class CassandraDef(object):
-    oldstable_version = '1.0.12'
-    oldstable_release_date = '2012-10-04'
+    oldstable_version = '1.1.8'
+    oldstable_release_date = '2012-12-20'
     oldstable_exists = True
-    veryoldstable_version = '0.8.10'
-    veryoldstable_release_date = '2012-02-13'
+    veryoldstable_version = '1.0.12'
+    veryoldstable_release_date = '2012-10-04'
     veryoldstable_exists = True
-    stable_version = '1.1.8'
-    stable_release_date = '2012-12-20'
+    stable_version = '1.2.0'
+    stable_release_date = '2013-01-02'
     devel_version = '1.2.0-rc2'
     devel_release_date = '2012-12-21'
-    devel_exists = True
+    devel_exists = False
     _apache_base_url = 'http://www.apache.org'
     _svn_base_url = 'https://svn.apache.org/repos/asf'
     _git_url = 'http://git-wip-us.apache.org/repos/asf?p=cassandra.git'
