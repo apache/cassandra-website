@@ -98,8 +98,8 @@ class CassandraDef(object):
     veryoldstable_version = '1.0.12'
     veryoldstable_release_date = '2012-10-04'
     veryoldstable_exists = True
-    stable_version = '1.2.6'
-    stable_release_date = '2013-06-26'
+    stable_version = '1.2.7'
+    stable_release_date = '2013-07-26'
     devel_version = '2.0.0-beta2'
     devel_release_date = '2013-07-25'
     devel_exists = True
