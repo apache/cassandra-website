@@ -93,13 +93,13 @@ SITE_POST_PROCESSORS = {
 
 class CassandraDef(object):
     oldstable_version = '1.2.15'
-    oldstable_release_date = '2013-02-07'
+    oldstable_release_date = '2014-02-07'
     oldstable_exists = True
     veryoldstable_version = '1.1.12'
     veryoldstable_release_date = '2013-05-27'
     veryoldstable_exists = True
     stable_version = '2.0.5'
-    stable_release_date = '2013-02-07'
+    stable_release_date = '2014-02-07'
     devel_version = '2.0.0-rc2'
     devel_release_date = '2013-08-20'
     devel_exists = False
