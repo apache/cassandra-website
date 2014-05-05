@@ -100,8 +100,8 @@ class CassandraDef(object):
     veryoldstable_exists = True
     stable_version = '2.0.7'
     stable_release_date = '2014-04-18'
-    devel_version = '2.1.0-beta1'
-    devel_release_date = '2014-02-20'
+    devel_version = '2.1.0-beta2'
+    devel_release_date = '2014-05-05'
     devel_exists = True
     _apache_base_url = 'http://www.apache.org'
     _svn_base_url = 'https://svn.apache.org/repos/asf'
