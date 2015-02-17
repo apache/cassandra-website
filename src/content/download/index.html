@@ -2,16 +2,17 @@
 {% block content %}
 <div class="span-24">
   <h2 class="hdr">Cassandra Server</h2>
-
-  Cassandra releases include the core server, the <a href="http://wiki.apache.org/cassandra/NodeTool">nodetool</a> administration command-line interface, and a development shell (<a href="http://cassandra.apache.org/doc/cql/CQL.html"><tt>cqlsh</tt></a> and the old <tt>cassandra-cli</tt>).
-
   <p>
-  The latest stable release of Apache Cassandra is {{ cassandra_stable }}
-  (released on {{ cassandra_stable_release_date }}).  <i>If you're just
-  starting out, download this one.</i>
+  Cassandra releases include the core server, the <a href="http://wiki.apache.org/cassandra/NodeTool">nodetool</a> administration command-line interface, and a development shell (<a href="http://cassandra.apache.org/doc/cql/CQL.html"><tt>cqlsh</tt></a> and the old <tt>cassandra-cli</tt>).
   </p>
 
-  Apache provides binary tarballs and Debian packages:
+  <p>
+  {% if is_stable_prod_ready %}
+
+  <p>
+  The <b>most stable</b> release of Apache Cassandra is {{ cassandra_stable }}
+  (released on {{ cassandra_stable_release_date }}).  <i>If you are looking for latest production ready Cassandra, download this one.</i>
+  </p>
 
   <ul>
     <li>
@@ -28,6 +29,55 @@
     <a href="http://wiki.apache.org/cassandra/DebianPackaging">Debian installation instructions</a>
     </li>
   </ul>
+
+  {% else %}
+
+   <b>There are currently two active releases available:</b>
+   <br/>
+   <p>
+      The latest release of Apache Cassandra is {{ cassandra_stable }}
+      (released on {{ cassandra_stable_release_date }}).  <i>If you're just
+      starting out and not yet in production, download this one.</i>
+    </p>
+  
+   <ul>
+     <li>
+       <a class="filename" 
+	  href="{{ binary_download }}"
+	  onclick="javascript: pageTracker._trackPageview('/clicks/binary_download');">
+	 {{ binary_filename }}
+       </a>
+       [<a href="{{ binary_artifacts_url }}.asc">PGP</a>]
+       [<a href="{{ binary_artifacts_url }}.md5">MD5</a>]
+       [<a href="{{ binary_artifacts_url }}.sha1">SHA1</a>]
+     </li>
+     <li>
+       <a href="http://wiki.apache.org/cassandra/DebianPackaging">Debian installation instructions</a>
+     </li>
+   </ul>
+
+   <p>
+     The <b>most stable</b> release of Apache Cassandra is {{ cassandra_oldstable }}
+     (released on {{ cassandra_oldstable_release_date }}).  <i>If you are in production or planning to be soon, download this one.</i>
+   </p>
+
+   <ul>
+     <li>
+       <a class="filename" href="{{ oldbin_download }}">{{ oldbin_filename }}</a>
+       [<a href="{{ oldstable_binary_artifacts_url }}.asc">PGP</a>]
+       [<a href="{{ oldstable_binary_artifacts_url }}.md5">MD5</a>]
+       [<a href="{{ oldstable_binary_artifacts_url }}.sha1">SHA1</a>]
+     </li>
+    <li>
+    <a href="http://wiki.apache.org/cassandra/DebianPackaging">Debian installation instructions</a>
+    </li>
+   </ul>
+
+  {% endif %}
+
+  </p>
+
+
 
   <h2 class="hdr">Third Party Distributions (not endorsed by Apache)</h2>
 
@@ -71,7 +121,7 @@
 
   <h2 class="hdr">Previous and Archived Cassandra Server Releases</h2>
 
-  {% if oldstable_exists %}
+  {% if is_stable_prod_ready and oldstable_exists %}
   <p>
   Previous stable branches of Cassandra continue to see periodic maintenance
   for some time after a new major release is made. The lastest release on the

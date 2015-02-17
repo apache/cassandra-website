@@ -92,14 +92,15 @@ SITE_POST_PROCESSORS = {
 }
 
 class CassandraDef(object):
+    stable_version = '2.1.3'
+    stable_release_date = '2014-02-17'
+    is_stable_prod_ready = False
     oldstable_version = '2.0.12'
     oldstable_release_date = '2015-01-20'
     oldstable_exists = True
     veryoldstable_version = '1.2.19'
     veryoldstable_release_date = '2014-09-18'
     veryoldstable_exists = True
-    stable_version = '2.1.2'
-    stable_release_date = '2014-11-10'
     devel_version = '2.1.0-rc7'
     devel_release_date = '2014-09-03'
     devel_exists = False
@@ -162,11 +163,17 @@ class CassandraDef(object):
                 (cls._git_url, cls.stable_version)
 
     @classmethod
+    def oldchangelog(cls):
+        return "%s;a=blob_plain;f=CHANGES.txt;hb=refs/tags/cassandra-%s" % \
+                (cls._git_url, cls.oldstable_version)
+
+    @classmethod
     def subversion_url(cls):
         return "%s/%s" % (cls._svn_base_url, cls._apache_path)
 
 CONTEXT = {
     'GENERATE_CLEAN_URLS': GENERATE_CLEAN_URLS,
+    'is_stable_prod_ready': CassandraDef.is_stable_prod_ready,
     'cassandra_oldstable': CassandraDef.oldstable_version,
     'cassandra_oldstable_release_date': CassandraDef.oldstable_release_date,
     'cassandra_veryoldstable': CassandraDef.veryoldstable_version,
@@ -177,6 +184,7 @@ CONTEXT = {
     'cassandra_devel_release_date': CassandraDef.devel_release_date,
     'subversion_url': CassandraDef.subversion_url(),
     'changelog': CassandraDef.changelog(),
+    'oldchangelog': CassandraDef.oldchangelog(),
     'oldbin_filename': CassandraDef.binary_filename(
             CassandraDef.oldstable_version),
     'oldbin_download': CassandraDef.binary_url(CassandraDef.oldstable_version),
