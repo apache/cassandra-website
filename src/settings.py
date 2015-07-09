@@ -92,8 +92,8 @@ SITE_POST_PROCESSORS = {
 }
 
 class CassandraDef(object):
-    stable_version = '2.1.7'
-    stable_release_date = '2015-06-22'
+    stable_version = '2.1.8'
+    stable_release_date = '2015-07-09'
     is_stable_prod_ready = True
     oldstable_version = '2.0.16'
     oldstable_release_date = '2015-06-22'
@@ -101,8 +101,8 @@ class CassandraDef(object):
     veryoldstable_version = '1.2.19'
     veryoldstable_release_date = '2014-09-18'
     veryoldstable_exists = True
-    devel_version = '2.2.0-rc1'
-    devel_release_date = '2015-06-08'
+    devel_version = '2.2.0-rc2'
+    devel_release_date = '2015-07-09'
     devel_exists = True
     _apache_base_url = 'http://www.apache.org'
     _svn_base_url = 'https://svn.apache.org/repos/asf'
