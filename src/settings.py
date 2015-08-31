@@ -131,7 +131,7 @@ class CassandraDef(object):
 
     @classmethod
     def binary_url(cls, version=stable_version):
-        return "%s/dyn/closer.lua?path=/%s"  % \
+        return "%s/dyn/closer.lua/%s"  % \
                 (cls._apache_base_url, cls.binary_path(version))
 
     @classmethod
@@ -150,7 +150,7 @@ class CassandraDef(object):
 
     @classmethod
     def source_url(cls, version=stable_version):
-        return "%s/dyn/closer.lua?path=/%s"  % \
+        return "%s/dyn/closer.lua/%s"  % \
                 (cls._apache_base_url, cls.source_path(version))
 
     @classmethod
