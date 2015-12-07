@@ -95,11 +95,11 @@ class CassandraDef(object):
     stable_version = '3.0.0'
     stable_release_date = '2015-11-09'
     is_stable_prod_ready = False
-    oldstable_version = '2.2.3'
-    oldstable_release_date = '2015-10-16'
+    oldstable_version = '2.2.4'
+    oldstable_release_date = '2015-12-07'
     oldstable_exists = True
-    veryoldstable_version = '2.1.11'
-    veryoldstable_release_date = '2015-10-16'
+    veryoldstable_version = '2.1.12'
+    veryoldstable_release_date = '2015-12-07'
     veryoldstable_exists = True
     devel_version = '3.0.0-rc2'
     devel_release_date = '2015-10-19'
