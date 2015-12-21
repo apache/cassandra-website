@@ -92,10 +92,10 @@ SITE_POST_PROCESSORS = {
 }
 
 class CassandraDef(object):
-    ticktock_version = '3.1'
-    ticktock_version_date = '2015-12-08'
-    stable_version = '3.0.1'
-    stable_release_date = '2015-12-08'
+    ticktock_version = '3.1.1'
+    ticktock_version_date = '2015-12-21'
+    stable_version = '3.0.2'
+    stable_release_date = '2015-12-21'
     is_stable_prod_ready = False
     oldstable_version = '2.2.4'
     oldstable_release_date = '2015-12-07'
