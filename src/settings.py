@@ -92,8 +92,8 @@ SITE_POST_PROCESSORS = {
 }
 
 class CassandraDef(object):
-    ticktock_version = '3.1.1'
-    ticktock_version_date = '2015-12-21'
+    ticktock_version = '3.2'
+    ticktock_version_date = '2016-01-11'
     stable_version = '3.0.2'
     stable_release_date = '2015-12-21'
     is_stable_prod_ready = False
