@@ -98,10 +98,8 @@ class CassandraDef(object):
     stable_release_date = '2015-12-21'
     oldstable_version = '2.2.4'
     oldstable_release_date = '2015-12-07'
-    oldstable_exists = True
     veryoldstable_version = '2.1.12'
     veryoldstable_release_date = '2015-12-07'
-    veryoldstable_exists = True
     devel_version = '3.0.0-rc2'
     devel_release_date = '2015-10-19'
     devel_exists = False
@@ -179,7 +177,6 @@ class CassandraDef(object):
 
 CONTEXT = {
     'GENERATE_CLEAN_URLS': GENERATE_CLEAN_URLS,
-    'is_stable_prod_ready': CassandraDef.is_stable_prod_ready,
     'cassandra_ticktock' : CassandraDef.ticktock_version,
     'cassandra_ticktock_release_date' : CassandraDef.ticktock_version_date,
     'cassandra_oldstable': CassandraDef.oldstable_version,
@@ -237,8 +234,6 @@ CONTEXT = {
     'devel_source_artifacts_url': CassandraDef.source_artifacts_url(
             CassandraDef.devel_version),
     'devel_exists': CassandraDef.devel_exists,
-    'oldstable_exists': CassandraDef.oldstable_exists,
-    'veryoldstable_exists': CassandraDef.veryoldstable_exists,
     'devel_branch': CassandraDef.branch(CassandraDef.devel_version),
     'stable_branch': CassandraDef.branch(CassandraDef.stable_version),
     'oldstable_branch': CassandraDef.branch(CassandraDef.oldstable_version),
