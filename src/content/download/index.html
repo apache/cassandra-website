@@ -4,10 +4,10 @@
 
     <h2 class="hdr">Tick-Tock Cassandra Server Releases</h2>
     <p>
-    Cassandra is moving to a new release process called <a href="http://www.planetcassandra.org/blog/cassandra-2-2-3-0-and-beyond/">Tick-Tock</a>.
-    <br/>
-    The latest tick-tock release is {{ cassandra_ticktock }} (released on
-    {{ cassandra_ticktock_release_date }}).
+    Cassandra is moving to a monthly release process called Tick-Tock.  Even-numbered releases contain new features; odd-numbered ones contain bug fixes only.  If a critical bug is found, a patch will be released against the most recent bug fix release.  (Read more about tick-tock <a href="http://www.planetcassandra.org/blog/cassandra-2-2-3-0-and-beyond/">here</a>.)
+    <p>
+    The latest tick-tock release is {{ cassandra_ticktock }}, released on
+    {{ cassandra_ticktock_release_date }}.
     </p>
 
     <ul>
@@ -19,44 +19,13 @@
       </li>
     </ul>
 
-  <h2 class="hdr">Traditional Cassandra Server Releases</h2>
-  <p>
-  Apache Cassandra &#8482; releases include the core server, the <a href="http://wiki.apache.org/cassandra/NodeTool">nodetool</a> administration command-line interface, and a development shell (<a href="http://cassandra.apache.org/doc/cql/CQL.html"><tt>cqlsh</tt></a> and the old <tt>cassandra-cli</tt>).
-  </p>
-
+  <h2 class="hdr">Older Cassandra Release Series</h2>
   <p>
 
-  {% if is_stable_prod_ready %}
-
-  <p>
-  The <b>most stable</b> release of Apache Cassandra is {{ cassandra_stable }}
-  (released on {{ cassandra_stable_release_date }}).  <i>If you are looking for latest production ready Cassandra, download this one.</i>
-  </p>
-
-  <ul>
-    <li>
-    <a class="filename"
-       href="{{ binary_download }}"
-       onclick="javascript: pageTracker._trackPageview('/clicks/binary_download');">
-      {{ binary_filename }}
-    </a>
-    [<a href="{{ binary_artifacts_url }}.asc">PGP</a>]
-    [<a href="{{ binary_artifacts_url }}.md5">MD5</a>]
-    [<a href="{{ binary_artifacts_url }}.sha1">SHA1</a>]
-    </li>
-    <li>
-    <a href="http://wiki.apache.org/cassandra/DebianPackaging">Debian installation instructions</a>
-    </li>
-  </ul>
-
-  {% else %}
-
-   <b>There are currently two active releases available:</b>
-   <br/>
    <p>
-      The latest release of Apache Cassandra is {{ cassandra_stable }}
-      (released on {{ cassandra_stable_release_date }}).  <i>If you're just
-      starting out and not yet in production, download this one.</i>
+      <b>Apache Cassandra 3.0.x is supported until May 2017.</b>
+      The latest release is {{ cassandra_stable }}, 
+      released on {{ cassandra_stable_release_date }}).
     </p>
 
    <ul>
@@ -76,8 +45,9 @@
    </ul>
 
    <p>
-     The <b>most stable</b> release of Apache Cassandra is {{ cassandra_oldstable }}
-     (released on {{ cassandra_oldstable_release_date }}).  <i>If you are in production or planning to be soon, download this one.</i>
+     <b>Apache Cassandra 2.2 is supported until November 2016</b>. 
+     The latest release is {{ cassandra_oldstable }},
+     released on {{ cassandra_oldstable_release_date }}.
    </p>
 
    <ul>
@@ -92,9 +62,30 @@
     </li>
    </ul>
 
-  {% endif %}
   </p>
 
+  {% if veryoldstable_exists %}
+  <p>
+    <b>Apache Cassandra 2.1 is supported until November 2016 with critical fixes only.</b>
+    The lastest release is {{ cassandra_veryoldstable }}, (released on {{ cassandra_veryoldstable_release_date }}).
+  </p>
+
+  <ul>
+    <li>
+    <a class="filename" href="{{ veryoldbin_download }}">{{ veryoldbin_filename }}</a>
+    [<a href="{{ veryoldstable_binary_artifacts_url }}.asc">PGP</a>]
+    [<a href="{{ veryoldstable_binary_artifacts_url }}.md5">MD5</a>]
+    [<a href="{{ veryoldstable_binary_artifacts_url }}.sha1">SHA1</a>]
+    </li>
+  </ul>
+  {% endif %}
+
+  <p>
+    <b>
+      Older (unsupported) versions of Cassandra are
+      <a href="http://archive.apache.org/dist/cassandra/">archived here</a>.
+    </b>
+  </p>
 
 
   <h2 class="hdr">Third Party Distributions (not endorsed by Apache)</h2>
@@ -137,47 +128,6 @@
   </ul>
   {% endif %}
 
-  <h2 class="hdr">Previous and Archived Cassandra Server Releases</h2>
-
-  {% if is_stable_prod_ready and oldstable_exists %}
-  <p>
-  Previous stable branches of Cassandra continue to see periodic maintenance
-  for some time after a new major release is made. The lastest release on the
-  {{ oldstable_branch }} branch is {{ cassandra_oldstable }} (released on
-  {{ cassandra_oldstable_release_date }}).
-  </p>
-
-  <ul>
-    <li>
-    <a class="filename" href="{{ oldbin_download }}">{{ oldbin_filename }}</a>
-    [<a href="{{ oldstable_binary_artifacts_url }}.asc">PGP</a>]
-    [<a href="{{ oldstable_binary_artifacts_url }}.md5">MD5</a>]
-    [<a href="{{ oldstable_binary_artifacts_url }}.sha1">SHA1</a>]
-    </li>
-  </ul>
-  {% endif %}
-
-  {% if veryoldstable_exists %}
-  <p>
-  The lastest release on the {{ veryoldstable_branch }} branch is
-  {{ cassandra_veryoldstable }} (released on {{ cassandra_veryoldstable_release_date }}).
-  </p>
-
-  <ul>
-    <li>
-    <a class="filename" href="{{ veryoldbin_download }}">{{ veryoldbin_filename }}</a>
-    [<a href="{{ veryoldstable_binary_artifacts_url }}.asc">PGP</a>]
-    [<a href="{{ veryoldstable_binary_artifacts_url }}.md5">MD5</a>]
-    [<a href="{{ veryoldstable_binary_artifacts_url }}.sha1">SHA1</a>]
-    </li>
-  </ul>
-  {% endif %}
-
-  <p>
-    Older (unsupported) versions of Cassandra are
-    <a href="http://archive.apache.org/dist/cassandra/">archived here</a>.
-  </p>
-
   <h2 class="hdr">Source</h2>
   <p>
   The Cassandra source code is available to download:
@@ -193,22 +143,18 @@
     [<a href="{{ source_artifacts_url }}.md5">MD5</a>]
     [<a href="{{ source_artifacts_url }}.sha1">SHA1</a>]
     </li>
-  {% if oldstable_exists %}
     <li>
     <a class="filename" href="{{ oldsrc_download }}">{{ oldsrc_filename }}</a>
     [<a href="{{ oldstable_source_artifacts_url }}.asc">PGP</a>]
     [<a href="{{ oldstable_source_artifacts_url }}.md5">MD5</a>]
     [<a href="{{ oldstable_source_artifacts_url }}.sha1">SHA1</a>]
     </li>
-  {% endif %}
-  {% if veryoldstable_exists %}
     <li>
     <a class="filename" href="{{ veryoldsrc_download }}">{{ veryoldsrc_filename }}</a>
     [<a href="{{ veryoldstable_source_artifacts_url }}.asc">PGP</a>]
     [<a href="{{ veryoldstable_source_artifacts_url }}.md5">MD5</a>]
     [<a href="{{ veryoldstable_source_artifacts_url }}.sha1">SHA1</a>]
     </li>
-  {% endif %}
   {% if devel_exists %}
     <li>
     <a class="filename" href="{{ devsrc_download }}">{{ devsrc_filename }}</a>

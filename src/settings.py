@@ -96,7 +96,6 @@ class CassandraDef(object):
     ticktock_version_date = '2016-01-11'
     stable_version = '3.0.2'
     stable_release_date = '2015-12-21'
-    is_stable_prod_ready = False
     oldstable_version = '2.2.4'
     oldstable_release_date = '2015-12-07'
     oldstable_exists = True
