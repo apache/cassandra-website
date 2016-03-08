@@ -92,10 +92,13 @@ SITE_POST_PROCESSORS = {
 }
 
 class CassandraDef(object):
-    ticktock_version = '3.3'
-    ticktock_version_date = '2016-02-09'
-    stable_version = '3.0.3'
-    stable_release_date = '2016-02-09'
+    ticktock_both_exist = True
+    ticktock_version = '3.4'
+    ticktock_version_date = '2016-03-08'
+    ticktock_odd_version = '3.3'
+    ticktock_odd_version_date = '2016-02-09'
+    stable_version = '3.0.4'
+    stable_release_date = '2016-03-08'
     oldstable_version = '2.2.5'
     oldstable_release_date = '2016-02-08'
     veryoldstable_version = '2.1.13'
@@ -177,8 +180,11 @@ class CassandraDef(object):
 
 CONTEXT = {
     'GENERATE_CLEAN_URLS': GENERATE_CLEAN_URLS,
+    'cassandra_ticktock_both_exist' : CassandraDef.ticktock_both_exist,
     'cassandra_ticktock' : CassandraDef.ticktock_version,
     'cassandra_ticktock_release_date' : CassandraDef.ticktock_version_date,
+    'cassandra_ticktock_odd' : CassandraDef.ticktock_odd_version,
+    'cassandra_ticktock_odd_release_date' : CassandraDef.ticktock_odd_version_date,
     'cassandra_oldstable': CassandraDef.oldstable_version,
     'cassandra_oldstable_release_date': CassandraDef.oldstable_release_date,
     'cassandra_veryoldstable': CassandraDef.veryoldstable_version,
@@ -193,6 +199,9 @@ CONTEXT = {
     'ticktockchangelog': CassandraDef.ticktockchangelog(),
     'ticktock_filename': CassandraDef.binary_filename(
             CassandraDef.ticktock_version),
+    'ticktock_odd_download': CassandraDef.binary_url(CassandraDef.ticktock_odd_version),
+    'ticktock_odd_filename': CassandraDef.binary_filename(
+            CassandraDef.ticktock_odd_version),
     'ticktock_download': CassandraDef.binary_url(CassandraDef.ticktock_version),
     'oldbin_filename': CassandraDef.binary_filename(
             CassandraDef.oldstable_version),
@@ -219,6 +228,10 @@ CONTEXT = {
             CassandraDef.ticktock_version),
     'ticktock_source_artifacts_url': CassandraDef.source_artifacts_url(
             CassandraDef.ticktock_version),
+    'ticktock_odd_artifacts_url': CassandraDef.binary_artifacts_url(
+            CassandraDef.ticktock_odd_version),
+    'ticktock_odd_source_artifacts_url': CassandraDef.source_artifacts_url(
+            CassandraDef.ticktock_odd_version),
     'oldstable_binary_artifacts_url': CassandraDef.binary_artifacts_url(
             CassandraDef.oldstable_version),
     'oldstable_source_artifacts_url': CassandraDef.source_artifacts_url(
