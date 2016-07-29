@@ -1,33 +1,53 @@
-Cassandra Site Management
-=========================
+Apache Cassandra website sources
+================================
+
+Prerequisite
+------------
+
+The site depends on Jekyll (https://jekyllrb.com/) which should be installed.
 
 Updating the site
 -----------------
- * Get Hyde (http://github.com/lakshmivyas/hyde, requires python-yaml)
- * Get Django 
- * Make your edits
- * Run `hyde.py -g -s src/ -d publish/`
- * Test!
- * Commit (SVN)
- * Thats it!
 
-Source layout
--------------
- * content/
+Updates to the "core" website are done by simply:
 
-   Django templates for each page.
+1. editing whatever local files needs to be edited (see layout below too)
+2. testing the change locally using `make server`
+3. building for real using: `make`
+4. committing.
 
- * layout/
+One exception is the documentation which is automatically built and imported from the Cassandra sources. If you need to
+update the documentation, you need to:
+1. checkout the proper branch (the one for which you want to build and import the doc) in your local checkout of the
+   cassandra git sources
+2. set the CASSANDRA_DIR environment variable to that git source checkout (pro-tip: it's a good idea to export that
+   variable in your bashrc/zshrc/whatev).
+3. use `make add-doc` or `make add-latest-doc` from this repository. The `add-latest-doc` target should be used when you
+   want the generated doc replace the "default" documentation, the one you get when you click "documentation" on the
+   website. This is often the one you want. You should use `add-doc` when you want to rebuild the doc for an old version
+   for some reason (such doc is accessible from /doc/<version>).
 
-   Django templates that contain page structure. All of the redundant
-   material can be found here (headers, footers, navigation, etc).
+Layout
+------
 
- * media/
+Outside of the documentation, the website is mostly only a few pages that are at top-level. The `index.html` file is the
+landing page, and other pages are markdown processed by Jekyll (the index page isn't markdown because it's layout is
+slightly more fancy).
 
-   CSS, javascript, images, etc.
+Further, the `_data/` directory contains "data" used by the pages. Mainly, the `_data/releases.yaml` file contains the
+versions and release dates of the currently released version. It's the file to edit when a new release is published.
 
- * settings.py
+The documentation is in the doc/ directory. It mostly contains sub-directories for each version for which we have a doc,
+and those sub-directories are automatically imported by `make add-doc`/`make add-lastest-doc` (so don't edit any file
+withing those version sub-directories). The doc/ directory also contains a `lastest` symlink pointing to the last
+version, the one the website documentation actually points to (that symlink is automatically updated when you use `make
+add-latest-doc`), as well as a few "static" files used by the doc (as of this writing, only links to legacy CQL doc).
 
-   Site-specific configuration. Vars that are used throughout the site
-   are defined here, (see the CassandraDefs object).
+The rest of the layout is standard to Jekyll:
 
+* `_layout/` contains the page (full) layouts.
+* `_includes/` contains fragments used by the different layouts (that's where the header, navigation and footer are).
+* `css/`, `js/` and `img/` are what ones would expect (they are included as-is by Jekyll).
+* `_sass/` is to `css/` what `_includes` is to `_layout`; it contains sass fragments imported by the main css files
+  (currently only the pygments theme for syntax highligthing in the documentation).
+* `_plugins/` contains a tiny plugin that make it easier to input download links in the `download.md` file.

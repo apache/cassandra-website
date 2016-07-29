@@ -1,0 +1,13 @@
+{% assign split_url = page.url | split:'/' %}
+{% if split_url.size > 0 %}
+  {% assign splitted_last = split_url | last | split:'.' %}
+  {% if splitted_last.size > 1 %}
+    {% assign depth = split_url | size | minus: 2 %}
+  {% else %}
+    {% assign depth = split_url | size | minus: 1 %}
+  {% endif %}
+  {% capture base %}./{% for i in (1..depth) %}../{% endfor %}{% endcapture %}
+{% else %}
+  {% capture base %}./{% endcapture %}
+{% endif %}
+
