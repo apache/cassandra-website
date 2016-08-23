@@ -26,7 +26,7 @@ endif
 	@cp -r $(CASSANDRA_DOC_DIR)/build/html $(DOC_DIR)
 
 .latest-doc-link:
-	@ln -s -f $(DOC_VERSION) "doc/latest"
+	@ln -s -f -T $(DOC_VERSION) "doc/latest"
 
 build:
 	@jekyll build
