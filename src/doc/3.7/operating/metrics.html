@@ -90,6 +90,7 @@ extra-footer: '
 <li class="toctree-l3"><a class="reference internal" href="#sstable-index-metrics">SSTable Index Metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bufferpool-metrics">BufferPool Metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#client-metrics">Client Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jvm-metrics">JVM Metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#jmx">JMX</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#metric-reporters">Metric Reporters</a></li>
 </ul>
@@ -100,8 +101,9 @@ extra-footer: '
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting bugs and contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
 </ul>
 
@@ -1375,6 +1377,182 @@ lower by recycling on and off heap buffers.</p>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="section" id="jvm-metrics">
+<h2>JVM Metrics<a class="headerlink" href="#jvm-metrics" title="Permalink to this headline">¶</a></h2>
+<p>JVM metrics such as memory and garbage collection statistics can either be accessed by connecting to the JVM using JMX or can be exported using <a class="reference internal" href="#metric-reporters">Metric Reporters</a>.</p>
+<div class="section" id="bufferpool">
+<h3>BufferPool<a class="headerlink" href="#bufferpool" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><strong>Metric Name</strong></dt>
+<dd><code class="docutils literal"><span class="pre">jvm.buffers.&lt;direct|mapped&gt;.&lt;MetricName&gt;</span></code></dd>
+<dt><strong>JMX MBean</strong></dt>
+<dd><code class="docutils literal"><span class="pre">java.nio:type=BufferPool</span> <span class="pre">name=&lt;direct|mapped&gt;</span></code></dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="12%" />
+<col width="66%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Capacity</td>
+<td>Gauge&lt;Long&gt;</td>
+<td>Estimated total capacity of the buffers in this pool</td>
+</tr>
+<tr class="row-odd"><td>Count</td>
+<td>Gauge&lt;Long&gt;</td>
+<td>Estimated number of buffers in the pool</td>
+</tr>
+<tr class="row-even"><td>Used</td>
+<td>Gauge&lt;Long&gt;</td>
+<td>Estimated memory that the Java virtual machine is using for this buffer pool</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="filedescriptorratio">
+<h3>FileDescriptorRatio<a class="headerlink" href="#filedescriptorratio" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><strong>Metric Name</strong></dt>
+<dd><code class="docutils literal"><span class="pre">jvm.fd.&lt;MetricName&gt;</span></code></dd>
+<dt><strong>JMX MBean</strong></dt>
+<dd><code class="docutils literal"><span class="pre">java.lang:type=OperatingSystem</span> <span class="pre">name=&lt;OpenFileDescriptorCount|MaxFileDescriptorCount&gt;</span></code></dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="18%" />
+<col width="49%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Usage</td>
+<td>Ratio</td>
+<td>Ratio of used to total file descriptors</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="garbagecollector">
+<h3>GarbageCollector<a class="headerlink" href="#garbagecollector" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><strong>Metric Name</strong></dt>
+<dd><code class="docutils literal"><span class="pre">jvm.gc.&lt;gc_type&gt;.&lt;MetricName&gt;</span></code></dd>
+<dt><strong>JMX MBean</strong></dt>
+<dd><code class="docutils literal"><span class="pre">java.lang:type=GarbageCollector</span> <span class="pre">name=&lt;gc_type&gt;</span></code></dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="14%" />
+<col width="61%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Count</td>
+<td>Gauge&lt;Long&gt;</td>
+<td>Total number of collections that have occurred</td>
+</tr>
+<tr class="row-odd"><td>Time</td>
+<td>Gauge&lt;Long&gt;</td>
+<td>Approximate accumulated collection elapsed time in milliseconds</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="memory">
+<h3>Memory<a class="headerlink" href="#memory" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><strong>Metric Name</strong></dt>
+<dd><code class="docutils literal"><span class="pre">jvm.memory.&lt;heap/non-heap/total&gt;.&lt;MetricName&gt;</span></code></dd>
+<dt><strong>JMX MBean</strong></dt>
+<dd><code class="docutils literal"><span class="pre">java.lang:type=Memory</span></code></dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="13%" />
+<col width="64%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Committed</td>
+<td>Gauge&lt;Long&gt;</td>
+<td>Amount of memory in bytes that is committed for the JVM to use</td>
+</tr>
+<tr class="row-even"><td>Init</td>
+<td>Gauge&lt;Long&gt;</td>
+<td>Amount of memory in bytes that the JVM initially requests from the OS</td>
+</tr>
+<tr class="row-odd"><td>Max</td>
+<td>Gauge&lt;Long&gt;</td>
+<td>Maximum amount of memory in bytes that can be used for memory management</td>
+</tr>
+<tr class="row-even"><td>Usage</td>
+<td>Ratio</td>
+<td>Ratio of used to maximum memory</td>
+</tr>
+<tr class="row-odd"><td>Used</td>
+<td>Gauge&lt;Long&gt;</td>
+<td>Amount of used memory in bytes</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="memorypool">
+<h3>MemoryPool<a class="headerlink" href="#memorypool" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><strong>Metric Name</strong></dt>
+<dd><code class="docutils literal"><span class="pre">jvm.memory.pools.&lt;memory_pool&gt;.&lt;MetricName&gt;</span></code></dd>
+<dt><strong>JMX MBean</strong></dt>
+<dd><code class="docutils literal"><span class="pre">java.lang:type=MemoryPool</span> <span class="pre">name=&lt;memory_pool&gt;</span></code></dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="13%" />
+<col width="64%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Committed</td>
+<td>Gauge&lt;Long&gt;</td>
+<td>Amount of memory in bytes that is committed for the JVM to use</td>
+</tr>
+<tr class="row-even"><td>Init</td>
+<td>Gauge&lt;Long&gt;</td>
+<td>Amount of memory in bytes that the JVM initially requests from the OS</td>
+</tr>
+<tr class="row-odd"><td>Max</td>
+<td>Gauge&lt;Long&gt;</td>
+<td>Maximum amount of memory in bytes that can be used for memory management</td>
+</tr>
+<tr class="row-even"><td>Usage</td>
+<td>Ratio</td>
+<td>Ratio of used to maximum memory</td>
+</tr>
+<tr class="row-odd"><td>Used</td>
+<td>Gauge&lt;Long&gt;</td>
+<td>Amount of used memory in bytes</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div class="section" id="jmx">
 <h2>JMX<a class="headerlink" href="#jmx" title="Permalink to this headline">¶</a></h2>

@@ -34,6 +34,7 @@ Contents:
    operating/index
    tools/index
    troubleshooting/index
+   development/index
    faq/index
 
    bugs
