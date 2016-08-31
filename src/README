@@ -52,3 +52,41 @@ The rest of the layout is standard to Jekyll:
   (currently only the pygments theme for syntax highligthing in the documentation).
 * `_plugins/` contains a tiny plugin that make it easier to input download links in the `download.md` file.
 
+How this work
+-------------
+
+Most of the site is a simple Jekyll installation and you should refer to the Jekyll documentation for detail. The site
+however includes the in-tree Sphinx documentation and this section attemps to provide more detail on that "integration".
+
+That doc integration is somewhat simplistic, which has both pros and cons. The pros is that there isn't really any
+complex mechanism involved, the cons is that it's a bit of a hack. The in-tree doc uses Sphinx, which normally generates
+complete (standalone) html files (from the textile source), while Jekyll generates it's pages from Liquid templates
+(https://jekyllrb.com/docs/templates/). The intregation between the 2 works by having a special Sphinx theme (that theme
+is in doc/source/_theme/cassandra_theme in the Cassandra git repository) which, instead of creating standalone html
+files, creates liquid template (that reuse the elements of the website). Note that this means in particular that this
+special theme is only ever useful for the website. In other words, the processus of integration of the doc in the
+website is:
+ 1) the in-tree doc is compiled by sphinx using the special theme.
+ 2) the generated files, which thanks to the theme are Liquid templates (mainly, if you look at the theme files, they
+    simply have a proper Jekyll yaml 'Front Matter'), are copied to the website doc.
+ 3) Jekyl is run normally. It then simply picks up the copied doc file and process them as any normal file.
+
+And there is just a bit of automation to make that process easier:
+ - the in-tree sphinx doc Makefile has a 'website' target that simply trigger the use of the special website Sphinx
+   theme.
+ - the website Makefile has the 'add-doc' and 'add-latest-doc' targets mentioned above to automate the generation and
+   copy of the doc files.
+
+And that's mostly what there is to it. I'll note however the following technical gotchas:
+ - once copied and processed by Jekyll, the doc files uses the website html header and navigation. Sphinx has a bunch of
+   custom css class that can be styled, as well as a few js files, and those are in the website css/ and js/
+   directories. In particular, most doc specific styling is in the css/sphinx.css (some of it have been simply copied
+   for the css of the default sphinx theme), and the sphinx js files have been manually copied into js/. Those aren't
+   updated by the integration process described above, and in particular, the sphinx generation puts a bunch of css/js
+   files in a _static/ directory of the generated files (see src/doc/latest/_static for instance) and those are
+   completely ignored (they are not even copied by Jekyll due to my next point).
+ - sphinx uses underscores at the start of some of the directories that have special meaning, like the _images directory
+   where it puts images, but Jekyll have the same convention for its own special directories and won't (by default) copy
+   any such directory when generated its result. In practice, this means we have to force manually force the inclusion
+   of those sphinx directories we want to include so Jekyll doesn't skip them, which is done in the _config.yml Jekyll
+   configuration file (the only sphinx dir we care about so far is _images).
