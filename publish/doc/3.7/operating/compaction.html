@@ -160,8 +160,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting bugs and contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
 </ul>
 
@@ -200,6 +201,12 @@ bootstrapped since that node will take ownership of some ranges from those nodes
 <dd>rebuild the secondary indexes on the node.</dd>
 <dt>Anticompaction</dt>
 <dd>after repair the ranges that were actually repaired are split out of the sstables that existed when repair started.</dd>
+<dt>Sub range compaction</dt>
+<dd>It is possible to only compact a given sub range - this could be useful if you know a token that has been
+misbehaving - either gathering many updates or many deletes. (<code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">compact</span> <span class="pre">-st</span> <span class="pre">x</span> <span class="pre">-et</span> <span class="pre">y</span></code>) will pick
+all sstables containing the range between x and y and issue a compaction for those sstables. For STCS this will
+most likely include all sstables but with LCS it can issue the compaction for a subset of the sstables. With LCS
+the resulting sstable will end up in L0.</dd>
 </dl>
 </div>
 <div class="section" id="when-is-a-minor-compaction-triggered">

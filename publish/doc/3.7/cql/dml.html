@@ -147,8 +147,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting bugs and contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
 </ul>
 
@@ -172,6 +173,7 @@
 <strong id="grammar-token-select_statement">select_statement</strong> ::=  SELECT [ JSON | DISTINCT ] ( <a class="reference internal" href="#grammar-token-select_clause"><code class="xref docutils literal"><span class="pre">select_clause</span></code></a> | '*' )
                       FROM <a class="reference internal" href="ddl.html#grammar-token-table_name"><code class="xref docutils literal"><span class="pre">table_name</span></code></a>
                       [ WHERE <a class="reference internal" href="#grammar-token-where_clause"><code class="xref docutils literal"><span class="pre">where_clause</span></code></a> ]
+                      [ GROUP BY <a class="reference internal" href="#grammar-token-group_by_clause"><code class="xref docutils literal"><span class="pre">group_by_clause</span></code></a> ]
                       [ ORDER BY <a class="reference internal" href="#grammar-token-ordering_clause"><code class="xref docutils literal"><span class="pre">ordering_clause</span></code></a> ]
                       [ PER PARTITION LIMIT (<a class="reference internal" href="definitions.html#grammar-token-integer"><code class="xref docutils literal"><span class="pre">integer</span></code></a> | <a class="reference internal" href="definitions.html#grammar-token-bind_marker"><code class="xref docutils literal"><span class="pre">bind_marker</span></code></a>) ]
                       [ LIMIT (<a class="reference internal" href="definitions.html#grammar-token-integer"><code class="xref docutils literal"><span class="pre">integer</span></code></a> | <a class="reference internal" href="definitions.html#grammar-token-bind_marker"><code class="xref docutils literal"><span class="pre">bind_marker</span></code></a>) ]
@@ -187,6 +189,7 @@
                       '(' <a class="reference internal" href="ddl.html#grammar-token-column_name"><code class="xref docutils literal"><span class="pre">column_name</span></code></a> ( ',' <a class="reference internal" href="ddl.html#grammar-token-column_name"><code class="xref docutils literal"><span class="pre">column_name</span></code></a> )* ')' <a class="reference internal" href="#grammar-token-operator"><code class="xref docutils literal"><span class="pre">operator</span></code></a> <a class="reference internal" href="types.html#grammar-token-tuple_literal"><code class="xref docutils literal"><span class="pre">tuple_literal</span></code></a>
                       TOKEN '(' <a class="reference internal" href="ddl.html#grammar-token-column_name"><code class="xref docutils literal"><span class="pre">column_name</span></code></a> ( ',' <a class="reference internal" href="ddl.html#grammar-token-column_name"><code class="xref docutils literal"><span class="pre">column_name</span></code></a> )* ')' <a class="reference internal" href="#grammar-token-operator"><code class="xref docutils literal"><span class="pre">operator</span></code></a> <a class="reference internal" href="definitions.html#grammar-token-term"><code class="xref docutils literal"><span class="pre">term</span></code></a>
 <strong id="grammar-token-operator">operator        </strong> ::=  '=' | '&lt;' | '&gt;' | '&lt;=' | '&gt;=' | '!=' | IN | CONTAINS | CONTAINS KEY
+<strong id="grammar-token-group_by_clause">group_by_clause </strong> ::=  <a class="reference internal" href="ddl.html#grammar-token-column_name"><code class="xref docutils literal"><span class="pre">column_name</span></code></a> ( ',' <a class="reference internal" href="ddl.html#grammar-token-column_name"><code class="xref docutils literal"><span class="pre">column_name</span></code></a> )*
 <strong id="grammar-token-ordering_clause">ordering_clause </strong> ::=  <a class="reference internal" href="ddl.html#grammar-token-column_name"><code class="xref docutils literal"><span class="pre">column_name</span></code></a> [ ASC | DESC ] ( ',' <a class="reference internal" href="ddl.html#grammar-token-column_name"><code class="xref docutils literal"><span class="pre">column_name</span></code></a> [ ASC | DESC ] )*
 </pre>
 <p>For instance:</p>
@@ -335,6 +338,19 @@ in the clustering order. In particular, rows having a <code class="docutils lite
 <p>The <code class="docutils literal"><span class="pre">CONTAINS</span></code> operator may only be used on collection columns (lists, sets, and maps). In the case of maps,
 <code class="docutils literal"><span class="pre">CONTAINS</span></code> applies to the map values. The <code class="docutils literal"><span class="pre">CONTAINS</span> <span class="pre">KEY</span></code> operator may only be used on map columns and applies to the
 map keys.</p>
+</div>
+<div class="section" id="grouping-results">
+<span id="group-by-clause"></span><h3>Grouping results<a class="headerlink" href="#grouping-results" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal"><span class="pre">GROUP</span> <span class="pre">BY</span></code> option allows to condense into a single row all selected rows that share the same values for a set
+of columns.</p>
+<p>Using the <code class="docutils literal"><span class="pre">GROUP</span> <span class="pre">BY</span></code> option, it is only possible to group rows at the partition key level or at a clustering column
+level. By consequence, the <code class="docutils literal"><span class="pre">GROUP</span> <span class="pre">BY</span></code> option only accept as arguments primary key column names in the primary key
+order. If a primary key column is restricted by an equality restriction it is not required to be present in the
+<code class="docutils literal"><span class="pre">GROUP</span> <span class="pre">BY</span></code> clause.</p>
+<p>Aggregate functions will produce a separate value for each group. If no <code class="docutils literal"><span class="pre">GROUP</span> <span class="pre">BY</span></code> clause is specified,
+aggregates functions will produce a single value for all the rows.</p>
+<p>If a column is selected without an aggregate function, in a statement with a <code class="docutils literal"><span class="pre">GROUP</span> <span class="pre">BY</span></code>, the first value encounter
+in each group will be returned.</p>
 </div>
 <div class="section" id="ordering-results">
 <span id="ordering-clause"></span><h3>Ordering results<a class="headerlink" href="#ordering-results" title="Permalink to this headline">¶</a></h3>
@@ -496,7 +512,8 @@ microseconds) at the start of statement execution as the timestamp. This is usua
 automatically removed from the database after the specified time. Note that the TTL concerns the inserted values, not
 the columns themselves. This means that any subsequent update of the column will also reset the TTL (to whatever TTL
 is specified in that update). By default, values never expire. A TTL of 0 is equivalent to no TTL. If the table has a
-default_time_to_live, a TTL of 0 will remove the TTL for the inserted or updated values.</li>
+default_time_to_live, a TTL of 0 will remove the TTL for the inserted or updated values. A TTL of <code class="docutils literal"><span class="pre">null</span></code> is equivalent
+to inserting with a TTL of 0.</li>
 </ul>
 </div>
 </div>
