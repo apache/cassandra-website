@@ -85,6 +85,3 @@ Development is done in the Apache Git repository. To check out a copy:
 ``` shell
 git clone http://git-wip-us.apache.org/repos/asf/cassandra.git
 ```
-
-[Bleeding edge development snapshots](http://cassci.datastax.com/job/trunk/lastSuccessfulBuild/) of Cassandra are
-available from Jenkins continuous integration.
