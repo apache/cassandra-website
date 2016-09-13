@@ -242,7 +242,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#request-timeout-in-ms"><code class="docutils literal"><span class="pre">request_timeout_in_ms</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#slow-query-log-timeout-in-ms"><code class="docutils literal"><span class="pre">slow_query_log_timeout_in_ms</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#cross-node-timeout"><code class="docutils literal"><span class="pre">cross_node_timeout</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#streaming-socket-timeout-in-ms"><code class="docutils literal"><span class="pre">streaming_socket_timeout_in_ms</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#streaming-keep-alive-period-in-secs"><code class="docutils literal"><span class="pre">streaming_keep_alive_period_in_secs</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#phi-convict-threshold"><code class="docutils literal"><span class="pre">phi_convict_threshold</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#endpoint-snitch"><code class="docutils literal"><span class="pre">endpoint_snitch</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dynamic-snitch-update-interval-in-ms"><code class="docutils literal"><span class="pre">dynamic_snitch_update_interval_in_ms</span></code></a></li>
@@ -1398,16 +1398,16 @@ already-timed-out requests.</p>
 and the times are synchronized between the nodes.</p>
 <p><em>Default Value:</em> false</p>
 </div>
-<div class="section" id="streaming-socket-timeout-in-ms">
-<h2><code class="docutils literal"><span class="pre">streaming_socket_timeout_in_ms</span></code><a class="headerlink" href="#streaming-socket-timeout-in-ms" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="streaming-keep-alive-period-in-secs">
+<h2><code class="docutils literal"><span class="pre">streaming_keep_alive_period_in_secs</span></code><a class="headerlink" href="#streaming-keep-alive-period-in-secs" title="Permalink to this headline">¶</a></h2>
 <p><em>This option is commented out by default.</em></p>
-<p>Set socket timeout for streaming operation.
-The stream session is failed if no data/ack is received by any of the participants
-within that period, which means this should also be sufficient to stream a large
-sstable or rebuild table indexes.
-Default value is 86400000ms, which means stale streams timeout after 24 hours.
-A value of zero means stream sockets should never time out.</p>
-<p><em>Default Value:</em> 86400000</p>
+<p>Set keep-alive period for streaming
+This node will send a keep-alive message periodically with this period.
+If the node does not receive a keep-alive message from the peer for
+2 keep-alive cycles the stream session times out and fail
+Default value is 300s (5 minutes), which means stalled stream
+times out in 10 minutes by default</p>
+<p><em>Default Value:</em> 300</p>
 </div>
 <div class="section" id="phi-convict-threshold">
 <h2><code class="docutils literal"><span class="pre">phi_convict_threshold</span></code><a class="headerlink" href="#phi-convict-threshold" title="Permalink to this headline">¶</a></h2>
