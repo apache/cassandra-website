@@ -15,18 +15,14 @@ Community
 
 Discussion and questions on Cassandra's usage and development happens mainly on the following mailing lists:
 
-* [Users](http://www.mail-archive.com/user@cassandra.apache.org/): General mailing list for user questions and
-  discussions. This is also where new releases are announced ([subscribe](user-subscribe@cassandra.apache.org) |
-  [unsubscribe](user-unsubscribe@cassandra.apache.org) |
-  [Archives](https://lists.apache.org/list.html?user@cassandra.apache.org)).
-* [Developers](http://www.mail-archive.com/dev@cassandra.apache.org/): Questions and discussions related to Cassandra
-  development ([subscribe](user-subscribe@cassandra.apache.org) | [unsubscribe](dev-unsubscribe@cassandra.apache.org) |
-  [Archives](https://lists.apache.org/list.html?dev@cassandra.apache.org)).
+* [Users](http://www.mail-archive.com/user@cassandra.apache.org/): General mailing list for user questions and discussions. This is also where new releases are announced
+  ([subscribe](mailto://user-subscribe@cassandra.apache.org) | [unsubscribe](mailto://user-unsubscribe@cassandra.apache.org) | [Archives](https://lists.apache.org/list.html?user@cassandra.apache.org)).
+* [Developers](http://www.mail-archive.com/dev@cassandra.apache.org/): Questions and discussions related to Cassandra development
+  ([subscribe](mailto://dev-subscribe@cassandra.apache.org) | [unsubscribe](mailto://dev-unsubscribe@cassandra.apache.org) | [Archives](https://lists.apache.org/list.html?dev@cassandra.apache.org)).
 * [Commits](http://www.mail-archive.com/commits@cassandra.apache.org/): Notification on commits done to the source
   repository and on [JIRA](https://issues.apache.org/jira/browse/CASSANDRA) updates. This is a fairly noisy mailing list
   mostly useful for Cassandra developers and those who would like to keep close tabs on Cassandra's development
-  ([subscribe](commits-subscribe@cassandra.apache.org) | [unsubscribe](commits-unsubscribe@cassandra.apache.org) |
-  [Archives](https://lists.apache.org/list.html?commits@cassandra.apache.org)).
+  ([subscribe](mailto://commits-subscribe@cassandra.apache.org) | [unsubscribe](mailto://commits-unsubscribe@cassandra.apache.org) | [Archives](https://lists.apache.org/list.html?commits@cassandra.apache.org)).
 
 #### IRC<a name="irc"></a>
 
