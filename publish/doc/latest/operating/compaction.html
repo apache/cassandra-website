@@ -2,6 +2,12 @@
 <html>
   
 
+  
+  
+    
+  
+  
+
 
 
 <head>
@@ -24,7 +30,7 @@
   <link rel="stylesheet" href="./../../../css/sphinx.css">
   
 
-   <link rel="top" title="Apache Cassandra Documentation v3.7" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Bloom Filters" href="bloom_filters.html"/> <link rel="prev" title="Hints" href="hints.html"/> 
+   <link rel="top" title="Apache Cassandra Documentation v4.0" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Bloom Filters" href="bloom_filters.html"/> <link rel="prev" title="Hints" href="hints.html"/> 
 </head>
 
   <body>
@@ -234,17 +240,17 @@ because of the distributed nature of Cassandra.</p>
 <div class="section" id="deletes-without-tombstones">
 <h3>Deletes without tombstones<a class="headerlink" href="#deletes-without-tombstones" title="Permalink to this headline">¶</a></h3>
 <p>Imagine a three node cluster which has the value [A] replicated to every node.:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[A], [A], [A]
+<div class="highlight-none"><div class="highlight"><pre>[A], [A], [A]
 </pre></div>
 </div>
 <p>If one of the nodes fails and and our delete operation only removes existing values we can end up with a cluster that
 looks like:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[], [], [A]
+<div class="highlight-none"><div class="highlight"><pre>[], [], [A]
 </pre></div>
 </div>
 <p>Then a repair operation would replace the value of [A] back onto the two
 nodes which are missing the value.:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[A], [A], [A]
+<div class="highlight-none"><div class="highlight"><pre>[A], [A], [A]
 </pre></div>
 </div>
 <p>This would cause our data to be resurrected even though it had been
@@ -253,16 +259,16 @@ deleted.</p>
 <div class="section" id="deletes-with-tombstones">
 <h3>Deletes with Tombstones<a class="headerlink" href="#deletes-with-tombstones" title="Permalink to this headline">¶</a></h3>
 <p>Starting again with a three node cluster which has the value [A] replicated to every node.:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[A], [A], [A]
+<div class="highlight-none"><div class="highlight"><pre>[A], [A], [A]
 </pre></div>
 </div>
 <p>If instead of removing data we add a tombstone record, our single node failure situation will look like this.:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[A, Tombstone[A]], [A, Tombstone[A]], [A]
+<div class="highlight-none"><div class="highlight"><pre>[A, Tombstone[A]], [A, Tombstone[A]], [A]
 </pre></div>
 </div>
 <p>Now when we issue a repair the Tombstone will be copied to the replica, rather than the deleted data being
 resurrected.:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[A, Tombstone[A]], [A, Tombstone[A]], [A, Tombstone[A]]
+<div class="highlight-none"><div class="highlight"><pre>[A, Tombstone[A]], [A, Tombstone[A]], [A, Tombstone[A]]
 </pre></div>
 </div>
 <p>Our repair operation will correctly put the state of the system to what we expect with the record [A] marked as deleted
@@ -376,7 +382,7 @@ to drop any tombstones.</dd>
 </div>
 <div class="section" id="compaction-nodetool-commands">
 <h2>Compaction nodetool commands<a class="headerlink" href="#compaction-nodetool-commands" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference internal" href="../tools/nodetool.html#nodetool"><span class="std std-ref">nodetool</span></a> utility provides a number of commands related to compaction:</p>
+<p>The <span class="xref std std-ref">nodetool</span> utility provides a number of commands related to compaction:</p>
 <dl class="docutils">
 <dt><code class="docutils literal"><span class="pre">enableautocompaction</span></code></dt>
 <dd>Enable compaction.</dd>
@@ -397,13 +403,13 @@ throughput.</dd>
 <h2>Switching the compaction strategy and options using JMX<a class="headerlink" href="#switching-the-compaction-strategy-and-options-using-jmx" title="Permalink to this headline">¶</a></h2>
 <p>It is possible to switch compaction strategies and its options on just a single node using JMX, this is a great way to
 experiment with settings without affecting the whole cluster. The mbean is:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>org.apache.cassandra.db:type=ColumnFamilies,keyspace=&lt;keyspace_name&gt;,columnfamily=&lt;table_name&gt;
+<div class="highlight-none"><div class="highlight"><pre>org.apache.cassandra.db:type=ColumnFamilies,keyspace=&lt;keyspace_name&gt;,columnfamily=&lt;table_name&gt;
 </pre></div>
 </div>
 <p>and the attribute to change is <code class="docutils literal"><span class="pre">CompactionParameters</span></code> or <code class="docutils literal"><span class="pre">CompactionParametersJson</span></code> if you use jconsole or jmc. The
 syntax for the json version is the same as you would use in an <a class="reference internal" href="../cql/ddl.html#alter-table-statement"><span class="std std-ref">ALTER TABLE</span></a> statement -
 for example:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>{ &#39;class&#39;: &#39;LeveledCompactionStrategy&#39;, &#39;sstable_size_in_mb&#39;: 123 }
+<div class="highlight-none"><div class="highlight"><pre>{ &#39;class&#39;: &#39;LeveledCompactionStrategy&#39;, &#39;sstable_size_in_mb&#39;: 123 }
 </pre></div>
 </div>
 <p>The setting is kept until someone executes an <a class="reference internal" href="../cql/ddl.html#alter-table-statement"><span class="std std-ref">ALTER TABLE</span></a> that touches the compaction

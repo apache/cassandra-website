@@ -2,6 +2,12 @@
 <html>
   
 
+  
+  
+    
+  
+  
+
 
 
 <head>
@@ -24,7 +30,7 @@
   <link rel="stylesheet" href="./../../../css/sphinx.css">
   
 
-   <link rel="top" title="Apache Cassandra Documentation v3.7" href="../index.html"/> <link rel="up" title="Configuring Cassandra" href="index.html"/> <link rel="next" title="Operating Cassandra" href="../operating/index.html"/> <link rel="prev" title="Configuring Cassandra" href="index.html"/> 
+   <link rel="top" title="Apache Cassandra Documentation v4.0" href="../index.html"/> <link rel="up" title="Configuring Cassandra" href="index.html"/> <link rel="next" title="Operating Cassandra" href="../operating/index.html"/> <link rel="prev" title="Configuring Cassandra" href="index.html"/> 
 </head>
 
   <body>
@@ -242,7 +248,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#request-timeout-in-ms"><code class="docutils literal"><span class="pre">request_timeout_in_ms</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#slow-query-log-timeout-in-ms"><code class="docutils literal"><span class="pre">slow_query_log_timeout_in_ms</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#cross-node-timeout"><code class="docutils literal"><span class="pre">cross_node_timeout</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#streaming-socket-timeout-in-ms"><code class="docutils literal"><span class="pre">streaming_socket_timeout_in_ms</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#streaming-keep-alive-period-in-secs"><code class="docutils literal"><span class="pre">streaming_keep_alive_period_in_secs</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#phi-convict-threshold"><code class="docutils literal"><span class="pre">phi_convict_threshold</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#endpoint-snitch"><code class="docutils literal"><span class="pre">endpoint_snitch</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dynamic-snitch-update-interval-in-ms"><code class="docutils literal"><span class="pre">dynamic_snitch_update_interval_in_ms</span></code></a></li>
@@ -270,6 +276,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#compaction-large-partition-warning-threshold-mb"><code class="docutils literal"><span class="pre">compaction_large_partition_warning_threshold_mb</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#gc-warn-threshold-in-ms"><code class="docutils literal"><span class="pre">gc_warn_threshold_in_ms</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#max-value-size-in-mb"><code class="docutils literal"><span class="pre">max_value_size_in_mb</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#back-pressure-enabled"><code class="docutils literal"><span class="pre">back_pressure_enabled</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#back-pressure-strategy"><code class="docutils literal"><span class="pre">back_pressure_strategy</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -347,8 +355,8 @@ May either be &#8220;true&#8221; or &#8220;false&#8221; to enable globally</p>
 <p>When hinted_handoff_enabled is true, a black list of data centers that will not
 perform hinted handoff</p>
 <p><em>Default Value (complex option)</em>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#    - DC1</span>
-<span class="c1">#    - DC2</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="c">#    - DC1</span>
+<span class="c">#    - DC2</span>
 </pre></div>
 </div>
 </div>
@@ -400,9 +408,9 @@ Will <em>not</em> trigger fsync.</p>
 will be written uncompressed. LZ4, Snappy, and Deflate compressors
 are supported.</p>
 <p><em>Default Value (complex option)</em>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#   - class_name: LZ4Compressor</span>
-<span class="c1">#     parameters:</span>
-<span class="c1">#         -</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="c">#   - class_name: LZ4Compressor</span>
+<span class="c">#     parameters:</span>
+<span class="c">#         -</span>
 </pre></div>
 </div>
 </div>
@@ -536,7 +544,7 @@ will spread data evenly across them, subject to the granularity of
 the configured compaction strategy.
 If not set, the default directory is $CASSANDRA_HOME/data/data.</p>
 <p><em>Default Value (complex option)</em>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#     - /var/lib/cassandra/data</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="c">#     - /var/lib/cassandra/data</span>
 </pre></div>
 </div>
 </div>
@@ -782,9 +790,9 @@ be set to at least twice the size of max_mutation_size_in_kb / 1024</p>
 will be written uncompressed.  LZ4, Snappy, and Deflate compressors
 are supported.</p>
 <p><em>Default Value (complex option)</em>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#   - class_name: LZ4Compressor</span>
-<span class="c1">#     parameters:</span>
-<span class="c1">#         -</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="c">#   - class_name: LZ4Compressor</span>
+<span class="c">#     parameters:</span>
+<span class="c">#         -</span>
 </pre></div>
 </div>
 </div>
@@ -793,15 +801,15 @@ are supported.</p>
 <p>any class that implements the SeedProvider interface and has a
 constructor that takes a Map&lt;String, String&gt; of parameters will do.</p>
 <p><em>Default Value (complex option)</em>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Addresses of hosts that are deemed contact points.</span>
-<span class="c1"># Cassandra nodes use this list of hosts to find each other and learn</span>
-<span class="c1"># the topology of the ring.  You must change this if you are running</span>
-<span class="c1"># multiple nodes!</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="c"># Addresses of hosts that are deemed contact points.</span>
+<span class="c"># Cassandra nodes use this list of hosts to find each other and learn</span>
+<span class="c"># the topology of the ring.  You must change this if you are running</span>
+<span class="c"># multiple nodes!</span>
 <span class="o">-</span> <span class="n">class_name</span><span class="p">:</span> <span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">cassandra</span><span class="o">.</span><span class="n">locator</span><span class="o">.</span><span class="n">SimpleSeedProvider</span>
   <span class="n">parameters</span><span class="p">:</span>
-      <span class="c1"># seeds is actually a comma-delimited list of addresses.</span>
-      <span class="c1"># Ex: &quot;&lt;ip1&gt;,&lt;ip2&gt;,&lt;ip3&gt;&quot;</span>
-      <span class="o">-</span> <span class="n">seeds</span><span class="p">:</span> <span class="s2">&quot;127.0.0.1&quot;</span>
+      <span class="c"># seeds is actually a comma-delimited list of addresses.</span>
+      <span class="c"># Ex: &quot;&lt;ip1&gt;,&lt;ip2&gt;,&lt;ip3&gt;&quot;</span>
+      <span class="o">-</span> <span class="n">seeds</span><span class="p">:</span> <span class="s">&quot;127.0.0.1&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -1398,16 +1406,16 @@ already-timed-out requests.</p>
 and the times are synchronized between the nodes.</p>
 <p><em>Default Value:</em> false</p>
 </div>
-<div class="section" id="streaming-socket-timeout-in-ms">
-<h2><code class="docutils literal"><span class="pre">streaming_socket_timeout_in_ms</span></code><a class="headerlink" href="#streaming-socket-timeout-in-ms" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="streaming-keep-alive-period-in-secs">
+<h2><code class="docutils literal"><span class="pre">streaming_keep_alive_period_in_secs</span></code><a class="headerlink" href="#streaming-keep-alive-period-in-secs" title="Permalink to this headline">¶</a></h2>
 <p><em>This option is commented out by default.</em></p>
-<p>Set socket timeout for streaming operation.
-The stream session is failed if no data/ack is received by any of the participants
-within that period, which means this should also be sufficient to stream a large
-sstable or rebuild table indexes.
-Default value is 86400000ms, which means stale streams timeout after 24 hours.
-A value of zero means stream sockets should never time out.</p>
-<p><em>Default Value:</em> 86400000</p>
+<p>Set keep-alive period for streaming
+This node will send a keep-alive message periodically with this period.
+If the node does not receive a keep-alive message from the peer for
+2 keep-alive cycles the stream session times out and fail
+Default value is 300s (5 minutes), which means stalled stream
+times out in 10 minutes by default</p>
+<p><em>Default Value:</em> 300</p>
 </div>
 <div class="section" id="phi-convict-threshold">
 <h2><code class="docutils literal"><span class="pre">phi_convict_threshold</span></code><a class="headerlink" href="#phi-convict-threshold" title="Permalink to this headline">¶</a></h2>
@@ -1543,11 +1551,11 @@ RoundRobin, based on the scheduler id.</dd>
 </dd>
 </dl>
 <p><em>Default Value (complex option)</em>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#    throttle_limit: 80</span>
-<span class="c1">#    default_weight: 5</span>
-<span class="c1">#    weights:</span>
-<span class="c1">#      Keyspace1: 1</span>
-<span class="c1">#      Keyspace2: 5</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="c">#    throttle_limit: 80</span>
+<span class="c">#    default_weight: 5</span>
+<span class="c">#    weights:</span>
+<span class="c">#      Keyspace1: 1</span>
+<span class="c">#      Keyspace2: 5</span>
 </pre></div>
 </div>
 </div>
@@ -1577,18 +1585,18 @@ If set to rack cassandra will encrypt the traffic between the racks</p>
 the keystore and truststore.  For instructions on generating these files, see:
 <a class="reference external" href="http://download.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html#CreateKeystore">http://download.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html#CreateKeystore</a></p>
 <p><em>Default Value (complex option)</em>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">internode_encryption</span><span class="p">:</span> <span class="n">none</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">internode_encryption</span><span class="p">:</span> <span class="n">none</span>
 <span class="n">keystore</span><span class="p">:</span> <span class="n">conf</span><span class="o">/.</span><span class="n">keystore</span>
 <span class="n">keystore_password</span><span class="p">:</span> <span class="n">cassandra</span>
 <span class="n">truststore</span><span class="p">:</span> <span class="n">conf</span><span class="o">/.</span><span class="n">truststore</span>
 <span class="n">truststore_password</span><span class="p">:</span> <span class="n">cassandra</span>
-<span class="c1"># More advanced defaults below:</span>
-<span class="c1"># protocol: TLS</span>
-<span class="c1"># algorithm: SunX509</span>
-<span class="c1"># store_type: JKS</span>
-<span class="c1"># cipher_suites: [TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA]</span>
-<span class="c1"># require_client_auth: false</span>
-<span class="c1"># require_endpoint_verification: false</span>
+<span class="c"># More advanced defaults below:</span>
+<span class="c"># protocol: TLS</span>
+<span class="c"># algorithm: SunX509</span>
+<span class="c"># store_type: JKS</span>
+<span class="c"># cipher_suites: [TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA]</span>
+<span class="c"># require_client_auth: false</span>
+<span class="c"># require_endpoint_verification: false</span>
 </pre></div>
 </div>
 </div>
@@ -1596,20 +1604,20 @@ the keystore and truststore.  For instructions on generating these files, see:
 <h2><code class="docutils literal"><span class="pre">client_encryption_options</span></code><a class="headerlink" href="#client-encryption-options" title="Permalink to this headline">¶</a></h2>
 <p>enable or disable client/server encryption.</p>
 <p><em>Default Value (complex option)</em>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">enabled</span><span class="p">:</span> <span class="n">false</span>
-<span class="c1"># If enabled and optional is set to true encrypted and unencrypted connections are handled.</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">enabled</span><span class="p">:</span> <span class="n">false</span>
+<span class="c"># If enabled and optional is set to true encrypted and unencrypted connections are handled.</span>
 <span class="n">optional</span><span class="p">:</span> <span class="n">false</span>
 <span class="n">keystore</span><span class="p">:</span> <span class="n">conf</span><span class="o">/.</span><span class="n">keystore</span>
 <span class="n">keystore_password</span><span class="p">:</span> <span class="n">cassandra</span>
-<span class="c1"># require_client_auth: false</span>
-<span class="c1"># Set trustore and truststore_password if require_client_auth is true</span>
-<span class="c1"># truststore: conf/.truststore</span>
-<span class="c1"># truststore_password: cassandra</span>
-<span class="c1"># More advanced defaults below:</span>
-<span class="c1"># protocol: TLS</span>
-<span class="c1"># algorithm: SunX509</span>
-<span class="c1"># store_type: JKS</span>
-<span class="c1"># cipher_suites: [TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA]</span>
+<span class="c"># require_client_auth: false</span>
+<span class="c"># Set trustore and truststore_password if require_client_auth is true</span>
+<span class="c"># truststore: conf/.truststore</span>
+<span class="c"># truststore_password: cassandra</span>
+<span class="c"># More advanced defaults below:</span>
+<span class="c"># protocol: TLS</span>
+<span class="c"># algorithm: SunX509</span>
+<span class="c"># store_type: JKS</span>
+<span class="c"># cipher_suites: [TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA]</span>
 </pre></div>
 </div>
 </div>
@@ -1690,12 +1698,12 @@ Unlimited Strength Jurisdiction Policy Files for your version of the JDK.
 <p>Currently, only the following file types are supported for transparent data encryption, although
 more are coming in future cassandra releases: commitlog, hints</p>
 <p><em>Default Value (complex option)</em>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">enabled</span><span class="p">:</span> <span class="n">false</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">enabled</span><span class="p">:</span> <span class="n">false</span>
 <span class="n">chunk_length_kb</span><span class="p">:</span> <span class="mi">64</span>
 <span class="n">cipher</span><span class="p">:</span> <span class="n">AES</span><span class="o">/</span><span class="n">CBC</span><span class="o">/</span><span class="n">PKCS5Padding</span>
 <span class="n">key_alias</span><span class="p">:</span> <span class="n">testing</span><span class="p">:</span><span class="mi">1</span>
-<span class="c1"># CBC IV length for AES needs to be 16 bytes (which is also the default size)</span>
-<span class="c1"># iv_length: 16</span>
+<span class="c"># CBC IV length for AES needs to be 16 bytes (which is also the default size)</span>
+<span class="c"># iv_length: 16</span>
 <span class="n">key_provider</span><span class="p">:</span>
   <span class="o">-</span> <span class="n">class_name</span><span class="p">:</span> <span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">cassandra</span><span class="o">.</span><span class="n">security</span><span class="o">.</span><span class="n">JKSKeyProvider</span>
     <span class="n">parameters</span><span class="p">:</span>
@@ -1728,13 +1736,13 @@ using the StorageService mbean.</p>
 </div>
 <div class="section" id="batch-size-warn-threshold-in-kb">
 <h2><code class="docutils literal"><span class="pre">batch_size_warn_threshold_in_kb</span></code><a class="headerlink" href="#batch-size-warn-threshold-in-kb" title="Permalink to this headline">¶</a></h2>
-<p>Log WARN on any batch size exceeding this value. 5kb per batch by default.
+<p>Log WARN on any multiple-partition batch size exceeding this value. 5kb per batch by default.
 Caution should be taken on increasing the size of this threshold as it can lead to node instability.</p>
 <p><em>Default Value:</em> 5</p>
 </div>
 <div class="section" id="batch-size-fail-threshold-in-kb">
 <h2><code class="docutils literal"><span class="pre">batch_size_fail_threshold_in_kb</span></code><a class="headerlink" href="#batch-size-fail-threshold-in-kb" title="Permalink to this headline">¶</a></h2>
-<p>Fail any batch exceeding this value. 50kb (10x warn threshold) by default.</p>
+<p>Fail any multiple-partition batch exceeding this value. 50kb (10x warn threshold) by default.</p>
 <p><em>Default Value:</em> 50</p>
 </div>
 <div class="section" id="unlogged-batch-across-partitions-warn-threshold">
@@ -1761,6 +1769,27 @@ By default, Cassandra logs GC Pauses greater than 200 ms at INFO level</p>
 early. Any value size larger than this threshold will result into marking an SSTable
 as corrupted.</p>
 <p><em>Default Value:</em> 256</p>
+</div>
+<div class="section" id="back-pressure-enabled">
+<h2><code class="docutils literal"><span class="pre">back_pressure_enabled</span></code><a class="headerlink" href="#back-pressure-enabled" title="Permalink to this headline">¶</a></h2>
+<p>Back-pressure settings #
+If enabled, the coordinator will apply the back-pressure strategy specified below to each mutation
+sent to replicas, with the aim of reducing pressure on overloaded replicas.</p>
+<p><em>Default Value:</em> false</p>
+</div>
+<div class="section" id="back-pressure-strategy">
+<h2><code class="docutils literal"><span class="pre">back_pressure_strategy</span></code><a class="headerlink" href="#back-pressure-strategy" title="Permalink to this headline">¶</a></h2>
+<p>The back-pressure strategy applied.
+The default implementation, RateBasedBackPressure, takes three arguments:
+high ratio, factor, and flow type, and uses the ratio between incoming mutation responses and outgoing mutation requests.
+If below high ratio, outgoing mutations are rate limited according to the incoming rate decreased by the given factor;
+if above high ratio, the rate limiting is increased by the given factor;
+such factor is usually best configured between 1 and 10, use larger values for a faster recovery
+at the expense of potentially more dropped mutations;
+the rate limiting is applied according to the flow type: if FAST, it&#8217;s rate limited at the speed of the fastest replica,
+if SLOW at the speed of the slowest one.
+New strategies can be added. Implementors need to implement org.apache.cassandra.net.BackpressureStrategy and
+provide a public constructor accepting a Map&lt;String, Object&gt;.</p>
 </div>
 </div>
 

@@ -2,6 +2,12 @@
 <html>
   
 
+  
+  
+    
+  
+  
+
 
 
 <head>
@@ -24,7 +30,7 @@
   <link rel="stylesheet" href="./../../../css/sphinx.css">
   
 
-   <link rel="top" title="Apache Cassandra Documentation v3.7" href="../index.html"/> <link rel="up" title="The Cassandra Query Language (CQL)" href="index.html"/> <link rel="next" title="JSON Support" href="json.html"/> <link rel="prev" title="Security" href="security.html"/> 
+   <link rel="top" title="Apache Cassandra Documentation v4.0" href="../index.html"/> <link rel="up" title="The Cassandra Query Language (CQL)" href="index.html"/> <link rel="next" title="JSON Support" href="json.html"/> <link rel="prev" title="Security" href="security.html"/> 
 </head>
 
   <body>
@@ -265,7 +271,7 @@ cast converting a datatype into its own datatype.</p>
 </table>
 <p>The conversions rely strictly on Java&#8217;s semantics. For example, the double value 1 will be converted to the text value
 &#8216;1.0&#8217;. For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">avg</span><span class="p">(</span><span class="k">cast</span><span class="p">(</span><span class="k">count</span> <span class="k">as</span> <span class="nb">double</span><span class="p">))</span> <span class="k">FROM</span> <span class="n">myTable</span>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">avg</span><span class="p">(</span><span class="k">cast</span><span class="p">(</span><span class="k">count</span> <span class="k">as</span> <span class="nb">double</span><span class="p">))</span> <span class="k">FROM</span> <span class="n">myTable</span>
 </pre></div>
 </div>
 </div>
@@ -281,7 +287,7 @@ the partitioner in use:</p>
 <li>For ByteOrderedPartitioner, the return type is <code class="docutils literal"><span class="pre">blob</span></code>.</li>
 </ul>
 <p>For instance, in a cluster using the default Murmur3Partitioner, if a table is defined by:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">users</span> <span class="p">(</span>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">users</span> <span class="p">(</span>
     <span class="n">userid</span> <span class="nb">text</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
     <span class="n">username</span> <span class="nb">text</span><span class="p">,</span>
 <span class="p">)</span>
@@ -303,7 +309,7 @@ the partitioner in use:</p>
 <p>The <code class="docutils literal"><span class="pre">now</span></code> function takes no arguments and generates, on the coordinator node, a new unique timeuuid (at the time where
 the statement using it is executed). Note that this method is useful for insertion but is largely non-sensical in
 <code class="docutils literal"><span class="pre">WHERE</span></code> clauses. For instance, a query of the form:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">myTable</span> <span class="k">WHERE</span> <span class="n">t</span> <span class="o">=</span> <span class="n">now</span><span class="p">()</span>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">myTable</span> <span class="k">WHERE</span> <span class="n">t</span> <span class="o">=</span> <span class="n">now</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>will never return any result by design, since the value returned by <code class="docutils literal"><span class="pre">now()</span></code> is guaranteed to be unique.</p>
@@ -313,7 +319,7 @@ the statement using it is executed). Note that this method is useful for inserti
 <p>The <code class="docutils literal"><span class="pre">minTimeuuid</span></code> (resp. <code class="docutils literal"><span class="pre">maxTimeuuid</span></code>) function takes a <code class="docutils literal"><span class="pre">timestamp</span></code> value <code class="docutils literal"><span class="pre">t</span></code> (which can be <cite>either a timestamp
 or a date string &lt;timestamps&gt;</cite>) and return a <em>fake</em> <code class="docutils literal"><span class="pre">timeuuid</span></code> corresponding to the <em>smallest</em> (resp. <em>biggest</em>)
 possible <code class="docutils literal"><span class="pre">timeuuid</span></code> having for timestamp <code class="docutils literal"><span class="pre">t</span></code>. So for instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">myTable</span>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">myTable</span>
  <span class="k">WHERE</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="n">maxTimeuuid</span><span class="p">(</span><span class="s1">&#39;2013-01-01 00:05+0000&#39;</span><span class="p">)</span>
    <span class="k">AND</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">minTimeuuid</span><span class="p">(</span><span class="s1">&#39;2013-02-02 10:00+0000&#39;</span><span class="p">)</span>
 </pre></div>
@@ -403,7 +409,7 @@ functions in <em>Java</em> and <em>JavaScript</em>. Support for other JSR 223 co
 Scala) can be added by adding a JAR to the classpath.</p>
 <p>UDFs are part of the Cassandra schema. As such, they are automatically propagated to all nodes in the cluster.</p>
 <p>UDFs can be <em>overloaded</em> - i.e. multiple UDFs with different argument types but the same function name. Example:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">FUNCTION</span> <span class="n">sample</span> <span class="p">(</span> <span class="n">arg</span> <span class="nb">int</span> <span class="p">)</span> <span class="mf">...</span><span class="p">;</span>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">FUNCTION</span> <span class="n">sample</span> <span class="p">(</span> <span class="n">arg</span> <span class="nb">int</span> <span class="p">)</span> <span class="mf">...</span><span class="p">;</span>
 <span class="k">CREATE</span> <span class="k">FUNCTION</span> <span class="n">sample</span> <span class="p">(</span> <span class="n">arg</span> <span class="nb">text</span> <span class="p">)</span> <span class="mf">...</span><span class="p">;</span>
 </pre></div>
 </div>
@@ -415,7 +421,7 @@ Tuple types and user-defined types are handled by the conversion functions of th
 documentation of the Java Driver for details on handling tuple types and user-defined types.</p>
 <p>Arguments for functions can be literals or terms. Prepared statement placeholders can be used, too.</p>
 <p>Note that you can use the double-quoted string syntax to enclose the UDF source code. For example:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">FUNCTION</span> <span class="n">some_function</span> <span class="p">(</span> <span class="n">arg</span> <span class="nb">int</span> <span class="p">)</span>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">FUNCTION</span> <span class="n">some_function</span> <span class="p">(</span> <span class="n">arg</span> <span class="nb">int</span> <span class="p">)</span>
     <span class="k">RETURNS</span> <span class="k">NULL</span> <span class="k">ON</span> <span class="k">NULL</span> <span class="k">INPUT</span>
     <span class="k">RETURNS</span> <span class="nb">int</span>
     <span class="k">LANGUAGE</span> <span class="n">java</span>
@@ -435,7 +441,7 @@ documentation of the Java Driver for details on handling tuple types and user-de
 <p>User-defined functions can be used in <code class="docutils literal"><span class="pre">SELECT</span></code>, <code class="docutils literal"><span class="pre">INSERT</span></code> and <code class="docutils literal"><span class="pre">UPDATE</span></code> statements.</p>
 <p>The implicitly available <code class="docutils literal"><span class="pre">udfContext</span></code> field (or binding for script UDFs) provides the necessary functionality to
 create new UDT and tuple values:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TYPE</span> <span class="n">custom_type</span> <span class="p">(</span><span class="n">txt</span> <span class="nb">text</span><span class="p">,</span> <span class="n">i</span> <span class="nb">int</span><span class="p">);</span>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TYPE</span> <span class="n">custom_type</span> <span class="p">(</span><span class="n">txt</span> <span class="nb">text</span><span class="p">,</span> <span class="n">i</span> <span class="nb">int</span><span class="p">);</span>
 <span class="k">CREATE</span> <span class="k">FUNCTION</span> <span class="n">fct</span><span class="err">\</span><span class="n">_using</span><span class="err">\</span><span class="n">_udt</span> <span class="p">(</span> <span class="n">somearg</span> <span class="nb">int</span> <span class="p">)</span>
     <span class="k">RETURNS</span> <span class="k">NULL</span> <span class="k">ON</span> <span class="k">NULL</span> <span class="k">INPUT</span>
     <span class="k">RETURNS</span> <span class="n">custom_type</span>
@@ -450,7 +456,7 @@ create new UDT and tuple values:</p>
 </div>
 <p>The definition of the <code class="docutils literal"><span class="pre">UDFContext</span></code> interface can be found in the Apache Cassandra source code for
 <code class="docutils literal"><span class="pre">org.apache.cassandra.cql3.functions.UDFContext</span></code>.</p>
-<div class="highlight-java"><div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UDFContext</span>
+<div class="highlight-java"><div class="highlight"><pre><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UDFContext</span>
 <span class="o">{</span>
     <span class="n">UDTValue</span> <span class="nf">newArgUDTValue</span><span class="o">(</span><span class="n">String</span> <span class="n">argName</span><span class="o">);</span>
     <span class="n">UDTValue</span> <span class="nf">newArgUDTValue</span><span class="o">(</span><span class="kt">int</span> <span class="n">argNum</span><span class="o">);</span>
@@ -464,7 +470,7 @@ create new UDT and tuple values:</p>
 </pre></div>
 </div>
 <p>Java UDFs already have some imports for common interfaces and classes defined. These imports are:</p>
-<div class="highlight-java"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.nio.ByteBuffer</span><span class="o">;</span>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">java.nio.ByteBuffer</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">java.util.Set</span><span class="o">;</span>
@@ -488,7 +494,7 @@ create new UDT and tuple values:</p>
 <strong id="grammar-token-arguments_declaration">arguments_declaration    </strong> ::=  <a class="reference internal" href="definitions.html#grammar-token-identifier"><code class="xref docutils literal"><span class="pre">identifier</span></code></a> <a class="reference internal" href="types.html#grammar-token-cql_type"><code class="xref docutils literal"><span class="pre">cql_type</span></code></a> ( ',' <a class="reference internal" href="definitions.html#grammar-token-identifier"><code class="xref docutils literal"><span class="pre">identifier</span></code></a> <a class="reference internal" href="types.html#grammar-token-cql_type"><code class="xref docutils literal"><span class="pre">cql_type</span></code></a> )*
 </pre>
 <p>For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="n">somefunction</span><span class="p">(</span><span class="n">somearg</span> <span class="nb">int</span><span class="p">,</span> <span class="n">anotherarg</span> <span class="nb">text</span><span class="p">,</span> <span class="n">complexarg</span> <span class="k">frozen</span><span class="o">&lt;</span><span class="n">someUDT</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">listarg</span> <span class="k">list</span><span class="p">)</span>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="n">somefunction</span><span class="p">(</span><span class="n">somearg</span> <span class="nb">int</span><span class="p">,</span> <span class="n">anotherarg</span> <span class="nb">text</span><span class="p">,</span> <span class="n">complexarg</span> <span class="k">frozen</span><span class="o">&lt;</span><span class="n">someUDT</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">listarg</span> <span class="k">list</span><span class="p">)</span>
     <span class="k">RETURNS</span> <span class="k">NULL</span> <span class="k">ON</span> <span class="k">NULL</span> <span class="k">INPUT</span>
     <span class="k">RETURNS</span> <span class="nb">text</span>
     <span class="k">LANGUAGE</span> <span class="n">java</span>
@@ -542,7 +548,7 @@ system keyspaces.</p>
 <strong id="grammar-token-arguments_signature">arguments_signature    </strong> ::=  <a class="reference internal" href="types.html#grammar-token-cql_type"><code class="xref docutils literal"><span class="pre">cql_type</span></code></a> ( ',' <a class="reference internal" href="types.html#grammar-token-cql_type"><code class="xref docutils literal"><span class="pre">cql_type</span></code></a> )*
 </pre>
 <p>For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">DROP</span> <span class="k">FUNCTION</span> <span class="n">myfunction</span><span class="p">;</span>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">DROP</span> <span class="k">FUNCTION</span> <span class="n">myfunction</span><span class="p">;</span>
 <span class="k">DROP</span> <span class="k">FUNCTION</span> <span class="n">mykeyspace</span><span class="mf">.</span><span class="n">afunction</span><span class="p">;</span>
 <span class="k">DROP</span> <span class="k">FUNCTION</span> <span class="n">afunction</span> <span class="p">(</span> <span class="nb">int</span> <span class="p">);</span>
 <span class="k">DROP</span> <span class="k">FUNCTION</span> <span class="n">afunction</span> <span class="p">(</span> <span class="nb">text</span> <span class="p">);</span>
@@ -565,12 +571,12 @@ aggregate functions, the values returned for them will be the ones of the first 
 <div class="section" id="count">
 <span id="count-function"></span><h4>Count<a class="headerlink" href="#count" title="Permalink to this headline">¶</a></h4>
 <p>The <code class="docutils literal"><span class="pre">count</span></code> function can be used to count the rows returned by a query. Example:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="k">COUNT</span> <span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">plays</span><span class="p">;</span>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="k">COUNT</span> <span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">plays</span><span class="p">;</span>
 <span class="k">SELECT</span> <span class="k">COUNT</span> <span class="p">(</span><span class="mf">1</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">plays</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>It also can be used to count the non null value of a given column:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="k">COUNT</span> <span class="p">(</span><span class="n">scores</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">plays</span><span class="p">;</span>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="k">COUNT</span> <span class="p">(</span><span class="n">scores</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">plays</span><span class="p">;</span>
 </pre></div>
 </div>
 </div>
@@ -578,14 +584,14 @@ aggregate functions, the values returned for them will be the ones of the first 
 <h4>Max and Min<a class="headerlink" href="#max-and-min" title="Permalink to this headline">¶</a></h4>
 <p>The <code class="docutils literal"><span class="pre">max</span></code> and <code class="docutils literal"><span class="pre">min</span></code> functions can be used to compute the maximum and the minimum value returned by a query for a
 given column. For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">MIN</span> <span class="p">(</span><span class="n">players</span><span class="p">),</span> <span class="n">MAX</span> <span class="p">(</span><span class="n">players</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">plays</span> <span class="k">WHERE</span> <span class="n">game</span> <span class="o">=</span> <span class="s1">&#39;quake&#39;</span><span class="p">;</span>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">MIN</span> <span class="p">(</span><span class="n">players</span><span class="p">),</span> <span class="n">MAX</span> <span class="p">(</span><span class="n">players</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">plays</span> <span class="k">WHERE</span> <span class="n">game</span> <span class="o">=</span> <span class="s1">&#39;quake&#39;</span><span class="p">;</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="sum">
 <h4>Sum<a class="headerlink" href="#sum" title="Permalink to this headline">¶</a></h4>
 <p>The <code class="docutils literal"><span class="pre">sum</span></code> function can be used to sum up all the values returned by a query for a given column. For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">SUM</span> <span class="p">(</span><span class="n">players</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">plays</span><span class="p">;</span>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">SUM</span> <span class="p">(</span><span class="n">players</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">plays</span><span class="p">;</span>
 </pre></div>
 </div>
 </div>
@@ -593,7 +599,7 @@ given column. For instance:</p>
 <h4>Avg<a class="headerlink" href="#avg" title="Permalink to this headline">¶</a></h4>
 <p>The <code class="docutils literal"><span class="pre">avg</span></code> function can be used to compute the average of all the values returned by a query for a given column. For
 instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">AVG</span> <span class="p">(</span><span class="n">players</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">plays</span><span class="p">;</span>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">AVG</span> <span class="p">(</span><span class="n">players</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">plays</span><span class="p">;</span>
 </pre></div>
 </div>
 </div>
@@ -612,7 +618,7 @@ function (since the overload can appear after creation of the aggregate).</p>
 <p>User-defined aggregates can be used in <code class="docutils literal"><span class="pre">SELECT</span></code> statement.</p>
 <p>A complete working example for user-defined aggregates (assuming that a keyspace has been selected using the <code class="docutils literal"><span class="pre">USE</span></code>
 statement):</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="n">averageState</span><span class="p">(</span><span class="n">state</span> <span class="k">tuple</span><span class="o">&lt;</span><span class="nb">int</span><span class="p">,</span><span class="nb">bigint</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">val</span> <span class="nb">int</span><span class="p">)</span>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="n">averageState</span><span class="p">(</span><span class="n">state</span> <span class="k">tuple</span><span class="o">&lt;</span><span class="nb">int</span><span class="p">,</span><span class="nb">bigint</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">val</span> <span class="nb">int</span><span class="p">)</span>
     <span class="k">CALLED</span> <span class="k">ON</span> <span class="k">NULL</span> <span class="k">INPUT</span>
     <span class="k">RETURNS</span> <span class="k">tuple</span>
     <span class="k">LANGUAGE</span> <span class="n">java</span>
@@ -693,7 +699,7 @@ defined, it is the return type of that function.</p>
 <strong id="grammar-token-drop_aggregate_statement">drop_aggregate_statement</strong> ::=  DROP AGGREGATE [ IF EXISTS ] <a class="reference internal" href="#grammar-token-function_name"><code class="xref docutils literal"><span class="pre">function_name</span></code></a> [ '(' <a class="reference internal" href="#grammar-token-arguments_signature"><code class="xref docutils literal"><span class="pre">arguments_signature</span></code></a> ')' ]
 </pre>
 <p>For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">DROP</span> <span class="k">AGGREGATE</span> <span class="n">myAggregate</span><span class="p">;</span>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">DROP</span> <span class="k">AGGREGATE</span> <span class="n">myAggregate</span><span class="p">;</span>
 <span class="k">DROP</span> <span class="k">AGGREGATE</span> <span class="n">myKeyspace</span><span class="mf">.</span><span class="n">anAggregate</span><span class="p">;</span>
 <span class="k">DROP</span> <span class="k">AGGREGATE</span> <span class="n">someAggregate</span> <span class="p">(</span> <span class="nb">int</span> <span class="p">);</span>
 <span class="k">DROP</span> <span class="k">AGGREGATE</span> <span class="n">someAggregate</span> <span class="p">(</span> <span class="nb">text</span> <span class="p">);</span>

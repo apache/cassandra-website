@@ -2,6 +2,12 @@
 <html>
   
 
+  
+  
+    
+  
+  
+
 
 
 <head>
@@ -24,7 +30,7 @@
   <link rel="stylesheet" href="./../../../css/sphinx.css">
   
 
-   <link rel="top" title="Apache Cassandra Documentation v3.7" href="../index.html"/> <link rel="up" title="The Cassandra Query Language (CQL)" href="index.html"/> <link rel="next" title="Security" href="security.html"/> <link rel="prev" title="Secondary Indexes" href="indexes.html"/> 
+   <link rel="top" title="Apache Cassandra Documentation v4.0" href="../index.html"/> <link rel="up" title="The Cassandra Query Language (CQL)" href="index.html"/> <link rel="next" title="Security" href="security.html"/> <link rel="prev" title="Secondary Indexes" href="indexes.html"/> 
 </head>
 
   <body>
@@ -177,7 +183,7 @@
                                             WITH <a class="reference internal" href="ddl.html#grammar-token-table_options"><code class="xref docutils literal"><span class="pre">table_options</span></code></a>
 </pre>
 <p>For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">MATERIALIZED</span> <span class="k">VIEW</span> <span class="n">monkeySpecies_by_population</span> <span class="k">AS</span>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">MATERIALIZED</span> <span class="k">VIEW</span> <span class="n">monkeySpecies_by_population</span> <span class="k">AS</span>
     <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">monkeySpecies</span>
     <span class="k">WHERE</span> <span class="n">population</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">species</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span>
     <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">species</span><span class="p">)</span>
@@ -226,7 +232,7 @@ exactly one row of the base table.</li>
 <li>it can only contain a single column that is not a primary key column in the base table.</li>
 </ul>
 <p>So for instance, give the following base table definition:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t</span> <span class="p">(</span>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t</span> <span class="p">(</span>
     <span class="n">k</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">c1</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">c2</span> <span class="nb">int</span><span class="p">,</span>
@@ -237,7 +243,7 @@ exactly one row of the base table.</li>
 </pre></div>
 </div>
 <p>then the following view definitions are allowed:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">MATERIALIZED</span> <span class="k">VIEW</span> <span class="n">mv1</span> <span class="k">AS</span>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">MATERIALIZED</span> <span class="k">VIEW</span> <span class="n">mv1</span> <span class="k">AS</span>
     <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">t</span> <span class="k">WHERE</span> <span class="n">k</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">c1</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">c2</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span>
     <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">c2</span><span class="p">)</span>
 
@@ -247,7 +253,7 @@ exactly one row of the base table.</li>
 </pre></div>
 </div>
 <p>but the following ones are <strong>not</strong> allowed:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="c1">// Error: cannot include both v1 and v2 in the primary key as both are not in the base table primary key</span>
+<div class="highlight-cql"><div class="highlight"><pre><span class="c1">// Error: cannot include both v1 and v2 in the primary key as both are not in the base table primary key</span>
 <span class="k">CREATE</span> <span class="k">MATERIALIZED</span> <span class="k">VIEW</span> <span class="n">mv1</span> <span class="k">AS</span>
     <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">t</span> <span class="k">WHERE</span> <span class="n">k</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">c1</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">c2</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">v1</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span>
     <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">)</span>
