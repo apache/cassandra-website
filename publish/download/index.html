@@ -118,71 +118,71 @@ released against the most recent bug fix release. Read more about <a href="http:
 
 <p>Older (unsupported) versions of Cassandra are <a href="http://archive.apache.org/dist/cassandra/">archived here</a>.</p>
 
-<h3 id="debian">Debian™</h3>
-
-<p>The Apache Cassandra project also provide official Debian™ packages (which are not a product of Debian™). To use those
-packages, you can use:</p>
-
-<pre><code>deb http://www.apache.org/dist/cassandra/debian &lt;release series&gt; main
-deb-src http://www.apache.org/dist/cassandra/debian &lt;release series&gt; main
-</code></pre>
-
-<p>where <code>&lt;release series&gt;</code> is the series you want to install:</p>
+<h3 id="installation-from-debian-packages">Installation from Debian packages</h3>
 
 <ul>
   <li>For tick-tock releases, the <code>&lt;release series&gt;</code> is the release number, without dot, and with an appended <code>x</code>, so <code>31x</code>,
 <code>32x</code>, …</li>
-  <li>For older pre-tick-tock releases, the <code>&lt;release series&gt;</code> is the major version number, without dot, and with an
-appended <code>x</code>. So currently it can one of <code>21x</code>, <code>22x</code> or <code>30x</code>.</li>
+  <li>
+    <p>For older pre-tick-tock releases, the <code>&lt;release series&gt;</code> is the major version number, without dot, and with an
+appended <code>x</code>. So currently it can one of <code>21x</code>, <code>22x</code> or <code>30x</code>.</p>
+  </li>
+  <li>Add the Apache repository of Cassandra to <code>/etc/apt/sources.list.d/cassandra.sources.list</code>, for example for version 3.6:</li>
 </ul>
 
-<p>If after running apt-get update, you see an error message like:</p>
-
-<pre><code>GPG error: http://www.apache.org unstable Release: The following signatures couldn't be verified because the public key is not available: NO_PUBKEY 0353B12C
+<pre><code>echo "deb http://www.apache.org/dist/cassandra/debian 36x main" | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list
 </code></pre>
 
-<p>you will need to add the public key of the current Cassandra “release manager”, here <code>0353B12C</code>. You can do that with:</p>
-
-<div><div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>gpg --keyserver pgp.mit.edu --recv-keys &lt;public key&gt;
-<span class="line-numbers"><a href="#n2" name="n2">2</a></span>gpg --export --armor &lt;public key&gt; | sudo apt-key add -
-</pre></div>
-</div>
-</div>
-
-<p>where <code>&lt;public key&gt;</code> is the key to add (<code>0353B12C</code> in the example above). The list of Apache contributors public keys is
-available at <a href="https://www.apache.org/dist/cassandra/KEYS">https://www.apache.org/dist/cassandra/KEYS</a>.</p>
-
-<p>Once set up, installing is done as usual with:</p>
-
-<div><div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>sudo apt-get update
-<span class="line-numbers"><a href="#n2" name="n2">2</a></span>sudo apt-get install cassandra
-</pre></div>
-</div>
-</div>
-
-<p>Some things to be aware of:</p>
-
 <ul>
-  <li>The configuration files are located in <code>/etc/cassandra</code>.</li>
-  <li>Start-up options (heap size, etc) can be configured in <code>/etc/default/cassandra</code>.</li>
+  <li>Add the Apache Cassandra repository keys:</li>
 </ul>
 
-<h3 id="third-party-distributions-not-endorsed-by-apache">Third party distributions (not endorsed by Apache)</h3>
+<pre><code>curl https://www.apache.org/dist/cassandra/KEYS | sudo apt-key add -
+</code></pre>
 
-<p><a href="http://www.planetcassandra.org/cassandra/">DataStax Distribution of Apache Cassandra</a> is available in Linux rpm, deb,
-and tar packages, a Windows MSI installer, and a Mac OS X binary.</p>
+<ul>
+  <li>Update the repositories:</li>
+</ul>
+
+<pre><code>sudo apt-get update
+</code></pre>
+
+<ul>
+  <li>If you encounter this error:</li>
+</ul>
+
+<pre><code>GPG error: http://www.apache.org 36x InRelease: The following signatures couldn't be verified because the public key is not available: NO_PUBKEY A278B781FE4B2BDA
+</code></pre>
+<p>Then add the public key A278B781FE4B2BDA as follows:</p>
+
+<pre><code>sudo apt-key adv --keyserver pool.sks-keyservers.net --recv-key A278B781FE4B2BDA
+</code></pre>
+<p>and repeat <code>sudo apt-get update</code>. The actual key may be different, you get it from the error message itself. For a
+full list of Apache contributors public keys, you can refer to <a href="https://www.apache.org/dist/cassandra/KEYS">https://www.apache.org/dist/cassandra/KEYS</a>.</p>
+
+<ul>
+  <li>Install Cassandra:</li>
+</ul>
+
+<pre><code>sudo apt-get install cassandra
+</code></pre>
+
+<ul>
+  <li>You can start Cassandra with <code>sudo service cassandra start</code> and stop it with <code>sudo service cassandra stop</code>.
+However, normally the service will start automatically. For this reason be sure to stop it if you need to make any
+configuration changes.</li>
+  <li>Verify that Cassandra is running by invoking <code>nodetool status</code> from the command line.</li>
+  <li>The default location of configuration files is <code>/etc/cassandra</code>.</li>
+  <li>The default location of log and data directories is <code>/var/log/cassandra/</code> and <code>/var/lib/cassandra</code>.</li>
+  <li>Start-up options (heap size, etc) can be configured in <code>/etc/default/cassandra</code>.</li>
+</ul>
 
 <h3 id="source">Source</h3>
 
 <p>Development is done in the Apache Git repository. To check out a copy:</p>
 
-<div><div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>git clone http://git-wip-us.apache.org/repos/asf/cassandra.git
-</pre></div>
-</div>
-</div>
+<pre><code>git clone http://git-wip-us.apache.org/repos/asf/cassandra.git
+</code></pre>
 
   </div>
 </div>
