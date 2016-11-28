@@ -35,7 +35,7 @@ Older (unsupported) versions of Cassandra are [archived here](http://archive.apa
 * For older pre-tick-tock releases, the `<release series>` is the major version number, without dot, and with an
   appended `x`. So currently it can one of `21x`, `22x` or `30x`.
 
-* Add the Apache repository of Cassandra to `/etc/apt/sources.list.d/cassandra.sources.list`, for example for version 3.6:
+* Add the Apache repository of Cassandra to `/etc/apt/sources.list.d/cassandra.sources.list`, for example for version 3.9:
 
 ```
 echo "deb http://www.apache.org/dist/cassandra/debian 39x main" | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list
