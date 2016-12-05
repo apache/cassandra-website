@@ -21,9 +21,9 @@ Download the latest Cassandra release: {{ "latest" | full_release_link }}.
 
 The following older Cassandra releases are still supported:
 
-* Apache Cassandra 3.0 is supported until **May 2017**. The latest release is {{ "3.0" | full_release_link }}.
-* Apache Cassandra 2.2 is supported until **November 2016**. The latest release is {{ "2.2" | full_release_link }}.
-* Apache Cassandra 2.1 is supported until **November 2016** with **critical fixes only**. The latest release is
+* Apache Cassandra 3.0 is supported until **6 months after 4.0 release (date TBD)**. The latest release is {{ "3.0" | full_release_link }}.
+* Apache Cassandra 2.2 is supported until **4.0 release (date TBD)**. The latest release is {{ "2.2" | full_release_link }}.
+* Apache Cassandra 2.1 is supported until **4.0 release (date TBD)** with **critical fixes only**. The latest release is
   {{ "2.1" | full_release_link }}.
 
 Older (unsupported) versions of Cassandra are [archived here](http://archive.apache.org/dist/cassandra/).
