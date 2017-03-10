@@ -35,10 +35,10 @@ Older (unsupported) versions of Cassandra are [archived here](http://archive.apa
 * For older pre-tick-tock releases, the `<release series>` is the major version number, without dot, and with an
   appended `x`. So currently it can one of `21x`, `22x` or `30x`.
 
-* Add the Apache repository of Cassandra to `/etc/apt/sources.list.d/cassandra.sources.list`, for example for version 3.9:
+* Add the Apache repository of Cassandra to `/etc/apt/sources.list.d/cassandra.sources.list`, for example for version 3.10:
 
 ```
-echo "deb http://www.apache.org/dist/cassandra/debian 39x main" | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list
+echo "deb http://www.apache.org/dist/cassandra/debian 310x main" | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list
 ```
 
 * Add the Apache Cassandra repository keys:
@@ -56,7 +56,7 @@ sudo apt-get update
 * If you encounter this error:
 
 ```
-GPG error: http://www.apache.org 39x InRelease: The following signatures couldn't be verified because the public key is not available: NO_PUBKEY A278B781FE4B2BDA
+GPG error: http://www.apache.org 310x InRelease: The following signatures couldn't be verified because the public key is not available: NO_PUBKEY A278B781FE4B2BDA
 ```
 Then add the public key A278B781FE4B2BDA as follows:
 
