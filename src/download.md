@@ -80,6 +80,34 @@ sudo apt-get install cassandra
 * The default location of log and data directories is `/var/log/cassandra/` and `/var/lib/cassandra`.
 * Start-up options (heap size, etc) can be configured in `/etc/default/cassandra`.
 
+### Installation from RPM packages
+
+Cassandra can currently only be installed manually from downloaded RPM packages. We'll work on making upcoming releases available through repositories in the future.
+
+The following versions are currently available for download:
+
+* TODO: 3.0.13 (pgp, md5 and sha1)
+
+Any instructions have been tested with CentOS 7 and should work for all Redhat based distributions. Please see note on end of this section on how to report any issues.
+
+Start Cassandra (will not start automatically):
+
+```
+service cassandra start
+```
+
+Systemd based distributions may require to run `systemctl daemon-reload` once to make Cassandra available as a systemd service. This should happen automatically by running the command above.
+
+Make Cassandra start automatically after reboot:
+
+```
+chkconfig cassandra on
+```
+
+Please note that official RPMs for Apache Cassandra only have been available recently and are not tested thoroughly on all platforms yet. We appreciate your feedback and support and ask you to post details on any issues in the [corresponding Jira ticket](https://issues.apache.org/jira/browse/CASSANDRA-13433).
+
+
+
 ### Source
 
 Development is done in the Apache Git repository. To check out a copy:
