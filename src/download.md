@@ -86,7 +86,7 @@ Cassandra can currently only be installed manually from downloaded RPM packages.
 
 The following versions are currently available for download:
 
-* TODO: 3.0.13 (pgp, md5 and sha1)
+* [3.0.13](http://www.apache.org/dyn/closer.lua/cassandra/redhat/30x/cassandra-3.0.13-1.noarch.rpm) (md5: `7a100653112a8a79d09fbf18dbc3f7d8` sha1: `3b9e2dfa94614af7d7f7891eb95982719e1a8fb4`)
 
 Any instructions have been tested with CentOS 7 and should work for all Redhat based distributions. Please see note on end of this section on how to report any issues.
 
