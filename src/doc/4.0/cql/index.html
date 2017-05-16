@@ -65,6 +65,7 @@ extra-footer: '
 <li class="toctree-l2"><a class="reference internal" href="mvs.html">Materialized Views</a></li>
 <li class="toctree-l2"><a class="reference internal" href="security.html">Security</a></li>
 <li class="toctree-l2"><a class="reference internal" href="functions.html">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators.html">Arithmetic Operators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="json.html">JSON Support</a></li>
 <li class="toctree-l2"><a class="reference internal" href="triggers.html">Triggers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="appendices.html">Appendices</a></li>
@@ -75,7 +76,7 @@ extra-footer: '
 <li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
@@ -97,8 +98,7 @@ extra-footer: '
 the languages. However, the <a class="reference external" href="#changes">changes</a> section provides the diff between the different versions of CQL.</p>
 <p>CQL offers a model close to SQL in the sense that data is put in <em>tables</em> containing <em>rows</em> of <em>columns</em>. For
 that reason, when used in this document, these terms (tables, rows and columns) have the same definition than they have
-in SQL. But please note that as such, they do <strong>not</strong> refer to the concept of rows and columns found in the deprecated
-thrift API (and earlier version 1 and 2 of CQL).</p>
+in SQL.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="definitions.html">Definitions</a><ul>
@@ -116,6 +116,7 @@ thrift API (and earlier version 1 and 2 of CQL).</p>
 <li class="toctree-l2"><a class="reference internal" href="types.html#working-with-timestamps">Working with timestamps</a></li>
 <li class="toctree-l2"><a class="reference internal" href="types.html#working-with-dates">Working with dates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="types.html#working-with-times">Working with times</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html#working-with-durations">Working with durations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="types.html#collections">Collections</a></li>
 <li class="toctree-l2"><a class="reference internal" href="types.html#user-defined-types">User-Defined Types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="types.html#tuples">Tuples</a></li>
@@ -164,6 +165,11 @@ thrift API (and earlier version 1 and 2 of CQL).</p>
 <li class="toctree-l2"><a class="reference internal" href="functions.html#aggregate-functions">Aggregate functions</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="operators.html">Arithmetic Operators</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="operators.html#id2">Number Arithmetic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators.html#id4">Datetime Arithmetic</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="json.html">JSON Support</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="json.html#select-json">SELECT JSON</a></li>
 <li class="toctree-l2"><a class="reference internal" href="json.html#insert-json">INSERT JSON</a></li>
@@ -183,26 +189,28 @@ thrift API (and earlier version 1 and 2 of CQL).</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changes.html">Changes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changes.html#id1">3.4.3</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes.html#id2">3.4.2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes.html#id3">3.4.1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes.html#id4">3.4.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes.html#id5">3.3.1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes.html#id6">3.3.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes.html#id7">3.2.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes.html#id8">3.1.7</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes.html#id9">3.1.6</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes.html#id10">3.1.5</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes.html#id11">3.1.4</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes.html#id12">3.1.3</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes.html#id13">3.1.2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes.html#id14">3.1.1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes.html#id15">3.1.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes.html#id16">3.0.5</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes.html#id17">3.0.4</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes.html#id18">3.0.3</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes.html#id19">3.0.2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes.html#id20">3.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id1">3.4.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id2">3.4.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id3">3.4.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id6">3.4.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id7">3.4.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id8">3.4.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id9">3.3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id10">3.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id11">3.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id12">3.1.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id13">3.1.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id14">3.1.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id15">3.1.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id16">3.1.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id17">3.1.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id18">3.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id19">3.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id20">3.0.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id21">3.0.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id22">3.0.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id23">3.0.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#id24">3.0.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes.html#versioning">Versioning</a></li>
 </ul>
 </li>

@@ -66,6 +66,7 @@ extra-footer: '
 <li class="toctree-l3"><a class="reference internal" href="#working-with-timestamps">Working with timestamps</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#working-with-dates">Working with dates</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#working-with-times">Working with times</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#working-with-durations">Working with durations</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#collections">Collections</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#user-defined-types">User-Defined Types</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tuples">Tuples</a></li>
@@ -78,6 +79,7 @@ extra-footer: '
 <li class="toctree-l2"><a class="reference internal" href="mvs.html">Materialized Views</a></li>
 <li class="toctree-l2"><a class="reference internal" href="security.html">Security</a></li>
 <li class="toctree-l2"><a class="reference internal" href="functions.html">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators.html">Arithmetic Operators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="json.html">JSON Support</a></li>
 <li class="toctree-l2"><a class="reference internal" href="triggers.html">Triggers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="appendices.html">Appendices</a></li>
@@ -88,7 +90,7 @@ extra-footer: '
 <li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
@@ -124,6 +126,7 @@ types</span></a>:</p>
                  | DATE
                  | DECIMAL
                  | DOUBLE
+                 | DURATION
                  | FLOAT
                  | INET
                  | INT
@@ -186,58 +189,62 @@ types</span></a>:</p>
 <a class="reference internal" href="definitions.html#grammar-token-float"><code class="xref std std-token docutils literal"><span class="pre">float</span></code></a></td>
 <td>64-bit IEEE-754 floating point</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">float</span></code></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">duration</span></code></td>
+<td><code class="xref std std-token docutils literal"><span class="pre">duration</span></code>,</td>
+<td>A duration with nanosecond precision. See <a class="reference internal" href="#durations"><span class="std std-ref">Working with durations</span></a> below for details</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">float</span></code></td>
 <td><a class="reference internal" href="definitions.html#grammar-token-integer"><code class="xref std std-token docutils literal"><span class="pre">integer</span></code></a>,
 <a class="reference internal" href="definitions.html#grammar-token-float"><code class="xref std std-token docutils literal"><span class="pre">float</span></code></a></td>
 <td>32-bit IEEE-754 floating point</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">inet</span></code></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">inet</span></code></td>
 <td><a class="reference internal" href="definitions.html#grammar-token-string"><code class="xref std std-token docutils literal"><span class="pre">string</span></code></a></td>
 <td>An IP address, either IPv4 (4 bytes long) or IPv6 (16 bytes long). Note that
 there is no <code class="docutils literal"><span class="pre">inet</span></code> constant, IP address should be input as strings</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">int</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">int</span></code></td>
 <td><a class="reference internal" href="definitions.html#grammar-token-integer"><code class="xref std std-token docutils literal"><span class="pre">integer</span></code></a></td>
 <td>32-bit signed int</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">smallint</span></code></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">smallint</span></code></td>
 <td><a class="reference internal" href="definitions.html#grammar-token-integer"><code class="xref std std-token docutils literal"><span class="pre">integer</span></code></a></td>
 <td>16-bit signed int</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">text</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">text</span></code></td>
 <td><a class="reference internal" href="definitions.html#grammar-token-string"><code class="xref std std-token docutils literal"><span class="pre">string</span></code></a></td>
 <td>UTF8 encoded string</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">time</span></code></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">time</span></code></td>
 <td><a class="reference internal" href="definitions.html#grammar-token-integer"><code class="xref std std-token docutils literal"><span class="pre">integer</span></code></a>,
 <a class="reference internal" href="definitions.html#grammar-token-string"><code class="xref std std-token docutils literal"><span class="pre">string</span></code></a></td>
 <td>A time (with no corresponding date value) with nanosecond precision. See
 <a class="reference internal" href="#times"><span class="std std-ref">Working with times</span></a> below for details</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">timestamp</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">timestamp</span></code></td>
 <td><a class="reference internal" href="definitions.html#grammar-token-integer"><code class="xref std std-token docutils literal"><span class="pre">integer</span></code></a>,
 <a class="reference internal" href="definitions.html#grammar-token-string"><code class="xref std std-token docutils literal"><span class="pre">string</span></code></a></td>
 <td>A timestamp (date and time) with millisecond precision. See <a class="reference internal" href="#timestamps"><span class="std std-ref">Working with timestamps</span></a>
 below for details</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">timeuuid</span></code></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">timeuuid</span></code></td>
 <td><a class="reference internal" href="definitions.html#grammar-token-uuid"><code class="xref std std-token docutils literal"><span class="pre">uuid</span></code></a></td>
 <td>Version 1 <a class="reference external" href="https://en.wikipedia.org/wiki/Universally_unique_identifier">UUID</a>, generally used as a “conflict-free” timestamp. Also see
 <a class="reference internal" href="functions.html#timeuuid-functions"><span class="std std-ref">Timeuuid functions</span></a></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">tinyint</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">tinyint</span></code></td>
 <td><a class="reference internal" href="definitions.html#grammar-token-integer"><code class="xref std std-token docutils literal"><span class="pre">integer</span></code></a></td>
 <td>8-bit signed int</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">uuid</span></code></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">uuid</span></code></td>
 <td><a class="reference internal" href="definitions.html#grammar-token-uuid"><code class="xref std std-token docutils literal"><span class="pre">uuid</span></code></a></td>
 <td>A <a class="reference external" href="https://en.wikipedia.org/wiki/Universally_unique_identifier">UUID</a> (of any version)</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">varchar</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">varchar</span></code></td>
 <td><a class="reference internal" href="definitions.html#grammar-token-string"><code class="xref std std-token docutils literal"><span class="pre">string</span></code></a></td>
 <td>UTF8 encoded string</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">varint</span></code></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">varint</span></code></td>
 <td><a class="reference internal" href="definitions.html#grammar-token-integer"><code class="xref std std-token docutils literal"><span class="pre">integer</span></code></a></td>
 <td>Arbitrary-precision integer</td>
 </tr>
@@ -308,6 +315,50 @@ time:</p>
 <li><code class="docutils literal"><span class="pre">'08:12:54.123456'</span></code></li>
 <li><code class="docutils literal"><span class="pre">'08:12:54.123456789'</span></code></li>
 </ul>
+</div>
+<div class="section" id="working-with-durations">
+<span id="durations"></span><h2>Working with durations<a class="headerlink" href="#working-with-durations" title="Permalink to this headline">¶</a></h2>
+<p>Values of the <code class="docutils literal"><span class="pre">duration</span></code> type are encoded as 3 signed integer of variable lengths. The first integer represents the
+number of months, the second the number of days and the third the number of nanoseconds. This is due to the fact that
+the number of days in a month can change, and a day can have 23 or 25 hours depending on the daylight saving.
+Internally, the number of months and days are decoded as 32 bits integers whereas the number of nanoseconds is decoded
+as a 64 bits integer.</p>
+<p>A duration can be input as:</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p class="first"><code class="docutils literal"><span class="pre">(quantity</span> <span class="pre">unit)+</span></code> like <code class="docutils literal"><span class="pre">12h30m</span></code> where the unit can be:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">y</span></code>: years (12 months)</li>
+<li><code class="docutils literal"><span class="pre">mo</span></code>: months (1 month)</li>
+<li><code class="docutils literal"><span class="pre">w</span></code>: weeks (7 days)</li>
+<li><code class="docutils literal"><span class="pre">d</span></code>: days (1 day)</li>
+<li><code class="docutils literal"><span class="pre">h</span></code>: hours (3,600,000,000,000 nanoseconds)</li>
+<li><code class="docutils literal"><span class="pre">m</span></code>: minutes (60,000,000,000 nanoseconds)</li>
+<li><code class="docutils literal"><span class="pre">s</span></code>: seconds (1,000,000,000 nanoseconds)</li>
+<li><code class="docutils literal"><span class="pre">ms</span></code>: milliseconds (1,000,000 nanoseconds)</li>
+<li><code class="docutils literal"><span class="pre">us</span></code> or <code class="docutils literal"><span class="pre">µs</span></code> : microseconds (1000 nanoseconds)</li>
+<li><code class="docutils literal"><span class="pre">ns</span></code>: nanoseconds (1 nanosecond)</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">ISO 8601 format:  <code class="docutils literal"><span class="pre">P[n]Y[n]M[n]DT[n]H[n]M[n]S</span> <span class="pre">or</span> <span class="pre">P[n]W</span></code></p>
+</li>
+<li><p class="first">ISO 8601 alternative format: <code class="docutils literal"><span class="pre">P[YYYY]-[MM]-[DD]T[hh]:[mm]:[ss]</span></code></p>
+</li>
+</ol>
+</div></blockquote>
+<p>For example:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">RiderResults</span> <span class="p">(</span><span class="n">rider</span><span class="p">,</span> <span class="n">race</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;Christopher Froome&#39;</span><span class="p">,</span> <span class="s1">&#39;Tour de France&#39;</span><span class="p">,</span> <span class="mf">89</span><span class="n">h4m48s</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">RiderResults</span> <span class="p">(</span><span class="n">rider</span><span class="p">,</span> <span class="n">race</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;BARDET Romain&#39;</span><span class="p">,</span> <span class="s1">&#39;Tour de France&#39;</span><span class="p">,</span> <span class="n">PT89H8M53S</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">RiderResults</span> <span class="p">(</span><span class="n">rider</span><span class="p">,</span> <span class="n">race</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;QUINTANA Nairo&#39;</span><span class="p">,</span> <span class="s1">&#39;Tour de France&#39;</span><span class="p">,</span> <span class="n">P0000</span><span class="o">-</span><span class="mf">00</span><span class="o">-</span><span class="mf">00</span><span class="n">T89</span><span class="p">:</span><span class="mf">09</span><span class="p">:</span><span class="mf">09</span><span class="p">);</span>
+</pre></div>
+</div>
+<p id="duration-limitation">Duration columns cannot be used in a table&#8217;s <code class="docutils literal"><span class="pre">PRIMARY</span> <span class="pre">KEY</span></code>. This limitation is due to the fact that
+durations cannot be ordered. It is effectively not possible to know if <code class="docutils literal"><span class="pre">1mo</span></code> is greater than <code class="docutils literal"><span class="pre">29d</span></code> without a date
+context.</p>
+<p>A <code class="docutils literal"><span class="pre">1d</span></code> duration is not equals to a <code class="docutils literal"><span class="pre">24h</span></code> one as the duration type has been created to be able to support daylight
+saving.</p>
 </div>
 <div class="section" id="collections">
 <span id="id4"></span><h2>Collections<a class="headerlink" href="#collections" title="Permalink to this headline">¶</a></h2>
@@ -564,14 +615,11 @@ For instance, one could insert into the table define in the previous section usi
 <p>An existing user-defined type can be modified using an <code class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TYPE</span></code> statement:</p>
 <pre>
 <strong id="grammar-token-alter_type_statement">alter_type_statement   </strong> ::=  ALTER TYPE <a class="reference internal" href="#grammar-token-udt_name"><code class="xref docutils literal"><span class="pre">udt_name</span></code></a> <a class="reference internal" href="#grammar-token-alter_type_modification"><code class="xref docutils literal"><span class="pre">alter_type_modification</span></code></a>
-<strong id="grammar-token-alter_type_modification">alter_type_modification</strong> ::=  ALTER <a class="reference internal" href="definitions.html#grammar-token-identifier"><code class="xref docutils literal"><span class="pre">identifier</span></code></a> TYPE <a class="reference internal" href="#grammar-token-cql_type"><code class="xref docutils literal"><span class="pre">cql_type</span></code></a>
-                             | ADD <a class="reference internal" href="#grammar-token-field_definition"><code class="xref docutils literal"><span class="pre">field_definition</span></code></a>
+<strong id="grammar-token-alter_type_modification">alter_type_modification</strong> ::=  ADD <a class="reference internal" href="#grammar-token-field_definition"><code class="xref docutils literal"><span class="pre">field_definition</span></code></a>
                              | RENAME <a class="reference internal" href="definitions.html#grammar-token-identifier"><code class="xref docutils literal"><span class="pre">identifier</span></code></a> TO <a class="reference internal" href="definitions.html#grammar-token-identifier"><code class="xref docutils literal"><span class="pre">identifier</span></code></a> ( <a class="reference internal" href="definitions.html#grammar-token-identifier"><code class="xref docutils literal"><span class="pre">identifier</span></code></a> TO <a class="reference internal" href="definitions.html#grammar-token-identifier"><code class="xref docutils literal"><span class="pre">identifier</span></code></a> )*
 </pre>
 <p>You can:</p>
 <ul class="simple">
-<li>modify the type of particular field (<code class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TYPE</span> <span class="pre">address</span> <span class="pre">ALTER</span> <span class="pre">zip</span> <span class="pre">TYPE</span> <span class="pre">bigint</span></code>). The restrictions for such change
-are the same than when <a class="reference internal" href="ddl.html#alter-table-statement"><span class="std std-ref">altering the type of column</span></a>.</li>
 <li>add a new field to the type (<code class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TYPE</span> <span class="pre">address</span> <span class="pre">ADD</span> <span class="pre">country</span> <span class="pre">text</span></code>). That new field will be <code class="docutils literal"><span class="pre">null</span></code> for any values
 of the type created before the addition.</li>
 <li>rename the fields of the type (<code class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TYPE</span> <span class="pre">address</span> <span class="pre">RENAME</span> <span class="pre">zip</span> <span class="pre">TO</span> <span class="pre">zipcode</span></code>).</li>

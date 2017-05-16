@@ -12,7 +12,7 @@ doc-title: "Nodetool"
 doc-header-links: '
   <link rel="top" title="Apache Cassandra Documentation v4.0" href="../../index.html"/>
       <link rel="up" title="Cassandra Tools" href="../index.html"/>
-      <link rel="next" title="Troubleshooting" href="../../troubleshooting/index.html"/>
+      <link rel="next" title="Cassandra Stress" href="../cassandra_stress.html"/>
       <link rel="prev" title="cqlsh: the CQL shell" href="../cqlsh.html"/>
 '
 doc-search-path: "../../search.html"
@@ -66,10 +66,11 @@ extra-footer: '
 <li class="toctree-l2"><a class="reference internal" href="../cqlsh.html">cqlsh: the CQL shell</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Nodetool</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cassandra_stress.html">Cassandra Stress</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../troubleshooting/index.html">Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Contributing to Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../faq/index.html">Frequently Asked Questions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../bugs.html">Reporting Bugs and Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contactus.html">Contact us</a></li>
@@ -92,8 +93,8 @@ extra-footer: '
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
 <dl class="docutils">
 <dt>usage: nodetool [(-pwf &lt;passwordFilePath&gt; | &#8211;password-file &lt;passwordFilePath&gt;)]</dt>
-<dd>[(-u &lt;username&gt; | &#8211;username &lt;username&gt;)] [(-p &lt;port&gt; | &#8211;port &lt;port&gt;)]
-[(-h &lt;host&gt; | &#8211;host &lt;host&gt;)] [(-pw &lt;password&gt; | &#8211;password &lt;password&gt;)]
+<dd>[(-h &lt;host&gt; | &#8211;host &lt;host&gt;)] [(-u &lt;username&gt; | &#8211;username &lt;username&gt;)]
+[(-pw &lt;password&gt; | &#8211;password &lt;password&gt;)] [(-p &lt;port&gt; | &#8211;port &lt;port&gt;)]
 &lt;command&gt; [&lt;args&gt;]</dd>
 </dl>
 <p>The most commonly used nodetool commands are:</p>
@@ -114,7 +115,6 @@ extra-footer: '
 <p><a class="reference internal" href="disablegossip.html"><span class="doc">disablegossip</span></a> -                 Disable gossip (effectively marking the node down)</p>
 <p><a class="reference internal" href="disablehandoff.html"><span class="doc">disablehandoff</span></a> -                Disable storing hinted handoffs</p>
 <p><a class="reference internal" href="disablehintsfordc.html"><span class="doc">disablehintsfordc</span></a> -             Disable hints for a data center</p>
-<p><a class="reference internal" href="disablethrift.html"><span class="doc">disablethrift</span></a> -                 Disable thrift server</p>
 <p><a class="reference internal" href="drain.html"><span class="doc">drain</span></a> -                         Drain the node (stop accepting writes and flush all tables)</p>
 <p><a class="reference internal" href="enableautocompaction.html"><span class="doc">enableautocompaction</span></a> -          Enable autocompaction for the given keyspace and table</p>
 <p><a class="reference internal" href="enablebackup.html"><span class="doc">enablebackup</span></a> -                  Enable incremental backup</p>
@@ -122,7 +122,6 @@ extra-footer: '
 <p><a class="reference internal" href="enablegossip.html"><span class="doc">enablegossip</span></a> -                  Reenable gossip</p>
 <p><a class="reference internal" href="enablehandoff.html"><span class="doc">enablehandoff</span></a> -                 Reenable future hints storing on the current node</p>
 <p><a class="reference internal" href="enablehintsfordc.html"><span class="doc">enablehintsfordc</span></a> -              Enable hints for a data center that was previsouly disabled</p>
-<p><a class="reference internal" href="enablethrift.html"><span class="doc">enablethrift</span></a> -                  Reenable thrift server</p>
 <p><a class="reference internal" href="failuredetector.html"><span class="doc">failuredetector</span></a> -               Shows the failure detector information for the cluster</p>
 <p><a class="reference internal" href="flush.html"><span class="doc">flush</span></a> -                         Flush one or more tables</p>
 <p><a class="reference internal" href="garbagecollect.html"><span class="doc">garbagecollect</span></a> -                Remove deleted data from one or more tables</p>
@@ -133,6 +132,7 @@ extra-footer: '
 <p><a class="reference internal" href="getendpoints.html"><span class="doc">getendpoints</span></a> -                  Print the end points that owns the key</p>
 <p><a class="reference internal" href="getinterdcstreamthroughput.html"><span class="doc">getinterdcstreamthroughput</span></a> -    Print the Mb/s throughput cap for inter-datacenter streaming in the system</p>
 <p><a class="reference internal" href="getlogginglevels.html"><span class="doc">getlogginglevels</span></a> -              Get the runtime logging levels</p>
+<p><a class="reference internal" href="getmaxhintwindow.html"><span class="doc">getmaxhintwindow</span></a> -              Print the max hint window in ms</p>
 <p><a class="reference internal" href="getsstables.html"><span class="doc">getsstables</span></a> -                   Print the sstable filenames that own the key</p>
 <p><a class="reference internal" href="getstreamthroughput.html"><span class="doc">getstreamthroughput</span></a> -           Print the Mb/s throughput cap for streaming in the system</p>
 <p><a class="reference internal" href="gettimeout.html"><span class="doc">gettimeout</span></a> -                    Print the timeout of the given type in ms</p>
@@ -158,6 +158,8 @@ extra-footer: '
 <p><a class="reference internal" href="relocatesstables.html"><span class="doc">relocatesstables</span></a> -              Relocates sstables to the correct disk</p>
 <p><a class="reference internal" href="removenode.html"><span class="doc">removenode</span></a> -                    Show status of current node removal, force completion of pending removal or remove provided ID</p>
 <p><a class="reference internal" href="repair.html"><span class="doc">repair</span></a> -                        Repair one or more tables</p>
+<p><a class="reference internal" href="repair_admin.html"><span class="doc">repair_admin</span></a> -
+<span class="xref doc">list</span> -  and fail incremental repair sessions</p>
 <p><a class="reference internal" href="replaybatchlog.html"><span class="doc">replaybatchlog</span></a> -                Kick off batchlog replay and wait for finish</p>
 <p><a class="reference internal" href="resetlocalschema.html"><span class="doc">resetlocalschema</span></a> -              Reset node&#8217;s local schema and resync</p>
 <p><a class="reference internal" href="resumehandoff.html"><span class="doc">resumehandoff</span></a> -                 Resume hints delivery process</p>
@@ -171,6 +173,7 @@ extra-footer: '
 <p><a class="reference internal" href="sethintedhandoffthrottlekb.html"><span class="doc">sethintedhandoffthrottlekb</span></a> -    Set hinted handoff throttle in kb per second, per delivery thread.</p>
 <p><a class="reference internal" href="setinterdcstreamthroughput.html"><span class="doc">setinterdcstreamthroughput</span></a> -    Set the Mb/s throughput cap for inter-datacenter streaming in the system, or 0 to disable throttling</p>
 <p><a class="reference internal" href="setlogginglevel.html"><span class="doc">setlogginglevel</span></a> -               Set the log level threshold for a given class. If both class and level are empty/null, it will reset to the initial configuration</p>
+<p><a class="reference internal" href="setmaxhintwindow.html"><span class="doc">setmaxhintwindow</span></a> -              Set the specified max hint window in ms</p>
 <p><a class="reference internal" href="setstreamthroughput.html"><span class="doc">setstreamthroughput</span></a> -           Set the Mb/s throughput cap for streaming in the system, or 0 to disable throttling</p>
 <p><a class="reference internal" href="settimeout.html"><span class="doc">settimeout</span></a> -                    Set the specified timeout in ms, or 0 to disable timeout</p>
 <p><a class="reference internal" href="settraceprobability.html"><span class="doc">settraceprobability</span></a> -           Sets the probability for tracing any given request to value. 0 disables, 1 enables for all requests, 0 is the default</p>
@@ -180,7 +183,6 @@ extra-footer: '
 <p><a class="reference internal" href="statusbinary.html"><span class="doc">statusbinary</span></a> -                  Status of native transport (binary protocol)</p>
 <p><a class="reference internal" href="statusgossip.html"><span class="doc">statusgossip</span></a> -                  Status of gossip</p>
 <p><a class="reference internal" href="statushandoff.html"><span class="doc">statushandoff</span></a> -                 Status of storing future hints on the current node</p>
-<p><a class="reference internal" href="statusthrift.html"><span class="doc">statusthrift</span></a> -                  Status of thrift server</p>
 <p><a class="reference internal" href="stop.html"><span class="doc">stop</span></a> -                          Stop compaction</p>
 <p><a class="reference internal" href="stopdaemon.html"><span class="doc">stopdaemon</span></a> -                    Stop cassandra daemon</p>
 <p><a class="reference internal" href="tablehistograms.html"><span class="doc">tablehistograms</span></a> -               Print statistic histograms for a given table</p>
@@ -201,7 +203,7 @@ extra-footer: '
           
           <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
             
-            <a href="../../troubleshooting/index.html" class="btn btn-default pull-right " role="button" title="Troubleshooting" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            <a href="../cassandra_stress.html" class="btn btn-default pull-right " role="button" title="Cassandra Stress" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
             
             
             <a href="../cqlsh.html" class="btn btn-default" role="button" title="cqlsh: the CQL shell" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>

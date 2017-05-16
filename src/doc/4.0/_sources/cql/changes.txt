@@ -21,13 +21,27 @@ Changes
 
 The following describes the changes in each version of CQL.
 
+3.4.5
+^^^^^
+
+- Adds support for arithmetic operators (:jira:`11935`)
+- Adds support for ``+`` and ``-`` operations on dates (:jira:`11936`)
+- Adds ``currentTimestamp``, ``currentDate``, ``currentTime`` and ``currentTimeUUID`` functions (:jira:`13132`)
+
+
+3.4.4
+^^^^^
+
+- ``ALTER TABLE`` ``ALTER`` has been removed; a column's type may not be changed after creation (:jira:`12443`).
+- ``ALTER TYPE`` ``ALTER`` has been removed; a field's type may not be changed after creation (:jira:`12443`).
+
 3.4.3
 ^^^^^
 
+- Adds a new ``duration `` :ref:`data types <data-types>` (:jira:`11873`).
 - Support for ``GROUP BY`` (:jira:`10707`).
 - Adds a ``DEFAULT UNSET`` option for ``INSERT JSON`` to ignore omitted columns (:jira:`11424`).
-- Allows ``null`` as a legal value for TTL on insert and update. It will be treated as equivalent to
-inserting a 0 (:jira:`12216`).
+- Allows ``null`` as a legal value for TTL on insert and update. It will be treated as equivalent to inserting a 0 (:jira:`12216`).
 
 3.4.2
 ^^^^^

@@ -166,7 +166,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
@@ -409,7 +409,7 @@ experiment with settings without affecting the whole cluster. The mbean is:</p>
 <p>and the attribute to change is <code class="docutils literal"><span class="pre">CompactionParameters</span></code> or <code class="docutils literal"><span class="pre">CompactionParametersJson</span></code> if you use jconsole or jmc. The
 syntax for the json version is the same as you would use in an <a class="reference internal" href="../cql/ddl.html#alter-table-statement"><span class="std std-ref">ALTER TABLE</span></a> statement -
 for example:</p>
-<div class="highlight-none"><div class="highlight"><pre>{ &#39;class&#39;: &#39;LeveledCompactionStrategy&#39;, &#39;sstable_size_in_mb&#39;: 123 }
+<div class="highlight-none"><div class="highlight"><pre>{ &#39;class&#39;: &#39;LeveledCompactionStrategy&#39;, &#39;sstable_size_in_mb&#39;: 123, &#39;fanout_size&#39;: 10}
 </pre></div>
 </div>
 <p>The setting is kept until someone executes an <a class="reference internal" href="../cql/ddl.html#alter-table-statement"><span class="std std-ref">ALTER TABLE</span></a> that touches the compaction
@@ -505,6 +505,9 @@ has not been involved.</p>
 <dt><code class="docutils literal"><span class="pre">sstable_size_in_mb</span></code> (default: 160MB)</dt>
 <dd>The target compressed (if using compression) sstable size - the sstables can end up being larger if there are very
 large partitions on the node.</dd>
+<dt><code class="docutils literal"><span class="pre">fanout_size</span></code> (default: 10)</dt>
+<dd>The target size of levels increases by this fanout_size multiplier. You can reduce the space amplification by tuning
+this option.</dd>
 </dl>
 <p>LCS also support the <code class="docutils literal"><span class="pre">cassandra.disable_stcs_in_l0</span></code> startup option (<code class="docutils literal"><span class="pre">-Dcassandra.disable_stcs_in_l0=true</span></code>) to avoid
 doing STCS in L0.</p>

@@ -147,6 +147,7 @@
 <li class="toctree-l2"><a class="reference internal" href="mvs.html">Materialized Views</a></li>
 <li class="toctree-l2"><a class="reference internal" href="security.html">Security</a></li>
 <li class="toctree-l2"><a class="reference internal" href="functions.html">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators.html">Arithmetic Operators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="json.html">JSON Support</a></li>
 <li class="toctree-l2"><a class="reference internal" href="triggers.html">Triggers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="appendices.html">Appendices</a></li>
@@ -157,7 +158,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
@@ -480,7 +481,7 @@ instance, given:</p>
     <span class="n">a</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">b</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">c</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
 <span class="p">);</span>
 
 <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">t</span><span class="p">;</span>
@@ -511,14 +512,14 @@ options of a table are described in the following sections.</p>
 <p class="first admonition-title">Warning</p>
 <p class="last">Since Cassandra 3.0, compact tables have the exact same layout internally than non compact ones (for the
 same schema obviously), and declaring a table compact <strong>only</strong> creates artificial limitations on the table definition
-and usage that are necessary to ensure backward compatibility with the deprecated Thrift API. And as <code class="docutils literal"><span class="pre">COMPACT</span>
+and usage. It only exists for historical reason and is preserved for backward compatibility And as <code class="docutils literal"><span class="pre">COMPACT</span>
 <span class="pre">STORAGE</span></code> cannot, as of Cassandra 4.0, be removed, it is strongly discouraged to create new table with the
 <code class="docutils literal"><span class="pre">COMPACT</span> <span class="pre">STORAGE</span></code> option.</p>
 </div>
-<p>A <em>compact</em> table is one defined with the <code class="docutils literal"><span class="pre">COMPACT</span> <span class="pre">STORAGE</span></code> option. This option is mainly targeted towards backward
-compatibility for definitions created before CQL version 3 (see <a class="reference external" href="http://www.datastax.com/dev/blog/thrift-to-cql3">www.datastax.com/dev/blog/thrift-to-cql3</a> for more details) and shouldn&#8217;t be used for new tables. Declaring a
-table with this option creates limitations for the table which are largely arbitrary but necessary for backward
-compatibility with the (deprecated) Thrift API. Amongst those limitation:</p>
+<p>A <em>compact</em> table is one defined with the <code class="docutils literal"><span class="pre">COMPACT</span> <span class="pre">STORAGE</span></code> option. This option is only maintained for backward
+compatibility for definitions created before CQL version 3 and shouldn&#8217;t be used for new tables. Declaring a
+table with this option creates limitations for the table which are largely arbitrary (and exists for historical
+reasons). Amongst those limitation:</p>
 <ul class="simple">
 <li>a compact table cannot use collections nor static columns.</li>
 <li>if a compact table has at least one clustering column, then it must have <em>exactly</em> one column outside of the primary
@@ -734,15 +735,12 @@ anticipate future usage when creating a table.</li>
 <p>Altering an existing table uses the <code class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> statement:</p>
 <pre>
 <strong id="grammar-token-alter_table_statement">alter_table_statement  </strong> ::=  ALTER TABLE <a class="reference internal" href="#grammar-token-table_name"><code class="xref docutils literal"><span class="pre">table_name</span></code></a> <a class="reference internal" href="#grammar-token-alter_table_instruction"><code class="xref docutils literal"><span class="pre">alter_table_instruction</span></code></a>
-<strong id="grammar-token-alter_table_instruction">alter_table_instruction</strong> ::=  ALTER <a class="reference internal" href="#grammar-token-column_name"><code class="xref docutils literal"><span class="pre">column_name</span></code></a> TYPE <a class="reference internal" href="types.html#grammar-token-cql_type"><code class="xref docutils literal"><span class="pre">cql_type</span></code></a>
-                             | ADD <a class="reference internal" href="#grammar-token-column_name"><code class="xref docutils literal"><span class="pre">column_name</span></code></a> <a class="reference internal" href="types.html#grammar-token-cql_type"><code class="xref docutils literal"><span class="pre">cql_type</span></code></a> ( ',' <a class="reference internal" href="#grammar-token-column_name"><code class="xref docutils literal"><span class="pre">column_name</span></code></a> <a class="reference internal" href="types.html#grammar-token-cql_type"><code class="xref docutils literal"><span class="pre">cql_type</span></code></a> )*
+<strong id="grammar-token-alter_table_instruction">alter_table_instruction</strong> ::=  ADD <a class="reference internal" href="#grammar-token-column_name"><code class="xref docutils literal"><span class="pre">column_name</span></code></a> <a class="reference internal" href="types.html#grammar-token-cql_type"><code class="xref docutils literal"><span class="pre">cql_type</span></code></a> ( ',' <a class="reference internal" href="#grammar-token-column_name"><code class="xref docutils literal"><span class="pre">column_name</span></code></a> <a class="reference internal" href="types.html#grammar-token-cql_type"><code class="xref docutils literal"><span class="pre">cql_type</span></code></a> )*
                              | DROP <a class="reference internal" href="#grammar-token-column_name"><code class="xref docutils literal"><span class="pre">column_name</span></code></a> ( <a class="reference internal" href="#grammar-token-column_name"><code class="xref docutils literal"><span class="pre">column_name</span></code></a> )*
                              | WITH <a class="reference internal" href="#grammar-token-options"><code class="xref docutils literal"><span class="pre">options</span></code></a>
 </pre>
 <p>For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">addamsFamily</span> <span class="k">ALTER</span> <span class="n">lastKnownLocation</span> <span class="k">TYPE</span> <span class="nb">uuid</span><span class="p">;</span>
-
-<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">addamsFamily</span> <span class="k">ADD</span> <span class="n">gravesite</span> <span class="nb">varchar</span><span class="p">;</span>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">addamsFamily</span> <span class="k">ADD</span> <span class="n">gravesite</span> <span class="nb">varchar</span><span class="p">;</span>
 
 <span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">addamsFamily</span>
        <span class="k">WITH</span> <span class="n">comment</span> <span class="o">=</span> <span class="s1">&#39;A most excellent and useful table&#39;</span>
@@ -751,11 +749,6 @@ anticipate future usage when creating a table.</li>
 </div>
 <p>The <code class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> statement can:</p>
 <ul class="simple">
-<li>Change the type of one of the column in the table (through the <code class="docutils literal"><span class="pre">ALTER</span></code> instruction). Note that the type of a column
-cannot be changed arbitrarily. The change of type should be such that any value of the previous type should be a valid
-value of the new type. Further, for <a class="reference internal" href="#clustering-columns"><span class="std std-ref">clustering columns</span></a> and columns on which a secondary
-index is defined, the new type must sort values in the same way the previous type does. See the <a class="reference internal" href="#alter-table-type-compatibility"><span class="std std-ref">type
-compatibility table</span></a> below for detail on which type changes are accepted.</li>
 <li>Add new column(s) to the table (through the <code class="docutils literal"><span class="pre">ADD</span></code> instruction). Note that the primary key of a table cannot be
 changed and thus newly added column will, by extension, never be part of the primary key. Also note that <a class="reference internal" href="#compact-tables"><span class="std std-ref">compact
 tables</span></a> have restrictions regarding column addition. Note that this is constant (in the amount of
@@ -780,75 +773,6 @@ convention. Please be aware that if you do so, dropping a column will not work c
 <p class="first admonition-title">Warning</p>
 <p class="last">Once a column is dropped, it is allowed to re-add a column with the same name than the dropped one
 <strong>unless</strong> the type of the dropped column was a (non-frozen) column (due to an internal technical limitation).</p>
-</div>
-<div class="section" id="cql-type-compatibility">
-<span id="alter-table-type-compatibility"></span><h3>CQL type compatibility:<a class="headerlink" href="#cql-type-compatibility" title="Permalink to this headline">¶</a></h3>
-<p>CQL data types may be converted only as the following table.</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="73%" />
-<col width="27%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Existing type</th>
-<th class="head">Can be altered to:</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>timestamp</td>
-<td>bigint</td>
-</tr>
-<tr class="row-odd"><td>ascii, bigint, boolean, date, decimal, double, float,
-inet, int, smallint, text, time, timestamp, timeuuid,
-tinyint, uuid, varchar, varint</td>
-<td>blob</td>
-</tr>
-<tr class="row-even"><td>int</td>
-<td>date</td>
-</tr>
-<tr class="row-odd"><td>ascii, varchar</td>
-<td>text</td>
-</tr>
-<tr class="row-even"><td>bigint</td>
-<td>time</td>
-</tr>
-<tr class="row-odd"><td>bigint</td>
-<td>timestamp</td>
-</tr>
-<tr class="row-even"><td>timeuuid</td>
-<td>uuid</td>
-</tr>
-<tr class="row-odd"><td>ascii, text</td>
-<td>varchar</td>
-</tr>
-<tr class="row-even"><td>bigint, int, timestamp</td>
-<td>varint</td>
-</tr>
-</tbody>
-</table>
-<p>Clustering columns have stricter requirements, only the following conversions are allowed:</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="52%" />
-<col width="48%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Existing type</th>
-<th class="head">Can be altered to</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>ascii, text, varchar</td>
-<td>blob</td>
-</tr>
-<tr class="row-odd"><td>ascii, varchar</td>
-<td>text</td>
-</tr>
-<tr class="row-even"><td>ascii, text</td>
-<td>varchar</td>
-</tr>
-</tbody>
-</table>
 </div>
 </div>
 <div class="section" id="drop-table">

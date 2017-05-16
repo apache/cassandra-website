@@ -156,7 +156,7 @@ PasswordAuthenticator}.
 
 - AllowAllAuthenticator performs no checks - set it to disable authentication.
 - PasswordAuthenticator relies on username/password pairs to authenticate
-  users. It keeps usernames and hashed passwords in system_auth.credentials table.
+  users. It keeps usernames and hashed passwords in system_auth.roles table.
   Please increase system_auth keyspace replication factor if you use this authenticator.
   If using PasswordAuthenticator, CassandraRoleManager must also be used (see below)
 
@@ -170,7 +170,7 @@ Out of the box, Cassandra provides org.apache.cassandra.auth.{AllowAllAuthorizer
 CassandraAuthorizer}.
 
 - AllowAllAuthorizer allows any action to any user - set it to disable authorization.
-- CassandraAuthorizer stores permissions in system_auth.permissions table. Please
+- CassandraAuthorizer stores permissions in system_auth.role_permissions table. Please
   increase system_auth keyspace replication factor if you use this authorizer.
 
 *Default Value:* AllowAllAuthorizer
@@ -357,10 +357,10 @@ ignore
 Policy for commit disk failures:
 
 die
-  shut down gossip and Thrift and kill the JVM, so the node can be replaced.
+  shut down the node and kill the JVM, so the node can be replaced.
 
 stop
-  shut down gossip and Thrift, leaving the node effectively dead, but
+  shut down the node, leaving the node effectively dead, but
   can still be inspected via JMX.
 
 stop_commit
@@ -390,17 +390,6 @@ i.e. use bind markers for variable parts.
 Do only change the default value, if you really have more prepared statements than
 fit in the cache. In most cases it is not neccessary to change this value.
 Constantly re-preparing statements is a performance penalty.
-
-Default value ("auto") is 1/256th of the heap or 10MB, whichever is greater
-
-``thrift_prepared_statements_cache_size_mb``
---------------------------------------------
-
-Maximum size of the Thrift prepared statement cache
-
-If you do not use Thrift at all, it is safe to leave this value at "auto".
-
-See description of 'prepared_statements_cache_size_mb' above for more information.
 
 Default value ("auto") is 1/256th of the heap or 10MB, whichever is greater
 
@@ -954,8 +943,7 @@ used to allow/disallow connections from peer nodes.
 --------------------------
 
 Whether to start the native transport server.
-Please note that the address on which the native transport is bound is the
-same as the rpc_address. The port however is different and specified below.
+The address on which the native transport is bound is defined by rpc_address.
 
 *Default Value:* true
 
@@ -982,10 +970,8 @@ keeping native_transport_port unencrypted.
 ``native_transport_max_threads``
 --------------------------------
 *This option is commented out by default.*
-The maximum threads for handling requests when the native transport is used.
-This is similar to rpc_max_threads though the default differs slightly (and
-there is no native_transport_min_threads, idle threads will always be stopped
-after 30 seconds).
+The maximum threads for handling requests (note that idle threads are stopped
+after 30 seconds so there is not corresponding minimum setting).
 
 *Default Value:* 128
 
@@ -1017,18 +1003,10 @@ The default is -1, which means unlimited.
 
 *Default Value:* -1
 
-``start_rpc``
--------------
-
-Whether to start the thrift rpc server.
-
-*Default Value:* false
-
 ``rpc_address``
 ---------------
 
-The address or interface to bind the Thrift RPC service and native transport
-server to.
+The address or interface to bind the native transport server to.
 
 Set rpc_address OR rpc_interface, not both.
 
@@ -1062,13 +1040,6 @@ ipv4. If there is only one address it will be selected regardless of ipv4/ipv6.
 
 *Default Value:* false
 
-``rpc_port``
-------------
-
-port for Thrift to listen for clients on
-
-*Default Value:* 9160
-
 ``broadcast_rpc_address``
 -------------------------
 *This option is commented out by default.*
@@ -1086,65 +1057,6 @@ be set.
 enable or disable keepalive on rpc/native connections
 
 *Default Value:* true
-
-``rpc_server_type``
--------------------
-
-Cassandra provides two out-of-the-box options for the RPC Server:
-
-sync
-  One thread per thrift connection. For a very large number of clients, memory
-  will be your limiting factor. On a 64 bit JVM, 180KB is the minimum stack size
-  per thread, and that will correspond to your use of virtual memory (but physical memory
-  may be limited depending on use of stack space).
-
-hsha
-  Stands for "half synchronous, half asynchronous." All thrift clients are handled
-  asynchronously using a small number of threads that does not vary with the amount
-  of thrift clients (and thus scales well to many clients). The rpc requests are still
-  synchronous (one thread per active request). If hsha is selected then it is essential
-  that rpc_max_threads is changed from the default value of unlimited.
-
-The default is sync because on Windows hsha is about 30% slower.  On Linux,
-sync/hsha performance is about the same, with hsha of course using less memory.
-
-Alternatively,  can provide your own RPC server by providing the fully-qualified class name
-of an o.a.c.t.TServerFactory that can create an instance of it.
-
-*Default Value:* sync
-
-``rpc_min_threads``
--------------------
-*This option is commented out by default.*
-
-Uncomment rpc_min|max_thread to set request pool size limits.
-
-Regardless of your choice of RPC server (see above), the number of maximum requests in the
-RPC thread pool dictates how many concurrent requests are possible (but if you are using the sync
-RPC server, it also dictates the number of clients that can be connected at all).
-
-The default is unlimited and thus provides no protection against clients overwhelming the server. You are
-encouraged to set a maximum that makes sense for you in production, but do keep in mind that
-rpc_max_threads represents the maximum number of client requests this server may execute concurrently.
-
-
-*Default Value:* 16
-
-``rpc_max_threads``
--------------------
-*This option is commented out by default.*
-
-*Default Value:* 2048
-
-``rpc_send_buff_size_in_bytes``
--------------------------------
-*This option is commented out by default.*
-
-uncomment to set socket buffer sizes on rpc connections
-
-``rpc_recv_buff_size_in_bytes``
--------------------------------
-*This option is commented out by default.*
 
 ``internode_send_buff_size_in_bytes``
 -------------------------------------
@@ -1167,13 +1079,6 @@ and 'man tcp'
 Uncomment to set socket buffer size for internode communication
 Note that when setting this, the buffer size is limited by net.core.wmem_max
 and when not setting it it is defined by net.ipv4.tcp_wmem
-
-``thrift_framed_transport_size_in_mb``
---------------------------------------
-
-Frame size for thrift (maximum message length).
-
-*Default Value:* 15
 
 ``incremental_backups``
 -----------------------
@@ -1383,9 +1288,20 @@ times out in 10 minutes by default
 
 *Default Value:* 300
 
+``streaming_connections_per_host``
+----------------------------------
+*This option is commented out by default.*
+
+Limit number of connections per host for streaming
+Increase this when you notice that joins are CPU-bound rather that network
+bound (for example a few nodes with big files).
+
+*Default Value:* 1
+
 ``phi_convict_threshold``
 -------------------------
 *This option is commented out by default.*
+
 
 phi value that must be reached for a host to be marked down.
 most users should never need to adjust this.
@@ -1488,66 +1404,6 @@ until the pinned host was 20% worse than the fastest.
 
 *Default Value:* 0.1
 
-``request_scheduler``
----------------------
-
-request_scheduler -- Set this to a class that implements
-RequestScheduler, which will schedule incoming client requests
-according to the specific policy. This is useful for multi-tenancy
-with a single Cassandra cluster.
-NOTE: This is specifically for requests from the client and does
-not affect inter node communication.
-org.apache.cassandra.scheduler.NoScheduler - No scheduling takes place
-org.apache.cassandra.scheduler.RoundRobinScheduler - Round robin of
-client requests to a node with a separate queue for each
-request_scheduler_id. The scheduler is further customized by
-request_scheduler_options as described below.
-
-*Default Value:* org.apache.cassandra.scheduler.NoScheduler
-
-``request_scheduler_options``
------------------------------
-*This option is commented out by default.*
-
-Scheduler Options vary based on the type of scheduler
-
-NoScheduler
-  Has no options
-
-RoundRobin
-  throttle_limit
-    The throttle_limit is the number of in-flight
-    requests per client.  Requests beyond 
-    that limit are queued up until
-    running requests can complete.
-    The value of 80 here is twice the number of
-    concurrent_reads + concurrent_writes.
-  default_weight
-    default_weight is optional and allows for
-    overriding the default which is 1.
-  weights
-    Weights are optional and will default to 1 or the
-    overridden default_weight. The weight translates into how
-    many requests are handled during each turn of the
-    RoundRobin, based on the scheduler id.
-
-
-*Default Value (complex option)*::
-
-    #    throttle_limit: 80
-    #    default_weight: 5
-    #    weights:
-    #      Keyspace1: 1
-    #      Keyspace2: 5
-
-``request_scheduler_id``
-------------------------
-*This option is commented out by default.*
-request_scheduler_id -- An identifier based on which to perform
-the request scheduling. Currently the only valid option is keyspace.
-
-*Default Value:* keyspace
-
 ``server_encryption_options``
 -----------------------------
 
@@ -1645,15 +1501,6 @@ TTL for different trace types used during logging of the repair process.
 ------------------------
 
 *Default Value:* 604800
-
-``gc_log_threshold_in_ms``
---------------------------
-*This option is commented out by default.*
-
-By default, Cassandra logs GC Pauses greater than 200 ms at INFO level
-This threshold can be adjusted to minimize logging if necessary
-
-*Default Value:* 200
 
 ``enable_user_defined_functions``
 ---------------------------------
@@ -1772,12 +1619,22 @@ Log a warning when compacting partitions larger than this value
 
 *Default Value:* 100
 
+``gc_log_threshold_in_ms``
+--------------------------
+*This option is commented out by default.*
+
+GC Pauses greater than 200 ms will be logged at INFO level
+This threshold can be adjusted to minimize logging if necessary
+
+*Default Value:* 200
+
 ``gc_warn_threshold_in_ms``
 ---------------------------
+*This option is commented out by default.*
 
 GC Pauses greater than gc_warn_threshold_in_ms will be logged at WARN level
-Adjust the threshold based on your application throughput requirement
-By default, Cassandra logs GC Pauses greater than 200 ms at INFO level
+Adjust the threshold based on your application throughput requirement. Setting to 0
+will deactivate the feature.
 
 *Default Value:* 1000
 
@@ -1813,3 +1670,69 @@ the rate limiting is applied according to the flow type: if FAST, it's rate limi
 if SLOW at the speed of the slowest one.
 New strategies can be added. Implementors need to implement org.apache.cassandra.net.BackpressureStrategy and
 provide a public constructor accepting a Map<String, Object>.
+
+``otc_coalescing_strategy``
+---------------------------
+*This option is commented out by default.*
+
+Coalescing Strategies #
+Coalescing multiples messages turns out to significantly boost message processing throughput (think doubling or more).
+On bare metal, the floor for packet processing throughput is high enough that many applications won't notice, but in
+virtualized environments, the point at which an application can be bound by network packet processing can be
+surprisingly low compared to the throughput of task processing that is possible inside a VM. It's not that bare metal
+doesn't benefit from coalescing messages, it's that the number of packets a bare metal network interface can process
+is sufficient for many applications such that no load starvation is experienced even without coalescing.
+There are other benefits to coalescing network messages that are harder to isolate with a simple metric like messages
+per second. By coalescing multiple tasks together, a network thread can process multiple messages for the cost of one
+trip to read from a socket, and all the task submission work can be done at the same time reducing context switching
+and increasing cache friendliness of network message processing.
+See CASSANDRA-8692 for details.
+
+Strategy to use for coalescing messages in OutboundTcpConnection.
+Can be fixed, movingaverage, timehorizon, disabled (default).
+You can also specify a subclass of CoalescingStrategies.CoalescingStrategy by name.
+
+*Default Value:* DISABLED
+
+``otc_coalescing_window_us``
+----------------------------
+*This option is commented out by default.*
+
+How many microseconds to wait for coalescing. For fixed strategy this is the amount of time after the first
+message is received before it will be sent with any accompanying messages. For moving average this is the
+maximum amount of time that will be waited as well as the interval at which messages must arrive on average
+for coalescing to be enabled.
+
+*Default Value:* 200
+
+``otc_coalescing_enough_coalesced_messages``
+--------------------------------------------
+*This option is commented out by default.*
+
+Do not try to coalesce messages if we already got that many messages. This should be more than 2 and less than 128.
+
+*Default Value:* 8
+
+``otc_backlog_expiration_interval_ms``
+--------------------------------------
+*This option is commented out by default.*
+
+How many milliseconds to wait between two expiration runs on the backlog (queue) of the OutboundTcpConnection.
+Expiration is done if messages are piling up in the backlog. Droppable messages are expired to free the memory
+taken by expired messages. The interval should be between 0 and 1000, and in most installations the default value
+will be appropriate. A smaller value could potentially expire messages slightly sooner at the expense of more CPU
+time and queue contention while iterating the backlog of messages.
+An interval of 0 disables any wait time, which is the behavior of former Cassandra versions.
+
+
+*Default Value:* 200
+
+``ideal_consistency_level``
+---------------------------
+*This option is commented out by default.*
+
+Track a metric per keyspace indicating whether replication achieved the ideal consistency
+level for writes without timing out. This is different from the consistency level requested by
+each write which may be lower in order to facilitate availability.
+
+*Default Value:* EACH_QUORUM

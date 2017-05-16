@@ -75,7 +75,7 @@ extra-footer: '
 <li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
@@ -95,10 +95,53 @@ extra-footer: '
 <h1>Storage Engine<a class="headerlink" href="#storage-engine" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="commitlog">
 <span id="commit-log"></span><h2>CommitLog<a class="headerlink" href="#commitlog" title="Permalink to this headline">¶</a></h2>
-<div class="admonition-todo admonition" id="index-0">
-<p class="first admonition-title">Todo</p>
-<p class="last">todo</p>
+<p>Commitlogs are an append only log of all mutations local to a Cassandra node. Any data written to Cassandra will first be written to a commit log before being written to a memtable. This provides durability in the case of unexpected shutdown. On startup, any mutations in the commit log will be applied to memtables.</p>
+<p>All mutations write optimized by storing in commitlog segments, reducing the number of seeks needed to write to disk. Commitlog Segments are limited by the &#8220;commitlog_segment_size_in_mb&#8221; option, once the size is reached, a new commitlog segment is created. Commitlog segments can be archived, deleted, or recycled once all its data has been flushed to SSTables.  Commitlog segments are truncated when Cassandra has written data older than a certain point to the SSTables. Running &#8220;nodetool drain&#8221; before stopping Cassandra will write everything in the memtables to SSTables and remove the need to sync with the commitlogs on startup.</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">commitlog_segment_size_in_mb</span></code>: The default size is 32, which is almost always fine, but if you are archiving commitlog segments (see commitlog_archiving.properties), then you probably want a finer granularity of archiving; 8 or 16 MB is reasonable. Max mutation size is also configurable via max_mutation_size_in_kb setting in cassandra.yaml. The default is half the size commitlog_segment_size_in_mb * 1024.</li>
+</ul>
+<p><strong>*NOTE: If max_mutation_size_in_kb is set explicitly then commitlog_segment_size_in_mb must be set to at least twice the size of max_mutation_size_in_kb / 1024*</strong></p>
+<p><em>Default Value:</em> 32</p>
+<p>Commitlogs are an append only log of all mutations local to a Cassandra node. Any data written to Cassandra will first be written to a commit log before being written to a memtable. This provides durability in the case of unexpected shutdown. On startup, any mutations in the commit log will be applied.</p>
+<ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">commitlog_sync</span></code>: may be either “periodic” or “batch.”</p>
+<ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">batch</span></code>: In batch mode, Cassandra won’t ack writes until the commit log has been fsynced to disk. It will wait &#8220;commitlog_sync_batch_window_in_ms&#8221; milliseconds between fsyncs. This window should be kept short because the writer threads will be unable to do extra work while waiting. You may need to increase concurrent_writes for the same reason.</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">commitlog_sync_batch_window_in_ms</span></code>: Time to wait between &#8220;batch&#8221; fsyncs</li>
+</ul>
+<p><em>Default Value:</em> 2</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">periodic</span></code>: In periodic mode, writes are immediately ack&#8217;ed, and the CommitLog is simply synced every &#8220;commitlog_sync_period_in_ms&#8221; milliseconds.</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">commitlog_sync_period_in_ms</span></code>: Time to wait between &#8220;periodic&#8221; fsyncs</li>
+</ul>
+<p><em>Default Value:</em> 10000</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><em>Default Value:</em> batch</p>
+<p><strong>* NOTE: In the event of an unexpected shutdown, Cassandra can lose up to the sync period or more if the sync is delayed. If using &#8220;batch&#8221; mode, it is recommended to store commitlogs in a separate, dedicated device.</strong></p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">commitlog_directory</span></code>: This option is commented out by default When running on magnetic HDD, this should be a separate spindle than the data directories. If not set, the default directory is $CASSANDRA_HOME/data/commitlog.</li>
+</ul>
+<p><em>Default Value:</em> /var/lib/cassandra/commitlog</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">commitlog_compression</span></code>: Compression to apply to the commitlog. If omitted, the commit log will be written uncompressed.  LZ4, Snappy, and Deflate compressors are supported.</li>
+</ul>
+<p>(Default Value: (complex option):</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="c">#   - class_name: LZ4Compressor</span>
+<span class="c">#     parameters:</span>
+<span class="c">#         -</span>
+</pre></div>
 </div>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">commitlog_total_space_in_mb</span></code>: Total space to use for commit logs on disk.</li>
+</ul>
+<p>If space gets above this value, Cassandra will flush every dirty CF in the oldest segment and remove it. So a small total commitlog space will tend to cause more flush activity on less-active columnfamilies.</p>
+<p>The default value is the smaller of 8192, and 1/4 of the total space of the commitlog volume.</p>
+<p><em>Default Value:</em> 8192</p>
 </div>
 <div class="section" id="memtables">
 <span id="id1"></span><h2>Memtables<a class="headerlink" href="#memtables" title="Permalink to this headline">¶</a></h2>

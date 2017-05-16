@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="./../../../css/sphinx.css">
   
 
-   <link rel="top" title="Apache Cassandra Documentation v4.0" href="../index.html"/> <link rel="next" title="Reporting Bugs and Contributing" href="../bugs.html"/> <link rel="prev" title="How-to Commit" href="../development/how_to_commit.html"/> 
+   <link rel="top" title="Apache Cassandra Documentation v4.0" href="../index.html"/> <link rel="next" title="Reporting Bugs and Contributing" href="../bugs.html"/> <link rel="prev" title="Working on Documentation" href="../development/documentation.html"/> 
 </head>
 
   <body>
@@ -130,7 +130,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Frequently Asked Questions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#why-can-t-i-set-listen-address-to-listen-on-0-0-0-0-all-my-addresses">Why can&#8217;t I set <code class="docutils literal"><span class="pre">listen_address</span></code> to listen on 0.0.0.0 (all my addresses)?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#what-ports-does-cassandra-use">What ports does Cassandra use?</a></li>
@@ -202,7 +202,7 @@ to make things resolve correctly (<code class="docutils literal"><span class="pr
 <div class="section" id="what-ports-does-cassandra-use">
 <span id="what-ports"></span><h2>What ports does Cassandra use?<a class="headerlink" href="#what-ports-does-cassandra-use" title="Permalink to this headline">¶</a></h2>
 <p>By default, Cassandra uses 7000 for cluster communication (7001 if SSL is enabled),  9042 for native protocol clients,
-and 7199 for JMX (and 9160 for the deprecated Thrift interface). The internode communication and native protocol ports
+and 7199 for JMX. The internode communication and native protocol ports
 are configurable in the <a class="reference internal" href="../configuration/cassandra_config_file.html#cassandra-yaml"><span class="std std-ref">Cassandra Configuration File</span></a>. The JMX port is configurable in <code class="docutils literal"><span class="pre">cassandra-env.sh</span></code> (through JVM
 options). All ports are TCP.</p>
 </div>
@@ -228,15 +228,16 @@ token on the next restart.</p>
 </div>
 <div class="section" id="can-i-change-the-replication-factor-a-a-keyspace-on-a-live-cluster">
 <span id="change-replication-factor"></span><h2>Can I change the replication factor (a a keyspace) on a live cluster?<a class="headerlink" href="#can-i-change-the-replication-factor-a-a-keyspace-on-a-live-cluster" title="Permalink to this headline">¶</a></h2>
-<p>Yes, but it will require running repair (or cleanup) to change the replica count of existing data:</p>
+<p>Yes, but it will require running a full repair (or cleanup) to change the replica count of existing data:</p>
 <ul class="simple">
 <li><a class="reference internal" href="../cql/ddl.html#alter-keyspace-statement"><span class="std std-ref">Alter</span></a> the replication factor for desired keyspace (using cqlsh for instance).</li>
 <li>If you&#8217;re reducing the replication factor, run <code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">cleanup</span></code> on the cluster to remove surplus replicated data.
 Cleanup runs on a per-node basis.</li>
-<li>If you&#8217;re increasing the replication factor, run <code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">repair</span></code> to ensure data is replicated according to the new
+<li>If you&#8217;re increasing the replication factor, run <code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">repair</span> <span class="pre">-full</span></code> to ensure data is replicated according to the new
 configuration. Repair runs on a per-replica set basis. This is an intensive process that may result in adverse cluster
 performance. It&#8217;s highly recommended to do rolling repairs, as an attempt to repair the entire cluster at once will
-most likely swamp it.</li>
+most likely swamp it. Note that you will need to run a full repair (<code class="docutils literal"><span class="pre">-full</span></code>) to make sure that already repaired
+sstables are not skipped.</li>
 </ul>
 </div>
 <div class="section" id="can-i-store-large-blobs-in-cassandra">
@@ -373,7 +374,7 @@ more than 10 min. Running the above command is highly recommended in that enviro
             <a href="../bugs.html" class="btn btn-default pull-right " role="button" title="Reporting Bugs and Contributing" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
             
             
-            <a href="../development/how_to_commit.html" class="btn btn-default" role="button" title="How-to Commit" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            <a href="../development/documentation.html" class="btn btn-default" role="button" title="Working on Documentation" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
             
           </div>
           

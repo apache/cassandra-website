@@ -87,9 +87,11 @@ extra-footer: '
 <li class="toctree-l3"><a class="reference internal" href="#commitlog-metrics">CommitLog Metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#storage-metrics">Storage Metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hintedhandoff-metrics">HintedHandoff Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hintsservice-metrics">HintsService Metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#sstable-index-metrics">SSTable Index Metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bufferpool-metrics">BufferPool Metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#client-metrics">Client Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#batch-metrics">Batch Metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#jvm-metrics">JVM Metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#jmx">JMX</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#metric-reporters">Metric Reporters</a></li>
@@ -101,7 +103,7 @@ extra-footer: '
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
@@ -372,13 +374,57 @@ average throughputs.</dd>
 <td>Counter</td>
 <td>Number of times speculative retries were sent for this table.</td>
 </tr>
-<tr class="row-odd"><td>WaitingOnFreeMemtableSpace</td>
+<tr class="row-odd"><td>SpeculativeFailedRetries</td>
+<td>Counter</td>
+<td>Number of speculative retries that failed to prevent a timeout</td>
+</tr>
+<tr class="row-even"><td>SpeculativeInsufficientReplicas</td>
+<td>Counter</td>
+<td>Number of speculative retries that couldn&#8217;t be attempted due to lack of replicas</td>
+</tr>
+<tr class="row-odd"><td>SpeculativeSampleLatencyNanos</td>
+<td>Gauge&lt;Long&gt;</td>
+<td>Number of nanoseconds to wait before speculation is attempted. Value may be statically configured or updated periodically based on coordinator latency.</td>
+</tr>
+<tr class="row-even"><td>WaitingOnFreeMemtableSpace</td>
 <td>Histogram</td>
 <td>Histogram of time spent waiting for free memtable space, either on- or off-heap.</td>
 </tr>
-<tr class="row-even"><td>DroppedMutations</td>
+<tr class="row-odd"><td>DroppedMutations</td>
 <td>Counter</td>
 <td>Number of dropped mutations on this table.</td>
+</tr>
+<tr class="row-even"><td>AnticompactionTime</td>
+<td>Timer</td>
+<td>Time spent anticompacting before a consistent repair.</td>
+</tr>
+<tr class="row-odd"><td>ValidationTime</td>
+<td>Timer</td>
+<td>Time spent doing validation compaction during repair.</td>
+</tr>
+<tr class="row-even"><td>SyncTime</td>
+<td>Timer</td>
+<td>Time spent doing streaming during repair.</td>
+</tr>
+<tr class="row-odd"><td>BytesValidated</td>
+<td>Histogram</td>
+<td>Histogram over the amount of bytes read during validation.</td>
+</tr>
+<tr class="row-even"><td>PartitionsValidated</td>
+<td>Histogram</td>
+<td>Histogram over the number of partitions read during validation.</td>
+</tr>
+<tr class="row-odd"><td>BytesAnticompacted</td>
+<td>Counter</td>
+<td>How many bytes we anticompacted.</td>
+</tr>
+<tr class="row-even"><td>BytesMutatedAnticompaction</td>
+<td>Counter</td>
+<td>How many bytes we avoided anticompacting because the sstable was fully contained in the repaired range.</td>
+</tr>
+<tr class="row-odd"><td>MutatedAnticompactionGauge</td>
+<td>Gauge&lt;Double&gt;</td>
+<td>Ratio of bytes mutated vs total bytes repaired.</td>
 </tr>
 </tbody>
 </table>
@@ -386,7 +432,7 @@ average throughputs.</dd>
 <div class="section" id="keyspace-metrics">
 <h2>Keyspace Metrics<a class="headerlink" href="#keyspace-metrics" title="Permalink to this headline">¶</a></h2>
 <p>Each keyspace in Cassandra has metrics responsible for tracking its state and performance.</p>
-<p>These metrics are the same as the <code class="docutils literal"><span class="pre">Table</span> <span class="pre">Metrics</span></code> above, only they are aggregated at the Keyspace level.</p>
+<p>Most of these metrics are the same as the <code class="docutils literal"><span class="pre">Table</span> <span class="pre">Metrics</span></code> above, only they are aggregated at the Keyspace level. The keyspace specific metrics are specified in the table below.</p>
 <p>Reported name format:</p>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
@@ -394,6 +440,37 @@ average throughputs.</dd>
 <dt><strong>JMX MBean</strong></dt>
 <dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=Keyspace</span> <span class="pre">scope=&lt;Keyspace&gt;</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
 </dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="7%" />
+<col width="73%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>WriteFailedIdeaCL</td>
+<td>Counter</td>
+<td>Number of writes that failed to achieve the configured ideal consistency level or 0 if none is configured</td>
+</tr>
+<tr class="row-odd"><td>IdealCLWriteLatency</td>
+<td>Latency</td>
+<td>Coordinator latency of writes at the configured ideal consistency level. No values are recorded if ideal consistency level is not configured</td>
+</tr>
+<tr class="row-even"><td>RepairTime</td>
+<td>Timer</td>
+<td>Total time spent as repair coordinator.</td>
+</tr>
+<tr class="row-odd"><td>RepairPrepareTime</td>
+<td>Timer</td>
+<td>Total time spent preparing for repair.</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="threadpool-metrics">
 <h2>ThreadPool Metrics<a class="headerlink" href="#threadpool-metrics" title="Permalink to this headline">¶</a></h2>
@@ -666,6 +743,10 @@ specific type.</p>
 <td>Histogram</td>
 <td>How many contended writes were encountered</td>
 </tr>
+<tr class="row-even"><td>MutationSizeHistogram</td>
+<td>Histogram</td>
+<td>Total size in bytes of the requests mutations.</td>
+</tr>
 </tbody>
 </table>
 </td>
@@ -782,6 +863,10 @@ specific type.</p>
 <tr class="row-odd"><td>Unavailables</td>
 <td>Counter</td>
 <td>Number of unavailable exceptions encountered.</td>
+</tr>
+<tr class="row-even"><td>MutationSizeHistogram</td>
+<td>Histogram</td>
+<td>Total size in bytes of the requests mutations.</td>
 </tr>
 </tbody>
 </table>
@@ -1271,6 +1356,53 @@ Dropped writes are stored and retried by <code class="docutils literal"><span cl
 </tbody>
 </table>
 </div>
+<div class="section" id="hintsservice-metrics">
+<h2>HintsService Metrics<a class="headerlink" href="#hintsservice-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Metrics specific to the Hints delivery service.  There are also some metrics related to hints tracked in <code class="docutils literal"><span class="pre">Storage</span> <span class="pre">Metrics</span></code></p>
+<p>These metrics include the peer endpoint <strong>in the metric name</strong></p>
+<p>Reported name format:</p>
+<dl class="docutils">
+<dt><strong>Metric Name</strong></dt>
+<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics.HintsService.&lt;MetricName&gt;</span></code></dd>
+<dt><strong>JMX MBean</strong></dt>
+<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=HintsService</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="26%" />
+<col width="14%" />
+<col width="60%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>HintsSucceeded</td>
+<td>Meter</td>
+<td>A meter of the hints successfully delivered</td>
+</tr>
+<tr class="row-odd"><td>HintsFailed</td>
+<td>Meter</td>
+<td>A meter of the hints that failed deliver</td>
+</tr>
+<tr class="row-even"><td>HintsTimedOut</td>
+<td>Meter</td>
+<td>A meter of the hints that timed out</td>
+</tr>
+<tr class="row-odd"><td>Hints_delays</td>
+<td>Histogram</td>
+<td>Histogram of hint delivery delays (in milliseconds)</td>
+</tr>
+<tr class="row-even"><td>Hints_delays-&lt;PeerIP&gt;</td>
+<td>Histogram</td>
+<td>Histogram of hint delivery delays (in milliseconds) per peer</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="section" id="sstable-index-metrics">
 <h2>SSTable Index Metrics<a class="headerlink" href="#sstable-index-metrics" title="Permalink to this headline">¶</a></h2>
 <p>Metrics specific to the SSTable index metadata.</p>
@@ -1371,9 +1503,43 @@ lower by recycling on and off heap buffers.</p>
 <td>Counter</td>
 <td>Number of clients connected to this nodes native protocol server</td>
 </tr>
-<tr class="row-odd"><td>connectedThriftClients</td>
-<td>Counter</td>
-<td>Number of clients connected to this nodes thrift protocol server</td>
+</tbody>
+</table>
+</div>
+<div class="section" id="batch-metrics">
+<h2>Batch Metrics<a class="headerlink" href="#batch-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Metrics specifc to batch statements.</p>
+<p>Reported name format:</p>
+<dl class="docutils">
+<dt><strong>Metric Name</strong></dt>
+<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics.Batch.&lt;MetricName&gt;</span></code></dd>
+<dt><strong>JMX MBean</strong></dt>
+<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=Batch</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="13%" />
+<col width="63%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>PartitionsPerCounterBatch</td>
+<td>Histogram</td>
+<td>Distribution of the number of partitions processed per counter batch</td>
+</tr>
+<tr class="row-odd"><td>PartitionsPerLoggedBatch</td>
+<td>Histogram</td>
+<td>Distribution of the number of partitions processed per logged batch</td>
+</tr>
+<tr class="row-even"><td>PartitionsPerUnloggedBatch</td>
+<td>Histogram</td>
+<td>Distribution of the number of partitions processed per unlogged batch</td>
 </tr>
 </tbody>
 </table>

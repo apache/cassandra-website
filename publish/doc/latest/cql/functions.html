@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="./../../../css/sphinx.css">
   
 
-   <link rel="top" title="Apache Cassandra Documentation v4.0" href="../index.html"/> <link rel="up" title="The Cassandra Query Language (CQL)" href="index.html"/> <link rel="next" title="JSON Support" href="json.html"/> <link rel="prev" title="Security" href="security.html"/> 
+   <link rel="top" title="Apache Cassandra Documentation v4.0" href="../index.html"/> <link rel="up" title="The Cassandra Query Language (CQL)" href="index.html"/> <link rel="next" title="Arithmetic Operators" href="operators.html"/> <link rel="prev" title="Security" href="security.html"/> 
 </head>
 
   <body>
@@ -140,6 +140,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#aggregate-functions">Aggregate functions</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="operators.html">Arithmetic Operators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="json.html">JSON Support</a></li>
 <li class="toctree-l2"><a class="reference internal" href="triggers.html">Triggers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="appendices.html">Appendices</a></li>
@@ -150,7 +151,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
@@ -306,13 +307,14 @@ the partitioner in use:</p>
 <span id="id3"></span><h4>Timeuuid functions<a class="headerlink" href="#timeuuid-functions" title="Permalink to this headline">¶</a></h4>
 <div class="section" id="now">
 <h5><code class="docutils literal"><span class="pre">now</span></code><a class="headerlink" href="#now" title="Permalink to this headline">¶</a></h5>
-<p>The <code class="docutils literal"><span class="pre">now</span></code> function takes no arguments and generates, on the coordinator node, a new unique timeuuid (at the time where
-the statement using it is executed). Note that this method is useful for insertion but is largely non-sensical in
+<p>The <code class="docutils literal"><span class="pre">now</span></code> function takes no arguments and generates, on the coordinator node, a new unique timeuuid at the
+time the function is invoked. Note that this method is useful for insertion but is largely non-sensical in
 <code class="docutils literal"><span class="pre">WHERE</span></code> clauses. For instance, a query of the form:</p>
 <div class="highlight-cql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">myTable</span> <span class="k">WHERE</span> <span class="n">t</span> <span class="o">=</span> <span class="n">now</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>will never return any result by design, since the value returned by <code class="docutils literal"><span class="pre">now()</span></code> is guaranteed to be unique.</p>
+<p><code class="docutils literal"><span class="pre">currentTimeUUID</span></code> is an alias of <code class="docutils literal"><span class="pre">now</span></code>.</p>
 </div>
 <div class="section" id="mintimeuuid-and-maxtimeuuid">
 <h5><code class="docutils literal"><span class="pre">minTimeuuid</span></code> and <code class="docutils literal"><span class="pre">maxTimeuuid</span></code><a class="headerlink" href="#mintimeuuid-and-maxtimeuuid" title="Permalink to this headline">¶</a></h5>
@@ -337,8 +339,43 @@ for querying (as in the example above). Inserting the result of those methods is
 </div>
 </div>
 </div>
+<div class="section" id="datetime-functions">
+<h4>Datetime functions<a class="headerlink" href="#datetime-functions" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="retrieving-the-current-date-time">
+<h5>Retrieving the current date/time<a class="headerlink" href="#retrieving-the-current-date-time" title="Permalink to this headline">¶</a></h5>
+<p>The following functions can be used to retrieve the date/time at the time where the function is invoked:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="58%" />
+<col width="42%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Function name</th>
+<th class="head">Output type</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">currentTimestamp</span></code></td>
+<td><code class="docutils literal"><span class="pre">timestamp</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">currentDate</span></code></td>
+<td><code class="docutils literal"><span class="pre">date</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">currentTime</span></code></td>
+<td><code class="docutils literal"><span class="pre">time</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">currentTimeUUID</span></code></td>
+<td><code class="docutils literal"><span class="pre">timeUUID</span></code></td>
+</tr>
+</tbody>
+</table>
+<p>For example the last 2 days of data can be retrieved using:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">myTable</span> <span class="k">WHERE</span> <span class="nb">date</span> <span class="o">&gt;=</span> <span class="n">currentDate</span><span class="p">()</span> <span class="o">-</span> <span class="mf">2</span><span class="n">d</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="time-conversion-functions">
-<h4>Time conversion functions<a class="headerlink" href="#time-conversion-functions" title="Permalink to this headline">¶</a></h4>
+<h5>Time conversion functions<a class="headerlink" href="#time-conversion-functions" title="Permalink to this headline">¶</a></h5>
 <p>A number of functions are provided to “convert” a <code class="docutils literal"><span class="pre">timeuuid</span></code>, a <code class="docutils literal"><span class="pre">timestamp</span></code> or a <code class="docutils literal"><span class="pre">date</span></code> into another <code class="docutils literal"><span class="pre">native</span></code>
 type.</p>
 <table border="1" class="docutils">
@@ -392,6 +429,7 @@ type.</p>
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 <div class="section" id="blob-conversion-functions">
 <h4>Blob conversion functions<a class="headerlink" href="#blob-conversion-functions" title="Permalink to this headline">¶</a></h4>
@@ -720,7 +758,7 @@ function with the signature does not exist.</p>
           
           <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
             
-            <a href="json.html" class="btn btn-default pull-right " role="button" title="JSON Support" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            <a href="operators.html" class="btn btn-default pull-right " role="button" title="Arithmetic Operators" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
             
             
             <a href="security.html" class="btn btn-default" role="button" title="Security" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>

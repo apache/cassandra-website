@@ -359,7 +359,7 @@ instance, given::
         a int,
         b int,
         c int,
-        PRIMARY KEY (a, c, d)
+        PRIMARY KEY (a, b, c)
     );
 
     SELECT * FROM t;
@@ -396,15 +396,14 @@ Compact tables
 
 .. warning:: Since Cassandra 3.0, compact tables have the exact same layout internally than non compact ones (for the
    same schema obviously), and declaring a table compact **only** creates artificial limitations on the table definition
-   and usage that are necessary to ensure backward compatibility with the deprecated Thrift API. And as ``COMPACT
+   and usage. It only exists for historical reason and is preserved for backward compatibility And as ``COMPACT
    STORAGE`` cannot, as of Cassandra |version|, be removed, it is strongly discouraged to create new table with the
    ``COMPACT STORAGE`` option.
 
-A *compact* table is one defined with the ``COMPACT STORAGE`` option. This option is mainly targeted towards backward
-compatibility for definitions created before CQL version 3 (see `www.datastax.com/dev/blog/thrift-to-cql3
-<http://www.datastax.com/dev/blog/thrift-to-cql3>`__ for more details) and shouldn't be used for new tables. Declaring a
-table with this option creates limitations for the table which are largely arbitrary but necessary for backward
-compatibility with the (deprecated) Thrift API. Amongst those limitation:
+A *compact* table is one defined with the ``COMPACT STORAGE`` option. This option is only maintained for backward
+compatibility for definitions created before CQL version 3 and shouldn't be used for new tables. Declaring a
+table with this option creates limitations for the table which are largely arbitrary (and exists for historical
+reasons). Amongst those limitation:
 
 - a compact table cannot use collections nor static columns.
 - if a compact table has at least one clustering column, then it must have *exactly* one column outside of the primary
@@ -559,14 +558,11 @@ Altering an existing table uses the ``ALTER TABLE`` statement:
 
 .. productionlist::
    alter_table_statement: ALTER TABLE `table_name` `alter_table_instruction`
-   alter_table_instruction: ALTER `column_name` TYPE `cql_type`
-                          : | ADD `column_name` `cql_type` ( ',' `column_name` `cql_type` )*
+   alter_table_instruction: ADD `column_name` `cql_type` ( ',' `column_name` `cql_type` )*
                           : | DROP `column_name` ( `column_name` )*
                           : | WITH `options`
 
 For instance::
-
-    ALTER TABLE addamsFamily ALTER lastKnownLocation TYPE uuid;
 
     ALTER TABLE addamsFamily ADD gravesite varchar;
 
@@ -576,11 +572,6 @@ For instance::
 
 The ``ALTER TABLE`` statement can:
 
-- Change the type of one of the column in the table (through the ``ALTER`` instruction). Note that the type of a column
-  cannot be changed arbitrarily. The change of type should be such that any value of the previous type should be a valid
-  value of the new type. Further, for :ref:`clustering columns <clustering-columns>` and columns on which a secondary
-  index is defined, the new type must sort values in the same way the previous type does. See the :ref:`type
-  compatibility table <alter-table-type-compatibility>` below for detail on which type changes are accepted.
 - Add new column(s) to the table (through the ``ADD`` instruction). Note that the primary key of a table cannot be
   changed and thus newly added column will, by extension, never be part of the primary key. Also note that :ref:`compact
   tables <compact-tables>` have restrictions regarding column addition. Note that this is constant (in the amount of
@@ -603,48 +594,6 @@ The ``ALTER TABLE`` statement can:
 .. warning:: Once a column is dropped, it is allowed to re-add a column with the same name than the dropped one
    **unless** the type of the dropped column was a (non-frozen) column (due to an internal technical limitation).
 
-.. _alter-table-type-compatibility:
-
-CQL type compatibility:
-~~~~~~~~~~~~~~~~~~~~~~~
-
-CQL data types may be converted only as the following table.
-
-+-------------------------------------------------------+--------------------+
-| Existing type                                         | Can be altered to: |
-+=======================================================+====================+
-| timestamp                                             | bigint             |
-+-------------------------------------------------------+--------------------+
-| ascii, bigint, boolean, date, decimal, double, float, | blob               |
-| inet, int, smallint, text, time, timestamp, timeuuid, |                    |
-| tinyint, uuid, varchar, varint                        |                    |
-+-------------------------------------------------------+--------------------+
-| int                                                   | date               |
-+-------------------------------------------------------+--------------------+
-| ascii, varchar                                        | text               |
-+-------------------------------------------------------+--------------------+
-| bigint                                                | time               |
-+-------------------------------------------------------+--------------------+
-| bigint                                                | timestamp          |
-+-------------------------------------------------------+--------------------+
-| timeuuid                                              | uuid               |
-+-------------------------------------------------------+--------------------+
-| ascii, text                                           | varchar            |
-+-------------------------------------------------------+--------------------+
-| bigint, int, timestamp                                | varint             |
-+-------------------------------------------------------+--------------------+
-
-Clustering columns have stricter requirements, only the following conversions are allowed:
-
-+------------------------+----------------------+
-| Existing type          | Can be altered to    |
-+========================+======================+
-| ascii, text, varchar   | blob                 |
-+------------------------+----------------------+
-| ascii, varchar         | text                 |
-+------------------------+----------------------+
-| ascii, text            | varchar              |
-+------------------------+----------------------+
 
 .. _drop-table-statement:
 
