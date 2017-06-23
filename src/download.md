@@ -11,11 +11,7 @@ Downloading Cassandra
 
 ### Latest version
 
-Cassandra is moving to a monthly release process called Tick-Tock. **Even-numbered** releases (e.g. 3.2) contain new
-features; **odd-numbered** releases (e.g. 3.3) contain bug fixes only. If a critical bug is found, a patch will be
-released against the most recent bug fix release. Read more about [tick-tock here](http://www.planetcassandra.org/blog/cassandra-2-2-3-0-and-beyond/).
-
-Download the latest Cassandra release: {{ "latest" | full_release_link }}.
+Download the latest Apache Cassandra 3.11 release: {{ "latest" | full_release_link }}.
 
 ### Older supported releases
 
@@ -30,15 +26,14 @@ Older (unsupported) versions of Cassandra are [archived here](http://archive.apa
 
 ### Installation from Debian packages
 
-* For tick-tock releases, the `<release series>` is the release number, without dot, and with an appended `x`, so `31x`,
-  `32x`, …
-* For older pre-tick-tock releases, the `<release series>` is the major version number, without dot, and with an
-  appended `x`. So currently it can one of `21x`, `22x` or `30x`.
+* For the `<release series>` specify the major version number, without dot, and with an appended `x`.
+* The latest `<release series>` is `311x`.
+* For older releases, the `<release series>` can one of `30x`, `22x`, or `21x`.
 
-* Add the Apache repository of Cassandra to `/etc/apt/sources.list.d/cassandra.sources.list`, for example for version 3.10:
+* Add the Apache repository of Cassandra to `/etc/apt/sources.list.d/cassandra.sources.list`, for example for the latest 3.11 version:
 
 ```
-echo "deb http://www.apache.org/dist/cassandra/debian 310x main" | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list
+echo "deb http://www.apache.org/dist/cassandra/debian 311x main" | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list
 ```
 
 * Add the Apache Cassandra repository keys:
@@ -82,13 +77,27 @@ sudo apt-get install cassandra
 
 ### Installation from RPM packages
 
-Cassandra can currently only be installed manually from downloaded RPM packages. We'll work on making upcoming releases available through repositories in the future.
+Cassandra can be installed using RPM packages for the following `<release series>`, similar to Debian packages above:
 
-The following versions are currently available for download:
+* `311x` and `30x`
+* Modify the `<release series>` desired in the `baseurl` below.
+* (Not all versions of Apache Cassandra are available, since building RPMs is a recent addition to the project.)
 
-* [3.0.13](http://www.apache.org/dyn/closer.lua/cassandra/redhat/30x/cassandra-3.0.13-1.noarch.rpm) (md5: `7a100653112a8a79d09fbf18dbc3f7d8` sha1: `3b9e2dfa94614af7d7f7891eb95982719e1a8fb4`)
+The following versions are currently available for RPM installation:
 
-Any instructions have been tested with CentOS 7 and should work for all Redhat based distributions. Please see note on end of this section on how to report any issues.
+* {{ "latest" }}
+* {{ "3.0" }}
+
+* Add the Apache repository of Cassandra to `/etc/yum.repos.d/cassandra.repo`, for example for the latest 3.11 version:
+
+```
+[cassandra]
+name=Apache Cassandra
+baseurl=https://www.apache.org/dist/cassandra/redhat/311x/
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://www.apache.org/dist/cassandra/KEYS
+```
 
 Start Cassandra (will not start automatically):
 
