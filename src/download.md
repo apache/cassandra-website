@@ -83,14 +83,9 @@ Cassandra can be installed using RPM packages for the following `<release series
 * Modify the `<release series>` desired in the `baseurl` below.
 * (Not all versions of Apache Cassandra are available, since building RPMs is a recent addition to the project.)
 
-The following versions are currently available for RPM installation:
-
-* {{ "latest" }}
-* {{ "3.0" }}
-
 * Add the Apache repository of Cassandra to `/etc/yum.repos.d/cassandra.repo`, for example for the latest 3.11 version:
 
-```
+```text
 [cassandra]
 name=Apache Cassandra
 baseurl=https://www.apache.org/dist/cassandra/redhat/311x/
