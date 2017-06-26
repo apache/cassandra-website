@@ -28,7 +28,7 @@ Older (unsupported) versions of Cassandra are [archived here](http://archive.apa
 
 * For the `<release series>` specify the major version number, without dot, and with an appended `x`.
 * The latest `<release series>` is `311x`.
-* For older releases, the `<release series>` can one of `30x`, `22x`, or `21x`.
+* For older releases, the `<release series>` can be one of `30x`, `22x`, or `21x`.
 
 * Add the Apache repository of Cassandra to `/etc/apt/sources.list.d/cassandra.sources.list`, for example for the latest 3.11 version:
 
@@ -79,7 +79,7 @@ sudo apt-get install cassandra
 
 * For the `<release series>` specify the major version number, without dot, and with an appended `x`.
 * The latest `<release series>` is `311x`.
-* For older releases, the `<release series>` can one of `30x`, `22x`, or `21x`.
+* For older releases, the `<release series>` can be one of `30x`, `22x`, or `21x`.
 * (Not all versions of Apache Cassandra are available, since building RPMs is a recent addition to the project.)
 
 * Add the Apache repository of Cassandra to `/etc/yum.repos.d/cassandra.repo`, for example for the latest 3.11 version:
