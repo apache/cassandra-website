@@ -93,6 +93,12 @@ repo_gpgcheck=1
 gpgkey=https://www.apache.org/dist/cassandra/KEYS
 ```
 
+* Install Cassandra, accepting the gpg key import prompts:
+
+```
+sudo yum install cassandra
+```
+
 Start Cassandra (will not start automatically):
 
 ```
