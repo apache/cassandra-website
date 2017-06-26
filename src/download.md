@@ -51,7 +51,7 @@ sudo apt-get update
 * If you encounter this error:
 
 ```
-GPG error: http://www.apache.org 310x InRelease: The following signatures couldn't be verified because the public key is not available: NO_PUBKEY A278B781FE4B2BDA
+GPG error: http://www.apache.org 311x InRelease: The following signatures couldn't be verified because the public key is not available: NO_PUBKEY A278B781FE4B2BDA
 ```
 Then add the public key A278B781FE4B2BDA as follows:
 
@@ -77,10 +77,9 @@ sudo apt-get install cassandra
 
 ### Installation from RPM packages
 
-Cassandra can be installed using RPM packages for the following `<release series>`, similar to Debian packages above:
-
-* `311x` and `30x`
-* Modify the `<release series>` desired in the `baseurl` below.
+* For the `<release series>` specify the major version number, without dot, and with an appended `x`.
+* The latest `<release series>` is `311x`.
+* For older releases, the `<release series>` can one of `30x`, `22x`, or `21x`.
 * (Not all versions of Apache Cassandra are available, since building RPMs is a recent addition to the project.)
 
 * Add the Apache repository of Cassandra to `/etc/yum.repos.d/cassandra.repo`, for example for the latest 3.11 version:
@@ -109,7 +108,6 @@ chkconfig cassandra on
 ```
 
 Please note that official RPMs for Apache Cassandra only have been available recently and are not tested thoroughly on all platforms yet. We appreciate your feedback and support and ask you to post details on any issues in the [corresponding Jira ticket](https://issues.apache.org/jira/browse/CASSANDRA-13433).
-
 
 
 ### Source
