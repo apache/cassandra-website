@@ -40,11 +40,6 @@ You can also check the [Q&A about using Cassandra](http://stackoverflow.com/ques
 Overflow.
 
 
-### News, articles and user groups
-
-You can find a number of news, articles and use cases, as well a links to Cassandra user groups on the [Planet
-Cassandra](http://planetcassandra.org/) (not endorsed by Apache).
-
 ### Books and Publications
 
 * [Cassandra: The Definitive Guide, 2nd Edition](http://shop.oreilly.com/product/0636920043041.do), by Jeff Carpenter and Eben Hewitt. Updated for Cassandra 3.0
