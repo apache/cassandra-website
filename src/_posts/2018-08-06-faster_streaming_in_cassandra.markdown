@@ -16,7 +16,7 @@ To solve this problem [CASSANDRA-14556](http://issues.apache.org/jira/browse/CAS
 
 ## How do I use this feature?
 
-It just works. This feature is controlled using `streaming_zerocopy_sstables_enabled` in `cassandra.yaml` and is enabled by default. Even though this feature is enabled, it will respect the throttling limits as defined by `stream_throughput_outbound_megabits_per_sec`.
+It just works. This feature is controlled using `stream_entire_sstables` in `cassandra.yaml` and is enabled by default. Even though this feature is enabled, it will respect the throttling limits as defined by `stream_throughput_outbound_megabits_per_sec`.
 
 ## Impact
 
