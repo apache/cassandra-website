@@ -29,13 +29,13 @@ endif
 	@ln -s -f -T $(DOC_VERSION) "doc/latest"
 
 build:
-	@jekyll build
+	@bundle exec jekyll build
 
 clean:
-	@jekyll clean
+	@bundle exec jekyll clean
 
 serve:
-	@jekyll serve
+	@bundle exec jekyll serve
 
 add-doc: .build-doc build
 
