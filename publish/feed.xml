@@ -1,5 +1,109 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://cassandra.apache.org/feed.xml" rel="self" type="application/atom+xml" /><link href="http://cassandra.apache.org/" rel="alternate" type="text/html" /><updated>2018-10-17T13:22:37+13:00</updated><id>http://cassandra.apache.org/</id><title type="html">Apache Cassandra Website</title><subtitle>The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
-</subtitle><entry><title type="html">Testing Apache Cassandra 4.0</title><link href="http://cassandra.apache.org/blog/2018/08/21/testing_apache_cassandra.html" rel="alternate" type="text/html" title="Testing Apache Cassandra 4.0" /><published>2018-08-21T15:00:00+12:00</published><updated>2018-08-21T15:00:00+12:00</updated><id>http://cassandra.apache.org/blog/2018/08/21/testing_apache_cassandra</id><content type="html" xml:base="http://cassandra.apache.org/blog/2018/08/21/testing_apache_cassandra.html">&lt;p&gt;With the goal of ensuring reliability and stability in Apache Cassandra 4.0, the project’s committers have voted to freeze new features on September 1 to concentrate on testing and validation before cutting a stable beta. Towards that goal, the community is investing in methodologies that can be performed at scale to exercise edge cases in the largest Cassandra clusters. The result, we hope, is to make Apache Cassandra 4.0 the best-tested and most reliable major release right out of the gate.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://cassandra.apache.org/feed.xml" rel="self" type="application/atom+xml" /><link href="http://cassandra.apache.org/" rel="alternate" type="text/html" /><updated>2018-10-18T14:18:30+13:00</updated><id>http://cassandra.apache.org/</id><title type="html">Apache Cassandra Website</title><subtitle>The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+</subtitle><entry><title type="html">Finding Bugs in Cassandra’s Internals with Property-based Testing</title><link href="http://cassandra.apache.org/blog/2018/10/17/finding_bugs_with_property_based_testing.html" rel="alternate" type="text/html" title="Finding Bugs in Cassandra's Internals with Property-based Testing" /><published>2018-10-17T20:00:00+13:00</published><updated>2018-10-17T20:00:00+13:00</updated><id>http://cassandra.apache.org/blog/2018/10/17/finding_bugs_with_property_based_testing</id><content type="html" xml:base="http://cassandra.apache.org/blog/2018/10/17/finding_bugs_with_property_based_testing.html">&lt;p&gt;As of September 1st, the Apache Cassandra community has shifted the focus of Cassandra 4.0 development from new feature work to testing, validation, and hardening, with the goal of releasing a stable 4.0 that every Cassandra user, from small deployments to large corporations, can deploy with confidence. There are several projects and methodologies that the community is undertaking to this end. One of these is the adoption of property-based testing, which was &lt;a href=&quot;http://cassandra.apache.org/blog/2018/08/21/testing_apache_cassandra.html&quot;&gt;previously introduced here&lt;/a&gt;. This post will take a look at a specific use of this approach and how it found a bug in a new feature meant to ensure data integrity between the client and Cassandra.&lt;/p&gt;
+
+&lt;h4 id=&quot;detecting-corruption-is-a-property&quot;&gt;Detecting Corruption is a Property&lt;/h4&gt;
+
+&lt;p&gt;In this post, we demonstrate property-based testing in Cassandra through the integration of the &lt;a href=&quot;https://github.com/ncredinburgh/QuickTheories&quot;&gt;QuickTheories&lt;/a&gt; library introduced as part of the work done for &lt;a href=&quot;https://issues.apache.org/jira/browse/CASSANDRA-13304&quot;&gt;CASSANDRA-13304&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;This ticket modifies the framing of Cassandra’s native client protocol to include checksums in addition to the existing, optional compression. Clients can opt-in to this new feature to retain data integrity across the many hops between themselves and Cassandra. This is meant to address cases where hardware and protocol level checksums fail (due to underlying hardware issues) — a case that has been seen in production. A description of the protocol changes can be found in the ticket but for the purposes of this discussion the salient part is that two checksums are added: one that covers the length(s) of the data (if compressed there are two lengths), and one for the data itself. Before merging this feature, property-based testing using QuickTheories was used to uncover a bug in the calculation of the checksum over the lengths. This bug could have led to silent corruption at worst or unexpected errors during deserialization at best.&lt;/p&gt;
+
+&lt;p&gt;The test used to find this bug is shown below. This example tests the property that when a frame is corrupted, that corruption should be caught by checksum comparison. The test is wrapped inside of a standard JUnit test case but, once called by JUnit, execution is handed over to QuickTheories to generate and execute hundreds of examples. These examples are dictated by the types of input that should be generated (the arguments to &lt;code class=&quot;highlighter-rouge&quot;&gt;forAll&lt;/code&gt;). The execution of each individual example is done by &lt;code class=&quot;highlighter-rouge&quot;&gt;checkAssert&lt;/code&gt; and its argument, the &lt;code class=&quot;highlighter-rouge&quot;&gt;roundTripWithCorruption&lt;/code&gt; function.&lt;/p&gt;
+
+&lt;div&gt;&lt;div&gt;&lt;pre&gt;
+@Test
+public void corruptionCausesFailure()
+{
+    qt().withExamples(500)
+        .forAll(inputWithCorruptablePosition(),
+                integers().between(0, Byte.MAX_VALUE).map(Integer::byteValue),
+                compressors(),
+                checksumTypes())
+        .checkAssert(this::roundTripWithCorruption);
+}
+&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;roundTripWithCorruption&lt;/code&gt; function is a generalization of a unit test that worked similarly but for a single case. It is given an input to transform and a position in the transformed output to insert corruption, as well as what byte to write to the corrupted position. The additional arguments (the compressor and checksum type) are used to ensure coverage of Cassandra’s various compression and checksumming implementations.&lt;/p&gt;
+
+&lt;div&gt;&lt;div&gt;&lt;pre&gt;
+private void roundTripWithCorruption(Pair&amp;lt;String, Integer&amp;gt; inputAndCorruptablePosition,
+                                     byte corruptionValue,
+                                     Compressor compressor,
+                                     ChecksumType checksum) {
+    String input = inputAndCorruptablePosition.left;
+    ByteBuf expectedBuf = Unpooled.wrappedBuffer(input.getBytes());
+    int byteToCorrupt = inputAndCorruptablePosition.right;
+    ChecksummingTransformer transformer = new ChecksummingTransformer(checksum, DEFAULT_BLOCK_SIZE, compressor);
+    ByteBuf outbound = transformer.transformOutbound(expectedBuf);
+
+    // make sure we're actually expecting to produce some corruption
+    if (outbound.getByte(byteToCorrupt) == corruptionValue)
+        return;
+
+    if (byteToCorrupt &amp;gt;= outbound.writerIndex())
+        return;
+ 
+    try {
+        int oldIndex = outbound.writerIndex();
+        outbound.writerIndex(byteToCorrupt);
+        outbound.writeByte(corruptionValue);
+        outbound.writerIndex(oldIndex);
+        ByteBuf inbound = transformer.transformInbound(outbound, FLAGS);
+
+        // verify that the content was actually corrupted
+        expectedBuf.readerIndex(0);
+        Assert.assertEquals(expectedBuf, inbound);
+    } catch(ProtocolException e) {
+       return;
+    }
+}
+&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The remaining piece is how those arguments are generated — the arguments to &lt;code class=&quot;highlighter-rouge&quot;&gt;forAll&lt;/code&gt; mentioned above. Each argument is a function that returns an input generator. For each example, an input is pulled from each generator and passed to &lt;code class=&quot;highlighter-rouge&quot;&gt;roundTripWithCorruption&lt;/code&gt;.  The &lt;code class=&quot;highlighter-rouge&quot;&gt;compressors()&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;checksums()&lt;/code&gt; generators aren’t copied here. They can be found in the &lt;a href=&quot;https://github.com/apache/cassandra/blob/65fb17a88bd096b1e952ccca31ad709759644a1b/test/unit/org/apache/cassandra/transport/frame/checksum/ChecksummingTransformerTest.java#L209-L217&quot;&gt;source&lt;/a&gt; and are based on built-in generator methods, provided by QuickTheories, that select a value from a list of values. The second argument, &lt;code class=&quot;highlighter-rouge&quot;&gt;integers().between(0, Byte.MAX_VALUE).map(Integer::byteValue)&lt;/code&gt;, generates non-negative numbers that fit into a single byte. These numbers will be passed as the &lt;code class=&quot;highlighter-rouge&quot;&gt;corruptionValue&lt;/code&gt; argument.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;inputWithCorruptiblePosition&lt;/code&gt; generator, copied below, generates strings to use as input to the transformation function and a position within the output byte stream to corrupt. Because compression prevents knowledge of the output size of the frame, the generator tries to choose a somewhat reasonable position to corrupt by limiting the choice to the size of the generated string (it’s uncommon for compression to generate a larger string and the implementation discards the compressed value if it does). It also avoids corrupting the first two bytes of the stream which are not covered by a checksum and therefore can be corrupted without being caught. The function above ensures that corruption is actually introduced and that corrupting a position larger than the size of the output does not occur.&lt;/p&gt;
+
+&lt;div&gt;&lt;div&gt;&lt;pre&gt;
+private Gen&amp;lt;Pair&amp;lt;String, Integer&amp;gt;&amp;gt; inputWithCorruptablePosition()
+{
+    return inputs().flatMap(s -&amp;gt; integers().between(2, s.length() + 2)
+                   .map(i -&amp;gt; Pair.create(s, i)));
+}
+&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;With all those pieces in place, if the test were run before the bug were fixed, it would fail with the following output.&lt;/p&gt;
+
+&lt;div&gt;&lt;div&gt;&lt;pre&gt;
+java.lang.AssertionError: Property falsified after 2 example(s) 
+Smallest found falsifying value(s) :-
+{(c,3), 0, null, Adler32}
+
+Cause was :-
+java.lang.IndexOutOfBoundsException: readerIndex(10) + length(16711681) exceeds writerIndex(15): UnpooledHeapByteBuf(ridx: 10, widx: 15, cap: 54/54)
+    at io.netty.buffer.AbstractByteBuf.checkReadableBytes0(AbstractByteBuf.java:1401)
+    at io.netty.buffer.AbstractByteBuf.checkReadableBytes(AbstractByteBuf.java:1388)
+    at io.netty.buffer.AbstractByteBuf.readBytes(AbstractByteBuf.java:870)
+    at org.apache.cassandra.transport.frame.checksum.ChecksummingTransformer.transformInbound(ChecksummingTransformer.java:289)
+    at org.apache.cassandra.transport.frame.checksum.ChecksummingTransformerTest.roundTripWithCorruption(ChecksummingTransformerTest.java:106)
+    ...
+Other found falsifying value(s) :- 
+{(c,3), 0, null, CRC32}
+{(c,3), 1, null, CRC32}
+{(c,3), 9, null, CRC32}
+{(c,3), 11, null, CRC32}
+{(c,3), 36, null, CRC32}
+{(c,3), 50, null, CRC32}
+{(c,3), 74, null, CRC32}
+{(c,3), 99, null, CRC32}
+
+Seed was 179207634899674
+&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The output shows more than a single failing example. This is because QuickTheories, like most property-based testing libraries, comes with a shrinker, which performs the task of taking a failure and minimizing its inputs. This aids in debugging because there are multiple failing examples to look at often removing noise in the process. Additionally, a seed value is provided so the same series of tests and failures can be generated again — another useful feature when debugging. In this case, the library generated an example that contains a single byte of input, which will corrupt the fourth byte in the output stream by setting it to zero, using no compression, and using Adler32 for checksumming. It can be seen from the other failing examples that using CRC32 also fails. This is due to improper calculation of the checksum, regardless of the algorithm. In particular, the checksum was only calculated over the least significant byte of each length rather than all eight bytes. By corrupting the fourth byte of the output stream (the first length’s second-most significant byte not covered by the calculation), an invalid length is read and later used.&lt;/p&gt;
+
+&lt;h4 id=&quot;where-to-find-more&quot;&gt;Where to Find More&lt;/h4&gt;
+
+&lt;p&gt;Property-based testing is a broad topic, much of which is not covered by this post. In addition to Cassandra, it has been used successfully in several places including &lt;a href=&quot;https://ieeexplore.ieee.org/document/7107466/&quot;&gt;car&lt;/a&gt; &lt;a href=&quot;https://arxiv.org/pdf/1703.06574.pdf&quot;&gt;operating
+systems&lt;/a&gt; and &lt;a href=&quot;https://youtu.be/hXnS_Xjwk2Y?t=1023&quot;&gt;suppliers’ products&lt;/a&gt;, &lt;a href=&quot;https://dl.acm.org/citation.cfm?id=2034662&quot;&gt;GNOME Glib&lt;/a&gt;, &lt;a href=&quot;https://github.com/WesleyAC/raft/tree/master/src&quot;&gt;distributed consensus&lt;/a&gt;, and other &lt;a href=&quot;https://www.youtube.com/watch?v=x9mW54GJpG0&quot;&gt;distributed&lt;/a&gt; &lt;a href=&quot;https://youtu.be/hXnS_Xjwk2Y?t=1382&quot;&gt;databases&lt;/a&gt;. It can also be combined with other approaches such as fault-injection and memory leak detection. Stateful models can also be built to generate a series of commands instead of running each example on one generated set of inputs. Our goal is to evangelize this approach within the Cassandra developer community and encourage more testing of this kind as part of our work to deliver the most stable major release of Cassandra yet.&lt;/p&gt;</content><author><name>the Apache Cassandra Community</name></author><summary type="html">As of September 1st, the Apache Cassandra community has shifted the focus of Cassandra 4.0 development from new feature work to testing, validation, and hardening, with the goal of releasing a stable 4.0 that every Cassandra user, from small deployments to large corporations, can deploy with confidence. There are several projects and methodologies that the community is undertaking to this end. One of these is the adoption of property-based testing, which was previously introduced here. This post will take a look at a specific use of this approach and how it found a bug in a new feature meant to ensure data integrity between the client and Cassandra.</summary></entry><entry><title type="html">Testing Apache Cassandra 4.0</title><link href="http://cassandra.apache.org/blog/2018/08/21/testing_apache_cassandra.html" rel="alternate" type="text/html" title="Testing Apache Cassandra 4.0" /><published>2018-08-21T15:00:00+12:00</published><updated>2018-08-21T15:00:00+12:00</updated><id>http://cassandra.apache.org/blog/2018/08/21/testing_apache_cassandra</id><content type="html" xml:base="http://cassandra.apache.org/blog/2018/08/21/testing_apache_cassandra.html">&lt;p&gt;With the goal of ensuring reliability and stability in Apache Cassandra 4.0, the project’s committers have voted to freeze new features on September 1 to concentrate on testing and validation before cutting a stable beta. Towards that goal, the community is investing in methodologies that can be performed at scale to exercise edge cases in the largest Cassandra clusters. The result, we hope, is to make Apache Cassandra 4.0 the best-tested and most reliable major release right out of the gate.&lt;/p&gt;
 
 &lt;p&gt;In the interests of communication (and hopefully more participation), here’s a look at some of the approaches being used to test Apache Cassandra 4.0:&lt;/p&gt;
 
