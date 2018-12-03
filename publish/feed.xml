@@ -1,5 +1,137 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://cassandra.apache.org/feed.xml" rel="self" type="application/atom+xml" /><link href="http://cassandra.apache.org/" rel="alternate" type="text/html" /><updated>2018-10-30T11:50:41+13:00</updated><id>http://cassandra.apache.org/</id><title type="html">Apache Cassandra Website</title><subtitle>The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
-</subtitle><entry><title type="html">Audit Logging in Apache Cassandra 4.0</title><link href="http://cassandra.apache.org/blog/2018/10/29/audit_logging_cassandra.html" rel="alternate" type="text/html" title="Audit Logging in Apache Cassandra 4.0" /><published>2018-10-29T20:00:00+13:00</published><updated>2018-10-29T20:00:00+13:00</updated><id>http://cassandra.apache.org/blog/2018/10/29/audit_logging_cassandra</id><content type="html" xml:base="http://cassandra.apache.org/blog/2018/10/29/audit_logging_cassandra.html">&lt;p&gt;Database audit logging is an industry standard tool for enterprises to
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://cassandra.apache.org/feed.xml" rel="self" type="application/atom+xml" /><link href="http://cassandra.apache.org/" rel="alternate" type="text/html" /><updated>2018-12-04T07:14:05+13:00</updated><id>http://cassandra.apache.org/</id><title type="html">Apache Cassandra Website</title><subtitle>The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+</subtitle><entry><title type="html">Introducing Transient Replication</title><link href="http://cassandra.apache.org/blog/2018/12/03/introducing-transient-replication.html" rel="alternate" type="text/html" title="Introducing Transient Replication" /><published>2018-12-03T21:00:00+13:00</published><updated>2018-12-03T21:00:00+13:00</updated><id>http://cassandra.apache.org/blog/2018/12/03/introducing-transient-replication</id><content type="html" xml:base="http://cassandra.apache.org/blog/2018/12/03/introducing-transient-replication.html">&lt;p&gt;Transient Replication is a new experimental feature soon to be available in 4.0. When enabled, it allows for the creation of keyspaces where replication factor can be specified as a number of copies (full replicas) and temporary copies (transient replicas). Transient replicas retain the data they replicate only long enough for it to be propagated to full replicas, via incremental repair, at which point the data is deleted. Writing to transient replicas can be avoided almost entirely if monotonic reads are not required because it is possible to achieve a quorum of acknowledged writes without them.&lt;/p&gt;
+
+&lt;p&gt;This results in a savings in disk space, CPU, and IO. By deleting data as soon as it is no longer needed, transient replicas require only a fraction of the disk space of a full replica. By not having to store the data indefinitely, the CPU and IO required for compaction is reduced, and read queries are faster as they have less data to process.&lt;/p&gt;
+
+&lt;p&gt;So what are the benefits of not actually keeping a full copy of the data? Well, for some installations and use cases, transient replicas can be almost free if &lt;a href=&quot;https://en.wikipedia.org/wiki/Consistency_model#Monotonic_Read_Consistency&quot;&gt;monotonic reads&lt;/a&gt; are disabled. In future releases where monotonic reads are supported with Transient Replication, enabling monotonic reads would reduce the savings in CPU and IO, but even then they should still be significant.&lt;/p&gt;
+
+&lt;p&gt;Transient Replication is designed to be transparent to applications:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Consistency levels continue to produce the same results for queries.&lt;/li&gt;
+  &lt;li&gt;The number of replicas that can be lost before data loss occurs is unchanged.&lt;/li&gt;
+  &lt;li&gt;The number of replicas that can be unavailable before some queries start to timeout or return unavailable is unchanged (with the exception of ONE).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;With Transient Replication, you can go from 3 replicas to 5 replicas, two of which are transient, without adding any hardware.&lt;/p&gt;
+
+&lt;p&gt;If you are running an active-passive 2 DC setup with 3 replicas in each DC, you can make one replica in each DC transient and still have four full copies of the data in total.&lt;/p&gt;
+
+&lt;h2 id=&quot;feature-support&quot;&gt;Feature support&lt;/h2&gt;
+
+&lt;p&gt;Transient Replication is not intended to fully replace Cassandra’s existing approach to replication. There are features that currently don’t work with transiently replicated keyspaces and features that are unlikely ever to work with them.&lt;/p&gt;
+
+&lt;p&gt;You can have keyspaces with and without Transient Replication enabled in the same cluster, so it is possible to use Transient Replication for just the use cases that are a good fit for the currently available functionality.&lt;/p&gt;
+
+&lt;h3 id=&quot;currently-unsupported-but-coming&quot;&gt;Currently unsupported but coming:&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Monotonic reads&lt;/li&gt;
+  &lt;li&gt;Batch log&lt;/li&gt;
+  &lt;li&gt;LWT&lt;/li&gt;
+  &lt;li&gt;Counters&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;will-never-be-supported&quot;&gt;Will never be supported:&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Secondary indexes&lt;/li&gt;
+  &lt;li&gt;Materialized views&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;how-transient-replication-works&quot;&gt;How Transient Replication works&lt;/h2&gt;
+
+&lt;h3 id=&quot;overview&quot;&gt;Overview&lt;/h3&gt;
+
+&lt;p&gt;Transient replication extends Cassandra’s existing consistent hashing algorithm to designate some replicas of a point or range on the consistent hash ring as transient and some as full. The following image depicts a consistent hash ring with three replicas &lt;strong&gt;A&lt;/strong&gt;, &lt;strong&gt;B&lt;/strong&gt;, and &lt;strong&gt;C&lt;/strong&gt;. The replicas are located at tokens 5, 10, 15 respectively. A key &lt;strong&gt;&lt;em&gt;k&lt;/em&gt;&lt;/strong&gt; hashes to token 3 on the ring.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/blog-post-introducing-transient-replication/diagram-hash-ring.gif&quot; alt=&quot;A consistent hash ring without Transient Replication&quot; title=&quot;A consistent hash ring without Rransient Replication&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Replicas are selected by walking the ring clockwise starting at the point on the ring the key hashes to. At RF=3, the replicas of key &lt;strong&gt;&lt;em&gt;k **&lt;/em&gt;are **A&lt;/strong&gt;, &lt;strong&gt;B&lt;/strong&gt;, &lt;strong&gt;C&lt;/strong&gt;.
+With Transient Replication, the last N replicas (where N is the configured number of transient replicas) found while walking the ring are designated as transient.&lt;/p&gt;
+
+&lt;p&gt;There are no nodes designated as transient replicas or full replicas. All nodes will fully replicate some ranges on the ring and transiently replicate others.&lt;/p&gt;
+
+&lt;p&gt;The following image depicts a consistent hash ring at RF=3/1 (three replicas, one of which is transient). The replicas of &lt;strong&gt;&lt;em&gt;k&lt;/em&gt;&lt;/strong&gt; are still &lt;strong&gt;A&lt;/strong&gt;, &lt;strong&gt;B&lt;/strong&gt;, and &lt;strong&gt;C&lt;/strong&gt;, but &lt;strong&gt;C&lt;/strong&gt; is now transiently replicating &lt;strong&gt;&lt;em&gt;k&lt;/em&gt;&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/blog-post-introducing-transient-replication/diagram-hash-ring-with-transient-replica.gif&quot; alt=&quot;A consistent hash ring with Transient Replication&quot; title=&quot;A consistent hash ring with Transient Replication&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Normally all replicas of a range receive all writes for that range, as depicted in the following image.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/blog-post-introducing-transient-replication/diagram-regular-write.gif&quot; alt=&quot;Normal write behavior&quot; title=&quot;Normal write behavior&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Transient replicas do not receive writes in the normal write path.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/blog-post-introducing-transient-replication/diagram-transient-write.gif&quot; alt=&quot;Transient write behavior&quot; title=&quot;Transient write behavior&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;If sufficient full replicas are unavailable, transient replicas will receive writes.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/blog-post-introducing-transient-replication/diagram-transient-write-down-node.gif&quot; alt=&quot;Transient write with unavailable node&quot; title=&quot;Transient write with unavailable node&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This optimization, which is possible with Transient Replication, is called Cheap Quorums. This minimizes the amount of work that transient replicas have to do at write time, and reduces the amount of background compaction they will have to do.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Cheap Quorums and monotonic reads:&lt;/strong&gt; Cheap Quorums may end up being incompatible with an initial implementation of monotonic reads, and operators will be able to make a conscious trade off between performance and monotonic reads.&lt;/p&gt;
+
+&lt;h3 id=&quot;rapid-write-protection&quot;&gt;Rapid write protection&lt;/h3&gt;
+
+&lt;p&gt;In keyspaces utilizing Transient Replication, writes are sent to every full replica and enough transient replicas to meet the requested consistency level (to make up for unavailable full replicas). In addition, enough transient replicas are selected to reach a quorum in every datacenter, though unless the consistency level requires it, the write will be acknowledged without ensuring all have been delivered.&lt;/p&gt;
+
+&lt;p&gt;Because not all replicas are sent the write, it’s possible that insufficient replicas will respond, causing timeouts.  To prevent this, we implement rapid write protection, similar to rapid read protection, that sends writes to additional replicas if sufficient acknowledgements to meet the consistency level are not received promptly.&lt;/p&gt;
+
+&lt;p&gt;The following animation shows rapid write protection in action.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/blog-post-introducing-transient-replication/diagram-rapid-write-protection.gif&quot; alt=&quot;Animation of rapid write protection preventing a write timeout&quot; title=&quot;Rapid write protection preventing a write timeout&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Rapid write protection is configured similarly to rapid read protection using the table option &lt;code class=&quot;highlighter-rouge&quot;&gt;additional_write_policy&lt;/code&gt;. The policy determines how long to wait for acknowledgements before sending additional mutations. The default is to wait for P99 of the observed latency.&lt;/p&gt;
+
+&lt;h3 id=&quot;incremental-repair&quot;&gt;Incremental repair&lt;/h3&gt;
+
+&lt;p&gt;Incremental repair is used to clean up transient data at transient replicas and propagate it to full replicas.&lt;/p&gt;
+
+&lt;p&gt;When incremental repair occurs transient replicas stream out transient data, but don’t receive any. Anti-compaction is used to separate transient and fully replicated data so that only fully replicated data is retained once incremental repair completes.&lt;/p&gt;
+
+&lt;p&gt;The result of running an incremental repair is that all full replicas for a range are synchronized and can be used interchangeably to retrieve the repaired data set for a query.&lt;/p&gt;
+
+&lt;h3 id=&quot;read-path&quot;&gt;Read path&lt;/h3&gt;
+
+&lt;p&gt;Reads must always include at least one full replica and can include as many replicas (transient or full) as necessary to achieve the desired consistency level. At least one full replica is required in order to provide the data not available at transient replicas, but it doesn’t matter which full replica is picked because incremental repair synchronizes the repaired data set across full replicas.&lt;/p&gt;
+
+&lt;p&gt;Reads at transient replicas are faster than reads at full replicas because reads at transient replicas are unlikely to return any results if monotonic reads are disabled, and they haven’t been receiving writes.&lt;/p&gt;
+
+&lt;h2 id=&quot;creating-keyspaces-with-transient-replication&quot;&gt;Creating keyspaces with Transient Replication&lt;/h2&gt;
+
+&lt;p&gt;Transient Replication is supported by SimpleStrategy and NetworkTopologyStrategy. When specifying the replication factor, you can specify the number of transient replicas in addition to the total number of replicas (including transient replicas). The syntax for a replication factor of 3 replicas total with one of them being transient would be “3/1”.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ALTER KEYSPACE foo WITH REPLICATION = {'class' : 'NetworkTopologyStrategy', 'DC1' : '3/1'};
+ALTER KEYSPACE foo WITH REPLICATION = {'class' : 'SimpleStrategy', 'replication_factor' : '3/1'};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Monotonic reads are not supported with Transient Replication in 4.0, so any existing tables in the keyspace must have monotonic reads disabled by setting &lt;code class=&quot;highlighter-rouge&quot;&gt;read_repair = 'NONE'&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Once the keyspace has been altered, you will need to run incremental repair and then nodetool cleanup to ensure  transient data is cleaned up.&lt;/p&gt;
+
+&lt;h2 id=&quot;operational-matters&quot;&gt;Operational matters&lt;/h2&gt;
+
+&lt;p&gt;Transient replication requires rolling incremental repair to be run regularly in order to move data from transient replicas to full replicas. By default transient replicas will receive 1% of writes for transiently replicated ranges due to rapid write protection. If a node is down for an extended period of time, its transient replicas will receive additional write load and that data should be cleaned up using incremental repair. Running incremental repair regularly will ensure that the size of each repair is small.&lt;/p&gt;
+
+&lt;p&gt;It’s also a good idea to run a small number of vnodes with transient replication so that when a node goes down the load is spread out over several other nodes that transiently replicate that range. Larges numbers of vnodes are known to be problematic, so it’s best to start with a cluster that is already close to or at its maximum size so that a small number of vnodes will be sufficient. If you intend to grow the cluster in the future, you will need to be cognizant of how this will interact with the number of vnodes you select.&lt;/p&gt;
+
+&lt;p&gt;While the odds of any data loss should multiple nodes be permanently lost remain the same with transient replication, the magnitude of potential data loss does not. With 3/1 transient replication the permanent loss of two nodes could result in the loss of the entirety of the repaired data set. If you are running a multi-DC setup with a high level of replication such as 2 DCs, with 3/1 replicas in each, then you will have 4 full copies total and the added risk of transient replication is minimal.&lt;/p&gt;
+
+&lt;h2 id=&quot;experimental-features&quot;&gt;Experimental features&lt;/h2&gt;
+
+&lt;p&gt;Experimental features are a relatively new idea for Apache Cassandra. Although we recently voted to make materialized views an experimental feature retroactively, Transient Replication is the first experimental feature to be introduced as such.&lt;/p&gt;
+
+&lt;p&gt;The goal of introducing experimental features is to allow for incremental development across multiple releases. In the case of Transient Replication, we can avoid a giant code drop that heavily modifies the code base, and the associated risks with incorporating a new feature that way.&lt;/p&gt;
+
+&lt;p&gt;What it means for a feature to be experimental doesn’t have a set definition, but for Transient Replication it’s intended to set expectations. As of 4.0, Transient Replication’s intended audience is expert operators of Cassandra with the ability to write the book on how to safely deploy Transient Replication, debug any issues that result, and if necessary contribute code back to address problems as they are discovered.&lt;/p&gt;
+
+&lt;p&gt;It’s expected that the feature set for Transient Replication will not change in minor updates to 4.0, but eventually it should be ready for use by a wider audience.&lt;/p&gt;
+
+&lt;h2 id=&quot;next-steps-for-transient-replication&quot;&gt;Next steps for Transient Replication&lt;/h2&gt;
+
+&lt;p&gt;If increasing availability or saving on capacity sounds good to you, then you can help make transient replication production-ready by testing it out or even deploying it. Experience and feedback from the community is one the of the things that will drive transient replication bug fixing and development.&lt;/p&gt;</content><author><name>The Apache Cassandra Community</name></author><summary type="html">Transient Replication is a new experimental feature soon to be available in 4.0. When enabled, it allows for the creation of keyspaces where replication factor can be specified as a number of copies (full replicas) and temporary copies (transient replicas). Transient replicas retain the data they replicate only long enough for it to be propagated to full replicas, via incremental repair, at which point the data is deleted. Writing to transient replicas can be avoided almost entirely if monotonic reads are not required because it is possible to achieve a quorum of acknowledged writes without them.</summary></entry><entry><title type="html">Audit Logging in Apache Cassandra 4.0</title><link href="http://cassandra.apache.org/blog/2018/10/29/audit_logging_cassandra.html" rel="alternate" type="text/html" title="Audit Logging in Apache Cassandra 4.0" /><published>2018-10-29T20:00:00+13:00</published><updated>2018-10-29T20:00:00+13:00</updated><id>http://cassandra.apache.org/blog/2018/10/29/audit_logging_cassandra</id><content type="html" xml:base="http://cassandra.apache.org/blog/2018/10/29/audit_logging_cassandra.html">&lt;p&gt;Database audit logging is an industry standard tool for enterprises to
 capture critical data change events including what data changed and who
 triggered the event. These captured records can then be reviewed later
 to ensure compliance with regulatory, security and operational policies.&lt;/p&gt;
