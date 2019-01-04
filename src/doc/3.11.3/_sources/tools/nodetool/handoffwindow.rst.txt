@@ -1,0 +1,11 @@
+.. _nodetool_handoffwindow:
+
+handoffwindow
+-------
+
+Usage
+---------
+
+.. include:: handoffwindow.txt
+  :literal:
+
