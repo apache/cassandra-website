@@ -16,7 +16,7 @@
 
   <title>Documentation</title>
 
-  <link rel="canonical" href="http://cassandra.apache.org/doc/latest/tools/nodetool/toppartitions.html">
+  <link rel="canonical" href="http://cassandra.apache.org/doc/latest/tools/nodetool/profileload.html">
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
   <link rel="stylesheet" href="./../../../../css/style.css">
@@ -62,7 +62,7 @@
       
 
       
-      <li>toppartitions</li>
+      <li>profileload</li>
       
     </ul>
   </div>
@@ -147,19 +147,20 @@
       <div class="content doc-content">
         <div class="content-container">
           
-  <div class="section" id="toppartitions">
-<span id="nodetool-toppartitions"></span><h1>toppartitions<a class="headerlink" href="#toppartitions" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="profileload">
+<span id="nodetool-profileload"></span><h1>profileload<a class="headerlink" href="#profileload" title="Permalink to this headline">¶</a></h1>
 </div>
 <div class="section" id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NAME</span>
-        <span class="n">nodetool</span> <span class="n">toppartitions</span> <span class="o">-</span> <span class="n">Sample</span> <span class="ow">and</span> <span class="nb">print</span> <span class="n">the</span> <span class="n">most</span> <span class="n">active</span> <span class="n">partitions</span>
+        <span class="n">nodetool</span> <span class="n">profileload</span> <span class="o">-</span> <span class="n">Low</span> <span class="n">footprint</span> <span class="n">profiling</span> <span class="n">of</span> <span class="n">activity</span> <span class="k">for</span> <span class="n">a</span> <span class="n">period</span>
+        <span class="n">of</span> <span class="n">time</span>
 
 <span class="n">SYNOPSIS</span>
         <span class="n">nodetool</span> <span class="p">[(</span><span class="o">-</span><span class="n">h</span> <span class="o">&lt;</span><span class="n">host</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">host</span> <span class="o">&lt;</span><span class="n">host</span><span class="o">&gt;</span><span class="p">)]</span> <span class="p">[(</span><span class="o">-</span><span class="n">p</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">port</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;</span><span class="p">)]</span>
                 <span class="p">[(</span><span class="o">-</span><span class="n">pp</span> <span class="o">|</span> <span class="o">--</span><span class="nb">print</span><span class="o">-</span><span class="n">port</span><span class="p">)]</span> <span class="p">[(</span><span class="o">-</span><span class="n">pw</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">password</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span><span class="p">)]</span>
                 <span class="p">[(</span><span class="o">-</span><span class="n">pwf</span> <span class="o">&lt;</span><span class="n">passwordFilePath</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">password</span><span class="o">-</span><span class="n">file</span> <span class="o">&lt;</span><span class="n">passwordFilePath</span><span class="o">&gt;</span><span class="p">)]</span>
-                <span class="p">[(</span><span class="o">-</span><span class="n">u</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">username</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span><span class="p">)]</span> <span class="n">toppartitions</span> <span class="p">[</span><span class="o">-</span><span class="n">a</span> <span class="o">&lt;</span><span class="n">samplers</span><span class="o">&gt;</span><span class="p">]</span>
+                <span class="p">[(</span><span class="o">-</span><span class="n">u</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">username</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span><span class="p">)]</span> <span class="n">profileload</span> <span class="p">[</span><span class="o">-</span><span class="n">a</span> <span class="o">&lt;</span><span class="n">samplers</span><span class="o">&gt;</span><span class="p">]</span>
                 <span class="p">[</span><span class="o">-</span><span class="n">k</span> <span class="o">&lt;</span><span class="n">topCount</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">s</span> <span class="o">&lt;</span><span class="n">capacity</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="p">]</span> <span class="o">&lt;</span><span class="n">keyspace</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">cfname</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">duration</span><span class="o">&gt;</span>
 
 <span class="n">OPTIONS</span>
