@@ -25,7 +25,7 @@ extra-footer: '
       COLLAPSE_INDEX: false,
       FILE_SUFFIX: ".html",
       HAS_SOURCE:  false,
-      SOURCELINK_SUFFIX: ""
+      SOURCELINK_SUFFIX: ".txt"
     };
 </script>
 '
@@ -33,7 +33,7 @@ extra-footer: '
 ---
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-3">
       <div class="doc-navigation">
         <div class="doc-menu" role="navigation">
           <div class="navbar-header">
@@ -78,10 +78,14 @@ extra-footer: '
 <li class="toctree-l2"><a class="reference internal" href="how_to_review.html">Review Checklist</a></li>
 <li class="toctree-l2"><a class="reference internal" href="how_to_commit.html">How-to Commit</a></li>
 <li class="toctree-l2"><a class="reference internal" href="documentation.html">Working on Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ci.html">Jenkins CI Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dependencies.html">Dependency Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_process.html">Release Process</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
 </ul>
 
@@ -93,7 +97,7 @@ extra-footer: '
     </div>
     <div class="col-md-8">
       <div class="content doc-content">
-        <div class="container">
+        <div class="content-container">
           
   <div class="section" id="building-and-ide-integration">
 <h1>Building and IDE Integration<a class="headerlink" href="#building-and-ide-integration" title="Permalink to this headline">¶</a></h1>
@@ -101,26 +105,22 @@ extra-footer: '
 <h2>Building From Source<a class="headerlink" href="#building-from-source" title="Permalink to this headline">¶</a></h2>
 <p>Getting started with Cassandra and IntelliJ IDEA or Eclipse is simple, once you manage to build Cassandra from source using <a class="reference external" href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java 8</a>, <a class="reference external" href="https://git-scm.com/">Git</a> and <a class="reference external" href="http://ant.apache.org/">Ant</a>.</p>
 <p>The source code for Cassandra is shared through the central Apache Git repository and organized by different branches. You can access the code for the current development branch through git as follows:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">clone</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">git</span><span class="o">-</span><span class="n">wip</span><span class="o">-</span><span class="n">us</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">repos</span><span class="o">/</span><span class="n">asf</span><span class="o">/</span><span class="n">cassandra</span><span class="o">.</span><span class="n">git</span> <span class="n">cassandra</span><span class="o">-</span><span class="n">trunk</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">git</span><span class="o">-</span><span class="n">wip</span><span class="o">-</span><span class="n">us</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">repos</span><span class="o">/</span><span class="n">asf</span><span class="o">/</span><span class="n">cassandra</span><span class="o">.</span><span class="n">git</span> <span class="n">cassandra</span><span class="o">-</span><span class="n">trunk</span>
 </pre></div>
 </div>
 <p>Other branches will point to different versions of Cassandra. Switching to a different branch requires checking out the branch by its name:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">checkout</span> <span class="n">cassandra</span><span class="o">-</span><span class="mf">3.0</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="n">cassandra</span><span class="o">-</span><span class="mf">3.0</span>
 </pre></div>
 </div>
 <p>You can get a list of available branches with <code class="docutils literal"><span class="pre">git</span> <span class="pre">branch</span></code>.</p>
 <p>Finally build Cassandra using ant:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">ant</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ant</span>
 </pre></div>
 </div>
 <p>This may take a significant amount of time depending on whether artifacts have to be downloaded and the number of classes that need to be compiled.</p>
 <div class="admonition hint">
 <p class="first admonition-title">Hint</p>
 <p class="last">You can setup multiple working trees for different Cassandra versions from the same repository using <a class="reference external" href="https://git-scm.com/docs/git-worktree">git-worktree</a>.</p>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last"><a class="reference external" href="http://cassci.datastax.com/job/trunk/lastSuccessfulBuild/">Bleeding edge development snapshots</a> of Cassandra are available from Jenkins continuous integration.</p>
 </div>
 </div>
 <div class="section" id="setting-up-cassandra-in-intellij-idea">
@@ -133,7 +133,7 @@ extra-footer: '
 <ol class="arabic simple">
 <li>Once Cassandra is built, generate the IDEA files using ant:</li>
 </ol>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">ant</span> <span class="n">generate</span><span class="o">-</span><span class="n">idea</span><span class="o">-</span><span class="n">files</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ant</span> <span class="n">generate</span><span class="o">-</span><span class="n">idea</span><span class="o">-</span><span class="n">files</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
@@ -207,7 +207,7 @@ extra-footer: '
 <p>Specify name, project and main class <code class="docutils literal"><span class="pre">org.apache.cassandra.service.CassandraDaemon</span></code></p>
 <img alt="../_images/eclipse_debug5.png" src="../_images/eclipse_debug5.png" />
 <p>Configure additional JVM specific parameters that will start Cassandra with some of the settings created by the regular startup script. Change heap related values as needed.</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="o">-</span><span class="n">Xms1024M</span> <span class="o">-</span><span class="n">Xmx1024M</span> <span class="o">-</span><span class="n">Xmn220M</span> <span class="o">-</span><span class="n">Xss256k</span> <span class="o">-</span><span class="n">ea</span> <span class="o">-</span><span class="n">XX</span><span class="p">:</span><span class="o">+</span><span class="n">UseThreadPriorities</span> <span class="o">-</span><span class="n">XX</span><span class="p">:</span><span class="n">ThreadPriorityPolicy</span><span class="o">=</span><span class="mi">42</span> <span class="o">-</span><span class="n">XX</span><span class="p">:</span><span class="o">+</span><span class="n">UseParNewGC</span> <span class="o">-</span><span class="n">XX</span><span class="p">:</span><span class="o">+</span><span class="n">UseConcMarkSweepGC</span> <span class="o">-</span><span class="n">XX</span><span class="p">:</span><span class="o">+</span><span class="n">CMSParallelRemarkEnabled</span> <span class="o">-</span><span class="n">XX</span><span class="p">:</span><span class="o">+</span><span class="n">UseCondCardMark</span> <span class="o">-</span><span class="n">javaagent</span><span class="p">:</span><span class="o">./</span><span class="n">lib</span><span class="o">/</span><span class="n">jamm</span><span class="o">-</span><span class="mf">0.3</span><span class="o">.</span><span class="mf">0.</span><span class="n">jar</span> <span class="o">-</span><span class="n">Djava</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">preferIPv4Stack</span><span class="o">=</span><span class="n">true</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">Xms1024M</span> <span class="o">-</span><span class="n">Xmx1024M</span> <span class="o">-</span><span class="n">Xmn220M</span> <span class="o">-</span><span class="n">Xss256k</span> <span class="o">-</span><span class="n">ea</span> <span class="o">-</span><span class="n">XX</span><span class="p">:</span><span class="o">+</span><span class="n">UseThreadPriorities</span> <span class="o">-</span><span class="n">XX</span><span class="p">:</span><span class="n">ThreadPriorityPolicy</span><span class="o">=</span><span class="mi">42</span> <span class="o">-</span><span class="n">XX</span><span class="p">:</span><span class="o">+</span><span class="n">UseParNewGC</span> <span class="o">-</span><span class="n">XX</span><span class="p">:</span><span class="o">+</span><span class="n">UseConcMarkSweepGC</span> <span class="o">-</span><span class="n">XX</span><span class="p">:</span><span class="o">+</span><span class="n">CMSParallelRemarkEnabled</span> <span class="o">-</span><span class="n">XX</span><span class="p">:</span><span class="o">+</span><span class="n">UseCondCardMark</span> <span class="o">-</span><span class="n">javaagent</span><span class="p">:</span><span class="o">./</span><span class="n">lib</span><span class="o">/</span><span class="n">jamm</span><span class="o">-</span><span class="mf">0.3</span><span class="o">.</span><span class="mf">0.</span><span class="n">jar</span> <span class="o">-</span><span class="n">Djava</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">preferIPv4Stack</span><span class="o">=</span><span class="n">true</span>
 </pre></div>
 </div>
 <img alt="../_images/eclipse_debug6.png" src="../_images/eclipse_debug6.png" />
@@ -231,8 +231,6 @@ extra-footer: '
           
         </div>
       </div>
-    </div>
-    <div class="col-md-2">
     </div>
   </div>
 </div>

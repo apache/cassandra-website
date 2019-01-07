@@ -25,7 +25,7 @@ extra-footer: '
       COLLAPSE_INDEX: false,
       FILE_SUFFIX: ".html",
       HAS_SOURCE:  false,
-      SOURCELINK_SUFFIX: ""
+      SOURCELINK_SUFFIX: ".txt"
     };
 </script>
 '
@@ -33,7 +33,7 @@ extra-footer: '
 ---
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-3">
       <div class="doc-navigation">
         <div class="doc-menu" role="navigation">
           <div class="navbar-header">
@@ -79,6 +79,7 @@ extra-footer: '
 <li class="toctree-l3"><a class="reference internal" href="#authenticator"><code class="docutils literal"><span class="pre">authenticator</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#authorizer"><code class="docutils literal"><span class="pre">authorizer</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#role-manager"><code class="docutils literal"><span class="pre">role_manager</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#network-authorizer"><code class="docutils literal"><span class="pre">network_authorizer</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#roles-validity-in-ms"><code class="docutils literal"><span class="pre">roles_validity_in_ms</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#roles-update-interval-in-ms"><code class="docutils literal"><span class="pre">roles_update_interval_in_ms</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#permissions-validity-in-ms"><code class="docutils literal"><span class="pre">permissions_validity_in_ms</span></code></a></li>
@@ -104,10 +105,11 @@ extra-footer: '
 <li class="toctree-l3"><a class="reference internal" href="#counter-cache-save-period"><code class="docutils literal"><span class="pre">counter_cache_save_period</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#counter-cache-keys-to-save"><code class="docutils literal"><span class="pre">counter_cache_keys_to_save</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#saved-caches-directory"><code class="docutils literal"><span class="pre">saved_caches_directory</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#commitlog-sync"><code class="docutils literal"><span class="pre">commitlog_sync</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#commitlog-sync-batch-window-in-ms"><code class="docutils literal"><span class="pre">commitlog_sync_batch_window_in_ms</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id1"><code class="docutils literal"><span class="pre">commitlog_sync</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#commitlog-sync-group-window-in-ms"><code class="docutils literal"><span class="pre">commitlog_sync_group_window_in_ms</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#commitlog-sync"><code class="docutils literal"><span class="pre">commitlog_sync</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#commitlog-sync-period-in-ms"><code class="docutils literal"><span class="pre">commitlog_sync_period_in_ms</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#periodic-commitlog-sync-lag-block-in-ms"><code class="docutils literal"><span class="pre">periodic_commitlog_sync_lag_block_in_ms</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#commitlog-segment-size-in-mb"><code class="docutils literal"><span class="pre">commitlog_segment_size_in_mb</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#commitlog-compression"><code class="docutils literal"><span class="pre">commitlog_compression</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#seed-provider"><code class="docutils literal"><span class="pre">seed_provider</span></code></a></li>
@@ -143,8 +145,10 @@ extra-footer: '
 <li class="toctree-l3"><a class="reference internal" href="#native-transport-port-ssl"><code class="docutils literal"><span class="pre">native_transport_port_ssl</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#native-transport-max-threads"><code class="docutils literal"><span class="pre">native_transport_max_threads</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#native-transport-max-frame-size-in-mb"><code class="docutils literal"><span class="pre">native_transport_max_frame_size_in_mb</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#native-transport-frame-block-size-in-kb"><code class="docutils literal"><span class="pre">native_transport_frame_block_size_in_kb</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#native-transport-max-concurrent-connections"><code class="docutils literal"><span class="pre">native_transport_max_concurrent_connections</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#native-transport-max-concurrent-connections-per-ip"><code class="docutils literal"><span class="pre">native_transport_max_concurrent_connections_per_ip</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#native-transport-allow-older-protocols"><code class="docutils literal"><span class="pre">native_transport_allow_older_protocols</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#rpc-address"><code class="docutils literal"><span class="pre">rpc_address</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#rpc-interface"><code class="docutils literal"><span class="pre">rpc_interface</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#rpc-interface-prefer-ipv6"><code class="docutils literal"><span class="pre">rpc_interface_prefer_ipv6</span></code></a></li>
@@ -158,8 +162,11 @@ extra-footer: '
 <li class="toctree-l3"><a class="reference internal" href="#column-index-size-in-kb"><code class="docutils literal"><span class="pre">column_index_size_in_kb</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#column-index-cache-size-in-kb"><code class="docutils literal"><span class="pre">column_index_cache_size_in_kb</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#concurrent-compactors"><code class="docutils literal"><span class="pre">concurrent_compactors</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#concurrent-validations"><code class="docutils literal"><span class="pre">concurrent_validations</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#concurrent-materialized-view-builders"><code class="docutils literal"><span class="pre">concurrent_materialized_view_builders</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#compaction-throughput-mb-per-sec"><code class="docutils literal"><span class="pre">compaction_throughput_mb_per_sec</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#sstable-preemptive-open-interval-in-mb"><code class="docutils literal"><span class="pre">sstable_preemptive_open_interval_in_mb</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stream-entire-sstables"><code class="docutils literal"><span class="pre">stream_entire_sstables</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#stream-throughput-outbound-megabits-per-sec"><code class="docutils literal"><span class="pre">stream_throughput_outbound_megabits_per_sec</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#inter-dc-stream-throughput-outbound-megabits-per-sec"><code class="docutils literal"><span class="pre">inter_dc_stream_throughput_outbound_megabits_per_sec</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#read-request-timeout-in-ms"><code class="docutils literal"><span class="pre">read_request_timeout_in_ms</span></code></a></li>
@@ -186,6 +193,8 @@ extra-footer: '
 <li class="toctree-l3"><a class="reference internal" href="#tracetype-repair-ttl"><code class="docutils literal"><span class="pre">tracetype_repair_ttl</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#enable-user-defined-functions"><code class="docutils literal"><span class="pre">enable_user_defined_functions</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#enable-scripted-user-defined-functions"><code class="docutils literal"><span class="pre">enable_scripted_user_defined_functions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enable-materialized-views"><code class="docutils literal"><span class="pre">enable_materialized_views</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enable-transient-replication"><code class="docutils literal"><span class="pre">enable_transient_replication</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#windows-timer-interval"><code class="docutils literal"><span class="pre">windows_timer_interval</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#transparent-data-encryption-options"><code class="docutils literal"><span class="pre">transparent_data_encryption_options</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tombstone-warn-threshold"><code class="docutils literal"><span class="pre">tombstone_warn_threshold</span></code></a></li>
@@ -204,6 +213,17 @@ extra-footer: '
 <li class="toctree-l3"><a class="reference internal" href="#otc-coalescing-enough-coalesced-messages"><code class="docutils literal"><span class="pre">otc_coalescing_enough_coalesced_messages</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#otc-backlog-expiration-interval-ms"><code class="docutils literal"><span class="pre">otc_backlog_expiration_interval_ms</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ideal-consistency-level"><code class="docutils literal"><span class="pre">ideal_consistency_level</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#full-query-log-dir"><code class="docutils literal"><span class="pre">full_query_log_dir</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#automatic-sstable-upgrade"><code class="docutils literal"><span class="pre">automatic_sstable_upgrade</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-concurrent-automatic-sstable-upgrades"><code class="docutils literal"><span class="pre">max_concurrent_automatic_sstable_upgrades</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#audit-logging-options"><code class="docutils literal"><span class="pre">audit_logging_options</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#full-query-logging-options"><code class="docutils literal"><span class="pre">full_query_logging_options</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#corrupted-tombstone-strategy"><code class="docutils literal"><span class="pre">corrupted_tombstone_strategy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#diagnostic-events-enabled"><code class="docutils literal"><span class="pre">diagnostic_events_enabled</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#native-transport-flush-in-batches-legacy"><code class="docutils literal"><span class="pre">native_transport_flush_in_batches_legacy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#repaired-data-tracking-for-range-reads-enabled"><code class="docutils literal"><span class="pre">repaired_data_tracking_for_range_reads_enabled</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#repaired-data-tracking-for-partition-reads-enabled"><code class="docutils literal"><span class="pre">repaired_data_tracking_for_partition_reads_enabled</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#report-unconfirmed-repaired-data-mismatches"><code class="docutils literal"><span class="pre">report_unconfirmed_repaired_data_mismatches</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -213,7 +233,8 @@ extra-footer: '
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
 </ul>
 
@@ -225,7 +246,7 @@ extra-footer: '
     </div>
     <div class="col-md-8">
       <div class="content doc-content">
-        <div class="container">
+        <div class="content-container">
           
   <div class="section" id="cassandra-configuration-file">
 <span id="cassandra-yaml"></span><h1>Cassandra Configuration File<a class="headerlink" href="#cassandra-configuration-file" title="Permalink to this headline">¶</a></h1>
@@ -281,8 +302,8 @@ May either be &#8220;true&#8221; or &#8220;false&#8221; to enable globally</p>
 <p>When hinted_handoff_enabled is true, a black list of data centers that will not
 perform hinted handoff</p>
 <p><em>Default Value (complex option)</em>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="c">#    - DC1</span>
-<span class="c">#    - DC2</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#    - DC1</span>
+<span class="c1">#    - DC2</span>
 </pre></div>
 </div>
 </div>
@@ -334,9 +355,9 @@ Will <em>not</em> trigger fsync.</p>
 will be written uncompressed. LZ4, Snappy, and Deflate compressors
 are supported.</p>
 <p><em>Default Value (complex option)</em>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="c">#   - class_name: LZ4Compressor</span>
-<span class="c">#     parameters:</span>
-<span class="c">#         -</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#   - class_name: LZ4Compressor</span>
+<span class="c1">#     parameters:</span>
+<span class="c1">#         -</span>
 </pre></div>
 </div>
 </div>
@@ -385,6 +406,19 @@ actually implements authentication, most of this functionality will be unavailab
 increase system_auth keyspace replication factor if you use this role manager.</li>
 </ul>
 <p><em>Default Value:</em> CassandraRoleManager</p>
+</div>
+<div class="section" id="network-authorizer">
+<h2><code class="docutils literal"><span class="pre">network_authorizer</span></code><a class="headerlink" href="#network-authorizer" title="Permalink to this headline">¶</a></h2>
+<p>Network authorization backend, implementing INetworkAuthorizer; used to restrict user
+access to certain DCs
+Out of the box, Cassandra provides org.apache.cassandra.auth.{AllowAllNetworkAuthorizer,
+CassandraNetworkAuthorizer}.</p>
+<ul class="simple">
+<li>AllowAllNetworkAuthorizer allows access to any DC to any user - set it to disable authorization.</li>
+<li>CassandraNetworkAuthorizer stores permissions in system_auth.network_permissions table. Please
+increase system_auth keyspace replication factor if you use this authorizer.</li>
+</ul>
+<p><em>Default Value:</em> AllowAllNetworkAuthorizer</p>
 </div>
 <div class="section" id="roles-validity-in-ms">
 <h2><code class="docutils literal"><span class="pre">roles_validity_in_ms</span></code><a class="headerlink" href="#roles-validity-in-ms" title="Permalink to this headline">¶</a></h2>
@@ -453,24 +487,24 @@ Defaults to the same value as credentials_validity_in_ms.</p>
 <div class="section" id="partitioner">
 <h2><code class="docutils literal"><span class="pre">partitioner</span></code><a class="headerlink" href="#partitioner" title="Permalink to this headline">¶</a></h2>
 <p>The partitioner is responsible for distributing groups of rows (by
-partition key) across nodes in the cluster.  You should leave this
-alone for new clusters.  The partitioner can NOT be changed without
-reloading all data, so when upgrading you should set this to the
-same partitioner you were already using.</p>
-<p>Besides Murmur3Partitioner, partitioners included for backwards
-compatibility include RandomPartitioner, ByteOrderedPartitioner, and
-OrderPreservingPartitioner.</p>
+partition key) across nodes in the cluster. The partitioner can NOT be
+changed without reloading all data.  If you are adding nodes or upgrading,
+you should set this to the same partitioner that you are currently using.</p>
+<p>The default partitioner is the Murmur3Partitioner. Older partitioners
+such as the RandomPartitioner, ByteOrderedPartitioner, and
+OrderPreservingPartitioner have been included for backward compatibility only.
+For new clusters, you should NOT change this value.</p>
 <p><em>Default Value:</em> org.apache.cassandra.dht.Murmur3Partitioner</p>
 </div>
 <div class="section" id="data-file-directories">
 <h2><code class="docutils literal"><span class="pre">data_file_directories</span></code><a class="headerlink" href="#data-file-directories" title="Permalink to this headline">¶</a></h2>
 <p><em>This option is commented out by default.</em></p>
-<p>Directories where Cassandra should store data on disk.  Cassandra
-will spread data evenly across them, subject to the granularity of
-the configured compaction strategy.
+<p>Directories where Cassandra should store data on disk. If multiple
+directories are specified, Cassandra will spread data evenly across
+them by partitioning the token ranges.
 If not set, the default directory is $CASSANDRA_HOME/data/data.</p>
 <p><em>Default Value (complex option)</em>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="c">#     - /var/lib/cassandra/data</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#     - /var/lib/cassandra/data</span>
 </pre></div>
 </div>
 </div>
@@ -658,26 +692,27 @@ Disabled by default, meaning all keys are going to be saved</p>
 If not set, the default directory is $CASSANDRA_HOME/data/saved_caches.</p>
 <p><em>Default Value:</em>  /var/lib/cassandra/saved_caches</p>
 </div>
-<div class="section" id="commitlog-sync">
-<h2><code class="docutils literal"><span class="pre">commitlog_sync</span></code><a class="headerlink" href="#commitlog-sync" title="Permalink to this headline">¶</a></h2>
-<p><em>This option is commented out by default.</em></p>
-<p>commitlog_sync may be either &#8220;periodic&#8221; or &#8220;batch.&#8221;</p>
-<p>When in batch mode, Cassandra won&#8217;t ack writes until the commit log
-has been fsynced to disk.  It will wait
-commitlog_sync_batch_window_in_ms milliseconds between fsyncs.
-This window should be kept short because the writer threads will
-be unable to do extra work while waiting.  (You may need to increase
-concurrent_writes for the same reason.)</p>
-<p><em>Default Value:</em> batch</p>
-</div>
 <div class="section" id="commitlog-sync-batch-window-in-ms">
 <h2><code class="docutils literal"><span class="pre">commitlog_sync_batch_window_in_ms</span></code><a class="headerlink" href="#commitlog-sync-batch-window-in-ms" title="Permalink to this headline">¶</a></h2>
 <p><em>This option is commented out by default.</em></p>
+<p>commitlog_sync may be either &#8220;periodic&#8221;, &#8220;group&#8221;, or &#8220;batch.&#8221;</p>
+<p>When in batch mode, Cassandra won&#8217;t ack writes until the commit log
+has been flushed to disk.  Each incoming write will trigger the flush task.
+commitlog_sync_batch_window_in_ms is a deprecated value. Previously it had
+almost no value, and is being removed.</p>
 <p><em>Default Value:</em> 2</p>
 </div>
-<div class="section" id="id1">
-<h2><code class="docutils literal"><span class="pre">commitlog_sync</span></code><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>the other option is &#8220;periodic&#8221; where writes may be acked immediately
+<div class="section" id="commitlog-sync-group-window-in-ms">
+<h2><code class="docutils literal"><span class="pre">commitlog_sync_group_window_in_ms</span></code><a class="headerlink" href="#commitlog-sync-group-window-in-ms" title="Permalink to this headline">¶</a></h2>
+<p><em>This option is commented out by default.</em></p>
+<p>group mode is similar to batch mode, where Cassandra will not ack writes
+until the commit log has been flushed to disk. The difference is group
+mode will wait up to commitlog_sync_group_window_in_ms between flushes.</p>
+<p><em>Default Value:</em> 1000</p>
+</div>
+<div class="section" id="commitlog-sync">
+<h2><code class="docutils literal"><span class="pre">commitlog_sync</span></code><a class="headerlink" href="#commitlog-sync" title="Permalink to this headline">¶</a></h2>
+<p>the default option is &#8220;periodic&#8221; where writes may be acked immediately
 and the CommitLog is simply synced every commitlog_sync_period_in_ms
 milliseconds.</p>
 <p><em>Default Value:</em> periodic</p>
@@ -685,6 +720,12 @@ milliseconds.</p>
 <div class="section" id="commitlog-sync-period-in-ms">
 <h2><code class="docutils literal"><span class="pre">commitlog_sync_period_in_ms</span></code><a class="headerlink" href="#commitlog-sync-period-in-ms" title="Permalink to this headline">¶</a></h2>
 <p><em>Default Value:</em> 10000</p>
+</div>
+<div class="section" id="periodic-commitlog-sync-lag-block-in-ms">
+<h2><code class="docutils literal"><span class="pre">periodic_commitlog_sync_lag_block_in_ms</span></code><a class="headerlink" href="#periodic-commitlog-sync-lag-block-in-ms" title="Permalink to this headline">¶</a></h2>
+<p><em>This option is commented out by default.</em></p>
+<p>When in periodic commitlog mode, the number of milliseconds to block writes
+while waiting for a slow disk flush to complete.</p>
 </div>
 <div class="section" id="commitlog-segment-size-in-mb">
 <h2><code class="docutils literal"><span class="pre">commitlog_segment_size_in_mb</span></code><a class="headerlink" href="#commitlog-segment-size-in-mb" title="Permalink to this headline">¶</a></h2>
@@ -697,7 +738,8 @@ archiving commitlog segments (see commitlog_archiving.properties),
 then you probably want a finer granularity of archiving; 8 or 16 MB
 is reasonable.
 Max mutation size is also configurable via max_mutation_size_in_kb setting in
-cassandra.yaml. The default is half the size commitlog_segment_size_in_mb * 1024.</p>
+cassandra.yaml. The default is half the size commitlog_segment_size_in_mb * 1024.
+This should be positive and less than 2048.</p>
 <p>NOTE: If max_mutation_size_in_kb is set explicitly then commitlog_segment_size_in_mb must
 be set to at least twice the size of max_mutation_size_in_kb / 1024</p>
 <p><em>Default Value:</em> 32</p>
@@ -709,9 +751,9 @@ be set to at least twice the size of max_mutation_size_in_kb / 1024</p>
 will be written uncompressed.  LZ4, Snappy, and Deflate compressors
 are supported.</p>
 <p><em>Default Value (complex option)</em>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="c">#   - class_name: LZ4Compressor</span>
-<span class="c">#     parameters:</span>
-<span class="c">#         -</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#   - class_name: LZ4Compressor</span>
+<span class="c1">#     parameters:</span>
+<span class="c1">#         -</span>
 </pre></div>
 </div>
 </div>
@@ -720,15 +762,15 @@ are supported.</p>
 <p>any class that implements the SeedProvider interface and has a
 constructor that takes a Map&lt;String, String&gt; of parameters will do.</p>
 <p><em>Default Value (complex option)</em>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="c"># Addresses of hosts that are deemed contact points.</span>
-<span class="c"># Cassandra nodes use this list of hosts to find each other and learn</span>
-<span class="c"># the topology of the ring.  You must change this if you are running</span>
-<span class="c"># multiple nodes!</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Addresses of hosts that are deemed contact points.</span>
+<span class="c1"># Cassandra nodes use this list of hosts to find each other and learn</span>
+<span class="c1"># the topology of the ring.  You must change this if you are running</span>
+<span class="c1"># multiple nodes!</span>
 <span class="o">-</span> <span class="n">class_name</span><span class="p">:</span> <span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">cassandra</span><span class="o">.</span><span class="n">locator</span><span class="o">.</span><span class="n">SimpleSeedProvider</span>
   <span class="n">parameters</span><span class="p">:</span>
-      <span class="c"># seeds is actually a comma-delimited list of addresses.</span>
-      <span class="c"># Ex: &quot;&lt;ip1&gt;,&lt;ip2&gt;,&lt;ip3&gt;&quot;</span>
-      <span class="o">-</span> <span class="n">seeds</span><span class="p">:</span> <span class="s">&quot;127.0.0.1&quot;</span>
+      <span class="c1"># seeds is actually a comma-delimited list of addresses.</span>
+      <span class="c1"># Ex: &quot;&lt;ip1&gt;,&lt;ip2&gt;,&lt;ip3&gt;&quot;</span>
+      <span class="o">-</span> <span class="n">seeds</span><span class="p">:</span> <span class="s2">&quot;127.0.0.1:7000&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -926,9 +968,10 @@ For security reasons, you should not expose this port to the internet.  Firewall
 </div>
 <div class="section" id="ssl-storage-port">
 <h2><code class="docutils literal"><span class="pre">ssl_storage_port</span></code><a class="headerlink" href="#ssl-storage-port" title="Permalink to this headline">¶</a></h2>
-<p>SSL port, for encrypted communication.  Unused unless enabled in
-encryption_options
-For security reasons, you should not expose this port to the internet.  Firewall it if needed.</p>
+<p>SSL port, for legacy encrypted communication. This property is unused unless enabled in
+server_encryption_options (see below). As of cassandra 4.0, this property is deprecated
+as a single port can be used for either/both secure and insecure connections.
+For security reasons, you should not expose this port to the internet. Firewall it if needed.</p>
 <p><em>Default Value:</em> 7001</p>
 </div>
 <div class="section" id="listen-address">
@@ -1020,8 +1063,15 @@ after 30 seconds so there is not corresponding minimum setting).</p>
 <p><em>This option is commented out by default.</em></p>
 <p>The maximum size of allowed frame. Frame (requests) larger than this will
 be rejected as invalid. The default is 256MB. If you&#8217;re changing this parameter,
-you may want to adjust max_value_size_in_mb accordingly.</p>
+you may want to adjust max_value_size_in_mb accordingly. This should be positive and less than 2048.</p>
 <p><em>Default Value:</em> 256</p>
+</div>
+<div class="section" id="native-transport-frame-block-size-in-kb">
+<h2><code class="docutils literal"><span class="pre">native_transport_frame_block_size_in_kb</span></code><a class="headerlink" href="#native-transport-frame-block-size-in-kb" title="Permalink to this headline">¶</a></h2>
+<p><em>This option is commented out by default.</em></p>
+<p>If checksumming is enabled as a protocol option, denotes the size of the chunks into which frame
+are bodies will be broken and checksummed.</p>
+<p><em>Default Value:</em> 32</p>
 </div>
 <div class="section" id="native-transport-max-concurrent-connections">
 <h2><code class="docutils literal"><span class="pre">native_transport_max_concurrent_connections</span></code><a class="headerlink" href="#native-transport-max-concurrent-connections" title="Permalink to this headline">¶</a></h2>
@@ -1036,6 +1086,12 @@ The default is -1, which means unlimited.</p>
 <p>The maximum number of concurrent client connections per source ip.
 The default is -1, which means unlimited.</p>
 <p><em>Default Value:</em> -1</p>
+</div>
+<div class="section" id="native-transport-allow-older-protocols">
+<h2><code class="docutils literal"><span class="pre">native_transport_allow_older_protocols</span></code><a class="headerlink" href="#native-transport-allow-older-protocols" title="Permalink to this headline">¶</a></h2>
+<p>Controls whether Cassandra honors older, yet currently supported, protocol versions.
+The default is true, which means all supported protocols will be honored.</p>
+<p><em>Default Value:</em> true</p>
 </div>
 <div class="section" id="rpc-address">
 <h2><code class="docutils literal"><span class="pre">rpc_address</span></code><a class="headerlink" href="#rpc-address" title="Permalink to this headline">¶</a></h2>
@@ -1164,6 +1220,18 @@ number of cores), with a minimum of 2 and a maximum of 8.</p>
 to the number of cores.</p>
 <p><em>Default Value:</em> 1</p>
 </div>
+<div class="section" id="concurrent-validations">
+<h2><code class="docutils literal"><span class="pre">concurrent_validations</span></code><a class="headerlink" href="#concurrent-validations" title="Permalink to this headline">¶</a></h2>
+<p><em>This option is commented out by default.</em></p>
+<p>Number of simultaneous repair validations to allow. Default is unbounded
+Values less than one are interpreted as unbounded (the default)</p>
+<p><em>Default Value:</em> 0</p>
+</div>
+<div class="section" id="concurrent-materialized-view-builders">
+<h2><code class="docutils literal"><span class="pre">concurrent_materialized_view_builders</span></code><a class="headerlink" href="#concurrent-materialized-view-builders" title="Permalink to this headline">¶</a></h2>
+<p>Number of simultaneous materialized view builder tasks to allow.</p>
+<p><em>Default Value:</em> 1</p>
+</div>
 <div class="section" id="compaction-throughput-mb-per-sec">
 <h2><code class="docutils literal"><span class="pre">compaction_throughput_mb_per_sec</span></code><a class="headerlink" href="#compaction-throughput-mb-per-sec" title="Permalink to this headline">¶</a></h2>
 <p>Throttles compaction to the given total throughput across the entire
@@ -1181,6 +1249,21 @@ are completely written, and used in place of the prior sstables for
 any range that has been written. This helps to smoothly transfer reads
 between the sstables, reducing page cache churn and keeping hot rows hot</p>
 <p><em>Default Value:</em> 50</p>
+</div>
+<div class="section" id="stream-entire-sstables">
+<h2><code class="docutils literal"><span class="pre">stream_entire_sstables</span></code><a class="headerlink" href="#stream-entire-sstables" title="Permalink to this headline">¶</a></h2>
+<p><em>This option is commented out by default.</em></p>
+<p>When enabled, permits Cassandra to zero-copy stream entire eligible
+SSTables between nodes, including every component.
+This speeds up the network transfer significantly subject to
+throttling specified by stream_throughput_outbound_megabits_per_sec.
+Enabling this will reduce the GC pressure on sending and receiving node.
+When unset, the default is enabled. While this feature tries to keep the
+disks balanced, it cannot guarantee it. This feature will be automatically
+disabled if internode encryption is enabled. Currently this can be used with
+Leveled Compaction. Once CASSANDRA-14586 is fixed other compaction strategies
+will benefit as well when used in combination with CASSANDRA-6696.</p>
+<p><em>Default Value:</em> true</p>
 </div>
 <div class="section" id="stream-throughput-outbound-megabits-per-sec">
 <h2><code class="docutils literal"><span class="pre">stream_throughput_outbound_megabits_per_sec</span></code><a class="headerlink" href="#stream-throughput-outbound-megabits-per-sec" title="Permalink to this headline">¶</a></h2>
@@ -1204,44 +1287,60 @@ When unset, the default is 200 Mbps or 25 MB/s</p>
 </div>
 <div class="section" id="read-request-timeout-in-ms">
 <h2><code class="docutils literal"><span class="pre">read_request_timeout_in_ms</span></code><a class="headerlink" href="#read-request-timeout-in-ms" title="Permalink to this headline">¶</a></h2>
-<p>How long the coordinator should wait for read operations to complete</p>
+<p>How long the coordinator should wait for read operations to complete.
+Lowest acceptable value is 10 ms.</p>
 <p><em>Default Value:</em> 5000</p>
 </div>
 <div class="section" id="range-request-timeout-in-ms">
 <h2><code class="docutils literal"><span class="pre">range_request_timeout_in_ms</span></code><a class="headerlink" href="#range-request-timeout-in-ms" title="Permalink to this headline">¶</a></h2>
-<p>How long the coordinator should wait for seq or index scans to complete</p>
+<p>How long the coordinator should wait for seq or index scans to complete.
+Lowest acceptable value is 10 ms.</p>
 <p><em>Default Value:</em> 10000</p>
 </div>
 <div class="section" id="write-request-timeout-in-ms">
 <h2><code class="docutils literal"><span class="pre">write_request_timeout_in_ms</span></code><a class="headerlink" href="#write-request-timeout-in-ms" title="Permalink to this headline">¶</a></h2>
-<p>How long the coordinator should wait for writes to complete</p>
+<p>How long the coordinator should wait for writes to complete.
+Lowest acceptable value is 10 ms.</p>
 <p><em>Default Value:</em> 2000</p>
 </div>
 <div class="section" id="counter-write-request-timeout-in-ms">
 <h2><code class="docutils literal"><span class="pre">counter_write_request_timeout_in_ms</span></code><a class="headerlink" href="#counter-write-request-timeout-in-ms" title="Permalink to this headline">¶</a></h2>
-<p>How long the coordinator should wait for counter writes to complete</p>
+<p>How long the coordinator should wait for counter writes to complete.
+Lowest acceptable value is 10 ms.</p>
 <p><em>Default Value:</em> 5000</p>
 </div>
 <div class="section" id="cas-contention-timeout-in-ms">
 <h2><code class="docutils literal"><span class="pre">cas_contention_timeout_in_ms</span></code><a class="headerlink" href="#cas-contention-timeout-in-ms" title="Permalink to this headline">¶</a></h2>
 <p>How long a coordinator should continue to retry a CAS operation
-that contends with other proposals for the same row</p>
+that contends with other proposals for the same row.
+Lowest acceptable value is 10 ms.</p>
 <p><em>Default Value:</em> 1000</p>
 </div>
 <div class="section" id="truncate-request-timeout-in-ms">
 <h2><code class="docutils literal"><span class="pre">truncate_request_timeout_in_ms</span></code><a class="headerlink" href="#truncate-request-timeout-in-ms" title="Permalink to this headline">¶</a></h2>
 <p>How long the coordinator should wait for truncates to complete
 (This can be much longer, because unless auto_snapshot is disabled
-we need to flush first so we can snapshot before removing the data.)</p>
+we need to flush first so we can snapshot before removing the data.)
+Lowest acceptable value is 10 ms.</p>
 <p><em>Default Value:</em> 60000</p>
 </div>
 <div class="section" id="request-timeout-in-ms">
 <h2><code class="docutils literal"><span class="pre">request_timeout_in_ms</span></code><a class="headerlink" href="#request-timeout-in-ms" title="Permalink to this headline">¶</a></h2>
-<p>The default timeout for other, miscellaneous operations</p>
+<p>The default timeout for other, miscellaneous operations.
+Lowest acceptable value is 10 ms.</p>
 <p><em>Default Value:</em> 10000</p>
 </div>
 <div class="section" id="slow-query-log-timeout-in-ms">
 <h2><code class="docutils literal"><span class="pre">slow_query_log_timeout_in_ms</span></code><a class="headerlink" href="#slow-query-log-timeout-in-ms" title="Permalink to this headline">¶</a></h2>
+<p>Defensive settings for protecting Cassandra from true network partitions.
+See (CASSANDRA-14358) for details.</p>
+<p>The amount of time to wait for internode tcp connections to establish.
+internode_tcp_connect_timeout_in_ms = 2000</p>
+<p>The amount of time unacknowledged data is allowed on a connection before we throw out the connection
+Note this is only supported on Linux + epoll, and it appears to behave oddly above a setting of 30000
+(it takes much longer than 30s) as of Linux 4.12. If you want something that high set this to 0
+which picks up the OS default and configure the net.ipv4.tcp_retries2 sysctl to be ~8.
+internode_tcp_user_timeout_in_ms = 30000</p>
 <p>How long before a node logs slow queries. Select queries that take longer than
 this timeout to execute, will generate an aggregated log message, so that slow queries
 can be identified. Set this value to zero to disable slow query logging.</p>
@@ -1359,7 +1458,7 @@ possibly recover</p>
 </div>
 <div class="section" id="dynamic-snitch-badness-threshold">
 <h2><code class="docutils literal"><span class="pre">dynamic_snitch_badness_threshold</span></code><a class="headerlink" href="#dynamic-snitch-badness-threshold" title="Permalink to this headline">¶</a></h2>
-<p>if set greater than zero and read_repair_chance is &lt; 1.0, this will allow
+<p>if set greater than zero, this will allow
 &#8216;pinning&#8217; of replicas to hosts in order to increase cache capacity.
 The badness threshold will control how much worse the pinned host has to be
 before the dynamic snitch will prefer other replicas over it.  This is
@@ -1371,55 +1470,61 @@ until the pinned host was 20% worse than the fastest.</p>
 <div class="section" id="server-encryption-options">
 <h2><code class="docutils literal"><span class="pre">server_encryption_options</span></code><a class="headerlink" href="#server-encryption-options" title="Permalink to this headline">¶</a></h2>
 <p>Enable or disable inter-node encryption
-JVM defaults for supported SSL socket protocols and cipher suites can
+JVM and netty defaults for supported SSL socket protocols and cipher suites can
 be replaced using custom encryption options. This is not recommended
 unless you have policies in place that dictate certain settings, or
 need to disable vulnerable ciphers or protocols in case the JVM cannot
 be updated.
 FIPS compliant settings can be configured at JVM level and should not
 involve changing encryption settings here:
-<a class="reference external" href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/FIPS.html">https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/FIPS.html</a>
-<em>NOTE</em> No custom encryption options are enabled at the moment
-The available internode options are : all, none, dc, rack</p>
-<p>If set to dc cassandra will encrypt the traffic between the DCs
+<a class="reference external" href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/FIPS.html">https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/FIPS.html</a></p>
+<p><em>NOTE</em> No custom encryption options are enabled at the moment
+The available internode options are : all, none, dc, rack
+If set to dc cassandra will encrypt the traffic between the DCs
 If set to rack cassandra will encrypt the traffic between the racks</p>
 <p>The passwords used in these options must match the passwords used when generating
 the keystore and truststore.  For instructions on generating these files, see:
-<a class="reference external" href="http://download.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html#CreateKeystore">http://download.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html#CreateKeystore</a></p>
+<a class="reference external" href="http://download.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html#CreateKeystore">http://download.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html#CreateKeystore</a></p>
 <p><em>Default Value (complex option)</em>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">internode_encryption</span><span class="p">:</span> <span class="n">none</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># set to true for allowing secure incoming connections</span>
+<span class="n">enabled</span><span class="p">:</span> <span class="n">false</span>
+<span class="c1"># If enabled and optional are both set to true, encrypted and unencrypted connections are handled on the storage_port</span>
+<span class="n">optional</span><span class="p">:</span> <span class="n">false</span>
+<span class="c1"># if enabled, will open up an encrypted listening socket on ssl_storage_port. Should be used</span>
+<span class="c1"># during upgrade to 4.0; otherwise, set to false.</span>
+<span class="n">enable_legacy_ssl_storage_port</span><span class="p">:</span> <span class="n">false</span>
+<span class="c1"># on outbound connections, determine which type of peers to securely connect to. &#39;enabled&#39; must be set to true.</span>
+<span class="n">internode_encryption</span><span class="p">:</span> <span class="n">none</span>
 <span class="n">keystore</span><span class="p">:</span> <span class="n">conf</span><span class="o">/.</span><span class="n">keystore</span>
 <span class="n">keystore_password</span><span class="p">:</span> <span class="n">cassandra</span>
 <span class="n">truststore</span><span class="p">:</span> <span class="n">conf</span><span class="o">/.</span><span class="n">truststore</span>
 <span class="n">truststore_password</span><span class="p">:</span> <span class="n">cassandra</span>
-<span class="c"># More advanced defaults below:</span>
-<span class="c"># protocol: TLS</span>
-<span class="c"># algorithm: SunX509</span>
-<span class="c"># store_type: JKS</span>
-<span class="c"># cipher_suites: [TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA]</span>
-<span class="c"># require_client_auth: false</span>
-<span class="c"># require_endpoint_verification: false</span>
+<span class="c1"># More advanced defaults below:</span>
+<span class="c1"># protocol: TLS</span>
+<span class="c1"># store_type: JKS</span>
+<span class="c1"># cipher_suites: [TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA]</span>
+<span class="c1"># require_client_auth: false</span>
+<span class="c1"># require_endpoint_verification: false</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="client-encryption-options">
 <h2><code class="docutils literal"><span class="pre">client_encryption_options</span></code><a class="headerlink" href="#client-encryption-options" title="Permalink to this headline">¶</a></h2>
-<p>enable or disable client/server encryption.</p>
+<p>enable or disable client-to-server encryption.</p>
 <p><em>Default Value (complex option)</em>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">enabled</span><span class="p">:</span> <span class="n">false</span>
-<span class="c"># If enabled and optional is set to true encrypted and unencrypted connections are handled.</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">enabled</span><span class="p">:</span> <span class="n">false</span>
+<span class="c1"># If enabled and optional is set to true encrypted and unencrypted connections are handled.</span>
 <span class="n">optional</span><span class="p">:</span> <span class="n">false</span>
 <span class="n">keystore</span><span class="p">:</span> <span class="n">conf</span><span class="o">/.</span><span class="n">keystore</span>
 <span class="n">keystore_password</span><span class="p">:</span> <span class="n">cassandra</span>
-<span class="c"># require_client_auth: false</span>
-<span class="c"># Set trustore and truststore_password if require_client_auth is true</span>
-<span class="c"># truststore: conf/.truststore</span>
-<span class="c"># truststore_password: cassandra</span>
-<span class="c"># More advanced defaults below:</span>
-<span class="c"># protocol: TLS</span>
-<span class="c"># algorithm: SunX509</span>
-<span class="c"># store_type: JKS</span>
-<span class="c"># cipher_suites: [TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA]</span>
+<span class="c1"># require_client_auth: false</span>
+<span class="c1"># Set trustore and truststore_password if require_client_auth is true</span>
+<span class="c1"># truststore: conf/.truststore</span>
+<span class="c1"># truststore_password: cassandra</span>
+<span class="c1"># More advanced defaults below:</span>
+<span class="c1"># protocol: TLS</span>
+<span class="c1"># store_type: JKS</span>
+<span class="c1"># cipher_suites: [TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA]</span>
 </pre></div>
 </div>
 </div>
@@ -1471,6 +1576,19 @@ Enable this option to be able to use UDFs with &#8220;language javascript&#8221;
 This option has no effect, if enable_user_defined_functions is false.</p>
 <p><em>Default Value:</em> false</p>
 </div>
+<div class="section" id="enable-materialized-views">
+<h2><code class="docutils literal"><span class="pre">enable_materialized_views</span></code><a class="headerlink" href="#enable-materialized-views" title="Permalink to this headline">¶</a></h2>
+<p>Enables materialized view creation on this node.
+Materialized views are considered experimental and are not recommended for production use.</p>
+<p><em>Default Value:</em> true</p>
+</div>
+<div class="section" id="enable-transient-replication">
+<h2><code class="docutils literal"><span class="pre">enable_transient_replication</span></code><a class="headerlink" href="#enable-transient-replication" title="Permalink to this headline">¶</a></h2>
+<p><em>This option is commented out by default.</em></p>
+<p>Enables creation of transiently replicated keyspaces on this node.
+Transient replication is experimental and is not recommended for production use.</p>
+<p><em>Default Value:</em> true</p>
+</div>
 <div class="section" id="windows-timer-interval">
 <h2><code class="docutils literal"><span class="pre">windows_timer_interval</span></code><a class="headerlink" href="#windows-timer-interval" title="Permalink to this headline">¶</a></h2>
 <p>The default Windows kernel timer and scheduling resolution is 15.6ms for power conservation.
@@ -1493,12 +1611,12 @@ Unlimited Strength Jurisdiction Policy Files for your version of the JDK.
 <p>Currently, only the following file types are supported for transparent data encryption, although
 more are coming in future cassandra releases: commitlog, hints</p>
 <p><em>Default Value (complex option)</em>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">enabled</span><span class="p">:</span> <span class="n">false</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">enabled</span><span class="p">:</span> <span class="n">false</span>
 <span class="n">chunk_length_kb</span><span class="p">:</span> <span class="mi">64</span>
 <span class="n">cipher</span><span class="p">:</span> <span class="n">AES</span><span class="o">/</span><span class="n">CBC</span><span class="o">/</span><span class="n">PKCS5Padding</span>
 <span class="n">key_alias</span><span class="p">:</span> <span class="n">testing</span><span class="p">:</span><span class="mi">1</span>
-<span class="c"># CBC IV length for AES needs to be 16 bytes (which is also the default size)</span>
-<span class="c"># iv_length: 16</span>
+<span class="c1"># CBC IV length for AES needs to be 16 bytes (which is also the default size)</span>
+<span class="c1"># iv_length: 16</span>
 <span class="n">key_provider</span><span class="p">:</span>
   <span class="o">-</span> <span class="n">class_name</span><span class="p">:</span> <span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">cassandra</span><span class="o">.</span><span class="n">security</span><span class="o">.</span><span class="n">JKSKeyProvider</span>
     <span class="n">parameters</span><span class="p">:</span>
@@ -1570,7 +1688,7 @@ will deactivate the feature.</p>
 <p><em>This option is commented out by default.</em></p>
 <p>Maximum size of any value in SSTables. Safety measure to detect SSTable corruption
 early. Any value size larger than this threshold will result into marking an SSTable
-as corrupted.</p>
+as corrupted. This should be positive and less than 2048.</p>
 <p><em>Default Value:</em> 256</p>
 </div>
 <div class="section" id="back-pressure-enabled">
@@ -1648,6 +1766,84 @@ level for writes without timing out. This is different from the consistency leve
 each write which may be lower in order to facilitate availability.</p>
 <p><em>Default Value:</em> EACH_QUORUM</p>
 </div>
+<div class="section" id="full-query-log-dir">
+<h2><code class="docutils literal"><span class="pre">full_query_log_dir</span></code><a class="headerlink" href="#full-query-log-dir" title="Permalink to this headline">¶</a></h2>
+<p><em>This option is commented out by default.</em></p>
+<p>Path to write full query log data to when the full query log is enabled
+The full query log will recrusively delete the contents of this path at
+times. Don&#8217;t place links in this directory to other parts of the filesystem.</p>
+<p><em>Default Value:</em>  /tmp/cassandrafullquerylog</p>
+</div>
+<div class="section" id="automatic-sstable-upgrade">
+<h2><code class="docutils literal"><span class="pre">automatic_sstable_upgrade</span></code><a class="headerlink" href="#automatic-sstable-upgrade" title="Permalink to this headline">¶</a></h2>
+<p><em>This option is commented out by default.</em></p>
+<p>Automatically upgrade sstables after upgrade - if there is no ordinary compaction to do, the
+oldest non-upgraded sstable will get upgraded to the latest version</p>
+<p><em>Default Value:</em> false</p>
+</div>
+<div class="section" id="max-concurrent-automatic-sstable-upgrades">
+<h2><code class="docutils literal"><span class="pre">max_concurrent_automatic_sstable_upgrades</span></code><a class="headerlink" href="#max-concurrent-automatic-sstable-upgrades" title="Permalink to this headline">¶</a></h2>
+<p><em>This option is commented out by default.</em>
+Limit the number of concurrent sstable upgrades</p>
+<p><em>Default Value:</em> 1</p>
+</div>
+<div class="section" id="audit-logging-options">
+<h2><code class="docutils literal"><span class="pre">audit_logging_options</span></code><a class="headerlink" href="#audit-logging-options" title="Permalink to this headline">¶</a></h2>
+<p>Audit logging - Logs every incoming CQL command request, authentication to a node. See the docs
+on audit_logging for full details about the various configuration options.</p>
+</div>
+<div class="section" id="full-query-logging-options">
+<h2><code class="docutils literal"><span class="pre">full_query_logging_options</span></code><a class="headerlink" href="#full-query-logging-options" title="Permalink to this headline">¶</a></h2>
+<p><em>This option is commented out by default.</em></p>
+<p>default options for full query logging - these can be overridden from command line when executing
+nodetool enablefullquerylog</p>
+</div>
+<div class="section" id="corrupted-tombstone-strategy">
+<h2><code class="docutils literal"><span class="pre">corrupted_tombstone_strategy</span></code><a class="headerlink" href="#corrupted-tombstone-strategy" title="Permalink to this headline">¶</a></h2>
+<p><em>This option is commented out by default.</em></p>
+<p>validate tombstones on reads and compaction
+can be either &#8220;disabled&#8221;, &#8220;warn&#8221; or &#8220;exception&#8221;</p>
+<p><em>Default Value:</em> disabled</p>
+</div>
+<div class="section" id="diagnostic-events-enabled">
+<h2><code class="docutils literal"><span class="pre">diagnostic_events_enabled</span></code><a class="headerlink" href="#diagnostic-events-enabled" title="Permalink to this headline">¶</a></h2>
+<p>Diagnostic Events #
+If enabled, diagnostic events can be helpful for troubleshooting operational issues. Emitted events contain details
+on internal state and temporal relationships across events, accessible by clients via JMX.</p>
+<p><em>Default Value:</em> false</p>
+</div>
+<div class="section" id="native-transport-flush-in-batches-legacy">
+<h2><code class="docutils literal"><span class="pre">native_transport_flush_in_batches_legacy</span></code><a class="headerlink" href="#native-transport-flush-in-batches-legacy" title="Permalink to this headline">¶</a></h2>
+<p><em>This option is commented out by default.</em></p>
+<p>Use native transport TCP message coalescing. If on upgrade to 4.0 you found your throughput decreasing, and in
+particular you run an old kernel or have very fewer client connections, this option might be worth evaluating.</p>
+<p><em>Default Value:</em> false</p>
+</div>
+<div class="section" id="repaired-data-tracking-for-range-reads-enabled">
+<h2><code class="docutils literal"><span class="pre">repaired_data_tracking_for_range_reads_enabled</span></code><a class="headerlink" href="#repaired-data-tracking-for-range-reads-enabled" title="Permalink to this headline">¶</a></h2>
+<p>Enable tracking of repaired state of data during reads and comparison between replicas
+Mismatches between the repaired sets of replicas can be characterized as either confirmed
+or unconfirmed. In this context, unconfirmed indicates that the presence of pending repair
+sessions, unrepaired partition tombstones, or some other condition means that the disparity
+cannot be considered conclusive. Confirmed mismatches should be a trigger for investigation
+as they may be indicative of corruption or data loss.
+There are separate flags for range vs partition reads as single partition reads are only tracked
+when CL &gt; 1 and a digest mismatch occurs. Currently, range queries don&#8217;t use digests so if
+enabled for range reads, all range reads will include repaired data tracking. As this adds
+some overhead, operators may wish to disable it whilst still enabling it for partition reads</p>
+<p><em>Default Value:</em> false</p>
+</div>
+<div class="section" id="repaired-data-tracking-for-partition-reads-enabled">
+<h2><code class="docutils literal"><span class="pre">repaired_data_tracking_for_partition_reads_enabled</span></code><a class="headerlink" href="#repaired-data-tracking-for-partition-reads-enabled" title="Permalink to this headline">¶</a></h2>
+<p><em>Default Value:</em> false</p>
+</div>
+<div class="section" id="report-unconfirmed-repaired-data-mismatches">
+<h2><code class="docutils literal"><span class="pre">report_unconfirmed_repaired_data_mismatches</span></code><a class="headerlink" href="#report-unconfirmed-repaired-data-mismatches" title="Permalink to this headline">¶</a></h2>
+<p>If false, only confirmed mismatches will be reported. If true, a separate metric for unconfirmed
+mismatches will also be recorded. This is to avoid potential signal:noise issues are unconfirmed
+mismatches are less actionable than confirmed ones.</p>
+<p><em>Default Value:</em> false</p>
+</div>
 </div>
 
 
@@ -1664,8 +1860,6 @@ each write which may be lower in order to facilitate availability.</p>
           
         </div>
       </div>
-    </div>
-    <div class="col-md-2">
     </div>
   </div>
 </div>

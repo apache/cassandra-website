@@ -25,7 +25,7 @@ extra-footer: '
       COLLAPSE_INDEX: false,
       FILE_SUFFIX: ".html",
       HAS_SOURCE:  false,
-      SOURCELINK_SUFFIX: ""
+      SOURCELINK_SUFFIX: ".txt"
     };
 </script>
 '
@@ -33,7 +33,7 @@ extra-footer: '
 ---
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-3">
       <div class="doc-navigation">
         <div class="doc-menu" role="navigation">
           <div class="navbar-header">
@@ -79,7 +79,8 @@ extra-footer: '
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
 </ul>
 
@@ -91,7 +92,7 @@ extra-footer: '
     </div>
     <div class="col-md-8">
       <div class="content doc-content">
-        <div class="container">
+        <div class="content-container">
           
   <div class="section" id="dynamo">
 <h1>Dynamo<a class="headerlink" href="#dynamo" title="Permalink to this headline">¶</a></h1>
@@ -144,6 +145,27 @@ nodes in each rack, the data load on the smallest rack may be much higher.  Simi
 into a new rack, it will be considered a replica for the entire ring.  For this reason, many operators choose to
 configure all nodes on a single &#8220;rack&#8221;.</p>
 </div>
+<div class="section" id="transient-replication">
+<span id="id2"></span><h3>Transient Replication<a class="headerlink" href="#transient-replication" title="Permalink to this headline">¶</a></h3>
+<p>Transient replication allows you to configure a subset of replicas to only replicate data that hasn&#8217;t been incrementally
+repaired. This allows you to decouple data redundancy from availability. For instance, if you have a keyspace replicated
+at rf 3, and alter it to rf 5 with 2 transient replicas, you go from being able to tolerate one failed replica to being
+able to tolerate two, without corresponding increase in storage usage. This is because 3 nodes will replicate all the data
+for a given token range, and the other 2 will only replicate data that hasn&#8217;t been incrementally repaired.</p>
+<p>To use transient replication, you first need to enable it in <code class="docutils literal"><span class="pre">cassandra.yaml</span></code>. Once enabled, both SimpleStrategy and
+NetworkTopologyStrategy can be configured to transiently replicate data. You configure it by specifying replication factor
+as <code class="docutils literal"><span class="pre">&lt;total_replicas&gt;/&lt;transient_replicas</span></code> Both SimpleStrategy and NetworkTopologyStrategy support configuring transient
+replication.</p>
+<p>Transiently replicated keyspaces only support tables created with read_repair set to NONE and monotonic reads are not currently supported.
+You also can&#8217;t use LWT, logged batches, and counters in 4.0. You will possibly never be able to use materialized views
+with transiently replicated keyspaces and probably never be able to use 2i with them.</p>
+<p>Transient replication is an experimental feature that may not be ready for production use. The expected audienced is experienced
+users of Cassandra capable of fully validating a deployment of their particular application. That means being able check
+that operations like reads, writes, decommission, remove, rebuild, repair, and replace all work with your queries, data,
+configuration, operational practices, and availability requirements.</p>
+<p>It is anticipated that 4.next will support monotonic reads with transient replication as well as LWT, logged batches, and
+counters.</p>
+</div>
 </div>
 <div class="section" id="tunable-consistency">
 <h2>Tunable Consistency<a class="headerlink" href="#tunable-consistency" title="Permalink to this headline">¶</a></h2>
@@ -177,13 +199,8 @@ write operations.</dd>
 <p>Write operations are always sent to all replicas, regardless of consistency level. The consistency level simply
 controls how many responses the coordinator waits for before responding to the client.</p>
 <p>For read operations, the coordinator generally only issues read commands to enough replicas to satisfy the consistency
-level. There are a couple of exceptions to this:</p>
-<ul class="simple">
-<li>Speculative retry may issue a redundant read request to an extra replica if the other replicas have not responded
-within a specified time window.</li>
-<li>Based on <code class="docutils literal"><span class="pre">read_repair_chance</span></code> and <code class="docutils literal"><span class="pre">dclocal_read_repair_chance</span></code> (part of a table&#8217;s schema), read requests may be
-randomly sent to all replicas in order to repair potentially inconsistent data.</li>
-</ul>
+level, with one exception. Speculative retry may issue a redundant read request to an extra replica if the other replicas
+have not responded within a specified time window.</p>
 <div class="section" id="picking-consistency-levels">
 <h3>Picking Consistency Levels<a class="headerlink" href="#picking-consistency-levels" title="Permalink to this headline">¶</a></h3>
 <p>It is common to pick read and write consistency levels that are high enough to overlap, resulting in &#8220;strong&#8221;
@@ -213,8 +230,6 @@ throughput, latency, and availability.</p>
           
         </div>
       </div>
-    </div>
-    <div class="col-md-2">
     </div>
   </div>
 </div>

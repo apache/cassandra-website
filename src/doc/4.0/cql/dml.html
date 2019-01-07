@@ -25,7 +25,7 @@ extra-footer: '
       COLLAPSE_INDEX: false,
       FILE_SUFFIX: ".html",
       HAS_SOURCE:  false,
-      SOURCELINK_SUFFIX: ""
+      SOURCELINK_SUFFIX: ".txt"
     };
 </script>
 '
@@ -33,7 +33,7 @@ extra-footer: '
 ---
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-3">
       <div class="doc-navigation">
         <div class="doc-menu" role="navigation">
           <div class="navbar-header">
@@ -88,7 +88,8 @@ extra-footer: '
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
 </ul>
 
@@ -100,7 +101,7 @@ extra-footer: '
     </div>
     <div class="col-md-8">
       <div class="content doc-content">
-        <div class="container">
+        <div class="content-container">
           
   <div class="section" id="data-manipulation">
 <span id="id1"></span><h1>Data Manipulation<a class="headerlink" href="#data-manipulation" title="Permalink to this headline">¶</a></h1>
@@ -132,7 +133,7 @@ extra-footer: '
 <strong id="grammar-token-ordering_clause">ordering_clause </strong> ::=  <a class="reference internal" href="ddl.html#grammar-token-column_name"><code class="xref docutils literal"><span class="pre">column_name</span></code></a> [ ASC | DESC ] ( ',' <a class="reference internal" href="ddl.html#grammar-token-column_name"><code class="xref docutils literal"><span class="pre">column_name</span></code></a> [ ASC | DESC ] )*
 </pre>
 <p>For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">name</span><span class="p">,</span> <span class="n">occupation</span> <span class="k">FROM</span> <span class="k">users</span> <span class="k">WHERE</span> <span class="n">userid</span> <span class="k">IN</span> <span class="p">(</span><span class="mf">199</span><span class="p">,</span> <span class="mf">200</span><span class="p">,</span> <span class="mf">207</span><span class="p">);</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">name</span><span class="p">,</span> <span class="n">occupation</span> <span class="k">FROM</span> <span class="k">users</span> <span class="k">WHERE</span> <span class="n">userid</span> <span class="k">IN</span> <span class="p">(</span><span class="mf">199</span><span class="p">,</span> <span class="mf">200</span><span class="p">,</span> <span class="mf">207</span><span class="p">);</span>
 <span class="k">SELECT</span> <span class="k">JSON</span> <span class="n">name</span><span class="p">,</span> <span class="n">occupation</span> <span class="k">FROM</span> <span class="k">users</span> <span class="k">WHERE</span> <span class="n">userid</span> <span class="o">=</span> <span class="mf">199</span><span class="p">;</span>
 <span class="k">SELECT</span> <span class="n">name</span> <span class="k">AS</span> <span class="n">user_name</span><span class="p">,</span> <span class="n">occupation</span> <span class="k">AS</span> <span class="n">user_occupation</span> <span class="k">FROM</span> <span class="k">users</span><span class="p">;</span>
 
@@ -175,7 +176,7 @@ more details.</li>
 <h4>Aliases<a class="headerlink" href="#aliases" title="Permalink to this headline">¶</a></h4>
 <p>Every <em>top-level</em> selector can also be aliased (using <cite>AS</cite>). If so, the name of the corresponding column in the result
 set will be that of the alias. For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="c1">// Without alias</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="c1">// Without alias</span>
 <span class="k">SELECT</span> <span class="n">intAsBlob</span><span class="p">(</span><span class="mf">4</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">t</span><span class="p">;</span>
 
 <span class="c1">//  intAsBlob(4)</span>
@@ -216,7 +217,7 @@ relation) on a partition key are not supported (but see the use of the <code cla
 the partition key). Moreover, for a given partition key, the clustering columns induce an ordering of rows and relations
 on them is restricted to the relations that allow to select a <strong>contiguous</strong> (for the ordering) set of rows. For
 instance, given:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">posts</span> <span class="p">(</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">posts</span> <span class="p">(</span>
     <span class="n">userid</span> <span class="nb">text</span><span class="p">,</span>
     <span class="n">blog_title</span> <span class="nb">text</span><span class="p">,</span>
     <span class="n">posted_at</span> <span class="nb">timestamp</span><span class="p">,</span>
@@ -228,7 +229,7 @@ instance, given:</p>
 </pre></div>
 </div>
 <p>The following query is allowed:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="n">entry_title</span><span class="p">,</span> <span class="n">content</span> <span class="k">FROM</span> <span class="n">posts</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">entry_title</span><span class="p">,</span> <span class="n">content</span> <span class="k">FROM</span> <span class="n">posts</span>
  <span class="k">WHERE</span> <span class="n">userid</span> <span class="o">=</span> <span class="s1">&#39;john doe&#39;</span>
    <span class="k">AND</span> <span class="n">blog_title</span><span class="o">=</span><span class="s1">&#39;John&#39;&#39;s Blog&#39;</span>
    <span class="k">AND</span> <span class="n">posted_at</span> <span class="o">&gt;=</span> <span class="s1">&#39;2012-01-01&#39;</span> <span class="k">AND</span> <span class="n">posted_at</span> <span class="o">&lt;</span> <span class="s1">&#39;2012-01-31&#39;</span>
@@ -236,7 +237,7 @@ instance, given:</p>
 </div>
 <p>But the following one is not, as it does not select a contiguous set of rows (and we suppose no secondary indexes are
 set):</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="c1">// Needs a blog_title to be set to select ranges of posted_at</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="c1">// Needs a blog_title to be set to select ranges of posted_at</span>
 <span class="k">SELECT</span> <span class="n">entry_title</span><span class="p">,</span> <span class="n">content</span> <span class="k">FROM</span> <span class="n">posts</span>
  <span class="k">WHERE</span> <span class="n">userid</span> <span class="o">=</span> <span class="s1">&#39;john doe&#39;</span>
    <span class="k">AND</span> <span class="n">posted_at</span> <span class="o">&gt;=</span> <span class="s1">&#39;2012-01-01&#39;</span> <span class="k">AND</span> <span class="n">posted_at</span> <span class="o">&lt;</span> <span class="s1">&#39;2012-01-31&#39;</span>
@@ -247,14 +248,14 @@ rows will be selected based on the token of their <code class="docutils literal"
 key depends on the partitioner in use, and that in particular the RandomPartitioner won&#8217;t yield a meaningful order. Also
 note that ordering partitioners always order token values by bytes (so even if the partition key is of type int,
 <code class="docutils literal"><span class="pre">token(-1)</span> <span class="pre">&gt;</span> <span class="pre">token(0)</span></code> in particular). Example:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">posts</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">posts</span>
  <span class="k">WHERE</span> <span class="k">token</span><span class="p">(</span><span class="n">userid</span><span class="p">)</span> <span class="o">&gt;</span> <span class="k">token</span><span class="p">(</span><span class="s1">&#39;tom&#39;</span><span class="p">)</span> <span class="k">AND</span> <span class="k">token</span><span class="p">(</span><span class="n">userid</span><span class="p">)</span> <span class="o">&lt;</span> <span class="k">token</span><span class="p">(</span><span class="s1">&#39;bob&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Moreover, the <code class="docutils literal"><span class="pre">IN</span></code> relation is only allowed on the last column of the partition key and on the last column of the full
 primary key.</p>
 <p>It is also possible to “group” <code class="docutils literal"><span class="pre">CLUSTERING</span> <span class="pre">COLUMNS</span></code> together in a relation using the tuple notation. For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">posts</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">posts</span>
  <span class="k">WHERE</span> <span class="n">userid</span> <span class="o">=</span> <span class="s1">&#39;john doe&#39;</span>
    <span class="k">AND</span> <span class="p">(</span><span class="n">blog_title</span><span class="p">,</span> <span class="n">posted_at</span><span class="p">)</span> <span class="o">&gt;</span> <span class="p">(</span><span class="s1">&#39;John&#39;&#39;s Blog&#39;</span><span class="p">,</span> <span class="s1">&#39;2012-01-01&#39;</span><span class="p">)</span>
 </pre></div>
@@ -262,14 +263,14 @@ primary key.</p>
 <p>will request all rows that sorts after the one having “John&#8217;s Blog” as <code class="docutils literal"><span class="pre">blog_tile</span></code> and &#8216;2012-01-01&#8217; for <code class="docutils literal"><span class="pre">posted_at</span></code>
 in the clustering order. In particular, rows having a <code class="docutils literal"><span class="pre">post_at</span> <span class="pre">&lt;=</span> <span class="pre">'2012-01-01'</span></code> will be returned as long as their
 <code class="docutils literal"><span class="pre">blog_title</span> <span class="pre">&gt;</span> <span class="pre">'John''s</span> <span class="pre">Blog'</span></code>, which would not be the case for:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">posts</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">posts</span>
  <span class="k">WHERE</span> <span class="n">userid</span> <span class="o">=</span> <span class="s1">&#39;john doe&#39;</span>
    <span class="k">AND</span> <span class="n">blog_title</span> <span class="o">&gt;</span> <span class="s1">&#39;John&#39;&#39;s Blog&#39;</span>
    <span class="k">AND</span> <span class="n">posted_at</span> <span class="o">&gt;</span> <span class="s1">&#39;2012-01-01&#39;</span>
 </pre></div>
 </div>
 <p>The tuple notation may also be used for <code class="docutils literal"><span class="pre">IN</span></code> clauses on clustering columns:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">posts</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">posts</span>
  <span class="k">WHERE</span> <span class="n">userid</span> <span class="o">=</span> <span class="s1">&#39;john doe&#39;</span>
    <span class="k">AND</span> <span class="p">(</span><span class="n">blog_title</span><span class="p">,</span> <span class="n">posted_at</span><span class="p">)</span> <span class="k">IN</span> <span class="p">((</span><span class="s1">&#39;John&#39;&#39;s Blog&#39;</span><span class="p">,</span> <span class="s1">&#39;2012-01-01&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Extreme Chess&#39;</span><span class="p">,</span> <span class="s1">&#39;2014-06-01&#39;</span><span class="p">))</span>
 </pre></div>
@@ -321,7 +322,7 @@ that selects a handful of records <strong>may</strong> exhibit performance that 
 cluster.</p>
 <p>For instance, considering the following table holding user profiles with their year of birth (with a secondary index on
 it) and country of residence:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">users</span> <span class="p">(</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">users</span> <span class="p">(</span>
     <span class="n">username</span> <span class="nb">text</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
     <span class="n">firstname</span> <span class="nb">text</span><span class="p">,</span>
     <span class="n">lastname</span> <span class="nb">text</span><span class="p">,</span>
@@ -333,7 +334,7 @@ it) and country of residence:</p>
 </pre></div>
 </div>
 <p>Then the following queries are valid:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="k">users</span><span class="p">;</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="k">users</span><span class="p">;</span>
 <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="k">users</span> <span class="k">WHERE</span> <span class="n">birth_year</span> <span class="o">=</span> <span class="mf">1981</span><span class="p">;</span>
 </pre></div>
 </div>
@@ -345,14 +346,14 @@ Nevertheless, the number of nodes will always be multiple number of magnitude lo
 stored). Of course, both query may return very large result set in practice, but the amount of data returned can always
 be controlled by adding a <code class="docutils literal"><span class="pre">LIMIT</span></code>.</p>
 <p>However, the following query will be rejected:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="k">users</span> <span class="k">WHERE</span> <span class="n">birth_year</span> <span class="o">=</span> <span class="mf">1981</span> <span class="k">AND</span> <span class="n">country</span> <span class="o">=</span> <span class="s1">&#39;FR&#39;</span><span class="p">;</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="k">users</span> <span class="k">WHERE</span> <span class="n">birth_year</span> <span class="o">=</span> <span class="mf">1981</span> <span class="k">AND</span> <span class="n">country</span> <span class="o">=</span> <span class="s1">&#39;FR&#39;</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>because Cassandra cannot guarantee that it won&#8217;t have to scan large amount of data even if the result to those query is
 small. Typically, it will scan all the index entries for users born in 1981 even if only a handful are actually from
 France. However, if you “know what you are doing”, you can force the execution of this query by using <code class="docutils literal"><span class="pre">ALLOW</span>
 <span class="pre">FILTERING</span></code> and so the following query is valid:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="k">users</span> <span class="k">WHERE</span> <span class="n">birth_year</span> <span class="o">=</span> <span class="mf">1981</span> <span class="k">AND</span> <span class="n">country</span> <span class="o">=</span> <span class="s1">&#39;FR&#39;</span> <span class="k">ALLOW</span> <span class="k">FILTERING</span><span class="p">;</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="k">users</span> <span class="k">WHERE</span> <span class="n">birth_year</span> <span class="o">=</span> <span class="mf">1981</span> <span class="k">AND</span> <span class="n">country</span> <span class="o">=</span> <span class="s1">&#39;FR&#39;</span> <span class="k">ALLOW</span> <span class="k">FILTERING</span><span class="p">;</span>
 </pre></div>
 </div>
 </div>
@@ -369,7 +370,7 @@ France. However, if you “know what you are doing”, you can force the executi
 <strong id="grammar-token-names">names           </strong> ::=  '(' <a class="reference internal" href="ddl.html#grammar-token-column_name"><code class="xref docutils literal"><span class="pre">column_name</span></code></a> ( ',' <a class="reference internal" href="ddl.html#grammar-token-column_name"><code class="xref docutils literal"><span class="pre">column_name</span></code></a> )* ')'
 </pre>
 <p>For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">NerdMovies</span> <span class="p">(</span><span class="n">movie</span><span class="p">,</span> <span class="n">director</span><span class="p">,</span> <span class="n">main_actor</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">NerdMovies</span> <span class="p">(</span><span class="n">movie</span><span class="p">,</span> <span class="n">director</span><span class="p">,</span> <span class="n">main_actor</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
                 <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;Serenity&#39;</span><span class="p">,</span> <span class="s1">&#39;Joss Whedon&#39;</span><span class="p">,</span> <span class="s1">&#39;Nathan Fillion&#39;</span><span class="p">,</span> <span class="mf">2005</span><span class="p">)</span>
       <span class="k">USING</span> <span class="k">TTL</span> <span class="mf">86400</span><span class="p">;</span>
 
@@ -410,7 +411,7 @@ will be used) so this should be used sparingly.</p>
 <strong id="grammar-token-condition">condition       </strong> ::=  <a class="reference internal" href="#grammar-token-simple_selection"><code class="xref docutils literal"><span class="pre">simple_selection</span></code></a> <a class="reference internal" href="#grammar-token-operator"><code class="xref docutils literal"><span class="pre">operator</span></code></a> <a class="reference internal" href="definitions.html#grammar-token-term"><code class="xref docutils literal"><span class="pre">term</span></code></a>
 </pre>
 <p>For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">UPDATE</span> <span class="n">NerdMovies</span> <span class="k">USING</span> <span class="k">TTL</span> <span class="mf">400</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">UPDATE</span> <span class="n">NerdMovies</span> <span class="k">USING</span> <span class="k">TTL</span> <span class="mf">400</span>
    <span class="k">SET</span> <span class="n">director</span>   <span class="o">=</span> <span class="s1">&#39;Joss Whedon&#39;</span><span class="p">,</span>
        <span class="n">main_actor</span> <span class="o">=</span> <span class="s1">&#39;Nathan Fillion&#39;</span><span class="p">,</span>
        <span class="n">year</span>       <span class="o">=</span> <span class="mf">2005</span>
@@ -467,7 +468,7 @@ to inserting with a TTL of 0.</li>
                       [ IF ( EXISTS | <a class="reference internal" href="#grammar-token-condition"><code class="xref docutils literal"><span class="pre">condition</span></code></a> ( AND <a class="reference internal" href="#grammar-token-condition"><code class="xref docutils literal"><span class="pre">condition</span></code></a> )*) ]
 </pre>
 <p>For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">NerdMovies</span> <span class="k">USING</span> <span class="nb">TIMESTAMP</span> <span class="mf">1240003134</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">NerdMovies</span> <span class="k">USING</span> <span class="nb">TIMESTAMP</span> <span class="mf">1240003134</span>
  <span class="k">WHERE</span> <span class="n">movie</span> <span class="o">=</span> <span class="s1">&#39;Serenity&#39;</span><span class="p">;</span>
 
 <span class="k">DELETE</span> <span class="n">phone</span> <span class="k">FROM</span> <span class="k">Users</span>
@@ -496,7 +497,7 @@ statements. However, as with <code class="docutils literal"><span class="pre">IN
 <strong id="grammar-token-modification_statement">modification_statement</strong> ::=  <a class="reference internal" href="#grammar-token-insert_statement"><code class="xref docutils literal"><span class="pre">insert_statement</span></code></a> | <a class="reference internal" href="#grammar-token-update_statement"><code class="xref docutils literal"><span class="pre">update_statement</span></code></a> | <a class="reference internal" href="#grammar-token-delete_statement"><code class="xref docutils literal"><span class="pre">delete_statement</span></code></a>
 </pre>
 <p>For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">BEGIN</span> <span class="k">BATCH</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">BEGIN</span> <span class="k">BATCH</span>
    <span class="k">INSERT</span> <span class="k">INTO</span> <span class="k">users</span> <span class="p">(</span><span class="n">userid</span><span class="p">,</span> <span class="k">password</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;user2&#39;</span><span class="p">,</span> <span class="s1">&#39;ch@ngem3b&#39;</span><span class="p">,</span> <span class="s1">&#39;second user&#39;</span><span class="p">);</span>
    <span class="k">UPDATE</span> <span class="k">users</span> <span class="k">SET</span> <span class="k">password</span> <span class="o">=</span> <span class="s1">&#39;ps22dhds&#39;</span> <span class="k">WHERE</span> <span class="n">userid</span> <span class="o">=</span> <span class="s1">&#39;user3&#39;</span><span class="p">;</span>
    <span class="k">INSERT</span> <span class="k">INTO</span> <span class="k">users</span> <span class="p">(</span><span class="n">userid</span><span class="p">,</span> <span class="k">password</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;user4&#39;</span><span class="p">,</span> <span class="s1">&#39;ch@ngem3c&#39;</span><span class="p">);</span>
@@ -554,8 +555,6 @@ updates in Cassandra, counter updates are not idempotent.</p>
           
         </div>
       </div>
-    </div>
-    <div class="col-md-2">
     </div>
   </div>
 </div>

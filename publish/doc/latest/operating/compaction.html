@@ -101,7 +101,7 @@
 
     <div class="container-fluid">
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-3">
       <div class="doc-navigation">
         <div class="doc-menu" role="navigation">
           <div class="navbar-header">
@@ -168,7 +168,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
 </ul>
 
@@ -180,7 +181,7 @@
     </div>
     <div class="col-md-8">
       <div class="content doc-content">
-        <div class="container">
+        <div class="content-container">
           
   <div class="section" id="compaction">
 <span id="id1"></span><h1>Compaction<a class="headerlink" href="#compaction" title="Permalink to this headline">¶</a></h1>
@@ -240,17 +241,17 @@ because of the distributed nature of Cassandra.</p>
 <div class="section" id="deletes-without-tombstones">
 <h3>Deletes without tombstones<a class="headerlink" href="#deletes-without-tombstones" title="Permalink to this headline">¶</a></h3>
 <p>Imagine a three node cluster which has the value [A] replicated to every node.:</p>
-<div class="highlight-none"><div class="highlight"><pre>[A], [A], [A]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[A], [A], [A]
 </pre></div>
 </div>
 <p>If one of the nodes fails and and our delete operation only removes existing values we can end up with a cluster that
 looks like:</p>
-<div class="highlight-none"><div class="highlight"><pre>[], [], [A]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[], [], [A]
 </pre></div>
 </div>
 <p>Then a repair operation would replace the value of [A] back onto the two
 nodes which are missing the value.:</p>
-<div class="highlight-none"><div class="highlight"><pre>[A], [A], [A]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[A], [A], [A]
 </pre></div>
 </div>
 <p>This would cause our data to be resurrected even though it had been
@@ -259,16 +260,16 @@ deleted.</p>
 <div class="section" id="deletes-with-tombstones">
 <h3>Deletes with Tombstones<a class="headerlink" href="#deletes-with-tombstones" title="Permalink to this headline">¶</a></h3>
 <p>Starting again with a three node cluster which has the value [A] replicated to every node.:</p>
-<div class="highlight-none"><div class="highlight"><pre>[A], [A], [A]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[A], [A], [A]
 </pre></div>
 </div>
 <p>If instead of removing data we add a tombstone record, our single node failure situation will look like this.:</p>
-<div class="highlight-none"><div class="highlight"><pre>[A, Tombstone[A]], [A, Tombstone[A]], [A]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[A, Tombstone[A]], [A, Tombstone[A]], [A]
 </pre></div>
 </div>
 <p>Now when we issue a repair the Tombstone will be copied to the replica, rather than the deleted data being
 resurrected.:</p>
-<div class="highlight-none"><div class="highlight"><pre>[A, Tombstone[A]], [A, Tombstone[A]], [A, Tombstone[A]]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[A, Tombstone[A]], [A, Tombstone[A]], [A, Tombstone[A]]
 </pre></div>
 </div>
 <p>Our repair operation will correctly put the state of the system to what we expect with the record [A] marked as deleted
@@ -314,7 +315,8 @@ compaction can drop that sstable. If you see sstables with only tombstones (note
 tombstones once the time to live has expired) but it is not being dropped by compaction, it is likely that other
 sstables contain older data. There is a tool called <code class="docutils literal"><span class="pre">sstableexpiredblockers</span></code> that will list which sstables are
 droppable and which are blocking them from being dropped. This is especially useful for time series compaction with
-<code class="docutils literal"><span class="pre">TimeWindowCompactionStrategy</span></code> (and the deprecated <code class="docutils literal"><span class="pre">DateTieredCompactionStrategy</span></code>).</p>
+<code class="docutils literal"><span class="pre">TimeWindowCompactionStrategy</span></code> (and the deprecated <code class="docutils literal"><span class="pre">DateTieredCompactionStrategy</span></code>). With <code class="docutils literal"><span class="pre">TimeWindowCompactionStrategy</span></code>
+it is possible to remove the guarantee (not check for shadowing data) by enabling <code class="docutils literal"><span class="pre">unsafe_aggressive_sstable_expiration</span></code>.</p>
 </div>
 <div class="section" id="repaired-unrepaired-data">
 <h2>Repaired/unrepaired data<a class="headerlink" href="#repaired-unrepaired-data" title="Permalink to this headline">¶</a></h2>
@@ -403,13 +405,13 @@ throughput.</dd>
 <h2>Switching the compaction strategy and options using JMX<a class="headerlink" href="#switching-the-compaction-strategy-and-options-using-jmx" title="Permalink to this headline">¶</a></h2>
 <p>It is possible to switch compaction strategies and its options on just a single node using JMX, this is a great way to
 experiment with settings without affecting the whole cluster. The mbean is:</p>
-<div class="highlight-none"><div class="highlight"><pre>org.apache.cassandra.db:type=ColumnFamilies,keyspace=&lt;keyspace_name&gt;,columnfamily=&lt;table_name&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>org.apache.cassandra.db:type=ColumnFamilies,keyspace=&lt;keyspace_name&gt;,columnfamily=&lt;table_name&gt;
 </pre></div>
 </div>
 <p>and the attribute to change is <code class="docutils literal"><span class="pre">CompactionParameters</span></code> or <code class="docutils literal"><span class="pre">CompactionParametersJson</span></code> if you use jconsole or jmc. The
 syntax for the json version is the same as you would use in an <a class="reference internal" href="../cql/ddl.html#alter-table-statement"><span class="std std-ref">ALTER TABLE</span></a> statement -
 for example:</p>
-<div class="highlight-none"><div class="highlight"><pre>{ &#39;class&#39;: &#39;LeveledCompactionStrategy&#39;, &#39;sstable_size_in_mb&#39;: 123, &#39;fanout_size&#39;: 10}
+<div class="highlight-none"><div class="highlight"><pre><span></span>{ &#39;class&#39;: &#39;LeveledCompactionStrategy&#39;, &#39;sstable_size_in_mb&#39;: 123, &#39;fanout_size&#39;: 10}
 </pre></div>
 </div>
 <p>The setting is kept until someone executes an <a class="reference internal" href="../cql/ddl.html#alter-table-statement"><span class="std std-ref">ALTER TABLE</span></a> that touches the compaction
@@ -527,6 +529,11 @@ as the combination of two primary options:</p>
 <dd>A Java TimeUnit (MINUTES, HOURS, or DAYS).</dd>
 <dt><code class="docutils literal"><span class="pre">compaction_window_size</span></code> (default: 1)</dt>
 <dd>The number of units that make up a window.</dd>
+<dt><code class="docutils literal"><span class="pre">unsafe_aggressive_sstable_expiration</span></code> (default: false)</dt>
+<dd>Expired sstables will be dropped without checking its data is shadowing other sstables. This is a potentially
+risky option that can lead to data loss or deleted data re-appearing, going beyond what
+<cite>unchecked_tombstone_compaction</cite> does for single  sstable compaction. Due to the risk the jvm must also be
+started with <cite>-Dcassandra.unsafe_aggressive_sstable_expiration=true</cite>.</dd>
 </dl>
 <p>Taken together, the operator can specify windows of virtually any size, and <cite>TimeWindowCompactionStrategy</cite> will work to
 create a single sstable for writes within that window. For efficiency during writing, the newest window will be
@@ -547,8 +554,7 @@ will be comingled and flushed into the same SSTable.</li>
 </ul>
 <p>While TWCS tries to minimize the impact of comingled data, users should attempt to avoid this behavior.  Specifically,
 users should avoid queries that explicitly set the timestamp via CQL <code class="docutils literal"><span class="pre">USING</span> <span class="pre">TIMESTAMP</span></code>. Additionally, users should run
-frequent repairs (which streams data in such a way that it does not become comingled), and disable background read
-repair by setting the table&#8217;s <code class="docutils literal"><span class="pre">read_repair_chance</span></code> and <code class="docutils literal"><span class="pre">dclocal_read_repair_chance</span></code> to 0.</p>
+frequent repairs (which streams data in such a way that it does not become comingled).</p>
 </div>
 <div class="section" id="changing-timewindowcompactionstrategy-options">
 <h3>Changing TimeWindowCompactionStrategy Options<a class="headerlink" href="#changing-timewindowcompactionstrategy-options" title="Permalink to this headline">¶</a></h3>
@@ -577,8 +583,6 @@ windows.</p>
           
         </div>
       </div>
-    </div>
-    <div class="col-md-2">
     </div>
   </div>
 </div>
@@ -622,39 +626,8 @@ windows.</p>
 <script src="./../../../js/doctools.js"></script>
 <script src="./../../../js/searchtools.js"></script>
 
- <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: "" }; </script> 
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
 
-<script type="text/javascript">
-$(function() {
-    // Stick the #nav to the top of the window
-    var nav = $('.doc-navigation');
-    var navHomeY = nav.offset().top;
-    var isFixed = false;
-    var $w = $(window);
-    $w.scroll(function() {
-        var scrollTop = $w.scrollTop();
-        var shouldBeFixed = $w.width() > 991 && scrollTop >= navHomeY - 10;
-        if (shouldBeFixed && !isFixed) {
-            nav.css({
-                position: 'fixed',
-                top: 0,
-                left: nav.offset().left,
-                width: nav.width(),
-            });
-            nav.addClass('fixed-navigation');
-            isFixed = true;
-        }
-        else if (!shouldBeFixed && isFixed)
-        {
-            nav.css({
-                position: 'static'
-            });
-            nav.removeClass('fixed-navigation');
-            isFixed = false;
-        }
-    });
-});
-</script>
 
 
 <script type="text/javascript">

@@ -25,7 +25,7 @@ extra-footer: '
       COLLAPSE_INDEX: false,
       FILE_SUFFIX: ".html",
       HAS_SOURCE:  false,
-      SOURCELINK_SUFFIX: ""
+      SOURCELINK_SUFFIX: ".txt"
     };
 </script>
 '
@@ -33,7 +33,7 @@ extra-footer: '
 ---
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-3">
       <div class="doc-navigation">
         <div class="doc-menu" role="navigation">
           <div class="navbar-header">
@@ -105,7 +105,8 @@ extra-footer: '
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
 </ul>
 
@@ -117,10 +118,10 @@ extra-footer: '
     </div>
     <div class="col-md-8">
       <div class="content doc-content">
-        <div class="container">
+        <div class="content-container">
           
   <div class="section" id="monitoring">
-<h1>Monitoring<a class="headerlink" href="#monitoring" title="Permalink to this headline">¶</a></h1>
+<span id="monitoring-metrics"></span><h1>Monitoring<a class="headerlink" href="#monitoring" title="Permalink to this headline">¶</a></h1>
 <p>Metrics in Cassandra are managed using the <a class="reference external" href="http://metrics.dropwizard.io">Dropwizard Metrics</a> library. These metrics
 can be queried via JMX or pushed to external monitoring systems using a number of <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/getting-started/#other-reporting">built in</a> and <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/manual/third-party/">third party</a> reporter plugins.</p>
 <p>Metrics are collected for a single node. It&#8217;s up to the operator to use an external monitoring system to aggregate them.</p>
@@ -150,7 +151,7 @@ average throughputs.</dd>
 </dl>
 </div>
 <div class="section" id="table-metrics">
-<h2>Table Metrics<a class="headerlink" href="#table-metrics" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>Table Metrics<a class="headerlink" href="#table-metrics" title="Permalink to this headline">¶</a></h2>
 <p>Each table in Cassandra has metrics responsible for tracking its state and performance.</p>
 <p>The metric names are all appended with the specific <code class="docutils literal"><span class="pre">Keyspace</span></code> and <code class="docutils literal"><span class="pre">Table</span></code> name.</p>
 <p>Reported name format:</p>
@@ -167,9 +168,9 @@ average throughputs.</dd>
 </div>
 <table border="1" class="docutils">
 <colgroup>
-<col width="19%" />
-<col width="7%" />
-<col width="74%" />
+<col width="16%" />
+<col width="6%" />
+<col width="78%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Name</th>
@@ -228,7 +229,7 @@ average throughputs.</dd>
 </tr>
 <tr class="row-even"><td>SSTablesPerReadHistogram</td>
 <td>Histogram</td>
-<td>Histogram of the number of sstable data files accessed per read.</td>
+<td>Histogram of the number of sstable data files accessed per single partition read. SSTables skipped due to Bloom Filters, min-max key or partition index lookup are not taken into acoount.</td>
 </tr>
 <tr class="row-odd"><td>ReadLatency</td>
 <td>Latency</td>
@@ -246,129 +247,145 @@ average throughputs.</dd>
 <td>Timer</td>
 <td>Coordinator read latency for this table.</td>
 </tr>
-<tr class="row-odd"><td>CoordinatorScanLatency</td>
+<tr class="row-odd"><td>CoordinatorWriteLatency</td>
+<td>Timer</td>
+<td>Coordinator write latency for this table.</td>
+</tr>
+<tr class="row-even"><td>CoordinatorScanLatency</td>
 <td>Timer</td>
 <td>Coordinator range scan latency for this table.</td>
 </tr>
-<tr class="row-even"><td>PendingFlushes</td>
+<tr class="row-odd"><td>PendingFlushes</td>
 <td>Counter</td>
 <td>Estimated number of flush tasks pending for this table.</td>
 </tr>
-<tr class="row-odd"><td>BytesFlushed</td>
+<tr class="row-even"><td>BytesFlushed</td>
 <td>Counter</td>
 <td>Total number of bytes flushed since server [re]start.</td>
 </tr>
-<tr class="row-even"><td>CompactionBytesWritten</td>
+<tr class="row-odd"><td>CompactionBytesWritten</td>
 <td>Counter</td>
 <td>Total number of bytes written by compaction since server [re]start.</td>
 </tr>
-<tr class="row-odd"><td>PendingCompactions</td>
+<tr class="row-even"><td>PendingCompactions</td>
 <td>Gauge&lt;Integer&gt;</td>
 <td>Estimate of number of pending compactions for this table.</td>
 </tr>
-<tr class="row-even"><td>LiveSSTableCount</td>
+<tr class="row-odd"><td>LiveSSTableCount</td>
 <td>Gauge&lt;Integer&gt;</td>
 <td>Number of SSTables on disk for this table.</td>
 </tr>
-<tr class="row-odd"><td>LiveDiskSpaceUsed</td>
+<tr class="row-even"><td>LiveDiskSpaceUsed</td>
 <td>Counter</td>
 <td>Disk space used by SSTables belonging to this table (in bytes).</td>
 </tr>
-<tr class="row-even"><td>TotalDiskSpaceUsed</td>
+<tr class="row-odd"><td>TotalDiskSpaceUsed</td>
 <td>Counter</td>
 <td>Total disk space used by SSTables belonging to this table, including obsolete ones waiting to be GC&#8217;d.</td>
 </tr>
-<tr class="row-odd"><td>MinPartitionSize</td>
+<tr class="row-even"><td>MinPartitionSize</td>
 <td>Gauge&lt;Long&gt;</td>
 <td>Size of the smallest compacted partition (in bytes).</td>
 </tr>
-<tr class="row-even"><td>MaxPartitionSize</td>
+<tr class="row-odd"><td>MaxPartitionSize</td>
 <td>Gauge&lt;Long&gt;</td>
 <td>Size of the largest compacted partition (in bytes).</td>
 </tr>
-<tr class="row-odd"><td>MeanPartitionSize</td>
+<tr class="row-even"><td>MeanPartitionSize</td>
 <td>Gauge&lt;Long&gt;</td>
 <td>Size of the average compacted partition (in bytes).</td>
 </tr>
-<tr class="row-even"><td>BloomFilterFalsePositives</td>
+<tr class="row-odd"><td>BloomFilterFalsePositives</td>
 <td>Gauge&lt;Long&gt;</td>
 <td>Number of false positives on table&#8217;s bloom filter.</td>
 </tr>
-<tr class="row-odd"><td>BloomFilterFalseRatio</td>
+<tr class="row-even"><td>BloomFilterFalseRatio</td>
 <td>Gauge&lt;Double&gt;</td>
 <td>False positive ratio of table&#8217;s bloom filter.</td>
 </tr>
-<tr class="row-even"><td>BloomFilterDiskSpaceUsed</td>
+<tr class="row-odd"><td>BloomFilterDiskSpaceUsed</td>
 <td>Gauge&lt;Long&gt;</td>
 <td>Disk space used by bloom filter (in bytes).</td>
 </tr>
-<tr class="row-odd"><td>BloomFilterOffHeapMemoryUsed</td>
+<tr class="row-even"><td>BloomFilterOffHeapMemoryUsed</td>
 <td>Gauge&lt;Long&gt;</td>
 <td>Off-heap memory used by bloom filter.</td>
 </tr>
-<tr class="row-even"><td>IndexSummaryOffHeapMemoryUsed</td>
+<tr class="row-odd"><td>IndexSummaryOffHeapMemoryUsed</td>
 <td>Gauge&lt;Long&gt;</td>
 <td>Off-heap memory used by index summary.</td>
 </tr>
-<tr class="row-odd"><td>CompressionMetadataOffHeapMemoryUsed</td>
+<tr class="row-even"><td>CompressionMetadataOffHeapMemoryUsed</td>
 <td>Gauge&lt;Long&gt;</td>
 <td>Off-heap memory used by compression meta data.</td>
 </tr>
-<tr class="row-even"><td>KeyCacheHitRate</td>
+<tr class="row-odd"><td>KeyCacheHitRate</td>
 <td>Gauge&lt;Double&gt;</td>
 <td>Key cache hit rate for this table.</td>
 </tr>
-<tr class="row-odd"><td>TombstoneScannedHistogram</td>
+<tr class="row-even"><td>TombstoneScannedHistogram</td>
 <td>Histogram</td>
 <td>Histogram of tombstones scanned in queries on this table.</td>
 </tr>
-<tr class="row-even"><td>LiveScannedHistogram</td>
+<tr class="row-odd"><td>LiveScannedHistogram</td>
 <td>Histogram</td>
 <td>Histogram of live cells scanned in queries on this table.</td>
 </tr>
-<tr class="row-odd"><td>ColUpdateTimeDeltaHistogram</td>
+<tr class="row-even"><td>ColUpdateTimeDeltaHistogram</td>
 <td>Histogram</td>
 <td>Histogram of column update time delta on this table.</td>
 </tr>
-<tr class="row-even"><td>ViewLockAcquireTime</td>
+<tr class="row-odd"><td>ViewLockAcquireTime</td>
 <td>Timer</td>
 <td>Time taken acquiring a partition lock for materialized view updates on this table.</td>
 </tr>
-<tr class="row-odd"><td>ViewReadTime</td>
+<tr class="row-even"><td>ViewReadTime</td>
 <td>Timer</td>
 <td>Time taken during the local read of a materialized view update.</td>
 </tr>
-<tr class="row-even"><td>TrueSnapshotsSize</td>
+<tr class="row-odd"><td>TrueSnapshotsSize</td>
 <td>Gauge&lt;Long&gt;</td>
 <td>Disk space used by snapshots of this table including all SSTable components.</td>
 </tr>
-<tr class="row-odd"><td>RowCacheHitOutOfRange</td>
+<tr class="row-even"><td>RowCacheHitOutOfRange</td>
 <td>Counter</td>
 <td>Number of table row cache hits that do not satisfy the query filter, thus went to disk.</td>
 </tr>
-<tr class="row-even"><td>RowCacheHit</td>
+<tr class="row-odd"><td>RowCacheHit</td>
 <td>Counter</td>
 <td>Number of table row cache hits.</td>
 </tr>
-<tr class="row-odd"><td>RowCacheMiss</td>
+<tr class="row-even"><td>RowCacheMiss</td>
 <td>Counter</td>
 <td>Number of table row cache misses.</td>
 </tr>
-<tr class="row-even"><td>CasPrepare</td>
+<tr class="row-odd"><td>CasPrepare</td>
 <td>Latency</td>
 <td>Latency of paxos prepare round.</td>
 </tr>
-<tr class="row-odd"><td>CasPropose</td>
+<tr class="row-even"><td>CasPropose</td>
 <td>Latency</td>
 <td>Latency of paxos propose round.</td>
 </tr>
-<tr class="row-even"><td>CasCommit</td>
+<tr class="row-odd"><td>CasCommit</td>
 <td>Latency</td>
 <td>Latency of paxos commit round.</td>
 </tr>
-<tr class="row-odd"><td>PercentRepaired</td>
+<tr class="row-even"><td>PercentRepaired</td>
 <td>Gauge&lt;Double&gt;</td>
 <td>Percent of table data that is repaired on disk.</td>
+</tr>
+<tr class="row-odd"><td>BytesRepaired</td>
+<td>Gauge&lt;Long&gt;</td>
+<td>Size of table data repaired on disk</td>
+</tr>
+<tr class="row-even"><td>BytesUnrepaired</td>
+<td>Gauge&lt;Long&gt;</td>
+<td>Size of table data unrepaired on disk</td>
+</tr>
+<tr class="row-odd"><td>BytesPendingRepair</td>
+<td>Gauge&lt;Long&gt;</td>
+<td>Size of table data isolated for an ongoing incremental repair</td>
 </tr>
 <tr class="row-even"><td>SpeculativeRetries</td>
 <td>Counter</td>
@@ -484,7 +501,7 @@ specific type.</p>
 <dt><strong>Metric Name</strong></dt>
 <dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics.ThreadPools.&lt;MetricName&gt;.&lt;Path&gt;.&lt;ThreadPoolName&gt;</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=ThreadPools</span> <span class="pre">scope=&lt;ThreadPoolName&gt;</span> <span class="pre">type=&lt;Type&gt;</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=ThreadPools</span> <span class="pre">path=&lt;Path&gt;</span> <span class="pre">scope=&lt;ThreadPoolName&gt;</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
 </dl>
 <table border="1" class="docutils">
 <colgroup>
@@ -522,6 +539,10 @@ specific type.</p>
 <tr class="row-odd"><td>MaxPoolSize</td>
 <td>Gauge&lt;Integer&gt;</td>
 <td>The maximum number of threads in this pool.</td>
+</tr>
+<tr class="row-even"><td>MaxTasksQueued</td>
+<td>Gauge&lt;Integer&gt;</td>
+<td>The maximum number of tasks queued before a task get blocked.</td>
 </tr>
 </tbody>
 </table>
@@ -630,6 +651,10 @@ specific type.</p>
 <tr class="row-even"><td>ValidationExecutor</td>
 <td>internal</td>
 <td>Performs validation compaction or scrubbing</td>
+</tr>
+<tr class="row-odd"><td>ViewBuildExecutor</td>
+<td>internal</td>
+<td>Performs materialized views initial build</td>
 </tr>
 </tbody>
 </table>
@@ -1067,15 +1092,15 @@ specific type.</p>
 </table>
 </div>
 <div class="section" id="droppedmessage-metrics">
-<h2>DroppedMessage Metrics<a class="headerlink" href="#droppedmessage-metrics" title="Permalink to this headline">¶</a></h2>
+<span id="dropped-metrics"></span><h2>DroppedMessage Metrics<a class="headerlink" href="#droppedmessage-metrics" title="Permalink to this headline">¶</a></h2>
 <p>Metrics specific to tracking dropped messages for different types of requests.
 Dropped writes are stored and retried by <code class="docutils literal"><span class="pre">Hinted</span> <span class="pre">Handoff</span></code></p>
 <p>Reported name format:</p>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics.DroppedMessages.&lt;MetricName&gt;.&lt;Type&gt;</span></code></dd>
+<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics.DroppedMessage.&lt;MetricName&gt;.&lt;Type&gt;</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=DroppedMetrics</span> <span class="pre">scope=&lt;Type&gt;</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=DroppedMessage</span> <span class="pre">scope=&lt;Type&gt;</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
 </dl>
 <table border="1" class="docutils">
 <colgroup>
@@ -1488,9 +1513,9 @@ lower by recycling on and off heap buffers.</p>
 </dl>
 <table border="1" class="docutils">
 <colgroup>
-<col width="26%" />
-<col width="13%" />
-<col width="61%" />
+<col width="24%" />
+<col width="25%" />
+<col width="51%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Name</th>
@@ -1500,8 +1525,16 @@ lower by recycling on and off heap buffers.</p>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>connectedNativeClients</td>
-<td>Counter</td>
+<td>Gauge&lt;Integer&gt;</td>
 <td>Number of clients connected to this nodes native protocol server</td>
+</tr>
+<tr class="row-odd"><td>connections</td>
+<td>Gauge&lt;List&lt;Map&lt;String, String&gt;&gt;</td>
+<td>List of all connections and their state information</td>
+</tr>
+<tr class="row-even"><td>connectedNativeClientsByUser</td>
+<td>Gauge&lt;Map&lt;String, Int&gt;</td>
+<td>Number of connnective native clients by username</td>
 </tr>
 </tbody>
 </table>
@@ -1725,12 +1758,12 @@ lower by recycling on and off heap buffers.</p>
 <p>Any JMX based client can access metrics from cassandra.</p>
 <p>If you wish to access JMX metrics over http it&#8217;s possible to download <a class="reference external" href="http://mx4j.sourceforge.net/">Mx4jTool</a> and
 place <code class="docutils literal"><span class="pre">mx4j-tools.jar</span></code> into the classpath.  On startup you will see in the log:</p>
-<div class="highlight-none"><div class="highlight"><pre>HttpAdaptor version 3.0.2 started on port 8081
+<div class="highlight-none"><div class="highlight"><pre><span></span>HttpAdaptor version 3.0.2 started on port 8081
 </pre></div>
 </div>
 <p>To choose a different port (8081 is the default) or a different listen address (0.0.0.0 is not the default) edit
 <code class="docutils literal"><span class="pre">conf/cassandra-env.sh</span></code> and uncomment:</p>
-<div class="highlight-none"><div class="highlight"><pre>#MX4J_ADDRESS=&quot;-Dmx4jaddress=0.0.0.0&quot;
+<div class="highlight-none"><div class="highlight"><pre><span></span>#MX4J_ADDRESS=&quot;-Dmx4jaddress=0.0.0.0&quot;
 
 #MX4J_PORT=&quot;-Dmx4jport=8081&quot;
 </pre></div>
@@ -1762,8 +1795,6 @@ reporter jars must all be in Cassandra&#8217;s classpath.</p>
           
         </div>
       </div>
-    </div>
-    <div class="col-md-2">
     </div>
   </div>
 </div>

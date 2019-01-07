@@ -101,7 +101,7 @@
 
     <div class="container-fluid">
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-3">
       <div class="doc-navigation">
         <div class="doc-menu" role="navigation">
           <div class="navbar-header">
@@ -157,7 +157,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
 </ul>
 
@@ -169,25 +170,32 @@
     </div>
     <div class="col-md-8">
       <div class="content doc-content">
-        <div class="container">
+        <div class="content-container">
           
   <div class="section" id="change-data-capture">
 <h1>Change Data Capture<a class="headerlink" href="#change-data-capture" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>Change data capture (CDC) provides a mechanism to flag specific tables for archival as well as rejecting writes to those
-tables once a configurable size-on-disk for the combined flushed and unflushed CDC-log is reached. An operator can
-enable CDC on a table by setting the table property <code class="docutils literal"><span class="pre">cdc=true</span></code> (either when <a class="reference internal" href="../cql/ddl.html#create-table-statement"><span class="std std-ref">creating the table</span></a> or <a class="reference internal" href="../cql/ddl.html#alter-table-statement"><span class="std std-ref">altering it</span></a>), after which any CommitLogSegments containing
-data for a CDC-enabled table are moved to the directory specified in <code class="docutils literal"><span class="pre">cassandra.yaml</span></code> on segment discard. A threshold
-of total disk space allowed is specified in the yaml at which time newly allocated CommitLogSegments will not allow CDC
-data until a consumer parses and removes data from the destination archival directory.</p>
+tables once a configurable size-on-disk for the CDC log is reached. An operator can enable CDC on a table by setting the
+table property <code class="docutils literal"><span class="pre">cdc=true</span></code> (either when <a class="reference internal" href="../cql/ddl.html#create-table-statement"><span class="std std-ref">creating the table</span></a> or
+<a class="reference internal" href="../cql/ddl.html#alter-table-statement"><span class="std std-ref">altering it</span></a>). Upon CommitLogSegment creation, a hard-link to the segment is created in the
+directory specified in <code class="docutils literal"><span class="pre">cassandra.yaml</span></code>. On segment fsync to disk, if CDC data is present anywhere in the segment a
+&lt;segment_name&gt;_cdc.idx file is also created with the integer offset of how much data in the original segment is persisted
+to disk. Upon final segment flush, a second line with the human-readable word &#8220;COMPLETED&#8221; will be added to the _cdc.idx
+file indicating that Cassandra has completed all processing on the file.</p>
+<p>We we use an index file rather than just encouraging clients to parse the log realtime off a memory mapped handle as data
+can be reflected in a kernel buffer that is not yet persisted to disk. Parsing only up to the listed offset in the _cdc.idx
+file will ensure that you only parse CDC data for data that is durable.</p>
+<p>A threshold of total disk space allowed is specified in the yaml at which time newly allocated CommitLogSegments will
+not allow CDC data until a consumer parses and removes files from the specified cdc_raw directory.</p>
 </div>
 <div class="section" id="configuration">
 <h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="enabling-or-disable-cdc-on-a-table">
-<h3>Enabling or disable CDC on a table<a class="headerlink" href="#enabling-or-disable-cdc-on-a-table" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="enabling-or-disabling-cdc-on-a-table">
+<h3>Enabling or disabling CDC on a table<a class="headerlink" href="#enabling-or-disabling-cdc-on-a-table" title="Permalink to this headline">¶</a></h3>
 <p>CDC is enable or disable through the <cite>cdc</cite> table property, for instance:</p>
-<div class="highlight-none"><div class="highlight"><pre>CREATE TABLE foo (a int, b text, PRIMARY KEY(a)) WITH cdc=true;
+<div class="highlight-none"><div class="highlight"><pre><span></span>CREATE TABLE foo (a int, b text, PRIMARY KEY(a)) WITH cdc=true;
 
 ALTER TABLE foo WITH cdc=true;
 
@@ -214,7 +222,7 @@ prevent burning CPU cycles unnecessarily. Default is to check 4 times per second
 </div>
 <div class="section" id="reading-commitlogsegments">
 <span id="id1"></span><h2>Reading CommitLogSegments<a class="headerlink" href="#reading-commitlogsegments" title="Permalink to this headline">¶</a></h2>
-<p>This implementation included a refactor of CommitLogReplayer into <a class="reference external" href="https://github.com/apache/cassandra/blob/e31e216234c6b57a531cae607e0355666007deb2/src/java/org/apache/cassandra/db/commitlog/CommitLogReader.java">CommitLogReader.java</a>.
+<p>Use a <a class="reference external" href="https://github.com/apache/cassandra/blob/e31e216234c6b57a531cae607e0355666007deb2/src/java/org/apache/cassandra/db/commitlog/CommitLogReader.java">CommitLogReader.java</a>.
 Usage is <a class="reference external" href="https://github.com/apache/cassandra/blob/e31e216234c6b57a531cae607e0355666007deb2/src/java/org/apache/cassandra/db/commitlog/CommitLogReplayer.java#L132-L140">fairly straightforward</a>
 with a <a class="reference external" href="https://github.com/apache/cassandra/blob/e31e216234c6b57a531cae607e0355666007deb2/src/java/org/apache/cassandra/db/commitlog/CommitLogReader.java#L71-L103">variety of signatures</a>
 available for use. In order to handle mutations read from disk, implement <a class="reference external" href="https://github.com/apache/cassandra/blob/e31e216234c6b57a531cae607e0355666007deb2/src/java/org/apache/cassandra/db/commitlog/CommitLogReadHandler.java">CommitLogReadHandler</a>.</p>
@@ -222,15 +230,14 @@ available for use. In order to handle mutations read from disk, implement <a cla
 <div class="section" id="warnings">
 <h2>Warnings<a class="headerlink" href="#warnings" title="Permalink to this headline">¶</a></h2>
 <p><strong>Do not enable CDC without some kind of consumption process in-place.</strong></p>
-<p>The initial implementation of Change Data Capture does not include a parser (see <a class="reference internal" href="#reading-commitlogsegments"><span class="std std-ref">Reading CommitLogSegments</span></a> above)
-so, if CDC is enabled on a node and then on a table, the <code class="docutils literal"><span class="pre">cdc_free_space_in_mb</span></code> will fill up and then writes to
+<p>If CDC is enabled on a node and then on a table, the <code class="docutils literal"><span class="pre">cdc_free_space_in_mb</span></code> will fill up and then writes to
 CDC-enabled tables will be rejected unless some consumption process is in place.</p>
 </div>
 <div class="section" id="further-reading">
 <h2>Further Reading<a class="headerlink" href="#further-reading" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><a class="reference external" href="https://docs.google.com/document/d/1ZxCWYkeZTquxsvf5hdPc0fiUnUHna8POvgt6TIzML4Y/edit">Design doc</a></li>
 <li><a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-8844">JIRA ticket</a></li>
+<li><a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-12148">JIRA ticket</a></li>
 </ul>
 </div>
 </div>
@@ -249,8 +256,6 @@ CDC-enabled tables will be rejected unless some consumption process is in place.
           
         </div>
       </div>
-    </div>
-    <div class="col-md-2">
     </div>
   </div>
 </div>
@@ -294,39 +299,8 @@ CDC-enabled tables will be rejected unless some consumption process is in place.
 <script src="./../../../js/doctools.js"></script>
 <script src="./../../../js/searchtools.js"></script>
 
- <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: "" }; </script> 
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
 
-<script type="text/javascript">
-$(function() {
-    // Stick the #nav to the top of the window
-    var nav = $('.doc-navigation');
-    var navHomeY = nav.offset().top;
-    var isFixed = false;
-    var $w = $(window);
-    $w.scroll(function() {
-        var scrollTop = $w.scrollTop();
-        var shouldBeFixed = $w.width() > 991 && scrollTop >= navHomeY - 10;
-        if (shouldBeFixed && !isFixed) {
-            nav.css({
-                position: 'fixed',
-                top: 0,
-                left: nav.offset().left,
-                width: nav.width(),
-            });
-            nav.addClass('fixed-navigation');
-            isFixed = true;
-        }
-        else if (!shouldBeFixed && isFixed)
-        {
-            nav.css({
-                position: 'static'
-            });
-            nav.removeClass('fixed-navigation');
-            isFixed = false;
-        }
-    });
-});
-</script>
 
 
 <script type="text/javascript">

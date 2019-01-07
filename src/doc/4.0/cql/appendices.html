@@ -25,7 +25,7 @@ extra-footer: '
       COLLAPSE_INDEX: false,
       FILE_SUFFIX: ".html",
       HAS_SOURCE:  false,
-      SOURCELINK_SUFFIX: ""
+      SOURCELINK_SUFFIX: ".txt"
     };
 </script>
 '
@@ -33,7 +33,7 @@ extra-footer: '
 ---
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-3">
       <div class="doc-navigation">
         <div class="doc-menu" role="navigation">
           <div class="navbar-header">
@@ -74,6 +74,7 @@ extra-footer: '
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Appendices</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#appendix-a-cql-keywords">Appendix A: CQL Keywords</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#appendix-b-cql-reserved-types">Appendix B: CQL Reserved Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#appendix-c-dropping-compact-storage">Appendix C: Dropping Compact Storage</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="changes.html">Changes</a></li>
@@ -85,7 +86,8 @@ extra-footer: '
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
 </ul>
 
@@ -97,7 +99,7 @@ extra-footer: '
     </div>
     <div class="col-md-8">
       <div class="content doc-content">
-        <div class="container">
+        <div class="content-container">
           
   <div class="section" id="appendices">
 <h1>Appendices<a class="headerlink" href="#appendices" title="Permalink to this headline">¶</a></h1>
@@ -524,6 +526,26 @@ names as their name.</p>
 </tbody>
 </table>
 </div>
+<div class="section" id="appendix-c-dropping-compact-storage">
+<h2>Appendix C: Dropping Compact Storage<a class="headerlink" href="#appendix-c-dropping-compact-storage" title="Permalink to this headline">¶</a></h2>
+<p>Starting version 4.0, Thrift and COMPACT STORAGE is no longer supported.</p>
+<p>&#8216;ALTER ... DROP COMPACT STORAGE&#8217; statement makes Compact Tables CQL-compatible,
+exposing internal structure of Thrift/Compact Tables:</p>
+<ul class="simple">
+<li>CQL-created Compact Tables that have no clustering columns, will expose an
+additional clustering column <code class="docutils literal"><span class="pre">column1</span></code> with <code class="docutils literal"><span class="pre">UTF8Type</span></code>.</li>
+<li>CQL-created Compact Tables that had no regular columns, will expose a
+regular column <code class="docutils literal"><span class="pre">value</span></code> with <code class="docutils literal"><span class="pre">BytesType</span></code>.</li>
+<li>For CQL-Created Compact Tables, all columns originally defined as
+<code class="docutils literal"><span class="pre">regular</span></code> will be come <code class="docutils literal"><span class="pre">static</span></code></li>
+<li>CQL-created Compact Tables that have clustering but have no regular
+columns will have an empty value column (of <code class="docutils literal"><span class="pre">EmptyType</span></code>)</li>
+<li>SuperColumn Tables (can only be created through Thrift) will expose
+a compact value map with an empty name.</li>
+<li>Thrift-created Compact Tables will have types corresponding to their
+Thrift definition.</li>
+</ul>
+</div>
 </div>
 
 
@@ -540,8 +562,6 @@ names as their name.</p>
           
         </div>
       </div>
-    </div>
-    <div class="col-md-2">
     </div>
   </div>
 </div>

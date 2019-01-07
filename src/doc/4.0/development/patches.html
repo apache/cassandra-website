@@ -25,7 +25,7 @@ extra-footer: '
       COLLAPSE_INDEX: false,
       FILE_SUFFIX: ".html",
       HAS_SOURCE:  false,
-      SOURCELINK_SUFFIX: ""
+      SOURCELINK_SUFFIX: ".txt"
     };
 </script>
 '
@@ -33,7 +33,7 @@ extra-footer: '
 ---
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-3">
       <div class="doc-navigation">
         <div class="doc-menu" role="navigation">
           <div class="navbar-header">
@@ -78,10 +78,14 @@ extra-footer: '
 <li class="toctree-l2"><a class="reference internal" href="how_to_review.html">Review Checklist</a></li>
 <li class="toctree-l2"><a class="reference internal" href="how_to_commit.html">How-to Commit</a></li>
 <li class="toctree-l2"><a class="reference internal" href="documentation.html">Working on Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ci.html">Jenkins CI Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dependencies.html">Dependency Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_process.html">Release Process</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
 </ul>
 
@@ -93,7 +97,7 @@ extra-footer: '
     </div>
     <div class="col-md-8">
       <div class="content doc-content">
-        <div class="container">
+        <div class="content-container">
           
   <div class="section" id="contributing-code-changes">
 <span id="patches"></span><h1>Contributing Code Changes<a class="headerlink" href="#contributing-code-changes" title="Permalink to this headline">¶</a></h1>
@@ -152,24 +156,37 @@ extra-footer: '
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>3.x</td>
-<td>Tick-tock (see below)</td>
+<tr class="row-even"><td>4.0</td>
+<td>Code freeze (see below)</td>
 </tr>
-<tr class="row-odd"><td>3.0</td>
-<td>Bug fixes only</td>
+<tr class="row-odd"><td>3.11</td>
+<td>Critical bug fixes only</td>
 </tr>
-<tr class="row-even"><td>2.2</td>
-<td>Bug fixes only</td>
+<tr class="row-even"><td>3.0</td>
+<td>Critical bug fixes only</td>
 </tr>
-<tr class="row-odd"><td>2.1</td>
+<tr class="row-odd"><td>2.2</td>
+<td>Critical bug fixes only</td>
+</tr>
+<tr class="row-even"><td>2.1</td>
 <td>Critical bug fixes only</td>
 </tr>
 </tbody>
 </table>
 <p>Corresponding branches in git are easy to recognize as they are named <code class="docutils literal"><span class="pre">cassandra-&lt;release&gt;</span></code> (e.g. <code class="docutils literal"><span class="pre">cassandra-3.0</span></code>). The <code class="docutils literal"><span class="pre">trunk</span></code> branch is an exception, as it contains the most recent commits from all other branches and is used for creating new branches for future tick-tock releases.</p>
-<div class="section" id="tick-tock-releases">
-<h4>Tick-Tock Releases<a class="headerlink" href="#tick-tock-releases" title="Permalink to this headline">¶</a></h4>
-<p>New releases created as part of the <a class="reference external" href="http://www.planetcassandra.org/blog/cassandra-2-2-3-0-and-beyond/">tick-tock release process</a> will either focus on stability (odd version numbers) or introduce new features (even version numbers). Any code for new Cassandra features you should be based on the latest, unreleased 3.x branch with even version number or based on trunk.</p>
+<div class="section" id="code-freeze">
+<h4>4.0 Code Freeze<a class="headerlink" href="#code-freeze" title="Permalink to this headline">¶</a></h4>
+<p>Patches for new features are currently not accepted for 4.0 or any earlier versions. Starting with the code freeze in September, all efforts should focus on stabilizing the 4.0 branch before the first official release. During that time, only the following patches will be considered for acceptance:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Bug fixes</li>
+<li>Measurable performance improvements</li>
+<li>Changes not distributed as part of the release such as:</li>
+<li>Testing related improvements and fixes</li>
+<li>Build and infrastructure related changes</li>
+<li>Documentation</li>
+</ul>
+</div></blockquote>
 </div>
 <div class="section" id="bug-fixes">
 <h4>Bug Fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this headline">¶</a></h4>
@@ -193,7 +210,7 @@ extra-footer: '
 <div><ol class="arabic simple">
 <li>Create a branch for your changes if you haven&#8217;t done already. Many contributors name their branches based on ticket number and Cassandra version, e.g. <code class="docutils literal"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">-b</span> <span class="pre">12345-3.0</span></code></li>
 <li>Verify that you follow Cassandra&#8217;s <a class="reference internal" href="code_style.html"><span class="doc">Code Style</span></a></li>
-<li>Make sure all tests (including yours) pass using ant as described in <a class="reference internal" href="testing.html"><span class="doc">Testing</span></a>. If you suspect a test failure is unrelated to your change, it may be useful to check the test&#8217;s status by searching the issue tracker or looking at <a class="reference external" href="https://cassci.datastax.com/">CI</a> results for the relevant upstream version.  Note that the full test suites take many hours to complete, so it is common to only run specific relevant tests locally before uploading a patch.  Once a patch has been uploaded, the reviewer or committer can help setup CI jobs to run the full test suites.</li>
+<li>Make sure all tests (including yours) pass using ant as described in <a class="reference internal" href="testing.html"><span class="doc">Testing</span></a>. If you suspect a test failure is unrelated to your change, it may be useful to check the test&#8217;s status by searching the issue tracker or looking at <a class="reference external" href="https://builds.apache.org/">CI</a> results for the relevant upstream version.  Note that the full test suites take many hours to complete, so it is common to only run specific relevant tests locally before uploading a patch.  Once a patch has been uploaded, the reviewer or committer can help setup CI jobs to run the full test suites.</li>
 <li>Consider going through the <a class="reference internal" href="how_to_review.html"><span class="doc">Review Checklist</span></a> for your code. This will help you to understand how others will consider your change for inclusion.</li>
 <li>Don’t make the committer squash commits for you in the root branch either. Multiple commits are fine - and often preferable - during review stage, especially for incremental review, but once +1d, do either:</li>
 </ol>
@@ -208,14 +225,14 @@ extra-footer: '
 <li>When you&#8217;re happy with the result, create a patch:</li>
 </ol>
 <blockquote>
-<div><div class="highlight-none"><div class="highlight"><pre>git add &lt;any new or modified file&gt;
+<div><div class="highlight-none"><div class="highlight"><pre><span></span>git add &lt;any new or modified file&gt;
 git commit -m &#39;&lt;message&gt;&#39;
 git format-patch HEAD~1
 mv &lt;patch-file&gt; &lt;ticket-branchname.txt&gt; (e.g. 12345-trunk.txt, 12345-3.0.txt)
 </pre></div>
 </div>
 <p>Alternatively, many contributors prefer to make their branch available on GitHub. In this case, fork the Cassandra repository on GitHub and push your branch:</p>
-<div class="highlight-none"><div class="highlight"><pre>git push --set-upstream origin 12345-3.0
+<div class="highlight-none"><div class="highlight"><pre><span></span>git push --set-upstream origin 12345-3.0
 </pre></div>
 </div>
 </div></blockquote>
@@ -244,8 +261,6 @@ mv &lt;patch-file&gt; &lt;ticket-branchname.txt&gt; (e.g. 12345-trunk.txt, 12345
           
         </div>
       </div>
-    </div>
-    <div class="col-md-2">
     </div>
   </div>
 </div>

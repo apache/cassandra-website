@@ -101,7 +101,7 @@
 
     <div class="container-fluid">
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-3">
       <div class="doc-navigation">
         <div class="doc-menu" role="navigation">
           <div class="navbar-header">
@@ -154,7 +154,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
 </ul>
 
@@ -166,7 +167,7 @@
     </div>
     <div class="col-md-8">
       <div class="content doc-content">
-        <div class="container">
+        <div class="content-container">
           
   <div class="section" id="materialized-views">
 <span id="id1"></span><h1>Materialized Views<a class="headerlink" href="#materialized-views" title="Permalink to this headline">¶</a></h1>
@@ -184,7 +185,7 @@
                                             WITH <a class="reference internal" href="ddl.html#grammar-token-table_options"><code class="xref docutils literal"><span class="pre">table_options</span></code></a>
 </pre>
 <p>For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">MATERIALIZED</span> <span class="k">VIEW</span> <span class="n">monkeySpecies_by_population</span> <span class="k">AS</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">MATERIALIZED</span> <span class="k">VIEW</span> <span class="n">monkeySpecies_by_population</span> <span class="k">AS</span>
     <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">monkeySpecies</span>
     <span class="k">WHERE</span> <span class="n">population</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">species</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span>
     <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">species</span><span class="p">)</span>
@@ -203,6 +204,13 @@ view.</p>
 </ul>
 <p>Attempting to create an already existing materialized view will return an error unless the <code class="docutils literal"><span class="pre">IF</span> <span class="pre">NOT</span> <span class="pre">EXISTS</span></code> option is
 used. If it is used, the statement will be a no-op if the materialized view already exists.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">By default, materialized views are built in a single thread. The initial build can be parallelized by
+increasing the number of threads specified by the property <code class="docutils literal"><span class="pre">concurrent_materialized_view_builders</span></code> in
+<code class="docutils literal"><span class="pre">cassandra.yaml</span></code>. This property can also be manipulated at runtime through both JMX and the
+<code class="docutils literal"><span class="pre">setconcurrentviewbuilders</span></code> and <code class="docutils literal"><span class="pre">getconcurrentviewbuilders</span></code> nodetool commands.</p>
+</div>
 <div class="section" id="mv-select-statement">
 <span id="mv-select"></span><h3>MV select statement<a class="headerlink" href="#mv-select-statement" title="Permalink to this headline">¶</a></h3>
 <p>The select statement of a materialized view creation defines which of the base table is included in the view. That
@@ -233,7 +241,7 @@ exactly one row of the base table.</li>
 <li>it can only contain a single column that is not a primary key column in the base table.</li>
 </ul>
 <p>So for instance, give the following base table definition:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t</span> <span class="p">(</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t</span> <span class="p">(</span>
     <span class="n">k</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">c1</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">c2</span> <span class="nb">int</span><span class="p">,</span>
@@ -244,7 +252,7 @@ exactly one row of the base table.</li>
 </pre></div>
 </div>
 <p>then the following view definitions are allowed:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">MATERIALIZED</span> <span class="k">VIEW</span> <span class="n">mv1</span> <span class="k">AS</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">MATERIALIZED</span> <span class="k">VIEW</span> <span class="n">mv1</span> <span class="k">AS</span>
     <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">t</span> <span class="k">WHERE</span> <span class="n">k</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">c1</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">c2</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span>
     <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">c2</span><span class="p">)</span>
 
@@ -254,7 +262,7 @@ exactly one row of the base table.</li>
 </pre></div>
 </div>
 <p>but the following ones are <strong>not</strong> allowed:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="c1">// Error: cannot include both v1 and v2 in the primary key as both are not in the base table primary key</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="c1">// Error: cannot include both v1 and v2 in the primary key as both are not in the base table primary key</span>
 <span class="k">CREATE</span> <span class="k">MATERIALIZED</span> <span class="k">VIEW</span> <span class="n">mv1</span> <span class="k">AS</span>
     <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">t</span> <span class="k">WHERE</span> <span class="n">k</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">c1</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">c2</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">v1</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span>
     <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">)</span>
@@ -288,6 +296,16 @@ creating a table</span></a>.</p>
 </pre>
 <p>If the materialized view does not exists, the statement will return an error, unless <code class="docutils literal"><span class="pre">IF</span> <span class="pre">EXISTS</span></code> is used in which case
 the operation is a no-op.</p>
+<div class="section" id="mv-limitations">
+<h3>MV Limitations<a class="headerlink" href="#mv-limitations" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Removal of columns not selected in the Materialized View (via <code class="docutils literal"><span class="pre">UPDATE</span> <span class="pre">base</span> <span class="pre">SET</span> <span class="pre">unselected_column</span> <span class="pre">=</span> <span class="pre">null</span></code> or
+<code class="docutils literal"><span class="pre">DELETE</span> <span class="pre">unselected_column</span> <span class="pre">FROM</span> <span class="pre">base</span></code>) may shadow missed updates to other columns received by hints or repair.
+For this reason, we advise against doing deletions on base columns not selected in views until this is
+fixed on CASSANDRA-13826.</p>
+</div>
+</div>
 </div>
 </div>
 
@@ -305,8 +323,6 @@ the operation is a no-op.</p>
           
         </div>
       </div>
-    </div>
-    <div class="col-md-2">
     </div>
   </div>
 </div>
@@ -350,39 +366,8 @@ the operation is a no-op.</p>
 <script src="./../../../js/doctools.js"></script>
 <script src="./../../../js/searchtools.js"></script>
 
- <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: "" }; </script> 
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
 
-<script type="text/javascript">
-$(function() {
-    // Stick the #nav to the top of the window
-    var nav = $('.doc-navigation');
-    var navHomeY = nav.offset().top;
-    var isFixed = false;
-    var $w = $(window);
-    $w.scroll(function() {
-        var scrollTop = $w.scrollTop();
-        var shouldBeFixed = $w.width() > 991 && scrollTop >= navHomeY - 10;
-        if (shouldBeFixed && !isFixed) {
-            nav.css({
-                position: 'fixed',
-                top: 0,
-                left: nav.offset().left,
-                width: nav.width(),
-            });
-            nav.addClass('fixed-navigation');
-            isFixed = true;
-        }
-        else if (!shouldBeFixed && isFixed)
-        {
-            nav.css({
-                position: 'static'
-            });
-            nav.removeClass('fixed-navigation');
-            isFixed = false;
-        }
-    });
-});
-</script>
 
 
 <script type="text/javascript">

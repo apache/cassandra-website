@@ -101,7 +101,7 @@
 
     <div class="container-fluid">
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-3">
       <div class="doc-navigation">
         <div class="doc-menu" role="navigation">
           <div class="navbar-header">
@@ -156,7 +156,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
 </ul>
 
@@ -168,7 +169,7 @@
     </div>
     <div class="col-md-8">
       <div class="content doc-content">
-        <div class="container">
+        <div class="content-container">
           
   <div class="section" id="compression">
 <h1>Compression<a class="headerlink" href="#compression" title="Permalink to this headline">¶</a></h1>
@@ -185,21 +186,21 @@ on).</p>
 default, three options are relevant:</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">class</span></code> specifies the compression class - Cassandra provides three classes (<code class="docutils literal"><span class="pre">LZ4Compressor</span></code>,
-<code class="docutils literal"><span class="pre">SnappyCompressor</span></code>, and <code class="docutils literal"><span class="pre">DeflateCompressor</span></code> ). The default is <code class="docutils literal"><span class="pre">SnappyCompressor</span></code>.</li>
+<code class="docutils literal"><span class="pre">SnappyCompressor</span></code>, and <code class="docutils literal"><span class="pre">DeflateCompressor</span></code> ). The default is <code class="docutils literal"><span class="pre">LZ4Compressor</span></code>.</li>
 <li><code class="docutils literal"><span class="pre">chunk_length_in_kb</span></code> specifies the number of kilobytes of data per compression chunk. The default is 64KB.</li>
 <li><code class="docutils literal"><span class="pre">crc_check_chance</span></code> determines how likely Cassandra is to verify the checksum on each compression chunk during
 reads. The default is 1.0.</li>
 </ul>
 <p>Users can set compression using the following syntax:</p>
-<div class="highlight-none"><div class="highlight"><pre>CREATE TABLE keyspace.table (id int PRIMARY KEY) WITH compression = {&#39;class&#39;: &#39;LZ4Compressor&#39;};
+<div class="highlight-none"><div class="highlight"><pre><span></span>CREATE TABLE keyspace.table (id int PRIMARY KEY) WITH compression = {&#39;class&#39;: &#39;LZ4Compressor&#39;};
 </pre></div>
 </div>
 <p>Or</p>
-<div class="highlight-none"><div class="highlight"><pre>ALTER TABLE keyspace.table WITH compression = {&#39;class&#39;: &#39;SnappyCompressor&#39;, &#39;chunk_length_in_kb&#39;: 128, &#39;crc_check_chance&#39;: 0.5};
+<div class="highlight-none"><div class="highlight"><pre><span></span>ALTER TABLE keyspace.table WITH compression = {&#39;class&#39;: &#39;SnappyCompressor&#39;, &#39;chunk_length_in_kb&#39;: 128, &#39;crc_check_chance&#39;: 0.5};
 </pre></div>
 </div>
 <p>Once enabled, compression can be disabled with <code class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> setting <code class="docutils literal"><span class="pre">enabled</span></code> to <code class="docutils literal"><span class="pre">false</span></code>:</p>
-<div class="highlight-none"><div class="highlight"><pre>ALTER TABLE keyspace.table WITH compression = {&#39;enabled&#39;:&#39;false&#39;};
+<div class="highlight-none"><div class="highlight"><pre><span></span>ALTER TABLE keyspace.table WITH compression = {&#39;enabled&#39;:&#39;false&#39;};
 </pre></div>
 </div>
 <p>Operators should be aware, however, that changing compression is not immediate. The data is compressed when the SSTable
@@ -251,8 +252,6 @@ way to ensure correctness of data on disk, compressed tables allow the user to s
         </div>
       </div>
     </div>
-    <div class="col-md-2">
-    </div>
   </div>
 </div>
 
@@ -295,39 +294,8 @@ way to ensure correctness of data on disk, compressed tables allow the user to s
 <script src="./../../../js/doctools.js"></script>
 <script src="./../../../js/searchtools.js"></script>
 
- <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: "" }; </script> 
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
 
-<script type="text/javascript">
-$(function() {
-    // Stick the #nav to the top of the window
-    var nav = $('.doc-navigation');
-    var navHomeY = nav.offset().top;
-    var isFixed = false;
-    var $w = $(window);
-    $w.scroll(function() {
-        var scrollTop = $w.scrollTop();
-        var shouldBeFixed = $w.width() > 991 && scrollTop >= navHomeY - 10;
-        if (shouldBeFixed && !isFixed) {
-            nav.css({
-                position: 'fixed',
-                top: 0,
-                left: nav.offset().left,
-                width: nav.width(),
-            });
-            nav.addClass('fixed-navigation');
-            isFixed = true;
-        }
-        else if (!shouldBeFixed && isFixed)
-        {
-            nav.css({
-                position: 'static'
-            });
-            nav.removeClass('fixed-navigation');
-            isFixed = false;
-        }
-    });
-});
-</script>
 
 
 <script type="text/javascript">

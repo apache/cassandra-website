@@ -25,7 +25,7 @@ extra-footer: '
       COLLAPSE_INDEX: false,
       FILE_SUFFIX: ".html",
       HAS_SOURCE:  false,
-      SOURCELINK_SUFFIX: ""
+      SOURCELINK_SUFFIX: ".txt"
     };
 </script>
 '
@@ -33,7 +33,7 @@ extra-footer: '
 ---
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-3">
       <div class="doc-navigation">
         <div class="doc-menu" role="navigation">
           <div class="navbar-header">
@@ -76,6 +76,7 @@ extra-footer: '
 <li class="toctree-l2"><a class="reference internal" href="metrics.html">Monitoring</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Security</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#tls-ssl-encryption">TLS/SSL Encryption</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ssl-certificate-hot-reloading">SSL Certificate Hot Reloading</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#authentication">Authentication</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#authorization">Authorization</a></li>
@@ -90,7 +91,8 @@ extra-footer: '
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
 </ul>
 
@@ -102,7 +104,7 @@ extra-footer: '
     </div>
     <div class="col-md-8">
       <div class="content doc-content">
-        <div class="container">
+        <div class="content-container">
           
   <div class="section" id="security">
 <h1>Security<a class="headerlink" href="#security" title="Permalink to this headline">¶</a></h1>
@@ -112,6 +114,18 @@ extra-footer: '
 <li>Client authentication</li>
 <li>Authorization</li>
 </ul>
+<p>By default, these features are disabled as Cassandra is configured to easily find and be found by other members of a
+cluster. In other words, an out-of-the-box Cassandra installation presents a large attack surface for a bad actor.
+Enabling authentication for clients using the binary protocol is not sufficient to protect a cluster. Malicious users
+able to access internode communication and JMX ports can still:</p>
+<ul class="simple">
+<li>Craft internode messages to insert users into authentication schema</li>
+<li>Craft internode messages to truncate or drop schema</li>
+<li>Use tools such as <code class="docutils literal"><span class="pre">sstableloader</span></code> to overwrite <code class="docutils literal"><span class="pre">system_auth</span></code> tables</li>
+<li>Attach to the cluster directly to capture write traffic</li>
+</ul>
+<p>Correct configuration of all three security components should negate theses vectors. Therefore, understanding Cassandra&#8217;s
+security features is crucial to configuring your cluster to meet your security needs.</p>
 <div class="section" id="tls-ssl-encryption">
 <h2>TLS/SSL Encryption<a class="headerlink" href="#tls-ssl-encryption" title="Permalink to this headline">¶</a></h2>
 <p>Cassandra provides secure communication between a client machine and a database cluster and between nodes within a
@@ -126,6 +140,15 @@ cassandra.yaml. See <a class="reference external" href="https://docs.oracle.com/
 for more details.</p>
 <p>For information on generating the keystore and truststore files used in SSL communications, see the
 <a class="reference external" href="http://download.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html#CreateKeystore">java documentation on creating keystores</a></p>
+</div>
+<div class="section" id="ssl-certificate-hot-reloading">
+<h2>SSL Certificate Hot Reloading<a class="headerlink" href="#ssl-certificate-hot-reloading" title="Permalink to this headline">¶</a></h2>
+<p>Beginning with Cassandra 4, Cassandra supports hot reloading of SSL Certificates. If SSL/TLS support is enabled in Cassandra,
+the node periodically polls the Trust and Key Stores specified in cassandra.yaml. When the files are updated, Cassandra will
+reload them and use them for subsequent connections. Please note that the Trust &amp; Key Store passwords are part of the yaml so
+the updated files should also use the same passwords. The default polling interval is 10 minutes.</p>
+<p>Certificate Hot reloading may also be triggered using the <code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">reloadssl</span></code> command. Use this if you want to Cassandra to
+immediately notice the changed certificates.</p>
 <div class="section" id="inter-node-encryption">
 <h3>Inter-node Encryption<a class="headerlink" href="#inter-node-encryption" title="Permalink to this headline">¶</a></h3>
 <p>The settings for managing inter-node encryption are found in <code class="docutils literal"><span class="pre">cassandra.yaml</span></code> in the <code class="docutils literal"><span class="pre">server_encryption_options</span></code>
@@ -181,20 +204,20 @@ uses <code class="docutils literal"><span class="pre">SimpleReplicationStrategy<
 non-trivial deployment to ensure that should nodes become unavailable, login is still possible. Best practice is to
 configure a replication factor of 3 to 5 per-DC.</li>
 </ol>
-<div class="highlight-none"><div class="highlight"><pre>ALTER KEYSPACE system_auth WITH replication = {&#39;class&#39;: &#39;NetworkTopologyStrategy&#39;, &#39;DC1&#39;: 3, &#39;DC2&#39;: 3};
+<div class="highlight-none"><div class="highlight"><pre><span></span>ALTER KEYSPACE system_auth WITH replication = {&#39;class&#39;: &#39;NetworkTopologyStrategy&#39;, &#39;DC1&#39;: 3, &#39;DC2&#39;: 3};
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
 <li>Edit <code class="docutils literal"><span class="pre">cassandra.yaml</span></code> to change the <code class="docutils literal"><span class="pre">authenticator</span></code> option like so:</li>
 </ol>
-<div class="highlight-none"><div class="highlight"><pre>authenticator: PasswordAuthenticator
+<div class="highlight-none"><div class="highlight"><pre><span></span>authenticator: PasswordAuthenticator
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
 <li>Restart the node.</li>
 <li>Open a new <code class="docutils literal"><span class="pre">cqlsh</span></code> session using the credentials of the default superuser:</li>
 </ol>
-<div class="highlight-none"><div class="highlight"><pre>cqlsh -u cassandra -p cassandra
+<div class="highlight-none"><div class="highlight"><pre><span></span>cqlsh -u cassandra -p cassandra
 </pre></div>
 </div>
 <ol class="arabic simple" start="5">
@@ -204,14 +227,14 @@ availability, as well as security, operators should create another superuser and
 is optional, but highly recommended. While logged in as the default superuser, create another superuser role which
 can be used to bootstrap further configuration.</li>
 </ol>
-<div class="highlight-none"><div class="highlight"><pre># create a new superuser
+<div class="highlight-none"><div class="highlight"><pre><span></span># create a new superuser
 CREATE ROLE dba WITH SUPERUSER = true AND LOGIN = true AND PASSWORD = &#39;super&#39;;
 </pre></div>
 </div>
 <ol class="arabic simple" start="6">
 <li>Start a new cqlsh session, this time logging in as the new_superuser and disable the default superuser.</li>
 </ol>
-<div class="highlight-none"><div class="highlight"><pre>ALTER ROLE cassandra WITH SUPERUSER = false AND LOGIN = false;
+<div class="highlight-none"><div class="highlight"><pre><span></span>ALTER ROLE cassandra WITH SUPERUSER = false AND LOGIN = false;
 </pre></div>
 </div>
 <ol class="arabic simple" start="7">
@@ -245,14 +268,14 @@ a node which is not processing client requests.</p>
 <ol class="arabic simple">
 <li>On the selected node, edit <code class="docutils literal"><span class="pre">cassandra.yaml</span></code> to change the <code class="docutils literal"><span class="pre">authorizer</span></code> option like so:</li>
 </ol>
-<div class="highlight-none"><div class="highlight"><pre>authorizer: CassandraAuthorizer
+<div class="highlight-none"><div class="highlight"><pre><span></span>authorizer: CassandraAuthorizer
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
 <li>Restart the node.</li>
 <li>Open a new <code class="docutils literal"><span class="pre">cqlsh</span></code> session using the credentials of a role with superuser credentials:</li>
 </ol>
-<div class="highlight-none"><div class="highlight"><pre>cqlsh -u dba -p super
+<div class="highlight-none"><div class="highlight"><pre><span></span>cqlsh -u dba -p super
 </pre></div>
 </div>
 <ol class="arabic simple" start="4">
@@ -260,7 +283,7 @@ a node which is not processing client requests.</p>
 statements. On the other nodes, until configuration is updated and the node restarted, this will have no effect so
 disruption to clients is avoided.</li>
 </ol>
-<div class="highlight-none"><div class="highlight"><pre>GRANT SELECT ON ks.t1 TO db_user;
+<div class="highlight-none"><div class="highlight"><pre><span></span>GRANT SELECT ON ks.t1 TO db_user;
 </pre></div>
 </div>
 <ol class="arabic simple" start="5">
@@ -315,26 +338,26 @@ correctly configured and working as expected.</p>
 <span id="id1"></span><h3>Standard JMX Auth<a class="headerlink" href="#standard-jmx-auth" title="Permalink to this headline">¶</a></h3>
 <p>Users permitted to connect to the JMX server are specified in a simple text file. The location of this file is set in
 <code class="docutils literal"><span class="pre">cassandra-env.sh</span></code> by the line:</p>
-<div class="highlight-none"><div class="highlight"><pre>JVM_OPTS=&quot;$JVM_OPTS -Dcom.sun.management.jmxremote.password.file=/etc/cassandra/jmxremote.password&quot;
+<div class="highlight-none"><div class="highlight"><pre><span></span>JVM_OPTS=&quot;$JVM_OPTS -Dcom.sun.management.jmxremote.password.file=/etc/cassandra/jmxremote.password&quot;
 </pre></div>
 </div>
 <p>Edit the password file to add username/password pairs:</p>
-<div class="highlight-none"><div class="highlight"><pre>jmx_user jmx_password
+<div class="highlight-none"><div class="highlight"><pre><span></span>jmx_user jmx_password
 </pre></div>
 </div>
 <p>Secure the credentials file so that only the user running the Cassandra process can read it :</p>
-<div class="highlight-none"><div class="highlight"><pre>$ chown cassandra:cassandra /etc/cassandra/jmxremote.password
+<div class="highlight-none"><div class="highlight"><pre><span></span>$ chown cassandra:cassandra /etc/cassandra/jmxremote.password
 $ chmod 400 /etc/cassandra/jmxremote.password
 </pre></div>
 </div>
 <p>Optionally, enable access control to limit the scope of what defined users can do via JMX. Note that this is a fairly
 blunt instrument in this context as most operational tools in Cassandra require full read/write access. To configure a
 simple access file, uncomment this line in <code class="docutils literal"><span class="pre">cassandra-env.sh</span></code>:</p>
-<div class="highlight-none"><div class="highlight"><pre>#JVM_OPTS=&quot;$JVM_OPTS -Dcom.sun.management.jmxremote.access.file=/etc/cassandra/jmxremote.access&quot;
+<div class="highlight-none"><div class="highlight"><pre><span></span>#JVM_OPTS=&quot;$JVM_OPTS -Dcom.sun.management.jmxremote.access.file=/etc/cassandra/jmxremote.access&quot;
 </pre></div>
 </div>
 <p>Then edit the access file to grant your JMX user readwrite permission:</p>
-<div class="highlight-none"><div class="highlight"><pre>jmx_user readwrite
+<div class="highlight-none"><div class="highlight"><pre><span></span>jmx_user readwrite
 </pre></div>
 </div>
 <p>Cassandra must be restarted to pick up the new settings.</p>
@@ -352,30 +375,34 @@ to switch to integrated auth once the node has joined the ring and initial setup
 can be managed centrally using just <code class="docutils literal"><span class="pre">cqlsh</span></code>. Furthermore, fine grained control over exactly which operations are
 permitted on particular MBeans can be acheived via <a class="reference internal" href="../cql/security.html#grant-permission-statement"><span class="std std-ref">GRANT PERMISSION</span></a>.</p>
 <p>To enable integrated authentication, edit <code class="docutils literal"><span class="pre">cassandra-env.sh</span></code> to uncomment these lines:</p>
-<div class="highlight-none"><div class="highlight"><pre>#JVM_OPTS=&quot;$JVM_OPTS -Dcassandra.jmx.remote.login.config=CassandraLogin&quot;
+<div class="highlight-none"><div class="highlight"><pre><span></span>#JVM_OPTS=&quot;$JVM_OPTS -Dcassandra.jmx.remote.login.config=CassandraLogin&quot;
 #JVM_OPTS=&quot;$JVM_OPTS -Djava.security.auth.login.config=$CASSANDRA_HOME/conf/cassandra-jaas.config&quot;
 </pre></div>
 </div>
 <p>And disable the JMX standard auth by commenting this line:</p>
-<div class="highlight-none"><div class="highlight"><pre>JVM_OPTS=&quot;$JVM_OPTS -Dcom.sun.management.jmxremote.password.file=/etc/cassandra/jmxremote.password&quot;
+<div class="highlight-none"><div class="highlight"><pre><span></span>JVM_OPTS=&quot;$JVM_OPTS -Dcom.sun.management.jmxremote.password.file=/etc/cassandra/jmxremote.password&quot;
 </pre></div>
 </div>
 <p>To enable integrated authorization, uncomment this line:</p>
-<div class="highlight-none"><div class="highlight"><pre>#JVM_OPTS=&quot;$JVM_OPTS -Dcassandra.jmx.authorizer=org.apache.cassandra.auth.jmx.AuthorizationProxy&quot;
+<div class="highlight-none"><div class="highlight"><pre><span></span>#JVM_OPTS=&quot;$JVM_OPTS -Dcassandra.jmx.authorizer=org.apache.cassandra.auth.jmx.AuthorizationProxy&quot;
 </pre></div>
 </div>
 <p>Check standard access control is off by ensuring this line is commented out:</p>
-<div class="highlight-none"><div class="highlight"><pre>#JVM_OPTS=&quot;$JVM_OPTS -Dcom.sun.management.jmxremote.access.file=/etc/cassandra/jmxremote.access&quot;
+<div class="highlight-none"><div class="highlight"><pre><span></span>#JVM_OPTS=&quot;$JVM_OPTS -Dcom.sun.management.jmxremote.access.file=/etc/cassandra/jmxremote.access&quot;
 </pre></div>
 </div>
 <p>With integrated authentication and authorization enabled, operators can define specific roles and grant them access to
 the particular JMX resources that they need. For example, a role with the necessary permissions to use tools such as
 jconsole or jmc in read-only mode would be defined as:</p>
-<div class="highlight-none"><div class="highlight"><pre>CREATE ROLE jmx WITH LOGIN = false;
+<div class="highlight-none"><div class="highlight"><pre><span></span>CREATE ROLE jmx WITH LOGIN = false;
 GRANT SELECT ON ALL MBEANS TO jmx;
 GRANT DESCRIBE ON ALL MBEANS TO jmx;
 GRANT EXECUTE ON MBEAN &#39;java.lang:type=Threading&#39; TO jmx;
 GRANT EXECUTE ON MBEAN &#39;com.sun.management:type=HotSpotDiagnostic&#39; TO jmx;
+
+# Grant the role with necessary permissions to use nodetool commands (including nodetool status) in read-only mode
+GRANT EXECUTE ON MBEAN &#39;org.apache.cassandra.db:type=EndpointSnitchInfo&#39; TO jmx;
+GRANT EXECUTE ON MBEAN &#39;org.apache.cassandra.db:type=StorageService&#39; TO jmx;
 
 # Grant the jmx role to one with login permissions so that it can access the JMX tooling
 CREATE ROLE ks_user WITH PASSWORD = &#39;password&#39; AND LOGIN = true AND SUPERUSER = false;
@@ -383,7 +410,7 @@ GRANT jmx TO ks_user;
 </pre></div>
 </div>
 <p>Fine grained access control to individual MBeans is also supported:</p>
-<div class="highlight-none"><div class="highlight"><pre>GRANT EXECUTE ON MBEAN &#39;org.apache.cassandra.db:type=Tables,keyspace=test_keyspace,table=t1&#39; TO ks_user;
+<div class="highlight-none"><div class="highlight"><pre><span></span>GRANT EXECUTE ON MBEAN &#39;org.apache.cassandra.db:type=Tables,keyspace=test_keyspace,table=t1&#39; TO ks_user;
 GRANT EXECUTE ON MBEAN &#39;org.apache.cassandra.db:type=Tables,keyspace=test_keyspace,table=*&#39; TO ks_owner;
 </pre></div>
 </div>
@@ -441,8 +468,6 @@ the public certificates of trusted clients</dd>
           
         </div>
       </div>
-    </div>
-    <div class="col-md-2">
     </div>
   </div>
 </div>

@@ -25,7 +25,7 @@ extra-footer: '
       COLLAPSE_INDEX: false,
       FILE_SUFFIX: ".html",
       HAS_SOURCE:  false,
-      SOURCELINK_SUFFIX: ""
+      SOURCELINK_SUFFIX: ".txt"
     };
 </script>
 '
@@ -33,7 +33,7 @@ extra-footer: '
 ---
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-3">
       <div class="doc-navigation">
         <div class="doc-menu" role="navigation">
           <div class="navbar-header">
@@ -90,7 +90,8 @@ extra-footer: '
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
 </ul>
 
@@ -102,7 +103,7 @@ extra-footer: '
     </div>
     <div class="col-md-8">
       <div class="content doc-content">
-        <div class="container">
+        <div class="content-container">
           
   <div class="section" id="adding-replacing-moving-and-removing-nodes">
 <span id="topology-changes"></span><h1>Adding, replacing, moving and removing nodes<a class="headerlink" href="#adding-replacing-moving-and-removing-nodes" title="Permalink to this headline">¶</a></h1>
@@ -170,15 +171,21 @@ run to remove any unnecessary data.</p>
 <h2>Replacing a dead node<a class="headerlink" href="#replacing-a-dead-node" title="Permalink to this headline">¶</a></h2>
 <p>In order to replace a dead node, start cassandra with the JVM startup flag
 <code class="docutils literal"><span class="pre">-Dcassandra.replace_address_first_boot=&lt;dead_node_ip&gt;</span></code>. Once this property is enabled the node starts in a hibernate
-state, during which all the other nodes will see this node to be down.</p>
-<p>The replacing node will now start to bootstrap the data from the rest of the nodes in the cluster. The main difference
-between normal bootstrapping of a new node is that this new node will not accept any writes during this phase.</p>
-<p>Once the bootstrapping is complete the node will be marked &#8220;UP&#8221;, we rely on the hinted handoff&#8217;s for making this node
-consistent (since we don&#8217;t accept writes since the start of the bootstrap).</p>
+state, during which all the other nodes will see this node to be DOWN (DN), however this node will see itself as UP
+(UN). Accurate replacement state can be found in <code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">netstats</span></code>.</p>
+<p>The replacing node will now start to bootstrap the data from the rest of the nodes in the cluster. A replacing node will
+only receive writes during the bootstrapping phase if it has a different ip address to the node that is being replaced.
+(See CASSANDRA-8523 and CASSANDRA-12344)</p>
+<p>Once the bootstrapping is complete the node will be marked &#8220;UP&#8221;.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">If the replacement process takes longer than <code class="docutils literal"><span class="pre">max_hint_window_in_ms</span></code> you <strong>MUST</strong> run repair to make the
-replaced node consistent again, since it missed ongoing writes during bootstrapping.</p>
+<p>If any of the following cases apply, you <strong>MUST</strong> run repair to make the replaced node consistent again, since
+it missed ongoing writes during/prior to bootstrapping. The <em>replacement</em> timeframe refers to the period from when the
+node initially dies to when a new node completes the replacement process.</p>
+<ol class="last arabic simple">
+<li>The node is down for longer than <code class="docutils literal"><span class="pre">max_hint_window_in_ms</span></code> before being replaced.</li>
+<li>You are replacing using the same IP address as the dead node <strong>and</strong> replacement takes longer than <code class="docutils literal"><span class="pre">max_hint_window_in_ms</span></code>.</li>
+</ol>
 </div>
 </div>
 <div class="section" id="monitoring-progress">
@@ -209,8 +216,6 @@ counted against the load on that node.</p>
           
         </div>
       </div>
-    </div>
-    <div class="col-md-2">
     </div>
   </div>
 </div>

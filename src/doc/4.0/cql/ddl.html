@@ -25,7 +25,7 @@ extra-footer: '
       COLLAPSE_INDEX: false,
       FILE_SUFFIX: ".html",
       HAS_SOURCE:  false,
-      SOURCELINK_SUFFIX: ""
+      SOURCELINK_SUFFIX: ".txt"
     };
 </script>
 '
@@ -33,7 +33,7 @@ extra-footer: '
 ---
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-3">
       <div class="doc-navigation">
         <div class="doc-menu" role="navigation">
           <div class="navbar-header">
@@ -92,7 +92,8 @@ extra-footer: '
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
 </ul>
 
@@ -104,7 +105,7 @@ extra-footer: '
     </div>
     <div class="col-md-8">
       <div class="content doc-content">
-        <div class="container">
+        <div class="content-container">
           
   <div class="section" id="data-definition">
 <span id="id1"></span><h1>Data Definition<a class="headerlink" href="#data-definition" title="Permalink to this headline">¶</a></h1>
@@ -147,14 +148,16 @@ part of. If is is not fully-qualified, the table is assumed to be in the <em>cur
 <strong id="grammar-token-create_keyspace_statement">create_keyspace_statement</strong> ::=  CREATE KEYSPACE [ IF NOT EXISTS ] <a class="reference internal" href="#grammar-token-keyspace_name"><code class="xref docutils literal"><span class="pre">keyspace_name</span></code></a> WITH <a class="reference internal" href="#grammar-token-options"><code class="xref docutils literal"><span class="pre">options</span></code></a>
 </pre>
 <p>For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">KEYSPACE</span> <span class="n">Excelsior</span>
-           <span class="k">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;SimpleStrategy&#39;</span><span class="p">,</span> <span class="s1">&#39;replication_factor&#39;</span> <span class="p">:</span> <span class="mf">3</span><span class="p">};</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">KEYSPACE</span> <span class="n">excelsior</span>
+    <span class="k">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;SimpleStrategy&#39;</span><span class="p">,</span> <span class="s1">&#39;replication_factor&#39;</span> <span class="p">:</span> <span class="mf">3</span><span class="p">};</span>
 
-<span class="k">CREATE</span> <span class="k">KEYSPACE</span> <span class="n">Excalibur</span>
-           <span class="k">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;NetworkTopologyStrategy&#39;</span><span class="p">,</span> <span class="s1">&#39;DC1&#39;</span> <span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s1">&#39;DC2&#39;</span> <span class="p">:</span> <span class="mf">3</span><span class="p">}</span>
-            <span class="k">AND</span> <span class="n">durable_writes</span> <span class="o">=</span> <span class="n">false</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">KEYSPACE</span> <span class="n">excalibur</span>
+    <span class="k">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;NetworkTopologyStrategy&#39;</span><span class="p">,</span> <span class="s1">&#39;DC1&#39;</span> <span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s1">&#39;DC2&#39;</span> <span class="p">:</span> <span class="mf">3</span><span class="p">}</span>
+    <span class="k">AND</span> <span class="n">durable_writes</span> <span class="o">=</span> <span class="n">false</span><span class="p">;</span>
 </pre></div>
 </div>
+<p>Attempting to create a keyspace that already exists will return an error unless the <code class="docutils literal"><span class="pre">IF</span> <span class="pre">NOT</span> <span class="pre">EXISTS</span></code> option is used. If
+it is used, the statement will be a no-op if the keyspace already exists.</p>
 <p>The supported <code class="docutils literal"><span class="pre">options</span></code> are:</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -176,7 +179,7 @@ part of. If is is not fully-qualified, the table is assumed to be in the <em>cur
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">replication</span></code></td>
 <td><em>map</em></td>
 <td>yes</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>The replication strategy and options to use for the keyspace (see
 details below).</td>
 </tr>
@@ -192,15 +195,112 @@ details below).</td>
 <p>The <code class="docutils literal"><span class="pre">replication</span></code> property is mandatory and must at least contains the <code class="docutils literal"><span class="pre">'class'</span></code> sub-option which defines the
 <a class="reference internal" href="../architecture/dynamo.html#replication-strategy"><span class="std std-ref">replication strategy</span></a> class to use. The rest of the sub-options depends on what replication
 strategy is used. By default, Cassandra support the following <code class="docutils literal"><span class="pre">'class'</span></code>:</p>
-<ul class="simple">
-<li><code class="docutils literal"><span class="pre">'SimpleStrategy'</span></code>: A simple strategy that defines a replication factor for the whole cluster. The only sub-options
-supported is <code class="docutils literal"><span class="pre">'replication_factor'</span></code> to define that replication factor and is mandatory.</li>
-<li><code class="docutils literal"><span class="pre">'NetworkTopologyStrategy'</span></code>: A replication strategy that allows to set the replication factor independently for
-each data-center. The rest of the sub-options are key-value pairs where a key is a data-center name and its value is
-the associated replication factor.</li>
-</ul>
-<p>Attempting to create a keyspace that already exists will return an error unless the <code class="docutils literal"><span class="pre">IF</span> <span class="pre">NOT</span> <span class="pre">EXISTS</span></code> option is used. If
-it is used, the statement will be a no-op if the keyspace already exists.</p>
+<div class="section" id="simplestrategy">
+<h3><code class="docutils literal"><span class="pre">SimpleStrategy</span></code><a class="headerlink" href="#simplestrategy" title="Permalink to this headline">¶</a></h3>
+<p>A simple strategy that defines a replication factor for data to be spread
+across the entire cluster. This is generally not a wise choice for production
+because it does not respect datacenter layouts and can lead to wildly varying
+query latency. For a production ready strategy, see
+<code class="docutils literal"><span class="pre">NetworkTopologyStrategy</span></code>. <code class="docutils literal"><span class="pre">SimpleStrategy</span></code> supports a single mandatory argument:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="7%" />
+<col width="8%" />
+<col width="54%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">sub-option</th>
+<th class="head">type</th>
+<th class="head">since</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">'replication_factor'</span></code></td>
+<td>int</td>
+<td>all</td>
+<td>The number of replicas to store per range</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="networktopologystrategy">
+<h3><code class="docutils literal"><span class="pre">NetworkTopologyStrategy</span></code><a class="headerlink" href="#networktopologystrategy" title="Permalink to this headline">¶</a></h3>
+<p>A production ready replication strategy that allows to set the replication
+factor independently for each data-center. The rest of the sub-options are
+key-value pairs where a key is a data-center name and its value is the
+associated replication factor. Options:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="39%" />
+<col width="6%" />
+<col width="6%" />
+<col width="48%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">sub-option</th>
+<th class="head">type</th>
+<th class="head">since</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">'&lt;datacenter&gt;'</span></code></td>
+<td>int</td>
+<td>all</td>
+<td>The number of replicas to store per range in
+the provided datacenter.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">'replication_factor'</span></code></td>
+<td>int</td>
+<td>4.0</td>
+<td>The number of replicas to use as a default
+per datacenter if not specifically provided.
+Note that this always defers to existing
+definitions or explicit datacenter settings.
+For example, to have three replicas per
+datacenter, supply this with a value of 3.</td>
+</tr>
+</tbody>
+</table>
+<p>Note that when <code class="docutils literal"><span class="pre">ALTER</span></code> ing keyspaces and supplying <code class="docutils literal"><span class="pre">replication_factor</span></code>,
+auto-expansion will only <em>add</em> new datacenters for safety, it will not alter
+existing datacenters or remove any even if they are no longer in the cluster.
+If you want to remove datacenters while still supplying <code class="docutils literal"><span class="pre">replication_factor</span></code>,
+explicitly zero out the datacenter you want to have zero replicas.</p>
+<p>An example of auto-expanding datacenters with two datacenters: <code class="docutils literal"><span class="pre">DC1</span></code> and <code class="docutils literal"><span class="pre">DC2</span></code>:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">KEYSPACE</span> <span class="n">excalibur</span>
+    <span class="k">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;NetworkTopologyStrategy&#39;</span><span class="p">,</span> <span class="s1">&#39;replication_factor&#39;</span> <span class="p">:</span> <span class="mf">3</span><span class="p">}</span>
+
+<span class="k">DESCRIBE</span> <span class="k">KEYSPACE</span> <span class="n">excalibur</span>
+    <span class="k">CREATE</span> <span class="k">KEYSPACE</span> <span class="n">excalibur</span> <span class="k">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;NetworkTopologyStrategy&#39;</span><span class="p">,</span> <span class="s1">&#39;DC1&#39;</span><span class="p">:</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;DC2&#39;</span><span class="p">:</span> <span class="s1">&#39;3&#39;</span><span class="p">}</span> <span class="k">AND</span> <span class="n">durable_writes</span> <span class="o">=</span> <span class="n">true</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>An example of auto-expanding and overriding a datacenter:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">KEYSPACE</span> <span class="n">excalibur</span>
+    <span class="k">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;NetworkTopologyStrategy&#39;</span><span class="p">,</span> <span class="s1">&#39;replication_factor&#39;</span> <span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s1">&#39;DC2&#39;</span><span class="p">:</span> <span class="mf">2</span><span class="p">}</span>
+
+<span class="k">DESCRIBE</span> <span class="k">KEYSPACE</span> <span class="n">excalibur</span>
+    <span class="k">CREATE</span> <span class="k">KEYSPACE</span> <span class="n">excalibur</span> <span class="k">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;NetworkTopologyStrategy&#39;</span><span class="p">,</span> <span class="s1">&#39;DC1&#39;</span><span class="p">:</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;DC2&#39;</span><span class="p">:</span> <span class="s1">&#39;2&#39;</span><span class="p">}</span> <span class="k">AND</span> <span class="n">durable_writes</span> <span class="o">=</span> <span class="n">true</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>An example that excludes a datacenter while using <code class="docutils literal"><span class="pre">replication_factor</span></code>:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">KEYSPACE</span> <span class="n">excalibur</span>
+    <span class="k">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;NetworkTopologyStrategy&#39;</span><span class="p">,</span> <span class="s1">&#39;replication_factor&#39;</span> <span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s1">&#39;DC2&#39;</span><span class="p">:</span> <span class="mf">0</span><span class="p">}</span> <span class="p">;</span>
+
+<span class="k">DESCRIBE</span> <span class="k">KEYSPACE</span> <span class="n">excalibur</span>
+    <span class="k">CREATE</span> <span class="k">KEYSPACE</span> <span class="n">excalibur</span> <span class="k">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;NetworkTopologyStrategy&#39;</span><span class="p">,</span> <span class="s1">&#39;DC1&#39;</span><span class="p">:</span> <span class="s1">&#39;3&#39;</span><span class="p">}</span> <span class="k">AND</span> <span class="n">durable_writes</span> <span class="o">=</span> <span class="n">true</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>If <a class="reference internal" href="../architecture/dynamo.html#transient-replication"><span class="std std-ref">transient replication</span></a> has been enabled, transient replicas can be configured for both
+SimpleStrategy and NetworkTopologyStrategy by defining replication factors in the format <code class="docutils literal"><span class="pre">'&lt;total_replicas&gt;/&lt;transient_replicas&gt;'</span></code></p>
+<p>For instance, this keyspace will have 3 replicas in DC1, 1 of which is transient, and 5 replicas in DC2, 2 of which are transient:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">KEYSPACE</span> <span class="n">some_keysopace</span>
+           <span class="k">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;NetworkTopologyStrategy&#39;</span><span class="p">,</span> <span class="s1">&#39;DC1&#39;</span> <span class="p">:</span> <span class="s1">&#39;3/1&#39;&#39;, &#39;</span><span class="n">DC2</span><span class="s1">&#39; : &#39;</span><span class="mf">5</span><span class="o">/</span><span class="mf">2</span><span class="s1">&#39;};</span>
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="use">
 <span id="use-statement"></span><h2>USE<a class="headerlink" href="#use" title="Permalink to this headline">¶</a></h2>
@@ -219,8 +319,8 @@ keyspace name). A <code class="docutils literal"><span class="pre">USE</span></c
 <strong id="grammar-token-alter_keyspace_statement">alter_keyspace_statement</strong> ::=  ALTER KEYSPACE <a class="reference internal" href="#grammar-token-keyspace_name"><code class="xref docutils literal"><span class="pre">keyspace_name</span></code></a> WITH <a class="reference internal" href="#grammar-token-options"><code class="xref docutils literal"><span class="pre">options</span></code></a>
 </pre>
 <p>For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">KEYSPACE</span> <span class="n">Excelsior</span>
-          <span class="k">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;SimpleStrategy&#39;</span><span class="p">,</span> <span class="s1">&#39;replication_factor&#39;</span> <span class="p">:</span> <span class="mf">4</span><span class="p">};</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">ALTER</span> <span class="k">KEYSPACE</span> <span class="n">Excelsior</span>
+    <span class="k">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;SimpleStrategy&#39;</span><span class="p">,</span> <span class="s1">&#39;replication_factor&#39;</span> <span class="p">:</span> <span class="mf">4</span><span class="p">};</span>
 </pre></div>
 </div>
 <p>The supported options are the same than for <a class="reference internal" href="#create-keyspace-statement"><span class="std std-ref">creating a keyspace</span></a>.</p>
@@ -232,7 +332,7 @@ keyspace name). A <code class="docutils literal"><span class="pre">USE</span></c
 <strong id="grammar-token-drop_keyspace_statement">drop_keyspace_statement</strong> ::=  DROP KEYSPACE [ IF EXISTS ] <a class="reference internal" href="#grammar-token-keyspace_name"><code class="xref docutils literal"><span class="pre">keyspace_name</span></code></a>
 </pre>
 <p>For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">DROP</span> <span class="k">KEYSPACE</span> <span class="n">Excelsior</span><span class="p">;</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">DROP</span> <span class="k">KEYSPACE</span> <span class="n">Excelsior</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>Dropping a keyspace results in the immediate, irreversible removal of that keyspace, including all the tables, UTD and
@@ -261,13 +361,12 @@ operation is a no-op.</p>
 <strong id="grammar-token-clustering_order">clustering_order      </strong> ::=  <a class="reference internal" href="#grammar-token-column_name"><code class="xref docutils literal"><span class="pre">column_name</span></code></a> (ASC | DESC) ( ',' <a class="reference internal" href="#grammar-token-column_name"><code class="xref docutils literal"><span class="pre">column_name</span></code></a> (ASC | DESC) )*
 </pre>
 <p>For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">monkeySpecies</span> <span class="p">(</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">monkeySpecies</span> <span class="p">(</span>
     <span class="n">species</span> <span class="nb">text</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
     <span class="n">common_name</span> <span class="nb">text</span><span class="p">,</span>
     <span class="n">population</span> <span class="nb">varint</span><span class="p">,</span>
     <span class="n">average_size</span> <span class="nb">int</span>
-<span class="p">)</span> <span class="k">WITH</span> <span class="n">comment</span><span class="o">=</span><span class="s1">&#39;Important biological records&#39;</span>
-   <span class="k">AND</span> <span class="n">read_repair_chance</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+<span class="p">)</span> <span class="k">WITH</span> <span class="n">comment</span><span class="o">=</span><span class="s1">&#39;Important biological records&#39;</span><span class="p">;</span>
 
 <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">timeline</span> <span class="p">(</span>
     <span class="n">userid</span> <span class="nb">uuid</span><span class="p">,</span>
@@ -291,8 +390,6 @@ operation is a no-op.</p>
 well as optional <a class="reference internal" href="#create-table-options"><span class="std std-ref">options</span></a> for the table.</p>
 <p>Attempting to create an already existing table will return an error unless the <code class="docutils literal"><span class="pre">IF</span> <span class="pre">NOT</span> <span class="pre">EXISTS</span></code> directive is used. If
 it is used, the statement will be a no-op if the table already exists.</p>
-<div class="section" id="column-definitions">
-<span id="column-definition"></span><h3>Column definitions<a class="headerlink" href="#column-definitions" title="Permalink to this headline">¶</a></h3>
 <p>Every rows in a CQL table has a set of predefined columns defined at the time of the table creation (or added later
 using an <a class="reference internal" href="#alter-table-statement"><span class="std std-ref">alter statement</span></a>).</p>
 <p>A <a class="reference internal" href="#grammar-token-column_definition"><code class="xref std std-token docutils literal"><span class="pre">column_definition</span></code></a> is primarily comprised of the name of the column defined and it&#8217;s <a class="reference internal" href="types.html#data-types"><span class="std std-ref">type</span></a>,
@@ -304,11 +401,9 @@ modifiers:</p>
 <dt><code class="docutils literal"><span class="pre">PRIMARY</span> <span class="pre">KEY</span></code></dt>
 <dd>it declares the column as being the sole component of the <a class="reference internal" href="#primary-key"><span class="std std-ref">primary key</span></a> of the table.</dd>
 </dl>
-<div class="section" id="static-columns">
-<span id="id2"></span><h4>Static columns<a class="headerlink" href="#static-columns" title="Permalink to this headline">¶</a></h4>
 <p>Some columns can be declared as <code class="docutils literal"><span class="pre">STATIC</span></code> in a table definition. A column that is static will be “shared” by all the
 rows belonging to the same partition (having the same <a class="reference internal" href="#partition-key"><span class="std std-ref">partition key</span></a>). For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t</span> <span class="p">(</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t</span> <span class="p">(</span>
     <span class="n">pk</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">t</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">v</span> <span class="nb">text</span><span class="p">,</span>
@@ -335,10 +430,6 @@ that example being <code class="docutils literal"><span class="pre">pk</span></c
 has only one row, and so every column is inherently static).</li>
 <li>only non <code class="docutils literal"><span class="pre">PRIMARY</span> <span class="pre">KEY</span></code> columns can be static.</li>
 </ul>
-</div>
-</div>
-<div class="section" id="the-primary-key">
-<span id="primary-key"></span><h3>The Primary key<a class="headerlink" href="#the-primary-key" title="Permalink to this headline">¶</a></h3>
 <p>Within a table, a row is uniquely identified by its <code class="docutils literal"><span class="pre">PRIMARY</span> <span class="pre">KEY</span></code>, and hence all table <strong>must</strong> define a PRIMARY KEY
 (and only one). A <code class="docutils literal"><span class="pre">PRIMARY</span> <span class="pre">KEY</span></code> definition is composed of one or more of the columns defined in the table.
 Syntactically, the primary key is defined the keywords <code class="docutils literal"><span class="pre">PRIMARY</span> <span class="pre">KEY</span></code> followed by comma-separated list of the column
@@ -349,7 +440,7 @@ column definition by the <code class="docutils literal"><span class="pre">PRIMAR
 <li><p class="first">the <a class="reference internal" href="#partition-key"><span class="std std-ref">partition key</span></a> part. It is the first component of the primary key definition. It can be a
 single column or, using additional parenthesis, can be multiple columns. A table always have at least a partition key,
 the smallest possible table definition is:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t</span> <span class="p">(</span><span class="n">k</span> <span class="nb">text</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">);</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t</span> <span class="p">(</span><span class="n">k</span> <span class="nb">text</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">);</span>
 </pre></div>
 </div>
 </li>
@@ -364,13 +455,11 @@ definition, and the order of those columns define the <em>clustering order</em>.
 <li><code class="docutils literal"><span class="pre">PRIMARY</span> <span class="pre">KEY</span> <span class="pre">((a,</span> <span class="pre">b),</span> <span class="pre">c)</span></code> : <code class="docutils literal"><span class="pre">a</span></code> and <code class="docutils literal"><span class="pre">b</span></code> compose the partition key (this is often called a <em>composite</em> partition
 key) and <code class="docutils literal"><span class="pre">c</span></code> is the clustering column.</li>
 </ul>
-<div class="section" id="the-partition-key">
-<span id="partition-key"></span><h4>The partition key<a class="headerlink" href="#the-partition-key" title="Permalink to this headline">¶</a></h4>
 <p>Within a table, CQL defines the notion of a <em>partition</em>. A partition is simply the set of rows that share the same value
 for their partition key. Note that if the partition key is composed of multiple columns, then rows belong to the same
 partition only they have the same values for all those partition key column. So for instance, given the following table
 definition and content:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t</span> <span class="p">(</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t</span> <span class="p">(</span>
     <span class="n">a</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">b</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">c</span> <span class="nb">int</span><span class="p">,</span>
@@ -403,13 +492,10 @@ be stored on the same set of replica node, a partition key that groups too much 
 done <em>atomically</em> and in <em>isolation</em>, which is not the case across partitions.</p>
 <p>The proper choice of the partition key and clustering columns for a table is probably one of the most important aspect
 of data modeling in Cassandra, and it largely impact which queries can be performed, and how efficiently they are.</p>
-</div>
-<div class="section" id="the-clustering-columns">
-<span id="clustering-columns"></span><h4>The clustering columns<a class="headerlink" href="#the-clustering-columns" title="Permalink to this headline">¶</a></h4>
 <p>The clustering columns of a table defines the clustering order for the partition of that table. For a given
 <a class="reference internal" href="#partition-key"><span class="std std-ref">partition</span></a>, all the rows are physically ordered inside Cassandra by that clustering order. For
 instance, given:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t</span> <span class="p">(</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t</span> <span class="p">(</span>
     <span class="n">a</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">b</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">c</span> <span class="nb">int</span><span class="p">,</span>
@@ -429,17 +515,11 @@ instance, given:</p>
 <code class="docutils literal"><span class="pre">b</span></code> column (the order they are displayed above). So where the partition key of the table allows to group rows on the
 same replica set, the clustering columns controls how those rows are stored on the replica. That sorting allows the
 retrieval of a range of rows within a partition (for instance, in the example above, <code class="docutils literal"><span class="pre">SELECT</span> <span class="pre">*</span> <span class="pre">FROM</span> <span class="pre">t</span> <span class="pre">WHERE</span> <span class="pre">a</span> <span class="pre">=</span> <span class="pre">0</span> <span class="pre">AND</span> <span class="pre">b</span>
-<span class="pre">&gt;</span> <span class="pre">1</span> <span class="pre">and</span> <span class="pre">b</span> <span class="pre">&lt;=</span> <span class="pre">3</span></code>) very efficient.</p>
-</div>
-</div>
-<div class="section" id="table-options">
-<span id="create-table-options"></span><h3>Table options<a class="headerlink" href="#table-options" title="Permalink to this headline">¶</a></h3>
+<span class="pre">&gt;</span> <span class="pre">1</span> <span class="pre">and</span> <span class="pre">b</span> <span class="pre">&lt;=</span> <span class="pre">3</span></code>) to be very efficient.</p>
 <p>A CQL table has a number of options that can be set at creation (and, for most of them, <a class="reference internal" href="#alter-table-statement"><span class="std std-ref">altered</span></a> later). These options are specified after the <code class="docutils literal"><span class="pre">WITH</span></code> keyword.</p>
 <p>Amongst those options, two important ones cannot be changed after creation and influence which queries can be done
 against the table: the <code class="docutils literal"><span class="pre">COMPACT</span> <span class="pre">STORAGE</span></code> option and the <code class="docutils literal"><span class="pre">CLUSTERING</span> <span class="pre">ORDER</span></code> option. Those, as well as the other
 options of a table are described in the following sections.</p>
-<div class="section" id="compact-tables">
-<span id="id3"></span><h4>Compact tables<a class="headerlink" href="#compact-tables" title="Permalink to this headline">¶</a></h4>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">Since Cassandra 3.0, compact tables have the exact same layout internally than non compact ones (for the
@@ -458,9 +538,6 @@ reasons). Amongst those limitation:</p>
 key ones. This imply you cannot add or remove columns after creation in particular.</li>
 <li>a compact table is limited in the indexes it can create, and no materialized view can be created on it.</li>
 </ul>
-</div>
-<div class="section" id="reversing-the-clustering-order">
-<span id="clustering-order"></span><h4>Reversing the clustering order<a class="headerlink" href="#reversing-the-clustering-order" title="Permalink to this headline">¶</a></h4>
 <p>The clustering order of a table is defined by the <a class="reference internal" href="#clustering-columns"><span class="std std-ref">clustering columns</span></a> of that table. By
 default, that ordering is based on natural order of those clustering order, but the <code class="docutils literal"><span class="pre">CLUSTERING</span> <span class="pre">ORDER</span></code> allows to
 change that clustering order to use the <em>reverse</em> natural order for some (potentially all) of the columns.</p>
@@ -483,9 +560,6 @@ has 3 visible consequences:</p>
 your columns (which is common with time series for instance where you often want data from the newest to the oldest),
 it is an optimization to declare a descending clustering order.</dd>
 </dl>
-</div>
-<div class="section" id="other-table-options">
-<span id="create-table-general-options"></span><h4>Other table options<a class="headerlink" href="#other-table-options" title="Permalink to this headline">¶</a></h4>
 <div class="admonition-todo admonition" id="index-0">
 <p class="first admonition-title">Todo</p>
 <p class="last">review (misses cdc if nothing else) and link to proper categories when appropriate (compaction for instance)</p>
@@ -511,20 +585,15 @@ it is an optimization to declare a descending clustering order.</dd>
 <td>none</td>
 <td>A free-form, human-readable comment.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">read_repair_chance</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">speculative_retry</span></code></td>
 <td><em>simple</em></td>
-<td>0.1</td>
-<td>The probability with which to query extra nodes (e.g.
-more nodes than required by the consistency level) for
-the purpose of read repairs.</td>
+<td>99PERCENTILE</td>
+<td><a class="reference internal" href="#speculative-retry-options"><span class="std std-ref">Speculative retry options</span></a>.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">dclocal_read_repair_chance</span></code></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">additional_write_policy</span></code></td>
 <td><em>simple</em></td>
-<td>0</td>
-<td>The probability with which to query extra nodes (e.g.
-more nodes than required by the consistency level)
-belonging to the same data center than the read
-coordinator for the purpose of read repairs.</td>
+<td>99PERCENTILE</td>
+<td><a class="reference internal" href="#speculative-retry-options"><span class="std std-ref">Speculative retry options</span></a>.</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">gc_grace_seconds</span></code></td>
 <td><em>simple</em></td>
@@ -561,10 +630,26 @@ table.</td>
 <td><em>see below</em></td>
 <td><a class="reference internal" href="#cql-caching-options"><span class="std std-ref">Caching options</span></a>.</td>
 </tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">memtable_flush_period_in_ms</span></code></td>
+<td><em>simple</em></td>
+<td>0</td>
+<td>Time (in ms) before Cassandra flushes memtables to disk.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">read_repair</span></code></td>
+<td><em>simple</em></td>
+<td>BLOCKING</td>
+<td>Sets read repair behavior (see below)</td>
+</tr>
 </tbody>
 </table>
-<div class="section" id="compaction-options">
-<span id="cql-compaction-options"></span><h5>Compaction options<a class="headerlink" href="#compaction-options" title="Permalink to this headline">¶</a></h5>
+<p>By default, Cassandra read coordinators only query as many replicas as necessary to satisfy
+consistency levels: one for consistency level <code class="docutils literal"><span class="pre">ONE</span></code>, a quorum for <code class="docutils literal"><span class="pre">QUORUM</span></code>, and so on.
+<code class="docutils literal"><span class="pre">speculative_retry</span></code> determines when coordinators may query additional replicas, which is useful
+when replicas are slow or unresponsive.  <code class="docutils literal"><span class="pre">additional_write_policy</span></code> specifies the threshold at which
+a cheap quorum write will be upgraded to include transient replicas.  The following are legal values (case-insensitive):</p>
+<p>This setting does not affect reads with consistency level <code class="docutils literal"><span class="pre">ALL</span></code> because they already query all replicas.</p>
+<p>Note that frequently reading from additional replicas can hurt cluster performance.
+When in doubt, keep the default <code class="docutils literal"><span class="pre">99PERCENTILE</span></code>.</p>
 <p>The <code class="docutils literal"><span class="pre">compaction</span></code> options must at least define the <code class="docutils literal"><span class="pre">'class'</span></code> sub-option, that defines the compaction strategy class
 to use. The default supported class are <code class="docutils literal"><span class="pre">'SizeTieredCompactionStrategy'</span></code> (<a class="reference internal" href="../operating/compaction.html#stcs"><span class="std std-ref">STCS</span></a>),
 <code class="docutils literal"><span class="pre">'LeveledCompactionStrategy'</span></code> (<a class="reference internal" href="../operating/compaction.html#lcs"><span class="std std-ref">LCS</span></a>) and <code class="docutils literal"><span class="pre">'TimeWindowCompactionStrategy'</span></code> (<a class="reference internal" href="../operating/compaction.html#twcs"><span class="std std-ref">TWCS</span></a>) (the
@@ -572,9 +657,6 @@ to use. The default supported class are <code class="docutils literal"><span cla
 preferred instead). Custom strategy can be provided by specifying the full class name as a <a class="reference internal" href="definitions.html#constants"><span class="std std-ref">string constant</span></a>.</p>
 <p>All default strategies support a number of <a class="reference internal" href="../operating/compaction.html#compaction-options"><span class="std std-ref">common options</span></a>, as well as options specific to
 the strategy chosen (see the section corresponding to your strategy for details: <a class="reference internal" href="../operating/compaction.html#stcs-options"><span class="std std-ref">STCS</span></a>, <a class="reference internal" href="../operating/compaction.html#lcs-options"><span class="std std-ref">LCS</span></a> and <a class="reference internal" href="../operating/compaction.html#twcs"><span class="std std-ref">TWCS</span></a>).</p>
-</div>
-<div class="section" id="compression-options">
-<span id="cql-compression-options"></span><h5>Compression options<a class="headerlink" href="#compression-options" title="Permalink to this headline">¶</a></h5>
 <p>The <code class="docutils literal"><span class="pre">compression</span></code> options define if and how the sstables of the table are compressed. The following sub-options are
 available:</p>
 <table border="1" class="docutils">
@@ -602,7 +684,7 @@ name as a “string constant”:#constants.</td>
 <td>Enable/disable sstable compression.</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">chunk_length_in_kb</span></code></td>
-<td>64KB</td>
+<td>64</td>
 <td>On disk SSTables are compressed by block (to allow random reads). This
 defines the size (in KB) of said block. Bigger values may improve the
 compression rate, but increases the minimum size of data to be read from disk
@@ -619,9 +701,15 @@ instance to check them every other read   |</td>
 </tr>
 </tbody>
 </table>
+<p>For instance, to create a table with LZ4Compressor and a chunk_lenth_in_kb of 4KB:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">simple</span> <span class="p">(</span>
+   <span class="n">id</span> <span class="nb">int</span><span class="p">,</span>
+   <span class="k">key</span> <span class="nb">text</span><span class="p">,</span>
+   <span class="n">value</span> <span class="nb">text</span><span class="p">,</span>
+   <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="k">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+<span class="p">)</span> <span class="k">with</span> <span class="n">compression</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;LZ4Compressor&#39;</span><span class="p">,</span> <span class="s1">&#39;chunk_length_in_kb&#39;</span><span class="p">:</span> <span class="mf">4</span><span class="p">};</span>
+</pre></div>
 </div>
-<div class="section" id="caching-options">
-<span id="cql-caching-options"></span><h5>Caching options<a class="headerlink" href="#caching-options" title="Permalink to this headline">¶</a></h5>
 <p>The <code class="docutils literal"><span class="pre">caching</span></code> options allows to configure both the <em>key cache</em> and the <em>row cache</em> for the table. The following
 sub-options are available:</p>
 <table border="1" class="docutils">
@@ -651,16 +739,37 @@ to disable row caching.</td>
 </tr>
 </tbody>
 </table>
+<p>For instance, to create a table with both a key cache and 10 rows per partition:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">simple</span> <span class="p">(</span>
+<span class="n">id</span> <span class="nb">int</span><span class="p">,</span>
+<span class="k">key</span> <span class="nb">text</span><span class="p">,</span>
+<span class="n">value</span> <span class="nb">text</span><span class="p">,</span>
+<span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="k">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+<span class="p">)</span> <span class="k">WITH</span> <span class="n">caching</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;keys&#39;</span><span class="p">:</span> <span class="s1">&#39;ALL&#39;</span><span class="p">,</span> <span class="s1">&#39;rows_per_partition&#39;</span><span class="p">:</span> <span class="mf">10</span><span class="p">};</span>
+</pre></div>
 </div>
-<div class="section" id="other-considerations">
-<h5>Other considerations:<a class="headerlink" href="#other-considerations" title="Permalink to this headline">¶</a></h5>
+<p>The <code class="docutils literal"><span class="pre">read_repair</span></code> options configures the read repair behavior to allow tuning for various performance and
+consistency behaviors. Two consistency properties are affected by read repair behavior.</p>
+<ul class="simple">
+<li>Monotonic Quorum Reads: Provided by <code class="docutils literal"><span class="pre">BLOCKING</span></code>. Monotonic quorum reads prevents reads from appearing to go back
+in time in some circumstances. When monotonic quorum reads are not provided and a write fails to reach a quorum of
+replicas, it may be visible in one read, and then disappear in a subsequent read.</li>
+<li>Write Atomicity: Provided by <code class="docutils literal"><span class="pre">NONE</span></code>. Write atomicity prevents reads from returning partially applied writes.
+Cassandra attempts to provide partition level write atomicity, but since only the data covered by a SELECT statement
+is repaired by a read repair, read repair can break write atomicity when data is read at a more granular level than it
+is written. For example read repair can break write atomicity if you write multiple rows to a clustered partition in a
+batch, but then select a single row by specifying the clustering column in a SELECT statement.</li>
+</ul>
+<p>The available read repair settings are:</p>
+<p>The default setting. When <code class="docutils literal"><span class="pre">read_repair</span></code> is set to <code class="docutils literal"><span class="pre">BLOCKING</span></code>, and a read repair is triggered, the read will block
+on writes sent to other replicas until the CL is reached by the writes. Provides monotonic quorum reads, but not partition
+level write atomicity</p>
+<p>When <code class="docutils literal"><span class="pre">read_repair</span></code> is set to <code class="docutils literal"><span class="pre">NONE</span></code>, the coordinator will reconcile any differences between replicas, but will not
+attempt to repair them. Provides partition level write atomicity, but not monotonic quorum reads.</p>
 <ul class="simple">
 <li>Adding new columns (see <code class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> below) is a constant time operation. There is thus no need to try to
 anticipate future usage when creating a table.</li>
 </ul>
-</div>
-</div>
-</div>
 </div>
 <div class="section" id="alter-table">
 <span id="alter-table-statement"></span><h2>ALTER TABLE<a class="headerlink" href="#alter-table" title="Permalink to this headline">¶</a></h2>
@@ -672,11 +781,10 @@ anticipate future usage when creating a table.</li>
                              | WITH <a class="reference internal" href="#grammar-token-options"><code class="xref docutils literal"><span class="pre">options</span></code></a>
 </pre>
 <p>For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">addamsFamily</span> <span class="k">ADD</span> <span class="n">gravesite</span> <span class="nb">varchar</span><span class="p">;</span>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">addamsFamily</span> <span class="k">ADD</span> <span class="n">gravesite</span> <span class="nb">varchar</span><span class="p">;</span>
 
 <span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">addamsFamily</span>
-       <span class="k">WITH</span> <span class="n">comment</span> <span class="o">=</span> <span class="s1">&#39;A most excellent and useful table&#39;</span>
-       <span class="k">AND</span> <span class="n">read_repair_chance</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">;</span>
+       <span class="k">WITH</span> <span class="n">comment</span> <span class="o">=</span> <span class="s1">&#39;A most excellent and useful table&#39;</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> statement can:</p>
@@ -743,8 +851,6 @@ that can be truncated currently and so the <code class="docutils literal"><span 
           
         </div>
       </div>
-    </div>
-    <div class="col-md-2">
     </div>
   </div>
 </div>
