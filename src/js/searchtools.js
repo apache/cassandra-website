@@ -473,7 +473,7 @@ var Search = {
    * search for object names
    */
   performObjectSearch : function(object, otherterms) {
-    var filenames = this._index.filenames;
+    var filenames = this._index.docnames;
     var objects = this._index.objects;
     var objnames = this._index.objnames;
     var titles = this._index.titles;
@@ -539,7 +539,7 @@ var Search = {
    * search for full-text terms in the index
    */
   performTermsSearch : function(searchterms, excluded, terms, titleterms) {
-    var filenames = this._index.filenames;
+    var filenames = this._index.docnames;
     var titles = this._index.titles;
 
     var i, j, file;
