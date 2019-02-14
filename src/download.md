@@ -121,5 +121,5 @@ Please note that official RPMs for Apache Cassandra only have been available rec
 Development is done in the Apache Git repository. To check out a copy:
 
 ```
-git clone http://git-wip-us.apache.org/repos/asf/cassandra.git
+git clone https://gitbox.apache.org/repos/asf/cassandra.git
 ```
