@@ -1,0 +1,20 @@
+version: '2.4'
+
+services:
+  cassandra-website:
+    build: .
+    image: cassandra-website:latest
+    volumes:
+      - ./src:/usr/src/cassandra-site/src
+      - ./publish:/usr/src/cassandra-site/publish
+
+  cassandra-website-serve:
+    build: .
+    image: cassandra-website:latest
+    entrypoint: /docker-entrypoint-jekyll-serve.sh
+    ports:
+      - 4000:4000
+    volumes:
+      - ./src:/usr/src/cassandra-site/src
+      - ./publish:/usr/src/cassandra-site/publish
+      - ./docker-entrypoint-jekyll-serve.sh:/docker-entrypoint-jekyll-serve.sh
