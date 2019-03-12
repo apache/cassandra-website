@@ -45,10 +45,10 @@ We're excited to announce the Call for Presentations is now open for both, closi
 #### Apache Cassandra Summit CFP (40-minute presentation, 5-minute Q&A) –
 
 **Example proposals might include:**
-- Presentations from contributors and large operators covering pain points and proposals to address them.
-- Planned or proposed improvements in specific areas of the Apache Cassandra codebase.
-- Planned or proposes improvements we can make to strengthen and empower the Apache Cassandra. community.
-- Something we haven't thought about that advanced operators / contributors would be interested to hear.
+- Lessons learned operating Apache Cassandra at scale.
+- Customizations and ways members of the community have extended Apache Cassandra to make it a great fit for their use case.
+- Stability improvements, performance enhancements, and new features in an upcoming Cassandra release.
+- Something we haven't thought about that a general audience would be interested to hear.
 
 &nbsp;
 
@@ -57,7 +57,7 @@ We're excited to announce the Call for Presentations is now open for both, closi
 **Example proposals might include:**
 - Presentations from contributors and large operators covering pain points and proposals to address them
 - Planned or proposed improvements in specific areas of the Apache Cassandra codebase
-- Planned or proposes improvements we can make to strengthen and empower the Apache Cassandra community.
+- Planned or proposed improvements we can make to strengthen and empower the Apache Cassandra community.
 - Something we haven't thought about that advanced operators / contributors would be interested to hear.
 
 &nbsp;
