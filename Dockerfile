@@ -1,20 +1,10 @@
 FROM debian:latest
 
-# Install Java
-RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
-    apt-get update && \
-    apt-get install -y \
-        software-properties-common \
-        gpg && \
-    add-apt-repository -y ppa:webupd8team/java && \
-    apt-get update && \
-    apt-get install -y --allow-unauthenticated oracle-java8-installer && \
-    rm -rf /var/lib/apt/lists/* && \
-    rm -rf /var/cache/oracle-jdk8-installer
-
-# Install other tools
+# Install tools
 RUN apt-get update && \
     apt-get install -y \
+        openjdk-8-jdk \
+        procps \
         git \
         python2.7 \
         python-pip \
