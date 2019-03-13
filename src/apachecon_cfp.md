@@ -64,5 +64,5 @@ We're excited to announce the Call for Presentations is now open for both, closi
 
 <span style="font-size: 20px; display: block;">[Click here](https://asf.jamhosted.net/cfp.html) to submit a proposal for the Apache Cassandra Summit or NGCC.</span>
 
-For NGCC submissions, please include "NGCC Proposal" in the "Optional Notes" field.
+When submitting, please ensure you select "Cassandra" as the category. For NGCC submissions, please include "NGCC Proposal" in the "Optional Notes" field.
 
