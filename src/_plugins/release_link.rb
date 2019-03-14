@@ -11,9 +11,9 @@ module Jekyll
       verif = Proc.new { |h, e| "<a href=\"#{apache_url}/dist/cassandra/#{name}/apache-cassandra-#{name}-bin.tar.gz.#{e}\">#{h}</a>" }
 
       pgp = verif.call("pgp", "asc")
-      md5 = verif.call("md5", "md5")
-      sha1 = verif.call("sha1", "sha1")
-      "<a href=\"#{dl_link}\">#{name}</a> (#{pgp}, #{md5} and #{sha1}), released on #{date}"
+      sha256 = verif.call("sha256", "sha256")
+      sha512 = verif.call("sha512", "sha512")
+      "<a href=\"#{dl_link}\">#{name}</a> (#{pgp}, #{sha256} and #{sha512}), released on #{date}"
     end
   end
 
