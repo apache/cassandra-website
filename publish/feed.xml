@@ -1,5 +1,82 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://cassandra.apache.org/feed.xml" rel="self" type="application/atom+xml" /><link href="http://cassandra.apache.org/" rel="alternate" type="text/html" /><updated>2019-03-13T12:32:18+13:00</updated><id>http://cassandra.apache.org/</id><title type="html">Apache Cassandra Website</title><subtitle>The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
-</subtitle><entry><title type="html">Introducing Transient Replication</title><link href="http://cassandra.apache.org/blog/2018/12/03/introducing-transient-replication.html" rel="alternate" type="text/html" title="Introducing Transient Replication" /><published>2018-12-03T21:00:00+13:00</published><updated>2018-12-03T21:00:00+13:00</updated><id>http://cassandra.apache.org/blog/2018/12/03/introducing-transient-replication</id><content type="html" xml:base="http://cassandra.apache.org/blog/2018/12/03/introducing-transient-replication.html">&lt;p&gt;Transient Replication is a new experimental feature soon to be available in 4.0. When enabled, it allows for the creation of keyspaces where replication factor can be specified as a number of copies (full replicas) and temporary copies (transient replicas). Transient replicas retain the data they replicate only long enough for it to be propagated to full replicas, via incremental repair, at which point the data is deleted. Writing to transient replicas can be avoided almost entirely if monotonic reads are not required because it is possible to achieve a quorum of acknowledged writes without them.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://cassandra.apache.org/feed.xml" rel="self" type="application/atom+xml" /><link href="http://cassandra.apache.org/" rel="alternate" type="text/html" /><updated>2019-04-10T13:13:00+12:00</updated><id>http://cassandra.apache.org/</id><title type="html">Apache Cassandra Website</title><subtitle>The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+</subtitle><entry><title type="html">Even Higher Availability with 5x Faster Streaming in Cassandra 4.0</title><link href="http://cassandra.apache.org/blog/2019/04/09/benchmarking_streaming.html" rel="alternate" type="text/html" title="Even Higher Availability with 5x Faster Streaming in Cassandra 4.0" /><published>2019-04-09T20:00:00+12:00</published><updated>2019-04-09T20:00:00+12:00</updated><id>http://cassandra.apache.org/blog/2019/04/09/benchmarking_streaming</id><content type="html" xml:base="http://cassandra.apache.org/blog/2019/04/09/benchmarking_streaming.html">&lt;p&gt;Streaming is a process where nodes of a cluster exchange data in the form of SSTables. Streaming can kick in during many situations such as bootstrap, repair, rebuild, range movement, cluster expansion, etc. In this post, we discuss the massive performance improvements made to the streaming process in Apache Cassandra 4.0.&lt;/p&gt;
+
+&lt;h2 id=&quot;high-availability&quot;&gt;High Availability&lt;/h2&gt;
+&lt;p&gt;As we know Cassandra is a Highly Available, Eventually Consistent database. The way it maintains its legendary availability is by storing redundant copies of data in nodes known as replicas, usually running on commodity hardware. During normal operations, these replicas may end up having hardware issues causing them to fail. As a result, we need to replace them with new nodes on fresh hardware.&lt;/p&gt;
+
+&lt;p&gt;As part of this replacement operation, the new Cassandra node streams data from the neighboring nodes that hold copies of the data belonging to this new node’s token range. Depending on the amount of data stored, this process can require substantial network bandwidth, taking some time to complete. The longer these types of operations take, the more we are exposing ourselves to loss of availability. Depending on your replication factor and consistency requirements, if another node fails during this replacement operation, ability will be impacted.&lt;/p&gt;
+
+&lt;h2 id=&quot;increasing-availability&quot;&gt;Increasing Availability&lt;/h2&gt;
+&lt;p&gt;To minimize the failure window, we want to make these operations as fast as possible. The faster the new node completes streaming its data, the faster it can serve traffic, increasing the availability of the cluster. Towards this goal, Cassandra 4.0 saw the addition of &lt;a href=&quot;https://en.wikipedia.org/wiki/Zero-copy&quot;&gt;Zero Copy&lt;/a&gt; streaming. For more details on Cassandra’s zero copy implementation, see this &lt;a href=&quot;../../../2018/08/06/faster_streaming_in_cassandra.html&quot;&gt;blog post&lt;/a&gt; and &lt;a href=&quot;https://issues.apache.org/jira/browse/CASSANDRA-14556&quot;&gt;CASSANDRA-14556&lt;/a&gt; for more information.&lt;/p&gt;
+
+&lt;h2 id=&quot;talking-numbers&quot;&gt;Talking Numbers&lt;/h2&gt;
+&lt;p&gt;To quantify the results of these improvements, we, at Netflix, measured the performance impact of streaming in 4.0 vs 3.0, using our open source &lt;a href=&quot;https://github.com/Netflix/ndbench&quot;&gt;NDBench&lt;/a&gt; benchmarking tool with the CassJavaDriverGeneric plugin. Though we knew there would be improvements, we were still amazed with the overall results of a &lt;strong&gt;five fold increase&lt;/strong&gt; in streaming performance. The test setup and operations are all detailed below.&lt;/p&gt;
+
+&lt;h3 id=&quot;test-setup&quot;&gt;Test Setup&lt;/h3&gt;
+&lt;p&gt;In our test setup, we used the following configurations:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;6-node clusters on i3.xl, i3.2xl, i3.4xl and i3.8xl EC2 instances, each on 3.0 and trunk (sha dd7ec5a2d6736b26d3c5f137388f2d0028df7a03).&lt;/li&gt;
+  &lt;li&gt;Table schema&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div&gt;&lt;pre&gt;
+CREATE TABLE testing.test (
+    key text,
+    column1 int,
+    value text,
+    PRIMARY KEY (key, column1)
+) WITH CLUSTERING ORDER BY (column1 ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.LeveledCompactionStrategy'}
+    AND compression = {'enabled': 'false'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Data size per node: 500GB&lt;/li&gt;
+  &lt;li&gt;No. of tokens per node: 1 (no vnodes)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;To trigger the streaming process we used the following steps in each of the clusters:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;terminated a node&lt;/li&gt;
+  &lt;li&gt;add a new node as a replacement&lt;/li&gt;
+  &lt;li&gt;measure the time taken to complete streaming data by the new node replacing the terminated node&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For each cluster and version, we repeated this exercise multiple times to collect several samples.&lt;/p&gt;
+
+&lt;p&gt;Below is the distribution of streaming times we found across the clusters
+&lt;img src=&quot;/img/blog-post-benchmarking-streaming/cassandra_streaming.png&quot; alt=&quot;Benchmark results&quot; title=&quot;Benchmark results&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;interpreting-the-results&quot;&gt;Interpreting the Results&lt;/h3&gt;
+&lt;p&gt;Based on the graph above, there are many conclusions one can draw from it. Some of them are&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;3.0 streaming times are inconsistent and show high degree of variability (fat distributions across multiple samples)&lt;/li&gt;
+  &lt;li&gt;3.0 streaming is highly affected by the instance type and generally looks generally CPU bound&lt;/li&gt;
+  &lt;li&gt;Zero Copy streaming is approximately 5x faster&lt;/li&gt;
+  &lt;li&gt;Zero Copy streaming time shows little variability in its performance (thin distributions across multiple samples)&lt;/li&gt;
+  &lt;li&gt;Zero Copy streaming performance is not CPU bound and remains consistent across instance types&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;It is clear from the performance test results that Zero Copy Streaming has a huge performance benefit over the current streaming infrastructure in Cassandra. But what does it mean in the real world? The following key points are the main take aways.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;MTTR (Mean Time to Recovery):&lt;/strong&gt; MTTR is a KPI (Key Performance Indicator) that is used to measure how quickly a system recovers from a failure. Zero Copy Streaming has a very direct impact here with a &lt;strong&gt;five fold improvement&lt;/strong&gt; on performance.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Costs:&lt;/strong&gt; Zero Copy Streaming is ~5x faster. This translates directly into cost for some organizations primarily as a result of reducing the need to maintain spare server or cloud capacity. In other situations where you’re migrating data to larger instance types or moving AZs or DCs, this means that instances that are sending data can be turned off sooner saving costs. An added cost benefit is that now you don’t have to over provision the instance. You get a similar streaming performance whether you use a i3.xl or an i3.8xl provided the bandwidth is available to the instance.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Risk Reduction:&lt;/strong&gt; There is a great reduction in the risk due to Zero Copy Streaming as well. Since a Cluster’s recovery mainly depends on the streaming speed, Cassandra clusters with failed nodes will be able to recover much more quickly (5x faster). This means the window of vulnerability is reduced significantly, in some situations down to few minutes.&lt;/p&gt;
+
+&lt;p&gt;Finally, a benefit that we generally don’t talk about is the environmental benefit of this change. Zero Copy Streaming enables us to move data very quickly through the cluster. It objectively reduces the number and sizes of instances that are used to build Cassandra cluster. As a result not only does it reduce Cassandra’s TCO (Total Cost of Ownership), it also helps the environment by consuming fewer resources!&lt;/p&gt;</content><author><name>The Apache Cassandra Community</name></author><summary type="html">Streaming is a process where nodes of a cluster exchange data in the form of SSTables. Streaming can kick in during many situations such as bootstrap, repair, rebuild, range movement, cluster expansion, etc. In this post, we discuss the massive performance improvements made to the streaming process in Apache Cassandra 4.0.</summary></entry><entry><title type="html">Introducing Transient Replication</title><link href="http://cassandra.apache.org/blog/2018/12/03/introducing-transient-replication.html" rel="alternate" type="text/html" title="Introducing Transient Replication" /><published>2018-12-03T21:00:00+13:00</published><updated>2018-12-03T21:00:00+13:00</updated><id>http://cassandra.apache.org/blog/2018/12/03/introducing-transient-replication</id><content type="html" xml:base="http://cassandra.apache.org/blog/2018/12/03/introducing-transient-replication.html">&lt;p&gt;Transient Replication is a new experimental feature soon to be available in 4.0. When enabled, it allows for the creation of keyspaces where replication factor can be specified as a number of copies (full replicas) and temporary copies (transient replicas). Transient replicas retain the data they replicate only long enough for it to be propagated to full replicas, via incremental repair, at which point the data is deleted. Writing to transient replicas can be avoided almost entirely if monotonic reads are not required because it is possible to achieve a quorum of acknowledged writes without them.&lt;/p&gt;
 
 &lt;p&gt;This results in a savings in disk space, CPU, and IO. By deleting data as soon as it is no longer needed, transient replicas require only a fraction of the disk space of a full replica. By not having to store the data indefinitely, the CPU and IO required for compaction is reduced, and read queries are faster as they have less data to process.&lt;/p&gt;
 
