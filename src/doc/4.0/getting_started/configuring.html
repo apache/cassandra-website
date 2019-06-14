@@ -95,24 +95,24 @@ extra-footer: '
           
   <div class="section" id="configuring-cassandra">
 <h1>Configuring Cassandra<a class="headerlink" href="#configuring-cassandra" title="Permalink to this headline">¶</a></h1>
-<p>For running Cassandra on a single node, the default configuration file present at <code class="docutils literal"><span class="pre">./conf/cassandra.yaml</span></code> is enough,
-you shouldn&#8217;t need to change any configuration. However, when you deploy a cluster of nodes, or use clients that
+<p>For running Cassandra on a single node, the default configuration file present at <code class="docutils literal notranslate"><span class="pre">./conf/cassandra.yaml</span></code> is enough,
+you shouldn’t need to change any configuration. However, when you deploy a cluster of nodes, or use clients that
 are not on the same host, then there are some parameters that must be changed.</p>
-<p>The Cassandra configuration files can be found in the <code class="docutils literal"><span class="pre">conf</span></code> directory of tarballs. For packages, the configuration
-files will be located in <code class="docutils literal"><span class="pre">/etc/cassandra</span></code>.</p>
+<p>The Cassandra configuration files can be found in the <code class="docutils literal notranslate"><span class="pre">conf</span></code> directory of tarballs. For packages, the configuration
+files will be located in <code class="docutils literal notranslate"><span class="pre">/etc/cassandra</span></code>.</p>
 <div class="section" id="main-runtime-properties">
 <h2>Main runtime properties<a class="headerlink" href="#main-runtime-properties" title="Permalink to this headline">¶</a></h2>
-<p>Most of configuration in Cassandra is done via yaml properties that can be set in <code class="docutils literal"><span class="pre">cassandra.yaml</span></code>. At a minimum you
+<p>Most of configuration in Cassandra is done via yaml properties that can be set in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code>. At a minimum you
 should consider setting the following properties:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">cluster_name</span></code>: the name of your cluster.</li>
-<li><code class="docutils literal"><span class="pre">seeds</span></code>: a comma separated list of the IP addresses of your cluster seeds.</li>
-<li><code class="docutils literal"><span class="pre">storage_port</span></code>: you don&#8217;t necessarily need to change this but make sure that there are no firewalls blocking this
+<li><code class="docutils literal notranslate"><span class="pre">cluster_name</span></code>: the name of your cluster.</li>
+<li><code class="docutils literal notranslate"><span class="pre">seeds</span></code>: a comma separated list of the IP addresses of your cluster seeds.</li>
+<li><code class="docutils literal notranslate"><span class="pre">storage_port</span></code>: you don’t necessarily need to change this but make sure that there are no firewalls blocking this
 port.</li>
-<li><code class="docutils literal"><span class="pre">listen_address</span></code>: the IP address of your node, this is what allows other nodes to communicate with this node so it
-is important that you change it. Alternatively, you can set <code class="docutils literal"><span class="pre">listen_interface</span></code> to tell Cassandra which interface to
+<li><code class="docutils literal notranslate"><span class="pre">listen_address</span></code>: the IP address of your node, this is what allows other nodes to communicate with this node so it
+is important that you change it. Alternatively, you can set <code class="docutils literal notranslate"><span class="pre">listen_interface</span></code> to tell Cassandra which interface to
 use, and consecutively which address to use. Set only one, not both.</li>
-<li><code class="docutils literal"><span class="pre">native_transport_port</span></code>: as for storage_port, make sure this port is not blocked by firewalls as clients will
+<li><code class="docutils literal notranslate"><span class="pre">native_transport_port</span></code>: as for storage_port, make sure this port is not blocked by firewalls as clients will
 communicate with Cassandra on this port.</li>
 </ul>
 </div>
@@ -120,22 +120,22 @@ communicate with Cassandra on this port.</li>
 <h2>Changing the location of directories<a class="headerlink" href="#changing-the-location-of-directories" title="Permalink to this headline">¶</a></h2>
 <p>The following yaml properties control the location of directories:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">data_file_directories</span></code>: one or more directories where data files are located.</li>
-<li><code class="docutils literal"><span class="pre">commitlog_directory</span></code>: the directory where commitlog files are located.</li>
-<li><code class="docutils literal"><span class="pre">saved_caches_directory</span></code>: the directory where saved caches are located.</li>
-<li><code class="docutils literal"><span class="pre">hints_directory</span></code>: the directory where hints are located.</li>
+<li><code class="docutils literal notranslate"><span class="pre">data_file_directories</span></code>: one or more directories where data files are located.</li>
+<li><code class="docutils literal notranslate"><span class="pre">commitlog_directory</span></code>: the directory where commitlog files are located.</li>
+<li><code class="docutils literal notranslate"><span class="pre">saved_caches_directory</span></code>: the directory where saved caches are located.</li>
+<li><code class="docutils literal notranslate"><span class="pre">hints_directory</span></code>: the directory where hints are located.</li>
 </ul>
 <p>For performance reasons, if you have multiple disks, consider putting commitlog and data files on different disks.</p>
 </div>
 <div class="section" id="environment-variables">
 <h2>Environment variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h2>
-<p>JVM-level settings such as heap size can be set in <code class="docutils literal"><span class="pre">cassandra-env.sh</span></code>.  You can add any additional JVM command line
-argument to the <code class="docutils literal"><span class="pre">JVM_OPTS</span></code> environment variable; when Cassandra starts these arguments will be passed to the JVM.</p>
+<p>JVM-level settings such as heap size can be set in <code class="docutils literal notranslate"><span class="pre">cassandra-env.sh</span></code>.  You can add any additional JVM command line
+argument to the <code class="docutils literal notranslate"><span class="pre">JVM_OPTS</span></code> environment variable; when Cassandra starts these arguments will be passed to the JVM.</p>
 </div>
 <div class="section" id="logging">
 <h2>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h2>
-<p>The logger in use is logback. You can change logging properties by editing <code class="docutils literal"><span class="pre">logback.xml</span></code>. By default it will log at
-INFO level into a file called <code class="docutils literal"><span class="pre">system.log</span></code> and at debug level into a file called <code class="docutils literal"><span class="pre">debug.log</span></code>. When running in the
+<p>The logger in use is logback. You can change logging properties by editing <code class="docutils literal notranslate"><span class="pre">logback.xml</span></code>. By default it will log at
+INFO level into a file called <code class="docutils literal notranslate"><span class="pre">system.log</span></code> and at debug level into a file called <code class="docutils literal notranslate"><span class="pre">debug.log</span></code>. When running in the
 foreground, it will also log at INFO level to the console.</p>
 </div>
 </div>

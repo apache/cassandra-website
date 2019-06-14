@@ -175,7 +175,7 @@ lies. Some of the most common are mentioned below.</p>
 <h2>Client Logs and Errors<a class="headerlink" href="#client-logs-and-errors" title="Permalink to this headline">¶</a></h2>
 <p>Clients of the cluster often leave the best breadcrumbs to follow. Perhaps
 client latencies or error rates have increased in a particular datacenter
-(likely eliminating other datacenter&#8217;s nodes), or clients are receiving a
+(likely eliminating other datacenter’s nodes), or clients are receiving a
 particular kind of error code indicating a particular kind of problem.
 Troubleshooters can often rule out many failure modes just by reading the error
 messages. In fact, many Cassandra error messages include the last coordinator
@@ -183,25 +183,25 @@ contacted to help operators find nodes to start with.</p>
 <p>Some common errors (likely culprit in parenthesis) assuming the client has
 similar error names as the Datastax <a class="reference internal" href="../getting_started/drivers.html#client-drivers"><span class="std std-ref">drivers</span></a>:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">SyntaxError</span></code> (<strong>client</strong>). This and other <code class="docutils literal"><span class="pre">QueryValidationException</span></code>
+<li><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code> (<strong>client</strong>). This and other <code class="docutils literal notranslate"><span class="pre">QueryValidationException</span></code>
 indicate that the client sent a malformed request. These are rarely server
 issues and usually indicate bad queries.</li>
-<li><code class="docutils literal"><span class="pre">UnavailableException</span></code> (<strong>server</strong>): This means that the Cassandra
+<li><code class="docutils literal notranslate"><span class="pre">UnavailableException</span></code> (<strong>server</strong>): This means that the Cassandra
 coordinator node has rejected the query as it believes that insufficent
 replica nodes are available.  If many coordinators are throwing this error it
 likely means that there really are (typically) multiple nodes down in the
 cluster and you can identify them using <a class="reference internal" href="use_nodetool.html#nodetool-status"><span class="std std-ref">nodetool status</span></a> If only a single coordinator is throwing this error it may
 mean that node has been partitioned from the rest.</li>
-<li><code class="docutils literal"><span class="pre">OperationTimedOutException</span></code> (<strong>server</strong>): This is the most frequent
+<li><code class="docutils literal notranslate"><span class="pre">OperationTimedOutException</span></code> (<strong>server</strong>): This is the most frequent
 timeout message raised when clients set timeouts and means that the query
 took longer than the supplied timeout. This is a <em>client side</em> timeout
 meaning that it took longer than the client specified timeout. The error
 message will include the coordinator node that was last tried which is
 usually a good starting point. This error usually indicates either
 aggressive client timeout values or latent server coordinators/replicas.</li>
-<li><code class="docutils literal"><span class="pre">ReadTimeoutException</span></code> or <code class="docutils literal"><span class="pre">WriteTimeoutException</span></code> (<strong>server</strong>): These
+<li><code class="docutils literal notranslate"><span class="pre">ReadTimeoutException</span></code> or <code class="docutils literal notranslate"><span class="pre">WriteTimeoutException</span></code> (<strong>server</strong>): These
 are raised when clients do not specify lower timeouts and there is a
-<em>coordinator</em> timeouts based on the values supplied in the <code class="docutils literal"><span class="pre">cassandra.yaml</span></code>
+<em>coordinator</em> timeouts based on the values supplied in the <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code>
 configuration file. They usually indicate a serious server side problem as
 the default values are usually multiple seconds.</li>
 </ul>
@@ -216,7 +216,7 @@ datacenter, rack, or even group of nodes is the main goal. Some helpful metrics
 to look at are:</p>
 <div class="section" id="errors">
 <h3>Errors<a class="headerlink" href="#errors" title="Permalink to this headline">¶</a></h3>
-<p>Cassandra refers to internode messaging errors as &#8220;drops&#8221;, and provided a
+<p>Cassandra refers to internode messaging errors as “drops”, and provided a
 number of <a class="reference internal" href="../operating/metrics.html#dropped-metrics"><span class="std std-ref">Dropped Message Metrics</span></a> to help narrow
 down errors. If particular nodes are dropping messages actively, they are
 likely related to the issue.</p>
@@ -225,18 +225,18 @@ likely related to the issue.</p>
 <h3>Latency<a class="headerlink" href="#latency" title="Permalink to this headline">¶</a></h3>
 <p>For timeouts or latency related issues you can start with <a class="reference internal" href="../operating/metrics.html#table-metrics"><span class="std std-ref">Table
 Metrics</span></a> by comparing Coordinator level metrics e.g.
-<code class="docutils literal"><span class="pre">CoordinatorReadLatency</span></code> or <code class="docutils literal"><span class="pre">CoordinatorWriteLatency</span></code> with their associated
-replica metrics e.g.  <code class="docutils literal"><span class="pre">ReadLatency</span></code> or <code class="docutils literal"><span class="pre">WriteLatency</span></code>.  Issues usually show
-up on the <code class="docutils literal"><span class="pre">99th</span></code> percentile before they show up on the <code class="docutils literal"><span class="pre">50th</span></code> percentile or
-the <code class="docutils literal"><span class="pre">mean</span></code>.  While <code class="docutils literal"><span class="pre">maximum</span></code> coordinator latencies are not typically very
+<code class="docutils literal notranslate"><span class="pre">CoordinatorReadLatency</span></code> or <code class="docutils literal notranslate"><span class="pre">CoordinatorWriteLatency</span></code> with their associated
+replica metrics e.g.  <code class="docutils literal notranslate"><span class="pre">ReadLatency</span></code> or <code class="docutils literal notranslate"><span class="pre">WriteLatency</span></code>.  Issues usually show
+up on the <code class="docutils literal notranslate"><span class="pre">99th</span></code> percentile before they show up on the <code class="docutils literal notranslate"><span class="pre">50th</span></code> percentile or
+the <code class="docutils literal notranslate"><span class="pre">mean</span></code>.  While <code class="docutils literal notranslate"><span class="pre">maximum</span></code> coordinator latencies are not typically very
 helpful due to the exponentially decaying reservoir used internally to produce
-metrics, <code class="docutils literal"><span class="pre">maximum</span></code> replica latencies that correlate with increased <code class="docutils literal"><span class="pre">99th</span></code>
+metrics, <code class="docutils literal notranslate"><span class="pre">maximum</span></code> replica latencies that correlate with increased <code class="docutils literal notranslate"><span class="pre">99th</span></code>
 percentiles on coordinators can help narrow down the problem.</p>
 <p>There are usually three main possibilities:</p>
 <ol class="arabic simple">
-<li>Coordinator latencies are high on all nodes, but only a few node&#8217;s local
+<li>Coordinator latencies are high on all nodes, but only a few node’s local
 read latencies are high. This points to slow replica nodes and the
-coordinator&#8217;s are just side-effects. This usually happens when clients are
+coordinator’s are just side-effects. This usually happens when clients are
 not token aware.</li>
 <li>Coordinator latencies and replica latencies increase at the
 same time on the a few nodes. If clients are token aware this is almost
@@ -246,35 +246,35 @@ ranges (only part of the ring).</li>
 indicates either a tipping point in the cluster capacity (too many writes or
 reads per second), or a new query pattern.</li>
 </ol>
-<p>It&#8217;s important to remember that depending on the client&#8217;s load balancing
+<p>It’s important to remember that depending on the client’s load balancing
 behavior and consistency levels coordinator and replica metrics may or may
-not correlate. In particular if you use <code class="docutils literal"><span class="pre">TokenAware</span></code> policies the same
-node&#8217;s coordinator and replica latencies will often increase together, but if
-you just use normal <code class="docutils literal"><span class="pre">DCAwareRoundRobin</span></code> coordinator latencies can increase
-with unrelated replica node&#8217;s latencies. For example:</p>
+not correlate. In particular if you use <code class="docutils literal notranslate"><span class="pre">TokenAware</span></code> policies the same
+node’s coordinator and replica latencies will often increase together, but if
+you just use normal <code class="docutils literal notranslate"><span class="pre">DCAwareRoundRobin</span></code> coordinator latencies can increase
+with unrelated replica node’s latencies. For example:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">TokenAware</span></code> + <code class="docutils literal"><span class="pre">LOCAL_ONE</span></code>: should always have coordinator and replica
+<li><code class="docutils literal notranslate"><span class="pre">TokenAware</span></code> + <code class="docutils literal notranslate"><span class="pre">LOCAL_ONE</span></code>: should always have coordinator and replica
 latencies on the same node rise together</li>
-<li><code class="docutils literal"><span class="pre">TokenAware</span></code> + <code class="docutils literal"><span class="pre">LOCAL_QUORUM</span></code>: should always have coordinator and
+<li><code class="docutils literal notranslate"><span class="pre">TokenAware</span></code> + <code class="docutils literal notranslate"><span class="pre">LOCAL_QUORUM</span></code>: should always have coordinator and
 multiple replica latencies rise together in the same datacenter.</li>
-<li><code class="docutils literal"><span class="pre">TokenAware</span></code> + <code class="docutils literal"><span class="pre">QUORUM</span></code>: replica latencies in other datacenters can
+<li><code class="docutils literal notranslate"><span class="pre">TokenAware</span></code> + <code class="docutils literal notranslate"><span class="pre">QUORUM</span></code>: replica latencies in other datacenters can
 affect coordinator latencies.</li>
-<li><code class="docutils literal"><span class="pre">DCAwareRoundRobin</span></code> + <code class="docutils literal"><span class="pre">LOCAL_ONE</span></code>: coordinator latencies and unrelated
-replica node&#8217;s latencies will rise together.</li>
-<li><code class="docutils literal"><span class="pre">DCAwareRoundRobin</span></code> + <code class="docutils literal"><span class="pre">LOCAL_QUORUM</span></code>: different coordinator and replica
+<li><code class="docutils literal notranslate"><span class="pre">DCAwareRoundRobin</span></code> + <code class="docutils literal notranslate"><span class="pre">LOCAL_ONE</span></code>: coordinator latencies and unrelated
+replica node’s latencies will rise together.</li>
+<li><code class="docutils literal notranslate"><span class="pre">DCAwareRoundRobin</span></code> + <code class="docutils literal notranslate"><span class="pre">LOCAL_QUORUM</span></code>: different coordinator and replica
 latencies will rise together with little correlation.</li>
 </ul>
 </div>
 <div class="section" id="query-rates">
 <h3>Query Rates<a class="headerlink" href="#query-rates" title="Permalink to this headline">¶</a></h3>
 <p>Sometimes the <a class="reference internal" href="../operating/metrics.html#table-metrics"><span class="std std-ref">Table</span></a> query rate metrics can help
-narrow down load issues as  &#8220;small&#8221; increase in coordinator queries per second
+narrow down load issues as  “small” increase in coordinator queries per second
 (QPS) may correlate with a very large increase in replica level QPS. This most
-often happens with <code class="docutils literal"><span class="pre">BATCH</span></code> writes, where a client may send a single <code class="docutils literal"><span class="pre">BATCH</span></code>
+often happens with <code class="docutils literal notranslate"><span class="pre">BATCH</span></code> writes, where a client may send a single <code class="docutils literal notranslate"><span class="pre">BATCH</span></code>
 query that might contain 50 statements in it, which if you have 9 copies (RF=3,
-three datacenters) means that every coordinator <code class="docutils literal"><span class="pre">BATCH</span></code> write turns into 450
-replica writes! This is why keeping <code class="docutils literal"><span class="pre">BATCH</span></code>&#8216;s to the same partition is so
-critical, otherwise you can exhaust significant CPU capacitity with a &#8220;single&#8221;
+three datacenters) means that every coordinator <code class="docutils literal notranslate"><span class="pre">BATCH</span></code> write turns into 450
+replica writes! This is why keeping <code class="docutils literal notranslate"><span class="pre">BATCH</span></code>’s to the same partition is so
+critical, otherwise you can exhaust significant CPU capacitity with a “single”
 query.</p>
 </div>
 </div>

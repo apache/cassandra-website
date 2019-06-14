@@ -108,36 +108,36 @@ SSTable data file for the partition being requested, Cassandra employs a data st
 data definitely does not exist in the given file, or - The data probably exists in the given file.</p>
 <p>While bloom filters can not guarantee that the data exists in a given SSTable, bloom filters can be made more accurate
 by allowing them to consume more RAM. Operators have the opportunity to tune this behavior per table by adjusting the
-the <code class="docutils literal"><span class="pre">bloom_filter_fp_chance</span></code> to a float between 0 and 1.</p>
-<p>The default value for <code class="docutils literal"><span class="pre">bloom_filter_fp_chance</span></code> is 0.1 for tables using LeveledCompactionStrategy and 0.01 for all
+the <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span></code> to a float between 0 and 1.</p>
+<p>The default value for <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span></code> is 0.1 for tables using LeveledCompactionStrategy and 0.01 for all
 other cases.</p>
 <p>Bloom filters are stored in RAM, but are stored offheap, so operators should not consider bloom filters when selecting
-the maximum heap size.  As accuracy improves (as the <code class="docutils literal"><span class="pre">bloom_filter_fp_chance</span></code> gets closer to 0), memory usage
-increases non-linearly - the bloom filter for <code class="docutils literal"><span class="pre">bloom_filter_fp_chance</span> <span class="pre">=</span> <span class="pre">0.01</span></code> will require about three times as much
-memory as the same table with <code class="docutils literal"><span class="pre">bloom_filter_fp_chance</span> <span class="pre">=</span> <span class="pre">0.1</span></code>.</p>
-<p>Typical values for <code class="docutils literal"><span class="pre">bloom_filter_fp_chance</span></code> are usually between 0.01 (1%) to 0.1 (10%) false-positive chance, where
+the maximum heap size.  As accuracy improves (as the <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span></code> gets closer to 0), memory usage
+increases non-linearly - the bloom filter for <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span> <span class="pre">=</span> <span class="pre">0.01</span></code> will require about three times as much
+memory as the same table with <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span> <span class="pre">=</span> <span class="pre">0.1</span></code>.</p>
+<p>Typical values for <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span></code> are usually between 0.01 (1%) to 0.1 (10%) false-positive chance, where
 Cassandra may scan an SSTable for a row, only to find that it does not exist on the disk. The parameter should be tuned
 by use case:</p>
 <ul class="simple">
-<li>Users with more RAM and slower disks may benefit from setting the <code class="docutils literal"><span class="pre">bloom_filter_fp_chance</span></code> to a numerically lower
+<li>Users with more RAM and slower disks may benefit from setting the <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span></code> to a numerically lower
 number (such as 0.01) to avoid excess IO operations</li>
-<li>Users with less RAM, more dense nodes, or very fast disks may tolerate a higher <code class="docutils literal"><span class="pre">bloom_filter_fp_chance</span></code> in order to
+<li>Users with less RAM, more dense nodes, or very fast disks may tolerate a higher <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span></code> in order to
 save RAM at the expense of excess IO operations</li>
 <li>In workloads that rarely read, or that only perform reads by scanning the entire data set (such as analytics
-workloads), setting the <code class="docutils literal"><span class="pre">bloom_filter_fp_chance</span></code> to a much higher number is acceptable.</li>
+workloads), setting the <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span></code> to a much higher number is acceptable.</li>
 </ul>
 <div class="section" id="changing">
 <h2>Changing<a class="headerlink" href="#changing" title="Permalink to this headline">¶</a></h2>
-<p>The bloom filter false positive chance is visible in the <code class="docutils literal"><span class="pre">DESCRIBE</span> <span class="pre">TABLE</span></code> output as the field
-<code class="docutils literal"><span class="pre">bloom_filter_fp_chance</span></code>. Operators can change the value with an <code class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> statement:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>ALTER TABLE keyspace.table WITH bloom_filter_fp_chance=0.01
+<p>The bloom filter false positive chance is visible in the <code class="docutils literal notranslate"><span class="pre">DESCRIBE</span> <span class="pre">TABLE</span></code> output as the field
+<code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span></code>. Operators can change the value with an <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> statement:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ALTER TABLE keyspace.table WITH bloom_filter_fp_chance=0.01
 </pre></div>
 </div>
 <p>Operators should be aware, however, that this change is not immediate: the bloom filter is calculated when the file is
-written, and persisted on disk as the Filter component of the SSTable. Upon issuing an <code class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> statement, new
-files on disk will be written with the new <code class="docutils literal"><span class="pre">bloom_filter_fp_chance</span></code>, but existing sstables will not be modified until
-they are compacted - if an operator needs a change to <code class="docutils literal"><span class="pre">bloom_filter_fp_chance</span></code> to take effect, they can trigger an
-SSTable rewrite using <code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">scrub</span></code> or <code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">upgradesstables</span> <span class="pre">-a</span></code>, both of which will rebuild the sstables on
+written, and persisted on disk as the Filter component of the SSTable. Upon issuing an <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> statement, new
+files on disk will be written with the new <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span></code>, but existing sstables will not be modified until
+they are compacted - if an operator needs a change to <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span></code> to take effect, they can trigger an
+SSTable rewrite using <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">scrub</span></code> or <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">upgradesstables</span> <span class="pre">-a</span></code>, both of which will rebuild the sstables on
 disk, regenerating the bloom filters in the progress.</p>
 </div>
 </div>

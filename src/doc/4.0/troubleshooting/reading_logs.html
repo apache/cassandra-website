@@ -97,20 +97,20 @@ extra-footer: '
 insight into the database while at the same time limiting noise to the logs.</p>
 <div class="section" id="common-log-files">
 <h2>Common Log Files<a class="headerlink" href="#common-log-files" title="Permalink to this headline">¶</a></h2>
-<p>Cassandra has three main logs, the <code class="docutils literal"><span class="pre">system.log</span></code>, <code class="docutils literal"><span class="pre">debug.log</span></code> and
-<code class="docutils literal"><span class="pre">gc.log</span></code> which hold general logging messages, debugging logging messages, and
+<p>Cassandra has three main logs, the <code class="docutils literal notranslate"><span class="pre">system.log</span></code>, <code class="docutils literal notranslate"><span class="pre">debug.log</span></code> and
+<code class="docutils literal notranslate"><span class="pre">gc.log</span></code> which hold general logging messages, debugging logging messages, and
 java garbage collection logs respectively.</p>
-<p>These logs by default live in <code class="docutils literal"><span class="pre">${CASSANDRA_HOME}/logs</span></code>, but most Linux
-distributions relocate logs to <code class="docutils literal"><span class="pre">/var/log/cassandra</span></code>. Operators can tune
+<p>These logs by default live in <code class="docutils literal notranslate"><span class="pre">${CASSANDRA_HOME}/logs</span></code>, but most Linux
+distributions relocate logs to <code class="docutils literal notranslate"><span class="pre">/var/log/cassandra</span></code>. Operators can tune
 this location as well as what levels are logged using the provided
-<code class="docutils literal"><span class="pre">logback.xml</span></code> file.</p>
+<code class="docutils literal notranslate"><span class="pre">logback.xml</span></code> file.</p>
 <div class="section" id="system-log">
-<h3><code class="docutils literal"><span class="pre">system.log</span></code><a class="headerlink" href="#system-log" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">system.log</span></code><a class="headerlink" href="#system-log" title="Permalink to this headline">¶</a></h3>
 <p>This log is the default Cassandra log and is a good place to start any
 investigation. Some examples of activities logged to this log:</p>
 <ul class="simple">
 <li>Uncaught exceptions. These can be very useful for debugging errors.</li>
-<li><code class="docutils literal"><span class="pre">GCInspector</span></code> messages indicating long garbage collector pauses. When long
+<li><code class="docutils literal notranslate"><span class="pre">GCInspector</span></code> messages indicating long garbage collector pauses. When long
 pauses happen Cassandra will print how long and also what was the state of
 the system (thread state) at the time of that pause. This can help narrow
 down a capacity issue (either not enough heap or not enough spare CPU).</li>
@@ -118,14 +118,14 @@ down a capacity issue (either not enough heap or not enough spare CPU).</li>
 metadata (data ownersip) changes. This is useful for debugging network
 partitions, data movements, and more.</li>
 <li>Keyspace/Table creation, modification, deletion.</li>
-<li><code class="docutils literal"><span class="pre">StartupChecks</span></code> that ensure optimal configuration of the operating system
+<li><code class="docutils literal notranslate"><span class="pre">StartupChecks</span></code> that ensure optimal configuration of the operating system
 to run Cassandra</li>
 <li>Information about some background operational tasks (e.g. Index
 Redistribution).</li>
 </ul>
-<p>As with any application, looking for <code class="docutils literal"><span class="pre">ERROR</span></code> or <code class="docutils literal"><span class="pre">WARN</span></code> lines can be a
+<p>As with any application, looking for <code class="docutils literal notranslate"><span class="pre">ERROR</span></code> or <code class="docutils literal notranslate"><span class="pre">WARN</span></code> lines can be a
 great first step:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ # Search for warnings or errors in the latest system.log
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ # Search for warnings or errors in the latest system.log
 $ grep &#39;WARN\|ERROR&#39; system.log | tail
 ...
 
@@ -136,9 +136,9 @@ $ zgrep &#39;WARN\|ERROR&#39; system.log.* | less
 </div>
 </div>
 <div class="section" id="debug-log">
-<h3><code class="docutils literal"><span class="pre">debug.log</span></code><a class="headerlink" href="#debug-log" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">debug.log</span></code><a class="headerlink" href="#debug-log" title="Permalink to this headline">¶</a></h3>
 <p>This log contains additional debugging information that may be useful when
-troubleshooting but may be much noiser than the normal <code class="docutils literal"><span class="pre">system.log</span></code>. Some
+troubleshooting but may be much noiser than the normal <code class="docutils literal notranslate"><span class="pre">system.log</span></code>. Some
 examples of activities logged to this log:</p>
 <ul class="simple">
 <li>Information about compactions, including when they start, which sstables
@@ -146,9 +146,9 @@ they contain, and when they finish.</li>
 <li>Information about memtable flushes to disk, including when they happened,
 how large the flushes were, and which commitlog segments the flush impacted.</li>
 </ul>
-<p>This log can be <em>very</em> noisy, so it is highly recommended to use <code class="docutils literal"><span class="pre">grep</span></code> and
+<p>This log can be <em>very</em> noisy, so it is highly recommended to use <code class="docutils literal notranslate"><span class="pre">grep</span></code> and
 other log analysis tools to dive deep. For example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ # Search for messages involving a CompactionTask with 5 lines of context
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ # Search for messages involving a CompactionTask with 5 lines of context
 $ grep CompactionTask debug.log -C 5
 ...
 
@@ -163,13 +163,13 @@ $ grep &quot;Enqueuing flush&quot; debug.log | cut -f 10 -d &#39; &#39; | sort |
 </div>
 </div>
 <div class="section" id="gc-log">
-<h3><code class="docutils literal"><span class="pre">gc.log</span></code><a class="headerlink" href="#gc-log" title="Permalink to this headline">¶</a></h3>
-<p>The gc log is a standard Java GC log. With the default <code class="docutils literal"><span class="pre">jvm.options</span></code>
+<h3><code class="docutils literal notranslate"><span class="pre">gc.log</span></code><a class="headerlink" href="#gc-log" title="Permalink to this headline">¶</a></h3>
+<p>The gc log is a standard Java GC log. With the default <code class="docutils literal notranslate"><span class="pre">jvm.options</span></code>
 settings you get a lot of valuable information in this log such as
 application pause times, and why pauses happened. This may help narrow
 down throughput or latency issues to a mistuned JVM. For example you can
 view the last few pauses:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ grep stopped gc.log.0.current | tail
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ grep stopped gc.log.0.current | tail
 2018-08-29T00:19:39.522+0000: 3022663.591: Total time for which application threads were stopped: 0.0332813 seconds, Stopping threads took: 0.0008189 seconds
 2018-08-29T00:19:44.369+0000: 3022668.438: Total time for which application threads were stopped: 0.0312507 seconds, Stopping threads took: 0.0007025 seconds
 2018-08-29T00:19:49.796+0000: 3022673.865: Total time for which application threads were stopped: 0.0307071 seconds, Stopping threads took: 0.0006662 seconds
@@ -186,7 +186,7 @@ view the last few pauses:</p>
 was paused (meaning zero user queries were being serviced during the e.g. 33ms
 JVM pause) as well as how long it took to enter the safepoint. You can use this
 raw data to e.g. get the longest pauses:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ grep stopped gc.log.0.current | cut -f 11 -d &#39; &#39; | sort -n  | tail | xargs -IX grep X gc.log.0.current | sort -k 1
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ grep stopped gc.log.0.current | cut -f 11 -d &#39; &#39; | sort -n  | tail | xargs -IX grep X gc.log.0.current | sort -k 1
 2018-08-28T17:13:40.520-0700: 1.193: Total time for which application threads were stopped: 0.0157914 seconds, Stopping threads took: 0.0000355 seconds
 2018-08-28T17:13:41.206-0700: 1.879: Total time for which application threads were stopped: 0.0249811 seconds, Stopping threads took: 0.0000318 seconds
 2018-08-28T17:13:41.638-0700: 2.311: Total time for which application threads were stopped: 0.0561130 seconds, Stopping threads took: 0.0000328 seconds
@@ -206,11 +206,11 @@ generally speaking high pauses with fast safepoints indicate a lack of JVM heap
 or mistuned JVM GC algorithm. High pauses with slow safepoints typically
 indicate that the JVM is having trouble entering a safepoint which usually
 indicates slow disk drives (Cassandra makes heavy use of memory mapped reads
-which the JVM doesn&#8217;t know could have disk latency, so the JVM safepoint logic
-doesn&#8217;t handle a blocking memory mapped read particularly well).</p>
+which the JVM doesn’t know could have disk latency, so the JVM safepoint logic
+doesn’t handle a blocking memory mapped read particularly well).</p>
 <p>Using these logs you can even get a pause distribution with something like
 <a class="reference external" href="https://github.com/bitly/data_hacks/blob/master/data_hacks/histogram.py">histogram.py</a>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ grep stopped gc.log.0.current | cut -f 11 -d &#39; &#39; | sort -n | histogram.py
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ grep stopped gc.log.0.current | cut -f 11 -d &#39; &#39; | sort -n | histogram.py
 # NumSamples = 410293; Min = 0.00; Max = 11.49
 # Mean = 0.035346; Variance = 0.002216; SD = 0.047078; Median 0.036498
 # each ∎ represents a count of 5470
@@ -227,9 +227,9 @@ doesn&#8217;t handle a blocking memory mapped read particularly well).</p>
 </pre></div>
 </div>
 <p>We can see in this case while we have very good average performance something
-is causing multi second JVM pauses ... In this case it was mostly safepoint
+is causing multi second JVM pauses … In this case it was mostly safepoint
 pauses caused by slow disks:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ grep stopped gc.log.0.current | cut -f 11 -d &#39; &#39; | sort -n | tail | xargs -IX grep X  gc.log.0.current| sort -k 1
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ grep stopped gc.log.0.current | cut -f 11 -d &#39; &#39; | sort -n | tail | xargs -IX grep X  gc.log.0.current| sort -k 1
 2018-07-27T04:52:27.413+0000: 187831.482: Total time for which application threads were stopped: 6.5037022 seconds, Stopping threads took: 0.0005212 seconds
 2018-07-30T23:38:18.354+0000: 514582.423: Total time for which application threads were stopped: 6.3262938 seconds, Stopping threads took: 0.0004882 seconds
 2018-08-01T02:37:48.380+0000: 611752.450: Total time for which application threads were stopped: 10.3879659 seconds, Stopping threads took: 0.0004475 seconds
@@ -255,19 +255,19 @@ while debugging tail latency issues.</p>
 </div>
 <div class="section" id="getting-more-information">
 <h2>Getting More Information<a class="headerlink" href="#getting-more-information" title="Permalink to this headline">¶</a></h2>
-<p>If the default logging levels are insuficient, <code class="docutils literal"><span class="pre">nodetool</span></code> can set higher
+<p>If the default logging levels are insuficient, <code class="docutils literal notranslate"><span class="pre">nodetool</span></code> can set higher
 or lower logging levels for various packages and classes using the
-<code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">setlogginglevel</span></code> command. Start by viewing the current levels:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ nodetool getlogginglevels
+<code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">setlogginglevel</span></code> command. Start by viewing the current levels:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ nodetool getlogginglevels
 
 Logger Name                                        Log Level
 ROOT                                                    INFO
 org.apache.cassandra                                   DEBUG
 </pre></div>
 </div>
-<p>Perhaps the <code class="docutils literal"><span class="pre">Gossiper</span></code> is acting up and we wish to enable it at <code class="docutils literal"><span class="pre">TRACE</span></code>
+<p>Perhaps the <code class="docutils literal notranslate"><span class="pre">Gossiper</span></code> is acting up and we wish to enable it at <code class="docutils literal notranslate"><span class="pre">TRACE</span></code>
 level for even more insight:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ nodetool setlogginglevel org.apache.cassandra.gms.Gossiper TRACE
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ nodetool setlogginglevel org.apache.cassandra.gms.Gossiper TRACE
 
 $ nodetool getlogginglevels
 
@@ -285,8 +285,8 @@ heartbeat version 2341 greater than 2340 for 127.0.0.1:7000
 </div>
 <p>Note that any changes made this way are reverted on next Cassandra process
 restart. To make the changes permanent add the appropriate rule to
-<code class="docutils literal"><span class="pre">logback.xml</span></code>.</p>
-<div class="highlight-diff"><div class="highlight"><pre><span></span><span class="gh">diff --git a/conf/logback.xml b/conf/logback.xml</span>
+<code class="docutils literal notranslate"><span class="pre">logback.xml</span></code>.</p>
+<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span><span class="gh">diff --git a/conf/logback.xml b/conf/logback.xml</span>
 <span class="gh">index b2c5b10..71b0a49 100644</span>
 <span class="gd">--- a/conf/logback.xml</span>
 <span class="gi">+++ b/conf/logback.xml</span>
@@ -304,8 +304,8 @@ restart. To make the changes permanent add the appropriate rule to
 is a highly performant binary logging tool which captures Cassandra queries
 in real time, writes them (if possible) to a log file, and ensures the total
 size of the capture does not exceed a particular limit. FQL is enabled with
-<code class="docutils literal"><span class="pre">nodetool</span></code> and the logs are read with the provided <code class="docutils literal"><span class="pre">bin/fqltool</span></code> utility:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ mkdir /var/tmp/fql_logs
+<code class="docutils literal notranslate"><span class="pre">nodetool</span></code> and the logs are read with the provided <code class="docutils literal notranslate"><span class="pre">bin/fqltool</span></code> utility:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mkdir /var/tmp/fql_logs
 $ nodetool enablefullquerylog --path /var/tmp/fql_logs
 
 # ... do some querying

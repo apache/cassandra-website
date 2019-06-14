@@ -109,14 +109,14 @@ extra-footer: '
 <p>When using LeveledCompactionStrategy, sstables can get stuck at L0 on a recently bootstrapped node, and compactions may never catch up. This tool is used to bump sstables into the highest level possible.</p>
 <p>ref: <a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-8301">https://issues.apache.org/jira/browse/CASSANDRA-8301</a></p>
 <p>The way this is done is: sstables are storted by their last token. Given an original leveling like this (note that [ ] indicates token boundaries, not sstable size on disk; all sstables are the same size):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">L3</span> <span class="p">[][][][][][][][][][][]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">L3</span> <span class="p">[][][][][][][][][][][]</span>
 <span class="n">L2</span> <span class="p">[</span>    <span class="p">][</span>    <span class="p">][</span>    <span class="p">][</span>  <span class="p">]</span>
 <span class="n">L1</span> <span class="p">[</span>          <span class="p">][</span>        <span class="p">]</span>
 <span class="n">L0</span> <span class="p">[</span>                    <span class="p">]</span>
 </pre></div>
 </div>
 <p>Will look like this after being dropped to L0 and sorted by last token (and, to illustrate overlap, the overlapping ones are put on a new line):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[][][]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[][][]</span>
 <span class="p">[</span>    <span class="p">][][][]</span>
     <span class="p">[</span>    <span class="p">]</span>
 <span class="p">[</span>          <span class="p">]</span>
@@ -128,13 +128,13 @@ extra-footer: '
 <p>Cassandra must be stopped before this tool is executed, or unexpected results will occur. Note: the script does not verify that Cassandra is stopped.</p>
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
-<p>sstableofflinerelevel [&#8211;dry-run] &lt;keyspace&gt; &lt;table&gt;</p>
+<p>sstableofflinerelevel [–dry-run] &lt;keyspace&gt; &lt;table&gt;</p>
 </div>
 <div class="section" id="doing-a-dry-run">
 <h2>Doing a dry run<a class="headerlink" href="#doing-a-dry-run" title="Permalink to this headline">¶</a></h2>
-<p>Use the &#8211;dry-run option to see the current level distribution and predicted level after the change.</p>
+<p>Use the –dry-run option to see the current level distribution and predicted level after the change.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sstableofflinerelevel</span> <span class="o">--</span><span class="n">dry</span><span class="o">-</span><span class="n">run</span> <span class="n">keyspace</span> <span class="n">eventlog</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstableofflinerelevel</span> <span class="o">--</span><span class="n">dry</span><span class="o">-</span><span class="n">run</span> <span class="n">keyspace</span> <span class="n">eventlog</span>
 <span class="n">For</span> <span class="n">sstables</span> <span class="ow">in</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">6365332094</span><span class="n">dd11e88f324f9c503e4753</span><span class="p">:</span>
 <span class="n">Current</span> <span class="n">leveling</span><span class="p">:</span>
 <span class="n">L0</span><span class="o">=</span><span class="mi">2</span>
@@ -147,7 +147,7 @@ extra-footer: '
 <div class="section" id="running-a-relevel">
 <h2>Running a relevel<a class="headerlink" href="#running-a-relevel" title="Permalink to this headline">¶</a></h2>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sstableofflinerelevel</span> <span class="n">keyspace</span> <span class="n">eventlog</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstableofflinerelevel</span> <span class="n">keyspace</span> <span class="n">eventlog</span>
 <span class="n">For</span> <span class="n">sstables</span> <span class="ow">in</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">6365332094</span><span class="n">dd11e88f324f9c503e4753</span><span class="p">:</span>
 <span class="n">Current</span> <span class="n">leveling</span><span class="p">:</span>
 <span class="n">L0</span><span class="o">=</span><span class="mi">2</span>
@@ -161,7 +161,7 @@ extra-footer: '
 <h2>Keyspace or table not found<a class="headerlink" href="#keyspace-or-table-not-found" title="Permalink to this headline">¶</a></h2>
 <p>If an invalid keyspace and/or table is provided, an exception will be thrown.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sstableofflinerelevel</span> <span class="o">--</span><span class="n">dry</span><span class="o">-</span><span class="n">run</span> <span class="n">keyspace</span> <span class="n">evenlog</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstableofflinerelevel</span> <span class="o">--</span><span class="n">dry</span><span class="o">-</span><span class="n">run</span> <span class="n">keyspace</span> <span class="n">evenlog</span>
 
 <span class="ne">Exception</span> <span class="ow">in</span> <span class="n">thread</span> <span class="s2">&quot;main&quot;</span> <span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">IllegalArgumentException</span><span class="p">:</span> <span class="n">Unknown</span> <span class="n">keyspace</span><span class="o">/</span><span class="n">columnFamily</span> <span class="n">keyspace1</span><span class="o">.</span><span class="n">evenlog</span>
     <span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">cassandra</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">SSTableOfflineRelevel</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">SSTableOfflineRelevel</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">96</span><span class="p">)</span>

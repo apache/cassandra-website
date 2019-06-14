@@ -164,14 +164,14 @@
           
   <div class="section" id="use-nodetool">
 <span id="id1"></span><h1>Use Nodetool<a class="headerlink" href="#use-nodetool" title="Permalink to this headline">¶</a></h1>
-<p>Cassandra&#8217;s <code class="docutils literal"><span class="pre">nodetool</span></code> allows you to narrow problems from the cluster down
+<p>Cassandra’s <code class="docutils literal notranslate"><span class="pre">nodetool</span></code> allows you to narrow problems from the cluster down
 to a particular node and gives a lot of insight into the state of the Cassandra
-process itself. There are dozens of useful commands (see <code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">help</span></code>
+process itself. There are dozens of useful commands (see <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">help</span></code>
 for all the commands), but briefly some of the most useful for troubleshooting:</p>
 <div class="section" id="cluster-status">
 <span id="nodetool-status"></span><h2>Cluster Status<a class="headerlink" href="#cluster-status" title="Permalink to this headline">¶</a></h2>
-<p>You can use <code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">status</span></code> to assess status of the cluster:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ nodetool status &lt;optional keyspace&gt;
+<p>You can use <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">status</span></code> to assess status of the cluster:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ nodetool status &lt;optional keyspace&gt;
 
 Datacenter: dc1
 =======================
@@ -184,12 +184,12 @@ UN  127.0.1.3  4.69 GiB   1            100.0%            9dc1a293-2cc0-40fa-a6fd
 </pre></div>
 </div>
 <p>In this case we can see that we have three nodes in one datacenter with about
-4.6GB of data each and they are all &#8220;up&#8221;. The up/down status of a node is
+4.6GB of data each and they are all “up”. The up/down status of a node is
 independently determined by every node in the cluster, so you may have to run
-<code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">status</span></code> on multiple nodes in a cluster to see the full view.</p>
-<p>You can use <code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">status</span></code> plus a little grep to see which nodes are
+<code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">status</span></code> on multiple nodes in a cluster to see the full view.</p>
+<p>You can use <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">status</span></code> plus a little grep to see which nodes are
 down:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ nodetool status | grep -v &#39;^UN&#39;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ nodetool status | grep -v &#39;^UN&#39;
 Datacenter: dc1
 ===============
 Status=Up/Down
@@ -204,14 +204,14 @@ DN  127.0.0.5  105.73 KiB  1            33.3%             df303ac7-61de-46e9-ac7
 </pre></div>
 </div>
 <p>In this case there are two datacenters and there is one node down in datacenter
-<code class="docutils literal"><span class="pre">dc2</span></code> and rack <code class="docutils literal"><span class="pre">r1</span></code>. This may indicate an issue on <code class="docutils literal"><span class="pre">127.0.0.5</span></code>
+<code class="docutils literal notranslate"><span class="pre">dc2</span></code> and rack <code class="docutils literal notranslate"><span class="pre">r1</span></code>. This may indicate an issue on <code class="docutils literal notranslate"><span class="pre">127.0.0.5</span></code>
 warranting investigation.</p>
 </div>
 <div class="section" id="coordinator-query-latency">
 <span id="nodetool-proxyhistograms"></span><h2>Coordinator Query Latency<a class="headerlink" href="#coordinator-query-latency" title="Permalink to this headline">¶</a></h2>
 <p>You can view latency distributions of coordinator read and write latency
-to help narrow down latency issues using <code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">proxyhistograms</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ nodetool proxyhistograms
+to help narrow down latency issues using <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">proxyhistograms</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ nodetool proxyhistograms
 Percentile       Read Latency      Write Latency      Range Latency   CAS Read Latency  CAS Write Latency View Write Latency
                      (micros)           (micros)           (micros)           (micros)           (micros)           (micros)
 50%                    454.83             219.34               0.00               0.00               0.00               0.00
@@ -224,7 +224,7 @@ Max                  25109.16           43388.63               0.00             
 </pre></div>
 </div>
 <p>Here you can see the full latency distribution of reads, writes, range requests
-(e.g. <code class="docutils literal"><span class="pre">select</span> <span class="pre">*</span> <span class="pre">from</span> <span class="pre">keyspace.table</span></code>), CAS read (compare phase of CAS) and
+(e.g. <code class="docutils literal notranslate"><span class="pre">select</span> <span class="pre">*</span> <span class="pre">from</span> <span class="pre">keyspace.table</span></code>), CAS read (compare phase of CAS) and
 CAS write (set phase of compare and set). These can be useful for narrowing
 down high level latency problems, for example in this case if a client had a
 20 millisecond timeout on their reads they might experience the occasional
@@ -234,9 +234,9 @@ milliseconds &lt; 20 milliseconds).</p>
 <div class="section" id="local-query-latency">
 <span id="nodetool-tablehistograms"></span><h2>Local Query Latency<a class="headerlink" href="#local-query-latency" title="Permalink to this headline">¶</a></h2>
 <p>If you know which table is having latency/error issues, you can use
-<code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">tablehistograms</span></code> to get a better idea of what is happening
+<code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">tablehistograms</span></code> to get a better idea of what is happening
 locally on a node:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ nodetool tablehistograms keyspace table
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ nodetool tablehistograms keyspace table
 Percentile  SSTables     Write Latency      Read Latency    Partition Size        Cell Count
                               (micros)          (micros)           (bytes)
 50%             0.00             73.46            182.79             17084               103
@@ -251,8 +251,8 @@ Max             2.00          12108.97          17436.92             17084      
 <p>This shows you percentile breakdowns particularly critical metrics.</p>
 <p>The first column contains how many sstables were read per logical read. A very
 high number here indicates that you may have chosen the wrong compaction
-strategy, e.g. <code class="docutils literal"><span class="pre">SizeTieredCompactionStrategy</span></code> typically has many more reads
-per read than <code class="docutils literal"><span class="pre">LeveledCompactionStrategy</span></code> does for update heavy workloads.</p>
+strategy, e.g. <code class="docutils literal notranslate"><span class="pre">SizeTieredCompactionStrategy</span></code> typically has many more reads
+per read than <code class="docutils literal notranslate"><span class="pre">LeveledCompactionStrategy</span></code> does for update heavy workloads.</p>
 <p>The second column shows you a latency breakdown of <em>local</em> write latency. In
 this case we see that while the p50 is quite good at 73 microseconds, the
 maximum latency is quite slow at 12 milliseconds. High write max latencies
@@ -265,15 +265,15 @@ the read speed correlates highly with the number of sstables read per read.</p>
 count per partition. These are useful for determining if the table has on
 average skinny or wide partitions and can help you isolate bad data patterns.
 For example if you have a single cell that is 2 megabytes, that is probably
-going to cause some heap pressure when it&#8217;s read.</p>
+going to cause some heap pressure when it’s read.</p>
 </div>
 <div class="section" id="threadpool-state">
 <span id="nodetool-tpstats"></span><h2>Threadpool State<a class="headerlink" href="#threadpool-state" title="Permalink to this headline">¶</a></h2>
-<p>You can use <code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">tpstats</span></code> to view the current outstanding requests on
+<p>You can use <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">tpstats</span></code> to view the current outstanding requests on
 a particular node. This is useful for trying to find out which resource
 (read threads, write threads, compaction, request response threads) the
 Cassandra process lacks. For example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ nodetool tpstats
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ nodetool tpstats
 Pool Name                         Active   Pending      Completed   Blocked  All time blocked
 ReadStage                              2         0             12         0                 0
 MiscStage                              0         0              0         0                 0
@@ -321,15 +321,15 @@ shows a detailed breakdown of threadpools for each Cassandra stage, including
 how many threads are current executing (Active) and how many are waiting to
 run (Pending). Typically if you see pending executions in a particular
 threadpool that indicates a problem localized to that type of operation. For
-example if the <code class="docutils literal"><span class="pre">RequestResponseState</span></code> queue is backing up, that means
+example if the <code class="docutils literal notranslate"><span class="pre">RequestResponseState</span></code> queue is backing up, that means
 that the coordinators are waiting on a lot of downstream replica requests and
 may indicate a lack of token awareness, or very high consistency levels being
-used on read requests (for example reading at <code class="docutils literal"><span class="pre">ALL</span></code> ties up RF
-<code class="docutils literal"><span class="pre">RequestResponseState</span></code> threads whereas <code class="docutils literal"><span class="pre">LOCAL_ONE</span></code> only uses a single
-thread in the <code class="docutils literal"><span class="pre">ReadStage</span></code> threadpool). On the other hand if you see a lot of
+used on read requests (for example reading at <code class="docutils literal notranslate"><span class="pre">ALL</span></code> ties up RF
+<code class="docutils literal notranslate"><span class="pre">RequestResponseState</span></code> threads whereas <code class="docutils literal notranslate"><span class="pre">LOCAL_ONE</span></code> only uses a single
+thread in the <code class="docutils literal notranslate"><span class="pre">ReadStage</span></code> threadpool). On the other hand if you see a lot of
 pending compactions that may indicate that your compaction threads cannot keep
 up with the volume of writes and you may need to tune either the compaction
-strategy or the <code class="docutils literal"><span class="pre">concurrent_compactors</span></code> or <code class="docutils literal"><span class="pre">compaction_throughput</span></code> options.</p>
+strategy or the <code class="docutils literal notranslate"><span class="pre">concurrent_compactors</span></code> or <code class="docutils literal notranslate"><span class="pre">compaction_throughput</span></code> options.</p>
 <p>The second section shows drops (errors) and latency distributions for all the
 major request types. Drops are cumulative since process start, but if you
 have any that indicate a serious problem as the default timeouts to qualify as
@@ -343,10 +343,10 @@ together, which can have adverse effects on performance. In particular,
 compaction uses a reasonable quantity of CPU resources, invalidates large
 quantities of the OS <a class="reference external" href="https://en.wikipedia.org/wiki/Page_cache">page cache</a>,
 and can put a lot of load on your disk drives. There are great
-<a class="reference internal" href="use_tools.html#os-iostat"><span class="std std-ref">os tools</span></a> to determine if this is the case, but often it&#8217;s a
+<a class="reference internal" href="use_tools.html#os-iostat"><span class="std std-ref">os tools</span></a> to determine if this is the case, but often it’s a
 good idea to check if compactions are even running using
-<code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">compactionstats</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ nodetool compactionstats
+<code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">compactionstats</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ nodetool compactionstats
 pending tasks: 2
 - keyspace.table: 2
 
@@ -355,17 +355,17 @@ id                                   compaction type keyspace table completed to
 Active compaction remaining time :   0h00m04s
 </pre></div>
 </div>
-<p>In this case there is a single compaction running on the <code class="docutils literal"><span class="pre">keyspace.table</span></code>
+<p>In this case there is a single compaction running on the <code class="docutils literal notranslate"><span class="pre">keyspace.table</span></code>
 table, has completed 21.8 megabytes of 97 and Cassandra estimates (based on
 the configured compaction throughput) that this will take 4 seconds. You can
-also pass <code class="docutils literal"><span class="pre">-H</span></code> to get the units in a human readable format.</p>
+also pass <code class="docutils literal notranslate"><span class="pre">-H</span></code> to get the units in a human readable format.</p>
 <p>Generally each running compaction can consume a single core, but the more
 you do in parallel the faster data compacts. Compaction is crucial to ensuring
 good read performance so having the right balance of concurrent compactions
-such that compactions complete quickly but don&#8217;t take too many resources
+such that compactions complete quickly but don’t take too many resources
 away from query threads is very important for performance. If you notice
-compaction unable to keep up, try tuning Cassandra&#8217;s <code class="docutils literal"><span class="pre">concurrent_compactors</span></code>
-or <code class="docutils literal"><span class="pre">compaction_throughput</span></code> options.</p>
+compaction unable to keep up, try tuning Cassandra’s <code class="docutils literal notranslate"><span class="pre">concurrent_compactors</span></code>
+or <code class="docutils literal notranslate"><span class="pre">compaction_throughput</span></code> options.</p>
 </div>
 </div>
 

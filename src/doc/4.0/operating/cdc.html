@@ -110,11 +110,11 @@ extra-footer: '
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>Change data capture (CDC) provides a mechanism to flag specific tables for archival as well as rejecting writes to those
 tables once a configurable size-on-disk for the CDC log is reached. An operator can enable CDC on a table by setting the
-table property <code class="docutils literal"><span class="pre">cdc=true</span></code> (either when <a class="reference internal" href="../cql/ddl.html#create-table-statement"><span class="std std-ref">creating the table</span></a> or
+table property <code class="docutils literal notranslate"><span class="pre">cdc=true</span></code> (either when <a class="reference internal" href="../cql/ddl.html#create-table-statement"><span class="std std-ref">creating the table</span></a> or
 <a class="reference internal" href="../cql/ddl.html#alter-table-statement"><span class="std std-ref">altering it</span></a>). Upon CommitLogSegment creation, a hard-link to the segment is created in the
-directory specified in <code class="docutils literal"><span class="pre">cassandra.yaml</span></code>. On segment fsync to disk, if CDC data is present anywhere in the segment a
+directory specified in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code>. On segment fsync to disk, if CDC data is present anywhere in the segment a
 &lt;segment_name&gt;_cdc.idx file is also created with the integer offset of how much data in the original segment is persisted
-to disk. Upon final segment flush, a second line with the human-readable word &#8220;COMPLETED&#8221; will be added to the _cdc.idx
+to disk. Upon final segment flush, a second line with the human-readable word “COMPLETED” will be added to the _cdc.idx
 file indicating that Cassandra has completed all processing on the file.</p>
 <p>We we use an index file rather than just encouraging clients to parse the log realtime off a memory mapped handle as data
 can be reflected in a kernel buffer that is not yet persisted to disk. Parsing only up to the listed offset in the _cdc.idx
@@ -127,7 +127,7 @@ not allow CDC data until a consumer parses and removes files from the specified 
 <div class="section" id="enabling-or-disabling-cdc-on-a-table">
 <h3>Enabling or disabling CDC on a table<a class="headerlink" href="#enabling-or-disabling-cdc-on-a-table" title="Permalink to this headline">¶</a></h3>
 <p>CDC is enable or disable through the <cite>cdc</cite> table property, for instance:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>CREATE TABLE foo (a int, b text, PRIMARY KEY(a)) WITH cdc=true;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CREATE TABLE foo (a int, b text, PRIMARY KEY(a)) WITH cdc=true;
 
 ALTER TABLE foo WITH cdc=true;
 
@@ -139,15 +139,15 @@ ALTER TABLE foo WITH cdc=false;
 <h3>cassandra.yaml parameters<a class="headerlink" href="#cassandra-yaml-parameters" title="Permalink to this headline">¶</a></h3>
 <p>The following <cite>cassandra.yaml</cite> are available for CDC:</p>
 <dl class="docutils">
-<dt><code class="docutils literal"><span class="pre">cdc_enabled</span></code> (default: false)</dt>
+<dt><code class="docutils literal notranslate"><span class="pre">cdc_enabled</span></code> (default: false)</dt>
 <dd>Enable or disable CDC operations node-wide.</dd>
-<dt><code class="docutils literal"><span class="pre">cdc_raw_directory</span></code> (default: <code class="docutils literal"><span class="pre">$CASSANDRA_HOME/data/cdc_raw</span></code>)</dt>
+<dt><code class="docutils literal notranslate"><span class="pre">cdc_raw_directory</span></code> (default: <code class="docutils literal notranslate"><span class="pre">$CASSANDRA_HOME/data/cdc_raw</span></code>)</dt>
 <dd>Destination for CommitLogSegments to be moved after all corresponding memtables are flushed.</dd>
-<dt><code class="docutils literal"><span class="pre">cdc_free_space_in_mb</span></code>: (default: min of 4096 and 1/8th volume space)</dt>
+<dt><code class="docutils literal notranslate"><span class="pre">cdc_free_space_in_mb</span></code>: (default: min of 4096 and 1/8th volume space)</dt>
 <dd>Calculated as sum of all active CommitLogSegments that permit CDC + all flushed CDC segments in
-<code class="docutils literal"><span class="pre">cdc_raw_directory</span></code>.</dd>
-<dt><code class="docutils literal"><span class="pre">cdc_free_space_check_interval_ms</span></code> (default: 250)</dt>
-<dd>When at capacity, we limit the frequency with which we re-calculate the space taken up by <code class="docutils literal"><span class="pre">cdc_raw_directory</span></code> to
+<code class="docutils literal notranslate"><span class="pre">cdc_raw_directory</span></code>.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">cdc_free_space_check_interval_ms</span></code> (default: 250)</dt>
+<dd>When at capacity, we limit the frequency with which we re-calculate the space taken up by <code class="docutils literal notranslate"><span class="pre">cdc_raw_directory</span></code> to
 prevent burning CPU cycles unnecessarily. Default is to check 4 times per second.</dd>
 </dl>
 </div>
@@ -162,7 +162,7 @@ available for use. In order to handle mutations read from disk, implement <a cla
 <div class="section" id="warnings">
 <h2>Warnings<a class="headerlink" href="#warnings" title="Permalink to this headline">¶</a></h2>
 <p><strong>Do not enable CDC without some kind of consumption process in-place.</strong></p>
-<p>If CDC is enabled on a node and then on a table, the <code class="docutils literal"><span class="pre">cdc_free_space_in_mb</span></code> will fill up and then writes to
+<p>If CDC is enabled on a node and then on a table, the <code class="docutils literal notranslate"><span class="pre">cdc_free_space_in_mb</span></code> will fill up and then writes to
 CDC-enabled tables will be rejected unless some consumption process is in place.</p>
 </div>
 <div class="section" id="further-reading">

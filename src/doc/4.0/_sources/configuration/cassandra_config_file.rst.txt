@@ -767,6 +767,20 @@ offheap_objects
 
 *Default Value:* heap_buffers
 
+``repair_session_space_in_mb``
+------------------------------
+*This option is commented out by default.*
+
+Limit memory usage for Merkle tree calculations during repairs. The default
+is 1/16th of the available heap. The main tradeoff is that smaller trees
+have less resolution, which can lead to over-streaming data. If you see heap
+pressure during repairs, consider lowering this, but you cannot go below
+one megabyte. If you see lots of over-streaming, consider raising
+this or using subrange repair.
+
+For more details see https://issues.apache.org/jira/browse/CASSANDRA-14096.
+
+
 ``commitlog_total_space_in_mb``
 -------------------------------
 *This option is commented out by default.*
@@ -1335,8 +1349,9 @@ Lowest acceptable value is 10 ms.
 
 *Default Value:* 10000
 
-``slow_query_log_timeout_in_ms``
---------------------------------
+``internode_application_send_queue_capacity_in_bytes``
+------------------------------------------------------
+*This option is commented out by default.*
 
 Defensive settings for protecting Cassandra from true network partitions.
 See (CASSANDRA-14358) for details.
@@ -1349,6 +1364,61 @@ Note this is only supported on Linux + epoll, and it appears to behave oddly abo
 (it takes much longer than 30s) as of Linux 4.12. If you want something that high set this to 0
 which picks up the OS default and configure the net.ipv4.tcp_retries2 sysctl to be ~8.
 internode_tcp_user_timeout_in_ms = 30000
+
+The maximum continuous period a connection may be unwritable in application space
+internode_application_timeout_in_ms = 30000
+
+Global, per-endpoint and per-connection limits imposed on messages queued for delivery to other nodes
+and waiting to be processed on arrival from other nodes in the cluster.  These limits are applied to the on-wire
+size of the message being sent or received.
+
+The basic per-link limit is consumed in isolation before any endpoint or global limit is imposed.
+Each node-pair has three links: urgent, small and large.  So any given node may have a maximum of
+N*3*(internode_application_send_queue_capacity_in_bytes+internode_application_receive_queue_capacity_in_bytes)
+messages queued without any coordination between them although in practice, with token-aware routing, only RF*tokens
+nodes should need to communicate with significant bandwidth.
+
+The per-endpoint limit is imposed on all messages exceeding the per-link limit, simultaneously with the global limit,
+on all links to or from a single node in the cluster.
+The global limit is imposed on all messages exceeding the per-link limit, simultaneously with the per-endpoint limit,
+on all links to or from any node in the cluster.
+
+
+*Default Value:* 4194304                       #4MiB
+
+``internode_application_send_queue_reserve_endpoint_capacity_in_bytes``
+-----------------------------------------------------------------------
+*This option is commented out by default.*
+
+*Default Value:* 134217728    #128MiB
+
+``internode_application_send_queue_reserve_global_capacity_in_bytes``
+---------------------------------------------------------------------
+*This option is commented out by default.*
+
+*Default Value:* 536870912      #512MiB
+
+``internode_application_receive_queue_capacity_in_bytes``
+---------------------------------------------------------
+*This option is commented out by default.*
+
+*Default Value:* 4194304                    #4MiB
+
+``internode_application_receive_queue_reserve_endpoint_capacity_in_bytes``
+--------------------------------------------------------------------------
+*This option is commented out by default.*
+
+*Default Value:* 134217728 #128MiB
+
+``internode_application_receive_queue_reserve_global_capacity_in_bytes``
+------------------------------------------------------------------------
+*This option is commented out by default.*
+
+*Default Value:* 536870912   #512MiB
+
+``slow_query_log_timeout_in_ms``
+--------------------------------
+
 
 How long before a node logs slow queries. Select queries that take longer than
 this timeout to execute, will generate an aggregated log message, so that slow queries
@@ -1622,23 +1692,6 @@ Enable this option to be able to use UDFs with "language javascript" or any cust
 This option has no effect, if enable_user_defined_functions is false.
 
 *Default Value:* false
-
-``enable_materialized_views``
------------------------------
-
-Enables materialized view creation on this node.
-Materialized views are considered experimental and are not recommended for production use.
-
-*Default Value:* true
-
-``enable_transient_replication``
---------------------------------
-*This option is commented out by default.*
-
-Enables creation of transiently replicated keyspaces on this node.
-Transient replication is experimental and is not recommended for production use.
-
-*Default Value:* true
 
 ``windows_timer_interval``
 --------------------------
@@ -1948,5 +2001,33 @@ some overhead, operators may wish to disable it whilst still enabling it for par
 If false, only confirmed mismatches will be reported. If true, a separate metric for unconfirmed
 mismatches will also be recorded. This is to avoid potential signal:noise issues are unconfirmed
 mismatches are less actionable than confirmed ones.
+
+*Default Value:* false
+
+``enable_materialized_views``
+-----------------------------
+
+########################
+EXPERIMENTAL FEATURES #
+########################
+
+Enables materialized view creation on this node.
+Materialized views are considered experimental and are not recommended for production use.
+
+*Default Value:* false
+
+``enable_sasi_indexes``
+-----------------------
+
+Enables SASI index creation on this node.
+SASI indexes are considered experimental and are not recommended for production use.
+
+*Default Value:* false
+
+``enable_transient_replication``
+--------------------------------
+
+Enables creation of transiently replicated keyspaces on this node.
+Transient replication is experimental and is not recommended for production use.
 
 *Default Value:* false
