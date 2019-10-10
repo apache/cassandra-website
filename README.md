@@ -20,7 +20,7 @@ $ cd ./cassandra-website
 
 ```
 
-To build the website run the following commands from within the _./cassandra-website_ directory (assuming you used the above checkout commands):
+To build the website run the following commands from within the `./cassandra-website` directory (assuming you used the above clone command):
 
 ```bash
 $ docker-compose build cassandra-website
@@ -29,7 +29,7 @@ $ docker-compose run cassandra-website
 
 Go make yourself a cup of coffee, this will take a while...
 
-Once building has completed, the site content will be in the _./cassandra-website/publish_ directory ready to be committed.
+Once building has completed, the site content will be in the `./cassandra-website/content` directory ready to be committed.
 
 
 Previewing the site
