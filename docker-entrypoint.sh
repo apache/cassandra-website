@@ -39,4 +39,4 @@ make
 
 # Fix the links in the resource paths for the landing pages of each version in the publish directory
 cd ${CASSANDRA_SITE_DIR}
-sed -i 's/\.\/\.\.\//\.\/\.\.\/\.\.\//g' ./publish/doc/*/index.html
+sed -i 's/\.\/\.\.\//\.\/\.\.\/\.\.\//g' ./content/doc/*/index.html
