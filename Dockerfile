@@ -1,4 +1,4 @@
-FROM debian:latest
+FROM debian:stretch
 
 # Install tools
 RUN apt-get update && \
