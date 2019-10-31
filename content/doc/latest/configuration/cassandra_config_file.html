@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="./../../../css/sphinx.css">
   
 
-   <link rel="top" title="Apache Cassandra Documentation v4.0" href="../index.html"/> <link rel="up" title="Configuring Cassandra" href="index.html"/> <link rel="next" title="Operating Cassandra" href="../operating/index.html"/> <link rel="prev" title="Configuring Cassandra" href="index.html"/> 
+   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha3" href="../index.html"/> <link rel="up" title="Configuring Cassandra" href="index.html"/> <link rel="next" title="Operating Cassandra" href="../operating/index.html"/> <link rel="prev" title="Configuring Cassandra" href="index.html"/> 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
   
   <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
@@ -89,7 +89,7 @@
           <li><a href="./../../../doc/">Documentation</a></li>
           <li><a href="./../../../community/">Community</a></li>
           <li>
-            <a href="./../../../blog">Blog</a>                    
+            <a href="./../../../blog/">Blog</a>
         </li>
         </ul>
       </div><!-- /#cassandra-menu -->
@@ -133,6 +133,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#cluster-name"><code class="docutils literal notranslate"><span class="pre">cluster_name</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#num-tokens"><code class="docutils literal notranslate"><span class="pre">num_tokens</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#allocate-tokens-for-keyspace"><code class="docutils literal notranslate"><span class="pre">allocate_tokens_for_keyspace</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#allocate-tokens-for-local-replication-factor"><code class="docutils literal notranslate"><span class="pre">allocate_tokens_for_local_replication_factor</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#initial-token"><code class="docutils literal notranslate"><span class="pre">initial_token</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hinted-handoff-enabled"><code class="docutils literal notranslate"><span class="pre">hinted_handoff_enabled</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hinted-handoff-disabled-datacenters"><code class="docutils literal notranslate"><span class="pre">hinted_handoff_disabled_datacenters</span></code></a></li>
@@ -218,6 +219,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#native-transport-max-concurrent-connections"><code class="docutils literal notranslate"><span class="pre">native_transport_max_concurrent_connections</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#native-transport-max-concurrent-connections-per-ip"><code class="docutils literal notranslate"><span class="pre">native_transport_max_concurrent_connections_per_ip</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#native-transport-allow-older-protocols"><code class="docutils literal notranslate"><span class="pre">native_transport_allow_older_protocols</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#native-transport-idle-timeout-in-ms"><code class="docutils literal notranslate"><span class="pre">native_transport_idle_timeout_in_ms</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#rpc-address"><code class="docutils literal notranslate"><span class="pre">rpc_address</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#rpc-interface"><code class="docutils literal notranslate"><span class="pre">rpc_interface</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#rpc-interface-prefer-ipv6"><code class="docutils literal notranslate"><span class="pre">rpc_interface_prefer_ipv6</span></code></a></li>
@@ -351,12 +353,20 @@ multiple tokens per node, see <a class="reference external" href="http://wiki.ap
 <p><em>This option is commented out by default.</em></p>
 <p>Triggers automatic allocation of num_tokens tokens for this node. The allocation
 algorithm attempts to choose tokens in a way that optimizes replicated load over
-the nodes in the datacenter for the replication strategy used by the specified
-keyspace.</p>
+the nodes in the datacenter for the replica factor.</p>
 <p>The load assigned to each node will be close to proportional to its number of
 vnodes.</p>
 <p>Only supported with the Murmur3Partitioner.</p>
+<p>Replica factor is determined via the replication strategy used by the specified
+keyspace.</p>
 <p><em>Default Value:</em> KEYSPACE</p>
+</div>
+<div class="section" id="allocate-tokens-for-local-replication-factor">
+<h2><code class="docutils literal notranslate"><span class="pre">allocate_tokens_for_local_replication_factor</span></code><a class="headerlink" href="#allocate-tokens-for-local-replication-factor" title="Permalink to this headline">¶</a></h2>
+<p><em>This option is commented out by default.</em></p>
+<p>Replica factor is explicitly set, regardless of keyspace or datacenter.
+This is the replica factor within the datacenter, like NTS.</p>
+<p><em>Default Value:</em> 3</p>
 </div>
 <div class="section" id="initial-token">
 <h2><code class="docutils literal notranslate"><span class="pre">initial_token</span></code><a class="headerlink" href="#initial-token" title="Permalink to this headline">¶</a></h2>
@@ -1179,6 +1189,17 @@ The default is -1, which means unlimited.</p>
 <p>Controls whether Cassandra honors older, yet currently supported, protocol versions.
 The default is true, which means all supported protocols will be honored.</p>
 <p><em>Default Value:</em> true</p>
+</div>
+<div class="section" id="native-transport-idle-timeout-in-ms">
+<h2><code class="docutils literal notranslate"><span class="pre">native_transport_idle_timeout_in_ms</span></code><a class="headerlink" href="#native-transport-idle-timeout-in-ms" title="Permalink to this headline">¶</a></h2>
+<p><em>This option is commented out by default.</em></p>
+<p>Controls when idle client connections are closed. Idle connections are ones that had neither reads
+nor writes for a time period.</p>
+<p>Clients may implement heartbeats by sending OPTIONS native protocol message after a timeout, which
+will reset idle timeout timer on the server side. To close idle client connections, corresponding
+values for heartbeat intervals have to be set on the client side.</p>
+<p>Idle connection timeouts are disabled by default.</p>
+<p><em>Default Value:</em> 60000</p>
 </div>
 <div class="section" id="rpc-address">
 <h2><code class="docutils literal notranslate"><span class="pre">rpc_address</span></code><a class="headerlink" href="#rpc-address" title="Permalink to this headline">¶</a></h2>

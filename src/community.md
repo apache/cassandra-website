@@ -23,12 +23,18 @@ Discussion and questions on Cassandra's usage and development happens mainly on 
   repository and on [JIRA](https://issues.apache.org/jira/browse/CASSANDRA) updates. This is a fairly noisy mailing list
   mostly useful for Cassandra developers and those who would like to keep close tabs on Cassandra's development
   ([subscribe](mailto:commits-subscribe@cassandra.apache.org) | [unsubscribe](mailto:commits-unsubscribe@cassandra.apache.org) | [Archives](https://lists.apache.org/list.html?commits@cassandra.apache.org)).
+  
+#### Slack
+
+We have recently moved to the ASF Slack organization for all chat.  Please [sign up for an account](https://s.apache.org/slack-invite) to participate.
+
+* `#cassandra` - for user questions and general discussions.
+* `#cassandra-dev` - strictly for questions or discussions related to Cassandra development.
 
 #### IRC<a name="irc"></a>
 
-To chat with developers or users in real-time, join our channels on [IRC freenode](http://webchat.freenode.net/):
+*Note*: Most discussion has been moved to the above Slack channels.  
 
-* `#cassandra` - for user questions and general discussions.
 * `#cassandra-dev` - strictly for questions or discussions related to Cassandra development.
 * `#cassandra-builds` - results of automated test builds.
 

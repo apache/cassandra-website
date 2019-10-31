@@ -10,7 +10,7 @@ NC='\033[0m' # No Color
 # version in the publish directory
 while [ 1 ]
 do
-    sed -i 's/\.\/\.\.\//\.\/\.\.\/\.\.\//g' /usr/src/cassandra-site/content/doc/*/index.html
+    sed -i 's/\.\/\.\.\//\.\/\.\.\/\.\.\//g' /usr/src/cassandra-site/publish/doc/*/index.html
     sleep 5
 done &
 

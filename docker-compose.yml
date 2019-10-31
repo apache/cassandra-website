@@ -1,4 +1,4 @@
-version: '2.4'
+version: '3.7'
 
 services:
   cassandra-website:
@@ -16,5 +16,15 @@ services:
       - 4000:4000
     volumes:
       - ./src:/usr/src/cassandra-site/src
-      - ./content:/usr/src/cassandra-site/content
+      - ./content:/usr/src/cassandra-site/publish
       - ./docker-entrypoint-jekyll-serve.sh:/docker-entrypoint-jekyll-serve.sh
+
+  preview:
+    image: nginx
+    ports:
+      - "8000:80"
+    volumes:
+      - "./content:/usr/share/nginx/html"
+
+
+
