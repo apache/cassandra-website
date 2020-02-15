@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="./../../../css/sphinx.css">
   
 
-   <link rel="top" title="Apache Cassandra Documentation v3.11.3" href="../index.html"/> <link rel="up" title="The Cassandra Query Language (CQL)" href="index.html"/> <link rel="next" title="Triggers" href="triggers.html"/> <link rel="prev" title="Functions" href="functions.html"/> 
+   <link rel="top" title="Apache Cassandra Documentation v3.11.6" href="../index.html"/> <link rel="up" title="The Cassandra Query Language (CQL)" href="index.html"/> <link rel="next" title="Triggers" href="triggers.html"/> <link rel="prev" title="Functions" href="functions.html"/> 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
   
   <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
@@ -176,39 +176,39 @@ statements. This support does not fundamentally alter the CQL API (for example, 
 provides a convenient way to work with JSON documents.</p>
 <div class="section" id="select-json">
 <h2>SELECT JSON<a class="headerlink" href="#select-json" title="Permalink to this headline">¶</a></h2>
-<p>With <code class="docutils literal"><span class="pre">SELECT</span></code> statements, the <code class="docutils literal"><span class="pre">JSON</span></code> keyword can be used to return each row as a single <code class="docutils literal"><span class="pre">JSON</span></code> encoded map. The
-remainder of the <code class="docutils literal"><span class="pre">SELECT</span></code> statement behavior is the same.</p>
-<p>The result map keys are the same as the column names in a normal result set. For example, a statement like <code class="docutils literal"><span class="pre">SELECT</span> <span class="pre">JSON</span>
-<span class="pre">a,</span> <span class="pre">ttl(b)</span> <span class="pre">FROM</span> <span class="pre">...</span></code> would result in a map with keys <code class="docutils literal"><span class="pre">&quot;a&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;ttl(b)&quot;</span></code>. However, this is one notable exception:
-for symmetry with <code class="docutils literal"><span class="pre">INSERT</span> <span class="pre">JSON</span></code> behavior, case-sensitive column names with upper-case letters will be surrounded with
-double quotes. For example, <code class="docutils literal"><span class="pre">SELECT</span> <span class="pre">JSON</span> <span class="pre">myColumn</span> <span class="pre">FROM</span> <span class="pre">...</span></code> would result in a map key <code class="docutils literal"><span class="pre">&quot;\&quot;myColumn\&quot;&quot;</span></code> (note the
+<p>With <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> statements, the <code class="docutils literal notranslate"><span class="pre">JSON</span></code> keyword can be used to return each row as a single <code class="docutils literal notranslate"><span class="pre">JSON</span></code> encoded map. The
+remainder of the <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> statement behavior is the same.</p>
+<p>The result map keys are the same as the column names in a normal result set. For example, a statement like <code class="docutils literal notranslate"><span class="pre">SELECT</span> <span class="pre">JSON</span>
+<span class="pre">a,</span> <span class="pre">ttl(b)</span> <span class="pre">FROM</span> <span class="pre">...</span></code> would result in a map with keys <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;ttl(b)&quot;</span></code>. However, this is one notable exception:
+for symmetry with <code class="docutils literal notranslate"><span class="pre">INSERT</span> <span class="pre">JSON</span></code> behavior, case-sensitive column names with upper-case letters will be surrounded with
+double quotes. For example, <code class="docutils literal notranslate"><span class="pre">SELECT</span> <span class="pre">JSON</span> <span class="pre">myColumn</span> <span class="pre">FROM</span> <span class="pre">...</span></code> would result in a map key <code class="docutils literal notranslate"><span class="pre">&quot;\&quot;myColumn\&quot;&quot;</span></code> (note the
 escaped quotes).</p>
-<p>The map values will <code class="docutils literal"><span class="pre">JSON</span></code>-encoded representations (as described below) of the result set values.</p>
+<p>The map values will <code class="docutils literal notranslate"><span class="pre">JSON</span></code>-encoded representations (as described below) of the result set values.</p>
 </div>
 <div class="section" id="insert-json">
 <h2>INSERT JSON<a class="headerlink" href="#insert-json" title="Permalink to this headline">¶</a></h2>
-<p>With <code class="docutils literal"><span class="pre">INSERT</span></code> statements, the new <code class="docutils literal"><span class="pre">JSON</span></code> keyword can be used to enable inserting a <code class="docutils literal"><span class="pre">JSON</span></code> encoded map as a single
-row. The format of the <code class="docutils literal"><span class="pre">JSON</span></code> map should generally match that returned by a <code class="docutils literal"><span class="pre">SELECT</span> <span class="pre">JSON</span></code> statement on the same
+<p>With <code class="docutils literal notranslate"><span class="pre">INSERT</span></code> statements, the new <code class="docutils literal notranslate"><span class="pre">JSON</span></code> keyword can be used to enable inserting a <code class="docutils literal notranslate"><span class="pre">JSON</span></code> encoded map as a single
+row. The format of the <code class="docutils literal notranslate"><span class="pre">JSON</span></code> map should generally match that returned by a <code class="docutils literal notranslate"><span class="pre">SELECT</span> <span class="pre">JSON</span></code> statement on the same
 table. In particular, case-sensitive column names should be surrounded with double quotes. For example, to insert into a
-table with two columns named &#8220;myKey&#8221; and &#8220;value&#8221;, you would do the following:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">mytable</span> <span class="k">JSON</span> <span class="s1">&#39;{ &quot;\&quot;myKey\&quot;&quot;: 0, &quot;value&quot;: 0}&#39;</span>
+table with two columns named “myKey” and “value”, you would do the following:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">mytable</span> <span class="k">JSON</span> <span class="s1">&#39;{ &quot;\&quot;myKey\&quot;&quot;: 0, &quot;value&quot;: 0}&#39;</span>
 </pre></div>
 </div>
-<p>By default (or if <code class="docutils literal"><span class="pre">DEFAULT</span> <span class="pre">NULL</span></code> is explicitly used), a column omitted from the <code class="docutils literal"><span class="pre">JSON</span></code> map will be set to <code class="docutils literal"><span class="pre">NULL</span></code>,
+<p>By default (or if <code class="docutils literal notranslate"><span class="pre">DEFAULT</span> <span class="pre">NULL</span></code> is explicitly used), a column omitted from the <code class="docutils literal notranslate"><span class="pre">JSON</span></code> map will be set to <code class="docutils literal notranslate"><span class="pre">NULL</span></code>,
 meaning that any pre-existing value for that column will be removed (resulting in a tombstone being created).
-Alternatively, if the <code class="docutils literal"><span class="pre">DEFAULT</span> <span class="pre">UNSET</span></code> directive is used after the value, omitted column values will be left unset,
+Alternatively, if the <code class="docutils literal notranslate"><span class="pre">DEFAULT</span> <span class="pre">UNSET</span></code> directive is used after the value, omitted column values will be left unset,
 meaning that pre-existing values for those column will be preserved.</p>
 </div>
 <div class="section" id="json-encoding-of-cassandra-data-types">
 <h2>JSON Encoding of Cassandra Data Types<a class="headerlink" href="#json-encoding-of-cassandra-data-types" title="Permalink to this headline">¶</a></h2>
-<p>Where possible, Cassandra will represent and accept data types in their native <code class="docutils literal"><span class="pre">JSON</span></code> representation. Cassandra will
+<p>Where possible, Cassandra will represent and accept data types in their native <code class="docutils literal notranslate"><span class="pre">JSON</span></code> representation. Cassandra will
 also accept string representations matching the CQL literal format for all single-field types. For example, floats,
 ints, UUIDs, and dates can be represented by CQL literal strings. However, compound types, such as collections, tuples,
-and user-defined types must be represented by native <code class="docutils literal"><span class="pre">JSON</span></code> collections (maps and lists) or a JSON-encoded string
+and user-defined types must be represented by native <code class="docutils literal notranslate"><span class="pre">JSON</span></code> collections (maps and lists) or a JSON-encoded string
 representation of the collection.</p>
-<p>The following table describes the encodings that Cassandra will accept in <code class="docutils literal"><span class="pre">INSERT</span> <span class="pre">JSON</span></code> values (and <code class="docutils literal"><span class="pre">fromJson()</span></code>
-arguments) as well as the format Cassandra will use when returning data for <code class="docutils literal"><span class="pre">SELECT</span> <span class="pre">JSON</span></code> statements (and
-<code class="docutils literal"><span class="pre">fromJson()</span></code>):</p>
+<p>The following table describes the encodings that Cassandra will accept in <code class="docutils literal notranslate"><span class="pre">INSERT</span> <span class="pre">JSON</span></code> values (and <code class="docutils literal notranslate"><span class="pre">fromJson()</span></code>
+arguments) as well as the format Cassandra will use when returning data for <code class="docutils literal notranslate"><span class="pre">SELECT</span> <span class="pre">JSON</span></code> statements (and
+<code class="docutils literal notranslate"><span class="pre">fromJson()</span></code>):</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="13%" />
@@ -224,125 +224,125 @@ arguments) as well as the format Cassandra will use when returning data for <cod
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">ascii</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ascii</span></code></td>
 <td>string</td>
 <td>string</td>
-<td>Uses JSON&#8217;s <code class="docutils literal"><span class="pre">\u</span></code> character escape</td>
+<td>Uses JSON’s <code class="docutils literal notranslate"><span class="pre">\u</span></code> character escape</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">bigint</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">bigint</span></code></td>
 <td>integer, string</td>
 <td>integer</td>
 <td>String must be valid 64 bit integer</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">blob</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">blob</span></code></td>
 <td>string</td>
 <td>string</td>
 <td>String should be 0x followed by an even number of hex digits</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">boolean</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">boolean</span></code></td>
 <td>boolean, string</td>
 <td>boolean</td>
-<td>String must be &#8220;true&#8221; or &#8220;false&#8221;</td>
+<td>String must be “true” or “false”</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">date</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">date</span></code></td>
 <td>string</td>
 <td>string</td>
-<td>Date in format <code class="docutils literal"><span class="pre">YYYY-MM-DD</span></code>, timezone UTC</td>
+<td>Date in format <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span></code>, timezone UTC</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">decimal</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">decimal</span></code></td>
 <td>integer, float, string</td>
 <td>float</td>
 <td>May exceed 32 or 64-bit IEEE-754 floating point precision in
 client-side decoder</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">double</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">double</span></code></td>
 <td>integer, float, string</td>
 <td>float</td>
 <td>String must be valid integer or float</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">float</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">float</span></code></td>
 <td>integer, float, string</td>
 <td>float</td>
 <td>String must be valid integer or float</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">inet</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">inet</span></code></td>
 <td>string</td>
 <td>string</td>
 <td>IPv4 or IPv6 address</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">int</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">int</span></code></td>
 <td>integer, string</td>
 <td>integer</td>
 <td>String must be valid 32 bit integer</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">list</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">list</span></code></td>
 <td>list, string</td>
 <td>list</td>
-<td>Uses JSON&#8217;s native list representation</td>
+<td>Uses JSON’s native list representation</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">map</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">map</span></code></td>
 <td>map, string</td>
 <td>map</td>
-<td>Uses JSON&#8217;s native map representation</td>
+<td>Uses JSON’s native map representation</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">smallint</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">smallint</span></code></td>
 <td>integer, string</td>
 <td>integer</td>
 <td>String must be valid 16 bit integer</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">set</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">set</span></code></td>
 <td>list, string</td>
 <td>list</td>
-<td>Uses JSON&#8217;s native list representation</td>
+<td>Uses JSON’s native list representation</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">text</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">text</span></code></td>
 <td>string</td>
 <td>string</td>
-<td>Uses JSON&#8217;s <code class="docutils literal"><span class="pre">\u</span></code> character escape</td>
+<td>Uses JSON’s <code class="docutils literal notranslate"><span class="pre">\u</span></code> character escape</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">time</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">time</span></code></td>
 <td>string</td>
 <td>string</td>
-<td>Time of day in format <code class="docutils literal"><span class="pre">HH-MM-SS[.fffffffff]</span></code></td>
+<td>Time of day in format <code class="docutils literal notranslate"><span class="pre">HH-MM-SS[.fffffffff]</span></code></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">timestamp</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">timestamp</span></code></td>
 <td>integer, string</td>
 <td>string</td>
 <td>A timestamp. Strings constant allows to input <a class="reference internal" href="types.html#timestamps"><span class="std std-ref">timestamps
-as dates</span></a>. Datestamps with format <code class="docutils literal"><span class="pre">YYYY-MM-DD</span>
+as dates</span></a>. Datestamps with format <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span>
 <span class="pre">HH:MM:SS.SSS</span></code> are returned.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">timeuuid</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">timeuuid</span></code></td>
 <td>string</td>
 <td>string</td>
-<td>Type 1 UUID. See <a class="reference internal" href="definitions.html#grammar-token-constant"><code class="xref std std-token docutils literal"><span class="pre">constant</span></code></a> for the UUID format</td>
+<td>Type 1 UUID. See <a class="reference internal" href="definitions.html#grammar-token-constant"><code class="xref std std-token docutils literal notranslate"><span class="pre">constant</span></code></a> for the UUID format</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">tinyint</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tinyint</span></code></td>
 <td>integer, string</td>
 <td>integer</td>
 <td>String must be valid 8 bit integer</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">tuple</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tuple</span></code></td>
 <td>list, string</td>
 <td>list</td>
-<td>Uses JSON&#8217;s native list representation</td>
+<td>Uses JSON’s native list representation</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">UDT</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">UDT</span></code></td>
 <td>map, string</td>
 <td>map</td>
-<td>Uses JSON&#8217;s native map representation with field names as keys</td>
+<td>Uses JSON’s native map representation with field names as keys</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">uuid</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">uuid</span></code></td>
 <td>string</td>
 <td>string</td>
-<td>See <a class="reference internal" href="definitions.html#grammar-token-constant"><code class="xref std std-token docutils literal"><span class="pre">constant</span></code></a> for the UUID format</td>
+<td>See <a class="reference internal" href="definitions.html#grammar-token-constant"><code class="xref std std-token docutils literal notranslate"><span class="pre">constant</span></code></a> for the UUID format</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">varchar</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">varchar</span></code></td>
 <td>string</td>
 <td>string</td>
-<td>Uses JSON&#8217;s <code class="docutils literal"><span class="pre">\u</span></code> character escape</td>
+<td>Uses JSON’s <code class="docutils literal notranslate"><span class="pre">\u</span></code> character escape</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">varint</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">varint</span></code></td>
 <td>integer, string</td>
 <td>integer</td>
 <td>Variable length; may overflow 32 or 64 bit integers in
@@ -353,14 +353,14 @@ client-side decoder</td>
 </div>
 <div class="section" id="the-fromjson-function">
 <h2>The fromJson() Function<a class="headerlink" href="#the-fromjson-function" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal"><span class="pre">fromJson()</span></code> function may be used similarly to <code class="docutils literal"><span class="pre">INSERT</span> <span class="pre">JSON</span></code>, but for a single column value. It may only be used
-in the <code class="docutils literal"><span class="pre">VALUES</span></code> clause of an <code class="docutils literal"><span class="pre">INSERT</span></code> statement or as one of the column values in an <code class="docutils literal"><span class="pre">UPDATE</span></code>, <code class="docutils literal"><span class="pre">DELETE</span></code>, or
-<code class="docutils literal"><span class="pre">SELECT</span></code> statement. For example, it cannot be used in the selection clause of a <code class="docutils literal"><span class="pre">SELECT</span></code> statement.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">fromJson()</span></code> function may be used similarly to <code class="docutils literal notranslate"><span class="pre">INSERT</span> <span class="pre">JSON</span></code>, but for a single column value. It may only be used
+in the <code class="docutils literal notranslate"><span class="pre">VALUES</span></code> clause of an <code class="docutils literal notranslate"><span class="pre">INSERT</span></code> statement or as one of the column values in an <code class="docutils literal notranslate"><span class="pre">UPDATE</span></code>, <code class="docutils literal notranslate"><span class="pre">DELETE</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">SELECT</span></code> statement. For example, it cannot be used in the selection clause of a <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> statement.</p>
 </div>
 <div class="section" id="the-tojson-function">
 <h2>The toJson() Function<a class="headerlink" href="#the-tojson-function" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal"><span class="pre">toJson()</span></code> function may be used similarly to <code class="docutils literal"><span class="pre">SELECT</span> <span class="pre">JSON</span></code>, but for a single column value. It may only be used
-in the selection clause of a <code class="docutils literal"><span class="pre">SELECT</span></code> statement.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">toJson()</span></code> function may be used similarly to <code class="docutils literal notranslate"><span class="pre">SELECT</span> <span class="pre">JSON</span></code>, but for a single column value. It may only be used
+in the selection clause of a <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> statement.</p>
 </div>
 </div>
 

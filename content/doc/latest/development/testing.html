@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="./../../../css/sphinx.css">
   
 
-   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha3" href="../index.html"/> <link rel="up" title="Contributing to Cassandra" href="index.html"/> <link rel="next" title="Contributing Code Changes" href="patches.html"/> <link rel="prev" title="Building and IDE Integration" href="ide.html"/> 
+   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha4" href="../index.html"/> <link rel="up" title="Contributing to Cassandra" href="index.html"/> <link rel="next" title="Contributing Code Changes" href="patches.html"/> <link rel="prev" title="Building and IDE Integration" href="ide.html"/> 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
   
   <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
@@ -175,18 +175,18 @@
 <h2>Unit Testing<a class="headerlink" href="#unit-testing" title="Permalink to this headline">¶</a></h2>
 <p>The most simple way to test code in Cassandra is probably by writing a unit test. Cassandra uses JUnit as a testing framework and test cases can be found in the <code class="docutils literal notranslate"><span class="pre">test/unit</span></code> directory. Ideally you’d be able to create a unit test for your implementation that would exclusively cover the class you created (the unit under test). Unfortunately this is not always possible and Cassandra doesn’t have a very mock friendly code base. Often you’ll find yourself in a situation where you have to make use of an embedded Cassandra instance that you’ll be able to interact with in your test. If you want to make use of CQL in your test, you can simply extend CQLTester and use some of the convenient helper methods such as in the following example.</p>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="nd">@Test</span>
-<span class="kd">public</span> <span class="kt">void</span> <span class="nf">testBatchAndList</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Throwable</span>
-<span class="o">{</span>
-   <span class="n">createTable</span><span class="o">(</span><span class="s">&quot;CREATE TABLE %s (k int PRIMARY KEY, l list&lt;int&gt;)&quot;</span><span class="o">);</span>
-   <span class="n">execute</span><span class="o">(</span><span class="s">&quot;BEGIN BATCH &quot;</span> <span class="o">+</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">testBatchAndList</span><span class="p">()</span> <span class="kd">throws</span> <span class="n">Throwable</span>
+<span class="p">{</span>
+   <span class="n">createTable</span><span class="p">(</span><span class="s">&quot;CREATE TABLE %s (k int PRIMARY KEY, l list&lt;int&gt;)&quot;</span><span class="p">);</span>
+   <span class="n">execute</span><span class="p">(</span><span class="s">&quot;BEGIN BATCH &quot;</span> <span class="o">+</span>
            <span class="s">&quot;UPDATE %1$s SET l = l +[ 1 ] WHERE k = 0; &quot;</span> <span class="o">+</span>
            <span class="s">&quot;UPDATE %1$s SET l = l + [ 2 ] WHERE k = 0; &quot;</span> <span class="o">+</span>
            <span class="s">&quot;UPDATE %1$s SET l = l + [ 3 ] WHERE k = 0; &quot;</span> <span class="o">+</span>
-           <span class="s">&quot;APPLY BATCH&quot;</span><span class="o">);</span>
+           <span class="s">&quot;APPLY BATCH&quot;</span><span class="p">);</span>
 
-   <span class="n">assertRows</span><span class="o">(</span><span class="n">execute</span><span class="o">(</span><span class="s">&quot;SELECT l FROM %s WHERE k = 0&quot;</span><span class="o">),</span>
-              <span class="n">row</span><span class="o">(</span><span class="n">list</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)));</span>
-<span class="o">}</span>
+   <span class="n">assertRows</span><span class="p">(</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SELECT l FROM %s WHERE k = 0&quot;</span><span class="p">),</span>
+              <span class="n">row</span><span class="p">(</span><span class="n">list</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)));</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>Unit tests can be run from the command line using the <code class="docutils literal notranslate"><span class="pre">ant</span> <span class="pre">test</span></code> command, <code class="docutils literal notranslate"><span class="pre">ant</span> <span class="pre">test</span> <span class="pre">-Dtest.name=&lt;simple_classname&gt;</span></code> to execute a test suite or <code class="docutils literal notranslate"><span class="pre">ant</span> <span class="pre">testsome</span> <span class="pre">-Dtest.name=&lt;FQCN&gt;</span> <span class="pre">-Dtest.methods=&lt;testmethod1&gt;[,testmethod2]</span></code> for individual tests.  For example, to run all test methods in the <code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.cql3.SimpleQueryTest</span></code> class, you would run:</p>

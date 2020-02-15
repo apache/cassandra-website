@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="./../../../css/sphinx.css">
   
 
-   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha3" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Read repair" href="read_repair.html"/> <link rel="prev" title="Adding, replacing, moving and removing nodes" href="topo_changes.html"/> 
+   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha4" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Read repair" href="read_repair.html"/> <link rel="prev" title="Adding, replacing, moving and removing nodes" href="topo_changes.html"/> 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
   
   <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
@@ -137,6 +137,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#incremental-and-full-repairs">Incremental and Full Repairs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#usage-and-best-practices">Usage and Best Practices</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#other-options">Other Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#full-repair-example">Full Repair Example</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="read_repair.html">Read repair</a></li>
@@ -239,6 +240,89 @@ data is out of sync, a full repair should be run.</dd>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="../tools/nodetool/repair.html#nodetool-repair"><span class="std std-ref">nodetool repair docs</span></a></p>
+</div>
+</div>
+<div class="section" id="full-repair-example">
+<h2>Full Repair Example<a class="headerlink" href="#full-repair-example" title="Permalink to this headline">¶</a></h2>
+<p>Full repair is typically needed to redistribute data after increasing the replication factor of a keyspace or after adding a node to the cluster. Full repair involves streaming SSTables. To demonstrate full repair start with a three node cluster.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ nodetool status
+Datacenter: us-east-1
+=====================
+Status=Up/Down
+|/ State=Normal/Leaving/Joining/Moving
+--  Address   Load        Tokens  Owns  Host ID                              Rack
+UN  10.0.1.115  547 KiB     256    ?  b64cb32a-b32a-46b4-9eeb-e123fa8fc287  us-east-1b
+UN  10.0.3.206  617.91 KiB  256    ?  74863177-684b-45f4-99f7-d1006625dc9e  us-east-1d
+UN  10.0.2.238  670.26 KiB  256    ?  4dcdadd2-41f9-4f34-9892-1f20868b27c7  us-east-1c
+</pre></div>
+</div>
+<p>Create a keyspace with replication factor 3:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh&gt; DROP KEYSPACE cqlkeyspace;
+cqlsh&gt; CREATE KEYSPACE CQLKeyspace
+  ... WITH replication = {&#39;class&#39;: &#39;SimpleStrategy&#39;, &#39;replication_factor&#39; : 3};
+</pre></div>
+</div>
+<p>Add a table to the keyspace:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh&gt; use cqlkeyspace;
+cqlsh:cqlkeyspace&gt; CREATE TABLE t (
+           ...   id int,
+           ...   k int,
+           ...   v text,
+           ...   PRIMARY KEY (id)
+           ... );
+</pre></div>
+</div>
+<p>Add table data:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:cqlkeyspace&gt; INSERT INTO t (id, k, v) VALUES (0, 0, &#39;val0&#39;);
+cqlsh:cqlkeyspace&gt; INSERT INTO t (id, k, v) VALUES (1, 1, &#39;val1&#39;);
+cqlsh:cqlkeyspace&gt; INSERT INTO t (id, k, v) VALUES (2, 2, &#39;val2&#39;);
+</pre></div>
+</div>
+<p>A query lists the data added:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:cqlkeyspace&gt; SELECT * FROM t;
+
+id | k | v
+----+---+------
+ 1 | 1 | val1
+ 0 | 0 | val0
+ 2 | 2 | val2
+(3 rows)
+</pre></div>
+</div>
+<p>Make the following changes to a three node cluster:</p>
+<ol class="arabic simple">
+<li>Increase the replication factor from 3 to 4.</li>
+<li>Add a 4th node to the cluster</li>
+</ol>
+<p>When the replication factor is increased the following message gets output indicating that a full repair is needed as per (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-13079">CASSANDRA-13079</a>):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:cqlkeyspace&gt; ALTER KEYSPACE CQLKeyspace
+           ... WITH replication = {&#39;class&#39;: &#39;SimpleStrategy&#39;, &#39;replication_factor&#39; : 4};
+Warnings :
+When increasing replication factor you need to run a full (-full) repair to distribute the
+data.
+</pre></div>
+</div>
+<p>Perform a full repair on the keyspace <code class="docutils literal notranslate"><span class="pre">cqlkeyspace</span></code> table <code class="docutils literal notranslate"><span class="pre">t</span></code> with following command:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nodetool repair -full cqlkeyspace t
+</pre></div>
+</div>
+<p>Full repair completes in about a second as indicated by the output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ nodetool repair -full cqlkeyspace t
+[2019-08-17 03:06:21,445] Starting repair command #1 (fd576da0-c09b-11e9-b00c-1520e8c38f00), repairing keyspace cqlkeyspace with repair options (parallelism: parallel, primary range: false, incremental: false, job threads: 1, ColumnFamilies: [t], dataCenters: [], hosts: [], previewKind: NONE, # of ranges: 1024, pull repair: false, force repair: false, optimise streams: false)
+[2019-08-17 03:06:23,059] Repair session fd8e5c20-c09b-11e9-b00c-1520e8c38f00 for range [(-8792657144775336505,-8786320730900698730], (-5454146041421260303,-5439402053041523135], (4288357893651763201,4324309707046452322], ... , (4350676211955643098,4351706629422088296]] finished (progress: 0%)
+[2019-08-17 03:06:23,077] Repair completed successfully
+[2019-08-17 03:06:23,077] Repair command #1 finished in 1 second
+[ec2-user@ip-10-0-2-238 ~]$
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">nodetool</span>&#160; <span class="pre">tpstats</span></code> command should list a repair having been completed as <code class="docutils literal notranslate"><span class="pre">Repair-Task</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">Completed</span></code> column value of 1:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ nodetool tpstats
+Pool Name Active   Pending Completed   Blocked  All time blocked
+ReadStage  0           0           99       0              0
+…
+Repair-Task 0       0           1        0              0
+RequestResponseStage                  0        0        2078        0               0
+</pre></div>
 </div>
 </div>
 </div>

@@ -425,7 +425,7 @@ documentation of the Java Driver for details on handling tuple types and user-de
     <span class="k">RETURNS</span> <span class="k">NULL</span> <span class="k">ON</span> <span class="k">NULL</span> <span class="k">INPUT</span>
     <span class="k">RETURNS</span> <span class="nb">int</span>
     <span class="k">LANGUAGE</span> <span class="n">java</span>
-    <span class="k">AS</span> <span class="s">$$</span> <span class="k">return</span> <span class="n">arg</span><span class="o">;</span> <span class="s">$$</span><span class="p">;</span>
+    <span class="k">AS</span> <span class="s">$$</span> <span class="k">return</span> <span class="n">arg</span><span class="p">;</span> <span class="s">$$</span><span class="p">;</span>
 
 <span class="k">SELECT</span> <span class="n">some_function</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">atable</span> <span class="mf">...</span><span class="p">;</span>
 <span class="k">UPDATE</span> <span class="n">atable</span> <span class="k">SET</span> <span class="n">col</span> <span class="o">=</span> <span class="n">some_function</span><span class="p">(</span><span class="o">?</span><span class="p">)</span> <span class="mf">...</span><span class="p">;</span>
@@ -435,7 +435,7 @@ documentation of the Java Driver for details on handling tuple types and user-de
     <span class="k">RETURNS</span> <span class="k">NULL</span> <span class="k">ON</span> <span class="k">NULL</span> <span class="k">INPUT</span>
     <span class="k">RETURNS</span> <span class="nb">text</span>
     <span class="k">LANGUAGE</span> <span class="n">java</span>
-    <span class="k">AS</span> <span class="s">$$</span> <span class="k">return</span> <span class="n">udtarg</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&quot;txt&quot;</span><span class="o">);</span> <span class="s">$$</span><span class="p">;</span>
+    <span class="k">AS</span> <span class="s">$$</span> <span class="k">return</span> <span class="n">udtarg</span><span class="p">.</span><span class="na">getString</span><span class="p">(</span><span class="s">&quot;txt&quot;</span><span class="p">);</span> <span class="s">$$</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>User-defined functions can be used in <code class="docutils literal notranslate"><span class="pre">SELECT</span></code>, <code class="docutils literal notranslate"><span class="pre">INSERT</span></code> and <code class="docutils literal notranslate"><span class="pre">UPDATE</span></code> statements.</p>
@@ -447,37 +447,37 @@ create new UDT and tuple values:</p>
     <span class="k">RETURNS</span> <span class="n">custom_type</span>
     <span class="k">LANGUAGE</span> <span class="n">java</span>
     <span class="k">AS</span> <span class="s">$$</span>
-        <span class="n">UDTValue</span> <span class="n">udt</span> <span class="o">=</span> <span class="n">udfContext</span><span class="o">.</span><span class="na">newReturnUDTValue</span><span class="o">();</span>
-        <span class="n">udt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="s">&quot;txt&quot;</span><span class="o">,</span> <span class="s">&quot;some string&quot;</span><span class="o">);</span>
-        <span class="n">udt</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="s">&quot;i&quot;</span><span class="o">,</span> <span class="mi">42</span><span class="o">);</span>
-        <span class="k">return</span> <span class="n">udt</span><span class="o">;</span>
+        <span class="n">UDTValue</span> <span class="n">udt</span> <span class="o">=</span> <span class="n">udfContext</span><span class="p">.</span><span class="na">newReturnUDTValue</span><span class="p">();</span>
+        <span class="n">udt</span><span class="p">.</span><span class="na">setString</span><span class="p">(</span><span class="s">&quot;txt&quot;</span><span class="p">,</span> <span class="s">&quot;some string&quot;</span><span class="p">);</span>
+        <span class="n">udt</span><span class="p">.</span><span class="na">setInt</span><span class="p">(</span><span class="s">&quot;i&quot;</span><span class="p">,</span> <span class="mi">42</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">udt</span><span class="p">;</span>
     <span class="s">$$</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>The definition of the <code class="docutils literal notranslate"><span class="pre">UDFContext</span></code> interface can be found in the Apache Cassandra source code for
 <code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.cql3.functions.UDFContext</span></code>.</p>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UDFContext</span>
-<span class="o">{</span>
-    <span class="n">UDTValue</span> <span class="nf">newArgUDTValue</span><span class="o">(</span><span class="n">String</span> <span class="n">argName</span><span class="o">);</span>
-    <span class="n">UDTValue</span> <span class="nf">newArgUDTValue</span><span class="o">(</span><span class="kt">int</span> <span class="n">argNum</span><span class="o">);</span>
-    <span class="n">UDTValue</span> <span class="nf">newReturnUDTValue</span><span class="o">();</span>
-    <span class="n">UDTValue</span> <span class="nf">newUDTValue</span><span class="o">(</span><span class="n">String</span> <span class="n">udtName</span><span class="o">);</span>
-    <span class="n">TupleValue</span> <span class="nf">newArgTupleValue</span><span class="o">(</span><span class="n">String</span> <span class="n">argName</span><span class="o">);</span>
-    <span class="n">TupleValue</span> <span class="nf">newArgTupleValue</span><span class="o">(</span><span class="kt">int</span> <span class="n">argNum</span><span class="o">);</span>
-    <span class="n">TupleValue</span> <span class="nf">newReturnTupleValue</span><span class="o">();</span>
-    <span class="n">TupleValue</span> <span class="nf">newTupleValue</span><span class="o">(</span><span class="n">String</span> <span class="n">cqlDefinition</span><span class="o">);</span>
-<span class="o">}</span>
+<span class="p">{</span>
+    <span class="n">UDTValue</span> <span class="nf">newArgUDTValue</span><span class="p">(</span><span class="n">String</span> <span class="n">argName</span><span class="p">);</span>
+    <span class="n">UDTValue</span> <span class="nf">newArgUDTValue</span><span class="p">(</span><span class="kt">int</span> <span class="n">argNum</span><span class="p">);</span>
+    <span class="n">UDTValue</span> <span class="nf">newReturnUDTValue</span><span class="p">();</span>
+    <span class="n">UDTValue</span> <span class="nf">newUDTValue</span><span class="p">(</span><span class="n">String</span> <span class="n">udtName</span><span class="p">);</span>
+    <span class="n">TupleValue</span> <span class="nf">newArgTupleValue</span><span class="p">(</span><span class="n">String</span> <span class="n">argName</span><span class="p">);</span>
+    <span class="n">TupleValue</span> <span class="nf">newArgTupleValue</span><span class="p">(</span><span class="kt">int</span> <span class="n">argNum</span><span class="p">);</span>
+    <span class="n">TupleValue</span> <span class="nf">newReturnTupleValue</span><span class="p">();</span>
+    <span class="n">TupleValue</span> <span class="nf">newTupleValue</span><span class="p">(</span><span class="n">String</span> <span class="n">cqlDefinition</span><span class="p">);</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>Java UDFs already have some imports for common interfaces and classes defined. These imports are:</p>
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.nio.ByteBuffer</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.Set</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.cassandra.cql3.functions.UDFContext</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">com.datastax.driver.core.TypeCodec</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">com.datastax.driver.core.TupleValue</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">com.datastax.driver.core.UDTValue</span><span class="o">;</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.nio.ByteBuffer</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Set</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.cassandra.cql3.functions.UDFContext</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.datastax.driver.core.TypeCodec</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.datastax.driver.core.TupleValue</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.datastax.driver.core.UDTValue</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>Please note, that these convenience imports are not available for script UDFs.</p>
@@ -623,11 +623,11 @@ statement):</p>
     <span class="k">RETURNS</span> <span class="k">tuple</span>
     <span class="k">LANGUAGE</span> <span class="n">java</span>
     <span class="k">AS</span> <span class="s">$$</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">val</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">state</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">state</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="mi">0</span><span class="o">)+</span><span class="mi">1</span><span class="o">);</span>
-            <span class="n">state</span><span class="o">.</span><span class="na">setLong</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">state</span><span class="o">.</span><span class="na">getLong</span><span class="o">(</span><span class="mi">1</span><span class="o">)+</span><span class="n">val</span><span class="o">.</span><span class="na">intValue</span><span class="o">());</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">state</span><span class="o">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">val</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">state</span><span class="p">.</span><span class="na">setInt</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">state</span><span class="p">.</span><span class="na">getInt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+            <span class="n">state</span><span class="p">.</span><span class="na">setLong</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">state</span><span class="p">.</span><span class="na">getLong</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">val</span><span class="p">.</span><span class="na">intValue</span><span class="p">());</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">state</span><span class="p">;</span>
     <span class="s">$$</span><span class="p">;</span>
 
 <span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="n">averageFinal</span> <span class="p">(</span><span class="n">state</span> <span class="k">tuple</span><span class="o">&lt;</span><span class="nb">int</span><span class="p">,</span><span class="nb">bigint</span><span class="o">&gt;</span><span class="p">)</span>
@@ -635,11 +635,11 @@ statement):</p>
     <span class="k">RETURNS</span> <span class="nb">double</span>
     <span class="k">LANGUAGE</span> <span class="n">java</span>
     <span class="k">AS</span> <span class="s">$$</span>
-        <span class="kt">double</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">state</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="na">getLong</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
-        <span class="n">r</span> <span class="o">/=</span> <span class="n">state</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
-        <span class="k">return</span> <span class="n">Double</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">r</span><span class="o">);</span>
+        <span class="kt">double</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="na">getInt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">state</span><span class="p">.</span><span class="na">getLong</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="n">r</span> <span class="o">/=</span> <span class="n">state</span><span class="p">.</span><span class="na">getInt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">Double</span><span class="p">.</span><span class="na">valueOf</span><span class="p">(</span><span class="n">r</span><span class="p">);</span>
     <span class="s">$$</span><span class="p">;</span>
 
 <span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">AGGREGATE</span> <span class="n">average</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>

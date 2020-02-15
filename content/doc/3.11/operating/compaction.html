@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="./../../../css/sphinx.css">
   
 
-   <link rel="top" title="Apache Cassandra Documentation v3.11.3" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Bloom Filters" href="bloom_filters.html"/> <link rel="prev" title="Hints" href="hints.html"/> 
+   <link rel="top" title="Apache Cassandra Documentation v3.11.6" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Bloom Filters" href="bloom_filters.html"/> <link rel="prev" title="Hints" href="hints.html"/> 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
   
   <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
@@ -209,7 +209,7 @@ bootstrapped since that node will take ownership of some ranges from those nodes
 <dd>after repair the ranges that were actually repaired are split out of the sstables that existed when repair started.</dd>
 <dt>Sub range compaction</dt>
 <dd>It is possible to only compact a given sub range - this could be useful if you know a token that has been
-misbehaving - either gathering many updates or many deletes. (<code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">compact</span> <span class="pre">-st</span> <span class="pre">x</span> <span class="pre">-et</span> <span class="pre">y</span></code>) will pick
+misbehaving - either gathering many updates or many deletes. (<code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">compact</span> <span class="pre">-st</span> <span class="pre">x</span> <span class="pre">-et</span> <span class="pre">y</span></code>) will pick
 all sstables containing the range between x and y and issue a compaction for those sstables. For STCS this will
 most likely include all sstables but with LCS it can issue the compaction for a subset of the sstables. With LCS
 the resulting sstable will end up in L0.</dd>
@@ -218,7 +218,7 @@ the resulting sstable will end up in L0.</dd>
 <div class="section" id="when-is-a-minor-compaction-triggered">
 <h2>When is a minor compaction triggered?<a class="headerlink" href="#when-is-a-minor-compaction-triggered" title="Permalink to this headline">¶</a></h2>
 <p>#  When an sstable is added to the node through flushing/streaming etc.
-#  When autocompaction is enabled after being disabled (<code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">enableautocompaction</span></code>)
+#  When autocompaction is enabled after being disabled (<code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">enableautocompaction</span></code>)
 #  When compaction adds new sstables.
 #  A check for new minor compactions every 5 minutes.</p>
 </div>
@@ -240,17 +240,17 @@ because of the distributed nature of Cassandra.</p>
 <div class="section" id="deletes-without-tombstones">
 <h3>Deletes without tombstones<a class="headerlink" href="#deletes-without-tombstones" title="Permalink to this headline">¶</a></h3>
 <p>Imagine a three node cluster which has the value [A] replicated to every node.:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[A], [A], [A]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[A], [A], [A]
 </pre></div>
 </div>
 <p>If one of the nodes fails and and our delete operation only removes existing values we can end up with a cluster that
 looks like:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[], [], [A]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[], [], [A]
 </pre></div>
 </div>
 <p>Then a repair operation would replace the value of [A] back onto the two
 nodes which are missing the value.:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[A], [A], [A]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[A], [A], [A]
 </pre></div>
 </div>
 <p>This would cause our data to be resurrected even though it had been
@@ -259,51 +259,51 @@ deleted.</p>
 <div class="section" id="deletes-with-tombstones">
 <h3>Deletes with Tombstones<a class="headerlink" href="#deletes-with-tombstones" title="Permalink to this headline">¶</a></h3>
 <p>Starting again with a three node cluster which has the value [A] replicated to every node.:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[A], [A], [A]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[A], [A], [A]
 </pre></div>
 </div>
 <p>If instead of removing data we add a tombstone record, our single node failure situation will look like this.:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[A, Tombstone[A]], [A, Tombstone[A]], [A]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[A, Tombstone[A]], [A, Tombstone[A]], [A]
 </pre></div>
 </div>
 <p>Now when we issue a repair the Tombstone will be copied to the replica, rather than the deleted data being
 resurrected.:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[A, Tombstone[A]], [A, Tombstone[A]], [A, Tombstone[A]]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[A, Tombstone[A]], [A, Tombstone[A]], [A, Tombstone[A]]
 </pre></div>
 </div>
 <p>Our repair operation will correctly put the state of the system to what we expect with the record [A] marked as deleted
 on all nodes. This does mean we will end up accruing Tombstones which will permanently accumulate disk space. To avoid
-keeping tombstones forever we have a parameter known as <code class="docutils literal"><span class="pre">gc_grace_seconds</span></code> for every table in Cassandra.</p>
+keeping tombstones forever we have a parameter known as <code class="docutils literal notranslate"><span class="pre">gc_grace_seconds</span></code> for every table in Cassandra.</p>
 </div>
 <div class="section" id="the-gc-grace-seconds-parameter-and-tombstone-removal">
 <h3>The gc_grace_seconds parameter and Tombstone Removal<a class="headerlink" href="#the-gc-grace-seconds-parameter-and-tombstone-removal" title="Permalink to this headline">¶</a></h3>
-<p>The table level <code class="docutils literal"><span class="pre">gc_grace_seconds</span></code> parameter controls how long Cassandra will retain tombstones through compaction
+<p>The table level <code class="docutils literal notranslate"><span class="pre">gc_grace_seconds</span></code> parameter controls how long Cassandra will retain tombstones through compaction
 events before finally removing them. This duration should directly reflect the amount of time a user expects to allow
-before recovering a failed node. After <code class="docutils literal"><span class="pre">gc_grace_seconds</span></code> has expired the tombstone may be removed (meaning there will
+before recovering a failed node. After <code class="docutils literal notranslate"><span class="pre">gc_grace_seconds</span></code> has expired the tombstone may be removed (meaning there will
 no longer be any record that a certain piece of data was deleted), but as a tombstone can live in one sstable and the
 data it covers in another, a compaction must also include both sstable for a tombstone to be removed. More precisely, to
 be able to drop an actual tombstone the following needs to be true;</p>
 <ul class="simple">
-<li>The tombstone must be older than <code class="docutils literal"><span class="pre">gc_grace_seconds</span></code></li>
+<li>The tombstone must be older than <code class="docutils literal notranslate"><span class="pre">gc_grace_seconds</span></code></li>
 <li>If partition X contains the tombstone, the sstable containing the partition plus all sstables containing data older
-than the tombstone containing X must be included in the same compaction. We don&#8217;t need to care if the partition is in
+than the tombstone containing X must be included in the same compaction. We don’t need to care if the partition is in
 an sstable if we can guarantee that all data in that sstable is newer than the tombstone. If the tombstone is older
 than the data it cannot shadow that data.</li>
-<li>If the option <code class="docutils literal"><span class="pre">only_purge_repaired_tombstones</span></code> is enabled, tombstones are only removed if the data has also been
+<li>If the option <code class="docutils literal notranslate"><span class="pre">only_purge_repaired_tombstones</span></code> is enabled, tombstones are only removed if the data has also been
 repaired.</li>
 </ul>
-<p>If a node remains down or disconnected for longer than <code class="docutils literal"><span class="pre">gc_grace_seconds</span></code> it&#8217;s deleted data will be repaired back to
-the other nodes and re-appear in the cluster. This is basically the same as in the &#8220;Deletes without Tombstones&#8221; section.
-Note that tombstones will not be removed until a compaction event even if <code class="docutils literal"><span class="pre">gc_grace_seconds</span></code> has elapsed.</p>
-<p>The default value for <code class="docutils literal"><span class="pre">gc_grace_seconds</span></code> is 864000 which is equivalent to 10 days. This can be set when creating or
-altering a table using <code class="docutils literal"><span class="pre">WITH</span> <span class="pre">gc_grace_seconds</span></code>.</p>
+<p>If a node remains down or disconnected for longer than <code class="docutils literal notranslate"><span class="pre">gc_grace_seconds</span></code> it’s deleted data will be repaired back to
+the other nodes and re-appear in the cluster. This is basically the same as in the “Deletes without Tombstones” section.
+Note that tombstones will not be removed until a compaction event even if <code class="docutils literal notranslate"><span class="pre">gc_grace_seconds</span></code> has elapsed.</p>
+<p>The default value for <code class="docutils literal notranslate"><span class="pre">gc_grace_seconds</span></code> is 864000 which is equivalent to 10 days. This can be set when creating or
+altering a table using <code class="docutils literal notranslate"><span class="pre">WITH</span> <span class="pre">gc_grace_seconds</span></code>.</p>
 </div>
 </div>
 <div class="section" id="ttl">
 <h2>TTL<a class="headerlink" href="#ttl" title="Permalink to this headline">¶</a></h2>
 <p>Data in Cassandra can have an additional property called time to live - this is used to automatically drop data that has
 expired once the time is reached. Once the TTL has expired the data is converted to a tombstone which stays around for
-at least <code class="docutils literal"><span class="pre">gc_grace_seconds</span></code>. Note that if you mix data with TTL and data without TTL (or just different length of the
+at least <code class="docutils literal notranslate"><span class="pre">gc_grace_seconds</span></code>. Note that if you mix data with TTL and data without TTL (or just different length of the
 TTL) Cassandra will have a hard time dropping the tombstones created since the partition might span many sstables and
 not all are compacted at once.</p>
 </div>
@@ -312,9 +312,9 @@ not all are compacted at once.</p>
 <p>If an sstable contains only tombstones and it is guaranteed that that sstable is not shadowing data in any other sstable
 compaction can drop that sstable. If you see sstables with only tombstones (note that TTL:ed data is considered
 tombstones once the time to live has expired) but it is not being dropped by compaction, it is likely that other
-sstables contain older data. There is a tool called <code class="docutils literal"><span class="pre">sstableexpiredblockers</span></code> that will list which sstables are
+sstables contain older data. There is a tool called <code class="docutils literal notranslate"><span class="pre">sstableexpiredblockers</span></code> that will list which sstables are
 droppable and which are blocking them from being dropped. This is especially useful for time series compaction with
-<code class="docutils literal"><span class="pre">TimeWindowCompactionStrategy</span></code> (and the deprecated <code class="docutils literal"><span class="pre">DateTieredCompactionStrategy</span></code>).</p>
+<code class="docutils literal notranslate"><span class="pre">TimeWindowCompactionStrategy</span></code> (and the deprecated <code class="docutils literal notranslate"><span class="pre">DateTieredCompactionStrategy</span></code>).</p>
 </div>
 <div class="section" id="repaired-unrepaired-data">
 <h2>Repaired/unrepaired data<a class="headerlink" href="#repaired-unrepaired-data" title="Permalink to this headline">¶</a></h2>
@@ -349,34 +349,34 @@ more data directories backed by the big disk.</li>
 sstables with very many tombstones and run single sstable compaction on that sstable in hope of being able to drop
 tombstones in that sstable. Before starting this it is also checked how likely it is that any tombstones will actually
 will be able to be dropped how much this sstable overlaps with other sstables. To avoid most of these checks the
-compaction option <code class="docutils literal"><span class="pre">unchecked_tombstone_compaction</span></code> can be enabled.</p>
+compaction option <code class="docutils literal notranslate"><span class="pre">unchecked_tombstone_compaction</span></code> can be enabled.</p>
 </div>
 <div class="section" id="common-options">
 <span id="compaction-options"></span><h2>Common options<a class="headerlink" href="#common-options" title="Permalink to this headline">¶</a></h2>
 <p>There is a number of common options for all the compaction strategies;</p>
 <dl class="docutils">
-<dt><code class="docutils literal"><span class="pre">enabled</span></code> (default: true)</dt>
-<dd>Whether minor compactions should run. Note that you can have &#8216;enabled&#8217;: true as a compaction option and then do
-&#8216;nodetool enableautocompaction&#8217; to start running compactions.</dd>
-<dt><code class="docutils literal"><span class="pre">tombstone_threshold</span></code> (default: 0.2)</dt>
+<dt><code class="docutils literal notranslate"><span class="pre">enabled</span></code> (default: true)</dt>
+<dd>Whether minor compactions should run. Note that you can have ‘enabled’: true as a compaction option and then do
+‘nodetool enableautocompaction’ to start running compactions.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">tombstone_threshold</span></code> (default: 0.2)</dt>
 <dd>How much of the sstable should be tombstones for us to consider doing a single sstable compaction of that sstable.</dd>
-<dt><code class="docutils literal"><span class="pre">tombstone_compaction_interval</span></code> (default: 86400s (1 day))</dt>
+<dt><code class="docutils literal notranslate"><span class="pre">tombstone_compaction_interval</span></code> (default: 86400s (1 day))</dt>
 <dd>Since it might not be possible to drop any tombstones when doing a single sstable compaction we need to make sure
 that one sstable is not constantly getting recompacted - this option states how often we should try for a given
 sstable.</dd>
-<dt><code class="docutils literal"><span class="pre">log_all</span></code> (default: false)</dt>
+<dt><code class="docutils literal notranslate"><span class="pre">log_all</span></code> (default: false)</dt>
 <dd>New detailed compaction logging, see <a class="reference internal" href="#detailed-compaction-logging"><span class="std std-ref">below</span></a>.</dd>
-<dt><code class="docutils literal"><span class="pre">unchecked_tombstone_compaction</span></code> (default: false)</dt>
+<dt><code class="docutils literal notranslate"><span class="pre">unchecked_tombstone_compaction</span></code> (default: false)</dt>
 <dd>The single sstable compaction has quite strict checks for whether it should be started, this option disables those
 checks and for some usecases this might be needed.  Note that this does not change anything for the actual
 compaction, tombstones are only dropped if it is safe to do so - it might just rewrite an sstable without being able
 to drop any tombstones.</dd>
-<dt><code class="docutils literal"><span class="pre">only_purge_repaired_tombstone</span></code> (default: false)</dt>
+<dt><code class="docutils literal notranslate"><span class="pre">only_purge_repaired_tombstone</span></code> (default: false)</dt>
 <dd>Option to enable the extra safety of making sure that tombstones are only dropped if the data has been repaired.</dd>
-<dt><code class="docutils literal"><span class="pre">min_threshold</span></code> (default: 4)</dt>
-<dd>Lower limit of number of sstables before a compaction is triggered. Not used for <code class="docutils literal"><span class="pre">LeveledCompactionStrategy</span></code>.</dd>
-<dt><code class="docutils literal"><span class="pre">max_threshold</span></code> (default: 32)</dt>
-<dd>Upper limit of number of sstables before a compaction is triggered. Not used for <code class="docutils literal"><span class="pre">LeveledCompactionStrategy</span></code>.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">min_threshold</span></code> (default: 4)</dt>
+<dd>Lower limit of number of sstables before a compaction is triggered. Not used for <code class="docutils literal notranslate"><span class="pre">LeveledCompactionStrategy</span></code>.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">max_threshold</span></code> (default: 32)</dt>
+<dd>Upper limit of number of sstables before a compaction is triggered. Not used for <code class="docutils literal notranslate"><span class="pre">LeveledCompactionStrategy</span></code>.</dd>
 </dl>
 <p>Further, see the section on each strategy for specific additional options.</p>
 </div>
@@ -384,18 +384,18 @@ to drop any tombstones.</dd>
 <h2>Compaction nodetool commands<a class="headerlink" href="#compaction-nodetool-commands" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference internal" href="../tools/nodetool.html#nodetool"><span class="std std-ref">nodetool</span></a> utility provides a number of commands related to compaction:</p>
 <dl class="docutils">
-<dt><code class="docutils literal"><span class="pre">enableautocompaction</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">enableautocompaction</span></code></dt>
 <dd>Enable compaction.</dd>
-<dt><code class="docutils literal"><span class="pre">disableautocompaction</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">disableautocompaction</span></code></dt>
 <dd>Disable compaction.</dd>
-<dt><code class="docutils literal"><span class="pre">setcompactionthroughput</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">setcompactionthroughput</span></code></dt>
 <dd>How fast compaction should run at most - defaults to 16MB/s, but note that it is likely not possible to reach this
 throughput.</dd>
-<dt><code class="docutils literal"><span class="pre">compactionstats</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">compactionstats</span></code></dt>
 <dd>Statistics about current and pending compactions.</dd>
-<dt><code class="docutils literal"><span class="pre">compactionhistory</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">compactionhistory</span></code></dt>
 <dd>List details about the last compactions.</dd>
-<dt><code class="docutils literal"><span class="pre">setcompactionthreshold</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">setcompactionthreshold</span></code></dt>
 <dd>Set the min/max sstable count for when to trigger compaction, defaults to 4/32.</dd>
 </dl>
 </div>
@@ -403,13 +403,13 @@ throughput.</dd>
 <h2>Switching the compaction strategy and options using JMX<a class="headerlink" href="#switching-the-compaction-strategy-and-options-using-jmx" title="Permalink to this headline">¶</a></h2>
 <p>It is possible to switch compaction strategies and its options on just a single node using JMX, this is a great way to
 experiment with settings without affecting the whole cluster. The mbean is:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>org.apache.cassandra.db:type=ColumnFamilies,keyspace=&lt;keyspace_name&gt;,columnfamily=&lt;table_name&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>org.apache.cassandra.db:type=ColumnFamilies,keyspace=&lt;keyspace_name&gt;,columnfamily=&lt;table_name&gt;
 </pre></div>
 </div>
-<p>and the attribute to change is <code class="docutils literal"><span class="pre">CompactionParameters</span></code> or <code class="docutils literal"><span class="pre">CompactionParametersJson</span></code> if you use jconsole or jmc. The
+<p>and the attribute to change is <code class="docutils literal notranslate"><span class="pre">CompactionParameters</span></code> or <code class="docutils literal notranslate"><span class="pre">CompactionParametersJson</span></code> if you use jconsole or jmc. The
 syntax for the json version is the same as you would use in an <a class="reference internal" href="../cql/ddl.html#alter-table-statement"><span class="std std-ref">ALTER TABLE</span></a> statement -
 for example:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>{ &#39;class&#39;: &#39;LeveledCompactionStrategy&#39;, &#39;sstable_size_in_mb&#39;: 123, &#39;fanout_size&#39;: 10}
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{ &#39;class&#39;: &#39;LeveledCompactionStrategy&#39;, &#39;sstable_size_in_mb&#39;: 123, &#39;fanout_size&#39;: 10}
 </pre></div>
 </div>
 <p>The setting is kept until someone executes an <a class="reference internal" href="../cql/ddl.html#alter-table-statement"><span class="std std-ref">ALTER TABLE</span></a> that touches the compaction
@@ -417,34 +417,34 @@ settings or restarts the node.</p>
 </div>
 <div class="section" id="more-detailed-compaction-logging">
 <span id="detailed-compaction-logging"></span><h2>More detailed compaction logging<a class="headerlink" href="#more-detailed-compaction-logging" title="Permalink to this headline">¶</a></h2>
-<p>Enable with the compaction option <code class="docutils literal"><span class="pre">log_all</span></code> and a more detailed compaction log file will be produced in your log
+<p>Enable with the compaction option <code class="docutils literal notranslate"><span class="pre">log_all</span></code> and a more detailed compaction log file will be produced in your log
 directory.</p>
 </div>
 <div class="section" id="size-tiered-compaction-strategy">
 <span id="stcs"></span><h2>Size Tiered Compaction Strategy<a class="headerlink" href="#size-tiered-compaction-strategy" title="Permalink to this headline">¶</a></h2>
-<p>The basic idea of <code class="docutils literal"><span class="pre">SizeTieredCompactionStrategy</span></code> (STCS) is to merge sstables of approximately the same size. All
+<p>The basic idea of <code class="docutils literal notranslate"><span class="pre">SizeTieredCompactionStrategy</span></code> (STCS) is to merge sstables of approximately the same size. All
 sstables are put in different buckets depending on their size. An sstable is added to the bucket if size of the sstable
-is within <code class="docutils literal"><span class="pre">bucket_low</span></code> and <code class="docutils literal"><span class="pre">bucket_high</span></code> of the current average size of the sstables already in the bucket. This
+is within <code class="docutils literal notranslate"><span class="pre">bucket_low</span></code> and <code class="docutils literal notranslate"><span class="pre">bucket_high</span></code> of the current average size of the sstables already in the bucket. This
 will create several buckets and the most interesting of those buckets will be compacted. The most interesting one is
-decided by figuring out which bucket&#8217;s sstables takes the most reads.</p>
+decided by figuring out which bucket’s sstables takes the most reads.</p>
 <div class="section" id="major-compaction">
 <h3>Major compaction<a class="headerlink" href="#major-compaction" title="Permalink to this headline">¶</a></h3>
 <p>When running a major compaction with STCS you will end up with two sstables per data directory (one for repaired data
 and one for unrepaired data). There is also an option (-s) to do a major compaction that splits the output into several
-sstables. The sizes of the sstables are approximately 50%, 25%, 12.5%... of the total size.</p>
+sstables. The sizes of the sstables are approximately 50%, 25%, 12.5%… of the total size.</p>
 </div>
 <div class="section" id="stcs-options">
 <span id="id2"></span><h3>STCS options<a class="headerlink" href="#stcs-options" title="Permalink to this headline">¶</a></h3>
 <dl class="docutils">
-<dt><code class="docutils literal"><span class="pre">min_sstable_size</span></code> (default: 50MB)</dt>
+<dt><code class="docutils literal notranslate"><span class="pre">min_sstable_size</span></code> (default: 50MB)</dt>
 <dd>Sstables smaller than this are put in the same bucket.</dd>
-<dt><code class="docutils literal"><span class="pre">bucket_low</span></code> (default: 0.5)</dt>
+<dt><code class="docutils literal notranslate"><span class="pre">bucket_low</span></code> (default: 0.5)</dt>
 <dd>How much smaller than the average size of a bucket a sstable should be before not being included in the bucket. That
-is, if <code class="docutils literal"><span class="pre">bucket_low</span> <span class="pre">*</span> <span class="pre">avg_bucket_size</span> <span class="pre">&lt;</span> <span class="pre">sstable_size</span></code> (and the <code class="docutils literal"><span class="pre">bucket_high</span></code> condition holds, see below), then
+is, if <code class="docutils literal notranslate"><span class="pre">bucket_low</span> <span class="pre">*</span> <span class="pre">avg_bucket_size</span> <span class="pre">&lt;</span> <span class="pre">sstable_size</span></code> (and the <code class="docutils literal notranslate"><span class="pre">bucket_high</span></code> condition holds, see below), then
 the sstable is added to the bucket.</dd>
-<dt><code class="docutils literal"><span class="pre">bucket_high</span></code> (default: 1.5)</dt>
+<dt><code class="docutils literal notranslate"><span class="pre">bucket_high</span></code> (default: 1.5)</dt>
 <dd>How much bigger than the average size of a bucket a sstable should be before not being included in the bucket. That
-is, if <code class="docutils literal"><span class="pre">sstable_size</span> <span class="pre">&lt;</span> <span class="pre">bucket_high</span> <span class="pre">*</span> <span class="pre">avg_bucket_size</span></code> (and the <code class="docutils literal"><span class="pre">bucket_low</span></code> condition holds, see above), then
+is, if <code class="docutils literal notranslate"><span class="pre">sstable_size</span> <span class="pre">&lt;</span> <span class="pre">bucket_high</span> <span class="pre">*</span> <span class="pre">avg_bucket_size</span></code> (and the <code class="docutils literal notranslate"><span class="pre">bucket_low</span></code> condition holds, see above), then
 the sstable is added to the bucket.</dd>
 </dl>
 </div>
@@ -456,7 +456,7 @@ so that the next read will not have to touch as many sstables. This can cause wr
 </div>
 <div class="section" id="leveled-compaction-strategy">
 <span id="lcs"></span><h2>Leveled Compaction Strategy<a class="headerlink" href="#leveled-compaction-strategy" title="Permalink to this headline">¶</a></h2>
-<p>The idea of <code class="docutils literal"><span class="pre">LeveledCompactionStrategy</span></code> (LCS) is that all sstables are put into different levels where we guarantee
+<p>The idea of <code class="docutils literal notranslate"><span class="pre">LeveledCompactionStrategy</span></code> (LCS) is that all sstables are put into different levels where we guarantee
 that no overlapping sstables are in the same level. By overlapping we mean that the first/last token of a single sstable
 are never overlapping with other sstables. This means that for a SELECT we will only have to look for the partition key
 in a single sstable per level. Each level is 10x the size of the previous one and each sstable is 160MB by default. L0
@@ -466,9 +466,9 @@ This is done by always including all overlapping sstables in the next level. For
 we need to guarantee that we pick all overlapping sstables in L4 and make sure that no currently ongoing compactions
 will create overlap if we start that compaction. We can start many parallel compactions in a level if we guarantee that
 we wont create overlap. For L0 -&gt; L1 compactions we almost always need to include all L1 sstables since most L0 sstables
-cover the full range. We also can&#8217;t compact all L0 sstables with all L1 sstables in a single compaction since that can
+cover the full range. We also can’t compact all L0 sstables with all L1 sstables in a single compaction since that can
 use too much memory.</p>
-<p>When deciding which level to compact LCS checks the higher levels first (with LCS, a &#8220;higher&#8221; level is one with a higher
+<p>When deciding which level to compact LCS checks the higher levels first (with LCS, a “higher” level is one with a higher
 number, L0 being the lowest one) and if the level is behind a compaction will be started in that level.</p>
 <div class="section" id="id3">
 <h3>Major compaction<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
@@ -502,38 +502,38 @@ has not been involved.</p>
 <div class="section" id="lcs-options">
 <span id="id4"></span><h3>LCS options<a class="headerlink" href="#lcs-options" title="Permalink to this headline">¶</a></h3>
 <dl class="docutils">
-<dt><code class="docutils literal"><span class="pre">sstable_size_in_mb</span></code> (default: 160MB)</dt>
+<dt><code class="docutils literal notranslate"><span class="pre">sstable_size_in_mb</span></code> (default: 160MB)</dt>
 <dd>The target compressed (if using compression) sstable size - the sstables can end up being larger if there are very
 large partitions on the node.</dd>
-<dt><code class="docutils literal"><span class="pre">fanout_size</span></code> (default: 10)</dt>
+<dt><code class="docutils literal notranslate"><span class="pre">fanout_size</span></code> (default: 10)</dt>
 <dd>The target size of levels increases by this fanout_size multiplier. You can reduce the space amplification by tuning
 this option.</dd>
 </dl>
-<p>LCS also support the <code class="docutils literal"><span class="pre">cassandra.disable_stcs_in_l0</span></code> startup option (<code class="docutils literal"><span class="pre">-Dcassandra.disable_stcs_in_l0=true</span></code>) to avoid
+<p>LCS also support the <code class="docutils literal notranslate"><span class="pre">cassandra.disable_stcs_in_l0</span></code> startup option (<code class="docutils literal notranslate"><span class="pre">-Dcassandra.disable_stcs_in_l0=true</span></code>) to avoid
 doing STCS in L0.</p>
 </div>
 </div>
 <div class="section" id="time-window-compactionstrategy">
 <span id="twcs"></span><h2>Time Window CompactionStrategy<a class="headerlink" href="#time-window-compactionstrategy" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal"><span class="pre">TimeWindowCompactionStrategy</span></code> (TWCS) is designed specifically for workloads where it&#8217;s beneficial to have data on
+<p><code class="docutils literal notranslate"><span class="pre">TimeWindowCompactionStrategy</span></code> (TWCS) is designed specifically for workloads where it’s beneficial to have data on
 disk grouped by the timestamp of the data, a common goal when the workload is time-series in nature or when all data is
 written with a TTL. In an expiring/TTL workload, the contents of an entire SSTable likely expire at approximately the
 same time, allowing them to be dropped completely, and space reclaimed much more reliably than when using
-<code class="docutils literal"><span class="pre">SizeTieredCompactionStrategy</span></code> or <code class="docutils literal"><span class="pre">LeveledCompactionStrategy</span></code>. The basic concept is that
-<code class="docutils literal"><span class="pre">TimeWindowCompactionStrategy</span></code> will create 1 sstable per file for a given window, where a window is simply calculated
+<code class="docutils literal notranslate"><span class="pre">SizeTieredCompactionStrategy</span></code> or <code class="docutils literal notranslate"><span class="pre">LeveledCompactionStrategy</span></code>. The basic concept is that
+<code class="docutils literal notranslate"><span class="pre">TimeWindowCompactionStrategy</span></code> will create 1 sstable per file for a given window, where a window is simply calculated
 as the combination of two primary options:</p>
 <dl class="docutils">
-<dt><code class="docutils literal"><span class="pre">compaction_window_unit</span></code> (default: DAYS)</dt>
+<dt><code class="docutils literal notranslate"><span class="pre">compaction_window_unit</span></code> (default: DAYS)</dt>
 <dd>A Java TimeUnit (MINUTES, HOURS, or DAYS).</dd>
-<dt><code class="docutils literal"><span class="pre">compaction_window_size</span></code> (default: 1)</dt>
+<dt><code class="docutils literal notranslate"><span class="pre">compaction_window_size</span></code> (default: 1)</dt>
 <dd>The number of units that make up a window.</dd>
 </dl>
 <p>Taken together, the operator can specify windows of virtually any size, and <cite>TimeWindowCompactionStrategy</cite> will work to
 create a single sstable for writes within that window. For efficiency during writing, the newest window will be
 compacted using <cite>SizeTieredCompactionStrategy</cite>.</p>
-<p>Ideally, operators should select a <code class="docutils literal"><span class="pre">compaction_window_unit</span></code> and <code class="docutils literal"><span class="pre">compaction_window_size</span></code> pair that produces
+<p>Ideally, operators should select a <code class="docutils literal notranslate"><span class="pre">compaction_window_unit</span></code> and <code class="docutils literal notranslate"><span class="pre">compaction_window_size</span></code> pair that produces
 approximately 20-30 windows - if writing with a 90 day TTL, for example, a 3 Day window would be a reasonable choice
-(<code class="docutils literal"><span class="pre">'compaction_window_unit':'DAYS','compaction_window_size':3</span></code>).</p>
+(<code class="docutils literal notranslate"><span class="pre">'compaction_window_unit':'DAYS','compaction_window_size':3</span></code>).</p>
 <div class="section" id="timewindowcompactionstrategy-operational-concerns">
 <h3>TimeWindowCompactionStrategy Operational Concerns<a class="headerlink" href="#timewindowcompactionstrategy-operational-concerns" title="Permalink to this headline">¶</a></h3>
 <p>The primary motivation for TWCS is to separate data on disk by timestamp and to allow fully expired SSTables to drop
@@ -542,20 +542,20 @@ order, with new data and old data in the same SSTable. Out of order data can app
 <ul class="simple">
 <li>If the user mixes old data and new data in the traditional write path, the data will be comingled in the memtables
 and flushed into the same SSTable, where it will remain comingled.</li>
-<li>If the user&#8217;s read requests for old data cause read repairs that pull old data into the current memtable, that data
+<li>If the user’s read requests for old data cause read repairs that pull old data into the current memtable, that data
 will be comingled and flushed into the same SSTable.</li>
 </ul>
 <p>While TWCS tries to minimize the impact of comingled data, users should attempt to avoid this behavior.  Specifically,
-users should avoid queries that explicitly set the timestamp via CQL <code class="docutils literal"><span class="pre">USING</span> <span class="pre">TIMESTAMP</span></code>. Additionally, users should run
+users should avoid queries that explicitly set the timestamp via CQL <code class="docutils literal notranslate"><span class="pre">USING</span> <span class="pre">TIMESTAMP</span></code>. Additionally, users should run
 frequent repairs (which streams data in such a way that it does not become comingled), and disable background read
-repair by setting the table&#8217;s <code class="docutils literal"><span class="pre">read_repair_chance</span></code> and <code class="docutils literal"><span class="pre">dclocal_read_repair_chance</span></code> to 0.</p>
+repair by setting the table’s <code class="docutils literal notranslate"><span class="pre">read_repair_chance</span></code> and <code class="docutils literal notranslate"><span class="pre">dclocal_read_repair_chance</span></code> to 0.</p>
 </div>
 <div class="section" id="changing-timewindowcompactionstrategy-options">
 <h3>Changing TimeWindowCompactionStrategy Options<a class="headerlink" href="#changing-timewindowcompactionstrategy-options" title="Permalink to this headline">¶</a></h3>
-<p>Operators wishing to enable <code class="docutils literal"><span class="pre">TimeWindowCompactionStrategy</span></code> on existing data should consider running a major compaction
+<p>Operators wishing to enable <code class="docutils literal notranslate"><span class="pre">TimeWindowCompactionStrategy</span></code> on existing data should consider running a major compaction
 first, placing all existing data into a single (old) window. Subsequent newer writes will then create typical SSTables
 as expected.</p>
-<p>Operators wishing to change <code class="docutils literal"><span class="pre">compaction_window_unit</span></code> or <code class="docutils literal"><span class="pre">compaction_window_size</span></code> can do so, but may trigger
+<p>Operators wishing to change <code class="docutils literal notranslate"><span class="pre">compaction_window_unit</span></code> or <code class="docutils literal notranslate"><span class="pre">compaction_window_size</span></code> can do so, but may trigger
 additional compactions as adjacent windows are joined together. If the window size is decrease d (for example, from 24
 hours to 12 hours), then the existing SSTables will not be modified - TWCS can not split existing SSTables into multiple
 windows.</p>

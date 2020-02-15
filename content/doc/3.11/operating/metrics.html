@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="./../../../css/sphinx.css">
   
 
-   <link rel="top" title="Apache Cassandra Documentation v3.11.3" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Security" href="security.html"/> <link rel="prev" title="Bulk Loading" href="bulk_loading.html"/> 
+   <link rel="top" title="Apache Cassandra Documentation v3.11.6" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Security" href="security.html"/> <link rel="prev" title="Bulk Loading" href="bulk_loading.html"/> 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
   
   <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
@@ -189,28 +189,28 @@
 <h1>Monitoring<a class="headerlink" href="#monitoring" title="Permalink to this headline">¶</a></h1>
 <p>Metrics in Cassandra are managed using the <a class="reference external" href="http://metrics.dropwizard.io">Dropwizard Metrics</a> library. These metrics
 can be queried via JMX or pushed to external monitoring systems using a number of <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/getting-started/#other-reporting">built in</a> and <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/manual/third-party/">third party</a> reporter plugins.</p>
-<p>Metrics are collected for a single node. It&#8217;s up to the operator to use an external monitoring system to aggregate them.</p>
+<p>Metrics are collected for a single node. It’s up to the operator to use an external monitoring system to aggregate them.</p>
 <div class="section" id="metric-types">
 <h2>Metric Types<a class="headerlink" href="#metric-types" title="Permalink to this headline">¶</a></h2>
 <p>All metrics reported by cassandra fit into one of the following types.</p>
 <dl class="docutils">
-<dt><code class="docutils literal"><span class="pre">Gauge</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">Gauge</span></code></dt>
 <dd>An instantaneous measurement of a value.</dd>
-<dt><code class="docutils literal"><span class="pre">Counter</span></code></dt>
-<dd>A gauge for an <code class="docutils literal"><span class="pre">AtomicLong</span></code> instance. Typically this is consumed by monitoring the change since the last call to
+<dt><code class="docutils literal notranslate"><span class="pre">Counter</span></code></dt>
+<dd>A gauge for an <code class="docutils literal notranslate"><span class="pre">AtomicLong</span></code> instance. Typically this is consumed by monitoring the change since the last call to
 see if there is a large increase compared to the norm.</dd>
-<dt><code class="docutils literal"><span class="pre">Histogram</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">Histogram</span></code></dt>
 <dd><p class="first">Measures the statistical distribution of values in a stream of data.</p>
 <p class="last">In addition to minimum, maximum, mean, etc., it also measures median, 75th, 90th, 95th, 98th, 99th, and 99.9th
 percentiles.</p>
 </dd>
-<dt><code class="docutils literal"><span class="pre">Timer</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">Timer</span></code></dt>
 <dd>Measures both the rate that a particular piece of code is called and the histogram of its duration.</dd>
-<dt><code class="docutils literal"><span class="pre">Latency</span></code></dt>
-<dd>Special type that tracks latency (in microseconds) with a <code class="docutils literal"><span class="pre">Timer</span></code> plus a <code class="docutils literal"><span class="pre">Counter</span></code> that tracks the total latency
+<dt><code class="docutils literal notranslate"><span class="pre">Latency</span></code></dt>
+<dd>Special type that tracks latency (in microseconds) with a <code class="docutils literal notranslate"><span class="pre">Timer</span></code> plus a <code class="docutils literal notranslate"><span class="pre">Counter</span></code> that tracks the total latency
 accrued since starting. The former is useful if you track the change in total latency since the last check. Each
-metric name of this type will have &#8216;Latency&#8217; and &#8216;TotalLatency&#8217; appended to it.</dd>
-<dt><code class="docutils literal"><span class="pre">Meter</span></code></dt>
+metric name of this type will have ‘Latency’ and ‘TotalLatency’ appended to it.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Meter</span></code></dt>
 <dd>A meter metric which measures mean throughput and one-, five-, and fifteen-minute exponentially-weighted moving
 average throughputs.</dd>
 </dl>
@@ -218,17 +218,17 @@ average throughputs.</dd>
 <div class="section" id="table-metrics">
 <h2>Table Metrics<a class="headerlink" href="#table-metrics" title="Permalink to this headline">¶</a></h2>
 <p>Each table in Cassandra has metrics responsible for tracking its state and performance.</p>
-<p>The metric names are all appended with the specific <code class="docutils literal"><span class="pre">Keyspace</span></code> and <code class="docutils literal"><span class="pre">Table</span></code> name.</p>
+<p>The metric names are all appended with the specific <code class="docutils literal notranslate"><span class="pre">Keyspace</span></code> and <code class="docutils literal notranslate"><span class="pre">Table</span></code> name.</p>
 <p>Reported name format:</p>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics.Table.&lt;MetricName&gt;.&lt;Keyspace&gt;.&lt;Table&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.Table.&lt;MetricName&gt;.&lt;Keyspace&gt;.&lt;Table&gt;</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=Table</span> <span class="pre">keyspace=&lt;Keyspace&gt;</span> <span class="pre">scope=&lt;Table&gt;</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=Table</span> <span class="pre">keyspace=&lt;Keyspace&gt;</span> <span class="pre">scope=&lt;Table&gt;</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
 </dl>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">There is a special table called &#8216;<code class="docutils literal"><span class="pre">all</span></code>&#8216; without a keyspace. This represents the aggregation of metrics across
+<p class="last">There is a special table called ‘<code class="docutils literal notranslate"><span class="pre">all</span></code>’ without a keyspace. This represents the aggregation of metrics across
 <strong>all</strong> tables and keyspaces on the node.</p>
 </div>
 <table border="1" class="docutils">
@@ -342,7 +342,7 @@ average throughputs.</dd>
 </tr>
 <tr class="row-even"><td>TotalDiskSpaceUsed</td>
 <td>Counter</td>
-<td>Total disk space used by SSTables belonging to this table, including obsolete ones waiting to be GC&#8217;d.</td>
+<td>Total disk space used by SSTables belonging to this table, including obsolete ones waiting to be GC’d.</td>
 </tr>
 <tr class="row-odd"><td>MinPartitionSize</td>
 <td>Gauge&lt;Long&gt;</td>
@@ -358,11 +358,11 @@ average throughputs.</dd>
 </tr>
 <tr class="row-even"><td>BloomFilterFalsePositives</td>
 <td>Gauge&lt;Long&gt;</td>
-<td>Number of false positives on table&#8217;s bloom filter.</td>
+<td>Number of false positives on table’s bloom filter.</td>
 </tr>
 <tr class="row-odd"><td>BloomFilterFalseRatio</td>
 <td>Gauge&lt;Double&gt;</td>
-<td>False positive ratio of table&#8217;s bloom filter.</td>
+<td>False positive ratio of table’s bloom filter.</td>
 </tr>
 <tr class="row-even"><td>BloomFilterDiskSpaceUsed</td>
 <td>Gauge&lt;Long&gt;</td>
@@ -454,28 +454,28 @@ average throughputs.</dd>
 <div class="section" id="keyspace-metrics">
 <h2>Keyspace Metrics<a class="headerlink" href="#keyspace-metrics" title="Permalink to this headline">¶</a></h2>
 <p>Each keyspace in Cassandra has metrics responsible for tracking its state and performance.</p>
-<p>These metrics are the same as the <code class="docutils literal"><span class="pre">Table</span> <span class="pre">Metrics</span></code> above, only they are aggregated at the Keyspace level.</p>
+<p>These metrics are the same as the <code class="docutils literal notranslate"><span class="pre">Table</span> <span class="pre">Metrics</span></code> above, only they are aggregated at the Keyspace level.</p>
 <p>Reported name format:</p>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics.keyspace.&lt;MetricName&gt;.&lt;Keyspace&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.keyspace.&lt;MetricName&gt;.&lt;Keyspace&gt;</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=Keyspace</span> <span class="pre">scope=&lt;Keyspace&gt;</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=Keyspace</span> <span class="pre">scope=&lt;Keyspace&gt;</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
 </dl>
 </div>
 <div class="section" id="threadpool-metrics">
 <h2>ThreadPool Metrics<a class="headerlink" href="#threadpool-metrics" title="Permalink to this headline">¶</a></h2>
 <p>Cassandra splits work of a particular type into its own thread pool.  This provides back-pressure and asynchrony for
-requests on a node.  It&#8217;s important to monitor the state of these thread pools since they can tell you how saturated a
+requests on a node.  It’s important to monitor the state of these thread pools since they can tell you how saturated a
 node is.</p>
-<p>The metric names are all appended with the specific <code class="docutils literal"><span class="pre">ThreadPool</span></code> name.  The thread pools are also categorized under a
+<p>The metric names are all appended with the specific <code class="docutils literal notranslate"><span class="pre">ThreadPool</span></code> name.  The thread pools are also categorized under a
 specific type.</p>
 <p>Reported name format:</p>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics.ThreadPools.&lt;MetricName&gt;.&lt;Path&gt;.&lt;ThreadPoolName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.ThreadPools.&lt;MetricName&gt;.&lt;Path&gt;.&lt;ThreadPoolName&gt;</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=ThreadPools</span> <span class="pre">scope=&lt;ThreadPoolName&gt;</span> <span class="pre">type=&lt;Type&gt;</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=ThreadPools</span> <span class="pre">scope=&lt;ThreadPoolName&gt;</span> <span class="pre">type=&lt;Type&gt;</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
 </dl>
 <table border="1" class="docutils">
 <colgroup>
@@ -628,13 +628,13 @@ specific type.</p>
 <div class="section" id="client-request-metrics">
 <h2>Client Request Metrics<a class="headerlink" href="#client-request-metrics" title="Permalink to this headline">¶</a></h2>
 <p>Client requests have their own set of metrics that encapsulate the work happening at coordinator level.</p>
-<p>Different types of client requests are broken down by <code class="docutils literal"><span class="pre">RequestType</span></code>.</p>
+<p>Different types of client requests are broken down by <code class="docutils literal notranslate"><span class="pre">RequestType</span></code>.</p>
 <p>Reported name format:</p>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics.ClientRequest.&lt;MetricName&gt;.&lt;RequestType&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.ClientRequest.&lt;MetricName&gt;.&lt;RequestType&gt;</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=ClientRequest</span> <span class="pre">scope=&lt;RequestType&gt;</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=ClientRequest</span> <span class="pre">scope=&lt;RequestType&gt;</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
 </dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -905,13 +905,13 @@ specific type.</p>
 </div>
 <div class="section" id="cache-metrics">
 <h2>Cache Metrics<a class="headerlink" href="#cache-metrics" title="Permalink to this headline">¶</a></h2>
-<p>Cassandra caches have metrics to track the effectivness of the caches. Though the <code class="docutils literal"><span class="pre">Table</span> <span class="pre">Metrics</span></code> might be more useful.</p>
+<p>Cassandra caches have metrics to track the effectivness of the caches. Though the <code class="docutils literal notranslate"><span class="pre">Table</span> <span class="pre">Metrics</span></code> might be more useful.</p>
 <p>Reported name format:</p>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics.Cache.&lt;MetricName&gt;.&lt;CacheName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.Cache.&lt;MetricName&gt;.&lt;CacheName&gt;</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=Cache</span> <span class="pre">scope=&lt;CacheName&gt;</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=Cache</span> <span class="pre">scope=&lt;CacheName&gt;</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
 </dl>
 <table border="1" class="docutils">
 <colgroup>
@@ -1009,9 +1009,9 @@ specific type.</p>
 <p>Reported name format:</p>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics.CQL.&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.CQL.&lt;MetricName&gt;</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=CQL</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=CQL</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
 </dl>
 <table border="1" class="docutils">
 <colgroup>
@@ -1052,13 +1052,13 @@ specific type.</p>
 <div class="section" id="droppedmessage-metrics">
 <h2>DroppedMessage Metrics<a class="headerlink" href="#droppedmessage-metrics" title="Permalink to this headline">¶</a></h2>
 <p>Metrics specific to tracking dropped messages for different types of requests.
-Dropped writes are stored and retried by <code class="docutils literal"><span class="pre">Hinted</span> <span class="pre">Handoff</span></code></p>
+Dropped writes are stored and retried by <code class="docutils literal notranslate"><span class="pre">Hinted</span> <span class="pre">Handoff</span></code></p>
 <p>Reported name format:</p>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics.DroppedMessages.&lt;MetricName&gt;.&lt;Type&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.DroppedMessages.&lt;MetricName&gt;.&lt;Type&gt;</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=DroppedMetrics</span> <span class="pre">scope=&lt;Type&gt;</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=DroppedMetrics</span> <span class="pre">scope=&lt;Type&gt;</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
 </dl>
 <table border="1" class="docutils">
 <colgroup>
@@ -1137,14 +1137,14 @@ Dropped writes are stored and retried by <code class="docutils literal"><span cl
 </div>
 <div class="section" id="streaming-metrics">
 <h2>Streaming Metrics<a class="headerlink" href="#streaming-metrics" title="Permalink to this headline">¶</a></h2>
-<p>Metrics reported during <code class="docutils literal"><span class="pre">Streaming</span></code> operations, such as repair, bootstrap, rebuild.</p>
+<p>Metrics reported during <code class="docutils literal notranslate"><span class="pre">Streaming</span></code> operations, such as repair, bootstrap, rebuild.</p>
 <p>These metrics are specific to a peer endpoint, with the source node being the node you are pulling the metrics from.</p>
 <p>Reported name format:</p>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics.Streaming.&lt;MetricName&gt;.&lt;PeerIP&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.Streaming.&lt;MetricName&gt;.&lt;PeerIP&gt;</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=Streaming</span> <span class="pre">scope=&lt;PeerIP&gt;</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=Streaming</span> <span class="pre">scope=&lt;PeerIP&gt;</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
 </dl>
 <table border="1" class="docutils">
 <colgroup>
@@ -1172,13 +1172,13 @@ Dropped writes are stored and retried by <code class="docutils literal"><span cl
 </div>
 <div class="section" id="compaction-metrics">
 <h2>Compaction Metrics<a class="headerlink" href="#compaction-metrics" title="Permalink to this headline">¶</a></h2>
-<p>Metrics specific to <code class="docutils literal"><span class="pre">Compaction</span></code> work.</p>
+<p>Metrics specific to <code class="docutils literal notranslate"><span class="pre">Compaction</span></code> work.</p>
 <p>Reported name format:</p>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics.Compaction.&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.Compaction.&lt;MetricName&gt;</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=Compaction</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=Compaction</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
 </dl>
 <table border="1" class="docutils">
 <colgroup>
@@ -1211,20 +1211,20 @@ Dropped writes are stored and retried by <code class="docutils literal"><span cl
 </tr>
 <tr class="row-even"><td>PendingTasksByTableName</td>
 <td>Gauge&lt;Map&lt;String, Map&lt;String, Integer&gt;&gt;&gt;</td>
-<td>Estimated number of compactions remaining to perform, grouped by keyspace and then table name. This info is also kept in <code class="docutils literal"><span class="pre">Table</span> <span class="pre">Metrics</span></code>.</td>
+<td>Estimated number of compactions remaining to perform, grouped by keyspace and then table name. This info is also kept in <code class="docutils literal notranslate"><span class="pre">Table</span> <span class="pre">Metrics</span></code>.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="commitlog-metrics">
 <h2>CommitLog Metrics<a class="headerlink" href="#commitlog-metrics" title="Permalink to this headline">¶</a></h2>
-<p>Metrics specific to the <code class="docutils literal"><span class="pre">CommitLog</span></code></p>
+<p>Metrics specific to the <code class="docutils literal notranslate"><span class="pre">CommitLog</span></code></p>
 <p>Reported name format:</p>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics.CommitLog.&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.CommitLog.&lt;MetricName&gt;</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=CommitLog</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=CommitLog</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
 </dl>
 <table border="1" class="docutils">
 <colgroup>
@@ -1245,7 +1245,7 @@ Dropped writes are stored and retried by <code class="docutils literal"><span cl
 </tr>
 <tr class="row-odd"><td>PendingTasks</td>
 <td>Gauge&lt;Long&gt;</td>
-<td>Number of commit log messages written but yet to be fsync&#8217;d.</td>
+<td>Number of commit log messages written but yet to be fsync’d.</td>
 </tr>
 <tr class="row-even"><td>TotalCommitLogSize</td>
 <td>Gauge&lt;Long&gt;</td>
@@ -1268,9 +1268,9 @@ Dropped writes are stored and retried by <code class="docutils literal"><span cl
 <p>Reported name format:</p>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics.Storage.&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.Storage.&lt;MetricName&gt;</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=Storage</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=Storage</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
 </dl>
 <table border="1" class="docutils">
 <colgroup>
@@ -1306,14 +1306,14 @@ Dropped writes are stored and retried by <code class="docutils literal"><span cl
 </div>
 <div class="section" id="hintedhandoff-metrics">
 <h2>HintedHandoff Metrics<a class="headerlink" href="#hintedhandoff-metrics" title="Permalink to this headline">¶</a></h2>
-<p>Metrics specific to Hinted Handoff.  There are also some metrics related to hints tracked in <code class="docutils literal"><span class="pre">Storage</span> <span class="pre">Metrics</span></code></p>
+<p>Metrics specific to Hinted Handoff.  There are also some metrics related to hints tracked in <code class="docutils literal notranslate"><span class="pre">Storage</span> <span class="pre">Metrics</span></code></p>
 <p>These metrics include the peer endpoint <strong>in the metric name</strong></p>
 <p>Reported name format:</p>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics.HintedHandOffManager.&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.HintedHandOffManager.&lt;MetricName&gt;</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=HintedHandOffManager</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=HintedHandOffManager</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
 </dl>
 <table border="1" class="docutils">
 <colgroup>
@@ -1345,9 +1345,9 @@ Dropped writes are stored and retried by <code class="docutils literal"><span cl
 <p>Reported name format:</p>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics.Index.&lt;MetricName&gt;.RowIndexEntry</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.Index.&lt;MetricName&gt;.RowIndexEntry</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=Index</span> <span class="pre">scope=RowIndexEntry</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=Index</span> <span class="pre">scope=RowIndexEntry</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
 </dl>
 <table border="1" class="docutils">
 <colgroup>
@@ -1384,9 +1384,9 @@ lower by recycling on and off heap buffers.</p>
 <p>Reported name format:</p>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics.BufferPool.&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.BufferPool.&lt;MetricName&gt;</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=BufferPool</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=BufferPool</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
 </dl>
 <table border="1" class="docutils">
 <colgroup>
@@ -1418,9 +1418,9 @@ lower by recycling on and off heap buffers.</p>
 <p>Reported name format:</p>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics.Client.&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.Client.&lt;MetricName&gt;</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">org.apache.cassandra.metrics:type=Client</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=Client</span> <span class="pre">name=&lt;MetricName&gt;</span></code></dd>
 </dl>
 <table border="1" class="docutils">
 <colgroup>
@@ -1453,9 +1453,9 @@ lower by recycling on and off heap buffers.</p>
 <h3>BufferPool<a class="headerlink" href="#bufferpool" title="Permalink to this headline">¶</a></h3>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
-<dd><code class="docutils literal"><span class="pre">jvm.buffers.&lt;direct|mapped&gt;.&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">jvm.buffers.&lt;direct|mapped&gt;.&lt;MetricName&gt;</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">java.nio:type=BufferPool</span> <span class="pre">name=&lt;direct|mapped&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">java.nio:type=BufferPool</span> <span class="pre">name=&lt;direct|mapped&gt;</span></code></dd>
 </dl>
 <table border="1" class="docutils">
 <colgroup>
@@ -1489,9 +1489,9 @@ lower by recycling on and off heap buffers.</p>
 <h3>FileDescriptorRatio<a class="headerlink" href="#filedescriptorratio" title="Permalink to this headline">¶</a></h3>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
-<dd><code class="docutils literal"><span class="pre">jvm.fd.&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">jvm.fd.&lt;MetricName&gt;</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">java.lang:type=OperatingSystem</span> <span class="pre">name=&lt;OpenFileDescriptorCount|MaxFileDescriptorCount&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">java.lang:type=OperatingSystem</span> <span class="pre">name=&lt;OpenFileDescriptorCount|MaxFileDescriptorCount&gt;</span></code></dd>
 </dl>
 <table border="1" class="docutils">
 <colgroup>
@@ -1517,9 +1517,9 @@ lower by recycling on and off heap buffers.</p>
 <h3>GarbageCollector<a class="headerlink" href="#garbagecollector" title="Permalink to this headline">¶</a></h3>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
-<dd><code class="docutils literal"><span class="pre">jvm.gc.&lt;gc_type&gt;.&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">jvm.gc.&lt;gc_type&gt;.&lt;MetricName&gt;</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">java.lang:type=GarbageCollector</span> <span class="pre">name=&lt;gc_type&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">java.lang:type=GarbageCollector</span> <span class="pre">name=&lt;gc_type&gt;</span></code></dd>
 </dl>
 <table border="1" class="docutils">
 <colgroup>
@@ -1549,9 +1549,9 @@ lower by recycling on and off heap buffers.</p>
 <h3>Memory<a class="headerlink" href="#memory" title="Permalink to this headline">¶</a></h3>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
-<dd><code class="docutils literal"><span class="pre">jvm.memory.&lt;heap/non-heap/total&gt;.&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">jvm.memory.&lt;heap/non-heap/total&gt;.&lt;MetricName&gt;</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">java.lang:type=Memory</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">java.lang:type=Memory</span></code></dd>
 </dl>
 <table border="1" class="docutils">
 <colgroup>
@@ -1587,9 +1587,9 @@ lower by recycling on and off heap buffers.</p>
 <h3>MemoryPool<a class="headerlink" href="#memorypool" title="Permalink to this headline">¶</a></h3>
 <dl class="docutils">
 <dt><strong>Metric Name</strong></dt>
-<dd><code class="docutils literal"><span class="pre">jvm.memory.pools.&lt;memory_pool&gt;.&lt;MetricName&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">jvm.memory.pools.&lt;memory_pool&gt;.&lt;MetricName&gt;</span></code></dd>
 <dt><strong>JMX MBean</strong></dt>
-<dd><code class="docutils literal"><span class="pre">java.lang:type=MemoryPool</span> <span class="pre">name=&lt;memory_pool&gt;</span></code></dd>
+<dd><code class="docutils literal notranslate"><span class="pre">java.lang:type=MemoryPool</span> <span class="pre">name=&lt;memory_pool&gt;</span></code></dd>
 </dl>
 <table border="1" class="docutils">
 <colgroup>
@@ -1625,14 +1625,14 @@ lower by recycling on and off heap buffers.</p>
 <div class="section" id="jmx">
 <h2>JMX<a class="headerlink" href="#jmx" title="Permalink to this headline">¶</a></h2>
 <p>Any JMX based client can access metrics from cassandra.</p>
-<p>If you wish to access JMX metrics over http it&#8217;s possible to download <a class="reference external" href="http://mx4j.sourceforge.net/">Mx4jTool</a> and
-place <code class="docutils literal"><span class="pre">mx4j-tools.jar</span></code> into the classpath.  On startup you will see in the log:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>HttpAdaptor version 3.0.2 started on port 8081
+<p>If you wish to access JMX metrics over http it’s possible to download <a class="reference external" href="http://mx4j.sourceforge.net/">Mx4jTool</a> and
+place <code class="docutils literal notranslate"><span class="pre">mx4j-tools.jar</span></code> into the classpath.  On startup you will see in the log:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>HttpAdaptor version 3.0.2 started on port 8081
 </pre></div>
 </div>
 <p>To choose a different port (8081 is the default) or a different listen address (0.0.0.0 is not the default) edit
-<code class="docutils literal"><span class="pre">conf/cassandra-env.sh</span></code> and uncomment:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>#MX4J_ADDRESS=&quot;-Dmx4jaddress=0.0.0.0&quot;
+<code class="docutils literal notranslate"><span class="pre">conf/cassandra-env.sh</span></code> and uncomment:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#MX4J_ADDRESS=&quot;-Dmx4jaddress=0.0.0.0&quot;
 
 #MX4J_PORT=&quot;-Dmx4jport=8081&quot;
 </pre></div>
@@ -1643,10 +1643,10 @@ place <code class="docutils literal"><span class="pre">mx4j-tools.jar</span></co
 <p>As mentioned at the top of this section on monitoring the Cassandra metrics can be exported to a number of monitoring
 system a number of <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/getting-started/#other-reporting">built in</a> and <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/manual/third-party/">third party</a> reporter plugins.</p>
 <p>The configuration of these plugins is managed by the <a class="reference external" href="https://github.com/addthis/metrics-reporter-config">metrics reporter config project</a>. There is a sample configuration file located at
-<code class="docutils literal"><span class="pre">conf/metrics-reporter-config-sample.yaml</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">conf/metrics-reporter-config-sample.yaml</span></code>.</p>
 <p>Once configured, you simply start cassandra with the flag
-<code class="docutils literal"><span class="pre">-Dcassandra.metricsReporterConfigFile=metrics-reporter-config.yaml</span></code>. The specified .yaml file plus any 3rd party
-reporter jars must all be in Cassandra&#8217;s classpath.</p>
+<code class="docutils literal notranslate"><span class="pre">-Dcassandra.metricsReporterConfigFile=metrics-reporter-config.yaml</span></code>. The specified .yaml file plus any 3rd party
+reporter jars must all be in Cassandra’s classpath.</p>
 </div>
 </div>
 

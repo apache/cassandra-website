@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="./../../../css/sphinx.css">
   
 
-   <link rel="top" title="Apache Cassandra Documentation v3.11.3" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Repair" href="repair.html"/> <link rel="prev" title="Snitch" href="snitch.html"/> 
+   <link rel="top" title="Apache Cassandra Documentation v3.11.6" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Repair" href="repair.html"/> <link rel="prev" title="Snitch" href="snitch.html"/> 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
   
   <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
@@ -176,22 +176,22 @@
 <span id="topology-changes"></span><h1>Adding, replacing, moving and removing nodes<a class="headerlink" href="#adding-replacing-moving-and-removing-nodes" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="bootstrap">
 <h2>Bootstrap<a class="headerlink" href="#bootstrap" title="Permalink to this headline">¶</a></h2>
-<p>Adding new nodes is called &#8220;bootstrapping&#8221;. The <code class="docutils literal"><span class="pre">num_tokens</span></code> parameter will define the amount of virtual nodes
+<p>Adding new nodes is called “bootstrapping”. The <code class="docutils literal notranslate"><span class="pre">num_tokens</span></code> parameter will define the amount of virtual nodes
 (tokens) the joining node will be assigned during bootstrap. The tokens define the sections of the ring (token ranges)
 the node will become responsible for.</p>
 <div class="section" id="token-allocation">
 <h3>Token allocation<a class="headerlink" href="#token-allocation" title="Permalink to this headline">¶</a></h3>
-<p>With the default token allocation algorithm the new node will pick <code class="docutils literal"><span class="pre">num_tokens</span></code> random tokens to become responsible
+<p>With the default token allocation algorithm the new node will pick <code class="docutils literal notranslate"><span class="pre">num_tokens</span></code> random tokens to become responsible
 for. Since tokens are distributed randomly, load distribution improves with a higher amount of virtual nodes, but it
 also increases token management overhead. The default of 256 virtual nodes should provide a reasonable load balance with
 acceptable overhead.</p>
 <p>On 3.0+ a new token allocation algorithm was introduced to allocate tokens based on the load of existing virtual nodes
 for a given keyspace, and thus yield an improved load distribution with a lower number of tokens. To use this approach,
-the new node must be started with the JVM option <code class="docutils literal"><span class="pre">-Dcassandra.allocate_tokens_for_keyspace=&lt;keyspace&gt;</span></code>, where
-<code class="docutils literal"><span class="pre">&lt;keyspace&gt;</span></code> is the keyspace from which the algorithm can find the load information to optimize token assignment for.</p>
+the new node must be started with the JVM option <code class="docutils literal notranslate"><span class="pre">-Dcassandra.allocate_tokens_for_keyspace=&lt;keyspace&gt;</span></code>, where
+<code class="docutils literal notranslate"><span class="pre">&lt;keyspace&gt;</span></code> is the keyspace from which the algorithm can find the load information to optimize token assignment for.</p>
 <div class="section" id="manual-token-assignment">
 <h4>Manual token assignment<a class="headerlink" href="#manual-token-assignment" title="Permalink to this headline">¶</a></h4>
-<p>You may specify a comma-separated list of tokens manually with the <code class="docutils literal"><span class="pre">initial_token</span></code> <code class="docutils literal"><span class="pre">cassandra.yaml</span></code> parameter, and
+<p>You may specify a comma-separated list of tokens manually with the <code class="docutils literal notranslate"><span class="pre">initial_token</span></code> <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> parameter, and
 if that is specified Cassandra will skip the token allocation process. This may be useful when doing token assignment
 with an external tool or when restoring a node with its previous tokens.</p>
 </div>
@@ -202,26 +202,26 @@ with an external tool or when restoring a node with its previous tokens.</p>
 responsible for to stream data from. By default it will stream from the primary replica of each token range in order to
 guarantee data in the new node will be consistent with the current state.</p>
 <p>In the case of any unavailable replica, the consistent bootstrap process will fail. To override this behavior and
-potentially miss data from an unavailable replica, set the JVM flag <code class="docutils literal"><span class="pre">-Dcassandra.consistent.rangemovement=false</span></code>.</p>
+potentially miss data from an unavailable replica, set the JVM flag <code class="docutils literal notranslate"><span class="pre">-Dcassandra.consistent.rangemovement=false</span></code>.</p>
 </div>
 <div class="section" id="resuming-failed-hanged-bootstrap">
 <h3>Resuming failed/hanged bootstrap<a class="headerlink" href="#resuming-failed-hanged-bootstrap" title="Permalink to this headline">¶</a></h3>
-<p>On 2.2+, if the bootstrap process fails, it&#8217;s possible to resume bootstrap from the previous saved state by calling
-<code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">bootstrap</span> <span class="pre">resume</span></code>. If for some reason the bootstrap hangs or stalls, it may also be resumed by simply
+<p>On 2.2+, if the bootstrap process fails, it’s possible to resume bootstrap from the previous saved state by calling
+<code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">bootstrap</span> <span class="pre">resume</span></code>. If for some reason the bootstrap hangs or stalls, it may also be resumed by simply
 restarting the node. In order to cleanup bootstrap state and start fresh, you may set the JVM startup flag
-<code class="docutils literal"><span class="pre">-Dcassandra.reset_bootstrap_progress=true</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">-Dcassandra.reset_bootstrap_progress=true</span></code>.</p>
 <p>On lower versions, when the bootstrap proces fails it is recommended to wipe the node (remove all the data), and restart
 the bootstrap process again.</p>
 </div>
 <div class="section" id="manual-bootstrapping">
 <h3>Manual bootstrapping<a class="headerlink" href="#manual-bootstrapping" title="Permalink to this headline">¶</a></h3>
-<p>It&#8217;s possible to skip the bootstrapping process entirely and join the ring straight away by setting the hidden parameter
-<code class="docutils literal"><span class="pre">auto_bootstrap:</span> <span class="pre">false</span></code>. This may be useful when restoring a node from a backup or creating a new data-center.</p>
+<p>It’s possible to skip the bootstrapping process entirely and join the ring straight away by setting the hidden parameter
+<code class="docutils literal notranslate"><span class="pre">auto_bootstrap:</span> <span class="pre">false</span></code>. This may be useful when restoring a node from a backup or creating a new data-center.</p>
 </div>
 </div>
 <div class="section" id="removing-nodes">
 <h2>Removing nodes<a class="headerlink" href="#removing-nodes" title="Permalink to this headline">¶</a></h2>
-<p>You can take a node out of the cluster with <code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">decommission</span></code> to a live node, or <code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">removenode</span></code> (to any
+<p>You can take a node out of the cluster with <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">decommission</span></code> to a live node, or <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">removenode</span></code> (to any
 other machine) to remove a dead one. This will assign the ranges the old node was responsible for to other nodes, and
 replicate the appropriate data there. If decommission is used, the data will stream from the decommissioned node. If
 removenode is used, the data will stream from the remaining replicas.</p>
@@ -230,34 +230,34 @@ a different token on the ring, it should be removed manually.</p>
 </div>
 <div class="section" id="moving-nodes">
 <h2>Moving nodes<a class="headerlink" href="#moving-nodes" title="Permalink to this headline">¶</a></h2>
-<p>When <code class="docutils literal"><span class="pre">num_tokens:</span> <span class="pre">1</span></code> it&#8217;s possible to move the node position in the ring with <code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">move</span></code>. Moving is both a
-convenience over and more efficient than decommission + bootstrap. After moving a node, <code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">cleanup</span></code> should be
+<p>When <code class="docutils literal notranslate"><span class="pre">num_tokens:</span> <span class="pre">1</span></code> it’s possible to move the node position in the ring with <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">move</span></code>. Moving is both a
+convenience over and more efficient than decommission + bootstrap. After moving a node, <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">cleanup</span></code> should be
 run to remove any unnecessary data.</p>
 </div>
 <div class="section" id="replacing-a-dead-node">
 <h2>Replacing a dead node<a class="headerlink" href="#replacing-a-dead-node" title="Permalink to this headline">¶</a></h2>
 <p>In order to replace a dead node, start cassandra with the JVM startup flag
-<code class="docutils literal"><span class="pre">-Dcassandra.replace_address_first_boot=&lt;dead_node_ip&gt;</span></code>. Once this property is enabled the node starts in a hibernate
+<code class="docutils literal notranslate"><span class="pre">-Dcassandra.replace_address_first_boot=&lt;dead_node_ip&gt;</span></code>. Once this property is enabled the node starts in a hibernate
 state, during which all the other nodes will see this node to be down.</p>
 <p>The replacing node will now start to bootstrap the data from the rest of the nodes in the cluster. The main difference
 between normal bootstrapping of a new node is that this new node will not accept any writes during this phase.</p>
-<p>Once the bootstrapping is complete the node will be marked &#8220;UP&#8221;, we rely on the hinted handoff&#8217;s for making this node
-consistent (since we don&#8217;t accept writes since the start of the bootstrap).</p>
+<p>Once the bootstrapping is complete the node will be marked “UP”, we rely on the hinted handoff’s for making this node
+consistent (since we don’t accept writes since the start of the bootstrap).</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">If the replacement process takes longer than <code class="docutils literal"><span class="pre">max_hint_window_in_ms</span></code> you <strong>MUST</strong> run repair to make the
+<p class="last">If the replacement process takes longer than <code class="docutils literal notranslate"><span class="pre">max_hint_window_in_ms</span></code> you <strong>MUST</strong> run repair to make the
 replaced node consistent again, since it missed ongoing writes during bootstrapping.</p>
 </div>
 </div>
 <div class="section" id="monitoring-progress">
 <h2>Monitoring progress<a class="headerlink" href="#monitoring-progress" title="Permalink to this headline">¶</a></h2>
-<p>Bootstrap, replace, move and remove progress can be monitored using <code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">netstats</span></code> which will show the progress
+<p>Bootstrap, replace, move and remove progress can be monitored using <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">netstats</span></code> which will show the progress
 of the streaming operations.</p>
 </div>
 <div class="section" id="cleanup-data-after-range-movements">
 <h2>Cleanup data after range movements<a class="headerlink" href="#cleanup-data-after-range-movements" title="Permalink to this headline">¶</a></h2>
-<p>As a safety measure, Cassandra does not automatically remove data from nodes that &#8220;lose&#8221; part of their token range due
-to a range movement operation (bootstrap, move, replace). Run <code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">cleanup</span></code> on the nodes that lost ranges to the
+<p>As a safety measure, Cassandra does not automatically remove data from nodes that “lose” part of their token range due
+to a range movement operation (bootstrap, move, replace). Run <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">cleanup</span></code> on the nodes that lost ranges to the
 joining node when you are satisfied the new node is up and working. If you do not do this the old data will still be
 counted against the load on that node.</p>
 </div>
