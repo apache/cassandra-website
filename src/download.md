@@ -33,13 +33,13 @@ Older (unsupported) versions of Cassandra are [archived here](http://archive.apa
 * Add the Apache repository of Cassandra to `/etc/apt/sources.list.d/cassandra.sources.list`, for example for the latest 3.11 version:
 
 ```
-echo "deb http://www.apache.org/dist/cassandra/debian 311x main" | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list
+echo "deb https://downloads.apache.org/cassandra/debian 311x main" | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list
 ```
 
 * Add the Apache Cassandra repository keys:
 
 ```
-curl https://www.apache.org/dist/cassandra/KEYS | sudo apt-key add -
+curl https://downloads.apache.org/cassandra/KEYS | sudo apt-key add -
 ```
 
 * Update the repositories:
@@ -59,7 +59,7 @@ Then add the public key A278B781FE4B2BDA as follows:
 sudo apt-key adv --keyserver pool.sks-keyservers.net --recv-key A278B781FE4B2BDA
 ```
 and repeat `sudo apt-get update`. The actual key may be different, you get it from the error message itself. For a
-full list of Apache contributors public keys, you can refer to <https://www.apache.org/dist/cassandra/KEYS>.
+full list of Apache contributors public keys, you can refer to <https://downloads.apache.org/cassandra/KEYS>.
 
 * Install Cassandra:
 
@@ -87,10 +87,10 @@ sudo apt-get install cassandra
 ```text
 [cassandra]
 name=Apache Cassandra
-baseurl=https://www.apache.org/dist/cassandra/redhat/311x/
+baseurl=https://downloads.apache.org/cassandra/redhat/311x/
 gpgcheck=1
 repo_gpgcheck=1
-gpgkey=https://www.apache.org/dist/cassandra/KEYS
+gpgkey=https://downloads.apache.org/cassandra/KEYS
 ```
 
 * Install Cassandra, accepting the gpg key import prompts:
