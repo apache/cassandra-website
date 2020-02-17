@@ -8,7 +8,7 @@ module Jekyll
       date = data['releases'][input]['date']
       dl_link = "#{download_url}/#{name}/apache-cassandra-#{name}-bin.tar.gz"
 
-      verif = Proc.new { |h, e| "<a href=\"#{apache_url}/dist/cassandra/#{name}/apache-cassandra-#{name}-bin.tar.gz.#{e}\">#{h}</a>" }
+      verif = Proc.new { |h, e| "<a href=\"#{apache_url}/cassandra/#{name}/apache-cassandra-#{name}-bin.tar.gz.#{e}\">#{h}</a>" }
 
       pgp = verif.call("pgp", "asc")
       sha256 = verif.call("sha256", "sha256")
