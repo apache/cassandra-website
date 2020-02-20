@@ -35,6 +35,14 @@ Once building has completed, the site content will be in the `./cassandra-websit
 Previewing the site
 -------------------
 
+The fastest way to preview the site is to run the following:
+
+```bash
+$ docker-compose up preview
+```
+
+Then view the site on http://localhost:8000
+
 If you want to preview the site as you are editing it run this command:
 
 ```bash

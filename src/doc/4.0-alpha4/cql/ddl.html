@@ -112,7 +112,7 @@ extra-footer: '
 <span id="id1"></span><h1>Data Definition<a class="headerlink" href="#data-definition" title="Permalink to this headline">¶</a></h1>
 <p>CQL stores data in <em>tables</em>, whose schema defines the layout of said data in the table, and those tables are grouped in
 <em>keyspaces</em>. A keyspace defines a number of options that applies to all the tables it contains, most prominently of
-which is the <a class="reference internal" href="../architecture/dynamo.html#replication-strategy"><span class="std std-ref">replication strategy</span></a> used by the keyspace. It is generally encouraged to use
+which is the <a class="reference internal" href="#replication-strategy"><span class="std std-ref">replication strategy</span></a> used by the keyspace. It is generally encouraged to use
 one keyspace by <em>application</em>, and thus many cluster may define only one keyspace.</p>
 <p>This section describes the statements used to create, modify, and remove those keyspace and tables.</p>
 <div class="section" id="common-definitions">
@@ -194,10 +194,10 @@ details below).</td>
 </tbody>
 </table>
 <p>The <code class="docutils literal notranslate"><span class="pre">replication</span></code> property is mandatory and must at least contains the <code class="docutils literal notranslate"><span class="pre">'class'</span></code> sub-option which defines the
-<a class="reference internal" href="../architecture/dynamo.html#replication-strategy"><span class="std std-ref">replication strategy</span></a> class to use. The rest of the sub-options depends on what replication
+<a class="reference internal" href="#replication-strategy"><span class="std std-ref">replication strategy</span></a> class to use. The rest of the sub-options depends on what replication
 strategy is used. By default, Cassandra support the following <code class="docutils literal notranslate"><span class="pre">'class'</span></code>:</p>
 <div class="section" id="simplestrategy">
-<h3><code class="docutils literal notranslate"><span class="pre">SimpleStrategy</span></code><a class="headerlink" href="#simplestrategy" title="Permalink to this headline">¶</a></h3>
+<span id="replication-strategy"></span><h3><code class="docutils literal notranslate"><span class="pre">SimpleStrategy</span></code><a class="headerlink" href="#simplestrategy" title="Permalink to this headline">¶</a></h3>
 <p>A simple strategy that defines a replication factor for data to be spread
 across the entire cluster. This is generally not a wise choice for production
 because it does not respect datacenter layouts and can lead to wildly varying
@@ -294,8 +294,8 @@ explicitly zero out the datacenter you want to have zero replicas.</p>
     <span class="k">CREATE</span> <span class="k">KEYSPACE</span> <span class="n">excalibur</span> <span class="k">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;NetworkTopologyStrategy&#39;</span><span class="p">,</span> <span class="s1">&#39;DC1&#39;</span><span class="p">:</span> <span class="s1">&#39;3&#39;</span><span class="p">}</span> <span class="k">AND</span> <span class="n">durable_writes</span> <span class="o">=</span> <span class="n">true</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>If <a class="reference internal" href="../architecture/dynamo.html#transient-replication"><span class="std std-ref">transient replication</span></a> has been enabled, transient replicas can be configured for both
-SimpleStrategy and NetworkTopologyStrategy by defining replication factors in the format <code class="docutils literal notranslate"><span class="pre">'&lt;total_replicas&gt;/&lt;transient_replicas&gt;'</span></code></p>
+<p>If transient replication has been enabled, transient replicas can be configured for both
+<code class="docutils literal notranslate"><span class="pre">SimpleStrategy</span></code> and <code class="docutils literal notranslate"><span class="pre">NetworkTopologyStrategy</span></code> by defining replication factors in the format <code class="docutils literal notranslate"><span class="pre">'&lt;total_replicas&gt;/&lt;transient_replicas&gt;'</span></code></p>
 <p>For instance, this keyspace will have 3 replicas in DC1, 1 of which is transient, and 5 replicas in DC2, 2 of which are transient:</p>
 <div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">KEYSPACE</span> <span class="n">some_keysopace</span>
            <span class="k">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;NetworkTopologyStrategy&#39;</span><span class="p">,</span> <span class="s1">&#39;DC1&#39;</span> <span class="p">:</span> <span class="s1">&#39;3/1&#39;&#39;, &#39;</span><span class="n">DC2</span><span class="s1">&#39; : &#39;</span><span class="mf">5</span><span class="o">/</span><span class="mf">2</span><span class="s1">&#39;};</span>
@@ -581,15 +581,19 @@ it is an optimization to declare a descending clustering order.</dd>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">comment</span></code></td>
-<td><em>simple</em></td>
-<td>none</td>
-<td>A free-form, human-readable comment.</td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">comment</span></code>
+<code class="docutils literal notranslate"><span class="pre">speculative_retry</span></code></td>
+<td><em>simple</em>
+<em>simple</em></td>
+<td>none
+99PERCENTILE</td>
+<td>A free-form, human-readable comment.
+<a class="reference internal" href="#speculative-retry-options"><span class="std std-ref">Speculative retry options</span></a>.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">speculative_retry</span></code></td>
-<td><em>simple</em></td>
-<td>99PERCENTILE</td>
-<td><a class="reference internal" href="#speculative-retry-options"><span class="std std-ref">Speculative retry options</span></a>.</td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cdc</span></code></td>
+<td><em>boolean</em></td>
+<td>false</td>
+<td>Create a Change Data Capture (CDC) log on the table.</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">additional_write_policy</span></code></td>
 <td><em>simple</em></td>
@@ -646,25 +650,60 @@ table.</td>
 <p>By default, Cassandra read coordinators only query as many replicas as necessary to satisfy
 consistency levels: one for consistency level <code class="docutils literal notranslate"><span class="pre">ONE</span></code>, a quorum for <code class="docutils literal notranslate"><span class="pre">QUORUM</span></code>, and so on.
 <code class="docutils literal notranslate"><span class="pre">speculative_retry</span></code> determines when coordinators may query additional replicas, which is useful
-when replicas are slow or unresponsive.  <code class="docutils literal notranslate"><span class="pre">additional_write_policy</span></code> specifies the threshold at which
-a cheap quorum write will be upgraded to include transient replicas.  The following are legal values (case-insensitive):</p>
-<p>This setting does not affect reads with consistency level <code class="docutils literal notranslate"><span class="pre">ALL</span></code> because they already query all replicas.</p>
+when replicas are slow or unresponsive.  Speculative retries are used to reduce the latency.  The speculative_retry option may be
+used to configure rapid read protection with which a coordinator sends more requests than needed to satisfy the Consistency level.</p>
+<p>Pre-4.0 speculative Retry Policy takes a single string as a parameter, this can be <code class="docutils literal notranslate"><span class="pre">NONE</span></code>, <code class="docutils literal notranslate"><span class="pre">ALWAYS</span></code>, <code class="docutils literal notranslate"><span class="pre">99PERCENTILE</span></code> (PERCENTILE), <code class="docutils literal notranslate"><span class="pre">50MS</span></code> (CUSTOM).</p>
+<p>Examples of setting speculative retry are:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="k">users</span> <span class="k">WITH</span> <span class="n">speculative_retry</span> <span class="o">=</span> <span class="s1">&#39;10ms&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Or,</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="k">users</span> <span class="k">WITH</span> <span class="n">speculative_retry</span> <span class="o">=</span> <span class="s1">&#39;99PERCENTILE&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The problem with these settings is when a single host goes into an unavailable state this drags up the percentiles. This means if we
+are set to use <code class="docutils literal notranslate"><span class="pre">p99</span></code> alone, we might not speculate when we intended to to because the value at the specified percentile has gone so high.
+As a fix 4.0 adds  support for hybrid <code class="docutils literal notranslate"><span class="pre">MIN()</span></code>, <code class="docutils literal notranslate"><span class="pre">MAX()</span></code> speculative retry policies (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-14293">CASSANDRA-14293</a>). This means if the normal <code class="docutils literal notranslate"><span class="pre">p99</span></code> for the
+table is &lt;50ms, we will still speculate at this value and not drag the tail latencies up… but if the <code class="docutils literal notranslate"><span class="pre">p99th</span></code> goes above what we know we
+should never exceed we use that instead.</p>
+<p>In 4.0 the values (case-insensitive) discussed in the following table are supported:</p>
+<p>As of version 4.0 speculative retry allows more friendly params (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-13876">CASSANDRA-13876</a>). The <code class="docutils literal notranslate"><span class="pre">speculative_retry</span></code> is more flexible with case. As an example a
+value does not have to be <code class="docutils literal notranslate"><span class="pre">NONE</span></code>, and the following are supported alternatives.</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">alter</span> <span class="k">table</span> <span class="k">users</span> <span class="k">WITH</span> <span class="n">speculative_retry</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="p">;</span>
+<span class="k">alter</span> <span class="k">table</span> <span class="k">users</span> <span class="k">WITH</span> <span class="n">speculative_retry</span> <span class="o">=</span> <span class="s1">&#39;None&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The text component is case insensitive and for <code class="docutils literal notranslate"><span class="pre">nPERCENTILE</span></code> version 4.0 allows <code class="docutils literal notranslate"><span class="pre">nP</span></code>, for instance <code class="docutils literal notranslate"><span class="pre">99p</span></code>.
+In a hybrid value for speculative retry, one of the two values must be a fixed millisecond value and the other a percentile value.</p>
+<p>Some examples:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="n">min</span><span class="p">(</span><span class="mf">99</span><span class="n">percentile</span><span class="p">,</span><span class="mf">50</span><span class="n">ms</span><span class="p">)</span>
+<span class="n">max</span><span class="p">(</span><span class="mf">99</span><span class="n">p</span><span class="p">,</span><span class="mf">50</span><span class="n">MS</span><span class="p">)</span>
+<span class="n">MAX</span><span class="p">(</span><span class="mf">99</span><span class="n">P</span><span class="p">,</span><span class="mf">50</span><span class="n">ms</span><span class="p">)</span>
+<span class="n">MIN</span><span class="p">(</span><span class="mf">99.9</span><span class="n">PERCENTILE</span><span class="p">,</span><span class="mf">50</span><span class="n">ms</span><span class="p">)</span>
+<span class="n">max</span><span class="p">(</span><span class="mf">90</span><span class="n">percentile</span><span class="p">,</span><span class="mf">100</span><span class="n">MS</span><span class="p">)</span>
+<span class="n">MAX</span><span class="p">(</span><span class="mf">100.0</span><span class="n">PERCENTILE</span><span class="p">,</span><span class="mf">60</span><span class="n">ms</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Two values of the same kind cannot be specified such as <code class="docutils literal notranslate"><span class="pre">min(90percentile,99percentile)</span></code> as it wouldn’t be a hybrid value.
+This setting does not affect reads with consistency level <code class="docutils literal notranslate"><span class="pre">ALL</span></code> because they already query all replicas.</p>
 <p>Note that frequently reading from additional replicas can hurt cluster performance.
 When in doubt, keep the default <code class="docutils literal notranslate"><span class="pre">99PERCENTILE</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">additional_write_policy</span></code> specifies the threshold at which a cheap quorum write will be upgraded to include transient replicas.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">compaction</span></code> options must at least define the <code class="docutils literal notranslate"><span class="pre">'class'</span></code> sub-option, that defines the compaction strategy class
-to use. The default supported class are <code class="docutils literal notranslate"><span class="pre">'SizeTieredCompactionStrategy'</span></code> (<a class="reference internal" href="../operating/compaction.html#stcs"><span class="std std-ref">STCS</span></a>),
+to use. The supported class are <code class="docutils literal notranslate"><span class="pre">'SizeTieredCompactionStrategy'</span></code> (<a class="reference internal" href="../operating/compaction.html#stcs"><span class="std std-ref">STCS</span></a>),
 <code class="docutils literal notranslate"><span class="pre">'LeveledCompactionStrategy'</span></code> (<a class="reference internal" href="../operating/compaction.html#lcs"><span class="std std-ref">LCS</span></a>) and <code class="docutils literal notranslate"><span class="pre">'TimeWindowCompactionStrategy'</span></code> (<a class="reference internal" href="../operating/compaction.html#twcs"><span class="std std-ref">TWCS</span></a>) (the
 <code class="docutils literal notranslate"><span class="pre">'DateTieredCompactionStrategy'</span></code> is also supported but is deprecated and <code class="docutils literal notranslate"><span class="pre">'TimeWindowCompactionStrategy'</span></code> should be
-preferred instead). Custom strategy can be provided by specifying the full class name as a <a class="reference internal" href="definitions.html#constants"><span class="std std-ref">string constant</span></a>.</p>
+preferred instead). The default is <code class="docutils literal notranslate"><span class="pre">'SizeTieredCompactionStrategy'</span></code>. Custom strategy can be provided by specifying the full class name as a <a class="reference internal" href="definitions.html#constants"><span class="std std-ref">string constant</span></a>.</p>
 <p>All default strategies support a number of <a class="reference internal" href="../operating/compaction.html#compaction-options"><span class="std std-ref">common options</span></a>, as well as options specific to
 the strategy chosen (see the section corresponding to your strategy for details: <a class="reference internal" href="../operating/compaction.html#stcs-options"><span class="std std-ref">STCS</span></a>, <a class="reference internal" href="../operating/compaction.html#lcs-options"><span class="std std-ref">LCS</span></a> and <a class="reference internal" href="../operating/compaction.html#twcs"><span class="std std-ref">TWCS</span></a>).</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">compression</span></code> options define if and how the sstables of the table are compressed. The following sub-options are
+<p>The <code class="docutils literal notranslate"><span class="pre">compression</span></code> options define if and how the sstables of the table are compressed. Compression is configured on a per-table
+basis as an optional argument to <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">TABLE</span></code> or <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code>. The following sub-options are
 available:</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="21%" />
-<col width="13%" />
-<col width="66%" />
+<col width="19%" />
+<col width="11%" />
+<col width="70%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Option</th>
@@ -676,29 +715,40 @@ available:</p>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">class</span></code></td>
 <td>LZ4Compressor</td>
 <td>The compression algorithm to use. Default compressor are: LZ4Compressor,
-SnappyCompressor and DeflateCompressor. Use <code class="docutils literal notranslate"><span class="pre">'enabled'</span> <span class="pre">:</span> <span class="pre">false</span></code> to disable
+SnappyCompressor, DeflateCompressor and ZstdCompressor. Use <code class="docutils literal notranslate"><span class="pre">'enabled'</span> <span class="pre">:</span> <span class="pre">false</span></code> to disable
 compression. Custom compressor can be provided by specifying the full class
 name as a “string constant”:#constants.</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">enabled</span></code></td>
 <td>true</td>
-<td>Enable/disable sstable compression.</td>
+<td>Enable/disable sstable compression. If the <code class="docutils literal notranslate"><span class="pre">enabled</span></code> option is set to <code class="docutils literal notranslate"><span class="pre">false</span></code> no other
+options must be specified.</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">chunk_length_in_kb</span></code></td>
 <td>64</td>
-<td>On disk SSTables are compressed by block (to allow random reads). This
+<td><p class="first">On disk SSTables are compressed by block (to allow random reads). This
 defines the size (in KB) of said block. Bigger values may improve the
 compression rate, but increases the minimum size of data to be read from disk
-for a read</td>
+for a read. The default value is an optimal value for compressing tables. Chunk length must
+be a power of 2 because so is assumed so when computing the chunk number from an uncompressed
+file offset.  Block size may be adjusted based on read/write access patterns such as:</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>How much data is typically requested at once</li>
+<li>Average size of rows in the table</li>
+</ul>
+</div></blockquote>
+</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">crc_check_chance</span></code></td>
 <td>1.0</td>
-<td>When compression is enabled, each compressed block includes a checksum of
-that block for the purpose of detecting disk bitrot and avoiding the
-propagation of corruption to other replica. This option defines the
-probability with which those checksums are checked during read. By default
-they are always checked. Set to 0 to disable checksum checking and to 0.5 for
-instance to check them every other read   |</td>
+<td>Determines how likely Cassandra is to verify the checksum on each compression chunk during
+reads.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">compression_level</span></code></td>
+<td>3</td>
+<td>Compression level. It is only applicable for <code class="docutils literal notranslate"><span class="pre">ZstdCompressor</span></code> and accepts values between
+<code class="docutils literal notranslate"><span class="pre">-131072</span></code> and <code class="docutils literal notranslate"><span class="pre">22</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -711,7 +761,8 @@ instance to check them every other read   |</td>
 <span class="p">)</span> <span class="k">with</span> <span class="n">compression</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;LZ4Compressor&#39;</span><span class="p">,</span> <span class="s1">&#39;chunk_length_in_kb&#39;</span><span class="p">:</span> <span class="mf">4</span><span class="p">};</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">caching</span></code> options allows to configure both the <em>key cache</em> and the <em>row cache</em> for the table. The following
+<p>Caching optimizes the use of cache memory of a table. The cached data is weighed by size and access frequency. The <code class="docutils literal notranslate"><span class="pre">caching</span></code>
+options allows to configure both the <em>key cache</em> and the <em>row cache</em> for the table. The following
 sub-options are available:</p>
 <table border="1" class="docutils">
 <colgroup>
