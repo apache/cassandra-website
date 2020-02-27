@@ -173,7 +173,7 @@
         <div class="content-container">
           
   <div class="section" id="hints">
-<h1>Hints<a class="headerlink" href="#hints" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>Hints<a class="headerlink" href="#hints" title="Permalink to this headline">¶</a></h1>
 <p>Hinting is a data repair technique applied during write operations. When
 replica nodes are unavailable to accept a mutation, either due to failure or
 more commonly routine maintenance, coordinators attempting to write to those
@@ -183,12 +183,12 @@ duration of data inconsistency. Coordinators replay hints quickly after
 unavailable replica nodes return to the ring. Hints are best effort, however,
 and do not guarantee eventual consistency like <a class="reference internal" href="repair.html#repair"><span class="std std-ref">anti-entropy repair</span></a> does.</p>
 <p>Hints are useful because of how Apache Cassandra replicates data to provide
-fault tolerance, high availability and durability. Cassandra <a class="reference internal" href="../architecture/dynamo.html#token-range"><span class="std std-ref">partitions
-data across the cluster</span></a> using consistent hashing, and then
-replicates keys to multiple nodes along the hash ring. To guarantee
-availability, all replicas of a key can accept mutations without consensus, but
-this means it is possible for some replicas to accept a mutation while others
-do not. When this happens an inconsistency is introduced.</p>
+fault tolerance, high availability and durability. Cassandra <a class="reference internal" href="../architecture/dynamo.html#consistent-hashing-token-ring"><span class="std std-ref">partitions
+data across the cluster</span></a> using consistent
+hashing, and then replicates keys to multiple nodes along the hash ring. To
+guarantee availability, all replicas of a key can accept mutations without
+consensus, but this means it is possible for some replicas to accept a mutation
+while others do not. When this happens an inconsistency is introduced.</p>
 <p>Hints are one of the three ways, in addition to read-repair and
 full/incremental anti-entropy repair, that Cassandra implements the eventual
 consistency guarantee that all updates are eventually received by all replicas.
@@ -210,7 +210,7 @@ up to <code class="docutils literal notranslate"><span class="pre">max_hint_wind
 unavailable replica does return to the cluster before the window expires, the
 coordinator applies any pending hinted mutations against the replica to ensure
 that eventual consistency is maintained.</p>
-<div class="figure" id="id1">
+<div class="figure" id="id2">
 <img alt="Hinted Handoff Example" src="../_images/hints.svg" /><p class="caption"><span class="caption-text">Hinted Handoff in Action</span></p>
 </div>
 <ul class="simple">
