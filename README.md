@@ -27,6 +27,13 @@ $ docker-compose build cassandra-website
 $ docker-compose run cassandra-website
 ```
 
+:warning: *Tip:* In order to prevent root-owned modified files in your repository, the container user, `build`, is set up with a default UID=1000:GID=1000, which is usually the first user configured on a linux machine. If your local user is different you should set up the container user with your local host user's UID:GID, replace the above with:
+
+```bash
+$ docker-compose build --build-arg UID=$(id -u) --build-arg GID=$(id -g) cassandra-website
+$ docker-compose run cassandra-website
+```
+
 Go make yourself a cup of coffee, this will take a while...
 
 Once building has completed, the site content will be in the `./cassandra-website/content` directory ready to be committed.

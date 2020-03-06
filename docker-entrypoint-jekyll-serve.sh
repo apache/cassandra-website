@@ -2,6 +2,8 @@
 
 set -e
 
+export CASSANDRA_SITE_DIR="/home/build/cassandra-site"
+
 GREEN='\033[1;32m'
 YELLOW='\033[0;33m'
 NC='\033[0m' # No Color
@@ -10,11 +12,11 @@ NC='\033[0m' # No Color
 # version in the publish directory
 while [ 1 ]
 do
-    sed -i 's/\.\/\.\.\//\.\/\.\.\/\.\.\//g' /usr/src/cassandra-site/publish/doc/*/index.html
+    sed -i 's/\.\/\.\.\//\.\/\.\.\/\.\.\//g' ${CASSANDRA_SITE_DIR}/publish/doc/*/index.html
     sleep 5
 done &
 
-cd /usr/src/cassandra-site/src
+cd ${CASSANDRA_SITE_DIR}/src
 
 JEKYLL_COMMAND="jekyll serve --host 0.0.0.0"
 

@@ -4,20 +4,22 @@ services:
   cassandra-website:
     build: .
     image: cassandra-website:latest
+    user: build
     volumes:
-      - ./src:/usr/src/cassandra-site/src
-      - ./content:/usr/src/cassandra-site/publish
+      - ./src:/home/build/cassandra-site/src
+      - ./content:/home/build/cassandra-site/publish
 
   cassandra-website-serve:
     build: .
     image: cassandra-website:latest
-    entrypoint: /docker-entrypoint-jekyll-serve.sh
+    user: build
+    entrypoint: /home/build/docker-entrypoint-jekyll-serve.sh
     ports:
       - 4000:4000
     volumes:
-      - ./src:/usr/src/cassandra-site/src
-      - ./content:/usr/src/cassandra-site/publish
-      - ./docker-entrypoint-jekyll-serve.sh:/docker-entrypoint-jekyll-serve.sh
+      - ./src:/home/build/cassandra-site/src
+      - ./content:/home/build/cassandra-site/publish
+      - ./docker-entrypoint-jekyll-serve.sh:/home/build/docker-entrypoint-jekyll-serve.sh
 
   preview:
     image: nginx
@@ -26,6 +28,4 @@ services:
     volumes:
       - "./content:/usr/share/nginx/html"
     command: [nginx-debug, '-g', 'daemon off;']
-
-
 
