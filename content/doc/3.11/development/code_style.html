@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="./../../../css/sphinx.css">
   
 
-   <link rel="top" title="Apache Cassandra Documentation v3.11.6" href="../index.html"/> <link rel="up" title="Cassandra Development" href="index.html"/> <link rel="next" title="Review Checklist" href="how_to_review.html"/> <link rel="prev" title="Contributing Code Changes" href="patches.html"/> 
+   <link rel="top" title="Apache Cassandra Documentation v3.11.3" href="../index.html"/> <link rel="up" title="Cassandra Development" href="index.html"/> <link rel="next" title="Review Checklist" href="how_to_review.html"/> <link rel="prev" title="Contributing Code Changes" href="patches.html"/> 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
   
   <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
@@ -55,7 +55,7 @@
 
       
         
-        <li><a href="./../../../doc">Documentation</a></li>
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
         
       
 
@@ -86,7 +86,7 @@
         <ul class="nav navbar-nav navbar-right">
           <li><a href="./../../../">Home</a></li>
           <li><a href="./../../../download/">Download</a></li>
-          <li><a href="./../../../doc/">Documentation</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
           <li><a href="./../../../community/">Community</a></li>
           <li>
             <a href="./../../../blog/">Blog</a>
@@ -171,7 +171,7 @@
 <h2>General Code Conventions<a class="headerlink" href="#general-code-conventions" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><ul class="simple">
-<li>The Cassandra project follows <a class="reference external" href="http://java.sun.com/docs/codeconv/html/CodeConvTOC.doc.html">Sun’s Java coding conventions</a> with an important exception: <code class="docutils literal notranslate"><span class="pre">{</span></code> and <code class="docutils literal notranslate"><span class="pre">}</span></code> are always placed on a new line</li>
+<li>The Cassandra project follows <a class="reference external" href="http://java.sun.com/docs/codeconv/html/CodeConvTOC.doc.html">Sun&#8217;s Java coding conventions</a> with an important exception: <code class="docutils literal"><span class="pre">{</span></code> and <code class="docutils literal"><span class="pre">}</span></code> are always placed on a new line</li>
 </ul>
 </div></blockquote>
 </div>
@@ -179,10 +179,10 @@
 <h2>Exception handling<a class="headerlink" href="#exception-handling" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><ul class="simple">
-<li>Never ever write <code class="docutils literal notranslate"><span class="pre">catch</span> <span class="pre">(...)</span> <span class="pre">{}</span></code> or <code class="docutils literal notranslate"><span class="pre">catch</span> <span class="pre">(...)</span> <span class="pre">{</span> <span class="pre">logger.error()</span> <span class="pre">}</span></code> merely to satisfy Java’s compile-time exception checking. Always propagate the exception up or throw <code class="docutils literal notranslate"><span class="pre">RuntimeException</span></code> (or, if it “can’t happen,” <code class="docutils literal notranslate"><span class="pre">AssertionError</span></code>). This makes the exceptions visible to automated tests.</li>
-<li>Avoid propagating up checked exceptions that no caller handles. Rethrow as <code class="docutils literal notranslate"><span class="pre">RuntimeException</span></code> (or <code class="docutils literal notranslate"><span class="pre">IOError</span></code>, if that is more applicable).</li>
-<li>Similarly, logger.warn() is often a cop-out: is this an error or not? If it is don’t hide it behind a warn; if it isn’t, no need for the warning.</li>
-<li>If you genuinely know an exception indicates an expected condition, it’s okay to ignore it BUT this must be explicitly explained in a comment.</li>
+<li>Never ever write <code class="docutils literal"><span class="pre">catch</span> <span class="pre">(...)</span> <span class="pre">{}</span></code> or <code class="docutils literal"><span class="pre">catch</span> <span class="pre">(...)</span> <span class="pre">{</span> <span class="pre">logger.error()</span> <span class="pre">}</span></code> merely to satisfy Java&#8217;s compile-time exception checking. Always propagate the exception up or throw <code class="docutils literal"><span class="pre">RuntimeException</span></code> (or, if it &#8220;can&#8217;t happen,&#8221; <code class="docutils literal"><span class="pre">AssertionError</span></code>). This makes the exceptions visible to automated tests.</li>
+<li>Avoid propagating up checked exceptions that no caller handles. Rethrow as <code class="docutils literal"><span class="pre">RuntimeException</span></code> (or <code class="docutils literal"><span class="pre">IOError</span></code>, if that is more applicable).</li>
+<li>Similarly, logger.warn() is often a cop-out: is this an error or not? If it is don&#8217;t hide it behind a warn; if it isn&#8217;t, no need for the warning.</li>
+<li>If you genuinely know an exception indicates an expected condition, it&#8217;s okay to ignore it BUT this must be explicitly explained in a comment.</li>
 </ul>
 </div></blockquote>
 </div>
@@ -190,11 +190,11 @@
 <h2>Boilerplate<a class="headerlink" href="#boilerplate" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><ul class="simple">
-<li>Avoid redundant <code class="docutils literal notranslate"><span class="pre">&#64;Override</span></code> annotations when implementing abstract or interface methods.</li>
+<li>Avoid redundant <code class="docutils literal"><span class="pre">&#64;Override</span></code> annotations when implementing abstract or interface methods.</li>
 <li>Do not implement equals or hashcode methods unless they are actually needed.</li>
-<li>Prefer public final fields to private fields with getters. (But prefer encapsulating behavior in “real” methods to either.)</li>
+<li>Prefer public final fields to private fields with getters. (But prefer encapsulating behavior in &#8220;real&#8221; methods to either.)</li>
 <li>Prefer requiring initialization in the constructor to setters.</li>
-<li>Avoid redundant <code class="docutils literal notranslate"><span class="pre">this</span></code> references to member fields or methods.</li>
+<li>Avoid redundant <code class="docutils literal"><span class="pre">this</span></code> references to member fields or methods.</li>
 <li>Do not extract interfaces (or abstract classes) unless you actually need multiple implementations of it.</li>
 <li>Always include braces for nested levels of conditionals and loops. Only avoid braces for single level.</li>
 </ul>
@@ -204,10 +204,10 @@
 <h2>Multiline statements<a class="headerlink" href="#multiline-statements" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><ul class="simple">
-<li>Try to keep lines under 120 characters, but use good judgement – it’s better to exceed 120 by a little, than split a line that has no natural splitting points.</li>
+<li>Try to keep lines under 120 characters, but use good judgement &#8211; it&#8217;s better to exceed 120 by a little, than split a line that has no natural splitting points.</li>
 <li>When splitting inside a method call, use one line per parameter and align them, like this:</li>
 </ul>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SSTableWriter writer = new SSTableWriter(cfs.getTempSSTablePath(),
+<div class="highlight-none"><div class="highlight"><pre><span></span>SSTableWriter writer = new SSTableWriter(cfs.getTempSSTablePath(),
                                          columnFamilies.size(),
                                          StorageService.getPartitioner());
 </pre></div>
@@ -215,7 +215,7 @@
 <ul class="simple">
 <li>When splitting a ternary, use one line per clause, carry the operator, and align like this:</li>
 </ul>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>var = bar == null
+<div class="highlight-none"><div class="highlight"><pre><span></span>var = bar == null
     ? doFoo()
     : doBar();
 </pre></div>
@@ -227,14 +227,14 @@
 <blockquote>
 <div><ul class="simple">
 <li>Please make sure to use 4 spaces instead of the tab character for all your indentation.</li>
-<li>Many lines in many files have a bunch of trailing whitespace… Please either clean these up in a separate patch, or leave them alone, so that reviewers now and anyone reading code history later doesn’t have to pay attention to whitespace diffs.</li>
+<li>Many lines in many files have a bunch of trailing whitespace... Please either clean these up in a separate patch, or leave them alone, so that reviewers now and anyone reading code history later doesn&#8217;t have to pay attention to whitespace diffs.</li>
 </ul>
 </div></blockquote>
 </div>
 <div class="section" id="imports">
 <h2>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">¶</a></h2>
 <p>Please observe the following order for your imports:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>java
+<div class="highlight-none"><div class="highlight"><pre><span></span>java
 [blank line]
 com.google.common
 org.apache.commons
