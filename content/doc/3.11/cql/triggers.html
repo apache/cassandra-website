@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="./../../../css/sphinx.css">
   
 
-   <link rel="top" title="Apache Cassandra Documentation v3.11.3" href="../index.html"/> <link rel="up" title="The Cassandra Query Language (CQL)" href="index.html"/> <link rel="next" title="Appendices" href="appendices.html"/> <link rel="prev" title="JSON Support" href="json.html"/> 
+   <link rel="top" title="Apache Cassandra Documentation v3.11.6" href="../index.html"/> <link rel="up" title="The Cassandra Query Language (CQL)" href="index.html"/> <link rel="next" title="Appendices" href="appendices.html"/> <link rel="prev" title="JSON Support" href="json.html"/> 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
   
   <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
@@ -55,7 +55,7 @@
 
       
         
-        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        <li><a href="./../../../doc">Documentation</a></li>
         
       
 
@@ -86,7 +86,7 @@
         <ul class="nav navbar-nav navbar-right">
           <li><a href="./../../../">Home</a></li>
           <li><a href="./../../../download/">Download</a></li>
-          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../doc/">Documentation</a></li>
           <li><a href="./../../../community/">Community</a></li>
           <li>
             <a href="./../../../blog/">Blog</a>
@@ -170,33 +170,33 @@
 <span id="cql-triggers"></span><h1>Triggers<a class="headerlink" href="#triggers" title="Permalink to this headline">¶</a></h1>
 <p>Triggers are identified by a name defined by:</p>
 <pre>
-<strong id="grammar-token-trigger_name">trigger_name</strong> ::=  <a class="reference internal" href="definitions.html#grammar-token-identifier"><code class="xref docutils literal"><span class="pre">identifier</span></code></a>
+<strong id="grammar-token-trigger-name">trigger_name</strong> ::=  <a class="reference internal" href="definitions.html#grammar-token-identifier"><code class="xref docutils literal notranslate"><span class="pre">identifier</span></code></a>
 </pre>
 <div class="section" id="create-trigger">
 <span id="create-trigger-statement"></span><h2>CREATE TRIGGER<a class="headerlink" href="#create-trigger" title="Permalink to this headline">¶</a></h2>
-<p>Creating a new trigger uses the <code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">TRIGGER</span></code> statement:</p>
+<p>Creating a new trigger uses the <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">TRIGGER</span></code> statement:</p>
 <pre>
-<strong id="grammar-token-create_trigger_statement">create_trigger_statement</strong> ::=  CREATE TRIGGER [ IF NOT EXISTS ] <a class="reference internal" href="#grammar-token-trigger_name"><code class="xref docutils literal"><span class="pre">trigger_name</span></code></a>
-                                  ON <a class="reference internal" href="ddl.html#grammar-token-table_name"><code class="xref docutils literal"><span class="pre">table_name</span></code></a>
-                                  USING <a class="reference internal" href="definitions.html#grammar-token-string"><code class="xref docutils literal"><span class="pre">string</span></code></a>
+<strong id="grammar-token-create-trigger-statement">create_trigger_statement</strong> ::=  CREATE TRIGGER [ IF NOT EXISTS ] <a class="reference internal" href="#grammar-token-trigger-name"><code class="xref docutils literal notranslate"><span class="pre">trigger_name</span></code></a>
+                                  ON <a class="reference internal" href="ddl.html#grammar-token-table-name"><code class="xref docutils literal notranslate"><span class="pre">table_name</span></code></a>
+                                  USING <a class="reference internal" href="definitions.html#grammar-token-string"><code class="xref docutils literal notranslate"><span class="pre">string</span></code></a>
 </pre>
 <p>For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TRIGGER</span> <span class="n">myTrigger</span> <span class="k">ON</span> <span class="n">myTable</span> <span class="k">USING</span> <span class="s1">&#39;org.apache.cassandra.triggers.InvertedIndex&#39;</span><span class="p">;</span>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TRIGGER</span> <span class="n">myTrigger</span> <span class="k">ON</span> <span class="n">myTable</span> <span class="k">USING</span> <span class="s1">&#39;org.apache.cassandra.triggers.InvertedIndex&#39;</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>The actual logic that makes up the trigger can be written in any Java (JVM) language and exists outside the database.
-You place the trigger code in a <code class="docutils literal"><span class="pre">lib/triggers</span></code> subdirectory of the Cassandra installation directory, it loads during
+You place the trigger code in a <code class="docutils literal notranslate"><span class="pre">lib/triggers</span></code> subdirectory of the Cassandra installation directory, it loads during
 cluster startup, and exists on every node that participates in a cluster. The trigger defined on a table fires before a
 requested DML statement occurs, which ensures the atomicity of the transaction.</p>
 </div>
 <div class="section" id="drop-trigger">
 <span id="drop-trigger-statement"></span><h2>DROP TRIGGER<a class="headerlink" href="#drop-trigger" title="Permalink to this headline">¶</a></h2>
-<p>Dropping a trigger uses the <code class="docutils literal"><span class="pre">DROP</span> <span class="pre">TRIGGER</span></code> statement:</p>
+<p>Dropping a trigger uses the <code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">TRIGGER</span></code> statement:</p>
 <pre>
-<strong id="grammar-token-drop_trigger_statement">drop_trigger_statement</strong> ::=  DROP TRIGGER [ IF EXISTS ] <a class="reference internal" href="#grammar-token-trigger_name"><code class="xref docutils literal"><span class="pre">trigger_name</span></code></a> ON <a class="reference internal" href="ddl.html#grammar-token-table_name"><code class="xref docutils literal"><span class="pre">table_name</span></code></a>
+<strong id="grammar-token-drop-trigger-statement">drop_trigger_statement</strong> ::=  DROP TRIGGER [ IF EXISTS ] <a class="reference internal" href="#grammar-token-trigger-name"><code class="xref docutils literal notranslate"><span class="pre">trigger_name</span></code></a> ON <a class="reference internal" href="ddl.html#grammar-token-table-name"><code class="xref docutils literal notranslate"><span class="pre">table_name</span></code></a>
 </pre>
 <p>For instance:</p>
-<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">DROP</span> <span class="k">TRIGGER</span> <span class="n">myTrigger</span> <span class="k">ON</span> <span class="n">myTable</span><span class="p">;</span>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">DROP</span> <span class="k">TRIGGER</span> <span class="n">myTrigger</span> <span class="k">ON</span> <span class="n">myTable</span><span class="p">;</span>
 </pre></div>
 </div>
 </div>

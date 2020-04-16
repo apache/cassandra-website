@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="./../../../css/sphinx.css">
   
 
-   <link rel="top" title="Apache Cassandra Documentation v3.11.3" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Change Data Capture" href="cdc.html"/> <link rel="prev" title="Bloom Filters" href="bloom_filters.html"/> 
+   <link rel="top" title="Apache Cassandra Documentation v3.11.6" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Change Data Capture" href="cdc.html"/> <link rel="prev" title="Bloom Filters" href="bloom_filters.html"/> 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
   
   <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
@@ -55,7 +55,7 @@
 
       
         
-        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        <li><a href="./../../../doc">Documentation</a></li>
         
       
 
@@ -86,7 +86,7 @@
         <ul class="nav navbar-nav navbar-right">
           <li><a href="./../../../">Home</a></li>
           <li><a href="./../../../download/">Download</a></li>
-          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../doc/">Documentation</a></li>
           <li><a href="./../../../community/">Community</a></li>
           <li>
             <a href="./../../../blog/">Blog</a>
@@ -173,7 +173,7 @@
   <div class="section" id="compression">
 <h1>Compression<a class="headerlink" href="#compression" title="Permalink to this headline">¶</a></h1>
 <p>Cassandra offers operators the ability to configure compression on a per-table basis. Compression reduces the size of
-data on disk by compressing the SSTable in user-configurable compression <code class="docutils literal"><span class="pre">chunk_length_in_kb</span></code>. Because Cassandra
+data on disk by compressing the SSTable in user-configurable compression <code class="docutils literal notranslate"><span class="pre">chunk_length_in_kb</span></code>. Because Cassandra
 SSTables are immutable, the CPU cost of compressing is only necessary when the SSTable is written - subsequent updates
 to data will land in different SSTables, so Cassandra will not need to decompress, overwrite, and recompress data when
 UPDATE commands are issued. On reads, Cassandra will locate the relevant compressed chunks on disk, decompress the full
@@ -181,37 +181,37 @@ chunk, and then proceed with the remainder of the read path (merging data from d
 on).</p>
 <div class="section" id="configuring-compression">
 <h2>Configuring Compression<a class="headerlink" href="#configuring-compression" title="Permalink to this headline">¶</a></h2>
-<p>Compression is configured on a per-table basis as an optional argument to <code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">TABLE</span></code> or <code class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code>. By
+<p>Compression is configured on a per-table basis as an optional argument to <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">TABLE</span></code> or <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code>. By
 default, three options are relevant:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">class</span></code> specifies the compression class - Cassandra provides three classes (<code class="docutils literal"><span class="pre">LZ4Compressor</span></code>,
-<code class="docutils literal"><span class="pre">SnappyCompressor</span></code>, and <code class="docutils literal"><span class="pre">DeflateCompressor</span></code> ). The default is <code class="docutils literal"><span class="pre">LZ4Compressor</span></code>.</li>
-<li><code class="docutils literal"><span class="pre">chunk_length_in_kb</span></code> specifies the number of kilobytes of data per compression chunk. The default is 64KB.</li>
-<li><code class="docutils literal"><span class="pre">crc_check_chance</span></code> determines how likely Cassandra is to verify the checksum on each compression chunk during
+<li><code class="docutils literal notranslate"><span class="pre">class</span></code> specifies the compression class - Cassandra provides three classes (<code class="docutils literal notranslate"><span class="pre">LZ4Compressor</span></code>,
+<code class="docutils literal notranslate"><span class="pre">SnappyCompressor</span></code>, and <code class="docutils literal notranslate"><span class="pre">DeflateCompressor</span></code> ). The default is <code class="docutils literal notranslate"><span class="pre">LZ4Compressor</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">chunk_length_in_kb</span></code> specifies the number of kilobytes of data per compression chunk. The default is 64KB.</li>
+<li><code class="docutils literal notranslate"><span class="pre">crc_check_chance</span></code> determines how likely Cassandra is to verify the checksum on each compression chunk during
 reads. The default is 1.0.</li>
 </ul>
 <p>Users can set compression using the following syntax:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>CREATE TABLE keyspace.table (id int PRIMARY KEY) WITH compression = {&#39;class&#39;: &#39;LZ4Compressor&#39;};
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CREATE TABLE keyspace.table (id int PRIMARY KEY) WITH compression = {&#39;class&#39;: &#39;LZ4Compressor&#39;};
 </pre></div>
 </div>
 <p>Or</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>ALTER TABLE keyspace.table WITH compression = {&#39;class&#39;: &#39;SnappyCompressor&#39;, &#39;chunk_length_in_kb&#39;: 128, &#39;crc_check_chance&#39;: 0.5};
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ALTER TABLE keyspace.table WITH compression = {&#39;class&#39;: &#39;SnappyCompressor&#39;, &#39;chunk_length_in_kb&#39;: 128, &#39;crc_check_chance&#39;: 0.5};
 </pre></div>
 </div>
-<p>Once enabled, compression can be disabled with <code class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> setting <code class="docutils literal"><span class="pre">enabled</span></code> to <code class="docutils literal"><span class="pre">false</span></code>:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>ALTER TABLE keyspace.table WITH compression = {&#39;enabled&#39;:&#39;false&#39;};
+<p>Once enabled, compression can be disabled with <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> setting <code class="docutils literal notranslate"><span class="pre">enabled</span></code> to <code class="docutils literal notranslate"><span class="pre">false</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ALTER TABLE keyspace.table WITH compression = {&#39;enabled&#39;:&#39;false&#39;};
 </pre></div>
 </div>
 <p>Operators should be aware, however, that changing compression is not immediate. The data is compressed when the SSTable
 is written, and as SSTables are immutable, the compression will not be modified until the table is compacted. Upon
-issuing a change to the compression options via <code class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code>, the existing SSTables will not be modified until they
+issuing a change to the compression options via <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code>, the existing SSTables will not be modified until they
 are compacted - if an operator needs compression changes to take effect immediately, the operator can trigger an SSTable
-rewrite using <code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">scrub</span></code> or <code class="docutils literal"><span class="pre">nodetool</span> <span class="pre">upgradesstables</span> <span class="pre">-a</span></code>, both of which will rebuild the SSTables on disk,
+rewrite using <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">scrub</span></code> or <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">upgradesstables</span> <span class="pre">-a</span></code>, both of which will rebuild the SSTables on disk,
 re-compressing the data in the process.</p>
 </div>
 <div class="section" id="benefits-and-uses">
 <h2>Benefits and Uses<a class="headerlink" href="#benefits-and-uses" title="Permalink to this headline">¶</a></h2>
-<p>Compression&#8217;s primary benefit is that it reduces the amount of data written to disk. Not only does the reduced size save
+<p>Compression’s primary benefit is that it reduces the amount of data written to disk. Not only does the reduced size save
 in storage requirements, it often increases read and write throughput, as the CPU overhead of compressing data is faster
 than the time it would take to read or write the larger volume of uncompressed data from disk.</p>
 <p>Compression is most useful in tables comprised of many rows, where the rows are similar in nature. Tables containing
@@ -221,18 +221,18 @@ similar text columns (such as repeated JSON blobs) often compress very well.</p>
 <h2>Operational Impact<a class="headerlink" href="#operational-impact" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Compression metadata is stored off-heap and scales with data on disk.  This often requires 1-3GB of off-heap RAM per
-terabyte of data on disk, though the exact usage varies with <code class="docutils literal"><span class="pre">chunk_length_in_kb</span></code> and compression ratios.</li>
+terabyte of data on disk, though the exact usage varies with <code class="docutils literal notranslate"><span class="pre">chunk_length_in_kb</span></code> and compression ratios.</li>
 <li>Streaming operations involve compressing and decompressing data on compressed tables - in some code paths (such as
 non-vnode bootstrap), the CPU overhead of compression can be a limiting factor.</li>
 <li>The compression path checksums data to ensure correctness - while the traditional Cassandra read path does not have a
-way to ensure correctness of data on disk, compressed tables allow the user to set <code class="docutils literal"><span class="pre">crc_check_chance</span></code> (a float from
+way to ensure correctness of data on disk, compressed tables allow the user to set <code class="docutils literal notranslate"><span class="pre">crc_check_chance</span></code> (a float from
 0.0 to 1.0) to allow Cassandra to probabilistically validate chunks on read to verify bits on disk are not corrupt.</li>
 </ul>
 </div>
 <div class="section" id="advanced-use">
 <h2>Advanced Use<a class="headerlink" href="#advanced-use" title="Permalink to this headline">¶</a></h2>
 <p>Advanced users can provide their own compression class by implementing the interface at
-<code class="docutils literal"><span class="pre">org.apache.cassandra.io.compress.ICompressor</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.io.compress.ICompressor</span></code>.</p>
 </div>
 </div>
 
