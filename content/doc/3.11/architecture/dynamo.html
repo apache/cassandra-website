@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="./../../../css/sphinx.css">
   
 
-   <link rel="top" title="Apache Cassandra Documentation v3.11.3" href="../index.html"/> <link rel="up" title="Architecture" href="index.html"/> <link rel="next" title="Storage Engine" href="storage_engine.html"/> <link rel="prev" title="Overview" href="overview.html"/> 
+   <link rel="top" title="Apache Cassandra Documentation v3.11.6" href="../index.html"/> <link rel="up" title="Architecture" href="index.html"/> <link rel="next" title="Storage Engine" href="storage_engine.html"/> <link rel="prev" title="Overview" href="overview.html"/> 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
   
   <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
@@ -55,7 +55,7 @@
 
       
         
-        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        <li><a href="./../../../doc">Documentation</a></li>
         
       
 
@@ -86,7 +86,7 @@
         <ul class="nav navbar-nav navbar-right">
           <li><a href="./../../../">Home</a></li>
           <li><a href="./../../../download/">Download</a></li>
-          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../doc/">Documentation</a></li>
           <li><a href="./../../../community/">Community</a></li>
           <li>
             <a href="./../../../blog/">Blog</a>
@@ -190,13 +190,13 @@
 replication strategies are <a class="reference internal" href="#simple-strategy"><span class="std std-ref">SimpleStrategy</span></a> and <a class="reference internal" href="#network-topology-strategy"><span class="std std-ref">NetworkTopologyStrategy</span></a>.</p>
 <div class="section" id="simplestrategy">
 <span id="simple-strategy"></span><h3>SimpleStrategy<a class="headerlink" href="#simplestrategy" title="Permalink to this headline">¶</a></h3>
-<p>SimpleStrategy allows a single integer <code class="docutils literal"><span class="pre">replication_factor</span></code> to be defined. This determines the number of nodes that
-should contain a copy of each row.  For example, if <code class="docutils literal"><span class="pre">replication_factor</span></code> is 3, then three different nodes should store
+<p>SimpleStrategy allows a single integer <code class="docutils literal notranslate"><span class="pre">replication_factor</span></code> to be defined. This determines the number of nodes that
+should contain a copy of each row.  For example, if <code class="docutils literal notranslate"><span class="pre">replication_factor</span></code> is 3, then three different nodes should store
 a copy of each row.</p>
 <p>SimpleStrategy treats all nodes identically, ignoring any configured datacenters or racks.  To determine the replicas
 for a token range, Cassandra iterates through the tokens in the ring, starting with the token range of interest.  For
 each token, it checks whether the owning node has been added to the set of replicas, and if it has not, it is added to
-the set.  This process continues until <code class="docutils literal"><span class="pre">replication_factor</span></code> distinct nodes have been added to the set of replicas.</p>
+the set.  This process continues until <code class="docutils literal notranslate"><span class="pre">replication_factor</span></code> distinct nodes have been added to the set of replicas.</p>
 </div>
 <div class="section" id="networktopologystrategy">
 <span id="network-topology-strategy"></span><h3>NetworkTopologyStrategy<a class="headerlink" href="#networktopologystrategy" title="Permalink to this headline">¶</a></h3>
@@ -210,34 +210,34 @@ replica, but some racks may hold more than one. Note that this rack-aware behavi
 implications</a>.  For example, if there are not an even number of
 nodes in each rack, the data load on the smallest rack may be much higher.  Similarly, if a single node is bootstrapped
 into a new rack, it will be considered a replica for the entire ring.  For this reason, many operators choose to
-configure all nodes on a single &#8220;rack&#8221;.</p>
+configure all nodes on a single “rack”.</p>
 </div>
 </div>
 <div class="section" id="tunable-consistency">
 <h2>Tunable Consistency<a class="headerlink" href="#tunable-consistency" title="Permalink to this headline">¶</a></h2>
 <p>Cassandra supports a per-operation tradeoff between consistency and availability through <em>Consistency Levels</em>.
-Essentially, an operation&#8217;s consistency level specifies how many of the replicas need to respond to the coordinator in
+Essentially, an operation’s consistency level specifies how many of the replicas need to respond to the coordinator in
 order to consider the operation a success.</p>
 <p>The following consistency levels are available:</p>
 <dl class="docutils">
-<dt><code class="docutils literal"><span class="pre">ONE</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">ONE</span></code></dt>
 <dd>Only a single replica must respond.</dd>
-<dt><code class="docutils literal"><span class="pre">TWO</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">TWO</span></code></dt>
 <dd>Two replicas must respond.</dd>
-<dt><code class="docutils literal"><span class="pre">THREE</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">THREE</span></code></dt>
 <dd>Three replicas must respond.</dd>
-<dt><code class="docutils literal"><span class="pre">QUORUM</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">QUORUM</span></code></dt>
 <dd>A majority (n/2 + 1) of the replicas must respond.</dd>
-<dt><code class="docutils literal"><span class="pre">ALL</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">ALL</span></code></dt>
 <dd>All of the replicas must respond.</dd>
-<dt><code class="docutils literal"><span class="pre">LOCAL_QUORUM</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">LOCAL_QUORUM</span></code></dt>
 <dd>A majority of the replicas in the local datacenter (whichever datacenter the coordinator is in) must respond.</dd>
-<dt><code class="docutils literal"><span class="pre">EACH_QUORUM</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">EACH_QUORUM</span></code></dt>
 <dd>A majority of the replicas in each datacenter must respond.</dd>
-<dt><code class="docutils literal"><span class="pre">LOCAL_ONE</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">LOCAL_ONE</span></code></dt>
 <dd>Only a single replica must respond.  In a multi-datacenter cluster, this also gaurantees that read requests are not
 sent to replicas in a remote datacenter.</dd>
-<dt><code class="docutils literal"><span class="pre">ANY</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">ANY</span></code></dt>
 <dd>A single replica may respond, or the coordinator may store a hint. If a hint is stored, the coordinator will later
 attempt to replay the hint and deliver the mutation to the replicas.  This consistency level is only accepted for
 write operations.</dd>
@@ -249,19 +249,19 @@ level. There are a couple of exceptions to this:</p>
 <ul class="simple">
 <li>Speculative retry may issue a redundant read request to an extra replica if the other replicas have not responded
 within a specified time window.</li>
-<li>Based on <code class="docutils literal"><span class="pre">read_repair_chance</span></code> and <code class="docutils literal"><span class="pre">dclocal_read_repair_chance</span></code> (part of a table&#8217;s schema), read requests may be
+<li>Based on <code class="docutils literal notranslate"><span class="pre">read_repair_chance</span></code> and <code class="docutils literal notranslate"><span class="pre">dclocal_read_repair_chance</span></code> (part of a table’s schema), read requests may be
 randomly sent to all replicas in order to repair potentially inconsistent data.</li>
 </ul>
 <div class="section" id="picking-consistency-levels">
 <h3>Picking Consistency Levels<a class="headerlink" href="#picking-consistency-levels" title="Permalink to this headline">¶</a></h3>
-<p>It is common to pick read and write consistency levels that are high enough to overlap, resulting in &#8220;strong&#8221;
-consistency.  This is typically expressed as <code class="docutils literal"><span class="pre">W</span> <span class="pre">+</span> <span class="pre">R</span> <span class="pre">&gt;</span> <span class="pre">RF</span></code>, where <code class="docutils literal"><span class="pre">W</span></code> is the write consistency level, <code class="docutils literal"><span class="pre">R</span></code> is the
-read consistency level, and <code class="docutils literal"><span class="pre">RF</span></code> is the replication factor.  For example, if <code class="docutils literal"><span class="pre">RF</span> <span class="pre">=</span> <span class="pre">3</span></code>, a <code class="docutils literal"><span class="pre">QUORUM</span></code> request will
-require responses from at least two of the three replicas.  If <code class="docutils literal"><span class="pre">QUORUM</span></code> is used for both writes and reads, at least
+<p>It is common to pick read and write consistency levels that are high enough to overlap, resulting in “strong”
+consistency.  This is typically expressed as <code class="docutils literal notranslate"><span class="pre">W</span> <span class="pre">+</span> <span class="pre">R</span> <span class="pre">&gt;</span> <span class="pre">RF</span></code>, where <code class="docutils literal notranslate"><span class="pre">W</span></code> is the write consistency level, <code class="docutils literal notranslate"><span class="pre">R</span></code> is the
+read consistency level, and <code class="docutils literal notranslate"><span class="pre">RF</span></code> is the replication factor.  For example, if <code class="docutils literal notranslate"><span class="pre">RF</span> <span class="pre">=</span> <span class="pre">3</span></code>, a <code class="docutils literal notranslate"><span class="pre">QUORUM</span></code> request will
+require responses from at least two of the three replicas.  If <code class="docutils literal notranslate"><span class="pre">QUORUM</span></code> is used for both writes and reads, at least
 one of the replicas is guaranteed to participate in <em>both</em> the write and the read request, which in turn guarantees that
-the latest write will be read. In a multi-datacenter environment, <code class="docutils literal"><span class="pre">LOCAL_QUORUM</span></code> can be used to provide a weaker but
+the latest write will be read. In a multi-datacenter environment, <code class="docutils literal notranslate"><span class="pre">LOCAL_QUORUM</span></code> can be used to provide a weaker but
 still useful guarantee: reads are guaranteed to see the latest write from within the same datacenter.</p>
-<p>If this type of strong consistency isn&#8217;t required, lower consistency levels like <code class="docutils literal"><span class="pre">ONE</span></code> may be used to improve
+<p>If this type of strong consistency isn’t required, lower consistency levels like <code class="docutils literal notranslate"><span class="pre">ONE</span></code> may be used to improve
 throughput, latency, and availability.</p>
 </div>
 </div>
