@@ -27,7 +27,7 @@ popd
 make .build-doc
 
 # Relink the 3.11 version
-LATEST_VERSION=$(basename $(find ./doc -iname 3.11* -type d | head -n 1))
+LATEST_VERSION=$(basename $(find ./doc -iname 3.11* -type d | tail -n 1))
 rm -f doc/3.11
 ln -s -f ${LATEST_VERSION} doc/3.11
 
