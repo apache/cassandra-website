@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="./../../../css/sphinx.css">
   
 
-   <link rel="top" title="Apache Cassandra Documentation v3.11.6" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Backups" href="backups.html"/> <link rel="prev" title="Compression" href="compression.html"/> 
+   <link rel="top" title="Apache Cassandra Documentation v3.11.3" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Backups" href="backups.html"/> <link rel="prev" title="Compression" href="compression.html"/> 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
   
   <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
@@ -55,7 +55,7 @@
 
       
         
-        <li><a href="./../../../doc">Documentation</a></li>
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
         
       
 
@@ -86,7 +86,7 @@
         <ul class="nav navbar-nav navbar-right">
           <li><a href="./../../../">Home</a></li>
           <li><a href="./../../../download/">Download</a></li>
-          <li><a href="./../../../doc/">Documentation</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
           <li><a href="./../../../community/">Community</a></li>
           <li>
             <a href="./../../../blog/">Blog</a>
@@ -177,8 +177,8 @@
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>Change data capture (CDC) provides a mechanism to flag specific tables for archival as well as rejecting writes to those
 tables once a configurable size-on-disk for the combined flushed and unflushed CDC-log is reached. An operator can
-enable CDC on a table by setting the table property <code class="docutils literal notranslate"><span class="pre">cdc=true</span></code> (either when <a class="reference internal" href="../cql/ddl.html#create-table-statement"><span class="std std-ref">creating the table</span></a> or <a class="reference internal" href="../cql/ddl.html#alter-table-statement"><span class="std std-ref">altering it</span></a>), after which any CommitLogSegments containing
-data for a CDC-enabled table are moved to the directory specified in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> on segment discard. A threshold
+enable CDC on a table by setting the table property <code class="docutils literal"><span class="pre">cdc=true</span></code> (either when <a class="reference internal" href="../cql/ddl.html#create-table-statement"><span class="std std-ref">creating the table</span></a> or <a class="reference internal" href="../cql/ddl.html#alter-table-statement"><span class="std std-ref">altering it</span></a>), after which any CommitLogSegments containing
+data for a CDC-enabled table are moved to the directory specified in <code class="docutils literal"><span class="pre">cassandra.yaml</span></code> on segment discard. A threshold
 of total disk space allowed is specified in the yaml at which time newly allocated CommitLogSegments will not allow CDC
 data until a consumer parses and removes data from the destination archival directory.</p>
 </div>
@@ -187,7 +187,7 @@ data until a consumer parses and removes data from the destination archival dire
 <div class="section" id="enabling-or-disable-cdc-on-a-table">
 <h3>Enabling or disable CDC on a table<a class="headerlink" href="#enabling-or-disable-cdc-on-a-table" title="Permalink to this headline">¶</a></h3>
 <p>CDC is enable or disable through the <cite>cdc</cite> table property, for instance:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CREATE TABLE foo (a int, b text, PRIMARY KEY(a)) WITH cdc=true;
+<div class="highlight-none"><div class="highlight"><pre><span></span>CREATE TABLE foo (a int, b text, PRIMARY KEY(a)) WITH cdc=true;
 
 ALTER TABLE foo WITH cdc=true;
 
@@ -199,15 +199,15 @@ ALTER TABLE foo WITH cdc=false;
 <h3>cassandra.yaml parameters<a class="headerlink" href="#cassandra-yaml-parameters" title="Permalink to this headline">¶</a></h3>
 <p>The following <cite>cassandra.yaml</cite> are available for CDC:</p>
 <dl class="docutils">
-<dt><code class="docutils literal notranslate"><span class="pre">cdc_enabled</span></code> (default: false)</dt>
+<dt><code class="docutils literal"><span class="pre">cdc_enabled</span></code> (default: false)</dt>
 <dd>Enable or disable CDC operations node-wide.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">cdc_raw_directory</span></code> (default: <code class="docutils literal notranslate"><span class="pre">$CASSANDRA_HOME/data/cdc_raw</span></code>)</dt>
+<dt><code class="docutils literal"><span class="pre">cdc_raw_directory</span></code> (default: <code class="docutils literal"><span class="pre">$CASSANDRA_HOME/data/cdc_raw</span></code>)</dt>
 <dd>Destination for CommitLogSegments to be moved after all corresponding memtables are flushed.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">cdc_free_space_in_mb</span></code>: (default: min of 4096 and 1/8th volume space)</dt>
+<dt><code class="docutils literal"><span class="pre">cdc_free_space_in_mb</span></code>: (default: min of 4096 and 1/8th volume space)</dt>
 <dd>Calculated as sum of all active CommitLogSegments that permit CDC + all flushed CDC segments in
-<code class="docutils literal notranslate"><span class="pre">cdc_raw_directory</span></code>.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">cdc_free_space_check_interval_ms</span></code> (default: 250)</dt>
-<dd>When at capacity, we limit the frequency with which we re-calculate the space taken up by <code class="docutils literal notranslate"><span class="pre">cdc_raw_directory</span></code> to
+<code class="docutils literal"><span class="pre">cdc_raw_directory</span></code>.</dd>
+<dt><code class="docutils literal"><span class="pre">cdc_free_space_check_interval_ms</span></code> (default: 250)</dt>
+<dd>When at capacity, we limit the frequency with which we re-calculate the space taken up by <code class="docutils literal"><span class="pre">cdc_raw_directory</span></code> to
 prevent burning CPU cycles unnecessarily. Default is to check 4 times per second.</dd>
 </dl>
 </div>
@@ -223,7 +223,7 @@ available for use. In order to handle mutations read from disk, implement <a cla
 <h2>Warnings<a class="headerlink" href="#warnings" title="Permalink to this headline">¶</a></h2>
 <p><strong>Do not enable CDC without some kind of consumption process in-place.</strong></p>
 <p>The initial implementation of Change Data Capture does not include a parser (see <a class="reference internal" href="#reading-commitlogsegments"><span class="std std-ref">Reading CommitLogSegments</span></a> above)
-so, if CDC is enabled on a node and then on a table, the <code class="docutils literal notranslate"><span class="pre">cdc_free_space_in_mb</span></code> will fill up and then writes to
+so, if CDC is enabled on a node and then on a table, the <code class="docutils literal"><span class="pre">cdc_free_space_in_mb</span></code> will fill up and then writes to
 CDC-enabled tables will be rejected unless some consumption process is in place.</p>
 </div>
 <div class="section" id="further-reading">
