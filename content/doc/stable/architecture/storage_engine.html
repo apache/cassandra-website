@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="./../../../css/sphinx.css">
   
 
-   <link rel="top" title="Apache Cassandra Documentation v3.11.3" href="../index.html"/> <link rel="up" title="Architecture" href="index.html"/> <link rel="next" title="Guarantees" href="guarantees.html"/> <link rel="prev" title="Dynamo" href="dynamo.html"/> 
+   <link rel="top" title="Apache Cassandra Documentation v3.11.7" href="../index.html"/> <link rel="up" title="Architecture" href="index.html"/> <link rel="next" title="Guarantees" href="guarantees.html"/> <link rel="prev" title="Dynamo" href="dynamo.html"/> 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
   
   <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
@@ -174,11 +174,11 @@
 Eventually, memtables are flushed onto disk and become immutable <a class="reference internal" href="#sstables">SSTables</a>.  This can be triggered in several
 ways:</p>
 <ul class="simple">
-<li>The memory usage of the memtables exceeds the configured threshold  (see <code class="docutils literal"><span class="pre">memtable_cleanup_threshold</span></code>)</li>
+<li>The memory usage of the memtables exceeds the configured threshold  (see <code class="docutils literal notranslate"><span class="pre">memtable_cleanup_threshold</span></code>)</li>
 <li>The <a class="reference internal" href="#commit-log"><span class="std std-ref">CommitLog</span></a> approaches its maximum size, and forces memtable flushes in order to allow commitlog segments to
 be freed</li>
 </ul>
-<p>Memtables may be stored entirely on-heap or partially off-heap, depending on <code class="docutils literal"><span class="pre">memtable_allocation_type</span></code>.</p>
+<p>Memtables may be stored entirely on-heap or partially off-heap, depending on <code class="docutils literal notranslate"><span class="pre">memtable_allocation_type</span></code>.</p>
 </div>
 <div class="section" id="sstables">
 <h2>SSTables<a class="headerlink" href="#sstables" title="Permalink to this headline">¶</a></h2>
@@ -187,27 +187,27 @@ be freed</li>
 which combine multiple SSTables into one.  Once the new SSTable has been written, the old SSTables can be removed.</p>
 <p>Each SSTable is comprised of multiple components stored in separate files:</p>
 <dl class="docutils">
-<dt><code class="docutils literal"><span class="pre">Data.db</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">Data.db</span></code></dt>
 <dd>The actual data, i.e. the contents of rows.</dd>
-<dt><code class="docutils literal"><span class="pre">Index.db</span></code></dt>
-<dd>An index from partition keys to positions in the <code class="docutils literal"><span class="pre">Data.db</span></code> file.  For wide partitions, this may also include an
+<dt><code class="docutils literal notranslate"><span class="pre">Index.db</span></code></dt>
+<dd>An index from partition keys to positions in the <code class="docutils literal notranslate"><span class="pre">Data.db</span></code> file.  For wide partitions, this may also include an
 index to rows within a partition.</dd>
-<dt><code class="docutils literal"><span class="pre">Summary.db</span></code></dt>
-<dd>A sampling of (by default) every 128th entry in the <code class="docutils literal"><span class="pre">Index.db</span></code> file.</dd>
-<dt><code class="docutils literal"><span class="pre">Filter.db</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">Summary.db</span></code></dt>
+<dd>A sampling of (by default) every 128th entry in the <code class="docutils literal notranslate"><span class="pre">Index.db</span></code> file.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Filter.db</span></code></dt>
 <dd>A Bloom Filter of the partition keys in the SSTable.</dd>
-<dt><code class="docutils literal"><span class="pre">CompressionInfo.db</span></code></dt>
-<dd>Metadata about the offsets and lengths of compression chunks in the <code class="docutils literal"><span class="pre">Data.db</span></code> file.</dd>
-<dt><code class="docutils literal"><span class="pre">Statistics.db</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">CompressionInfo.db</span></code></dt>
+<dd>Metadata about the offsets and lengths of compression chunks in the <code class="docutils literal notranslate"><span class="pre">Data.db</span></code> file.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Statistics.db</span></code></dt>
 <dd>Stores metadata about the SSTable, including information about timestamps, tombstones, clustering keys, compaction,
 repair, compression, TTLs, and more.</dd>
-<dt><code class="docutils literal"><span class="pre">Digest.crc32</span></code></dt>
-<dd>A CRC-32 digest of the <code class="docutils literal"><span class="pre">Data.db</span></code> file.</dd>
-<dt><code class="docutils literal"><span class="pre">TOC.txt</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">Digest.crc32</span></code></dt>
+<dd>A CRC-32 digest of the <code class="docutils literal notranslate"><span class="pre">Data.db</span></code> file.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">TOC.txt</span></code></dt>
 <dd>A plain text list of the component files for the SSTable.</dd>
 </dl>
-<p>Within the <code class="docutils literal"><span class="pre">Data.db</span></code> file, rows are organized by partition.  These partitions are sorted in token order (i.e. by a
-hash of the partition key when the default partitioner, <code class="docutils literal"><span class="pre">Murmur3Partition</span></code>, is used).  Within a partition, rows are
+<p>Within the <code class="docutils literal notranslate"><span class="pre">Data.db</span></code> file, rows are organized by partition.  These partitions are sorted in token order (i.e. by a
+hash of the partition key when the default partitioner, <code class="docutils literal notranslate"><span class="pre">Murmur3Partition</span></code>, is used).  Within a partition, rows are
 stored in the order of their clustering keys.</p>
 <p>SSTables can be optionally compressed using block-based compression.</p>
 </div>

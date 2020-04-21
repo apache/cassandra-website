@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="./../../../css/sphinx.css">
   
 
-   <link rel="top" title="Apache Cassandra Documentation v3.11.3" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Cassandra Tools" href="../tools/index.html"/> <link rel="prev" title="Security" href="security.html"/> 
+   <link rel="top" title="Apache Cassandra Documentation v3.11.7" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Cassandra Tools" href="../tools/index.html"/> <link rel="prev" title="Security" href="security.html"/> 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
   
   <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
@@ -185,9 +185,9 @@ additional CPU cores often increases throughput of both reads and writes.</p>
 </div>
 <div class="section" id="memory">
 <h2>Memory<a class="headerlink" href="#memory" title="Permalink to this headline">¶</a></h2>
-<p>Cassandra runs within a Java VM, which will pre-allocate a fixed size heap (java&#8217;s Xmx system parameter). In addition to
+<p>Cassandra runs within a Java VM, which will pre-allocate a fixed size heap (java’s Xmx system parameter). In addition to
 the heap, Cassandra will use significant amounts of RAM offheap for compression metadata, bloom filters, row, key, and
-counter caches, and an in process page cache. Finally, Cassandra will take advantage of the operating system&#8217;s page
+counter caches, and an in process page cache. Finally, Cassandra will take advantage of the operating system’s page
 cache, storing recently accessed portions files in RAM for rapid re-use.</p>
 <p>For optimal performance, operators should benchmark and tune their clusters based on their individual workload. However,
 basic guidelines suggest:</p>
@@ -208,17 +208,17 @@ only ever read on node start-up. SSTable (data file) writes on the other hand oc
 satisfy client look-ups. SSTables are also periodically merged and rewritten in a process called compaction.  The data
 held in the commitlog directory is data that has not been permanently saved to the SSTable data directories - it will be
 periodically purged once it is flushed to the SSTable data files.</p>
-<p>Cassandra performs very well on both spinning hard drives and solid state disks. In both cases, Cassandra&#8217;s sorted
+<p>Cassandra performs very well on both spinning hard drives and solid state disks. In both cases, Cassandra’s sorted
 immutable SSTables allow for linear reads, few seeks, and few overwrites, maximizing throughput for HDDs and lifespan of
-SSDs by avoiding write amplification. However, when using spinning disks, it&#8217;s important that the commitlog
-(<code class="docutils literal"><span class="pre">commitlog_directory</span></code>) be on one physical disk (not simply a partition, but a physical disk), and the data files
-(<code class="docutils literal"><span class="pre">data_file_directories</span></code>) be set to a separate physical disk. By separating the commitlog from the data directory,
+SSDs by avoiding write amplification. However, when using spinning disks, it’s important that the commitlog
+(<code class="docutils literal notranslate"><span class="pre">commitlog_directory</span></code>) be on one physical disk (not simply a partition, but a physical disk), and the data files
+(<code class="docutils literal notranslate"><span class="pre">data_file_directories</span></code>) be set to a separate physical disk. By separating the commitlog from the data directory,
 writes can benefit from sequential appends to the commitlog without having to seek around the platter as reads request
 data from various SSTables on disk.</p>
 <p>In most cases, Cassandra is designed to provide redundancy via multiple independent, inexpensive servers. For this
 reason, using NFS or a SAN for data directories is an antipattern and should typically be avoided.  Similarly, servers
 with multiple disks are often better served by using RAID0 or JBOD than RAID1 or RAID5 - replication provided by
-Cassandra obsoletes the need for replication at the disk layer, so it&#8217;s typically recommended that operators take
+Cassandra obsoletes the need for replication at the disk layer, so it’s typically recommended that operators take
 advantage of the additional throughput of RAID0 rather than protecting against failures with RAID1 or RAID5.</p>
 </div>
 <div class="section" id="common-cloud-choices">
