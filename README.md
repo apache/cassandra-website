@@ -58,3 +58,10 @@ $ docker-compose up cassandra-website-serve
 ```
 
 For information about the site layout see the **Layout** section of [README](src/README#layout) in the _src_ directory.
+
+Staging the site
+----------------
+
+Changes to the content/ directory on the `asf-staging` will be staged at https://cassandra.staged.apache.org/
+
+Please validate changes here before pushing to the main website.
