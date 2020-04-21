@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-alpha2/troubleshooting/use_tools.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha2" href="../index.html"/> <link rel="up" title="Troubleshooting" href="index.html"/> <link rel="next" title="Contributing to Cassandra" href="../development/index.html"/> <link rel="prev" title="Use Nodetool" href="use_nodetool.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">Troubleshooting</a></li>
+      
+
+      
+      <li>Diving Deep, Use External Tools</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Troubleshooting</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="finding_nodes.html">Find The Misbehaving Nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reading_logs.html">Cassandra Logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use_nodetool.html">Use Nodetool</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Diving Deep, Use External Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#jvm-tooling">JVM Tooling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#basic-os-tooling">Basic OS Tooling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#advanced-tools">Advanced tools</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="diving-deep-use-external-tools">
+<span id="use-os-tools"></span><h1>Diving Deep, Use External Tools<a class="headerlink" href="#diving-deep-use-external-tools" title="Permalink to this headline">¶</a></h1>
+<p>Machine access allows operators to dive even deeper than logs and <code class="docutils literal notranslate"><span class="pre">nodetool</span></code>
+allow. While every Cassandra operator may have their personal favorite
+toolsets for troubleshooting issues, this page contains some of the most common
+operator techniques and examples of those tools. Many of these commands work
+only on Linux, but if you are deploying on a different operating system you may
+have access to other substantially similar tools that assess similar OS level
+metrics and processes.</p>
+<div class="section" id="jvm-tooling">
+<h2>JVM Tooling<a class="headerlink" href="#jvm-tooling" title="Permalink to this headline">¶</a></h2>
+<p>The JVM ships with a number of useful tools. Some of them are useful for
+debugging Cassandra issues, especially related to heap and execution stacks.</p>
+<p><strong>NOTE</strong>: There are two common gotchas with JVM tooling and Cassandra:</p>
+<ol class="arabic simple">
+<li>By default Cassandra ships with <code class="docutils literal notranslate"><span class="pre">-XX:+PerfDisableSharedMem</span></code> set to prevent
+long pauses (see <code class="docutils literal notranslate"><span class="pre">CASSANDRA-9242</span></code> and <code class="docutils literal notranslate"><span class="pre">CASSANDRA-9483</span></code> for details). If
+you want to use JVM tooling you can instead have <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> mounted on an in
+memory <code class="docutils literal notranslate"><span class="pre">tmpfs</span></code> which also effectively works around <code class="docutils literal notranslate"><span class="pre">CASSANDRA-9242</span></code>.</li>
+<li>Make sure you run the tools as the same user as Cassandra is running as,
+e.g. if the database is running as <code class="docutils literal notranslate"><span class="pre">cassandra</span></code> the tool also has to be
+run as <code class="docutils literal notranslate"><span class="pre">cassandra</span></code>, e.g. via <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">cassandra</span> <span class="pre">&lt;cmd&gt;</span></code>.</li>
+</ol>
+<div class="section" id="garbage-collection-state-jstat">
+<h3>Garbage Collection State (jstat)<a class="headerlink" href="#garbage-collection-state-jstat" title="Permalink to this headline">¶</a></h3>
+<p>If you suspect heap pressure you can use <code class="docutils literal notranslate"><span class="pre">jstat</span></code> to dive deep into the
+garbage collection state of a Cassandra process. This command is always
+safe to run and yields detailed heap information including eden heap usage (E),
+old generation heap usage (O), count of eden collections (YGC), time spend in
+eden collections (YGCT), old/mixed generation collections (FGC) and time spent
+in old/mixed generation collections (FGCT):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jstat</span> <span class="o">-</span><span class="n">gcutil</span> <span class="o">&lt;</span><span class="n">cassandra</span> <span class="n">pid</span><span class="o">&gt;</span> <span class="mi">500</span><span class="n">ms</span>
+ <span class="n">S0</span>     <span class="n">S1</span>     <span class="n">E</span>      <span class="n">O</span>      <span class="n">M</span>     <span class="n">CCS</span>    <span class="n">YGC</span>     <span class="n">YGCT</span>    <span class="n">FGC</span>    <span class="n">FGCT</span>     <span class="n">GCT</span>
+ <span class="mf">0.00</span>   <span class="mf">0.00</span>  <span class="mf">81.53</span>  <span class="mf">31.16</span>  <span class="mf">93.07</span>  <span class="mf">88.20</span>     <span class="mi">12</span>    <span class="mf">0.151</span>     <span class="mi">3</span>    <span class="mf">0.257</span>    <span class="mf">0.408</span>
+ <span class="mf">0.00</span>   <span class="mf">0.00</span>  <span class="mf">82.36</span>  <span class="mf">31.16</span>  <span class="mf">93.07</span>  <span class="mf">88.20</span>     <span class="mi">12</span>    <span class="mf">0.151</span>     <span class="mi">3</span>    <span class="mf">0.257</span>    <span class="mf">0.408</span>
+ <span class="mf">0.00</span>   <span class="mf">0.00</span>  <span class="mf">82.36</span>  <span class="mf">31.16</span>  <span class="mf">93.07</span>  <span class="mf">88.20</span>     <span class="mi">12</span>    <span class="mf">0.151</span>     <span class="mi">3</span>    <span class="mf">0.257</span>    <span class="mf">0.408</span>
+ <span class="mf">0.00</span>   <span class="mf">0.00</span>  <span class="mf">83.19</span>  <span class="mf">31.16</span>  <span class="mf">93.07</span>  <span class="mf">88.20</span>     <span class="mi">12</span>    <span class="mf">0.151</span>     <span class="mi">3</span>    <span class="mf">0.257</span>    <span class="mf">0.408</span>
+ <span class="mf">0.00</span>   <span class="mf">0.00</span>  <span class="mf">83.19</span>  <span class="mf">31.16</span>  <span class="mf">93.07</span>  <span class="mf">88.20</span>     <span class="mi">12</span>    <span class="mf">0.151</span>     <span class="mi">3</span>    <span class="mf">0.257</span>    <span class="mf">0.408</span>
+ <span class="mf">0.00</span>   <span class="mf">0.00</span>  <span class="mf">84.19</span>  <span class="mf">31.16</span>  <span class="mf">93.07</span>  <span class="mf">88.20</span>     <span class="mi">12</span>    <span class="mf">0.151</span>     <span class="mi">3</span>    <span class="mf">0.257</span>    <span class="mf">0.408</span>
+ <span class="mf">0.00</span>   <span class="mf">0.00</span>  <span class="mf">84.19</span>  <span class="mf">31.16</span>  <span class="mf">93.07</span>  <span class="mf">88.20</span>     <span class="mi">12</span>    <span class="mf">0.151</span>     <span class="mi">3</span>    <span class="mf">0.257</span>    <span class="mf">0.408</span>
+ <span class="mf">0.00</span>   <span class="mf">0.00</span>  <span class="mf">85.03</span>  <span class="mf">31.16</span>  <span class="mf">93.07</span>  <span class="mf">88.20</span>     <span class="mi">12</span>    <span class="mf">0.151</span>     <span class="mi">3</span>    <span class="mf">0.257</span>    <span class="mf">0.408</span>
+ <span class="mf">0.00</span>   <span class="mf">0.00</span>  <span class="mf">85.03</span>  <span class="mf">31.16</span>  <span class="mf">93.07</span>  <span class="mf">88.20</span>     <span class="mi">12</span>    <span class="mf">0.151</span>     <span class="mi">3</span>    <span class="mf">0.257</span>    <span class="mf">0.408</span>
+ <span class="mf">0.00</span>   <span class="mf">0.00</span>  <span class="mf">85.94</span>  <span class="mf">31.16</span>  <span class="mf">93.07</span>  <span class="mf">88.20</span>     <span class="mi">12</span>    <span class="mf">0.151</span>     <span class="mi">3</span>    <span class="mf">0.257</span>    <span class="mf">0.408</span>
+</pre></div>
+</div>
+<p>In this case we see we have a relatively healthy heap profile, with 31.16%
+old generation heap usage and 83% eden. If the old generation routinely is
+above 75% then you probably need more heap (assuming CMS with a 75% occupancy
+threshold). If you do have such persistently high old gen that often means you
+either have under-provisioned the old generation heap, or that there is too
+much live data on heap for Cassandra to collect (e.g. because of memtables).
+Another thing to watch for is time between young garbage collections (YGC),
+which indicate how frequently the eden heap is collected. Each young gc pause
+is about 20-50ms, so if you have a lot of them your clients will notice in
+their high percentile latencies.</p>
+</div>
+<div class="section" id="thread-information-jstack">
+<h3>Thread Information (jstack)<a class="headerlink" href="#thread-information-jstack" title="Permalink to this headline">¶</a></h3>
+<p>To get a point in time snapshot of exactly what Cassandra is doing, run
+<code class="docutils literal notranslate"><span class="pre">jstack</span></code> against the Cassandra PID. <strong>Note</strong> that this does pause the JVM for
+a very brief period (&lt;20ms).:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ jstack &lt;cassandra pid&gt; &gt; threaddump
+
+# display the threaddump
+$ cat threaddump
+...
+
+# look at runnable threads
+$grep RUNNABLE threaddump -B 1
+&quot;Attach Listener&quot; #15 daemon prio=9 os_prio=0 tid=0x00007f829c001000 nid=0x3a74 waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+--
+&quot;DestroyJavaVM&quot; #13 prio=5 os_prio=0 tid=0x00007f82e800e000 nid=0x2a19 waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+--
+&quot;JPS thread pool&quot; #10 prio=5 os_prio=0 tid=0x00007f82e84d0800 nid=0x2a2c runnable [0x00007f82d0856000]
+   java.lang.Thread.State: RUNNABLE
+--
+&quot;Service Thread&quot; #9 daemon prio=9 os_prio=0 tid=0x00007f82e80d7000 nid=0x2a2a runnable [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+--
+&quot;C1 CompilerThread3&quot; #8 daemon prio=9 os_prio=0 tid=0x00007f82e80cc000 nid=0x2a29 waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+--
+...
+
+# Note that the nid is the Linux thread id
+</pre></div>
+</div>
+<p>Some of the most important information in the threaddumps are waiting/blocking
+threads, including what locks or monitors the thread is blocking/waiting on.</p>
+</div>
+</div>
+<div class="section" id="basic-os-tooling">
+<h2>Basic OS Tooling<a class="headerlink" href="#basic-os-tooling" title="Permalink to this headline">¶</a></h2>
+<p>A great place to start when debugging a Cassandra issue is understanding how
+Cassandra is interacting with system resources. The following are all
+resources that Cassandra makes heavy uses of:</p>
+<ul class="simple">
+<li>CPU cores. For executing concurrent user queries</li>
+<li>CPU processing time. For query activity (data decompression, row merging,
+etc…)</li>
+<li>CPU processing time (low priority). For background tasks (compaction,
+streaming, etc …)</li>
+<li>RAM for Java Heap. Used to hold internal data-structures and by default the
+Cassandra memtables. Heap space is a crucial component of write performance
+as well as generally.</li>
+<li>RAM for OS disk cache. Used to cache frequently accessed SSTable blocks. OS
+disk cache is a crucial component of read performance.</li>
+<li>Disks. Cassandra cares a lot about disk read latency, disk write throughput,
+and of course disk space.</li>
+<li>Network latency. Cassandra makes many internode requests, so network latency
+between nodes can directly impact performance.</li>
+<li>Network throughput. Cassandra (as other databases) frequently have the
+so called “incast” problem where a small request (e.g. <code class="docutils literal notranslate"><span class="pre">SELECT</span> <span class="pre">*</span> <span class="pre">from</span>
+<span class="pre">foo.bar</span></code>) returns a massively large result set (e.g. the entire dataset).
+In such situations outgoing bandwidth is crucial.</li>
+</ul>
+<p>Often troubleshooting Cassandra comes down to troubleshooting what resource
+the machine or cluster is running out of. Then you create more of that resource
+or change the query pattern to make less use of that resource.</p>
+<div class="section" id="high-level-resource-usage-top-htop">
+<h3>High Level Resource Usage (top/htop)<a class="headerlink" href="#high-level-resource-usage-top-htop" title="Permalink to this headline">¶</a></h3>
+<p>Cassandra makes signifiant use of system resources, and often the very first
+useful action is to run <code class="docutils literal notranslate"><span class="pre">top</span></code> or <code class="docutils literal notranslate"><span class="pre">htop</span></code> (<a class="reference external" href="https://hisham.hm/htop/">website</a>)to see the state of the machine.</p>
+<p>Useful things to look at:</p>
+<ul class="simple">
+<li>System load levels. While these numbers can be confusing, generally speaking
+if the load average is greater than the number of CPU cores, Cassandra
+probably won’t have very good (sub 100 millisecond) latencies. See
+<a class="reference external" href="http://www.brendangregg.com/blog/2017-08-08/linux-load-averages.html">Linux Load Averages</a>
+for more information.</li>
+<li>CPU utilization. <code class="docutils literal notranslate"><span class="pre">htop</span></code> in particular can help break down CPU utilization
+into <code class="docutils literal notranslate"><span class="pre">user</span></code> (low and normal priority), <code class="docutils literal notranslate"><span class="pre">system</span></code> (kernel), and <code class="docutils literal notranslate"><span class="pre">io-wait</span></code>
+. Cassandra query threads execute as normal priority <code class="docutils literal notranslate"><span class="pre">user</span></code> threads, while
+compaction threads execute as low priority <code class="docutils literal notranslate"><span class="pre">user</span></code> threads. High <code class="docutils literal notranslate"><span class="pre">system</span></code>
+time could indicate problems like thread contention, and high <code class="docutils literal notranslate"><span class="pre">io-wait</span></code>
+may indicate slow disk drives. This can help you understand what Cassandra
+is spending processing resources doing.</li>
+<li>Memory usage. Look for which programs have the most resident memory, it is
+probably Cassandra. The number for Cassandra is likely inaccurately high due
+to how Linux (as of 2018) accounts for memory mapped file memory.</li>
+</ul>
+</div>
+<div class="section" id="io-usage-iostat">
+<span id="os-iostat"></span><h3>IO Usage (iostat)<a class="headerlink" href="#io-usage-iostat" title="Permalink to this headline">¶</a></h3>
+<p>Use iostat to determine how data drives are faring, including latency
+distributions, throughput, and utilization:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo iostat -xdm 2
+Linux 4.13.0-13-generic (hostname)     07/03/2018     _x86_64_    (8 CPU)
+
+Device:         rrqm/s   wrqm/s     r/s     w/s    rMB/s    wMB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util
+sda               0.00     0.28    0.32    5.42     0.01     0.13    48.55     0.01    2.21    0.26    2.32   0.64   0.37
+sdb               0.00     0.00    0.00    0.00     0.00     0.00    79.34     0.00    0.20    0.20    0.00   0.16   0.00
+sdc               0.34     0.27    0.76    0.36     0.01     0.02    47.56     0.03   26.90    2.98   77.73   9.21   1.03
+
+Device:         rrqm/s   wrqm/s     r/s     w/s    rMB/s    wMB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util
+sda               0.00     0.00    2.00   32.00     0.01     4.04   244.24     0.54   16.00    0.00   17.00   1.06   3.60
+sdb               0.00     0.00    0.00    0.00     0.00     0.00     0.00     0.00    0.00    0.00    0.00   0.00   0.00
+sdc               0.00    24.50    0.00  114.00     0.00    11.62   208.70     5.56   48.79    0.00   48.79   1.12  12.80
+</pre></div>
+</div>
+<p>In this case we can see that <code class="docutils literal notranslate"><span class="pre">/dev/sdc1</span></code> is a very slow drive, having an
+<code class="docutils literal notranslate"><span class="pre">await</span></code> close to 50 milliseconds and an <code class="docutils literal notranslate"><span class="pre">avgqu-sz</span></code> close to 5 ios. The
+drive is not particularly saturated (utilization is only 12.8%), but we should
+still be concerned about how this would affect our p99 latency since 50ms is
+quite long for typical Cassandra operations. That being said, in this case
+most of the latency is present in writes (typically writes are more latent
+than reads), which due to the LSM nature of Cassandra is often hidden from
+the user.</p>
+<p>Important metrics to assess using iostat:</p>
+<ul class="simple">
+<li>Reads and writes per second. These numbers will change with the workload,
+but generally speaking the more reads Cassandra has to do from disk the
+slower Cassandra read latencies are. Large numbers of reads per second
+can be a dead giveaway that the cluster has insufficient memory for OS
+page caching.</li>
+<li>Write throughput. Cassandra’s LSM model defers user writes and batches them
+together, which means that throughput to the underlying medium is the most
+important write metric for Cassandra.</li>
+<li>Read latency (<code class="docutils literal notranslate"><span class="pre">r_await</span></code>). When Cassandra missed the OS page cache and reads
+from SSTables, the read latency directly determines how fast Cassandra can
+respond with the data.</li>
+<li>Write latency. Cassandra is less sensitive to write latency except when it
+syncs the commit log. This typically enters into the very high percentiles of
+write latency.</li>
+</ul>
+<p>Note that to get detailed latency breakdowns you will need a more advanced
+tool such as <a class="reference internal" href="#use-bcc-tools"><span class="std std-ref">bcc-tools</span></a>.</p>
+</div>
+<div class="section" id="os-page-cache-usage">
+<h3>OS page Cache Usage<a class="headerlink" href="#os-page-cache-usage" title="Permalink to this headline">¶</a></h3>
+<p>As Cassandra makes heavy use of memory mapped files, the health of the
+operating system’s <a class="reference external" href="https://en.wikipedia.org/wiki/Page_cache">Page Cache</a> is
+crucial to performance. Start by finding how much available cache is in the
+system:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ free -g
+              total        used        free      shared  buff/cache   available
+Mem:             15           9           2           0           3           5
+Swap:             0           0           0
+</pre></div>
+</div>
+<p>In this case 9GB of memory is used by user processes (Cassandra heap) and 8GB
+is available for OS page cache. Of that, 3GB is actually used to cache files.
+If most memory is used and unavailable to the page cache, Cassandra performance
+can suffer significantly. This is why Cassandra starts with a reasonably small
+amount of memory reserved for the heap.</p>
+<p>If you suspect that you are missing the OS page cache frequently you can use
+advanced tools like <a class="reference internal" href="#use-bcc-tools"><span class="std std-ref">cachestat</span></a> or
+<a class="reference internal" href="#use-vmtouch"><span class="std std-ref">vmtouch</span></a> to dive deeper.</p>
+</div>
+<div class="section" id="network-latency-and-reliability">
+<h3>Network Latency and Reliability<a class="headerlink" href="#network-latency-and-reliability" title="Permalink to this headline">¶</a></h3>
+<p>Whenever Cassandra does writes or reads that involve other replicas,
+<code class="docutils literal notranslate"><span class="pre">LOCAL_QUORUM</span></code> reads for example, one of the dominant effects on latency is
+network latency. When trying to debug issues with multi machine operations,
+the network can be an important resource to investigate. You can determine
+internode latency using tools like <code class="docutils literal notranslate"><span class="pre">ping</span></code> and <code class="docutils literal notranslate"><span class="pre">traceroute</span></code> or most
+effectively <code class="docutils literal notranslate"><span class="pre">mtr</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mtr -nr www.google.com
+Start: Sun Jul 22 13:10:28 2018
+HOST: hostname                     Loss%   Snt   Last   Avg  Best  Wrst StDev
+  1.|-- 192.168.1.1                0.0%    10    2.0   1.9   1.1   3.7   0.7
+  2.|-- 96.123.29.15               0.0%    10   11.4  11.0   9.0  16.4   1.9
+  3.|-- 68.86.249.21               0.0%    10   10.6  10.7   9.0  13.7   1.1
+  4.|-- 162.141.78.129             0.0%    10   11.5  10.6   9.6  12.4   0.7
+  5.|-- 162.151.78.253             0.0%    10   10.9  12.1  10.4  20.2   2.8
+  6.|-- 68.86.143.93               0.0%    10   12.4  12.6   9.9  23.1   3.8
+  7.|-- 96.112.146.18              0.0%    10   11.9  12.4  10.6  15.5   1.6
+  9.|-- 209.85.252.250             0.0%    10   13.7  13.2  12.5  13.9   0.0
+ 10.|-- 108.170.242.238            0.0%    10   12.7  12.4  11.1  13.0   0.5
+ 11.|-- 74.125.253.149             0.0%    10   13.4  13.7  11.8  19.2   2.1
+ 12.|-- 216.239.62.40              0.0%    10   13.4  14.7  11.5  26.9   4.6
+ 13.|-- 108.170.242.81             0.0%    10   14.4  13.2  10.9  16.0   1.7
+ 14.|-- 72.14.239.43               0.0%    10   12.2  16.1  11.0  32.8   7.1
+ 15.|-- 216.58.195.68              0.0%    10   25.1  15.3  11.1  25.1   4.8
+</pre></div>
+</div>
+<p>In this example of <code class="docutils literal notranslate"><span class="pre">mtr</span></code>, we can rapidly assess the path that your packets
+are taking, as well as what their typical loss and latency are. Packet loss
+typically leads to between <code class="docutils literal notranslate"><span class="pre">200ms</span></code> and <code class="docutils literal notranslate"><span class="pre">3s</span></code> of additional latency, so that
+can be a common cause of latency issues.</p>
+</div>
+<div class="section" id="network-throughput">
+<h3>Network Throughput<a class="headerlink" href="#network-throughput" title="Permalink to this headline">¶</a></h3>
+<p>As Cassandra is sensitive to outgoing bandwidth limitations, sometimes it is
+useful to determine if network throughput is limited. One handy tool to do
+this is <a class="reference external" href="https://www.systutorials.com/docs/linux/man/8-iftop/">iftop</a> which
+shows both bandwidth usage as well as connection information at a glance. An
+example showing traffic during a stress run against a local <code class="docutils literal notranslate"><span class="pre">ccm</span></code> cluster:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ # remove the -t for ncurses instead of pure text
+$ sudo iftop -nNtP -i lo
+interface: lo
+IP address is: 127.0.0.1
+MAC address is: 00:00:00:00:00:00
+Listening on lo
+   # Host name (port/service if enabled)            last 2s   last 10s   last 40s cumulative
+--------------------------------------------------------------------------------------------
+   1 127.0.0.1:58946                          =&gt;      869Kb      869Kb      869Kb      217KB
+     127.0.0.3:9042                           &lt;=         0b         0b         0b         0B
+   2 127.0.0.1:54654                          =&gt;      736Kb      736Kb      736Kb      184KB
+     127.0.0.1:9042                           &lt;=         0b         0b         0b         0B
+   3 127.0.0.1:51186                          =&gt;      669Kb      669Kb      669Kb      167KB
+     127.0.0.2:9042                           &lt;=         0b         0b         0b         0B
+   4 127.0.0.3:9042                           =&gt;     3.30Kb     3.30Kb     3.30Kb       845B
+     127.0.0.1:58946                          &lt;=         0b         0b         0b         0B
+   5 127.0.0.1:9042                           =&gt;     2.79Kb     2.79Kb     2.79Kb       715B
+     127.0.0.1:54654                          &lt;=         0b         0b         0b         0B
+   6 127.0.0.2:9042                           =&gt;     2.54Kb     2.54Kb     2.54Kb       650B
+     127.0.0.1:51186                          &lt;=         0b         0b         0b         0B
+   7 127.0.0.1:36894                          =&gt;     1.65Kb     1.65Kb     1.65Kb       423B
+     127.0.0.5:7000                           &lt;=         0b         0b         0b         0B
+   8 127.0.0.1:38034                          =&gt;     1.50Kb     1.50Kb     1.50Kb       385B
+     127.0.0.2:7000                           &lt;=         0b         0b         0b         0B
+   9 127.0.0.1:56324                          =&gt;     1.50Kb     1.50Kb     1.50Kb       383B
+     127.0.0.1:7000                           &lt;=         0b         0b         0b         0B
+  10 127.0.0.1:53044                          =&gt;     1.43Kb     1.43Kb     1.43Kb       366B
+     127.0.0.4:7000                           &lt;=         0b         0b         0b         0B
+--------------------------------------------------------------------------------------------
+Total send rate:                                     2.25Mb     2.25Mb     2.25Mb
+Total receive rate:                                      0b         0b         0b
+Total send and receive rate:                         2.25Mb     2.25Mb     2.25Mb
+--------------------------------------------------------------------------------------------
+Peak rate (sent/received/total):                     2.25Mb         0b     2.25Mb
+Cumulative (sent/received/total):                     576KB         0B      576KB
+============================================================================================
+</pre></div>
+</div>
+<p>In this case we can see that bandwidth is fairly shared between many peers,
+but if the total was getting close to the rated capacity of the NIC or was focussed
+on a single client, that may indicate a clue as to what issue is occurring.</p>
+</div>
+</div>
+<div class="section" id="advanced-tools">
+<h2>Advanced tools<a class="headerlink" href="#advanced-tools" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes as an operator you may need to really dive deep. This is where
+advanced OS tooling can come in handy.</p>
+<div class="section" id="bcc-tools">
+<span id="use-bcc-tools"></span><h3>bcc-tools<a class="headerlink" href="#bcc-tools" title="Permalink to this headline">¶</a></h3>
+<p>Most modern Linux distributions (kernels newer than <code class="docutils literal notranslate"><span class="pre">4.1</span></code>) support <a class="reference external" href="https://github.com/iovisor/bcc">bcc-tools</a> for diving deep into performance problems.
+First install <code class="docutils literal notranslate"><span class="pre">bcc-tools</span></code>, e.g.  via <code class="docutils literal notranslate"><span class="pre">apt</span></code> on Debian:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ apt install bcc-tools
+</pre></div>
+</div>
+<p>Then you can use all the tools that <code class="docutils literal notranslate"><span class="pre">bcc-tools</span></code> contains. One of the most
+useful tools is <code class="docutils literal notranslate"><span class="pre">cachestat</span></code>
+(<a class="reference external" href="https://github.com/iovisor/bcc/blob/master/tools/cachestat_example.txt">cachestat examples</a>)
+which allows you to determine exactly how many OS page cache hits and misses
+are happening:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo /usr/share/bcc/tools/cachestat -T 1
+TIME        TOTAL   MISSES     HITS  DIRTIES   BUFFERS_MB  CACHED_MB
+18:44:08       66       66        0       64           88       4427
+18:44:09       40       40        0       75           88       4427
+18:44:10     4353       45     4308      203           88       4427
+18:44:11       84       77        7       13           88       4428
+18:44:12     2511       14     2497       14           88       4428
+18:44:13      101       98        3       18           88       4428
+18:44:14    16741        0    16741       58           88       4428
+18:44:15     1935       36     1899       18           88       4428
+18:44:16       89       34       55       18           88       4428
+</pre></div>
+</div>
+<p>In this case there are not too many page cache <code class="docutils literal notranslate"><span class="pre">MISSES</span></code> which indicates a
+reasonably sized cache. These metrics are the most direct measurement of your
+Cassandra node’s “hot” dataset. If you don’t have enough cache, <code class="docutils literal notranslate"><span class="pre">MISSES</span></code> will
+be high and performance will be slow. If you have enough cache, <code class="docutils literal notranslate"><span class="pre">MISSES</span></code> will
+be low and performance will be fast (as almost all reads are being served out
+of memory).</p>
+<p>You can also measure disk latency distributions using <code class="docutils literal notranslate"><span class="pre">biolatency</span></code>
+(<a class="reference external" href="https://github.com/iovisor/bcc/blob/master/tools/biolatency_example.txt">biolatency examples</a>)
+to get an idea of how slow Cassandra will be when reads miss the OS page Cache
+and have to hit disks:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo /usr/share/bcc/tools/biolatency -D 10
+Tracing block device I/O... Hit Ctrl-C to end.
+
+
+disk = &#39;sda&#39;
+     usecs               : count     distribution
+         0 -&gt; 1          : 0        |                                        |
+         2 -&gt; 3          : 0        |                                        |
+         4 -&gt; 7          : 0        |                                        |
+         8 -&gt; 15         : 0        |                                        |
+        16 -&gt; 31         : 12       |****************************************|
+        32 -&gt; 63         : 9        |******************************          |
+        64 -&gt; 127        : 1        |***                                     |
+       128 -&gt; 255        : 3        |**********                              |
+       256 -&gt; 511        : 7        |***********************                 |
+       512 -&gt; 1023       : 2        |******                                  |
+
+disk = &#39;sdc&#39;
+     usecs               : count     distribution
+         0 -&gt; 1          : 0        |                                        |
+         2 -&gt; 3          : 0        |                                        |
+         4 -&gt; 7          : 0        |                                        |
+         8 -&gt; 15         : 0        |                                        |
+        16 -&gt; 31         : 0        |                                        |
+        32 -&gt; 63         : 0        |                                        |
+        64 -&gt; 127        : 41       |************                            |
+       128 -&gt; 255        : 17       |*****                                   |
+       256 -&gt; 511        : 13       |***                                     |
+       512 -&gt; 1023       : 2        |                                        |
+      1024 -&gt; 2047       : 0        |                                        |
+      2048 -&gt; 4095       : 0        |                                        |
+      4096 -&gt; 8191       : 56       |*****************                       |
+      8192 -&gt; 16383      : 131      |****************************************|
+     16384 -&gt; 32767      : 9        |**                                      |
+</pre></div>
+</div>
+<p>In this case most ios on the data drive (<code class="docutils literal notranslate"><span class="pre">sdc</span></code>) are fast, but many take
+between 8 and 16 milliseconds.</p>
+<p>Finally <code class="docutils literal notranslate"><span class="pre">biosnoop</span></code> (<a class="reference external" href="https://github.com/iovisor/bcc/blob/master/tools/biosnoop_example.txt">examples</a>)
+can be used to dive even deeper and see per IO latencies:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo /usr/share/bcc/tools/biosnoop | grep java | head
+0.000000000    java           17427  sdc     R  3972458600 4096      13.58
+0.000818000    java           17427  sdc     R  3972459408 4096       0.35
+0.007098000    java           17416  sdc     R  3972401824 4096       5.81
+0.007896000    java           17416  sdc     R  3972489960 4096       0.34
+0.008920000    java           17416  sdc     R  3972489896 4096       0.34
+0.009487000    java           17427  sdc     R  3972401880 4096       0.32
+0.010238000    java           17416  sdc     R  3972488368 4096       0.37
+0.010596000    java           17427  sdc     R  3972488376 4096       0.34
+0.011236000    java           17410  sdc     R  3972488424 4096       0.32
+0.011825000    java           17427  sdc     R  3972488576 16384      0.65
+... time passes
+8.032687000    java           18279  sdc     R  10899712  122880     3.01
+8.033175000    java           18279  sdc     R  10899952  8192       0.46
+8.073295000    java           18279  sdc     R  23384320  122880     3.01
+8.073768000    java           18279  sdc     R  23384560  8192       0.46
+</pre></div>
+</div>
+<p>With <code class="docutils literal notranslate"><span class="pre">biosnoop</span></code> you see every single IO and how long they take. This data
+can be used to construct the latency distributions in <code class="docutils literal notranslate"><span class="pre">biolatency</span></code> but can
+also be used to better understand how disk latency affects performance. For
+example this particular drive takes ~3ms to service a memory mapped read due to
+the large default value (<code class="docutils literal notranslate"><span class="pre">128kb</span></code>) of <code class="docutils literal notranslate"><span class="pre">read_ahead_kb</span></code>. To improve point read
+performance you may may want to decrease <code class="docutils literal notranslate"><span class="pre">read_ahead_kb</span></code> on fast data volumes
+such as SSDs while keeping the a higher value like <code class="docutils literal notranslate"><span class="pre">128kb</span></code> value is probably
+right for HDs. There are tradeoffs involved, see <a class="reference external" href="https://www.kernel.org/doc/Documentation/block/queue-sysfs.txt">queue-sysfs</a> docs for more
+information, but regardless <code class="docutils literal notranslate"><span class="pre">biosnoop</span></code> is useful for understanding <em>how</em>
+Cassandra uses drives.</p>
+</div>
+<div class="section" id="vmtouch">
+<span id="use-vmtouch"></span><h3>vmtouch<a class="headerlink" href="#vmtouch" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes it’s useful to know how much of the Cassandra data files are being
+cached by the OS. A great tool for answering this question is
+<a class="reference external" href="https://github.com/hoytech/vmtouch">vmtouch</a>.</p>
+<p>First install it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/hoytech/vmtouch.git
+$ cd vmtouch
+$ make
+</pre></div>
+</div>
+<p>Then run it on the Cassandra data directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./vmtouch /var/lib/cassandra/data/
+           Files: 312
+     Directories: 92
+  Resident Pages: 62503/64308  244M/251M  97.2%
+         Elapsed: 0.005657 seconds
+</pre></div>
+</div>
+<p>In this case almost the entire dataset is hot in OS page Cache. Generally
+speaking the percentage doesn’t really matter unless reads are missing the
+cache (per e.g. <a class="reference internal" href="#use-bcc-tools"><span class="std std-ref">cachestat</span></a>), in which case having
+additional memory may help read performance.</p>
+</div>
+<div class="section" id="cpu-flamegraphs">
+<h3>CPU Flamegraphs<a class="headerlink" href="#cpu-flamegraphs" title="Permalink to this headline">¶</a></h3>
+<p>Cassandra often uses a lot of CPU, but telling <em>what</em> it is doing can prove
+difficult. One of the best ways to analyze Cassandra on CPU time is to use
+<a class="reference external" href="http://www.brendangregg.com/FlameGraphs/cpuflamegraphs.html">CPU Flamegraphs</a>
+which display in a useful way which areas of Cassandra code are using CPU. This
+may help narrow down a compaction problem to a “compaction problem dropping
+tombstones” or just generally help you narrow down what Cassandra is doing
+while it is having an issue. To get CPU flamegraphs follow the instructions for
+<a class="reference external" href="http://www.brendangregg.com/FlameGraphs/cpuflamegraphs.html#Java">Java Flamegraphs</a>.</p>
+<p>Generally:</p>
+<ol class="arabic simple">
+<li>Enable the <code class="docutils literal notranslate"><span class="pre">-XX:+PreserveFramePointer</span></code> option in Cassandra’s
+<code class="docutils literal notranslate"><span class="pre">jvm.options</span></code> configuation file. This has a negligible performance impact
+but allows you actually see what Cassandra is doing.</li>
+<li>Run <code class="docutils literal notranslate"><span class="pre">perf</span></code> to get some data.</li>
+<li>Send that data through the relevant scripts in the FlameGraph toolset and
+convert the data into a pretty flamegraph. View the resulting SVG image in
+a browser or other image browser.</li>
+</ol>
+<p>For example just cloning straight off github we first install the
+<code class="docutils literal notranslate"><span class="pre">perf-map-agent</span></code> to the location of our JVMs (assumed to be
+<code class="docutils literal notranslate"><span class="pre">/usr/lib/jvm</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo bash
+$ export JAVA_HOME=/usr/lib/jvm/java-8-oracle/
+$ cd /usr/lib/jvm
+$ git clone --depth=1 https://github.com/jvm-profiling-tools/perf-map-agent
+$ cd perf-map-agent
+$ cmake .
+$ make
+</pre></div>
+</div>
+<p>Now to get a flamegraph:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone --depth=1 https://github.com/brendangregg/FlameGraph
+$ sudo bash
+$ cd FlameGraph
+$ # Record traces of Cassandra and map symbols for all java processes
+$ perf record -F 49 -a -g -p &lt;CASSANDRA PID&gt; -- sleep 30; ./jmaps
+$ # Translate the data
+$ perf script &gt; cassandra_stacks
+$ cat cassandra_stacks | ./stackcollapse-perf.pl | grep -v cpu_idle | \
+    ./flamegraph.pl --color=java --hash &gt; cassandra_flames.svg
+</pre></div>
+</div>
+<p>The resulting SVG is searchable, zoomable, and generally easy to introspect
+using a browser.</p>
+</div>
+<div class="section" id="packet-capture">
+<span id="id4"></span><h3>Packet Capture<a class="headerlink" href="#packet-capture" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes you have to understand what queries a Cassandra node is performing
+<em>right now</em> to troubleshoot an issue. For these times trusty packet capture
+tools like <code class="docutils literal notranslate"><span class="pre">tcpdump</span></code> and <a class="reference external" href="https://www.wireshark.org/">Wireshark</a> can be very helpful to dissect packet captures.
+Wireshark even has native <a class="reference external" href="https://www.wireshark.org/docs/dfref/c/cql.html">CQL support</a> although it sometimes has
+compatibility issues with newer Cassandra protocol releases.</p>
+<p>To get a packet capture first capture some packets:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo tcpdump -U -s0 -i &lt;INTERFACE&gt; -w cassandra.pcap -n &quot;tcp port 9042&quot;
+</pre></div>
+</div>
+<p>Now open it up with wireshark:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ wireshark cassandra.pcap
+</pre></div>
+</div>
+<p>If you don’t see CQL like statements try telling to decode as CQL by right
+clicking on a packet going to 9042 -&gt; <code class="docutils literal notranslate"><span class="pre">Decode</span> <span class="pre">as</span></code> -&gt; select CQL from the
+dropdown for port 9042.</p>
+<p>If you don’t want to do this manually or use a GUI, you can also use something
+like <a class="reference external" href="https://github.com/jolynch/cqltrace">cqltrace</a> to ease obtaining and
+parsing CQL packet captures.</p>
+</div>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="../development/index.html" class="btn btn-default pull-right " role="button" title="Contributing to Cassandra" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="use_nodetool.html" class="btn btn-default" role="button" title="Use Nodetool" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

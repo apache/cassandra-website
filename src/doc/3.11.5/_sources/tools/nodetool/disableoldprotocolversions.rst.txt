@@ -1,0 +1,11 @@
+.. _nodetool_disableoldprotocolversions:
+
+disableoldprotocolversions
+--------------------------
+
+Usage
+---------
+
+.. include:: disableoldprotocolversions.txt
+  :literal:
+

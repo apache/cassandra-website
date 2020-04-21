@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-alpha1/tools/sstable/sstabledump.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha1" href="../../index.html"/> <link rel="up" title="SSTable Tools" href="index.html"/> <link rel="next" title="sstableexpiredblockers" href="sstableexpiredblockers.html"/> <link rel="prev" title="SSTable Tools" href="index.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">SSTable Tools</a></li>
+      
+
+      
+      <li>sstabledump</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../../"><img src="./../../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../../">Home</a></li>
+          <li><a href="./../../../../download/">Download</a></li>
+          <li><a href="./../../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Cassandra Tools</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cqlsh.html">cqlsh: the CQL shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodetool/nodetool.html">Nodetool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodetool/nodetool.html#usage">Usage</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">SSTable Tools</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sstabledump</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableexpiredblockers.html">sstableexpiredblockers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablelevelreset.html">sstablelevelreset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableloader.html">sstableloader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablemetadata.html">sstablemetadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableofflinerelevel.html">sstableofflinerelevel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablerepairedset.html">sstablerepairedset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablescrub.html">sstablescrub</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablesplit.html">sstablesplit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableupgrade.html">sstableupgrade</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableutil.html">sstableutil</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableverify.html">sstableverify</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cassandra_stress.html">Cassandra Stress</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="sstabledump">
+<h1>sstabledump<a class="headerlink" href="#sstabledump" title="Permalink to this headline">¶</a></h1>
+<p>Dump contents of a given SSTable to standard output in JSON format.</p>
+<p>You must supply exactly one sstable.</p>
+<p>Cassandra must be stopped before this tool is executed, or unexpected results will occur. Note: the script does not verify that Cassandra is stopped.</p>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>sstabledump &lt;options&gt; &lt;sstable file path&gt;</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="70%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>-d</td>
+<td>CQL row per line internal representation</td>
+</tr>
+<tr class="row-even"><td>-e</td>
+<td>Enumerate partition keys only</td>
+</tr>
+<tr class="row-odd"><td>-k &lt;arg&gt;</td>
+<td>Partition key</td>
+</tr>
+<tr class="row-even"><td>-x &lt;arg&gt;</td>
+<td>Excluded partition key(s)</td>
+</tr>
+<tr class="row-odd"><td>-t</td>
+<td>Print raw timestamps instead of iso8601 date strings</td>
+</tr>
+<tr class="row-even"><td>-l</td>
+<td>Output each row as a separate JSON object</td>
+</tr>
+</tbody>
+</table>
+<p>If necessary, use sstableutil first to find out the sstables used by a table.</p>
+</div>
+<div class="section" id="dump-entire-table">
+<h2>Dump entire table<a class="headerlink" href="#dump-entire-table" title="Permalink to this headline">¶</a></h2>
+<p>Dump the entire table without any options.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstabledump</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">65</span><span class="n">c429e08c5a11e8939edf4f403979ef</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span> <span class="o">&gt;</span> <span class="n">eventlog_dump_2018Jul26</span>
+
+<span class="n">cat</span> <span class="n">eventlog_dump_2018Jul26</span>
+<span class="p">[</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;partition&quot;</span> <span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;key&quot;</span> <span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;3578d7de-c60d-4599-aefb-3f22a07b2bc6&quot;</span> <span class="p">],</span>
+      <span class="s2">&quot;position&quot;</span> <span class="p">:</span> <span class="mi">0</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;rows&quot;</span> <span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;row&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;position&quot;</span> <span class="p">:</span> <span class="mi">61</span><span class="p">,</span>
+        <span class="s2">&quot;liveness_info&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tstamp&quot;</span> <span class="p">:</span> <span class="s2">&quot;2018-07-20T20:23:08.378711Z&quot;</span> <span class="p">},</span>
+        <span class="s2">&quot;cells&quot;</span> <span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;party&quot;</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;insertedtimestamp&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;2018-07-20 20:23:08.384Z&quot;</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;asdf&quot;</span> <span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;partition&quot;</span> <span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;key&quot;</span> <span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;d18250c0-84fc-4d40-b957-4248dc9d790e&quot;</span> <span class="p">],</span>
+      <span class="s2">&quot;position&quot;</span> <span class="p">:</span> <span class="mi">62</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;rows&quot;</span> <span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;row&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;position&quot;</span> <span class="p">:</span> <span class="mi">123</span><span class="p">,</span>
+        <span class="s2">&quot;liveness_info&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tstamp&quot;</span> <span class="p">:</span> <span class="s2">&quot;2018-07-20T20:23:07.783522Z&quot;</span> <span class="p">},</span>
+        <span class="s2">&quot;cells&quot;</span> <span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;party&quot;</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;insertedtimestamp&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;2018-07-20 20:23:07.789Z&quot;</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;asdf&quot;</span> <span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;partition&quot;</span> <span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;key&quot;</span> <span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;cf188983-d85b-48d6-9365-25005289beb2&quot;</span> <span class="p">],</span>
+      <span class="s2">&quot;position&quot;</span> <span class="p">:</span> <span class="mi">124</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;rows&quot;</span> <span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;row&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;position&quot;</span> <span class="p">:</span> <span class="mi">182</span><span class="p">,</span>
+        <span class="s2">&quot;liveness_info&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tstamp&quot;</span> <span class="p">:</span> <span class="s2">&quot;2018-07-20T20:22:27.028809Z&quot;</span> <span class="p">},</span>
+        <span class="s2">&quot;cells&quot;</span> <span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;party&quot;</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;insertedtimestamp&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;2018-07-20 20:22:27.055Z&quot;</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;asdf&quot;</span> <span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dump-table-in-a-more-manageable-format">
+<h2>Dump table in a more manageable format<a class="headerlink" href="#dump-table-in-a-more-manageable-format" title="Permalink to this headline">¶</a></h2>
+<p>Use the -l option to dump each row as a separate JSON object. This will make the output easier to manipulate for large data sets. ref: <a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-13848">https://issues.apache.org/jira/browse/CASSANDRA-13848</a></p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstabledump</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">65</span><span class="n">c429e08c5a11e8939edf4f403979ef</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span> <span class="o">-</span><span class="n">l</span> <span class="o">&gt;</span> <span class="n">eventlog_dump_2018Jul26_justlines</span>
+
+<span class="n">cat</span> <span class="n">eventlog_dump_2018Jul26_justlines</span>
+<span class="p">[</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;partition&quot;</span> <span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;key&quot;</span> <span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;3578d7de-c60d-4599-aefb-3f22a07b2bc6&quot;</span> <span class="p">],</span>
+      <span class="s2">&quot;position&quot;</span> <span class="p">:</span> <span class="mi">0</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;rows&quot;</span> <span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;row&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;position&quot;</span> <span class="p">:</span> <span class="mi">61</span><span class="p">,</span>
+        <span class="s2">&quot;liveness_info&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tstamp&quot;</span> <span class="p">:</span> <span class="s2">&quot;2018-07-20T20:23:08.378711Z&quot;</span> <span class="p">},</span>
+        <span class="s2">&quot;cells&quot;</span> <span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;party&quot;</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;insertedtimestamp&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;2018-07-20 20:23:08.384Z&quot;</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;asdf&quot;</span> <span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;partition&quot;</span> <span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;key&quot;</span> <span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;d18250c0-84fc-4d40-b957-4248dc9d790e&quot;</span> <span class="p">],</span>
+      <span class="s2">&quot;position&quot;</span> <span class="p">:</span> <span class="mi">62</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;rows&quot;</span> <span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;row&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;position&quot;</span> <span class="p">:</span> <span class="mi">123</span><span class="p">,</span>
+        <span class="s2">&quot;liveness_info&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tstamp&quot;</span> <span class="p">:</span> <span class="s2">&quot;2018-07-20T20:23:07.783522Z&quot;</span> <span class="p">},</span>
+        <span class="s2">&quot;cells&quot;</span> <span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;party&quot;</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;insertedtimestamp&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;2018-07-20 20:23:07.789Z&quot;</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;asdf&quot;</span> <span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;partition&quot;</span> <span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;key&quot;</span> <span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;cf188983-d85b-48d6-9365-25005289beb2&quot;</span> <span class="p">],</span>
+      <span class="s2">&quot;position&quot;</span> <span class="p">:</span> <span class="mi">124</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;rows&quot;</span> <span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;row&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;position&quot;</span> <span class="p">:</span> <span class="mi">182</span><span class="p">,</span>
+        <span class="s2">&quot;liveness_info&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tstamp&quot;</span> <span class="p">:</span> <span class="s2">&quot;2018-07-20T20:22:27.028809Z&quot;</span> <span class="p">},</span>
+        <span class="s2">&quot;cells&quot;</span> <span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;party&quot;</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;insertedtimestamp&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;2018-07-20 20:22:27.055Z&quot;</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;asdf&quot;</span> <span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dump-only-keys">
+<h2>Dump only keys<a class="headerlink" href="#dump-only-keys" title="Permalink to this headline">¶</a></h2>
+<p>Dump only the keys by using the -e option.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstabledump</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">65</span><span class="n">c429e08c5a11e8939edf4f403979ef</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span> <span class="o">-</span><span class="n">e</span> <span class="o">&gt;</span> <span class="n">eventlog_dump_2018Jul26_justkeys</span>
+
+<span class="n">cat</span> <span class="n">eventlog_dump_2018Jul26b</span>
+<span class="p">[</span> <span class="p">[</span> <span class="s2">&quot;3578d7de-c60d-4599-aefb-3f22a07b2bc6&quot;</span> <span class="p">],</span> <span class="p">[</span> <span class="s2">&quot;d18250c0-84fc-4d40-b957-4248dc9d790e&quot;</span> <span class="p">],</span> <span class="p">[</span> <span class="s2">&quot;cf188983-d85b-48d6-9365-25005289beb2&quot;</span> <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dump-row-for-a-single-key">
+<h2>Dump row for a single key<a class="headerlink" href="#dump-row-for-a-single-key" title="Permalink to this headline">¶</a></h2>
+<p>Dump a single key using the -k option.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstabledump</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">65</span><span class="n">c429e08c5a11e8939edf4f403979ef</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span> <span class="o">-</span><span class="n">k</span> <span class="mi">3578</span><span class="n">d7de</span><span class="o">-</span><span class="n">c60d</span><span class="o">-</span><span class="mi">4599</span><span class="o">-</span><span class="n">aefb</span><span class="o">-</span><span class="mi">3</span><span class="n">f22a07b2bc6</span> <span class="o">&gt;</span> <span class="n">eventlog_dump_2018Jul26_singlekey</span>
+
+<span class="n">cat</span> <span class="n">eventlog_dump_2018Jul26_singlekey</span>
+<span class="p">[</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;partition&quot;</span> <span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;key&quot;</span> <span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;3578d7de-c60d-4599-aefb-3f22a07b2bc6&quot;</span> <span class="p">],</span>
+      <span class="s2">&quot;position&quot;</span> <span class="p">:</span> <span class="mi">0</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;rows&quot;</span> <span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;row&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;position&quot;</span> <span class="p">:</span> <span class="mi">61</span><span class="p">,</span>
+        <span class="s2">&quot;liveness_info&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tstamp&quot;</span> <span class="p">:</span> <span class="s2">&quot;2018-07-20T20:23:08.378711Z&quot;</span> <span class="p">},</span>
+        <span class="s2">&quot;cells&quot;</span> <span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;party&quot;</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;insertedtimestamp&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;2018-07-20 20:23:08.384Z&quot;</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;asdf&quot;</span> <span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="exclude-a-key-or-keys-in-dump-of-rows">
+<h2>Exclude a key or keys in dump of rows<a class="headerlink" href="#exclude-a-key-or-keys-in-dump-of-rows" title="Permalink to this headline">¶</a></h2>
+<p>Dump a table except for the rows excluded with the -x option. Multiple keys can be used.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstabledump</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">65</span><span class="n">c429e08c5a11e8939edf4f403979ef</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span> <span class="o">-</span><span class="n">x</span> <span class="mi">3578</span><span class="n">d7de</span><span class="o">-</span><span class="n">c60d</span><span class="o">-</span><span class="mi">4599</span><span class="o">-</span><span class="n">aefb</span><span class="o">-</span><span class="mi">3</span><span class="n">f22a07b2bc6</span> <span class="n">d18250c0</span><span class="o">-</span><span class="mi">84</span><span class="n">fc</span><span class="o">-</span><span class="mi">4</span><span class="n">d40</span><span class="o">-</span><span class="n">b957</span><span class="o">-</span><span class="mi">4248</span><span class="n">dc9d790e</span>  <span class="o">&gt;</span> <span class="n">eventlog_dump_2018Jul26_excludekeys</span>
+
+<span class="n">cat</span> <span class="n">eventlog_dump_2018Jul26_excludekeys</span>
+<span class="p">[</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;partition&quot;</span> <span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;key&quot;</span> <span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;cf188983-d85b-48d6-9365-25005289beb2&quot;</span> <span class="p">],</span>
+      <span class="s2">&quot;position&quot;</span> <span class="p">:</span> <span class="mi">0</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;rows&quot;</span> <span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;row&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;position&quot;</span> <span class="p">:</span> <span class="mi">182</span><span class="p">,</span>
+        <span class="s2">&quot;liveness_info&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tstamp&quot;</span> <span class="p">:</span> <span class="s2">&quot;2018-07-20T20:22:27.028809Z&quot;</span> <span class="p">},</span>
+        <span class="s2">&quot;cells&quot;</span> <span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;party&quot;</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;insertedtimestamp&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;2018-07-20 20:22:27.055Z&quot;</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;asdf&quot;</span> <span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="display-raw-timestamps">
+<h2>Display raw timestamps<a class="headerlink" href="#display-raw-timestamps" title="Permalink to this headline">¶</a></h2>
+<p>By default, dates are displayed in iso8601 date format. Using the -t option will dump the data with the raw timestamp.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstabledump</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">65</span><span class="n">c429e08c5a11e8939edf4f403979ef</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span> <span class="o">-</span><span class="n">t</span> <span class="o">-</span><span class="n">k</span> <span class="n">cf188983</span><span class="o">-</span><span class="n">d85b</span><span class="o">-</span><span class="mi">48</span><span class="n">d6</span><span class="o">-</span><span class="mi">9365</span><span class="o">-</span><span class="mi">25005289</span><span class="n">beb2</span> <span class="o">&gt;</span> <span class="n">eventlog_dump_2018Jul26_times</span>
+
+<span class="n">cat</span> <span class="n">eventlog_dump_2018Jul26_times</span>
+<span class="p">[</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;partition&quot;</span> <span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;key&quot;</span> <span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;cf188983-d85b-48d6-9365-25005289beb2&quot;</span> <span class="p">],</span>
+      <span class="s2">&quot;position&quot;</span> <span class="p">:</span> <span class="mi">124</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;rows&quot;</span> <span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;row&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;position&quot;</span> <span class="p">:</span> <span class="mi">182</span><span class="p">,</span>
+        <span class="s2">&quot;liveness_info&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tstamp&quot;</span> <span class="p">:</span> <span class="s2">&quot;1532118147028809&quot;</span> <span class="p">},</span>
+        <span class="s2">&quot;cells&quot;</span> <span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;party&quot;</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;insertedtimestamp&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;2018-07-20 20:22:27.055Z&quot;</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;asdf&quot;</span> <span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="display-internal-structure-in-output">
+<h2>Display internal structure in output<a class="headerlink" href="#display-internal-structure-in-output" title="Permalink to this headline">¶</a></h2>
+<p>Dump the table in a format that reflects the internal structure.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstabledump</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">65</span><span class="n">c429e08c5a11e8939edf4f403979ef</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span> <span class="o">-</span><span class="n">d</span> <span class="o">&gt;</span> <span class="n">eventlog_dump_2018Jul26_d</span>
+
+<span class="n">cat</span> <span class="n">eventlog_dump_2018Jul26_d</span>
+<span class="p">[</span><span class="mi">3578</span><span class="n">d7de</span><span class="o">-</span><span class="n">c60d</span><span class="o">-</span><span class="mi">4599</span><span class="o">-</span><span class="n">aefb</span><span class="o">-</span><span class="mi">3</span><span class="n">f22a07b2bc6</span><span class="p">]</span><span class="o">@</span><span class="mi">0</span> <span class="n">Row</span><span class="p">[</span><span class="n">info</span><span class="o">=</span><span class="p">[</span><span class="n">ts</span><span class="o">=</span><span class="mi">1532118188378711</span><span class="p">]</span> <span class="p">]:</span>  <span class="o">|</span> <span class="p">[</span><span class="n">event</span><span class="o">=</span><span class="n">party</span> <span class="n">ts</span><span class="o">=</span><span class="mi">1532118188378711</span><span class="p">],</span> <span class="p">[</span><span class="n">insertedtimestamp</span><span class="o">=</span><span class="mi">2018</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">20</span> <span class="mi">20</span><span class="p">:</span><span class="mi">23</span><span class="n">Z</span> <span class="n">ts</span><span class="o">=</span><span class="mi">1532118188378711</span><span class="p">],</span> <span class="p">[</span><span class="n">source</span><span class="o">=</span><span class="n">asdf</span> <span class="n">ts</span><span class="o">=</span><span class="mi">1532118188378711</span><span class="p">]</span>
+<span class="p">[</span><span class="n">d18250c0</span><span class="o">-</span><span class="mi">84</span><span class="n">fc</span><span class="o">-</span><span class="mi">4</span><span class="n">d40</span><span class="o">-</span><span class="n">b957</span><span class="o">-</span><span class="mi">4248</span><span class="n">dc9d790e</span><span class="p">]</span><span class="o">@</span><span class="mi">62</span> <span class="n">Row</span><span class="p">[</span><span class="n">info</span><span class="o">=</span><span class="p">[</span><span class="n">ts</span><span class="o">=</span><span class="mi">1532118187783522</span><span class="p">]</span> <span class="p">]:</span>  <span class="o">|</span> <span class="p">[</span><span class="n">event</span><span class="o">=</span><span class="n">party</span> <span class="n">ts</span><span class="o">=</span><span class="mi">1532118187783522</span><span class="p">],</span> <span class="p">[</span><span class="n">insertedtimestamp</span><span class="o">=</span><span class="mi">2018</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">20</span> <span class="mi">20</span><span class="p">:</span><span class="mi">23</span><span class="n">Z</span> <span class="n">ts</span><span class="o">=</span><span class="mi">1532118187783522</span><span class="p">],</span> <span class="p">[</span><span class="n">source</span><span class="o">=</span><span class="n">asdf</span> <span class="n">ts</span><span class="o">=</span><span class="mi">1532118187783522</span><span class="p">]</span>
+<span class="p">[</span><span class="n">cf188983</span><span class="o">-</span><span class="n">d85b</span><span class="o">-</span><span class="mi">48</span><span class="n">d6</span><span class="o">-</span><span class="mi">9365</span><span class="o">-</span><span class="mi">25005289</span><span class="n">beb2</span><span class="p">]</span><span class="o">@</span><span class="mi">124</span> <span class="n">Row</span><span class="p">[</span><span class="n">info</span><span class="o">=</span><span class="p">[</span><span class="n">ts</span><span class="o">=</span><span class="mi">1532118147028809</span><span class="p">]</span> <span class="p">]:</span>  <span class="o">|</span> <span class="p">[</span><span class="n">event</span><span class="o">=</span><span class="n">party</span> <span class="n">ts</span><span class="o">=</span><span class="mi">1532118147028809</span><span class="p">],</span> <span class="p">[</span><span class="n">insertedtimestamp</span><span class="o">=</span><span class="mi">2018</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">20</span> <span class="mi">20</span><span class="p">:</span><span class="mi">22</span><span class="n">Z</span> <span class="n">ts</span><span class="o">=</span><span class="mi">1532118147028809</span><span class="p">],</span> <span class="p">[</span><span class="n">source</span><span class="o">=</span><span class="n">asdf</span> <span class="n">ts</span><span class="o">=</span><span class="mi">1532118147028809</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="sstableexpiredblockers.html" class="btn btn-default pull-right " role="button" title="sstableexpiredblockers" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="index.html" class="btn btn-default" role="button" title="SSTable Tools" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../../js/doctools.js"></script>
+<script src="./../../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>
