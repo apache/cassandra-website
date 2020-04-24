@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="./../../../css/sphinx.css">
   
 
-   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha4" href="../index.html"/> <link rel="up" title="Configuring Cassandra" href="index.html"/> <link rel="next" title="Operating Cassandra" href="../operating/index.html"/> <link rel="prev" title="Configuring Cassandra" href="index.html"/> 
+   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha5" href="../index.html"/> <link rel="up" title="Configuring Cassandra" href="index.html"/> <link rel="next" title="Operating Cassandra" href="../operating/index.html"/> <link rel="prev" title="Configuring Cassandra" href="index.html"/> 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
   
   <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
@@ -182,6 +182,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#periodic-commitlog-sync-lag-block-in-ms"><code class="docutils literal notranslate"><span class="pre">periodic_commitlog_sync_lag_block_in_ms</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#commitlog-segment-size-in-mb"><code class="docutils literal notranslate"><span class="pre">commitlog_segment_size_in_mb</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#commitlog-compression"><code class="docutils literal notranslate"><span class="pre">commitlog_compression</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#table"><code class="docutils literal notranslate"><span class="pre">table</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flush-compression"><code class="docutils literal notranslate"><span class="pre">flush_compression</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#seed-provider"><code class="docutils literal notranslate"><span class="pre">seed_provider</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#concurrent-reads"><code class="docutils literal notranslate"><span class="pre">concurrent_reads</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#concurrent-writes"><code class="docutils literal notranslate"><span class="pre">concurrent_writes</span></code></a></li>
@@ -842,6 +844,28 @@ are supported.</p>
 <span class="c1">#         -</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="table">
+<h2><code class="docutils literal notranslate"><span class="pre">table</span></code><a class="headerlink" href="#table" title="Permalink to this headline">¶</a></h2>
+<p><em>This option is commented out by default.</em>
+Compression to apply to SSTables as they flush for compressed tables.
+Note that tables without compression enabled do not respect this flag.</p>
+<p>As high ratio compressors like LZ4HC, Zstd, and Deflate can potentially
+block flushes for too long, the default is to flush with a known fast
+compressor in those cases. Options are:</p>
+<p>none : Flush without compressing blocks but while still doing checksums.
+fast : Flush with a fast compressor. If the table is already using a</p>
+<blockquote>
+<div>fast compressor that compressor is used.</div></blockquote>
+<p><em>Default Value:</em> Always flush with the same compressor that the table uses. This</p>
+</div>
+<div class="section" id="flush-compression">
+<h2><code class="docutils literal notranslate"><span class="pre">flush_compression</span></code><a class="headerlink" href="#flush-compression" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><em>This option is commented out by default.</em></dt>
+<dd>was the pre 4.0 behavior.</dd>
+</dl>
+<p><em>Default Value:</em> fast</p>
 </div>
 <div class="section" id="seed-provider">
 <h2><code class="docutils literal notranslate"><span class="pre">seed_provider</span></code><a class="headerlink" href="#seed-provider" title="Permalink to this headline">¶</a></h2>
