@@ -2,7 +2,8 @@
 
 set -xe
 
-export CASSANDRA_SITE_DIR="/home/build/cassandra-site"
+export CASSANDRA_SITE_DIR="${BUILD_DIR}/cassandra-site"
+export CASSANDRA_DIR="${BUILD_DIR}/cassandra"
 
 jekyll --version
 
