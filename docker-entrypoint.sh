@@ -17,9 +17,14 @@ make add-latest-doc
 
 
 # Make sure we have the latest commit of Cassandra 3.11
-pushd ${CASSANDRA_DIR} ; ant realclean ; git checkout cassandra-3.11.5 ; popd ; make .build-doc
-pushd ${CASSANDRA_DIR} ; ant realclean ; git checkout cassandra-4.0-alpha1 ; popd ; make .build-doc
-pushd ${CASSANDRA_DIR} ; ant realclean ; git checkout cassandra-4.0-alpha2 ; popd ; make .build-doc
+pushd ${CASSANDRA_DIR}
+ant realclean
+git checkout cassandra-3.11
+git pull --rebase --prune
+popd
+
+# Now make the docs for 3.11
+make .build-doc
 
 # Relink the 3.11 version
 LATEST_VERSION=$(basename $(find ./doc -iname 3.11* -type d | tail -n 1))
