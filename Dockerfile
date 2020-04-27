@@ -39,18 +39,19 @@ RUN gem install bundler && \
     bundle install && \
     rm /Gemfile /Gemfile.lock
 
-# Run as build user from here
-USER build
+ENV BUILD_DIR="/home/build"
 
-ENV CASSANDRA_DIR="/home/build/cassandra"
-
-# Setup repositories to building the docs
-RUN mkdir -p /home/build/cassandra-site && \
-    git clone https://gitbox.apache.org/repos/asf/cassandra.git ${CASSANDRA_DIR}
+# Setup directories for building the docs
+#  Give the build user rw access to everything in the build directory,
+#   neccessary for the ASF 'websites' jenkins agent (which can't chown)
+RUN mkdir -p ${BUILD_DIR}/cassandra-site && \
+    git clone https://gitbox.apache.org/repos/asf/cassandra.git ${BUILD_DIR}/cassandra && \
+    chmod -R a+rw ${BUILD_DIR}
 
 EXPOSE 4000/tcp
 
+# Run as build user from here
+USER build
 COPY docker-entrypoint.sh /home/build/
 ENTRYPOINT ["/home/build/docker-entrypoint.sh"]
-
 CMD [""]
