@@ -48,7 +48,7 @@ Overflow.
 
 ### Books and Publications
 
-* [Cassandra: The Definitive Guide, 2nd Edition](http://shop.oreilly.com/product/0636920043041.do), by Jeff Carpenter and Eben Hewitt. Updated for Cassandra 3.0
+* [Cassandra: The Definitive Guide, 3rd Edition](http://shop.oreilly.com/product/0636920299837.do), by Jeff Carpenter and Eben Hewitt. Updated for Cassandra 4.0
 * [Mastering Apache Cassandra, 2nd Edition](https://www.amazon.com/Mastering-Apache-Cassandra-Nishant-Neeraj/dp/1784392618/), by Nishant Neeraj
 * [Learning Apache Cassandra - Manage Fault Tolerant and Scalable Real-Time Data](https://www.amazon.com/Learning-Apache-Cassandra-Tolerant-Real-Time/dp/1783989203/), by Mat Brown
 * [Cassandra: a decentralized structured storage system](https://dl.acm.org/citation.cfm?id=1773922), by Avinash Lakshman and Prashant Malik
