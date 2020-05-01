@@ -1,10 +1,23 @@
-Apache Cassandra website builder
-================================
+Apache Cassandra website
+========================
 
-Building the Apache Cassandra website takes a number of steps. To make things easier we have provided a Docker container which can build the full website in two simple commands and have it ready to commit via git. If you are interested in the process head over to the [README](./src/README) in _src_ directory.
+Development Cycle
+-----------------
 
-Prerequisite
-------------
+Making changes to the website is done with the following steps.
+
+1. Test changes locally
+2. Commit changes in `src/` to a fork and branch, and create a pull request
+3. Get the pull request reviewed and merged to `master`
+4. Preview the rendered site on https://cassandra.staged.apache.org/ (wait til [ci-cassandra.apache.org](https://ci-cassandra.apache.org/job/cassandra-website/) has deployed it)
+5. Merge `asf-staging` to `asf-site`
+6. View the rendered site on https://cassandra.apache.org/
+
+
+To test changes before committing, it is a requirement that you build the website locally. Building the Apache Cassandra website takes a number of steps. To make things easier we have provided a Docker container which can build the full website in two simple commands and have it ready to commit via git. If you are interested in the process head over to the [README](./src/README) in _src_ directory.
+
+Building Prerequisites
+----------------------
 
 To build and run the Docker container you will need `Docker` version 2.0.0.0 or greater. If you need a copy of the site code you will need `git` as well.
 
@@ -36,7 +49,7 @@ $ docker-compose run cassandra-website
 
 Go make yourself a cup of coffee, this will take a while...
 
-Once building has completed, the site content will be in the `./cassandra-website/content` directory ready to be committed.
+Once building has completed, the site content will be in the `./cassandra-website/content` directory ready to be tested.
 
 
 Previewing the site
@@ -58,10 +71,3 @@ $ docker-compose up cassandra-website-serve
 ```
 
 For information about the site layout see the **Layout** section of [README](src/README#layout) in the _src_ directory.
-
-Staging the site
-----------------
-
-Changes to the content/ directory on the `asf-staging` will be staged at https://cassandra.staged.apache.org/
-
-Please validate changes here before pushing to the main website.
