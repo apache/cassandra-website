@@ -38,7 +38,7 @@ Move data in and out of open-source Apache Cassandra.
 
 * [Orange CassKop](https://orange-opensource.github.io/casskop/): The Orange Cassandra operator is a Kubernetes operator to automate provisioning, management, autoscaling and operations of Apache Cassandra clusters deployed to K8s.
 * [Sky Cassandra Operator](https://github.com/sky-uk/cassandra-operator): The Sky Cassandra Operator is a Kubernetes operator that manages Cassandra clusters inside Kubernetes.
-* [DataStax cass-operator[(https://github.com/datastax/cass-operator): The DataStax Kubernetes Operator for Apache Cassandra
+* [DataStax cass-operator](https://github.com/datastax/cass-operator): The DataStax Kubernetes Operator for Apache Cassandra
 * [Instaclustr cassandra-operator](https://github.com/instaclustr/cassandra-operator): The Cassandra operator manages Cassandra clusters deployed to Kubernetes and automates tasks related to operating a Cassandra cluster.
 
 ### Cassandra Kafka Connectors
