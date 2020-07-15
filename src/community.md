@@ -55,7 +55,7 @@ Overflow.
 
 ### Third-party projects
 
-There are a number of third-party Cassandra projects that could be useful. Check out this [listing](https://cassandra.apache.org/third-party.md).
+There are a number of third-party Cassandra projects that could be useful. Check out this [listing](https://cassandra.apache.org/third-party.html).
 
 ### Reporting bugs
 
