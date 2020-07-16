@@ -72,7 +72,7 @@ Snap it into your existing workflows with the click of a button, automate away t
 
 #### Apache Flink
 
-* [Flink Sink Connector)(https://ci.apache.org/projects/flink/flink-docs-stable/dev/connectors/cassandra.html): This connector provides sinks that writes data into a Apache Cassandra database.
+* [Flink Sink Connector](https://ci.apache.org/projects/flink/flink-docs-stable/dev/connectors/cassandra.html): This connector provides sinks that writes data into a Apache Cassandra database.
 
 #### Apache Pulsar
 
