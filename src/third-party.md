@@ -26,7 +26,7 @@ Snap it into your existing workflows with the click of a button, automate away t
 
 * [cassandra.link](https://cassandra.link/awesome/#tools): Curated list of tools
 * [Cassandra Prometheus Exporter](https://github.com/criteo/cassandra_exporter): Standalone application which exports Cassandra metrics through a prometheus friendly endpoint
-* [DataStax Bulk Loader] (https://downloads.datastax.com/#bulk-loader): Easy-to-use command line utility for loading and unloading JSON or CSV files to/from the database, counting rows in tables and identifying large partitions. 
+* [DataStax Bulk Loader](https://downloads.datastax.com/#bulk-loader): Easy-to-use command line utility for loading and unloading JSON or CSV files to/from the database, counting rows in tables and identifying large partitions. 
 * [DataStax Metrics Collector for Cassandra](https://github.com/datastax/metric-collector-for-apache-cassandra): Based on Collectd, aggregates OS and Cassandra metrics along with diagnostic events to facilitate problem resolution and remediation
 * [Hackolade](https://hackolade.com/nosqldb.html#cassandra): Visual data modeling tool for Cassandra
 * [The Last Pickle/DataStax Medusa](https://github.com/thelastpickle/cassandra-medusa): Apache Cassandra Backup and Restore Tool
@@ -37,7 +37,7 @@ Snap it into your existing workflows with the click of a button, automate away t
 ### Cassandra Kubernetes operators
 
 * [DataStax cass-operator](https://github.com/datastax/cass-operator): The DataStax Kubernetes Operator for Apache Cassandra
-* [D2iQ Cassandra Kudo Operator] (https://github.com/mesosphere/kudo-cassandra-operator): The KUDO Cassandra Operator makes it easy to deploy and manage Apache Cassandra on Kubernetes.
+* [D2iQ Cassandra Kudo Operator](https://github.com/mesosphere/kudo-cassandra-operator): The KUDO Cassandra Operator makes it easy to deploy and manage Apache Cassandra on Kubernetes.
 * [Instaclustr cassandra-operator](https://github.com/instaclustr/cassandra-operator): The Cassandra operator manages Cassandra clusters deployed to Kubernetes and automates tasks related to operating a Cassandra cluster.
 * [Orange CassKop](https://orange-opensource.github.io/casskop/): The Orange Cassandra operator is a Kubernetes operator to automate provisioning, management, autoscaling and operations of Apache Cassandra clusters deployed to K8s.
 * [Sky Cassandra Operator](https://github.com/sky-uk/cassandra-operator): The Sky Cassandra Operator is a Kubernetes operator that manages Cassandra clusters inside Kubernetes.
@@ -53,7 +53,7 @@ Snap it into your existing workflows with the click of a button, automate away t
 * [Django Cassandra Engine](http://r4fek.github.io/django-cassandra-engine/): Cassandra backend for Django Framework that allows you to use Cqlengine directly in your project.
 * [Express Cassandra](https://express-cassandra.readthedocs.io/en/stable/): Express-Cassandra is a Cassandra ORM/ODM/OGM for NodeJS with Elassandra & JanusGraph Support.
 * [Quarkus extension for Apache Cassandra](https://quarkus.io/guides/cassandra): An Apache Cassandra(R) extension for Quarkus. Quarkus is A Kubernetes Native Java stack tailored for OpenJDK HotSpot and GraalVM, crafted from the best of breed Java libraries and standards.
-* [Spring Data Cassandra] (https://spring.io/projects/spring-data-cassandra): With the power to stay at a high level with annotated POJOs, or at a low level with high performance data ingestion capabilities, the Spring Data for Apache Cassandra templates are sure to meet every application need
+* [Spring Data Cassandra](https://spring.io/projects/spring-data-cassandra): With the power to stay at a high level with annotated POJOs, or at a low level with high performance data ingestion capabilities, the Spring Data for Apache Cassandra templates are sure to meet every application need
 * [TestContainers](https://www.testcontainers.org/modules/databases/cassandra/): Testcontainers is a Java library that supports JUnit tests, providing lightweight, throwaway instances of common databases, Selenium web browsers, or anything else that can run in a Docker container.
 
 ### Cassandra connectors 
