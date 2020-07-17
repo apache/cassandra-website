@@ -20,19 +20,18 @@ Snap it into your existing workflows with the click of a button, automate away t
 ### Cassandra installation tools
 * [Docker community Cassandra images](https://hub.docker.com/_/cassandra): Docker images for Apache Cassandra maintained by the Docker community
 * [DataStax Desktop](https://downloads.datastax.com/#desktop): Cross-platform (Windows, MacOSX, Linux) application that allows developers to quickly explore Apache Cassandra™ with a few clicks on their laptop, complete with tutorials and walkthroughs.
-* [The Last Pickle/DataStax tlp-cluster](https://github.com/thelastpickle/tlp-cluster): tlp-cluster, a tool for launching Cassandra clusters in AWS
+* [The Last Pickle tlp-cluster](https://github.com/thelastpickle/tlp-cluster): tlp-cluster, a tool for launching Cassandra clusters in AWS (DataStax)
 
 ### Cassandra tools
 
-* [cassandra.link](https://cassandra.link): Curated site with tools
-* [cassandra.tools](https://cassandra.tools): Curated list of tools
+* [cassandra.link](https://cassandra.link): Curated site with tools, along with [cassandra.tools](https://cassandra.tools).
 * [Cassandra Prometheus Exporter](https://github.com/criteo/cassandra_exporter): Standalone application which exports Cassandra metrics through a prometheus friendly endpoint
 * [DataStax Bulk Loader](https://downloads.datastax.com/#bulk-loader): Easy-to-use command line utility for loading and unloading JSON or CSV files to/from the database, counting rows in tables and identifying large partitions. 
 * [DataStax Metrics Collector for Cassandra](https://github.com/datastax/metric-collector-for-apache-cassandra): Based on Collectd, aggregates OS and Cassandra metrics along with diagnostic events to facilitate problem resolution and remediation
 * [Hackolade](https://hackolade.com/nosqldb.html#cassandra): Visual data modeling tool for Cassandra
-* [The Last Pickle/DataStax Medusa](https://github.com/thelastpickle/cassandra-medusa): Apache Cassandra Backup and Restore Tool
-* [The Last Pickle/DataStax Reaper](https://github.com/thelastpickle/cassandra-reaper): Automated repair tool for Apache Cassandra 
-* [The Last Pickle/DataStax Cassandra stress tool, tlp-stress](https://github.com/thelastpickle/tlp-stress): A workload-centric stress tool for Apache Cassandra. Designed for simplicity, no math degree required.
+* [The Last Pickle Medusa](https://github.com/thelastpickle/cassandra-medusa): Apache Cassandra Backup and Restore Tool (DataStax)
+* [The Last Pickle Reaper](https://github.com/thelastpickle/cassandra-reaper): Automated repair tool for Apache Cassandra  (DataStax)
+* [The Last Pickle Cassandra stress tool, tlp-stress](https://github.com/thelastpickle/tlp-stress): A workload-centric stress tool for Apache Cassandra. Designed for simplicity, no math degree required. (DataStax)
 * [NoSQLBench](https://github.com/nosqlbench/nosqlbench): Pluggable benchmarking suite for Cassandra and other distributed systems
 
 ### Cassandra Kubernetes operators
