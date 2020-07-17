@@ -24,7 +24,7 @@ Snap it into your existing workflows with the click of a button, automate away t
 
 ### Cassandra tools
 
-* [cassandra.link](https://cassandra.link): Curated site with tools, along with [cassandra.tools](https://cassandra.tools).
+ * [cassandra.link](https://cassandra.link): Curated site with tools, along with [cassandra.tools](https://cassandra.tools).
 * [Cassandra Prometheus Exporter](https://github.com/criteo/cassandra_exporter): Standalone application which exports Cassandra metrics through a prometheus friendly endpoint
 * [DataStax Bulk Loader](https://downloads.datastax.com/#bulk-loader): Easy-to-use command line utility for loading and unloading JSON or CSV files to/from the database, counting rows in tables and identifying large partitions. 
 * [DataStax Metrics Collector for Cassandra](https://github.com/datastax/metric-collector-for-apache-cassandra): Based on Collectd, aggregates OS and Cassandra metrics along with diagnostic events to facilitate problem resolution and remediation
