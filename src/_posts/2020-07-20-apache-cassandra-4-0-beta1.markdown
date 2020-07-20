@@ -1,12 +1,11 @@
 ---
 layout: post
-title: "Apache Cassandra 4.0 Beta: Battle Tested From Day One"
-date:   2020-07-20 01:00:00 +0200
+title: "Introducing Apache Cassandra 4.0 Beta: Battle Tested From Day One"
+date:   2020-07-20 23:00:00 +0200
 author: The Apache Cassandra Community
 categories: blog
 ---
 
-## **Introducing Apache Cassandra 4.0 Beta: Battle Tested From Day One**
 
 This is the most **stable** Apache Cassandra in history; you should start using Apache Cassandra 4.0 Beta today in your test and QA environments, head to the [downloads site](https://www.apache.org/dyn/closer.lua/cassandra/4.0-beta1/apache-cassandra-4.0-beta1-bin.tar.gz) to get your hands on it. The Cassandra community is on a mission to deliver a 4.0 GA release that is ready to be deployed to production. You can guarantee this holds true by running your application workloads against the Beta release and contributing to the community's validation effort to get Cassandra 4.0 to GA.
 
@@ -68,6 +67,6 @@ The Last Pickle Blog: [Virtual tables are coming in Cassandra 4.0](https://thela
 
 The Last Pickle Blog: [Java 11 Support in Apache Cassandra 4.0](https://thelastpickle.com/blog/2018/08/16/java11.html)
 
-###
+
 
 ![Apache Cassandra Infographic](/img/blog-post-apache-cassandra-4-0-beta1/apache-cassandra-infographic-final.jpg "Apache Cassandra Infographic")
