@@ -28,23 +28,15 @@ Discussion and questions on Cassandra's usage and development happens mainly on 
 
 We have recently moved to the ASF Slack organization for all chat.  Please [sign up for an account](https://s.apache.org/slack-invite) to participate.
 
-* `#cassandra` - for user questions and general discussions.
-* `#cassandra-dev` - strictly for questions or discussions related to Cassandra development.
-
-#### IRC<a name="irc"></a>
-
-*Note*: Most discussion has been moved to the above Slack channels.  
-
-* `#cassandra-dev` - strictly for questions or discussions related to Cassandra development.
-* `#cassandra-builds` - results of automated test builds.
-
-Communication on the `#cassandra-dev` channel is [publicly archived](http://wilderness.apache.org/channels/#logs-#cassandra-dev).
+* `#cassandra` - for user questions and general discussions
+* `#cassandra-dev` - strictly for questions or discussions related to Cassandra development
+* `#cassandra-builds` - results of automated test builds
+* `#cassandra-builds-patches` - results of patch test builds
 
 ### Stack Overflow
 
 You can also check the [Q&A about using Cassandra](http://stackoverflow.com/questions/tagged/cassandra) on Stack
 Overflow.
-
 
 ### Books and publications
 
