@@ -36,14 +36,15 @@ Snap it into your existing workflows with the click of a button, automate away t
 
 ### Cassandra Kubernetes operators
 
-* [DataStax cass-operator](https://github.com/datastax/cass-operator): The DataStax Kubernetes Operator for Apache Cassandra
 * [D2iQ Cassandra Kudo Operator](https://github.com/mesosphere/kudo-cassandra-operator): The KUDO Cassandra Operator makes it easy to deploy and manage Apache Cassandra on Kubernetes.
+* [DataStax cass-operator](https://github.com/datastax/cass-operator): The DataStax Kubernetes Operator for Apache Cassandra
 * [Instaclustr cassandra-operator](https://github.com/instaclustr/cassandra-operator): The Cassandra operator manages Cassandra clusters deployed to Kubernetes and automates tasks related to operating a Cassandra cluster.
 * [Orange CassKop](https://orange-opensource.github.io/casskop/): The Orange Cassandra operator is a Kubernetes operator to automate provisioning, management, autoscaling and operations of Apache Cassandra clusters deployed to K8s.
 * [Sky Cassandra Operator](https://github.com/sky-uk/cassandra-operator): The Sky Cassandra Operator is a Kubernetes operator that manages Cassandra clusters inside Kubernetes.
 
 ### Cassandra management sidecars
 
+* [Apache Cassandra cassandra-sidecar](https://github.com/apache/cassandra-sidecar): Sidecar for the highly scalable Apache Cassandra database, built as part of the Apache Cassandra project.
 * [DataStax Management API for Apache Cassandra](https://github.com/datastax/management-api-for-apache-cassandra): RESTful / Secure Management Sidecar for Apache Cassandra
 * [DataStax Spring Boot](https://github.com/datastax/spring-boot): Spring Boot extension
 * [Instaclustr cassandra-sidecar](https://github.com/instaclustr/cassandra-sidecar): This repository is home of a sidecar for Apache Cassandra database. Sidecar is meant to be run alongside of Cassandra instance and sidecar talks to Cassandra via JMX.
@@ -77,3 +78,10 @@ Snap it into your existing workflows with the click of a button, automate away t
 #### Apache Pulsar
 
 * [Pulsar Sink Connector](https://pulsar.apache.org/docs/en/io-quickstart/#connect-pulsar-to-cassandra): The Pulsar Cassandra Sink connector is used to write messages to a Cassandra Cluster.
+
+#### Professional Support
+
+* [DataStax Luna](https://luna.datastax.com/), [DataStax Premium Support](https://www.datastax.com/services/support/premium-support), [DataStax Professional Services](https://www.datastax.com/services/professional-services)
+* [Instacluster](https://www.instaclustr.com/services/)
+* [Open Credo](https://opencredo.com/about-us/)
+
