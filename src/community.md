@@ -28,8 +28,10 @@ Discussion and questions on Cassandra's usage and development happens mainly on 
 
 We have recently moved to the ASF Slack organization for all chat.  Please [sign up for an account](https://s.apache.org/slack-invite) to participate.
 
-* `#cassandra` - for user questions and general discussions.
-* `#cassandra-dev` - strictly for questions or discussions related to Cassandra development.
+* `#cassandra` - for user questions and general discussions
+* `#cassandra-dev` - strictly for questions or discussions related to Cassandra development
+* `#cassandra-builds` - results of automated test builds
+* `#cassandra-builds-patches` - results of patch test builds
 
 ### Stack Overflow
 
