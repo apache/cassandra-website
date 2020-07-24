@@ -71,3 +71,13 @@ $ docker-compose up cassandra-website-serve
 ```
 
 For information about the site layout see the **Layout** section of [README](src/README#layout) in the _src_ directory.
+
+Merging `asf-staging` to `asf-site`
+-----------------------------------
+
+Updating the main website, after verifying the staged website, involves copying the `asf-staging` branch to `asf-site`. A normal git merge is not used, because the `asf-staging` is forced updated after each ci-cassandra.apache.org build. Instead make live the staged website by copying the `asf-staging` to the `asf-site` branch.
+
+    git fetch origin
+    git switch asf-site
+    git reset --hard origin/asf-staging
+    git push -f origin asf-site
