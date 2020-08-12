@@ -2,7 +2,7 @@
 layout: post
 title: "Cassandra and Kubernetes: SIG Update and Survey"
 date:   2020-08-17 23:00:00 +0200
-author: Rahul Singh
+author: the Apache Cassandra Community
 categories: blog
 ---
 
