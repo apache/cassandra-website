@@ -10,7 +10,7 @@ Five operators for Apache Cassandra have been created that have made it easier t
 
 The community created a special interest group (SIG) to set goals for what the operator should do at different levels to find a path for creating a standard community-based operator. The Operator Framework suggests five maturity levels for operator capabilities starting from basic installation to auto-pilot. 
 
-TODO: add image 
+![Operator Capability Maturity Levels](/img/blog-post-cassandra-and-kubernetes-sig-update/operator-capabilities.png)
 
 (Source: [OperatorFramework.io](https://operatorframework.io/operator-capabilities/)) 
 
@@ -41,7 +41,7 @@ As part of the SIG, we’re also coming up with reference architectures on which
   - DC expands to 6 (6 total) 
   - DC contracts to 3 ( 3 total)
 
-TODO: add picture
+![Single Workload / Datacenter in a Single Region](/img/blog-post-cassandra-and-kubernetes-sig-update/single-region-single-datacenter.png)
 
 * **Multi-Workload in Single Region**
   - 2 DCs, both in the same region, with 3 nodes in each DC (6 total)
@@ -50,8 +50,7 @@ TODO: add picture
   - Add a third DC in the same region with 3 nodes (9 nodes)
   - Remove third DC 
 
-
-TODO: add picture
+![Multiple Workloads / Datacenters in a Single Region](/img/blog-post-cassandra-and-kubernetes-sig-update/single-region-multi-datacenter.png)
 
 * **Single Workload in Multi-Regions**
   - 2 DCs, 1 in each region, with 3 nodes in each DC (6 total)
