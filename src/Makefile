@@ -30,6 +30,9 @@ endif
 .latest-doc-link:
 	@ln -s -f -T $(DOC_VERSION) "doc/latest"
 
+.stable-doc-link:
+	@ln -s -f -T $(DOC_VERSION) "doc/stable"
+
 build:
 	@bundle exec jekyll build
 
@@ -42,3 +45,5 @@ serve:
 add-doc: .build-doc build
 
 add-latest-doc: .build-doc .latest-doc-link build
+
+add-stable-doc: .build-doc .stable-doc-link build
