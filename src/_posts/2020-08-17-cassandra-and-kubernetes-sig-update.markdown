@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Cassandra and Kubernetes: SIG Update and Survey"
-date:   2020-08-17 23:00:00 +0200
+date:   2020-08-12 20:00:00 +0200
 author: the Apache Cassandra Community
 categories: blog
 ---
@@ -26,7 +26,10 @@ We’re not starting from zero, as the creators of the five operators are active
 
 If you’re interested in catching up on what the SIG has been talking about, you can watch the YouTube videos of the sessions and read up on the working documents:
 
+<p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/ODz9eEdspXE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</p>
+
 
 As with any Kubernetes operator, the goal is to create a robot which takes the manual work of setting up complex configurations of containers in Kubernetes easier. As mentioned above, the different operator capability levels offer a roadmap to creating a robust operator for Cassandra users that is easy to use, set up, maintain and upgrade, and expand a cluster. 
 
