@@ -25,7 +25,8 @@ RUN apt-get update && \
         make \
         ant \
         ant-optional \
-        maven
+        maven \
+        wget
 
 # Install Sphinx for generating Cassandra docs
 RUN pip install --no-cache-dir \
