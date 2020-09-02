@@ -10,7 +10,7 @@ doc-parent: "Configuring Cassandra"
 
 doc-title: "Cassandra Configuration File"
 doc-header-links: '
-  <link rel="top" title="Apache Cassandra Documentation v3.11.7" href="../index.html"/>
+  <link rel="top" title="Apache Cassandra Documentation v3.11.8" href="../index.html"/>
       <link rel="up" title="Configuring Cassandra" href="index.html"/>
       <link rel="next" title="Operating Cassandra" href="../operating/index.html"/>
       <link rel="prev" title="Configuring Cassandra" href="index.html"/>
@@ -203,6 +203,7 @@ extra-footer: '
 <li class="toctree-l3"><a class="reference internal" href="#transparent-data-encryption-options"><code class="docutils literal notranslate"><span class="pre">transparent_data_encryption_options</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tombstone-warn-threshold"><code class="docutils literal notranslate"><span class="pre">tombstone_warn_threshold</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tombstone-failure-threshold"><code class="docutils literal notranslate"><span class="pre">tombstone_failure_threshold</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#replica-filtering-protection"><code class="docutils literal notranslate"><span class="pre">replica_filtering_protection</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#batch-size-warn-threshold-in-kb"><code class="docutils literal notranslate"><span class="pre">batch_size_warn_threshold_in_kb</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#batch-size-fail-threshold-in-kb"><code class="docutils literal notranslate"><span class="pre">batch_size_fail_threshold_in_kb</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#unlogged-batch-across-partitions-warn-threshold"><code class="docutils literal notranslate"><span class="pre">unlogged_batch_across_partitions_warn_threshold</span></code></a></li>
@@ -1686,6 +1687,14 @@ using the StorageService mbean.</p>
 <div class="section" id="tombstone-failure-threshold">
 <h2><code class="docutils literal notranslate"><span class="pre">tombstone_failure_threshold</span></code><a class="headerlink" href="#tombstone-failure-threshold" title="Permalink to this headline">¶</a></h2>
 <p><em>Default Value:</em> 100000</p>
+</div>
+<div class="section" id="replica-filtering-protection">
+<h2><code class="docutils literal notranslate"><span class="pre">replica_filtering_protection</span></code><a class="headerlink" href="#replica-filtering-protection" title="Permalink to this headline">¶</a></h2>
+<p>Filtering and secondary index queries at read consistency levels above ONE/LOCAL_ONE use a
+mechanism called replica filtering protection to ensure that results from stale replicas do
+not violate consistency. (See CASSANDRA-8272 and CASSANDRA-15907 for more details.) This
+mechanism materializes replica results by partition on-heap at the coordinator. The more possibly
+stale results returned by the replicas, the more rows materialized during the query.</p>
 </div>
 <div class="section" id="batch-size-warn-threshold-in-kb">
 <h2><code class="docutils literal notranslate"><span class="pre">batch_size_warn_threshold_in_kb</span></code><a class="headerlink" href="#batch-size-warn-threshold-in-kb" title="Permalink to this headline">¶</a></h2>
