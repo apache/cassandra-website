@@ -1762,6 +1762,15 @@ using the StorageService mbean.
 
 *Default Value:* 100000
 
+``replica_filtering_protection``
+--------------------------------
+
+Filtering and secondary index queries at read consistency levels above ONE/LOCAL_ONE use a
+mechanism called replica filtering protection to ensure that results from stale replicas do
+not violate consistency. (See CASSANDRA-8272 and CASSANDRA-15907 for more details.) This
+mechanism materializes replica results by partition on-heap at the coordinator. The more possibly
+stale results returned by the replicas, the more rows materialized during the query.
+
 ``batch_size_warn_threshold_in_kb``
 -----------------------------------
 
