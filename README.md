@@ -72,7 +72,26 @@ $ docker-compose up cassandra-website-serve
 
 For information about the site layout see the **Layout** section of [README](src/README#layout) in the _src_ directory.
 
-Merging `asf-staging` to `asf-site`
+
+How ci-cassandra.apache.org continuously deploys to cassandra.staged.apache.org
+-------------------------------------------------------------------------------
+
+The `cassandra-website` job on ci-cassandra.apache.org performs the following steps to CD master builds to cassandra.staged.apache.org
+
+```
+git checkout asf-staging
+git reset --hard origin/master
+docker-compose build --build-arg UID=$(id -u) --build-arg GID=$(id -g) cassandra-website
+docker-compose run cassandra-website
+#git status
+git add content/ src/doc/
+git commit -a -m "generate docs for $(git rev-parse --short HEAD)"
+#git show --stat HEAD
+git push -f origin asf-staging
+```
+
+
+Publishing to cassandra.apache.org :: Merging `asf-staging` to `asf-site`
 -----------------------------------
 
 Updating the main website, after verifying the staged website, involves copying the `asf-staging` branch to `asf-site`. A normal git merge is not used, because the `asf-staging` is forced updated after each ci-cassandra.apache.org build. Instead make live the staged website by copying the `asf-staging` to the `asf-site` branch.
