@@ -91,7 +91,7 @@ When asked what it would take for practitioners to use Cassandra for more applic
 
 We invite anyone who is curious about Cassandra to test the [4.0 beta release](https://cassandra.apache.org/blog/2020/07/20/apache-cassandra-4-0-beta1.html). There will be no new features or breaking API changes in future Beta or GA builds, so you can expect the time you put into the beta to translate into transitioning your production workloads to 4.0. 
 
-We also invite you to participate in a short survey about [Kubernetes and Cassandra](https://docs.google.com/forms/d/e/1FAIpQLScdoTCMxsDwRzt-U898fVmeksBlAf5fud2GVsGqC0T_IQz2Tg/viewform?usp=sf_link) that is open through September 17, 2020. Details will be shared with the Cassandra Kubernetes SIG after it closes.
+We also invite you to participate in a short survey about [Kubernetes and Cassandra](https://docs.google.com/forms/d/e/1FAIpQLScdoTCMxsDwRzt-U898fVmeksBlAf5fud2GVsGqC0T_IQz2Tg/viewform?usp=sf_link) that is open through September 24, 2020. Details will be shared with the Cassandra Kubernetes SIG after it closes.
 
 ### Survey Credits
 
