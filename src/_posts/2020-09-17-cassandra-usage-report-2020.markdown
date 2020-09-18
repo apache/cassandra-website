@@ -9,7 +9,7 @@ categories: blog
 Apache Cassandra is the open source NoSQL database for mission critical data. Today the community announced findings from a comprehensive global survey of 901 practitioners on Cassandra usage. It’s the first of what will become an annual survey that provides a baseline understanding of who, how, and why organizations use Cassandra.
 
 
-    "I saw zero downtime at global scale with Apache Cassandra. That's a powerful statement to make. For our business that’s quite crucial." - Practitioner, London
+> "I saw zero downtime at global scale with Apache Cassandra. That's a powerful statement to make. For our business that’s quite crucial." - Practitioner, London
 
 ### Key Themes
 
@@ -60,7 +60,7 @@ People from organizations that self-identified as being in a “highly advanced�
 Cassandra predominates in very important or mission critical apps. Among practitioners, 31% use Cassandra for their mission critical applications, 55% for their very important applications, 38% for their somewhat important applications, and 20% for their least important applications. 
 
 
-    "We're scheduling 100s of millions of messages to be sent. Per day. If it's two weeks, we're talking about a couple billion. So for this, we use Cassandra." - Practitioner, Amsterdam
+> "We're scheduling 100s of millions of messages to be sent. Per day. If it's two weeks, we're talking about a couple billion. So for this, we use Cassandra." - Practitioner, Amsterdam
 
 ![Cassandra usage](/img/blog-post-usage-report-2020/image4.jpg "image_tooltip")
 
@@ -69,23 +69,22 @@ Cassandra predominates in very important or mission critical apps. Among practit
 The top reasons practitioners use Cassandra for mission critical apps are “good hybrid solutions” (62%), “very secure” (60%), “highly scalable” (57%), “fast” (57%), and “easy to build apps with” (55%). 
 
 
-    “High traffic, high data environments where really you're just looking for very simplistic key value persistence of your data. It's going to be a great fit for you, I can promise that.” - Global SVP Engineering
+> “High traffic, high data environments where really you're just looking for very simplistic key value persistence of your data. It's going to be a great fit for you, I can promise that.” - Global SVP Engineering
 
 ![Top reasons practitioners use Cassandra](/img/blog-post-usage-report-2020/image5.jpg "image_tooltip")
 
 For companies in a highly advanced stage of digital transformation, 58% cite “won’t lose data” as the top reason, followed by “gives me confidence” (56%), “cloud native” (56%), and “very secure” (56%).
 
-    "It can’t lose anything, it has to be able to capture everything. It can’t have any security defects. It needs to be somewhat compatible with the environment. If we adopt a new database, it can’t be a duplicate of the data we already have.… So: Cassandra." - Practitioner, San Francisco
+> "It can’t lose anything, it has to be able to capture everything. It can’t have any security defects. It needs to be somewhat compatible with the environment. If we adopt a new database, it can’t be a duplicate of the data we already have.… So: Cassandra." - Practitioner, San Francisco
 
 However, 36% of practitioners currently using Cassandra for mission critical apps say that a lack of Cassandra-skilled team members may deter adoption. 
 
 
-    “We don’t have time to train a ton of developers, so that time to deploy, time to onboard, that's really key. All the other stuff, scalability, that all sounds fine.” – Practitioner, London
+> “We don’t have time to train a ton of developers, so that time to deploy, time to onboard, that's really key. All the other stuff, scalability, that all sounds fine.” – Practitioner, London
 
 When asked what it would take for practitioners to use Cassandra for more applications and features in production, they said “easier to migrate” and “easier to integrate.”
 
-
-    "If I can get started and be productive in 30 minutes, it’s a no brainer." - Practitioner, London
+> "If I can get started and be productive in 30 minutes, it’s a no brainer." - Practitioner, London
 
 ### Conclusion
 
