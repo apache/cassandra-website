@@ -1,0 +1,80 @@
+site:
+  title: {{ site.title }}
+  url: {{ site.url }}
+  start_page: {{ site.start_page }}::index.adoc
+
+content:
+  sources:
+  {%- for source in source_list %}
+    - url: {{ source.url }}
+    {%- if 'branches' in source %}
+      branches:
+      {%- for branch in source.branches %}
+        - '{{ branch }}'
+      {%- endfor %}
+    {%- endif %}
+    {%- if 'tags' in source %}
+      tags:
+      {%- for tag in source.tags %}
+        - '{{ tag }}'
+      {%- endfor %}
+    {%- endif %}
+      start_path: {{ source.start_path }}
+  {%- endfor %}
+
+ui:
+  bundle:
+    url: {{ ui_bundle.url }}
+    snapshot: true
+  output_dir: assets
+
+output:
+  clean: true
+  dir: ./build/html
+
+asciidoc:
+  attributes:
+    idprefix: ''
+    idseparator: '-'
+    experimental: ''
+    source-language: asciidoc
+    current-version: 4.0
+    latest-version: 4.0
+    previous-version: 3.11
+    40_version: '4.0'
+    3x_version: '3.11'
+    example-caption: ~
+    hide-uri-scheme: ''
+    linkattrs: ''
+    table-caption: ~
+    tabs: tabs
+    page-pagination: true
+    latest-name: '{{ asciidoc_attributes.latest.name }}'
+    latest-date: '{{ asciidoc_attributes.latest.date }}'
+    3_11-name: '{{ asciidoc_attributes.v311.name }}'
+    3_11-date: '{{ asciidoc_attributes.v311.date }}'
+    3_0-name: '{{ asciidoc_attributes.v30.name }}'
+    3_0-date: '{{ asciidoc_attributes.v30.date }}'
+    2_2-name: '{{ asciidoc_attributes.v22.name }}'
+    2_2-date: '{{ asciidoc_attributes.v22.date }}'
+    2_1-name: '{{ asciidoc_attributes.v21.name }}'
+    2_1-date: '{{ asciidoc_attributes.v21.date }}'
+    url-downloads-cassandra: {{ asciidoc_attributes.url_downloads_cassandra }}
+    url-apache-closer: https://www.apache.org/dyn/closer.lua/cassandra
+    url-project: https://asciidoctor.org
+    url-org: https://github.com/asciidoctor
+    url-exten-lab: https://github.com/asciidoctor/asciidoctor-extensions-lab
+    url-rubygem: https://rubygems.org/gems/asciidoctor
+    url-tilt: https://github.com/rtomayko/tilt
+    url-foundation: https://foundation.zurb.com
+    url-jruby: https://jruby.org
+    url-highlightjs: https://highlightjs.org/
+    url-highlightjs-lang: https://highlightjs.org/download/
+    url-prettify: https://code.google.com/p/google-code-prettify
+    url-pygments: http://pygments.org
+    url-pygments-lang: http://pygments.org/languages/
+    url-pygments-gem: https://rubygems.org/gems/pygments.rb
+    url-python: https://www.python.org
+  extensions:
+    - ./lib/tabs-block.js
+    - "@djencks/asciidoctor-openblock"
