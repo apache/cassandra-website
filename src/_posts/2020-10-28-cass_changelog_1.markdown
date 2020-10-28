@@ -6,29 +6,29 @@ author: the Apache Cassandra Community
 categories: blog
 ---
 
-![Cassandra Changelog header](/img/changelog_header.jpg "image_tooltip")
-
 Introducing the first Cassandra Changelog blog! Our monthly roundup of key activities and knowledge to keep the community informed. 
+
+![Cassandra Changelog header](/img/changelog_header.jpg "image_tooltip")
 
 ## Release Notes
 
-#### ### Updated
+#### Updated
 
 The most current Apache Cassandra releases are 4.0-beta2, 3.11.8, 3.0.22, 2.2.18 and 2.1.22 released on August 31 and are [in the repositories](https://cassandra.apache.org/download/). The next cut of releases will be out soon―join the Cassandra [mailing list](https://cassandra.apache.org/community/) to stay up-to-date.
 
 We continue to make progress toward the 4.0 GA release with the overarching goal of it being at a state where major users should feel confident running it in production when it is cut. Over 1,300 Jira tickets have been closed and [less than 100 remain](https://issues.apache.org/jira/projects/CASSANDRA/versions/12346094) as of this post. To gain this confidence, there are various ongoing testing efforts involving correctness, performance, and ease of use.
 
-#### ### Added
+#### Added
 
 With CASSANDRA-15013, the community improved Cassandra&#39;s ability to [handle high throughput workloads](https://cassandra.apache.org/blog/2020/09/03/improving-resiliency.html), while having enough safeguards in place to protect itself from potentially going out of memory.
 
-#### ### Added
+#### Added
 
 The [Harry project](https://github.com/apache/cassandra-harry/blob/master/README.md) is a fuzz testing tool that aims to generate reproducible workloads that are as close to real-life as possible, while being able to efficiently verify the cluster state against the model without pausing the workload itself.
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Check out Harry, a fuzz-testing tool for Apache Cassandra, the best way to test databases or storage engines you&#39;ve ever used: <a href="https://t.co/WjtkIMMrXp">https://t.co/WjtkIMMrXp</a></p>&mdash; αλεx π (@ifesdjeen) <a href="https://twitter.com/ifesdjeen/status/1308036563402719234?ref_src=twsrc%5Etfw">September 21, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-#### ### Added
+#### Added
 
 The community published its first [Apache Cassandra Usage Report 2020](https://cassandra.apache.org/blog/2020/09/17/cassandra-usage-report-2020.html) detailing findings from a comprehensive global survey of 901 practitioners on Cassandra usage to provide a baseline understanding of who, how, and why organizations use Cassandra.
 
@@ -36,15 +36,15 @@ The community published its first [Apache Cassandra Usage Report 2020](https://c
 
 _Updates on new and active Cassandra Enhancement Proposals (CEPs) and how to contribute._
 
-#### ### Changed
+#### Changed
 
 [CEP-2: Kubernetes Operator](https://cwiki.apache.org/confluence/display/CASSANDRA/CEP-2+Kubernetes+Operator) was introduced this year and is an active discussion on creation of a community-based operator with the goal of making it easy to run Cassandra on Kubernetes.
 
-#### ### Added
+#### Added
 
 [CEP-7: Storage Attached Index (SAI)](https://cwiki.apache.org/confluence/display/CASSANDRA/CEP-7%3A+Storage+Attached+Index) is a new secondary index for Cassandra that builds on the advancements made with SASI. It is intended to replace the existing built-in secondary index implementations.
 
-#### ### Added
+#### Added
 
 Cassandra was selected by the ASF Diversity &amp; Inclusion committee to be [included in a research project](https://lists.apache.org/thread.html/rfa1673c9f8b42cf286f5fb763eb987eced2bdea1a619358869a49bef%40%3Cdev.cassandra.apache.org%3E) to evaluate and understand the current state of diversity.
 
@@ -86,7 +86,6 @@ A Cassandra user was in search of a tool to perform schema DDL upgrades. Another
 
 [Understanding Data Modifications in Cassandra](https://www.red-gate.com/simple-talk/blogs/understanding-data-modifications-in-cassandra/) - Sameer Shukla, Redgate
 
-## 
 ![Cassandra Changelog footer](/img/changelog_footer.jpg "image_tooltip")
-## 
+
 Cassandra Changelog is curated by the community. Please send submissions to [cassandra@constantia.io](mailto:cassandra@constantia.io).
