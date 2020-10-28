@@ -56,7 +56,7 @@ Cassandra was selected by the ASF Diversity &amp; Inclusion committee to be [inc
 
 **Bloomberg**
 
-&quot;Our group is working on a multi-year build, creating a new Index Construction Platform to handle the daily production of the Bloomberg Barclays fixed income indices. This involves building and productionizing an Apache Solr-backed search platform to handle thousands of searches per minute, an Apache Cassandra back-end database to store millions of data points per day, and a distributed computational engine to handle millions of computations daily.&quot; - [Pinky Dewani](https://www.techatbloomberg.com/blog/meet-the-team-indices-engineering/)
+&quot;Our group is working on a multi-year build, creating a new Index Construction Platform to handle the daily production of the Bloomberg Barclays fixed income indices. This involves building and productionizing an Apache Solr-backed search platform to handle thousands of searches per minute, an Apache Cassandra back-end database to store millions of data points per day, and a distributed computational engine to handle millions of computations daily.&quot; - [Noel Gunasekar](https://www.techatbloomberg.com/blog/meet-the-team-indices-engineering/)
 
 ## In the News
 
