@@ -9,11 +9,15 @@ is_sphinx_doc: false
 Downloading Cassandra
 ---------------------
 
-### Latest version
+### Latest Beta Version
 
-Download the latest Apache Cassandra 3.11 release: {{ "latest" | full_release_link }}.
+Download the latest Apache Cassandra 4.0 beta release: {{ "latest" | full_release_link }}.
 
-### Older supported releases
+### Latest Stable Version
+
+Download the latest Apache Cassandra 3.11 release: {{ "3.11" | full_release_link }}.
+
+### Older Supported Releases
 
 The following older Cassandra releases are still supported:
 
