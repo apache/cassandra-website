@@ -4,22 +4,26 @@ Apache Cassandra website
 Development Cycle
 -----------------
 
-Making changes to the website is done with the following steps.
+Making changes to the website content can be done using the following steps.
 
-1. Test changes locally
-2. Commit changes in `src/` to a fork and branch, and create a pull request
-3. Get the pull request reviewed and merged to `trunk`
-4. Preview the rendered site on https://cassandra.staged.apache.org/ (wait til [ci-cassandra.apache.org](https://ci-cassandra.apache.org/job/cassandra-website/) has deployed it)
-5. Merge `asf-staging` to `asf-site`
-6. View the rendered site on https://cassandra.apache.org/
+1. Preview changes locally. See below for further details about how to do this.
+2. Commit changes in `site-content/source` to a fork and branch.
+3. Create a pull request back to this repository.
+3. Get the pull request reviewed and merged to `trunk`.
+4. Preview the rendered site on https://cassandra.staged.apache.org/ (wait til [ci-cassandra.apache.org](https://ci-cassandra.apache.org/job/cassandra-website/) has deployed it).
+5. Merge `asf-staging` to `asf-site`.
+6. View the rendered site on https://cassandra.apache.org/.
 
 
-To test changes before committing, it is a requirement that you build the website locally. Building the Apache Cassandra website takes a number of steps. To make things easier we have provided a Docker container which can build the full website in two simple commands and have it ready to commit via git. If you are interested in the process head over to the [README](./src/README) in _src_ directory.
+To test changes before committing, it is a requirement that you build the website locally. Building the Apache Cassandra website takes a number of steps. To make things easier we have provided a Docker container which can build the full website in two simple commands and have it ready to commit via git.
 
 Building Prerequisites
 ----------------------
 
 To build and run the Docker container you will need `Docker` version 2.0.0.0 or greater. If you need a copy of the site code you will need `git` as well.
+
+
+# WARNING: The content below is incorrect and needs to be updated.
 
 
 Building the site
@@ -51,7 +55,7 @@ $ docker-compose run cassandra-website
 
 Go make yourself a cup of coffee, this will take a while...
 
-Once building has completed, the site content will be in the `./cassandra-website/content` directory ready to be tested.
+Once building has completed, the site content will be in the `./cassandra-website/site-content/build` directory ready to be tested.
 
 
 Previewing the site
