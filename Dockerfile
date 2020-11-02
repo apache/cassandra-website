@@ -61,7 +61,7 @@ ENV GIT_USER_NAME ""
 # Build from 3.11.5 as document generation for previous versions is broken.
 ENV CASSANDRA_REPOSITORY_URL "${CASSANDRA_GIT_URL}"
 ENV CASSANDRA_VERSIONS="trunk cassandra-4.0 cassandra-3.11.8 cassandra-3.11.7 cassandra-3.11.6 cassandra-3.11.5"
-ENV CASSANDRA_START_PATH="doc/sourc"
+ENV CASSANDRA_START_PATH="doc/source"
 ENV CASSANDRA_WEBSITE_REPOSITORY_URL="https://gitbox.apache.org/repos/asf/cassandra-website.git"
 ENV CASSANDRA_WEBSITE_VERSIONS="trunk"
 ENV CASSANDRA_WEBSITE_START_PATH="site-content/source"
