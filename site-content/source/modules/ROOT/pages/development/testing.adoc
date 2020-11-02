@@ -1,0 +1,115 @@
+== Testing
+
+Creating tests is one of the most important and also most difficult
+parts of developing Cassandra. There are different ways to test your
+code depending on what you're working on.
+
+=== Unit Testing
+
+The simplest test to write for Cassandra code is a unit test.
+Cassandra uses JUnit as a testing framework and test cases
+can be found in the `test/unit` directory.
+Ideally, you’d be able to create a unit test for your implementation that would exclusively cover the class you created (the unit under test).
+Unfortunately, this is not always possible, because Cassandra doesn’t have a very mock friendly code base.
+Often you’ll find yourself in a situation where you have to use an embedded Cassandra instance to interact with your test.
+If you want to make use of CQL in your test, you can extend CQLTester and use
+some of the convenient helper methods, as shown here:
+
+[source,java]
+----
+@Test
+public void testBatchAndList() throws Throwable
+{
+   createTable("CREATE TABLE %s (k int PRIMARY KEY, l list<int>)");
+   execute("BEGIN BATCH " +
+           "UPDATE %1$s SET l = l +[ 1 ] WHERE k = 0; " +
+           "UPDATE %1$s SET l = l + [ 2 ] WHERE k = 0; " +
+           "UPDATE %1$s SET l = l + [ 3 ] WHERE k = 0; " +
+           "APPLY BATCH");
+
+   assertRows(execute("SELECT l FROM %s WHERE k = 0"),
+              row(list(1, 2, 3)));
+}
+----
+
+Unit tests can be run using the command `ant test`. Both test suites and
+individual tests can be executed.
+
+Test suite:
+[source, plaintext]
+----
+ant test -Dtest.name=<simple_classname>
+----
+For example, replace `<simple_classname>` with `SimpleQueryTest` to test all the methods in `org.apache.cassandra.cql3.SimpleQueryTest`.
+
+Individual test:
+[source, plaintext]
+----
+ant testsome -Dtest.name=<FQCN> -Dtest.methods=<testmethod1>[,testmethod2]
+----
+
+For example, replace `<FQCN>` with `org.apache.cassandra.cql3.SimpleQueryTest`
+and `<testmethod1>` with `testStaticCompactTables` to test just the one method.
+
+
+If you get the following error for a unit test, install the `ant-optional` package
+because you need the `JUnitTask` class:
+
+[source,none]
+----
+Throws: cassandra-trunk/build.xml:1134: taskdef A class needed by class org.krummas.junit.JStackJUnitTask cannot be found:
+org/apache/tools/ant/taskdefs/optional/junit/JUnitTask  using the classloader
+AntClassLoader[/.../cassandra-trunk/lib/jstackjunit-0.0.1.jar]
+----
+
+Tests that consume a significant amount of time during execution can be found
+in the `test/long` directory.
+They can be executed as a regular JUnit test or standalone program.
+Except for the execution time, there’s nothing
+really special about them, but `ant` will only execute these test with the
+`ant long-test` target.
+
+=== DTests
+
+One way of doing integration or system testing at larger scale is
+using https://github.com/apache/cassandra-dtest[dtest] (Cassandra distributed test).
+These dtests automatically setup Cassandra clusters with certain configurations and simulate use cases you want to test.
+DTests are Python scripts that use `ccmlib` from the https://github.com/pcmanus/ccm[ccm] project.
+The clusters set up with dtests run like ad-hoc clusters executed with `ccm` on your local machine.
+
+Once a cluster is initialized, the http://datastax.github.io/python-driver/installation.html[Python driver] is used to interact with the nodes, manipulate the file system, analyze logs, or change individual nodes.
+
+The https://builds.apache.org/[CI server] uses dtests against new patches to  prevent regression bugs.
+Committers can set up build branches and use the CI environment to run tests for your submitted patches.
+Read more on the motivation behind http://www.datastax.com/dev/blog/cassandra-testing-improvements-for-developer-convenience-and-confidence[continuous integration].
+
+The best way to learn how to write dtests is probably by reading the
+introduction "http://www.datastax.com/dev/blog/how-to-write-a-dtest[How
+to Write a Dtest]".
+Looking at existing, recently updated tests in the project is another good activity.
+New tests must follow certain
+https://github.com/apache/cassandra-dtest/blob/master/CONTRIBUTING.md[style
+conventions] that are checked before contributions are accepted.
+In contrast to Cassandra, dtest issues and pull requests are managed on
+github, therefore you should make sure to link any created dtests in your
+Cassandra ticket and also refer to the ticket number in your dtest PR.
+
+Creating a good dtest can be tough, but it should not prevent you from
+submitting patches!
+Please ask in the corresponding JIRA ticket how to write a good dtest for the patch.
+In most cases a reviewer or committer will able to support you, and in some cases they may offer to write a dtest for you.
+
+=== Performance Testing
+
+Performance tests for Cassandra are a special breed of tests that are
+not part of the usual patch contribution process. In fact, many people
+contribute a lot of patches to Cassandra without ever running performance
+tests. However, they are important when working on performance
+improvements; such improvements must be measurable.
+
+Several tools exist for running performance tests. Here are a few to investigate:
+
+* `cassandra-stress`: built-in Cassandra stress tool
+* https://github.com/thelastpickle/tlp-stress[tlp-stress]
+* https://github.com/nosqlbench/nosqlbench[NoSQLBench]
+* https://github.com/datastax/cstar_perf[cstar_perf]
