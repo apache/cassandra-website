@@ -8,15 +8,10 @@ set -e
 git config --global user.email "${GIT_EMAIL_ADDRESS}"
 git config --global user.name "${GIT_USER_NAME}"
 
-#echo
-#echo "Running in '${BUILD_MODE}' mode!"
-#echo
-
 export CASSANDRA_USE_JDK11=true
 CASSANDRA_SITE_DIR="${BUILD_DIR}/cassandra-site"
 CASSANDRA_DIR="${BUILD_DIR}/cassandra"
 CASSANDRA_DOC="${CASSANDRA_DIR}/doc"
-
 
 for version in ${CASSANDRA_VERSIONS}
 do
@@ -33,9 +28,12 @@ do
   popd
 
   pushd "${CASSANDRA_DOC}"
+
   # cassandra-3.11 is missing gen-nodetool-docs.py, ref: CASSANDRA-16093
-  if [ ! -f ./gen-nodetool-docs.py ]
+  gen_nodetool_docs=$(find . -iname gen-nodetool-docs.py | head -n 1)
+  if [ ! -f "${gen_nodetool_docs}" ]
   then
+    echo "Unable to find ${gen_nodetool_docs}, so I will download it from the Cassandra repository using commit a47be7e."
     wget \
       -nc \
       -O ./gen-nodetool-docs.py \
@@ -44,12 +42,16 @@ do
 
   echo "Generating asciidoc for version ${doc_version}"
   # generate the nodetool docs
-  python3 scripts/gen-nodetool-docs.py
+  python3 "${gen_nodetool_docs}"
 
   # generate cassandra.yaml docs
-  YAML_INPUT="${CASSANDRA_DIR}/conf/cassandra.yaml"
-  YAML_OUTPUT="${CASSANDRA_DOC}/source/modules/cassandra/pages/configuration/cass_yaml_file.adoc"
-  python3 scripts/convert_yaml_to_adoc.py "${YAML_INPUT}" "${YAML_OUTPUT}"
+  convert_yaml_to_adoc=$(find . -iname convert_yaml_to_adoc.py | head -n 1)
+  if [ -f "${gen_nodetool_docs}" ]
+  then
+    YAML_INPUT="${CASSANDRA_DIR}/conf/cassandra.yaml"
+    YAML_OUTPUT="${CASSANDRA_DOC}/source/modules/cassandra/pages/configuration/cass_yaml_file.adoc"
+    python3 "${convert_yaml_to_adoc}" "${YAML_INPUT}" "${YAML_OUTPUT}"
+  fi
 
   git add .
   git commit -m "Generated nodetool and configuration documentation for ${doc_version}."
@@ -58,10 +60,12 @@ done
 
 cd "${CASSANDRA_SITE_DIR}/site-content"
 echo "Building site.yml"
-
+rm -f site.yml
 python3 ./bin/site_yml_generator.py \
+  -s "{\"title\":\"${SITE_TITLE}\",\"url\":\"${SITE_URL}\",\"start_page\":\"${SITE_START_PAGE}\"}" \
   -c "{\"url\":\"${CASSANDRA_REPOSITORY_URL}\",\"branches\":[$(echo \""${CASSANDRA_VERSIONS}"\" | sed 's~\ ~\",\"~g')],\"start_path\":\"${CASSANDRA_START_PATH}\"}" \
   -c "{\"url\":\"${CASSANDRA_WEBSITE_REPOSITORY_URL}\",\"branches\":[$(echo \""${CASSANDRA_WEBSITE_VERSIONS}"\" | sed 's~\ ~\",\"~g')],\"start_path\":\"${CASSANDRA_WEBSITE_START_PATH}\"}" \
+  -u "${UI_BUNDLE_ZIP_URL}" \
   site.template.yml
 
 echo "Building the site HTML content."

@@ -4,9 +4,6 @@ import argparse
 import jinja2
 import json
 
-SITE_URL_DEFAULT = "https://cassandra.apache.org/"
-BUNDLE_ZIP_URL_DEFAULT = "https://github.com/ianjevans/antora-ui-datastax/releases/download/v0.1oss/ui-bundle.zip"
-
 
 def build_parser():
     parser = argparse.ArgumentParser(description="Generate the site.yml using the site.yml.template.")
@@ -15,11 +12,11 @@ def build_parser():
         "file_path", metavar="FILE_PATH",  help="Path to site.template to use to generate site.yaml")
     parser.add_argument(
         "-s",
-        "--site-url",
-        metavar="URL",
-        default=SITE_URL_DEFAULT,
-        dest="site_url",
-        help="URL to the website.")
+        "--site-info",
+        metavar="JSON",
+        required=True,
+        dest="site_info",
+        help="Information about the site.")
     parser.add_argument(
         "-c"
         "--content-source",
@@ -32,7 +29,7 @@ def build_parser():
         "-u",
         "--ui-bundle-zip-url",
         metavar="URL",
-        default=BUNDLE_ZIP_URL_DEFAULT,
+        required=True,
         dest="ui_bundle_url",
         help="Local path or URL to UI bundle.zip.")
 
@@ -43,11 +40,9 @@ def build_parser():
 
 args = build_parser().parse_args()
 
-site_dict = {}
+site_dict = json.loads(args.site_info)
 source_list = []
 ui_bundle_dict = {}
-
-site_dict["url"] = args.site_url
 
 for source in args.content_source_list:
     source_obj = json.loads(source)
