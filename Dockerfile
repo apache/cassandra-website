@@ -50,36 +50,38 @@ RUN npm i -g antora-lunr antora-site-generator-lunr
 
 ENV BUILD_DIR="/home/${BUILD_USER}"
 
-ENV GIT_EMAIL_ADDRESS ""
-ENV GIT_USER_NAME ""
-
-#ENV BUILD_MODE "preview"
-#ENV GPG_KEY_PATH ""
-#ENV GENERATE_NODETOOL_AND_CONFIG_DOCS "true"
-#ENV WEB_SERVER_PORT "5000"
-
-# Set defaults for site build variables.
-# Build from 3.11.5 as document generation for previous versions is broken.
-ENV GIT_EMAIL_ADDRESS "${BUILD_USER}@apache.org"
-ENV GIT_USER_NAME "${BUILD_USER}"
-ENV CASSANDRA_REPOSITORY_URL "${CASSANDRA_GIT_URL}"
-ENV CASSANDRA_VERSIONS "trunk cassandra-4.0 cassandra-3.11.8 cassandra-3.11.7 cassandra-3.11.6 cassandra-3.11.5"
-ENV CASSANDRA_START_PATH "doc/source"
-ENV CASSANDRA_WEBSITE_REPOSITORY_URL "https://gitbox.apache.org/repos/asf/cassandra-website.git"
-ENV CASSANDRA_WEBSITE_VERSIONS "trunk"
-ENV CASSANDRA_WEBSITE_START_PATH "site-content/source"
-ENV UI_BUNDLE_ZIP_URL "https://github.com/ianjevans/antora-ui-datastax/releases/download/v0.1oss/ui-bundle.zip"
-ENV SITE_TITLE "Apache Cassandra Documentation"
-ENV SITE_URL "https://cassandra.apache.org/"
-ENV SITE_START_PAGE "website"
-
 # Setup directories for building the docs
 #  Give the build user rw access to everything in the build directory,
 #   neccessary for the ASF 'website'.
 RUN mkdir -p ${BUILD_DIR}/cassandra-site && \
     git clone ${CASSANDRA_GIT_URL} ${BUILD_DIR}/cassandra && \
     mkdir -p ${BUILD_DIR}/cassandra/doc/build_gen && \
-    chmod -R a+rw ${BUILD_DIR}
+    chmod -R a+rw ${BUILD_DIR} && \
+    chown -R ${BUILD_USER}:${BUILD_USER} ${BUILD_DIR}
+
+#ENV BUILD_MODE "preview"
+#ENV GPG_KEY_PATH ""
+#ENV GENERATE_NODETOOL_AND_CONFIG_DOCS "true"
+#ENV WEB_SERVER_PORT "5000"
+
+# Set defaults for site build environment variables.
+ENV GIT_EMAIL_ADDRESS "${BUILD_USER}@apache.org"
+ENV GIT_USER_NAME "${BUILD_USER}"
+
+ENV SITE_TITLE "Apache Cassandra Documentation"
+ENV SITE_URL "https://cassandra.apache.org/"
+ENV SITE_START_PAGE "Website"
+
+# Build from 3.11.5 as document generation for previous versions is broken.
+ENV CASSANDRA_REPOSITORY_URL "${CASSANDRA_GIT_URL}"
+ENV CASSANDRA_VERSIONS "trunk cassandra-4.0 cassandra-3.11.8 cassandra-3.11.7 cassandra-3.11.6 cassandra-3.11.5"
+ENV CASSANDRA_START_PATH "doc/source"
+ENV CASSANDRA_WEBSITE_REPOSITORY_URL "https://gitbox.apache.org/repos/asf/cassandra-website.git"
+ENV CASSANDRA_WEBSITE_VERSIONS "trunk"
+ENV CASSANDRA_WEBSITE_START_PATH "site-content/source"
+
+ENV UI_BUNDLE_ZIP_URL "https://github.com/ianjevans/antora-ui-datastax/releases/download/v0.1oss/ui-bundle.zip"
+
 
 #EXPOSE ${WEB_SERVER_PORT}/tcp
 

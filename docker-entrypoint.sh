@@ -3,7 +3,6 @@
 # Abort script if a command fails
 set -e
 
-
 # Setup git and ssh
 git config --global user.email "${GIT_EMAIL_ADDRESS}"
 git config --global user.name "${GIT_USER_NAME}"
@@ -13,6 +12,7 @@ CASSANDRA_SITE_DIR="${BUILD_DIR}/cassandra-site"
 CASSANDRA_DIR="${BUILD_DIR}/cassandra"
 CASSANDRA_DOC="${CASSANDRA_DIR}/doc"
 
+# @todo make this optional
 for version in ${CASSANDRA_VERSIONS}
 do
   echo "Checking out branch '${version}'"
@@ -76,21 +76,6 @@ export DOCSEARCH_INDEX_VERSION=latest
 antora --generator antora-site-generator-lunr site.yml
 
 
-## *************************
-## CHANGE THIS TO trunk AFTER TESTING!!!!
-## *************************
-## Antora is run only from one branch (trunk)
-#git checkout doc_redo_asciidoc
-#cd doc
-#
-## run antora
-#echo "Building the docs site with antora."
-#export DOCSEARCH_ENABLED=true
-#export DOCSEARCH_ENGINE=lunr
-#export NODE_PATH="$(npm -g root)"
-#export DOCSEARCH_INDEX_VERSION=latest
-#antora --generator antora-site-generator-lunr site.yml
-#
 #if [ "${BUILD_MODE}" = "preview" ]
 #then
 #  echo "Starting webserver."
