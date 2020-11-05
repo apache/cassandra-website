@@ -61,19 +61,20 @@ done
 cd "${CASSANDRA_SITE_DIR}/site-content"
 echo "Building site.yml"
 rm -f site.yml
-python3 ./bin/site_yml_generator.py \
+python3 ./bin/site_yaml_generator.py \
   -s "{\"title\":\"${SITE_TITLE}\",\"url\":\"${SITE_URL}\",\"start_page\":\"${SITE_START_PAGE}\"}" \
   -c "{\"url\":\"${CASSANDRA_REPOSITORY_URL}\",\"branches\":[$(echo \""${CASSANDRA_VERSIONS}"\" | sed 's~\ ~\",\"~g')],\"start_path\":\"${CASSANDRA_START_PATH}\"}" \
   -c "{\"url\":\"${CASSANDRA_WEBSITE_REPOSITORY_URL}\",\"branches\":[$(echo \""${CASSANDRA_WEBSITE_VERSIONS}"\" | sed 's~\ ~\",\"~g')],\"start_path\":\"${CASSANDRA_WEBSITE_START_PATH}\"}" \
   -u "${UI_BUNDLE_ZIP_URL}" \
-  site.template.yml
+  -r "${CASSANDRA_DOWNLOADS_URL}" \
+  site.template.yaml
 
 echo "Building the site HTML content."
 export DOCSEARCH_ENABLED=true
 export DOCSEARCH_ENGINE=lunr
 export NODE_PATH="$(npm -g root)"
 export DOCSEARCH_INDEX_VERSION=latest
-antora --generator antora-site-generator-lunr site.yml
+antora --generator antora-site-generator-lunr site.yaml
 
 
 #if [ "${BUILD_MODE}" = "preview" ]

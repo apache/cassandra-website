@@ -35,7 +35,7 @@ RUN apt-get update && \
         ant-optional \
         vim
 
-RUN pip3 install jinja2
+RUN pip3 install jinja2 requests
 
 # INSTALL nodejs and nvm
 ENV NODE_PACKAGE="node-${NODE_VERSION}-linux-x64.tar.gz"
@@ -43,8 +43,7 @@ RUN wget https://nodejs.org/download/release/${NODE_VERSION}/${NODE_PACKAGE} && 
     tar -C /usr/local --strip-components 1 -xzf ${NODE_PACKAGE} && \
     rm ${NODE_PACKAGE}
 
-# Use npm to install Antora globally
-# and antora-lunr for site search
+# Use npm to install Antora globally, and antora-lunr for site search, and js-yaml to load YAML files
 RUN npm i -g @antora/cli@2.3 @antora/site-generator-default@2.3
 RUN npm i -g antora-lunr antora-site-generator-lunr
 
@@ -81,6 +80,8 @@ ENV CASSANDRA_WEBSITE_VERSIONS "trunk"
 ENV CASSANDRA_WEBSITE_START_PATH "site-content/source"
 
 ENV UI_BUNDLE_ZIP_URL "https://github.com/ianjevans/antora-ui-datastax/releases/download/v0.1oss/ui-bundle.zip"
+
+ENV CASSANDRA_DOWNLOADS_URL "https://downloads.apache.org/cassandra/"
 
 
 #EXPOSE ${WEB_SERVER_PORT}/tcp
