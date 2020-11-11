@@ -63,8 +63,8 @@ fi
 if [ "${RENDER_SITE_HTML_CONTENT}" = "enabled" ]
 then
   cd "${CASSANDRA_SITE_DIR}/site-content"
-  echo "Building site.yml"
-  rm -f site.yml
+  echo "Building site.yaml"
+  rm -f site.yaml
   python3 ./bin/site_yaml_generator.py \
     -s "{\"title\":\"${SITE_TITLE}\",\"url\":\"${SITE_URL}\",\"start_page\":\"${SITE_START_PAGE}\"}" \
     -c "{\"url\":\"${CASSANDRA_REPOSITORY_URL}\",\"branches\":[$(echo \""${CASSANDRA_VERSIONS}"\" | sed 's~\ ~\",\"~g')],\"start_path\":\"${CASSANDRA_START_PATH}\"}" \
