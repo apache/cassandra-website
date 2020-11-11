@@ -83,6 +83,8 @@ ENV UI_BUNDLE_ZIP_URL "https://github.com/ianjevans/antora-ui-datastax/releases/
 
 ENV CASSANDRA_DOWNLOADS_URL "https://downloads.apache.org/cassandra/"
 
+ENV GENERATE_CASSANDRA_VERSIONED_DOCS "enabled"
+ENV RENDER_SITE_HTML_CONTENT "enabled"
 
 #EXPOSE ${WEB_SERVER_PORT}/tcp
 
