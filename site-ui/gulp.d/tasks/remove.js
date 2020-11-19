@@ -1,7 +1,8 @@
 'use strict'
 
 const fs = require('fs-extra')
-const { obj: map } = require('through2')
+const { Transform } = require('stream')
+const map = (transform) => new Transform({ objectMode: true, transform })
 const vfs = require('vinyl-fs')
 
 module.exports = (files) => () =>

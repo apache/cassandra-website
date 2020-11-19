@@ -3,11 +3,12 @@
 const asciidoctor = require('asciidoctor.js')()
 const fs = require('fs-extra')
 const handlebars = require('handlebars')
-const { obj: map } = require('through2')
 const merge = require('merge-stream')
 const ospath = require('path')
 const path = ospath.posix
 const requireFromString = require('require-from-string')
+const { Transform } = require('stream')
+const map = (transform = () => {}, flush = undefined) => new Transform({ objectMode: true, transform, flush })
 const vfs = require('vinyl-fs')
 const yaml = require('js-yaml')
 
