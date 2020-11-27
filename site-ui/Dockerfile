@@ -18,7 +18,7 @@ ENV BUILD_DIR="/home/site-ui"
 
 RUN mkdir -p ${BUILD_DIR}
 
-EXPOSE 5252
+EXPOSE 5252/tpc
 
 WORKDIR ${BUILD_DIR}
 COPY docker-entrypoint.sh /usr/local/bin/
