@@ -92,9 +92,7 @@ ENV CASSANDRA_DOWNLOADS_URL "https://downloads.apache.org/cassandra/"
 ENV GENERATE_CASSANDRA_VERSIONED_DOCS "enabled"
 ENV RENDER_SITE_HTML_CONTENT "enabled"
 
-ENV WEB_SERVER_PORT "5151"
-
-EXPOSE ${WEB_SERVER_PORT}/tcp
+EXPOSE 5151/tcp
 
 # Run as build user from here
 USER ${BUILD_USER_ARG}
