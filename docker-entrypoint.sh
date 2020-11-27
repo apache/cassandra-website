@@ -3,16 +3,33 @@
 # Abort script if a command fails
 set -e
 
+#
+# Tasks
+#
+# docs (generate docs)
+# build (render site)
+# preview (preview site)
+# publish (publish site to asf-site branch)
+#
+
 export CASSANDRA_USE_JDK11=true
-CASSANDRA_SITE_DIR="${BUILD_DIR}/cassandra-site"
+CASSANDRA_WEBSITE_DIR="${BUILD_DIR}/cassandra-website"
 CASSANDRA_DIR="${BUILD_DIR}/cassandra"
 CASSANDRA_DOC="${CASSANDRA_DIR}/doc"
+GIT_USER_SETUP="false"
 
-if [ "${GENERATE_CASSANDRA_VERSIONED_DOCS}" = "enabled" ]
-then
-  # Setup git so we can commit back to the Cassandra repository locally
-  git config --global user.email "${GIT_EMAIL_ADDRESS}"
-  git config --global user.name "${GIT_USER_NAME}"
+setup_git_user() {
+  if [ "${GIT_USER_SETUP}" = "false" ]
+  then
+    # Setup git so we can commit back to the Cassandra repository locally
+    git config --global user.email "${GIT_EMAIL_ADDRESS}"
+    git config --global user.name "${GIT_USER_NAME}"
+    GIT_USER_SETUP="true"
+  fi
+}
+
+generate_cassandra_versioned_docs() {
+  setup_git_user
 
   for version in ${CASSANDRA_VERSIONS}
   do
@@ -58,11 +75,10 @@ then
     git commit -m "Generated nodetool and configuration documentation for ${doc_version}."
     popd
   done
-fi
+}
 
-if [ "${RENDER_SITE_HTML_CONTENT}" = "enabled" ]
-then
-  cd "${CASSANDRA_SITE_DIR}/site-content"
+render_site_content_to_html() {
+  cd "${CASSANDRA_WEBSITE_DIR}/site-content"
   echo "Building site.yaml"
   rm -f site.yaml
   python3 ./bin/site_yaml_generator.py \
@@ -79,6 +95,16 @@ then
   export NODE_PATH="$(npm -g root)"
   export DOCSEARCH_INDEX_VERSION=latest
   antora --generator antora-site-generator-lunr site.yaml
+}
+
+if [ "${GENERATE_CASSANDRA_VERSIONED_DOCS}" = "enabled" ]
+then
+  generate_cassandra_versioned_docs
+fi
+
+if [ "${RENDER_SITE_HTML_CONTENT}" = "enabled" ]
+then
+  render_site_content_to_html
 fi
 
 
