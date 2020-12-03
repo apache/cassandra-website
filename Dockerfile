@@ -10,11 +10,13 @@ FROM ubuntu:18.04
 # Other container parameters can be overridden at build time as well:
 #  - BUILD_USER_ARG:                Name of the user to run as when building the docs and site.
 #  - NODE_VERSION_ARG:              Version of node to use.
+#  - ENTR_VERSION_ARG:              Version of entr to use.
 #  - CASSANDRA_REPOSITORY_URL_ARG:  Git URL to use for the Cassandra repository.
 ARG UID_ARG=1000
 ARG GID_ARG=1000
 ARG BUILD_USER_ARG=build
 ARG NODE_VERSION_ARG="v12.16.2"
+ARG ENTR_VERSION_ARG="4.6"
 ARG CASSANDRA_REPOSITORY_URL_ARG="https://gitbox.apache.org/repos/asf/cassandra.git"
 
 RUN echo "Building with arguments" \
@@ -54,12 +56,25 @@ RUN wget https://nodejs.org/download/release/${NODE_VERSION_ARG}/${NODE_PACKAGE}
 # Use npm to install Antora globally, and antora-lunr for site search, and js-yaml to load YAML files
 RUN npm i -g @antora/cli@2.3 @antora/site-generator-default@2.3
 RUN npm i -g antora-lunr antora-site-generator-lunr
-
-ENV BUILD_DIR="/home/${BUILD_USER_ARG}"
+RUN npm i -g live-server
 
 # Setup directories for building the docs
 #  Give the build user rw access to everything in the build directory,
 #   neccessary for the ASF 'website'.
+ENV BUILD_DIR="/home/${BUILD_USER_ARG}"
+ENV ENTR_PACKAGE="${ENTR_VERSION_ARG}.tar.gz"
+WORKDIR ${BUILD_DIR}
+RUN wget https://github.com/eradman/entr/archive/${ENTR_PACKAGE} && \
+    mkdir entr && \
+    tar -C ${BUILD_DIR}/entr --strip-components 1 -xzf ${ENTR_PACKAGE} && \
+    rm ${ENTR_PACKAGE}
+
+WORKDIR ${BUILD_DIR}/entr
+RUN ./configure && \
+    make test && \
+    make install
+
+WORKDIR ${BUILD_DIR}
 RUN mkdir -p ${BUILD_DIR}/cassandra-website && \
     git clone ${CASSANDRA_REPOSITORY_URL_ARG} ${BUILD_DIR}/cassandra && \
     mkdir -p ${BUILD_DIR}/cassandra/doc/build_gen && \
@@ -71,26 +86,27 @@ RUN mkdir -p ${BUILD_DIR}/cassandra-website && \
 #ENV GENERATE_NODETOOL_AND_CONFIG_DOCS "true"
 
 # Set defaults for site build environment variables.
-ENV GIT_EMAIL_ADDRESS "${BUILD_USER_ARG}@apache.org"
-ENV GIT_USER_NAME "${BUILD_USER_ARG}"
+ENV GIT_EMAIL_ADDRES="${BUILD_USER_ARG}@apache.org"
+ENV GIT_USER_NAME="${BUILD_USER_ARG}"
 
-ENV SITE_TITLE "Apache Cassandra Documentation"
-ENV SITE_URL "https://cassandra.apache.org/"
-ENV SITE_START_PAGE "Website"
+ENV SITE_TITLE="Apache Cassandra Documentation"
+ENV SITE_URL="https://cassandra.apache.org/"
+ENV SITE_START_PAGE="Website"
 
 # Build from 3.11.5 as document generation for previous versions is broken.
-ENV CASSANDRA_REPOSITORY_URL "${CASSANDRA_REPOSITORY_URL_ARG}"
-ENV CASSANDRA_VERSIONS "trunk cassandra-4.0 cassandra-3.11.8 cassandra-3.11.7 cassandra-3.11.6 cassandra-3.11.5"
-ENV CASSANDRA_START_PATH "doc/source"
-ENV CASSANDRA_WEBSITE_REPOSITORY_URL "https://gitbox.apache.org/repos/asf/cassandra-website.git"
-ENV CASSANDRA_WEBSITE_VERSIONS "trunk"
-ENV CASSANDRA_WEBSITE_START_PATH "site-content/source"
+ENV CASSANDRA_REPOSITORY_URL="${CASSANDRA_REPOSITORY_URL_ARG}"
+ENV CASSANDRA_VERSIONS="trunk cassandra-4.0 cassandra-3.11.8 cassandra-3.11.7 cassandra-3.11.6 cassandra-3.11.5"
+ENV CASSANDRA_START_PATH="doc/source"
+ENV CASSANDRA_WEBSITE_REPOSITORY_URL="https://gitbox.apache.org/repos/asf/cassandra-website.git"
+ENV CASSANDRA_WEBSITE_VERSIONS="trunk"
+ENV CASSANDRA_WEBSITE_START_PATH="site-content/source"
 
-ENV UI_BUNDLE_ZIP_URL "https://github.com/ianjevans/antora-ui-datastax/releases/download/v0.1oss/ui-bundle.zip"
-ENV CASSANDRA_DOWNLOADS_URL "https://downloads.apache.org/cassandra/"
+ENV UI_BUNDLE_ZIP_URL="https://github.com/ianjevans/antora-ui-datastax/releases/download/v0.1oss/ui-bundle.zip"
+ENV CASSANDRA_DOWNLOADS_URL="https://downloads.apache.org/cassandra/"
 
-ENV GENERATE_CASSANDRA_VERSIONED_DOCS "enabled"
-ENV RENDER_SITE_HTML_CONTENT "enabled"
+ENV GENERATE_DOCS="enabled"
+ENV BUILD_SITE="enabled"
+ENV PREVIEW_MODE="disabled"
 
 EXPOSE 5151/tcp
 
