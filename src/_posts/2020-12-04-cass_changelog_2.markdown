@@ -27,9 +27,6 @@ _Updates on Cassandra Enhancement Proposals (CEPs), how to contribute, and other
 The community weighed options to address reads inconsistencies for Compact Storage as noted in ticket [CASSANDRA-16217](https://issues.apache.org/jira/browse/CASSANDRA-16217) (committed). The conversation continues in ticket [CASSANDRA-16226](https://issues.apache.org/jira/browse/CASSANDRA-16226) with the aim of ensuring there are no huge performance regressions for common queries when you upgrade from 2.x to 3.0 with Compact Storage tables or drop it from a table on 3.0+.
 
 #### **Added**
-In 4.0 there is a plan to drop compact storage and related code, but the community noticed behavioral changes such as differences in visible behavior between "normal" and compact tables. Solutions are being discussed as part of [CASSANDRA-16217](https://issues.apache.org/jira/browse/CASSANDRA-16217). 
-
-#### **Added**
 [CASSANDRA-16222](https://issues.apache.org/jira/browse/CASSANDRA-16222) is a Spark library that can compact and read raw Cassandra SSTables into SparkSQL. By reading the sstables directly from a snapshot directory, one can achieve high performance with minimal impact to a production cluster. It was used to successfully export a 32TB Cassandra table (46bn CQL rows) to HDFS in Parquet format in around 70 minutes, a 20x improvement on previous solutions.
 
 #### **Changed**
