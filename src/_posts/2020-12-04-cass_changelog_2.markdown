@@ -5,9 +5,9 @@ date:   2020-12-01 x
 author: the Apache Cassandra Community
 categories: blog
 ---
-![Apache Cassandra Changelog Header](img/changelog_header.jpg "image_tooltip")
-
 Our monthly roundup of key activities and knowledge to keep the community informed.
+
+![Apache Cassandra Changelog Header](/img/changelog_header.jpg "image_tooltip")
 
 ## Release Notes
 
@@ -78,7 +78,7 @@ Users in search of a tool for scheduling backups and performing restores with cl
 
 [How to deploy Cassandra on Openshift and open it up to remote connections](https://sindhumurugavel.medium.com/how-to-deploy-cassandra-on-openshift-and-open-it-up-to-remote-connections-c7783861b868) - Sindhu Murugavel
 
-![Apache Cassandra Changelog Footer](img/changelog_footer.jpg "image_tooltip")
+![Apache Cassandra Changelog Footer](/img/changelog_footer.jpg "image_tooltip")
 ---
 
 Cassandra Changelog is curated by the community. Please send submissions to [cassandra@constantia.io](mailto:cassandra@constantia.io). 
