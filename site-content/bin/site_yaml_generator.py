@@ -127,7 +127,7 @@ def build_arg_parser():
         required=True,
         action="append",
         dest="content_source_list",
-        help="JSON object containing the url, branches and start_path of a source for the website.")
+        help="JSON object containing the url, branches, tags, and start_path of a source for the website.")
     parser.add_argument(
         "-u",
         "--ui-bundle-zip-url",

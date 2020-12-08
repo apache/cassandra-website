@@ -95,10 +95,12 @@ ENV SITE_START_PAGE="Website"
 
 # Build from 3.11.5 as document generation for previous versions is broken.
 ENV CASSANDRA_REPOSITORY_URL="${CASSANDRA_REPOSITORY_URL_ARG}"
-ENV CASSANDRA_VERSIONS="trunk cassandra-4.0 cassandra-3.11.8 cassandra-3.11.7 cassandra-3.11.6 cassandra-3.11.5"
+ENV CASSANDRA_VERSIONS="trunk cassandra-4.0 cassandra-3.11 cassandra-3.11.8 cassandra-3.11.7 cassandra-3.11.6 cassandra-3.11.5"
+ENV CASSANDRA_TAGS=""
 ENV CASSANDRA_START_PATH="doc/source"
 ENV CASSANDRA_WEBSITE_REPOSITORY_URL="https://gitbox.apache.org/repos/asf/cassandra-website.git"
 ENV CASSANDRA_WEBSITE_VERSIONS="trunk"
+ENV CASSANDRA_WEBSITE_TAGS=""
 ENV CASSANDRA_WEBSITE_START_PATH="site-content/source"
 
 ENV UI_BUNDLE_ZIP_URL="https://github.com/ianjevans/antora-ui-datastax/releases/download/v0.1oss/ui-bundle.zip"

@@ -5,14 +5,22 @@ site:
 
 content:
   sources:
-    {%- for source in source_list %}
+  {%- for source in source_list %}
     - url: {{ source.url }}
+    {%- if 'branches' in source %}
       branches:
-        {%- for branch in source.branches %}
+      {%- for branch in source.branches %}
         - '{{ branch }}'
-        {%- endfor %}
+      {%- endfor %}
+    {%- endif %}
+    {%- if 'tags' in source %}
+      tags:
+      {%- for tag in source.tags %}
+        - '{{ tag }}'
+      {%- endfor %}
+    {%- endif %}
       start_path: {{ source.start_path }}
-    {%- endfor %}
+  {%- endfor %}
 
 ui:
   bundle:
