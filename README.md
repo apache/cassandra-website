@@ -8,7 +8,7 @@ Making changes to the website is done with the following steps.
 
 1. Test changes locally
 2. Commit changes in `src/` to a fork and branch, and create a pull request
-3. Get the pull request reviewed and merged to `master`
+3. Get the pull request reviewed and merged to `trunk`
 4. Preview the rendered site on https://cassandra.staged.apache.org/ (wait til [ci-cassandra.apache.org](https://ci-cassandra.apache.org/job/cassandra-website/) has deployed it)
 5. Merge `asf-staging` to `asf-site`
 6. View the rendered site on https://cassandra.apache.org/
