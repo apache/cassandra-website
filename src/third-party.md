@@ -36,16 +36,16 @@ Snap it into your existing workflows with the click of a button, automate away t
 * [The Last Pickle Cassandra stress tool, tlp-stress](https://github.com/thelastpickle/tlp-stress): A workload-centric stress tool for Apache Cassandra. Designed for simplicity, no math degree required. (DataStax)
 * [NoSQLBench](https://github.com/nosqlbench/nosqlbench): Pluggable benchmarking suite for Cassandra and other distributed systems
 * [Stargate](https://stargate.io): Open source data gateway providing Document, REST, and GraphQL APIs to Apache Cassandra.
-* [Instaclustr Esop](https://github.com/instaclustr/esop): Swiss knife for backup and restore of your node to GCP, Azure, S3, Ceph etc. Supports backup and restoration of commit logs too. Esop is embedded in [Instaclustr Icarus](https://github.com/instaclustr/icarus) sidecar so you may backup and restore your cluster remotely and on-the-fly with any disruption.
-* [Instaclustr Kerberos plugin](https://github.com/instaclustr/cassandra-kerberos): A GSSAPI authentication provider for Apache Cassandra
+* [Instaclustr Esop](https://github.com/instaclustr/esop): Swiss knife for backup and restore of your node to GCP, Azure, S3, Ceph etc. Supports backup and restoration of commit logs too. Esop is embedded in [Instaclustr Icarus](https://github.com/instaclustr/icarus) sidecar so you may backup and restore your cluster remotely and on-the-fly without any disruption.
+* [Instaclustr Kerberos plugin](https://github.com/instaclustr/cassandra-kerberos): A GSSAPI authentication provider for Apache Cassandra.
 * [Instaclustr Java Driver for Kerberos](https://github.com/instaclustr/cassandra-java-driver-kerberos): A GSSAPI authentication provider for the Cassandra Java driver.
 * [Instaclustr Minotaur](https://github.com/instaclustr/instaclustr-minotaur): Command line tool for consistent rebuilding of a Cassandra cluster.
-* [Instaclustr LDAP Authenticator](https://github.com/instaclustr/cassandra-ldap): LDAP Authenticator for Apache Cassandra
-* [Instaclustr TTL Remover](https://github.com/instaclustr/cassandra-ttl-remover): Command line tool for rewriting SSTables to remove TTLs
-* [Instaclustr SSTable Generator](https://github.com/instaclustr/cassandra-sstable-generator): CLI tool for programmatic generation of Cassandra SSTables
-* [Instaclustr Exporter](https://github.com/instaclustr/cassandra-exporter): Java agent that exports Cassandra metrics to Prometheus
-* [Instaclustr Go Client for Instaclustr Icarus](https://github.com/instaclustr/instaclustr-icarus-go-client): Go client for Instaclustr Icarus sidecar
-* [Instaclustr SStable Tools](https://github.com/instaclustr/cassandra-sstable-tools): A command line tool that helps admins get summaries, metadata, partition info, cell info for SSTables
+* [Instaclustr LDAP Authenticator](https://github.com/instaclustr/cassandra-ldap): LDAP Authenticator for Apache Cassandra.
+* [Instaclustr TTL Remover](https://github.com/instaclustr/cassandra-ttl-remover): Command line tool for rewriting SSTables to remove TTLs.
+* [Instaclustr SSTable Generator](https://github.com/instaclustr/cassandra-sstable-generator): CLI tool for programmatic generation of Cassandra SSTables.
+* [Instaclustr Exporter](https://github.com/instaclustr/cassandra-exporter): Java agent that exports Cassandra metrics to Prometheus.
+* [Instaclustr Go Client for Instaclustr Icarus](https://github.com/instaclustr/instaclustr-icarus-go-client): Go client for Instaclustr Icarus sidecar.
+* [Instaclustr SSTable Tools](https://github.com/instaclustr/cassandra-sstable-tools): A command line tool that helps admins get summaries, metadata, partition info, and cell info for SSTables.
 
 ### Cassandra Kubernetes operators
 
@@ -60,7 +60,7 @@ Snap it into your existing workflows with the click of a button, automate away t
 * [Apache Cassandra cassandra-sidecar](https://github.com/apache/cassandra-sidecar): Sidecar for the highly scalable Apache Cassandra database, built as part of the Apache Cassandra project.
 * [DataStax Management API for Apache Cassandra](https://github.com/datastax/management-api-for-apache-cassandra): RESTful / Secure Management Sidecar for Apache Cassandra
 * [DataStax Spring Boot](https://github.com/datastax/spring-boot): Spring Boot extension
-* [Instaclustr Icarus](https://github.com/instaclustr/icarus): This repository is home of a sidecar for Apache Cassandra database. Icarus is meant to be run alongside of Cassandra instance and it talks to Cassandra via JMX. It embeds [Instaclustr Esop](https://github.com/instaclustr/esop) so you can backup and restore your cluster on-the-fly to and from various cloud storage providers. Icarus is used as a container in [Instaclustr cassandra-operator](https://github.com/instaclustr/cassandra-operator) as well as in [Orange CassKop](https://orange-opensource.github.io/casskop/) where it is used for backup and restoration purposes primarily.
+* [Instaclustr Icarus](https://github.com/instaclustr/icarus): Icarus is meant to be run alongside of Cassandra, talking to Cassandra via JMX. Instaclustr Esop is embedded in Icarus for on-the-fly cluster backup and restore using various cloud storage providers as a source or destination. Icarus is used primarily as a backup and restore tool, and is containerized in [Instaclustr cassandra-operator](https://github.com/instaclustr/cassandra-operator) and [Orange CassKop](https://orange-opensource.github.io/casskop/).
 
 ### Developer Frameworks
 
