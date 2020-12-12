@@ -20,6 +20,14 @@ setup_git_user() {
 }
 
 generate_cassandra_versioned_docs() {
+  local commit_changes_to_branch=""
+  if [ $(echo "${CASSANDRA_VERSIONS}" | wc -w) -gt 1 ] || [ "${CREATE_GIT_COMMIT_WHEN_GENERATING_DOCS}" = "enabled" ]
+  then
+    commit_changes_to_branch="enabled"
+  else
+    commit_changes_to_branch="disabled"
+  fi
+
   for version in ${CASSANDRA_VERSIONS}
   do
     echo "Checking out branch '${version}'"
@@ -59,8 +67,11 @@ generate_cassandra_versioned_docs() {
       python3 "${convert_yaml_to_adoc}" "${YAML_INPUT}" "${YAML_OUTPUT}"
     fi
 
-    git add .
-    git commit -m "Generated nodetool and configuration documentation for ${doc_version}."
+    if [ "${commit_changes_to_branch}" = "enabled" ]
+    then
+      git add .
+      git commit -m "Generated nodetool and configuration documentation for ${doc_version}."
+    fi
     popd > /dev/null
   done
 }
@@ -122,6 +133,30 @@ generate_json() {
 
 generate_site_yaml() {
   pushd "${CASSANDRA_WEBSITE_DIR}/site-content" > /dev/null
+
+  local repository_url=""
+  local start_path=""
+  local branches=""
+  local tags=""
+  local content_source_options=()
+  for repo in CASSANDRA CASSANDRA_WEBSITE
+  do
+    repository_url=$(eval echo "$"${repo}_REPOSITORY_URL"")
+    start_path=$(eval echo "$"${repo}_START_PATH"")
+    branches=$(eval echo "$"${repo}_VERSIONS"")
+    tags=$(eval echo "$"${repo}_TAGS"")
+
+    if [ -n "${repository_url}" ] && [ -n "${start_path}" ] && { [ -n "${branches}" ] || [ -n "${tags}" ]; }
+    then
+      content_source_options+=("-c")
+      content_source_options+=("$(generate_json \
+          "string|url|${repository_url}" \
+          "string|start_path|${start_path}" \
+          "list|branches|${branches}" \
+          "list|tags|${tags}")")
+    fi
+  done
+
   echo "Building site.yaml"
   rm -f site.yaml
   python3 ./bin/site_yaml_generator.py \
@@ -129,16 +164,7 @@ generate_site_yaml() {
           "string|title|${SITE_TITLE}" \
           "string|url|${SITE_URL}" \
           "string|start_page|${SITE_START_PAGE}") "\
-    -c "$(generate_json \
-          "string|url|${CASSANDRA_REPOSITORY_URL}" \
-          "string|start_path|${CASSANDRA_START_PATH}" \
-          "list|branches|${CASSANDRA_VERSIONS}" \
-          "list|tags|${CASSANDRA_TAGS}")" \
-    -c "$(generate_json \
-          "string|url|${CASSANDRA_WEBSITE_REPOSITORY_URL}" \
-          "string|start_path|${CASSANDRA_WEBSITE_START_PATH}" \
-          "list|branches|${CASSANDRA_WEBSITE_VERSIONS}" \
-          "list|tags|${CASSANDRA_WEBSITE_TAGS}")" \
+    "${content_source_options[@]}" \
     -u "${UI_BUNDLE_ZIP_URL}" \
     -r "${CASSANDRA_DOWNLOADS_URL}" \
     site.template.yaml
@@ -155,13 +181,6 @@ render_site_content_to_html() {
 
 run_preview_mode() {
   echo "Entering preview mode!"
-  if [ "${BUILD_SITE}" != "enabled" ]
-  then
-    generate_site_yaml
-    render_site_content_to_html
-  fi
-
-  export -f render_site_content_to_html
 
   local find_paths="${CASSANDRA_WEBSITE_DIR}/${CASSANDRA_WEBSITE_START_PATH}"
   if [ "${GENERATE_DOCS}" = "enabled" ]
@@ -170,6 +189,20 @@ run_preview_mode() {
     # Ensure we only have one branch to generate docs for
     CASSANDRA_VERSIONS=$(echo "${CASSANDRA_VERSIONS} "| cut -d' ' -f1)
   fi
+
+  if [ "${BUILD_SITE}" != "enabled" ]
+  then
+    generate_site_yaml
+
+    export DOCSEARCH_ENABLED=true
+    export DOCSEARCH_ENGINE=lunr
+    export NODE_PATH="$(npm -g root)"
+    export DOCSEARCH_INDEX_VERSION=latest
+
+    render_site_content_to_html
+  fi
+
+  export -f render_site_content_to_html
 
   pushd "${CASSANDRA_WEBSITE_DIR}/site-content/build/html" > /dev/null
   live-server --port=5151 --host=0.0.0.0 --no-browser --no-css-inject --wait=2000 &

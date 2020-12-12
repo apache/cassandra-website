@@ -109,6 +109,7 @@ ENV CASSANDRA_DOWNLOADS_URL="https://downloads.apache.org/cassandra/"
 ENV GENERATE_DOCS="enabled"
 ENV BUILD_SITE="enabled"
 ENV PREVIEW_MODE="disabled"
+ENV CREATE_GIT_COMMIT_WHEN_GENERATING_DOCS="enabled"
 
 EXPOSE 5151/tcp
 
