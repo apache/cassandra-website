@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Apache Cassandra Changelog #3 | January 2021"
-date:   2020-01-19
+date:   2021-01-19
 author: the Apache Cassandra Community
 categories: blog
 ---
