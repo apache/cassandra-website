@@ -1,6 +1,6 @@
-= Contributing Code Changes
+== Contributing Code Changes
 
-== Choosing What to Work on
+=== Choosing What to Work on
 
 Submitted patches can include bug fixes, changes to the Java code base,
 improvements for tooling (both Java or Python), documentation, testing
@@ -10,48 +10,47 @@ time it takes to get a patch accepted also depends on the kind of issue
 you're addressing.
 
 As a general rule of thumb:::
-  * Major new features and significant changes to the code based will
-  likely not going to be accepted without deeper discussion within the
-  http://cassandra.apache.org/community/[developer community]
-  * Bug fixes take higher priority compared to features
-  * The extend to which tests are required depend on how likely your
+  * Major new features and significant changes to the code base will
+  likely not be accepted without deeper discussion within the
+  http://cassandra.apache.org/community/[developer community].
+  * Bug fixes take higher priority compared to features.
+  * The extent to which tests are required depends on how likely your
   changes will effect the stability of Cassandra in production. Tooling
   changes requires fewer tests than storage engine changes.
-  * Less complex patches will be faster to review: consider breaking up
+  * Less complex patches will be reviewed faster; consider breaking up
   an issue into individual tasks and contributions that can be reviewed
-  separately
+  separately.
 
 [TIP]
 .Hint
 ====
 Not sure what to work? Just pick an issue marked as
 https://issues.apache.org/jira/issues/?jql=project%20%3D%20CASSANDRA%20AND%20Complexity%20%3D%20%22Low%20Hanging%20Fruit%22%20and%20status%20!%3D%20resolved[Low
-Hanging Fruit] Complexity in JIRA, which we use to flag issues that
-could turn out to be good starter tasks for beginners.
+Hanging Fruit] Complexity in JIRA, which flags issues that often turn out to be good starter tasks for beginners.
 ====
 
-== Before You Start Coding
+=== Before You Start Coding
 
 Although contributions are highly appreciated, we do not guarantee that
-each contribution will become a part of Cassandra. Therefore it's
-generally a good idea to first get some feedback on the things you plan
-to work on, especially about any new features or major changes to the
+every contribution will become a part of Cassandra. Therefore, it's
+generally a good idea to first get some feedback on the thing you plan
+to do, especially about any new features or major changes to the
 code base. You can reach out to other developers on the mailing list or
 `Slack`.
 
 You should also::
   * Avoid redundant work by searching for already reported issues in
-  https://issues.apache.org/jira/browse/CASSANDRA[JIRA]
+  https://issues.apache.org/jira/browse/CASSANDRA[JIRA] to work on.
   * Create a new issue early in the process describing what you're
-  working on - not just after finishing your patch
+  working on - before finishing your patch.
   * Link related JIRA issues with your own ticket to provide a better
-  context
+  context.
   * Update your ticket from time to time by giving feedback on your
-  progress and link a GitHub WIP branch with your current code
+  progress and link a GitHub WIP branch with your current code.
   * Ping people who you actively like to ask for advice on JIRA by
-  https://confluence.atlassian.com/conf54/confluence-user-s-guide/sharing-content/using-mentions[mentioning
-  users]
-There are also some fixed rules that you need to be aware:::
+  https://confluence.atlassian.com/doc/mentions-251725350.html[mentioning users].
+
+There are also some fixed rules that you need to be aware::
   * Patches will only be applied to branches by following the release
   model
   * Code must be testable
@@ -60,7 +59,7 @@ There are also some fixed rules that you need to be aware:::
   versions
   * Contributions must be covered by the Apache License
 
-=== Choosing the Right Branches to Work on
+==== Choosing the Right Branches to Work on
 
 There are currently multiple Cassandra versions maintained in individual
 branches:
@@ -84,32 +83,29 @@ releases.
 ==== 4.0 Code Freeze
 
 Patches for new features are currently not accepted for 4.0 or any
-earlier versions. Starting with the code freeze in September, all
-efforts should focus on stabilizing the 4.0 branch before the first
+earlier versions.
+All efforts should focus on stabilizing the 4.0 branch before the first
 official release. During that time, only the following patches will be
 considered for acceptance:
 
-____
 * Bug fixes
 * Measurable performance improvements
 * Changes not distributed as part of the release such as:
 * Testing related improvements and fixes
 * Build and infrastructure related changes
 * Documentation
-____
 
 ==== Bug Fixes
 
-Creating patches for bug fixes is a bit more complicated as this will
+Creating patches for bug fixes is a bit more complicated and will
 depend on how many different versions of Cassandra are affected. In each
 case, the order for merging such changes will be `cassandra-2.1` ->
-`cassandra-2.2` -> `cassandra-3.0` -> `cassandra-3.x` -> `trunk`. But
-don't worry, merging from 2.1 would be the worst case for bugs that
-affect all currently supported versions, which isn't very common. As a
+`cassandra-2.2` -> `cassandra-3.0` -> `cassandra-3.x` -> `trunk`.
+But don't worry, merging from 2.1 would be the worst case for bugs that
+affect all currently supported versions, an uncommon event. As a
 contributor, you're also not expected to provide a single patch for each
 version. What you need to do however is:
 
-____
 * Be clear about which versions you could verify to be affected by the
 bug
 * For 2.x: ask if a bug qualifies to be fixed in this release line, as
@@ -121,14 +117,12 @@ already in 3.0)
 direction listed above
 * Be clear which branches may need attention by the committer or even
 create custom patches for those if you can
-____
 
-== Creating a Patch
+=== Creating a Patch
 
 So you've finished coding and the great moment arrives: it's time to
 submit your patch!
 
-____
 [arabic]
 . Create a branch for your changes if you haven't done already. Many
 contributors name their branches based on ticket number and Cassandra
@@ -149,12 +143,10 @@ inclusion.
 either. Multiple commits are fine - and often preferable - during review
 stage, especially for incremental review, but once +1d, do either:
 
-____
 [loweralpha]
 . Attach a patch to JIRA with a single squashed commit in it (per
 branch), or
 . Squash the commits in-place in your branches into one
-____
 
 [arabic, start=6]
 . Include a CHANGES.txt entry (put it at the top of the list), and
@@ -171,9 +163,9 @@ is necessary.
 <Optional lengthier description>
 patch by <Authors>; reviewed by <Reviewers> for CASSANDRA-#####
 ----
+[arabic, start=7]
 . When you're happy with the result, create a patch:
-
-____
++
 [source,none]
 ----
 git add <any new or modified file>
@@ -190,7 +182,6 @@ push your branch:
 ----
 git push --set-upstream origin 12345-3.0
 ----
-____
 
 [arabic, start=8]
 . To make life easier for your reviewer/committer, you may want to make
@@ -208,7 +199,6 @@ do not be discouraged. If possible, the reviewer will give suggestions
 to improve your patch or explain why it is not suitable.
 . If the reviewer has given feedback to improve the patch, make the
 necessary changes and move the ticket into "Patch Available" once again.
-____
 
 Once the review process is complete, you will receive a +1. Wait for a
 committer to commit it. Do not delete your branches immediately after
