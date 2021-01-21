@@ -1,4 +1,4 @@
-== Jenkins CI Environment
+== CI Environments
 
 === About CI testing and Apache Cassandra
 
@@ -83,3 +83,20 @@ Executors need to have "JDK 1.8 (latest)" installed. This is done under
 `Manage Jenkins -> Global Tool Configuration -> JDK Installations…`.
 Executors also need to have the `virtualenv` package installed on their
 system.
+
+=== CircleCI
+
+Cassandra ships with a default https://circleci.com[CircleCI]
+configuration to enable running tests on your branches.
+Go to the CircleCI website, click "Login" and log in with your github account.
+Then give CircleCI permission to watch your repositories.
+
+Once you have done that, you can optionally configure CircleCI to run
+tests in parallel if you wish:
+
+[arabic,start=1]
+. Click `Projects` and select your github account, and then click the settings for your project.
+. Set the parallelism setting. If you leave the default value of 1
+for Cassandra, only `ant eclipse-warnings` and `ant test` will be run.
+If you change the value to 4, Circle CI also runs `ant long-test`,
+`ant test-compression` and `ant stress-test`.
