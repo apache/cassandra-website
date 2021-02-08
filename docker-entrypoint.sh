@@ -110,9 +110,9 @@ generate_json() {
       break
     fi
 
-    json_type="$(echo ${arg} | cut -d'|' -f1)"
-    key="$(echo ${arg} | cut -d'|' -f2)"
-    value="$(echo ${arg} | cut -d'|' -f3)"
+    json_type="$(echo ${arg} | cut -d':' -f1)"
+    key="$(echo ${arg} | cut -d':' -f2)"
+    value=${arg//${json_type}:${key}:/}
     if [ -n "${value}" ]
     then
       json_obj=$("${json_type}_to_json" "${key}" "${value}")
@@ -150,10 +150,10 @@ generate_site_yaml() {
     then
       content_source_options+=("-c")
       content_source_options+=("$(generate_json \
-          "string|url|${repository_url}" \
-          "string|start_path|${start_path}" \
-          "list|branches|${branches}" \
-          "list|tags|${tags}")")
+          "string:url:${repository_url}" \
+          "string:start_path:${start_path}" \
+          "list:branches:${branches}" \
+          "list:tags:${tags}")")
     fi
   done
 
@@ -161,9 +161,9 @@ generate_site_yaml() {
   rm -f site.yaml
   python3 ./bin/site_yaml_generator.py \
     -s "$(generate_json \
-          "string|title|${SITE_TITLE}" \
-          "string|url|${SITE_URL}" \
-          "string|start_page|${SITE_START_PAGE}") "\
+          "string:title:${SITE_TITLE}" \
+          "string:url:${SITE_URL}" \
+          "string:start_page:${SITE_START_PAGE}") "\
     "${content_source_options[@]}" \
     -u "${UI_BUNDLE_ZIP_URL}" \
     -r "${CASSANDRA_DOWNLOADS_URL}" \
