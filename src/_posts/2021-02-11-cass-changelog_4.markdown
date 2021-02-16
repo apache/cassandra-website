@@ -56,7 +56,7 @@ For the GA of Apache Cassandra 4.0, any claim of support for Python 2 will be dr
 
 The Kubernetes SIG is discussing how to encourage more participation and to structure SIG meetings around updates on Kubernetes and Cassandra. We also intend to invite other projects (like OpenEDS, Prometheus, and others) to discuss how we can make Cassandra and Kubernetes better. As well as updates, the group discussed handling large-scale backups inside Kubernetes and using S3 APIs to store images. [Watch here](https://www.youtube.com/watch?v=X5mEgFquIoo).
 
-<iframe width="400" height="200" src="http://www.youtube.com/embed/X5mEgFquIoo" frameborder="0" allowfullscreen></iframe>
+[![kubernetes-sig-meeting-2021-01-14](http://img.youtube.com/vi/X5mEgFquIoo/0.jpg)](http://www.youtube.com/watch?v=X5mEgFquIoo)
 
 ## User Space
 
