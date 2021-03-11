@@ -40,7 +40,7 @@ With 4.0 approaching completion, the idea of a project roadmap is also being [di
 
 #### Changed
 
-The Kubernetes SIG is looking at ways to invite more participants by hosting two meetings to accommodate people in different time zones. [Watch here](https://www.youtube.com/watch?v=rp-0JaptJ3Y&t=1846s).
+The Kubernetes SIG is looking at ways to invite more participants by hosting two meetings to accommodate people in different time zones. [Watch here](https://www.youtube.com/watch?v=rp-0JaptJ3Y).
 
 [![Cassandra Kubernetes SIG Meeting 2021-02-11](http://img.youtube.com/vi/rp-0JaptJ3Y/0.jpg)](http://www.youtube.com/watch?v=rp-0JaptJ3Y)
 
