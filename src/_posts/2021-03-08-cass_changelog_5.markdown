@@ -28,7 +28,7 @@ _Updates on Cassandra Enhancement Proposals (CEPs), how to contribute, and other
 
 #### Added
 
-We are pleased to announce that Paulo Motta has accepted the invitation to become a PMC member! This invite comes in recognition of all the contributions to the Apache Cassandra project over many years.
+We are pleased to announce that Paulo Motta has accepted the invitation to become a PMC member! This invite comes in recognition of all his contributions to the Apache Cassandra project over many years.
 
 #### Added
 
@@ -42,7 +42,7 @@ With 4.0 approaching completion, the idea of a project roadmap is also being [di
 
 The Kubernetes SIG is looking at ways to invite more participants by hosting two meetings to accommodate people in different time zones. [Watch here](https://www.youtube.com/watch?v=rp-0JaptJ3Y&t=1846s).
 
-[![Cassandra Kubernetes SIG Meeting 2021-02-11](http://img.youtube.com/vi/rp-0JaptJ3Y/0.jpg)](http://www.youtube.com/watch?v=rp-0JaptJ3Y "Cassandra Kubernetes SIG Meeting")
+[![Cassandra Kubernetes SIG Meeting 2021-02-11](http://img.youtube.com/vi/rp-0JaptJ3Y/0.jpg)](http://www.youtube.com/watch?v=rp-0JaptJ3Y)
 
 A community website dedicated to [cass-operator](https://github.com/datastax/cass-operator) is also in development focused on documentation for the operator. Going forward, the Kubernetes SIG is discussing release cadence and looking at six releases a year.
 
