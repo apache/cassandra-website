@@ -215,12 +215,12 @@ run_website_preview() {
   local env_args
   local cassandra_volume_arg
 
-  if [ -z "${env_file}" ]
+  if [ -n "${env_file}" ]
   then
     env_file_arg="--env-file .env.dev"
   fi
 
-  if [ -z "${local_cassandra_repository_path}" ]
+  if [ -n "${local_cassandra_repository_path}" ]
   then
     cassandra_volume_arg="-v ${local_cassandra_repository_path}:/home/build/cassandra"
   fi
