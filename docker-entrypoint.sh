@@ -21,16 +21,16 @@ setup_git_user() {
 
 generate_cassandra_versioned_docs() {
   local commit_changes_to_branch=""
-  if [ $(echo "${CASSANDRA_VERSIONS}" | wc -w) -gt 1 ] || [ "${CREATE_GIT_COMMIT_WHEN_GENERATING_DOCS}" = "enabled" ]
+  if [ $(wc -w <<< "${GENERATE_CASSANDRA_VERSIONS}") -gt 1 ] || [ "${CREATE_GIT_COMMIT_WHEN_GENERATING_DOCS}" = "enabled" ]
   then
     commit_changes_to_branch="enabled"
   else
     commit_changes_to_branch="disabled"
   fi
 
-  for version in ${CASSANDRA_VERSIONS}
+  for version in ${GENERATE_CASSANDRA_VERSIONS}
   do
-    echo "Checking out branch '${version}'"
+    echo "Checking out '${version}'"
     pushd "${CASSANDRA_DIR}" > /dev/null
     git clean -xdff
     git checkout "${version}"
@@ -110,8 +110,8 @@ generate_json() {
       break
     fi
 
-    json_type="$(echo ${arg} | cut -d':' -f1)"
-    key="$(echo ${arg} | cut -d':' -f2)"
+    json_type="$(cut -d':' -f1 <<< ${arg})"
+    key="$(cut -d':' -f2 <<< ${arg})"
     value=${arg//${json_type}:${key}:/}
     if [ -n "${value}" ]
     then
@@ -141,10 +141,10 @@ generate_site_yaml() {
   local content_source_options=()
   for repo in CASSANDRA CASSANDRA_WEBSITE
   do
-    repository_url=$(eval echo "$"${repo}_REPOSITORY_URL"")
-    start_path=$(eval echo "$"${repo}_START_PATH"")
-    branches=$(eval echo "$"${repo}_VERSIONS"")
-    tags=$(eval echo "$"${repo}_TAGS"")
+    repository_url=$(eval echo "$"ANTORA_CONTENT_SOURCES_${repo}_URL"")
+    start_path=$(eval echo "$"ANTORA_CONTENT_SOURCES_${repo}_START_PATH"")
+    branches=$(eval echo "$"ANTORA_CONTENT_SOURCES_${repo}_BRANCHES"")
+    tags=$(eval echo "$"ANTORA_CONTENT_SOURCES_${repo}_TAGS"")
 
     if [ -n "${repository_url}" ] && [ -n "${start_path}" ] && { [ -n "${branches}" ] || [ -n "${tags}" ]; }
     then
@@ -161,11 +161,11 @@ generate_site_yaml() {
   rm -f site.yaml
   python3 ./bin/site_yaml_generator.py \
     -s "$(generate_json \
-          "string:title:${SITE_TITLE}" \
-          "string:url:${SITE_URL}" \
-          "string:start_page:${SITE_START_PAGE}") "\
+          "string:title:${ANTORA_SITE_TITLE}" \
+          "string:url:${ANTORA_SITE_URL}" \
+          "string:start_page:${ANTORA_SITE_START_PAGE}") "\
     "${content_source_options[@]}" \
-    -u "${UI_BUNDLE_ZIP_URL}" \
+    -u "${ANTORA_UI_BUNDLE_URL}" \
     -r "${CASSANDRA_DOWNLOADS_URL}" \
     site.template.yaml
   popd > /dev/null
@@ -182,15 +182,23 @@ render_site_content_to_html() {
 run_preview_mode() {
   echo "Entering preview mode!"
 
-  local find_paths="${CASSANDRA_WEBSITE_DIR}/${CASSANDRA_WEBSITE_START_PATH}"
-  if [ "${GENERATE_DOCS}" = "enabled" ]
+  export -f render_site_content_to_html
+
+  local on_change_functions="render_site_content_to_html"
+  local find_paths="${CASSANDRA_WEBSITE_DIR}/${ANTORA_CONTENT_SOURCES_CASSANDRA_WEBSITE_START_PATH}"
+
+  if [ "${COMMAND_GENERATE_DOCS}" = "run" ]
   then
-    find_paths="${find_paths} ${CASSANDRA_DIR}/${CASSANDRA_START_PATH}"
+    on_change_functions="generate_cassandra_versioned_docs && ${on_change_functions}"
+    find_paths="${find_paths} ${CASSANDRA_DIR}/${ANTORA_CONTENT_SOURCES_CASSANDRA_START_PATH}"
+
+    export -f generate_cassandra_versioned_docs
+
     # Ensure we only have one branch to generate docs for
-    CASSANDRA_VERSIONS=$(echo "${CASSANDRA_VERSIONS} "| cut -d' ' -f1)
+    GENERATE_CASSANDRA_VERSIONS=$(cut -d' ' -f1 <<< "${GENERATE_CASSANDRA_VERSIONS}")
   fi
 
-  if [ "${BUILD_SITE}" != "enabled" ]
+  if [ "${COMMAND_BUILD_SITE}" != "run" ]
   then
     generate_site_yaml
 
@@ -202,23 +210,53 @@ run_preview_mode() {
     render_site_content_to_html
   fi
 
-  export -f render_site_content_to_html
-
   pushd "${CASSANDRA_WEBSITE_DIR}/site-content/build/html" > /dev/null
   live-server --port=5151 --host=0.0.0.0 --no-browser --no-css-inject --wait=2000 &
   popd > /dev/null
 
-  find "${CASSANDRA_WEBSITE_DIR}/${CASSANDRA_WEBSITE_START_PATH}" -type f | \
-    entr /bin/bash -c "render_site_content_to_html"
+  find "${find_paths}" -type f | entr /bin/bash -c "${on_change_functions}"
 }
 
-if [ "${GENERATE_DOCS}" = "enabled" ]
+
+# ============ MAIN ============
+
+GENERATE_CASSANDRA_VERSIONS=$(sed 's/^[[:space:]]]*//' <<< "${ANTORA_CONTENT_SOURCES_CASSANDRA_BRANCHES} ${ANTORA_CONTENT_SOURCES_CASSANDRA_TAGS}")
+export GENERATE_CASSANDRA_VERSIONS
+
+# Initialise commands and assume none of them will run
+COMMAND_GENERATE_DOCS="skip"
+COMMAND_BUILD_SITE="skip"
+COMMAND_PREVIEW="skip"
+
+# Work out which commands the caller has requested. We need to do this first as the commands should be run in a certain order
+while [ "$1" != "" ]
+do
+  case $1 in
+    "generate-docs")
+      COMMAND_GENERATE_DOCS="run"
+    ;;
+    "build-site")
+      COMMAND_BUILD_SITE="run"
+    ;;
+    "preview")
+      COMMAND_PREVIEW="run"
+    ;;
+    *)
+      echo "Skipping unrecognised command '$1'."
+    ;;
+  esac
+
+  shift
+done
+
+# Execute the commands as requested by the caller.
+if [ "${COMMAND_GENERATE_DOCS}" = "run" ]
 then
   setup_git_user
   generate_cassandra_versioned_docs
 fi
 
-if [ "${BUILD_SITE}" = "enabled" ]
+if [ "${COMMAND_BUILD_SITE}" = "run" ]
 then
   generate_site_yaml
 
@@ -230,7 +268,7 @@ then
   render_site_content_to_html
 fi
 
-if [ "${PREVIEW_MODE}" = "enabled" ]
+if [ "${COMMAND_PREVIEW}" = "run" ]
 then
   run_preview_mode
 fi
