@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Join Apache Cassandra for Google Summer of Code 2021"
-date:   2021-03-09
+date:   2021-03-10
 author: Paulo Motta
 categories: blog
 excerpt: Getting involved with Apache Cassandra @ Google Summer of Code 2021
