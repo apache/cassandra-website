@@ -8,12 +8,14 @@ categories: blog
 
 The COVID-19 pandemic has taken a toll on a lot of things and one of those is our ability to interact as a community. There has been no in-person conferences or meetups for over a year now. The Cassandra community has always thrived on sharing with each other at places like ApacheCon and the Cassandra Summit. With Cassandra 4.0, we have a lot to celebrate! 
 
+![Apache Cassandra™ World Party footer](/img/world-party-2021-footer.png)
+
 This release will be the most stable database ever shipped, and Cassandra has become one of the most important databases running today. It is responsible for the biggest workloads in the world and because of that, we want to gather the worldwide community and have a party. 
 
 We thought we would do something different for this special event that reflects who we are as a community. Our community lives and works in every timezone, and we want to make it as easy as possible for everyone to participate so we’ve decided to use an Ignite-style format. If you are new to this here’s how it works:
 
-* Each talk is only 5 minutes long
-* You get ten slides and they automatically advance every 30 seconds
+* Each talk is only 5 minutes long.
+* You get ten slides and they automatically advance every 30 seconds.
 * To get you started, we have a template ready [here](https://docs.google.com/presentation/d/1cWta8H88xXolEdS-HFo9nzp1GI5v_VkCHo5dmoKqozY/edit#slide=id.gc922c7a35f_0_106).
 * You can do your talk in the language of your choice. English is not required. 
 * Format: PDF (Please no GIFs or videos)
@@ -38,4 +40,3 @@ Whether you're attending or speaking, all Apache Cassandra™ World Party partic
 
 Got questions about the event? Please email [cassandra@constantia.io](mailto:cassandra@constantia.io).
 
-![Apache Cassandra™ World Party footer](/img/world-party-2021-footer.png)
