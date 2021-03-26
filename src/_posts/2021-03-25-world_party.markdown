@@ -28,11 +28,11 @@ One-day virtual party on Wednesday, April 28 with three, hour-long sessions so y
 
 ## When?
 
-Join us at the time most convenient for you on April 28:
+Join us at the time most convenient for you:
 
-*   6:00am PT / 1:00pm UTC
-*   2:00pm PT / 9:00pm UTC
-*   10:00pm PT / 5:00am UTC
+* April 28 5:00am UTC
+* April 28 1:00pm UTC
+* April 28 9:00pm UTC
 
 A registration page will go live soon. In the meantime, please [submit your 5-minute Cassandra talk](https://sessionize.com/cassandra) by April 9!
 
