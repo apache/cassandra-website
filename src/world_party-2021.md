@@ -21,9 +21,9 @@ Anyone around the world! If you use and/or contribute to Cassandra, join us to m
 ## When
 
 The one-day event will include three sessions so you can celebrate with the Cassandra community in your time zone or attend all three! **Registration link coming soon**.
-- 1-2pm UTC / 6-7am PDT
-- 9-10pm UTC / 3-4pm PDT
-- 5-6am UTC / 10-11pm PDT
+- April 28 5:00am UTC
+- April 28 1:00pm UTC
+- April 28 9:00pm UTC
 
 ## What
 
