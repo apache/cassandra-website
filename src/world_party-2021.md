@@ -6,10 +6,10 @@ is_homepage: false
 is_sphinx_doc: false
 ---
 
-![Apache Cassandra™ World Party banner](/img/world-party-2021-footer.png)
-
 Cassandra 4.0 World Party
 -------------------------
+
+![Apache Cassandra™ World Party banner](/img/world-party-2021-footer.png)
 
 Apache Cassandra™ runs some of the biggest workloads around the world. Join our virtual, one-day celebration on **Wednesday, April 28, 2021** in preparation for
  the launch of 4.0, the most stable database release ever shipped. Fun, fast-paced talks from our global community will keep you entertained around the clock.
