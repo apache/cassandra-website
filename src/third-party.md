@@ -14,7 +14,7 @@ is_sphinx_doc: false
 * [Aiven for Apache Cassandra](https://aiven.io/cassandra): Aiven for Apache Cassandra is a fully managed NoSQL database, deployable in the cloud of your choice.
 Snap it into your existing workflows with the click of a button, automate away the mundane tasks, and focus on building your core apps. Now running Cassandra 3.11.
 * [Amazon Keyspaces (for Apache Cassandra)](https://aws.amazon.com/keyspaces/): Scalable, highly available, and managed Apache Cassandra–compatible database service.
-* [DataStax Astra](https://astra.datastax.com): Cloud-native database as-a-service built on Apache Cassandra™ complete with a free-tier and CQL, REST and GraphQL APIs for faster development. Deployable in AWS and GCP.
+* [DataStax Astra](https://dtsx.io/3ct6e87): Cloud-native database as-a-service built on Apache Cassandra™ complete with a free-tier and CQL, REST and GraphQL APIs for faster development. Deployable in AWS and GCP.
 * [Instaclustr Hosted & Managed Apache Cassandra as a Service](https://www.instaclustr.com/solutions/managed-apache-cassandra): Instaclustr provides a fully managed and SOC 2 certified hosted & managed service for Apache Cassandra® on AWS, Azure, GCP and IBM Cloud.
 
 ### Cassandra installation tools
