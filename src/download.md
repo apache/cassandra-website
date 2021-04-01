@@ -17,16 +17,16 @@ Download the latest Apache Cassandra 4.0 beta release: {{ "latest" | full_releas
 
 Download the latest Apache Cassandra 3.11 release: {{ "3.11" | full_release_link }}.
 
-### Older Supported Releases
+### Older Maintained Releases
 
-The following older Cassandra releases are still supported:
+The following older Cassandra releases are still maintained:
 
-* Apache Cassandra 3.0 is supported until **6 months after 4.0 release (date TBD)**. The latest release is {{ "3.0" | full_release_link }}.
-* Apache Cassandra 2.2 is supported until **4.0 release (date TBD)**. The latest release is {{ "2.2" | full_release_link }}.
-* Apache Cassandra 2.1 is supported until **4.0 release (date TBD)** with **critical fixes only**. The latest release is
-  {{ "2.1" | full_release_link }}.
+* Apache Cassandra 3.11 will fully be maintained until **April 30, 2022** and with **critical fixes only** until **April 30, 2023** The latest release is {{ "3.11" | full_release_link }}.
+* Apache Cassandra 3.0 will be maintained until **April 30, 2022** with **critical fixes only**. The latest release is {{ "3.0" | full_release_link }}.
+* Apache Cassandra 2.2 will be maintained until **April 30, 2021**. with **critical fixes only**. The latest release is {{ "2.2" | full_release_link }}.
+* Apache Cassandra 2.1 will be maintained until **April 30, 2021** with **critical fixes only**. The latest release is {{ "2.1" | full_release_link }}.
 
-Older (unsupported) versions of Cassandra are [archived here](http://archive.apache.org/dist/cassandra/).
+Older (unmaintained) versions of Cassandra are [archived here](http://archive.apache.org/dist/cassandra/).
 
 ### Installation from Debian packages
 
