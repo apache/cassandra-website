@@ -6,13 +6,13 @@ is_homepage: false
 is_sphinx_doc: false
 ---
 
-![spacer](/img/1x1.png)
+Cassandra 4.0 World Party
+-------------------------
 
 ![Apache Cassandra™ World Party banner](/img/world-party-2021-footer.png)
 
-![spacer](/img/1x1.png)
-
-Apache Cassandra™ runs some of the biggest workloads around the world. Join our virtual, one-day celebration on **Wednesday, April 28, 2021** in preparation for the launch of 4.0, the most stable database release ever shipped. Fun, fast-paced talks from our global community will keep you entertained around the clock. [Register now!](https://hopin.com/events/apache-cassandra-4-0-world-party)
+Apache Cassandra™ runs some of the biggest workloads around the world. Join our virtual, one-day celebration on **Wednesday, April 28, 2021** in preparation for
+ the launch of 4.0, the most stable database release ever shipped. Fun, fast-paced talks from our global community will keep you entertained around the clock.
 
 ## Who
 
@@ -20,7 +20,7 @@ Anyone around the world! If you use and/or contribute to Cassandra, join us to m
 
 ## When
 
-The one-day event will include three sessions so you can celebrate with the Cassandra community in your time zone or attend all three! [Register now!](https://hopin.com/events/apache-cassandra-4-0-world-party)
+The one-day event will include three sessions so you can celebrate with the Cassandra community in your time zone or attend all three! **Registration link coming soon**.
 - April 28 5:00am UTC
 - April 28 1:00pm UTC
 - April 28 9:00pm UTC
