@@ -10,7 +10,7 @@ The COVID-19 pandemic has taken a toll on a lot of things and one of those is ou
 
 ![Apache Cassandra™ World Party footer](/img/world-party-2021-footer.png)
 
-This release will be the most stable database ever shipped, and Cassandra has become one of the most important databases running today. It is responsible for the biggest workloads in the world and because of that, we want to gather the worldwide community and have a party.
+This release will be the most stable database ever shipped, and Cassandra has become one of the most important databases running today. It is responsible for the biggest workloads in the world and because of that, [we want to gather the worldwide community and have a party](https://hopin.com/events/apache-cassandra-4-0-world-party).
 
 We thought we would do something different for this special event that reflects who we are as a community. Our community lives and works in every timezone, and we want to make it as easy as possible for everyone to participate so we’ve decided to use an Ignite-style format. If you are new to this here’s how it works:
 
@@ -34,9 +34,9 @@ Join us at the time most convenient for you:
 * April 28 1:00pm UTC
 * April 28 9:00pm UTC
 
-A registration page will go live soon. In the meantime, please [submit your 5-minute Cassandra talk](https://sessionize.com/cassandra) by April 9!
+[Register here](https://hopin.com/events/apache-cassandra-4-0-world-party). In the meantime, please [submit your 5-minute Cassandra talk](https://sessionize.com/cassandra) by April 9!
 
 Whether you're attending or speaking, all Apache Cassandra™ World Party participants must adhere to the [code of conduct](https://www.apache.org/foundation/policies/anti-harassment.html).
 
-Got questions about the event? Please email [cassandra@constantia.io](mailto:cassandra@constantia.io).
+Got questions about the event? Please email [events@constantia.io](mailto:events@constantia.io).
 
