@@ -46,7 +46,7 @@ Join us to hear from the following lineups at the following times:
 
 - Introduction to Apache Cassandra™ 4.0
 - Cassandra Robustness: Errors I Made and You Cannot Anymore! by Carlos Rolo
-- Raising the Bar on QAMick by Semb Wever
+- Raising the Bar on QA by Mick Semb Wever
 - Cassandra in Adobe Audience Manager by Serban Teodorescu
 - 11 Years of Cassandra by John Schulz
 - Fun and Games
