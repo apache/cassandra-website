@@ -29,21 +29,36 @@ The one-day event will include three sessions so you can celebrate with the Cass
 
 Each session is an hour long and will feature fun, fast-paced lightning talks on Cassandra plus interactive content and some giveaways. All participants must adhere to the ASF’s [anti-harassment policy](https://www.apache.org/foundation/policies/anti-harassment.html).
 
-### Call for Papers
+### Agenda
 
-We’re looking for fun, fast-paced, 5 minute “lightning” style talks that focus on:
-x
-- What you love about Cassandra
-- Why you’re passionate about Cassandra
-- What you’ve learned using Cassandra
-- What you’ve built with Cassandra
-- How you successfully scale applications with Cassandra
+Join us to hear from the following lineups at the following times:
 
-That’s it! We’ll even give you a deck with iconography you can use to get you started. Whether you're a beginner or long-time Cassandra user, come share your tale and learn from others. Submissions due by April 9.
+#### 5:00 - 6:00am UTC | Moderated by [Jeremy Hanna](https://github.com/jeromatron) + [Erick Ramirez](https://twitter.com/ErickRamirezAU)
 
-[Submit a Talk](https://sessionize.com/cassandra).
+- Introduction to Apache Cassandra™ 4.0
+- Downside of Incremental Repairs by Payal Kumari
+- Apache Cassandra™ with Quarkus by Ravindra Kulkarni
+- Cassandra: Now and For The Future by Nirmal KPS Singh
+- Understanding Cassandra by Pradeep Gopal
+- Fun and Games
 
-We're also looking for people to help review talks and moderate -- if you're interested in participating, email [events@constantia.io](mailto:events@constantia.io).
+#### 1:00 - 2:00pm UTC | Moderated by [Ekaterina Dimitrova](https://twitter.com/EkaterinaDimit9) + [Patrick McFadin](https://github.com/pmcfadin)
+
+- Introduction to Apache Cassandra™ 4.0
+- Cassandra Robustness: Errors I Made and You Cannot Anymore! by Carlos Rolo
+- Raising the Bar on QA by Mick Semb Wever
+- Cassandra in Adobe Audience Manager by Serban Teodorescu
+- 11 Years of Cassandra by John Schulz
+- Fun and Games
+
+#### 9:00 - 10:00pm UTC | Moderated by [Melissa Logan](https://twitter.com/Melissa_B2B) + [Ben Bromhead](https://twitter.com/BenBromhead)
+
+- Introduction to Apache Cassandra™ 4.0
+- How Apache Cassandra™ Skills Help Women on a Path to Reentry in Tech by Autumn Capasso
+- Making Cassandra Easy by Rahul Xavier Singh
+- Optimizing Cassandra for Cloud Native Architecture by Subrata Ashe
+- Moving from Elastic to Cassandra by Charles Herring
+- Fun and Games
 
 See you online April 28!
 
