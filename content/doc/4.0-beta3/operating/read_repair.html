@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-beta3/operating/read_repair.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-beta3" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Hints" href="hints.html"/> <link rel="prev" title="Repair" href="repair.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">Operating Cassandra</a></li>
+      
+
+      
+      <li>Read repair</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Operating Cassandra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="snitch.html">Snitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topo_changes.html">Adding, replacing, moving and removing nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="repair.html">Repair</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Read repair</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#expectation-of-monotonic-quorum-reads">Expectation of Monotonic Quorum Reads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#table-level-configuration-of-monotonic-reads">Table level configuration of monotonic reads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#read-repair-example">Read Repair Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#read-consistency-level-and-read-repair">Read Consistency Level and Read Repair</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#improved-read-repair-blocking-behavior-in-cassandra-4-0">Improved Read Repair Blocking Behavior in Cassandra 4.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#diagnostic-events-for-read-repairs">Diagnostic Events for Read Repairs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#background-read-repair">Background Read Repair</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hints.html">Hints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html">Compaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bloom_filters.html">Bloom Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compression.html">Compression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cdc.html">Change Data Capture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backups.html">Backups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bulk_loading.html">Bulk Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html">Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html">Hardware Choices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="read-repair">
+<span id="id1"></span><h1>Read repair<a class="headerlink" href="#read-repair" title="Permalink to this headline">¶</a></h1>
+<p>Read Repair is the process of repairing data replicas during a read request. If all replicas involved in a read request at the given read consistency level are consistent the data is returned to the client and no read repair is needed. But if the replicas involved in a read request at the given consistency level are not consistent a read repair is performed to make replicas involved in the read request consistent. The most up-to-date data is returned to the client. The read repair runs in the foreground and is blocking in that a response is not returned to the client until the read repair has completed and up-to-date data is constructed.</p>
+<div class="section" id="expectation-of-monotonic-quorum-reads">
+<h2>Expectation of Monotonic Quorum Reads<a class="headerlink" href="#expectation-of-monotonic-quorum-reads" title="Permalink to this headline">¶</a></h2>
+<p>Cassandra uses a blocking read repair to ensure the expectation of “monotonic quorum reads” i.e. that in 2 successive quorum reads, it’s guaranteed the 2nd one won’t get something older than the 1st one, and this even if a failed quorum write made a write of the most up to date value only to a minority of replicas. “Quorum” means majority of nodes among replicas.</p>
+</div>
+<div class="section" id="table-level-configuration-of-monotonic-reads">
+<h2>Table level configuration of monotonic reads<a class="headerlink" href="#table-level-configuration-of-monotonic-reads" title="Permalink to this headline">¶</a></h2>
+<p>Cassandra 4.0 adds support for table level configuration of monotonic reads (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-14635">CASSANDRA-14635</a>). The <code class="docutils literal notranslate"><span class="pre">read_repair</span></code> table option has been added to table schema, with the options <code class="docutils literal notranslate"><span class="pre">blocking</span></code> (default), and <code class="docutils literal notranslate"><span class="pre">none</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">read_repair</span></code> option configures the read repair behavior to allow tuning for various performance and consistency behaviors. Two consistency properties are affected by read repair behavior.</p>
+<ul class="simple">
+<li>Monotonic Quorum Reads: Provided by <code class="docutils literal notranslate"><span class="pre">BLOCKING</span></code>. Monotonic quorum reads prevents reads from appearing to go back in time in some circumstances. When monotonic quorum reads are not provided and a write fails to reach a quorum of replicas, it may be visible in one read, and then disappear in a subsequent read.</li>
+<li>Write Atomicity: Provided by <code class="docutils literal notranslate"><span class="pre">NONE</span></code>. Write atomicity prevents reads from returning partially applied writes. Cassandra attempts to provide partition level write atomicity, but since only the data covered by a <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> statement is repaired by a read repair, read repair can break write atomicity when data is read at a more granular level than it is written. For example read repair can break write atomicity if you write multiple rows to a clustered partition in a batch, but then select a single row by specifying the clustering column in a <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> statement.</li>
+</ul>
+<p>The available read repair settings are:</p>
+<div class="section" id="blocking">
+<h3>Blocking<a class="headerlink" href="#blocking" title="Permalink to this headline">¶</a></h3>
+<p>The default setting. When <code class="docutils literal notranslate"><span class="pre">read_repair</span></code> is set to <code class="docutils literal notranslate"><span class="pre">BLOCKING</span></code>, and a read repair is started, the read will block on writes sent to other replicas until the CL is reached by the writes. Provides monotonic quorum reads, but not partition level write atomicity.</p>
+</div>
+<div class="section" id="none">
+<h3>None<a class="headerlink" href="#none" title="Permalink to this headline">¶</a></h3>
+<p>When <code class="docutils literal notranslate"><span class="pre">read_repair</span></code> is set to <code class="docutils literal notranslate"><span class="pre">NONE</span></code>, the coordinator will reconcile any differences between replicas, but will not attempt to repair them. Provides partition level write atomicity, but not monotonic quorum reads.</p>
+<p>An example of using the <code class="docutils literal notranslate"><span class="pre">NONE</span></code> setting for the <code class="docutils literal notranslate"><span class="pre">read_repair</span></code> option is as follows:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CREATE TABLE ks.tbl (k INT, c INT, v INT, PRIMARY KEY (k,c)) with read_repair=&#39;NONE&#39;&quot;);
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="read-repair-example">
+<h2>Read Repair Example<a class="headerlink" href="#read-repair-example" title="Permalink to this headline">¶</a></h2>
+<p>To illustrate read repair with an example, consider that a client sends a read request with read consistency level <code class="docutils literal notranslate"><span class="pre">TWO</span></code> to a 5-node cluster as illustrated in Figure 1. Read consistency level determines how many replica nodes must return a response before the read request is considered successful.</p>
+<div class="figure">
+<img alt="../_images/Figure_1_read_repair.jpg" src="../_images/Figure_1_read_repair.jpg" />
+</div>
+<p>Figure 1. Client sends read request to a 5-node Cluster</p>
+<p>Three nodes host replicas for the requested data as illustrated in Figure 2. With a read consistency level of <code class="docutils literal notranslate"><span class="pre">TWO</span></code> two replica nodes must return a response for the read request to be considered successful. If the node the client sends request to hosts a replica of the data requested only one other replica node needs to be sent a read request to. But if the receiving node does not host a replica for the requested data the node becomes a coordinator node and forwards the read request to a node that hosts a replica. A direct read request is forwarded to the fastest node (as determined by dynamic snitch) as shown in Figure 2. A direct read request is a full read and returns the requested data.</p>
+<div class="figure">
+<img alt="../_images/Figure_2_read_repair.jpg" src="../_images/Figure_2_read_repair.jpg" />
+</div>
+<p>Figure 2. Direct Read Request sent to Fastest Replica Node</p>
+<p>Next, the coordinator node sends the requisite number of additional requests to satisfy the consistency level, which is <code class="docutils literal notranslate"><span class="pre">TWO</span></code>. The coordinator node needs to send one more read request for a total of two. All read requests additional to the first direct read request are digest read requests. A digest read request is not a full read and only returns the hash value of the data. Only a hash value is returned to reduce the network data traffic. In the example being discussed the coordinator node sends one digest read request to a node hosting a replica as illustrated in Figure 3.</p>
+<div class="figure">
+<img alt="../_images/Figure_3_read_repair.jpg" src="../_images/Figure_3_read_repair.jpg" />
+</div>
+<p>Figure 3. Coordinator Sends a Digest Read Request</p>
+<p>The coordinator node has received a full copy of data from one node and a hash value for the data from another node. To compare the data returned a hash value is calculated for the  full copy of data. The two hash values are compared. If the hash values are the same no read repair is needed and the full copy of requested data is returned to the client. The coordinator node only performed a total of two replica read request because the read consistency level is <code class="docutils literal notranslate"><span class="pre">TWO</span></code> in the example. If the consistency level were higher such as <code class="docutils literal notranslate"><span class="pre">THREE</span></code>, three replica nodes would need to respond to a read request and only if all digest or hash values were to match with the hash value of the full copy of data would the read request be considered successful and the data returned to the client.</p>
+<p>But, if the hash value/s from the digest read request/s are not the same as the hash value of the data from the full read request of the first replica node it implies that an inconsistency in the replicas exists. To fix the inconsistency a read repair is performed.</p>
+<p>For example, consider that that digest request returns a hash value that is not the same as the hash value of the data from the direct full read request. We would need to make the replicas consistent for which the coordinator node sends a direct (full) read request to the replica node that it sent a digest read request to earlier as illustrated in Figure 4.</p>
+<div class="figure">
+<img alt="../_images/Figure_4_read_repair.jpg" src="../_images/Figure_4_read_repair.jpg" />
+</div>
+<p>Figure 4. Coordinator sends  Direct Read Request to Replica Node it had sent Digest Read Request to</p>
+<p>After receiving the data from the second replica node the coordinator has data from two of the replica nodes. It only needs two replicas as the read consistency level is <code class="docutils literal notranslate"><span class="pre">TWO</span></code> in the example. Data from the two replicas is compared and based on the timestamps the most recent replica is selected. Data may need to be merged to construct an up-to-date copy of data if one replica has data for only some of the columns. In the example, if the data from the first direct read request is found to be outdated and the data from the second full read request to be the latest read, repair needs to be performed on Replica 2. If a new up-to-date data is constructed by merging the two replicas a read repair would be needed on both the replicas involved. For example, a read repair is performed on Replica 2 as illustrated in Figure 5.</p>
+<div class="figure">
+<img alt="../_images/Figure_5_read_repair.jpg" src="../_images/Figure_5_read_repair.jpg" />
+</div>
+<p>Figure 5. Coordinator performs Read Repair</p>
+<p>The most up-to-date data is returned to the client as illustrated in Figure 6. From the three replicas Replica 1 is not even read and thus not repaired. Replica 2 is repaired. Replica 3 is the most up-to-date and returned to client.</p>
+<div class="figure">
+<img alt="../_images/Figure_6_read_repair.jpg" src="../_images/Figure_6_read_repair.jpg" />
+</div>
+<p>Figure 6. Most up-to-date Data returned to Client</p>
+</div>
+<div class="section" id="read-consistency-level-and-read-repair">
+<h2>Read Consistency Level and Read Repair<a class="headerlink" href="#read-consistency-level-and-read-repair" title="Permalink to this headline">¶</a></h2>
+<p>The read consistency is most significant in determining if a read repair needs to be performed. As discussed in Table 1 a read repair is not needed for all of the consistency levels.</p>
+<p>Table 1. Read Repair based on Read Consistency Level</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="34%" />
+<col width="66%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Read Consistency Level</td>
+<td>Description</td>
+</tr>
+<tr class="row-even"><td>ONE</td>
+<td>Read repair is not performed as the
+data from the first direct read request
+satisfies the consistency level ONE.
+No digest read requests are involved
+for finding mismatches in data.</td>
+</tr>
+<tr class="row-odd"><td>TWO</td>
+<td>Read repair is performed if inconsistencies
+in data are found as determined by the
+direct and digest read requests.</td>
+</tr>
+<tr class="row-even"><td>THREE</td>
+<td>Read repair is performed if inconsistencies
+in data are found as determined by the
+direct and digest read requests.</td>
+</tr>
+<tr class="row-odd"><td>LOCAL_ONE</td>
+<td>Read repair is not performed as the data
+from the direct read request from the
+closest replica satisfies the consistency
+level LOCAL_ONE.No digest read requests are
+involved for finding mismatches in data.</td>
+</tr>
+<tr class="row-even"><td>LOCAL_QUORUM</td>
+<td>Read repair is performed if inconsistencies
+in data are found as determined by the
+direct and digest read requests.</td>
+</tr>
+<tr class="row-odd"><td>QUORUM</td>
+<td>Read repair is performed if inconsistencies
+in data are found as determined by the
+direct and digest read requests.</td>
+</tr>
+</tbody>
+</table>
+<p>If read repair is performed it is made only on the replicas that are not up-to-date and that are involved in the read request. The number of replicas involved in a read request would be based on the read consistency level; in the example it is two.</p>
+</div>
+<div class="section" id="improved-read-repair-blocking-behavior-in-cassandra-4-0">
+<h2>Improved Read Repair Blocking Behavior in Cassandra 4.0<a class="headerlink" href="#improved-read-repair-blocking-behavior-in-cassandra-4-0" title="Permalink to this headline">¶</a></h2>
+<p>Cassandra 4.0 makes two improvements to read repair blocking behavior (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-10726">CASSANDRA-10726</a>).</p>
+<ol class="arabic simple">
+<li>Speculative Retry of Full Data Read Requests. Cassandra 4.0 makes use of speculative retry in sending read requests (full, not digest) to replicas if a full data response is not received, whether in the initial full read request or a full data read request during read repair.  With speculative retry if it looks like a response may not be received from the initial set of replicas Cassandra sent messages to, to satisfy the consistency level, it speculatively sends additional read request to un-contacted replica/s. Cassandra 4.0 will also speculatively send a repair mutation to a minority of nodes not involved in the read repair data read / write cycle with the combined contents of all un-acknowledged mutations if it looks like one may not respond. Cassandra accepts acks from them in lieu of acks from the initial mutations sent out, so long as it receives the same number of acks as repair mutations transmitted.</li>
+<li>Only blocks on Full Data Responses to satisfy the Consistency Level. Cassandra 4.0 only blocks for what is needed for resolving the digest mismatch and wait for enough full data responses to meet the consistency level, no matter whether it’s speculative retry or read repair chance. As an example, if it looks like Cassandra might not receive full data requests from everyone in time, it sends additional requests to additional replicas not contacted in the initial full data read. If the collection of nodes that end up responding in time end up agreeing on the data, the response from the disagreeing replica that started the read repair is not considered, and won’t be included in the response to the client, preserving the expectation of monotonic quorum reads.</li>
+</ol>
+</div>
+<div class="section" id="diagnostic-events-for-read-repairs">
+<h2>Diagnostic Events for Read Repairs<a class="headerlink" href="#diagnostic-events-for-read-repairs" title="Permalink to this headline">¶</a></h2>
+<p>Cassandra 4.0 adds diagnostic events for read repair (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-14668">CASSANDRA-14668</a>) that can be used for exposing information such as:</p>
+<ul class="simple">
+<li>Contacted endpoints</li>
+<li>Digest responses by endpoint</li>
+<li>Affected partition keys</li>
+<li>Speculated reads / writes</li>
+<li>Update oversized</li>
+</ul>
+</div>
+<div class="section" id="background-read-repair">
+<h2>Background Read Repair<a class="headerlink" href="#background-read-repair" title="Permalink to this headline">¶</a></h2>
+<p>Background read repair, which was configured using <code class="docutils literal notranslate"><span class="pre">read_repair_chance</span></code> and <code class="docutils literal notranslate"><span class="pre">dclocal_read_repair_chance</span></code> settings in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> is  removed Cassandra 4.0 (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-13910">CASSANDRA-13910</a>).</p>
+<p>Read repair is not an alternative for other kind of repairs such as full repairs or replacing a node that keeps failing. The data returned even after a read repair has been performed may not be the most up-to-date data if consistency level is other than one requiring response from all replicas.</p>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="hints.html" class="btn btn-default pull-right " role="button" title="Hints" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="repair.html" class="btn btn-default" role="button" title="Repair" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

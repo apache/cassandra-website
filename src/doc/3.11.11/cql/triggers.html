@@ -1,0 +1,153 @@
+---
+layout: docpage
+
+title: "Documentation"
+
+is_homepage: false
+is_sphinx_doc: true
+
+doc-parent: "The Cassandra Query Language (CQL)"
+
+doc-title: "Triggers"
+doc-header-links: '
+  <link rel="top" title="Apache Cassandra Documentation v3.11.11" href="../index.html"/>
+      <link rel="up" title="The Cassandra Query Language (CQL)" href="index.html"/>
+      <link rel="next" title="Appendices" href="appendices.html"/>
+      <link rel="prev" title="JSON Support" href="json.html"/>
+'
+doc-search-path: "../search.html"
+
+extra-footer: '
+<script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+      URL_ROOT:    "",
+      VERSION:     "",
+      COLLAPSE_INDEX: false,
+      FILE_SUFFIX: ".html",
+      HAS_SOURCE:  false,
+      SOURCELINK_SUFFIX: ".txt"
+    };
+</script>
+'
+
+---
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">The Cassandra Query Language (CQL)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="definitions.html">Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ddl.html">Data Definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dml.html">Data Manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indexes.html">Secondary Indexes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mvs.html">Materialized Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json.html">JSON Support</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Triggers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#create-trigger">CREATE TRIGGER</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#drop-trigger">DROP TRIGGER</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="appendices.html">Appendices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html">Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="triggers">
+<span id="cql-triggers"></span><h1>Triggers<a class="headerlink" href="#triggers" title="Permalink to this headline">¶</a></h1>
+<p>Triggers are identified by a name defined by:</p>
+<pre>
+<strong id="grammar-token-trigger-name">trigger_name</strong> ::=  <a class="reference internal" href="definitions.html#grammar-token-identifier"><code class="xref docutils literal notranslate"><span class="pre">identifier</span></code></a>
+</pre>
+<div class="section" id="create-trigger">
+<span id="create-trigger-statement"></span><h2>CREATE TRIGGER<a class="headerlink" href="#create-trigger" title="Permalink to this headline">¶</a></h2>
+<p>Creating a new trigger uses the <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">TRIGGER</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-create-trigger-statement">create_trigger_statement</strong> ::=  CREATE TRIGGER [ IF NOT EXISTS ] <a class="reference internal" href="#grammar-token-trigger-name"><code class="xref docutils literal notranslate"><span class="pre">trigger_name</span></code></a>
+                                  ON <a class="reference internal" href="ddl.html#grammar-token-table-name"><code class="xref docutils literal notranslate"><span class="pre">table_name</span></code></a>
+                                  USING <a class="reference internal" href="definitions.html#grammar-token-string"><code class="xref docutils literal notranslate"><span class="pre">string</span></code></a>
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TRIGGER</span> <span class="n">myTrigger</span> <span class="k">ON</span> <span class="n">myTable</span> <span class="k">USING</span> <span class="s1">&#39;org.apache.cassandra.triggers.InvertedIndex&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The actual logic that makes up the trigger can be written in any Java (JVM) language and exists outside the database.
+You place the trigger code in a <code class="docutils literal notranslate"><span class="pre">lib/triggers</span></code> subdirectory of the Cassandra installation directory, it loads during
+cluster startup, and exists on every node that participates in a cluster. The trigger defined on a table fires before a
+requested DML statement occurs, which ensures the atomicity of the transaction.</p>
+</div>
+<div class="section" id="drop-trigger">
+<span id="drop-trigger-statement"></span><h2>DROP TRIGGER<a class="headerlink" href="#drop-trigger" title="Permalink to this headline">¶</a></h2>
+<p>Dropping a trigger uses the <code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">TRIGGER</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-drop-trigger-statement">drop_trigger_statement</strong> ::=  DROP TRIGGER [ IF EXISTS ] <a class="reference internal" href="#grammar-token-trigger-name"><code class="xref docutils literal notranslate"><span class="pre">trigger_name</span></code></a> ON <a class="reference internal" href="ddl.html#grammar-token-table-name"><code class="xref docutils literal notranslate"><span class="pre">table_name</span></code></a>
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">DROP</span> <span class="k">TRIGGER</span> <span class="n">myTrigger</span> <span class="k">ON</span> <span class="n">myTable</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="appendices.html" class="btn btn-default pull-right " role="button" title="Appendices" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="json.html" class="btn btn-default" role="button" title="JSON Support" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-alpha3/data_modeling/data_modeling_rdbms.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha3" href="../index.html"/> <link rel="up" title="Data Modeling" href="index.html"/> <link rel="next" title="Defining Application Queries" href="data_modeling_queries.html"/> <link rel="prev" title="Conceptual Data Modeling" href="data_modeling_conceptual.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">Data Modeling</a></li>
+      
+
+      
+      <li>RDBMS Design</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Data Modeling</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_conceptual.html">Conceptual Data Modeling</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">RDBMS Design</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#design-differences-between-rdbms-and-cassandra">Design Differences Between RDBMS and Cassandra</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_queries.html">Defining Application Queries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_logical.html">Logical Data Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_physical.html">Physical Data Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_refining.html">Evaluating and Refining Data Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_schema.html">Defining Database Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_tools.html">Cassandra Data Modeling Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="rdbms-design">
+<h1>RDBMS Design<a class="headerlink" href="#rdbms-design" title="Permalink to this headline">¶</a></h1>
+<p>When you set out to build a new data-driven application that will use a
+relational database, you might start by modeling the domain as a set of
+properly normalized tables and use foreign keys to reference related
+data in other tables.</p>
+<p>The figure below shows how you might represent the data storage for your application
+using a relational database model. The relational model includes a
+couple of “join” tables in order to realize the many-to-many
+relationships from the conceptual model of hotels-to-points of interest,
+rooms-to-amenities, rooms-to-availability, and guests-to-rooms (via a
+reservation).</p>
+<img alt="../_images/data_modeling_hotel_relational.png" src="../_images/data_modeling_hotel_relational.png" />
+<div class="section" id="design-differences-between-rdbms-and-cassandra">
+<h2>Design Differences Between RDBMS and Cassandra<a class="headerlink" href="#design-differences-between-rdbms-and-cassandra" title="Permalink to this headline">¶</a></h2>
+<p>Let’s take a minute to highlight some of the key differences in doing
+ata modeling for Cassandra versus a relational database.</p>
+<div class="section" id="no-joins">
+<h3>No joins<a class="headerlink" href="#no-joins" title="Permalink to this headline">¶</a></h3>
+<p>You cannot perform joins in Cassandra. If you have designed a data model
+and find that you need something like a join, you’ll have to either do
+the work on the client side, or create a denormalized second table that
+represents the join results for you. This latter option is preferred in
+Cassandra data modeling. Performing joins on the client should be a very
+rare case; you really want to duplicate (denormalize) the data instead.</p>
+</div>
+<div class="section" id="no-referential-integrity">
+<h3>No referential integrity<a class="headerlink" href="#no-referential-integrity" title="Permalink to this headline">¶</a></h3>
+<p>Although Cassandra supports features such as lightweight transactions
+and batches, Cassandra itself has no concept of referential integrity
+across tables. In a relational database, you could specify foreign keys
+in a table to reference the primary key of a record in another table.
+But Cassandra does not enforce this. It is still a common design
+requirement to store IDs related to other entities in your tables, but
+operations such as cascading deletes are not available.</p>
+</div>
+<div class="section" id="denormalization">
+<h3>Denormalization<a class="headerlink" href="#denormalization" title="Permalink to this headline">¶</a></h3>
+<p>In relational database design, you are often taught the importance of
+normalization. This is not an advantage when working with Cassandra
+because it performs best when the data model is denormalized. It is
+often the case that companies end up denormalizing data in relational
+databases as well. There are two common reasons for this. One is
+performance. Companies simply can’t get the performance they need when
+they have to do so many joins on years’ worth of data, so they
+denormalize along the lines of known queries. This ends up working, but
+goes against the grain of how relational databases are intended to be
+designed, and ultimately makes one question whether using a relational
+database is the best approach in these circumstances.</p>
+<p>A second reason that relational databases get denormalized on purpose is
+a business document structure that requires retention. That is, you have
+an enclosing table that refers to a lot of external tables whose data
+could change over time, but you need to preserve the enclosing document
+as a snapshot in history. The common example here is with invoices. You
+already have customer and product tables, and you’d think that you could
+just make an invoice that refers to those tables. But this should never
+be done in practice. Customer or price information could change, and
+then you would lose the integrity of the invoice document as it was on
+the invoice date, which could violate audits, reports, or laws, and
+cause other problems.</p>
+<p>In the relational world, denormalization violates Codd’s normal forms,
+and you try to avoid it. But in Cassandra, denormalization is, well,
+perfectly normal. It’s not required if your data model is simple. But
+don’t be afraid of it.</p>
+<p>Historically, denormalization in Cassandra has required designing and
+managing multiple tables using techniques described in this documentation.
+Beginning with the 3.0 release, Cassandra provides a feature known
+as <a class="reference internal" href="../cql/mvs.html#materialized-views"><span class="std std-ref">materialized views</span></a>
+which allows you to create multiple denormalized
+views of data based on a base table design. Cassandra manages
+materialized views on the server, including the work of keeping the
+views in sync with the table.</p>
+</div>
+<div class="section" id="query-first-design">
+<h3>Query-first design<a class="headerlink" href="#query-first-design" title="Permalink to this headline">¶</a></h3>
+<p>Relational modeling, in simple terms, means that you start from the
+conceptual domain and then represent the nouns in the domain in tables.
+You then assign primary keys and foreign keys to model relationships.
+When you have a many-to-many relationship, you create the join tables
+that represent just those keys. The join tables don’t exist in the real
+world, and are a necessary side effect of the way relational models
+work. After you have all your tables laid out, you can start writing
+queries that pull together disparate data using the relationships
+defined by the keys. The queries in the relational world are very much
+secondary. It is assumed that you can always get the data you want as
+long as you have your tables modeled properly. Even if you have to use
+several complex subqueries or join statements, this is usually true.</p>
+<p>By contrast, in Cassandra you don’t start with the data model; you start
+with the query model. Instead of modeling the data first and then
+writing queries, with Cassandra you model the queries and let the data
+be organized around them. Think of the most common query paths your
+application will use, and then create the tables that you need to
+support them.</p>
+<p>Detractors have suggested that designing the queries first is overly
+constraining on application design, not to mention database modeling.
+But it is perfectly reasonable to expect that you should think hard
+about the queries in your application, just as you would, presumably,
+think hard about your relational domain. You may get it wrong, and then
+you’ll have problems in either world. Or your query needs might change
+over time, and then you’ll have to work to update your data set. But
+this is no different from defining the wrong tables, or needing
+additional tables, in an RDBMS.</p>
+</div>
+<div class="section" id="designing-for-optimal-storage">
+<h3>Designing for optimal storage<a class="headerlink" href="#designing-for-optimal-storage" title="Permalink to this headline">¶</a></h3>
+<p>In a relational database, it is frequently transparent to the user how
+tables are stored on disk, and it is rare to hear of recommendations
+about data modeling based on how the RDBMS might store tables on disk.
+However, that is an important consideration in Cassandra. Because
+Cassandra tables are each stored in separate files on disk, it’s
+important to keep related columns defined together in the same table.</p>
+<p>A key goal that you will see as you begin creating data models in
+Cassandra is to minimize the number of partitions that must be searched
+in order to satisfy a given query. Because the partition is a unit of
+storage that does not get divided across nodes, a query that searches a
+single partition will typically yield the best performance.</p>
+</div>
+<div class="section" id="sorting-is-a-design-decision">
+<h3>Sorting is a design decision<a class="headerlink" href="#sorting-is-a-design-decision" title="Permalink to this headline">¶</a></h3>
+<p>In an RDBMS, you can easily change the order in which records are
+returned to you by using <code class="docutils literal notranslate"><span class="pre">ORDER</span> <span class="pre">BY</span></code> in your query. The default sort
+order is not configurable; by default, records are returned in the order
+in which they are written. If you want to change the order, you just
+modify your query, and you can sort by any list of columns.</p>
+<p>In Cassandra, however, sorting is treated differently; it is a design
+decision. The sort order available on queries is fixed, and is
+determined entirely by the selection of clustering columns you supply in
+the <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">TABLE</span></code> command. The CQL <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> statement does support
+<code class="docutils literal notranslate"><span class="pre">ORDER</span> <span class="pre">BY</span></code> semantics, but only in the order specified by the
+clustering columns.</p>
+<p><em>Material adapted from Cassandra, The Definitive Guide. Published by
+O’Reilly Media, Inc. Copyright © 2020 Jeff Carpenter, Eben Hewitt.
+All rights reserved. Used with permission.</em></p>
+</div>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="data_modeling_queries.html" class="btn btn-default pull-right " role="button" title="Defining Application Queries" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="data_modeling_conceptual.html" class="btn btn-default" role="button" title="Conceptual Data Modeling" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

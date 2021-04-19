@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-beta2/tools/nodetool/nodetool.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha5" href="../../index.html"/> <link rel="up" title="Cassandra Tools" href="../index.html"/> <link rel="next" title="SSTable Tools" href="../sstable/index.html"/> <link rel="prev" title="cqlsh: the CQL shell" href="../cqlsh.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">Cassandra Tools</a></li>
+      
+
+      
+      <li>Nodetool</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../../"><img src="./../../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../../">Home</a></li>
+          <li><a href="./../../../../download/">Download</a></li>
+          <li><a href="./../../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Cassandra Tools</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cqlsh.html">cqlsh: the CQL shell</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Nodetool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sstable/index.html">SSTable Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cassandra_stress.html">Cassandra Stress</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="nodetool">
+<h1>Nodetool<a class="headerlink" href="#nodetool" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>usage: nodetool [(-u &lt;username&gt; | –username &lt;username&gt;)]</dt>
+<dd>[(-h &lt;host&gt; | –host &lt;host&gt;)] [(-p &lt;port&gt; | –port &lt;port&gt;)]
+[(-pw &lt;password&gt; | –password &lt;password&gt;)]
+[(-pwf &lt;passwordFilePath&gt; | –password-file &lt;passwordFilePath&gt;)]
+[(-pp | –print-port)] &lt;command&gt; [&lt;args&gt;]</dd>
+</dl>
+<p>The most commonly used nodetool commands are:</p>
+<blockquote>
+<div><p><a class="reference internal" href="assassinate.html"><span class="doc">assassinate</span></a> -                   Forcefully remove a dead node without re-replicating any data.  Use as a last resort if you cannot removenode</p>
+<p><a class="reference internal" href="bootstrap.html"><span class="doc">bootstrap</span></a> -                     Monitor/manage node’s bootstrap process</p>
+<p><a class="reference internal" href="cleanup.html"><span class="doc">cleanup</span></a> -                       Triggers the immediate cleanup of keys no longer belonging to a node. By default, clean all keyspaces</p>
+<p><a class="reference internal" href="clearsnapshot.html"><span class="doc">clearsnapshot</span></a> -                 Remove the snapshot with the given name from the given keyspaces. If no snapshotName is specified we will remove all snapshots</p>
+<p><a class="reference internal" href="clientstats.html"><span class="doc">clientstats</span></a> -                   Print information about connected clients</p>
+<p><a class="reference internal" href="compact.html"><span class="doc">compact</span></a> -                       Force a (major) compaction on one or more tables or user-defined compaction on given SSTables</p>
+<p><a class="reference internal" href="compactionhistory.html"><span class="doc">compactionhistory</span></a> -             Print history of compaction</p>
+<p><a class="reference internal" href="compactionstats.html"><span class="doc">compactionstats</span></a> -               Print statistics on compactions</p>
+<p><a class="reference internal" href="decommission.html"><span class="doc">decommission</span></a> -                  Decommission the <em>node I am connecting to</em></p>
+<p><a class="reference internal" href="describecluster.html"><span class="doc">describecluster</span></a> -               Print the name, snitch, partitioner and schema version of a cluster</p>
+<p><a class="reference internal" href="describering.html"><span class="doc">describering</span></a> -                  Shows the token ranges info of a given keyspace</p>
+<p><a class="reference internal" href="disableauditlog.html"><span class="doc">disableauditlog</span></a> -               Disable the audit log</p>
+<p><a class="reference internal" href="disableautocompaction.html"><span class="doc">disableautocompaction</span></a> -         Disable autocompaction for the given keyspace and table</p>
+<p><a class="reference internal" href="disablebackup.html"><span class="doc">disablebackup</span></a> -                 Disable incremental backup</p>
+<p><a class="reference internal" href="disablebinary.html"><span class="doc">disablebinary</span></a> -                 Disable native transport (binary protocol)</p>
+<p><a class="reference internal" href="disablefullquerylog.html"><span class="doc">disablefullquerylog</span></a> -           Disable the full query log</p>
+<p><a class="reference internal" href="disablegossip.html"><span class="doc">disablegossip</span></a> -                 Disable gossip (effectively marking the node down)</p>
+<p><a class="reference internal" href="disablehandoff.html"><span class="doc">disablehandoff</span></a> -                Disable storing hinted handoffs</p>
+<p><a class="reference internal" href="disablehintsfordc.html"><span class="doc">disablehintsfordc</span></a> -             Disable hints for a data center</p>
+<p><a class="reference internal" href="disableoldprotocolversions.html"><span class="doc">disableoldprotocolversions</span></a> -    Disable old protocol versions</p>
+<p><a class="reference internal" href="drain.html"><span class="doc">drain</span></a> -                         Drain the node (stop accepting writes and flush all tables)</p>
+<p><a class="reference internal" href="enableauditlog.html"><span class="doc">enableauditlog</span></a> -                Enable the audit log</p>
+<p><a class="reference internal" href="enableautocompaction.html"><span class="doc">enableautocompaction</span></a> -          Enable autocompaction for the given keyspace and table</p>
+<p><a class="reference internal" href="enablebackup.html"><span class="doc">enablebackup</span></a> -                  Enable incremental backup</p>
+<p><a class="reference internal" href="enablebinary.html"><span class="doc">enablebinary</span></a> -                  Reenable native transport (binary protocol)</p>
+<p><a class="reference internal" href="enablefullquerylog.html"><span class="doc">enablefullquerylog</span></a> -            Enable full query logging, defaults for the options are configured in cassandra.yaml</p>
+<p><a class="reference internal" href="enablegossip.html"><span class="doc">enablegossip</span></a> -                  Reenable gossip</p>
+<p><a class="reference internal" href="enablehandoff.html"><span class="doc">enablehandoff</span></a> -                 Reenable future hints storing on the current node</p>
+<p><a class="reference internal" href="enablehintsfordc.html"><span class="doc">enablehintsfordc</span></a> -              Enable hints for a data center that was previsouly disabled</p>
+<p><a class="reference internal" href="enableoldprotocolversions.html"><span class="doc">enableoldprotocolversions</span></a> -     Enable old protocol versions</p>
+<p><a class="reference internal" href="failuredetector.html"><span class="doc">failuredetector</span></a> -               Shows the failure detector information for the cluster</p>
+<p><a class="reference internal" href="flush.html"><span class="doc">flush</span></a> -                         Flush one or more tables</p>
+<p><a class="reference internal" href="garbagecollect.html"><span class="doc">garbagecollect</span></a> -                Remove deleted data from one or more tables</p>
+<p><a class="reference internal" href="gcstats.html"><span class="doc">gcstats</span></a> -                       Print GC Statistics</p>
+<p><a class="reference internal" href="getbatchlogreplaythrottle.html"><span class="doc">getbatchlogreplaythrottle</span></a> -     Print batchlog replay throttle in KB/s. This is reduced proportionally to the number of nodes in the cluster.</p>
+<p><a class="reference internal" href="getcompactionthreshold.html"><span class="doc">getcompactionthreshold</span></a> -        Print min and max compaction thresholds for a given table</p>
+<p><a class="reference internal" href="getcompactionthroughput.html"><span class="doc">getcompactionthroughput</span></a> -       Print the MB/s throughput cap for compaction in the system</p>
+<p><a class="reference internal" href="getconcurrency.html"><span class="doc">getconcurrency</span></a> -                Get maximum concurrency for processing stages</p>
+<p><a class="reference internal" href="getconcurrentcompactors.html"><span class="doc">getconcurrentcompactors</span></a> -       Get the number of concurrent compactors in the system.</p>
+<p><a class="reference internal" href="getconcurrentviewbuilders.html"><span class="doc">getconcurrentviewbuilders</span></a> -     Get the number of concurrent view builders in the system</p>
+<p><a class="reference internal" href="getendpoints.html"><span class="doc">getendpoints</span></a> -                  Print the end points that owns the key</p>
+<p><a class="reference internal" href="getinterdcstreamthroughput.html"><span class="doc">getinterdcstreamthroughput</span></a> -    Print the Mb/s throughput cap for inter-datacenter streaming in the system</p>
+<p><a class="reference internal" href="getlogginglevels.html"><span class="doc">getlogginglevels</span></a> -              Get the runtime logging levels</p>
+<p><a class="reference internal" href="getmaxhintwindow.html"><span class="doc">getmaxhintwindow</span></a> -              Print the max hint window in ms</p>
+<p><a class="reference internal" href="getreplicas.html"><span class="doc">getreplicas</span></a> -                   Print replicas for a given key</p>
+<p><a class="reference internal" href="getseeds.html"><span class="doc">getseeds</span></a> -                      Get the currently in use seed node IP list excluding the node IP</p>
+<p><a class="reference internal" href="getsstables.html"><span class="doc">getsstables</span></a> -                   Print the sstable filenames that own the key</p>
+<p><a class="reference internal" href="getstreamthroughput.html"><span class="doc">getstreamthroughput</span></a> -           Print the Mb/s throughput cap for streaming in the system</p>
+<p><a class="reference internal" href="gettimeout.html"><span class="doc">gettimeout</span></a> -                    Print the timeout of the given type in ms</p>
+<p><a class="reference internal" href="gettraceprobability.html"><span class="doc">gettraceprobability</span></a> -           Print the current trace probability value</p>
+<p><a class="reference internal" href="gossipinfo.html"><span class="doc">gossipinfo</span></a> -                    Shows the gossip information for the cluster</p>
+<p><a class="reference internal" href="handoffwindow.html"><span class="doc">handoffwindow</span></a> -                 Print current hinted handoff window</p>
+<p><a class="reference internal" href="help.html"><span class="doc">help</span></a> -                          Display help information</p>
+<p><a class="reference internal" href="import.html"><span class="doc">import</span></a> -                        Import new SSTables to the system</p>
+<p><a class="reference internal" href="info.html"><span class="doc">info</span></a> -                          Print node information (uptime, load, …)</p>
+<p><a class="reference internal" href="invalidatecountercache.html"><span class="doc">invalidatecountercache</span></a> -        Invalidate the counter cache</p>
+<p><a class="reference internal" href="invalidatekeycache.html"><span class="doc">invalidatekeycache</span></a> -            Invalidate the key cache</p>
+<p><a class="reference internal" href="invalidaterowcache.html"><span class="doc">invalidaterowcache</span></a> -            Invalidate the row cache</p>
+<p><a class="reference internal" href="join.html"><span class="doc">join</span></a> -                          Join the ring</p>
+<p><a class="reference internal" href="listsnapshots.html"><span class="doc">listsnapshots</span></a> -                 Lists all the snapshots along with the size on disk and true size. True size is the total size of all SSTables which are not backed up to disk. Size on disk is total size of the snapshot on disk. Total TrueDiskSpaceUsed does not make any SSTable deduplication.</p>
+<p><a class="reference internal" href="move.html"><span class="doc">move</span></a> -                          Move node on the token ring to a new token</p>
+<p><a class="reference internal" href="netstats.html"><span class="doc">netstats</span></a> -                      Print network information on provided host (connecting node by default)</p>
+<p><a class="reference internal" href="pausehandoff.html"><span class="doc">pausehandoff</span></a> -                  Pause hints delivery process</p>
+<p><a class="reference internal" href="profileload.html"><span class="doc">profileload</span></a> -                   Low footprint profiling of activity for a period of time</p>
+<p><a class="reference internal" href="proxyhistograms.html"><span class="doc">proxyhistograms</span></a> -               Print statistic histograms for network operations</p>
+<p><a class="reference internal" href="rangekeysample.html"><span class="doc">rangekeysample</span></a> -                Shows the sampled keys held across all keyspaces</p>
+<p><a class="reference internal" href="rebuild.html"><span class="doc">rebuild</span></a> -                       Rebuild data by streaming from other nodes (similarly to bootstrap)</p>
+<p><a class="reference internal" href="rebuild_index.html"><span class="doc">rebuild_index</span></a> -                 A full rebuild of native secondary indexes for a given table</p>
+<p><a class="reference internal" href="refresh.html"><span class="doc">refresh</span></a> -                       Load newly placed SSTables to the system without restart</p>
+<p><a class="reference internal" href="refreshsizeestimates.html"><span class="doc">refreshsizeestimates</span></a> -          Refresh system.size_estimates</p>
+<p><a class="reference internal" href="reloadlocalschema.html"><span class="doc">reloadlocalschema</span></a> -             Reload local node schema from system tables</p>
+<p><a class="reference internal" href="reloadseeds.html"><span class="doc">reloadseeds</span></a> -                   Reload the seed node list from the seed node provider</p>
+<p><a class="reference internal" href="reloadssl.html"><span class="doc">reloadssl</span></a> -                     Signals Cassandra to reload SSL certificates</p>
+<p><a class="reference internal" href="reloadtriggers.html"><span class="doc">reloadtriggers</span></a> -                Reload trigger classes</p>
+<p><a class="reference internal" href="relocatesstables.html"><span class="doc">relocatesstables</span></a> -              Relocates sstables to the correct disk</p>
+<p><a class="reference internal" href="removenode.html"><span class="doc">removenode</span></a> -                    Show status of current node removal, force completion of pending removal or remove provided ID</p>
+<p><a class="reference internal" href="repair.html"><span class="doc">repair</span></a> -                        Repair one or more tables</p>
+<p><a class="reference internal" href="repair_admin.html"><span class="doc">repair_admin</span></a> -
+<span class="xref std std-doc">list</span> -  and fail incremental repair sessions</p>
+<p><a class="reference internal" href="replaybatchlog.html"><span class="doc">replaybatchlog</span></a> -                Kick off batchlog replay and wait for finish</p>
+<p><a class="reference internal" href="resetfullquerylog.html"><span class="doc">resetfullquerylog</span></a> -             Stop the full query log and clean files in the configured full query log directory from cassandra.yaml as well as JMX</p>
+<p><a class="reference internal" href="resetlocalschema.html"><span class="doc">resetlocalschema</span></a> -              Reset node’s local schema and resync</p>
+<p><a class="reference internal" href="resumehandoff.html"><span class="doc">resumehandoff</span></a> -                 Resume hints delivery process</p>
+<p><a class="reference internal" href="ring.html"><span class="doc">ring</span></a> -                          Print information about the token ring</p>
+<p><a class="reference internal" href="scrub.html"><span class="doc">scrub</span></a> -                         Scrub (rebuild sstables for) one or more tables</p>
+<p><a class="reference internal" href="setbatchlogreplaythrottle.html"><span class="doc">setbatchlogreplaythrottle</span></a> -     Set batchlog replay throttle in KB per second, or 0 to disable throttling. This will be reduced proportionally to the number of nodes in the cluster.</p>
+<p><a class="reference internal" href="setcachecapacity.html"><span class="doc">setcachecapacity</span></a> -              Set global key, row, and counter cache capacities (in MB units)</p>
+<p><a class="reference internal" href="setcachekeystosave.html"><span class="doc">setcachekeystosave</span></a> -            Set number of keys saved by each cache for faster post-restart warmup. 0 to disable</p>
+<p><a class="reference internal" href="setcompactionthreshold.html"><span class="doc">setcompactionthreshold</span></a> -        Set min and max compaction thresholds for a given table</p>
+<p><a class="reference internal" href="setcompactionthroughput.html"><span class="doc">setcompactionthroughput</span></a> -       Set the MB/s throughput cap for compaction in the system, or 0 to disable throttling</p>
+<p><a class="reference internal" href="setconcurrency.html"><span class="doc">setconcurrency</span></a> -                Set maximum concurrency for processing stage</p>
+<p><a class="reference internal" href="setconcurrentcompactors.html"><span class="doc">setconcurrentcompactors</span></a> -       Set number of concurrent compactors in the system.</p>
+<p><a class="reference internal" href="setconcurrentviewbuilders.html"><span class="doc">setconcurrentviewbuilders</span></a> -     Set the number of concurrent view builders in the system</p>
+<p><a class="reference internal" href="sethintedhandoffthrottlekb.html"><span class="doc">sethintedhandoffthrottlekb</span></a> -    Set hinted handoff throttle in kb per second, per delivery thread.</p>
+<p><a class="reference internal" href="setinterdcstreamthroughput.html"><span class="doc">setinterdcstreamthroughput</span></a> -    Set the Mb/s throughput cap for inter-datacenter streaming in the system, or 0 to disable throttling</p>
+<p><a class="reference internal" href="setlogginglevel.html"><span class="doc">setlogginglevel</span></a> -               Set the log level threshold for a given component or class. Will reset to the initial configuration if called with no parameters.</p>
+<p><a class="reference internal" href="setmaxhintwindow.html"><span class="doc">setmaxhintwindow</span></a> -              Set the specified max hint window in ms</p>
+<p><a class="reference internal" href="setstreamthroughput.html"><span class="doc">setstreamthroughput</span></a> -           Set the Mb/s throughput cap for streaming in the system, or 0 to disable throttling</p>
+<p><a class="reference internal" href="settimeout.html"><span class="doc">settimeout</span></a> -                    Set the specified timeout in ms, or 0 to disable timeout</p>
+<p><a class="reference internal" href="settraceprobability.html"><span class="doc">settraceprobability</span></a> -           Sets the probability for tracing any given request to value. 0 disables, 1 enables for all requests, 0 is the default</p>
+<p><a class="reference internal" href="sjk.html"><span class="doc">sjk</span></a> -                           Run commands of ‘Swiss Java Knife’. Run ‘nodetool sjk –help’ for more information.</p>
+<p><a class="reference internal" href="snapshot.html"><span class="doc">snapshot</span></a> -                      Take a snapshot of specified keyspaces or a snapshot of the specified table</p>
+<p><a class="reference internal" href="status.html"><span class="doc">status</span></a> -                        Print cluster information (state, load, IDs, …)</p>
+<p><a class="reference internal" href="statusautocompaction.html"><span class="doc">statusautocompaction</span></a> -
+<a class="reference internal" href="status.html"><span class="doc">status</span></a> -  of autocompaction of the given keyspace and table</p>
+<p><a class="reference internal" href="statusbackup.html"><span class="doc">statusbackup</span></a> -                  Status of incremental backup</p>
+<p><a class="reference internal" href="statusbinary.html"><span class="doc">statusbinary</span></a> -                  Status of native transport (binary protocol)</p>
+<p><a class="reference internal" href="statusgossip.html"><span class="doc">statusgossip</span></a> -                  Status of gossip</p>
+<p><a class="reference internal" href="statushandoff.html"><span class="doc">statushandoff</span></a> -                 Status of storing future hints on the current node</p>
+<p><a class="reference internal" href="stop.html"><span class="doc">stop</span></a> -                          Stop compaction</p>
+<p><a class="reference internal" href="stopdaemon.html"><span class="doc">stopdaemon</span></a> -                    Stop cassandra daemon</p>
+<p><a class="reference internal" href="tablehistograms.html"><span class="doc">tablehistograms</span></a> -               Print statistic histograms for a given table</p>
+<p><a class="reference internal" href="tablestats.html"><span class="doc">tablestats</span></a> -                    Print statistics on tables</p>
+<p><a class="reference internal" href="toppartitions.html"><span class="doc">toppartitions</span></a> -                 Sample and print the most active partitions</p>
+<p><a class="reference internal" href="tpstats.html"><span class="doc">tpstats</span></a> -                       Print usage statistics of thread pools</p>
+<p><a class="reference internal" href="truncatehints.html"><span class="doc">truncatehints</span></a> -                 Truncate all hints on the local node, or truncate hints for the endpoint(s) specified.</p>
+<p><a class="reference internal" href="upgradesstables.html"><span class="doc">upgradesstables</span></a> -               Rewrite sstables (for the requested tables) that are not on the current version (thus upgrading them to said current version)</p>
+<p><a class="reference internal" href="verify.html"><span class="doc">verify</span></a> -                        Verify (check data checksum for) one or more tables</p>
+<p><a class="reference internal" href="version.html"><span class="doc">version</span></a> -                       Print cassandra version</p>
+<p><a class="reference internal" href="viewbuildstatus.html"><span class="doc">viewbuildstatus</span></a> -               Show progress of a materialized view build</p>
+</div></blockquote>
+<p>See ‘nodetool help &lt;command&gt;’ for more information on a specific command.</p>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="../sstable/index.html" class="btn btn-default pull-right " role="button" title="SSTable Tools" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="../cqlsh.html" class="btn btn-default" role="button" title="cqlsh: the CQL shell" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../../js/doctools.js"></script>
+<script src="./../../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

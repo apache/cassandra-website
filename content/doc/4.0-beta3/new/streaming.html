@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-beta3/new/streaming.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-beta3" href="../index.html"/> <link rel="up" title="New Features in Apache Cassandra 4.0" href="index.html"/> <link rel="next" title="Transient Replication" href="transientreplication.html"/> <link rel="prev" title="Improved Internode Messaging" href="messaging.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">New Features in Apache Cassandra 4.0</a></li>
+      
+
+      
+      <li>Improved Streaming</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">New Features in Apache Cassandra 4.0</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="java11.html">Support for Java 11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="virtualtables.html">Virtual Tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auditlogging.html">Audit Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fqllogging.html">Full Query Logging (FQL)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="messaging.html">Improved Internode Messaging</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Improved Streaming</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#streaming-based-on-netty">Streaming based on Netty</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#zero-copy-streaming">Zero Copy Streaming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#repair-streaming-preview">Repair Streaming Preview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parallelizing-of-streaming-of-keyspaces">Parallelizing of Streaming of Keyspaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#unique-nodes-for-streaming-in-multi-dc-deployment">Unique nodes for Streaming in Multi-DC deployment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stream-operation-types">Stream Operation Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#disallow-decommission-when-number-of-replicas-will-drop-below-configured-rf">Disallow Decommission when number of Replicas will drop below configured RF</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transientreplication.html">Transient Replication</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="improved-streaming">
+<h1>Improved Streaming<a class="headerlink" href="#improved-streaming" title="Permalink to this headline">¶</a></h1>
+<p>Apache Cassandra 4.0 has made several improvements to streaming.  Streaming is the process used by nodes of a cluster to exchange data in the form of SSTables.  Streaming of SSTables is performed for several operations, such as:</p>
+<ul class="simple">
+<li>SSTable Repair</li>
+<li>Host Replacement</li>
+<li>Range movements</li>
+<li>Bootstrapping</li>
+<li>Rebuild</li>
+<li>Cluster expansion</li>
+</ul>
+<div class="section" id="streaming-based-on-netty">
+<h2>Streaming based on Netty<a class="headerlink" href="#streaming-based-on-netty" title="Permalink to this headline">¶</a></h2>
+<p>Streaming in Cassandra 4.0 is based on Non-blocking Input/Output (NIO) with Netty (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-12229">CASSANDRA-12229</a>). It replaces the single-threaded (or sequential), synchronous, blocking model of streaming messages and transfer of files. Netty supports non-blocking, asynchronous, multi-threaded streaming with which multiple connections are opened simultaneously.  Non-blocking implies that threads are not blocked as they don’t wait for a response for a sent request. A response could be returned in a different thread. With asynchronous, connections and threads are decoupled and do not have a 1:1 relation. Several more connections than threads may be opened.</p>
+</div>
+<div class="section" id="zero-copy-streaming">
+<h2>Zero Copy Streaming<a class="headerlink" href="#zero-copy-streaming" title="Permalink to this headline">¶</a></h2>
+<p>Pre-4.0, during streaming Cassandra reifies the SSTables into objects. This creates unnecessary garbage and slows down the whole streaming process as some SSTables can be transferred as a whole file rather than individual partitions. Cassandra 4.0 has added support for streaming entire SSTables when possible (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-14556">CASSANDRA-14556</a>) for faster Streaming using ZeroCopy APIs. If enabled, Cassandra will use ZeroCopy for eligible SSTables significantly speeding up transfers and increasing throughput.  A zero-copy path avoids bringing data into user-space on both sending and receiving side. Any streaming related operations will notice corresponding improvement. Zero copy streaming is hardware bound; only limited by the hardware limitations (Network and Disk IO ).</p>
+<div class="section" id="high-availability">
+<h3>High Availability<a class="headerlink" href="#high-availability" title="Permalink to this headline">¶</a></h3>
+<p>In benchmark tests Zero Copy Streaming is 5x faster than partitions based streaming. Faster streaming provides the benefit of improved availability. A cluster’s recovery mainly depends on the streaming speed, Cassandra clusters with failed nodes will be able to recover much more quickly (5x faster). If a node fails, SSTables need to be streamed to a replacement node. During the replacement operation, the new Cassandra node streams SSTables from the neighboring nodes that hold copies of the data belonging to this new node’s token range. Depending on the amount of data stored, this process can require substantial network bandwidth, taking some time to complete. The longer these range movement operations take, the more the cluster availability is lost. Failure of multiple nodes would reduce high availability greatly. The faster the new node completes streaming its data, the faster it can serve traffic, increasing the availability of the cluster.</p>
+</div>
+<div class="section" id="enabling-zero-copy-streaming">
+<h3>Enabling Zero Copy Streaming<a class="headerlink" href="#enabling-zero-copy-streaming" title="Permalink to this headline">¶</a></h3>
+<p>Zero copy streaming is enabled by setting the following setting in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">stream_entire_sstables</span><span class="p">:</span> <span class="n">true</span>
+</pre></div>
+</div>
+<p>By default zero copy streaming is enabled.</p>
+</div>
+<div class="section" id="sstables-eligible-for-zero-copy-streaming">
+<h3>SSTables Eligible for Zero Copy Streaming<a class="headerlink" href="#sstables-eligible-for-zero-copy-streaming" title="Permalink to this headline">¶</a></h3>
+<p>Zero copy streaming is used if all partitions within the SSTable need to be transmitted. This is common when using <code class="docutils literal notranslate"><span class="pre">LeveledCompactionStrategy</span></code> or when partitioning SSTables by token range has been enabled. All partition keys in the SSTables are iterated over to determine the eligibility for Zero Copy streaming.</p>
+</div>
+<div class="section" id="benefits-of-zero-copy-streaming">
+<h3>Benefits of Zero Copy Streaming<a class="headerlink" href="#benefits-of-zero-copy-streaming" title="Permalink to this headline">¶</a></h3>
+<p>When enabled, it permits Cassandra to zero-copy stream entire eligible SSTables between nodes, including every component. This speeds up the network transfer significantly subject to throttling specified by <code class="docutils literal notranslate"><span class="pre">stream_throughput_outbound_megabits_per_sec</span></code>.</p>
+<p>Enabling this will reduce the GC pressure on sending and receiving node. While this feature tries to keep the disks balanced, it cannot guarantee it. This feature will be automatically disabled if internode encryption is enabled. Currently this can be used with Leveled Compaction.</p>
+</div>
+<div class="section" id="configuring-for-zero-copy-streaming">
+<h3>Configuring for Zero Copy Streaming<a class="headerlink" href="#configuring-for-zero-copy-streaming" title="Permalink to this headline">¶</a></h3>
+<p>Throttling would reduce the streaming speed. The <code class="docutils literal notranslate"><span class="pre">stream_throughput_outbound_megabits_per_sec</span></code> throttles all outbound streaming file transfers on a node to the given total throughput in Mbps. When unset, the default is 200 Mbps or 25 MB/s.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">stream_throughput_outbound_megabits_per_sec</span><span class="p">:</span> <span class="mi">200</span>
+</pre></div>
+</div>
+<p>To run any Zero Copy streaming benchmark the <code class="docutils literal notranslate"><span class="pre">stream_throughput_outbound_megabits_per_sec</span></code> must be set to a really high value otherwise, throttling will be significant and the benchmark results will not be meaningful.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">inter_dc_stream_throughput_outbound_megabits_per_sec</span></code> throttles all streaming file transfer between the datacenters, this setting allows users to throttle inter dc stream throughput in addition to throttling all network stream traffic as configured with <code class="docutils literal notranslate"><span class="pre">stream_throughput_outbound_megabits_per_sec</span></code>. When unset, the default is 200 Mbps or 25 MB/s.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inter_dc_stream_throughput_outbound_megabits_per_sec</span><span class="p">:</span> <span class="mi">200</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sstable-components-streamed-with-zero-copy-streaming">
+<h3>SSTable Components Streamed with Zero Copy Streaming<a class="headerlink" href="#sstable-components-streamed-with-zero-copy-streaming" title="Permalink to this headline">¶</a></h3>
+<p>Zero Copy Streaming streams entire SSTables.  SSTables are made up of multiple components in separate files. SSTable components streamed are listed in Table 1.</p>
+<p>Table 1. SSTable Components</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="26%" />
+<col width="74%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>SSTable Component</td>
+<td>Description</td>
+</tr>
+<tr class="row-even"><td>Data.db</td>
+<td>The base data for an SSTable: the remaining
+components can be regenerated based on the data
+component.</td>
+</tr>
+<tr class="row-odd"><td>Index.db</td>
+<td>Index of the row keys with pointers to their
+positions in the data file.</td>
+</tr>
+<tr class="row-even"><td>Filter.db</td>
+<td>Serialized bloom filter for the row keys in the
+SSTable.</td>
+</tr>
+<tr class="row-odd"><td>CompressionInfo.db</td>
+<td>File to hold information about uncompressed
+data length, chunk offsets etc.</td>
+</tr>
+<tr class="row-even"><td>Statistics.db</td>
+<td>Statistical metadata about the content of the
+SSTable.</td>
+</tr>
+<tr class="row-odd"><td>Digest.crc32</td>
+<td>Holds CRC32 checksum of the data file
+size_bytes.</td>
+</tr>
+<tr class="row-even"><td>CRC.db</td>
+<td>Holds the CRC32 for chunks in an uncompressed file.</td>
+</tr>
+<tr class="row-odd"><td>Summary.db</td>
+<td>Holds SSTable Index Summary
+(sampling of Index component)</td>
+</tr>
+<tr class="row-even"><td>TOC.txt</td>
+<td>Table of contents, stores the list of all
+components for the SSTable.</td>
+</tr>
+</tbody>
+</table>
+<p>Custom component, used by e.g. custom compaction strategy may also be included.</p>
+</div>
+</div>
+<div class="section" id="repair-streaming-preview">
+<h2>Repair Streaming Preview<a class="headerlink" href="#repair-streaming-preview" title="Permalink to this headline">¶</a></h2>
+<p>Repair with <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">repair</span></code> involves streaming of repaired SSTables and a repair preview has been added to provide an estimate of the amount of repair streaming that would need to be performed. Repair preview (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-13257">CASSANDRA-13257</a>) is invoke with <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">repair</span> <span class="pre">--preview</span></code> using option:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">prv</span><span class="p">,</span> <span class="o">--</span><span class="n">preview</span>
+</pre></div>
+</div>
+<p>It determines ranges and amount of data to be streamed, but doesn’t actually perform repair.</p>
+</div>
+<div class="section" id="parallelizing-of-streaming-of-keyspaces">
+<h2>Parallelizing of Streaming of Keyspaces<a class="headerlink" href="#parallelizing-of-streaming-of-keyspaces" title="Permalink to this headline">¶</a></h2>
+<p>The streaming of the different keyspaces for bootstrap and rebuild has been parallelized in Cassandra 4.0 (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-4663">CASSANDRA-4663</a>).</p>
+</div>
+<div class="section" id="unique-nodes-for-streaming-in-multi-dc-deployment">
+<h2>Unique nodes for Streaming in Multi-DC deployment<a class="headerlink" href="#unique-nodes-for-streaming-in-multi-dc-deployment" title="Permalink to this headline">¶</a></h2>
+<p>Range Streamer picks unique nodes to stream data from when number of replicas in each DC is three or more (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-4650">CASSANDRA-4650</a>). What the optimization does is to even out the streaming load across the cluster. Without the optimization, some node can be picked up to stream more data than others. This patch allows to select dedicated node to stream only one range.</p>
+<p>This will increase the performance of bootstrapping a node and will also put less pressure on nodes serving the data. This does not affect if N &lt; 3 in each DC as then it streams data from only 2 nodes.</p>
+</div>
+<div class="section" id="stream-operation-types">
+<h2>Stream Operation Types<a class="headerlink" href="#stream-operation-types" title="Permalink to this headline">¶</a></h2>
+<p>It is important to know the type or purpose of a certain stream. Version 4.0 (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-13064">CASSANDRA-13064</a>) adds an <code class="docutils literal notranslate"><span class="pre">enum</span></code> to distinguish between the different types  of streams.  Stream types are available both in a stream request and a stream task. The different stream types are:</p>
+<ul class="simple">
+<li>Restore replica count</li>
+<li>Unbootstrap</li>
+<li>Relocation</li>
+<li>Bootstrap</li>
+<li>Rebuild</li>
+<li>Bulk Load</li>
+<li>Repair</li>
+</ul>
+</div>
+<div class="section" id="disallow-decommission-when-number-of-replicas-will-drop-below-configured-rf">
+<h2>Disallow Decommission when number of Replicas will drop below configured RF<a class="headerlink" href="#disallow-decommission-when-number-of-replicas-will-drop-below-configured-rf" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-12510">CASSANDRA-12510</a> guards against decommission that will drop # of replicas below configured replication factor (RF), and adds the <code class="docutils literal notranslate"><span class="pre">--force</span></code> option that allows decommission to continue if intentional; force decommission of this node even when it reduces the number of replicas to below configured RF.</p>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="transientreplication.html" class="btn btn-default pull-right " role="button" title="Transient Replication" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="messaging.html" class="btn btn-default" role="button" title="Improved Internode Messaging" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

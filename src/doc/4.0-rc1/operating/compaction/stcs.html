@@ -1,0 +1,122 @@
+---
+layout: docpage
+
+title: "Documentation"
+
+is_homepage: false
+is_sphinx_doc: true
+
+doc-title: "Size Tiered Compaction Strategy"
+doc-header-links: '
+  <link rel="top" title="Apache Cassandra Documentation v4.0-rc1" href="../../index.html"/>
+'
+doc-search-path: "../../search.html"
+
+extra-footer: '
+<script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+      URL_ROOT:    "",
+      VERSION:     "",
+      COLLAPSE_INDEX: false,
+      FILE_SUFFIX: ".html",
+      HAS_SOURCE:  false,
+      SOURCELINK_SUFFIX: ".txt"
+    };
+</script>
+'
+
+---
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="size-tiered-compaction-strategy">
+<span id="stcs"></span><h1>Size Tiered Compaction Strategy<a class="headerlink" href="#size-tiered-compaction-strategy" title="Permalink to this headline">¶</a></h1>
+<p>The basic idea of <code class="docutils literal notranslate"><span class="pre">SizeTieredCompactionStrategy</span></code> (STCS) is to merge sstables of approximately the same size. All
+sstables are put in different buckets depending on their size. An sstable is added to the bucket if size of the sstable
+is within <code class="docutils literal notranslate"><span class="pre">bucket_low</span></code> and <code class="docutils literal notranslate"><span class="pre">bucket_high</span></code> of the current average size of the sstables already in the bucket. This
+will create several buckets and the most interesting of those buckets will be compacted. The most interesting one is
+decided by figuring out which bucket’s sstables takes the most reads.</p>
+<div class="section" id="major-compaction">
+<h2>Major compaction<a class="headerlink" href="#major-compaction" title="Permalink to this headline">¶</a></h2>
+<p>When running a major compaction with STCS you will end up with two sstables per data directory (one for repaired data
+and one for unrepaired data). There is also an option (-s) to do a major compaction that splits the output into several
+sstables. The sizes of the sstables are approximately 50%, 25%, 12.5%… of the total size.</p>
+</div>
+<div class="section" id="stcs-options">
+<span id="id1"></span><h2>STCS options<a class="headerlink" href="#stcs-options" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">min_sstable_size</span></code> (default: 50MB)</dt>
+<dd>Sstables smaller than this are put in the same bucket.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">bucket_low</span></code> (default: 0.5)</dt>
+<dd>How much smaller than the average size of a bucket a sstable should be before not being included in the bucket. That
+is, if <code class="docutils literal notranslate"><span class="pre">bucket_low</span> <span class="pre">*</span> <span class="pre">avg_bucket_size</span> <span class="pre">&lt;</span> <span class="pre">sstable_size</span></code> (and the <code class="docutils literal notranslate"><span class="pre">bucket_high</span></code> condition holds, see below), then
+the sstable is added to the bucket.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">bucket_high</span></code> (default: 1.5)</dt>
+<dd>How much bigger than the average size of a bucket a sstable should be before not being included in the bucket. That
+is, if <code class="docutils literal notranslate"><span class="pre">sstable_size</span> <span class="pre">&lt;</span> <span class="pre">bucket_high</span> <span class="pre">*</span> <span class="pre">avg_bucket_size</span></code> (and the <code class="docutils literal notranslate"><span class="pre">bucket_low</span></code> condition holds, see above), then
+the sstable is added to the bucket.</dd>
+</dl>
+</div>
+<div class="section" id="defragmentation">
+<h2>Defragmentation<a class="headerlink" href="#defragmentation" title="Permalink to this headline">¶</a></h2>
+<p>Defragmentation is done when many sstables are touched during a read.  The result of the read is put in to the memtable
+so that the next read will not have to touch as many sstables. This can cause writes on a read-only-cluster.</p>
+</div>
+</div>
+
+
+
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

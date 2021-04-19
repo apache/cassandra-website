@@ -1,0 +1,151 @@
+---
+layout: docpage
+
+title: "Documentation"
+
+is_homepage: false
+is_sphinx_doc: true
+
+doc-parent: "Data Modeling"
+
+doc-title: "Conceptual Data Modeling"
+doc-header-links: '
+  <link rel="top" title="Apache Cassandra Documentation v4.0-rc1" href="../index.html"/>
+      <link rel="up" title="Data Modeling" href="index.html"/>
+      <link rel="next" title="RDBMS Design" href="data_modeling_rdbms.html"/>
+      <link rel="prev" title="Introduction" href="intro.html"/>
+'
+doc-search-path: "../search.html"
+
+extra-footer: '
+<script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+      URL_ROOT:    "",
+      VERSION:     "",
+      COLLAPSE_INDEX: false,
+      FILE_SUFFIX: ".html",
+      HAS_SOURCE:  false,
+      SOURCELINK_SUFFIX: ".txt"
+    };
+</script>
+'
+
+---
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Data Modeling</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Conceptual Data Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_rdbms.html">RDBMS Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_queries.html">Defining Application Queries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_logical.html">Logical Data Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_physical.html">Physical Data Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_refining.html">Evaluating and Refining Data Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_schema.html">Defining Database Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_tools.html">Cassandra Data Modeling Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="conceptual-data-modeling">
+<h1>Conceptual Data Modeling<a class="headerlink" href="#conceptual-data-modeling" title="Permalink to this headline">¶</a></h1>
+<p>First, let’s create a simple domain model that is easy to understand in
+the relational world, and then see how you might map it from a relational
+to a distributed hashtable model in Cassandra.</p>
+<p>Let’s use an example that is complex enough
+to show the various data structures and design patterns, but not
+something that will bog you down with details. Also, a domain that’s
+familiar to everyone will allow you to concentrate on how to work with
+Cassandra, not on what the application domain is all about.</p>
+<p>For example, let’s use a domain that is easily understood and that
+everyone can relate to: making hotel reservations.</p>
+<p>The conceptual domain includes hotels, guests that stay in the hotels, a
+collection of rooms for each hotel, the rates and availability of those
+rooms, and a record of reservations booked for guests. Hotels typically
+also maintain a collection of “points of interest,” which are parks,
+museums, shopping galleries, monuments, or other places near the hotel
+that guests might want to visit during their stay. Both hotels and
+points of interest need to maintain geolocation data so that they can be
+found on maps for mashups, and to calculate distances.</p>
+<p>The conceptual domain is depicted below using the entity–relationship
+model popularized by Peter Chen. This simple diagram represents the
+entities in the domain with rectangles, and attributes of those entities
+with ovals. Attributes that represent unique identifiers for items are
+underlined. Relationships between entities are represented as diamonds,
+and the connectors between the relationship and each entity show the
+multiplicity of the connection.</p>
+<img alt="../_images/data_modeling_hotel_erd.png" src="../_images/data_modeling_hotel_erd.png" />
+<p>Obviously, in the real world, there would be many more considerations
+and much more complexity. For example, hotel rates are notoriously
+dynamic, and calculating them involves a wide array of factors. Here
+you’re defining something complex enough to be interesting and touch on
+the important points, but simple enough to maintain the focus on
+learning Cassandra.</p>
+<p><em>Material adapted from Cassandra, The Definitive Guide. Published by
+O’Reilly Media, Inc. Copyright © 2020 Jeff Carpenter, Eben Hewitt.
+All rights reserved. Used with permission.</em></p>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="data_modeling_rdbms.html" class="btn btn-default pull-right " role="button" title="RDBMS Design" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="intro.html" class="btn btn-default" role="button" title="Introduction" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

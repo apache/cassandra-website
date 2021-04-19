@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="With the goal of ensuring reliability and stability in Apache Cassandra 4.0, the project’s committers have voted to freeze new features on September 1 to con...">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Testing Apache Cassandra 4.0</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/blog/2018/08/21/testing_apache_cassandra.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../../css/style.css">
+  
+
+  
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li>Testing Apache Cassandra 4.0</li>
+        
+      
+
+      
+
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../../"><img src="./../../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../../">Home</a></li>
+          <li><a href="./../../../../download/">Download</a></li>
+          <li><a href="./../../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="content">
+  <div class="container">
+  <h2>Testing Apache Cassandra 4.0</h2>
+    <p>Posted on August 21, 2018 by the Apache Cassandra Community</p>
+    <h5><a href="/blog">&laquo; Back to the Apache Cassandra Blog</a></h5>
+    <hr />
+  <p>With the goal of ensuring reliability and stability in Apache Cassandra 4.0, the project’s committers have voted to freeze new features on September 1 to concentrate on testing and validation before cutting a stable beta. Towards that goal, the community is investing in methodologies that can be performed at scale to exercise edge cases in the largest Cassandra clusters. The result, we hope, is to make Apache Cassandra 4.0 the best-tested and most reliable major release right out of the gate.</p>
+
+<p>In the interests of communication (and hopefully more participation), here’s a look at some of the approaches being used to test Apache Cassandra 4.0:</p>
+
+<hr />
+
+<h4 id="replay-testing">Replay Testing</h4>
+<h5 id="workload-recording-log-replay-and-comparison">Workload Recording, Log Replay, and Comparison</h5>
+
+<p>Replay testing allows for side-by-side comparison of a workload using two versions of the same database. It is a black-box technique that answers the question, “did anything change that we didn’t expect?”</p>
+
+<p>Replay testing is simple in concept: record a workload, then re-issue it against two clusters – one running a stable release and the second running a candidate build. Replay testing a stateful distributed system is more challenging. For a subset of workloads, we can achieve determinism in testing by grouping writes by CQL partition and ordering them via client-supplied timestamps. This also allows us to achieve parallelism, as recorded workloads can be distributed by partition across an arbitrarily-large fleet of writers. Though linearizing updates within a partition and comparing differences does not allow for validation of all possible workloads (e.g., CAS queries), this subset is very useful.</p>
+
+<p>The suite of Full Query Logging (“FQL”) tools in Apache Cassandra enable workload recording. <a href="https://issues.apache.org/jira/browse/CASSANDRA-14618">CASSANDRA-14618</a> and <a href="https://issues.apache.org/jira/browse/CASSANDRA-14619">CASSANDRA-14619</a> will add fqltool replay and fqltool compare, enabling log replay and comparison. Standard tools in the Apache ecosystem such as <a href="https://spark.apache.org">Apache Spark</a> and <a href="https://mesos.apache.org">Apache Mesos</a> can also make parallelizing replay and comparison across large clusters of machines straightforward.</p>
+
+<hr />
+
+<h4 id="fuzz-testing-and-property-based-testing">Fuzz Testing and Property-Based Testing</h4>
+<h5 id="dynamic-test-generation-and-fuzzing">Dynamic Test Generation and Fuzzing</h5>
+
+<p>Fuzz testing dynamically generates input to be passed through a function for validation. We can make fuzz testing smarter in stateful systems like Apache Cassandra to assert that persisted data conforms to the database’s contracts: acknowledged writes are not lost, deleted data is not resurrected, and consistency levels are respected. Fuzz testing of storage systems to validate these properties requires maintaining a record of responses received from the system; the development of a model representing valid legal states of data within the database; and a validation pass to assert that responses reflect valid states according to that model.</p>
+
+<p>Property-based testing combines fuzz testing and assertions to explore a state space using randomly-generated input. These tests provide dynamic input to the system and assert that its fundamental properties are not violated. These properties can range from generic (e.g., “I can write data and read it back”) to specific (“range tombstone bounds synthesized during short-read-protection reads are properly closed”); and from local to distributed (e.g., “replacing every single node in a cluster results in an identical database”). To simplify debugging, property-based testing libraries like <a href="https://github.com/ncredinburgh/QuickTheories">QuickTheories</a> also provide a “shrinker,” which attempts to generate the simplest possible failing case after detecting input or a sequence of actions that triggers a failure.</p>
+
+<p>Unlike model checkers, property-based tests don’t exhaust the state space – but explore it until a threshold of examples is reached. This allows for the computation to be distributed across many machines to gain confidence in code and infrastructure that scales with the amount of computation applied to test it.</p>
+
+<hr />
+
+<h4 id="distributed-tests-and-fault-injection-testing">Distributed Tests and Fault-Injection Testing</h4>
+<h5 id="validating-behavior-under-fault-scenarios">Validating Behavior Under Fault Scenarios</h5>
+
+<p>All of the above techniques can be combined with fault injection testing to validate that the system maintains availability where expected in fault scenarios, that fundamental properties hold, and that reads and writes conform to the system’s contracts. By asserting series of invariants under fault scenarios using different techniques, we gain the ability to exercise edge cases in the system that may reveal unexpected failures in extreme scenarios. Injected faults can take many forms – network partitions, process pauses, disk failures, and more.</p>
+
+<hr />
+
+<h4 id="upgrade-testing">Upgrade Testing</h4>
+<h5 id="ensuring-a-safe-upgrade-path">Ensuring a Safe Upgrade Path</h5>
+
+<p>Finally, it’s not enough to test one version of the database. Upgrade testing allows us to validate the upgrade path between major versions, ensuring that a rolling upgrade can be completed successfully, and that contents of the resulting upgraded database is identical to the original. To perform upgrade tests, we begin by snapshotting a cluster and cloning it twice, resulting in two identical clusters. One of the clusters is then upgraded. Finally, we perform a row-by-row scan and comparison of all data in each partition to assert that all rows read are identical, logging any deltas for investigation. Like fault injection tests, upgrade tests can also be thought of as an operational scenario all other types of tests can be parameterized against.</p>
+
+<hr />
+
+<h4 id="wrapping-up">Wrapping Up</h4>
+
+<p>The Apache Cassandra developer community is working hard to deliver Cassandra 4.0 as the most stable major release to date, bringing a variety of methodologies to bear on the problem. We invite you to join us in the effort, deploying these techniques within your infrastructure and testing the release on your workloads. Learn more about how to get involved <a href="http://cassandra.apache.org/community/">here</a>.</p>
+
+<p>The more that join, the better the release we’ll ship together.</p>
+
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

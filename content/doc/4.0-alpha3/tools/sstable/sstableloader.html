@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-alpha3/tools/sstable/sstableloader.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha3" href="../../index.html"/> <link rel="up" title="SSTable Tools" href="index.html"/> <link rel="next" title="sstablemetadata" href="sstablemetadata.html"/> <link rel="prev" title="sstablelevelreset" href="sstablelevelreset.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">SSTable Tools</a></li>
+      
+
+      
+      <li>sstableloader</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../../"><img src="./../../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../../">Home</a></li>
+          <li><a href="./../../../../download/">Download</a></li>
+          <li><a href="./../../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Cassandra Tools</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cqlsh.html">cqlsh: the CQL shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodetool/nodetool.html">Nodetool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodetool/nodetool.html#usage">Usage</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">SSTable Tools</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sstabledump.html">sstabledump</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableexpiredblockers.html">sstableexpiredblockers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablelevelreset.html">sstablelevelreset</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sstableloader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablemetadata.html">sstablemetadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableofflinerelevel.html">sstableofflinerelevel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablerepairedset.html">sstablerepairedset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablescrub.html">sstablescrub</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablesplit.html">sstablesplit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableupgrade.html">sstableupgrade</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableutil.html">sstableutil</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableverify.html">sstableverify</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cassandra_stress.html">Cassandra Stress</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="sstableloader">
+<h1>sstableloader<a class="headerlink" href="#sstableloader" title="Permalink to this headline">¶</a></h1>
+<p>Bulk-load the sstables found in the directory &lt;dir_path&gt; to the configured cluster. The parent directories of &lt;dir_path&gt; are used as the target keyspace/table name. For example, to load an sstable named ma-1-big-Data.db into keyspace1/standard1, you will need to have the files ma-1-big-Data.db and ma-1-big-Index.db in a directory /path/to/keyspace1/standard1/. The tool will create new sstables, and does not clean up your copied files.</p>
+<p>Several of the options listed below don’t work quite as intended, and in those cases, workarounds are mentioned for specific use cases.</p>
+<p>To avoid having the sstable files to be loaded compacted while reading them, place the files in an alternate keyspace/table path than the data directory.</p>
+<p>ref: <a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-1278">https://issues.apache.org/jira/browse/CASSANDRA-1278</a></p>
+<p>Cassandra must be stopped before this tool is executed, or unexpected results will occur. Note: the script does not verify that Cassandra is stopped.</p>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>sstableloader &lt;options&gt; &lt;dir_path&gt;</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="39%" />
+<col width="61%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>-d, –nodes &lt;initial hosts&gt;</td>
+<td>Required. Try to connect to these hosts (comma-separated)
+initially for ring information</td>
+</tr>
+<tr class="row-even"><td>-u, –username &lt;username&gt;</td>
+<td>username for Cassandra authentication</td>
+</tr>
+<tr class="row-odd"><td>-pw, –password &lt;password&gt;</td>
+<td>password for Cassandra authentication</td>
+</tr>
+<tr class="row-even"><td>-p, –port &lt;native transport port&gt;</td>
+<td>port used for native connection (default 9042)</td>
+</tr>
+<tr class="row-odd"><td>-sp, –storage-port &lt;storage port&gt;</td>
+<td>port used for internode communication (default 7000)</td>
+</tr>
+<tr class="row-even"><td>-ssp, –ssl-storage-port &lt;ssl storage port&gt;</td>
+<td>port used for TLS internode communication (default 7001)</td>
+</tr>
+<tr class="row-odd"><td>–no-progress</td>
+<td>don’t display progress</td>
+</tr>
+<tr class="row-even"><td>-t, –throttle &lt;throttle&gt;</td>
+<td>throttle speed in Mbits (default unlimited)</td>
+</tr>
+<tr class="row-odd"><td>-idct, –inter-dc-throttle &lt;inter-dc-throttle&gt;</td>
+<td>inter-datacenter throttle speed in Mbits (default unlimited)</td>
+</tr>
+<tr class="row-even"><td>-cph, –connections-per-host &lt;connectionsPerHost&gt;</td>
+<td>number of concurrent connections-per-host</td>
+</tr>
+<tr class="row-odd"><td>-i, –ignore &lt;NODES&gt;</td>
+<td>don’t stream to this (comma separated) list of nodes</td>
+</tr>
+<tr class="row-even"><td>-alg, –ssl-alg &lt;ALGORITHM&gt;</td>
+<td>Client SSL: algorithm (default: SunX509)</td>
+</tr>
+<tr class="row-odd"><td>-ciphers, –ssl-ciphers &lt;CIPHER-SUITES&gt;</td>
+<td>Client SSL: comma-separated list of encryption suites to use</td>
+</tr>
+<tr class="row-even"><td>-ks, –keystore &lt;KEYSTORE&gt;</td>
+<td>Client SSL: full path to keystore</td>
+</tr>
+<tr class="row-odd"><td>-kspw, –keystore-password &lt;KEYSTORE-PASSWORD&gt;</td>
+<td>Client SSL: password of the keystore</td>
+</tr>
+<tr class="row-even"><td>-st, –store-type &lt;STORE-TYPE&gt;</td>
+<td>Client SSL: type of store</td>
+</tr>
+<tr class="row-odd"><td>-ts, –truststore &lt;TRUSTSTORE&gt;</td>
+<td>Client SSL: full path to truststore</td>
+</tr>
+<tr class="row-even"><td>-tspw, –truststore-password &lt;TRUSTSTORE-PASSWORD&gt;</td>
+<td>Client SSL: password of the truststore</td>
+</tr>
+<tr class="row-odd"><td>-prtcl, –ssl-protocol &lt;PROTOCOL&gt;</td>
+<td>Client SSL: connections protocol to use (default: TLS)</td>
+</tr>
+<tr class="row-even"><td>-ap, –auth-provider &lt;auth provider&gt;</td>
+<td>custom AuthProvider class name for cassandra authentication</td>
+</tr>
+<tr class="row-odd"><td>-f, –conf-path &lt;path to config file&gt;</td>
+<td>cassandra.yaml file path for streaming throughput and client/server SSL</td>
+</tr>
+<tr class="row-even"><td>-v, –verbose</td>
+<td>verbose output</td>
+</tr>
+<tr class="row-odd"><td>-h, –help</td>
+<td>display this help message</td>
+</tr>
+</tbody>
+</table>
+<p>You can provide a cassandra.yaml file with the -f command line option to set up streaming throughput, and client and server encryption options. Only stream_throughput_outbound_megabits_per_sec, server_encryption_options, and client_encryption_options are read from yaml. You can override options read from cassandra.yaml with corresponding command line options.</p>
+</div>
+<div class="section" id="load-sstables-from-a-snapshot">
+<h2>Load sstables from a Snapshot<a class="headerlink" href="#load-sstables-from-a-snapshot" title="Permalink to this headline">¶</a></h2>
+<p>Copy the snapshot sstables into an accessible directory and use sstableloader to restore them.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cp</span> <span class="n">snapshots</span><span class="o">/</span><span class="mi">1535397029191</span><span class="o">/*</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">keyspace1</span><span class="o">/</span><span class="n">standard1</span><span class="o">/</span>
+
+<span class="n">sstableloader</span> <span class="o">--</span><span class="n">nodes</span> <span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">loadme</span><span class="o">/</span><span class="n">keyspace1</span><span class="o">/</span><span class="n">standard1</span><span class="o">-</span><span class="n">f8a4fa30aa2a11e8af27091830ac5256</span><span class="o">/</span>
+<span class="n">Established</span> <span class="n">connection</span> <span class="n">to</span> <span class="n">initial</span> <span class="n">hosts</span>
+<span class="n">Opening</span> <span class="n">sstables</span> <span class="ow">and</span> <span class="n">calculating</span> <span class="n">sections</span> <span class="n">to</span> <span class="n">stream</span>
+<span class="n">Streaming</span> <span class="n">relevant</span> <span class="n">part</span> <span class="n">of</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">loadme</span><span class="o">/</span><span class="n">keyspace1</span><span class="o">/</span><span class="n">standard1</span><span class="o">-</span><span class="n">f8a4fa30aa2a11e8af27091830ac5256</span><span class="o">/</span><span class="n">ma</span><span class="o">-</span><span class="mi">3</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span> <span class="n">to</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="o">/</span><span class="mi">1</span> <span class="mi">100</span><span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">100</span><span class="o">%</span> <span class="mi">0</span>  <span class="n">MB</span><span class="o">/</span><span class="n">s</span><span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mi">1</span> <span class="n">MB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">Summary</span> <span class="n">statistics</span><span class="p">:</span>
+   <span class="n">Connections</span> <span class="n">per</span> <span class="n">host</span><span class="p">:</span>         <span class="p">:</span> <span class="mi">1</span>
+   <span class="n">Total</span> <span class="n">files</span> <span class="n">transferred</span><span class="p">:</span>      <span class="p">:</span> <span class="mi">1</span>
+   <span class="n">Total</span> <span class="nb">bytes</span> <span class="n">transferred</span><span class="p">:</span>      <span class="p">:</span> <span class="mi">4700000</span>
+   <span class="n">Total</span> <span class="n">duration</span> <span class="p">(</span><span class="n">ms</span><span class="p">):</span>          <span class="p">:</span> <span class="mi">4390</span>
+   <span class="n">Average</span> <span class="n">transfer</span> <span class="n">rate</span> <span class="p">(</span><span class="n">MB</span><span class="o">/</span><span class="n">s</span><span class="p">):</span> <span class="p">:</span> <span class="mi">1</span>
+   <span class="n">Peak</span> <span class="n">transfer</span> <span class="n">rate</span> <span class="p">(</span><span class="n">MB</span><span class="o">/</span><span class="n">s</span><span class="p">):</span>    <span class="p">:</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>The -d or –nodes option is required, or the script will not run.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstableloader</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">loadme</span><span class="o">/</span><span class="n">keyspace1</span><span class="o">/</span><span class="n">standard1</span><span class="o">-</span><span class="n">f8a4fa30aa2a11e8af27091830ac5256</span><span class="o">/</span>
+<span class="n">Initial</span> <span class="n">hosts</span> <span class="n">must</span> <span class="n">be</span> <span class="n">specified</span> <span class="p">(</span><span class="o">-</span><span class="n">d</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="use-a-config-file-for-ssl-clusters">
+<h2>Use a Config File for SSL Clusters<a class="headerlink" href="#use-a-config-file-for-ssl-clusters" title="Permalink to this headline">¶</a></h2>
+<p>If SSL encryption is enabled in the cluster, use the –conf-path option with sstableloader to point the tool to the cassandra.yaml with the relevant server_encryption_options (e.g., truststore location, algorithm). This will work better than passing individual ssl options shown above to sstableloader on the command line.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstableloader</span> <span class="o">--</span><span class="n">nodes</span> <span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span> <span class="o">--</span><span class="n">conf</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">cassandra</span><span class="o">.</span><span class="n">yaml</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">loadme</span><span class="o">/</span><span class="n">keyspace1</span><span class="o">/</span><span class="n">standard1</span><span class="o">-</span><span class="mf">0974e5</span><span class="n">a0aa5811e8a0a06d2c86545d91</span><span class="o">/</span><span class="n">snapshots</span><span class="o">/</span>
+<span class="n">Established</span> <span class="n">connection</span> <span class="n">to</span> <span class="n">initial</span> <span class="n">hosts</span>
+<span class="n">Opening</span> <span class="n">sstables</span> <span class="ow">and</span> <span class="n">calculating</span> <span class="n">sections</span> <span class="n">to</span> <span class="n">stream</span>
+<span class="n">Streaming</span> <span class="n">relevant</span> <span class="n">part</span> <span class="n">of</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">loadme</span><span class="o">/</span><span class="n">keyspace1</span><span class="o">/</span><span class="n">standard1</span><span class="o">-</span><span class="mf">0974e5</span><span class="n">a0aa5811e8a0a06d2c86545d91</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span>  <span class="n">to</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">1</span>  <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">1</span><span class="o">%</span> <span class="mf">9.165</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">9.165</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">2</span>  <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">2</span><span class="o">%</span> <span class="mf">5.147</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">18.299</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">4</span>  <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">4</span><span class="o">%</span> <span class="mf">9.751</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">27.423</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">5</span>  <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">5</span><span class="o">%</span> <span class="mf">8.203</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">36.524</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="o">/</span><span class="mi">1</span> <span class="mi">100</span><span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">100</span><span class="o">%</span> <span class="mf">0.000</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">480.513</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+
+<span class="n">Summary</span> <span class="n">statistics</span><span class="p">:</span>
+   <span class="n">Connections</span> <span class="n">per</span> <span class="n">host</span>    <span class="p">:</span> <span class="mi">1</span>
+   <span class="n">Total</span> <span class="n">files</span> <span class="n">transferred</span> <span class="p">:</span> <span class="mi">1</span>
+   <span class="n">Total</span> <span class="nb">bytes</span> <span class="n">transferred</span> <span class="p">:</span> <span class="mf">4.387</span><span class="n">MiB</span>
+   <span class="n">Total</span> <span class="n">duration</span>          <span class="p">:</span> <span class="mi">9356</span> <span class="n">ms</span>
+   <span class="n">Average</span> <span class="n">transfer</span> <span class="n">rate</span>   <span class="p">:</span> <span class="mf">480.105</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span>
+   <span class="n">Peak</span> <span class="n">transfer</span> <span class="n">rate</span>      <span class="p">:</span> <span class="mf">586.410</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="hide-progress-output">
+<h2>Hide Progress Output<a class="headerlink" href="#hide-progress-output" title="Permalink to this headline">¶</a></h2>
+<p>To hide the output of progress and the summary statistics (e.g., if you wanted to use this tool in a script), use the –no-progress option.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstableloader</span> <span class="o">--</span><span class="n">nodes</span> <span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">progress</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">loadme</span><span class="o">/</span><span class="n">keyspace1</span><span class="o">/</span><span class="n">standard1</span><span class="o">-</span><span class="n">f8a4fa30aa2a11e8af27091830ac5256</span><span class="o">/</span>
+<span class="n">Established</span> <span class="n">connection</span> <span class="n">to</span> <span class="n">initial</span> <span class="n">hosts</span>
+<span class="n">Opening</span> <span class="n">sstables</span> <span class="ow">and</span> <span class="n">calculating</span> <span class="n">sections</span> <span class="n">to</span> <span class="n">stream</span>
+<span class="n">Streaming</span> <span class="n">relevant</span> <span class="n">part</span> <span class="n">of</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">loadme</span><span class="o">/</span><span class="n">keyspace1</span><span class="o">/</span><span class="n">standard1</span><span class="o">-</span><span class="n">f8a4fa30aa2a11e8af27091830ac5256</span><span class="o">/</span><span class="n">ma</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span> <span class="n">to</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-more-detail">
+<h2>Get More Detail<a class="headerlink" href="#get-more-detail" title="Permalink to this headline">¶</a></h2>
+<p>Using the –verbose option will provide much more progress output.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstableloader</span> <span class="o">--</span><span class="n">nodes</span> <span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span> <span class="o">--</span><span class="n">verbose</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">loadme</span><span class="o">/</span><span class="n">keyspace1</span><span class="o">/</span><span class="n">standard1</span><span class="o">-</span><span class="mf">0974e5</span><span class="n">a0aa5811e8a0a06d2c86545d91</span><span class="o">/</span>
+<span class="n">Established</span> <span class="n">connection</span> <span class="n">to</span> <span class="n">initial</span> <span class="n">hosts</span>
+<span class="n">Opening</span> <span class="n">sstables</span> <span class="ow">and</span> <span class="n">calculating</span> <span class="n">sections</span> <span class="n">to</span> <span class="n">stream</span>
+<span class="n">Streaming</span> <span class="n">relevant</span> <span class="n">part</span> <span class="n">of</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">loadme</span><span class="o">/</span><span class="n">keyspace1</span><span class="o">/</span><span class="n">standard1</span><span class="o">-</span><span class="mf">0974e5</span><span class="n">a0aa5811e8a0a06d2c86545d91</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span>  <span class="n">to</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">1</span>  <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">1</span><span class="o">%</span> <span class="mf">12.056</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">12.056</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">2</span>  <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">2</span><span class="o">%</span> <span class="mf">9.092</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">24.081</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">4</span>  <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">4</span><span class="o">%</span> <span class="mf">18.832</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">36.099</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">5</span>  <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">5</span><span class="o">%</span> <span class="mf">2.253</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">47.882</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">7</span>  <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">7</span><span class="o">%</span> <span class="mf">6.388</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">59.743</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">8</span>  <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">8</span><span class="o">%</span> <span class="mf">14.606</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">71.635</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">9</span>  <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">9</span><span class="o">%</span> <span class="mf">8.880</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">83.465</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">11</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">11</span><span class="o">%</span> <span class="mf">5.217</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">95.176</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">12</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">12</span><span class="o">%</span> <span class="mf">12.563</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">106.975</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">14</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">14</span><span class="o">%</span> <span class="mf">2.550</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">118.322</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">15</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">15</span><span class="o">%</span> <span class="mf">16.638</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">130.063</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">17</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">17</span><span class="o">%</span> <span class="mf">17.270</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">141.793</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">18</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">18</span><span class="o">%</span> <span class="mf">11.280</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">153.452</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">19</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">19</span><span class="o">%</span> <span class="mf">2.903</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">164.603</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">21</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">21</span><span class="o">%</span> <span class="mf">6.744</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">176.061</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">22</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">22</span><span class="o">%</span> <span class="mf">6.011</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">187.440</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">24</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">24</span><span class="o">%</span> <span class="mf">9.690</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">198.920</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">25</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">25</span><span class="o">%</span> <span class="mf">11.481</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">210.412</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">27</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">27</span><span class="o">%</span> <span class="mf">9.957</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">221.848</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">28</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">28</span><span class="o">%</span> <span class="mf">10.270</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">233.265</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">29</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">29</span><span class="o">%</span> <span class="mf">7.812</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">244.571</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">31</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">31</span><span class="o">%</span> <span class="mf">14.843</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">256.021</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">32</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">32</span><span class="o">%</span> <span class="mf">11.457</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">267.394</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">34</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">34</span><span class="o">%</span> <span class="mf">6.550</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">278.536</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">35</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">35</span><span class="o">%</span> <span class="mf">9.115</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">289.782</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">37</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">37</span><span class="o">%</span> <span class="mf">11.054</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">301.064</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">38</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">38</span><span class="o">%</span> <span class="mf">10.449</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">312.307</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">39</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">39</span><span class="o">%</span> <span class="mf">1.646</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">321.665</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">41</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">41</span><span class="o">%</span> <span class="mf">13.300</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">332.872</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">42</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">42</span><span class="o">%</span> <span class="mf">14.370</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">344.082</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">44</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">44</span><span class="o">%</span> <span class="mf">16.734</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">355.314</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">45</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">45</span><span class="o">%</span> <span class="mf">22.245</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">366.592</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">47</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">47</span><span class="o">%</span> <span class="mf">25.561</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">377.882</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">48</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">48</span><span class="o">%</span> <span class="mf">24.543</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">389.155</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">49</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">49</span><span class="o">%</span> <span class="mf">4.894</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">399.688</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">51</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">51</span><span class="o">%</span> <span class="mf">8.331</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">410.559</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">52</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">52</span><span class="o">%</span> <span class="mf">5.771</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">421.150</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">54</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">54</span><span class="o">%</span> <span class="mf">8.738</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">431.983</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">55</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">55</span><span class="o">%</span> <span class="mf">3.406</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">441.911</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">56</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">56</span><span class="o">%</span> <span class="mf">9.791</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">452.730</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">58</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">58</span><span class="o">%</span> <span class="mf">3.401</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">462.545</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">59</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">59</span><span class="o">%</span> <span class="mf">5.280</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">472.840</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">61</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">61</span><span class="o">%</span> <span class="mf">12.232</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">483.663</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">62</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">62</span><span class="o">%</span> <span class="mf">9.258</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">494.325</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">64</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">64</span><span class="o">%</span> <span class="mf">2.877</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">503.640</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">65</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">65</span><span class="o">%</span> <span class="mf">7.461</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">514.078</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">66</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">66</span><span class="o">%</span> <span class="mf">24.247</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">525.018</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">68</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">68</span><span class="o">%</span> <span class="mf">9.348</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">535.563</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">69</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">69</span><span class="o">%</span> <span class="mf">5.130</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">545.563</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">71</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">71</span><span class="o">%</span> <span class="mf">19.861</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">556.392</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">72</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">72</span><span class="o">%</span> <span class="mf">15.501</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">567.122</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">74</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">74</span><span class="o">%</span> <span class="mf">5.031</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">576.996</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">75</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">75</span><span class="o">%</span> <span class="mf">22.771</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">587.813</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">76</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">76</span><span class="o">%</span> <span class="mf">22.780</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">598.619</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">78</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">78</span><span class="o">%</span> <span class="mf">20.684</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">609.386</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">79</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">79</span><span class="o">%</span> <span class="mf">22.920</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">620.173</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">81</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">81</span><span class="o">%</span> <span class="mf">7.458</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">630.333</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">82</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">82</span><span class="o">%</span> <span class="mf">22.993</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">641.090</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">84</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">84</span><span class="o">%</span> <span class="mf">21.392</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">651.814</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">85</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">85</span><span class="o">%</span> <span class="mf">7.732</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">661.938</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">86</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">86</span><span class="o">%</span> <span class="mf">3.476</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">670.892</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">88</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">88</span><span class="o">%</span> <span class="mf">19.889</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">681.521</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">89</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">89</span><span class="o">%</span> <span class="mf">21.077</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">692.162</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">91</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">91</span><span class="o">%</span> <span class="mf">24.062</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">702.835</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">92</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">92</span><span class="o">%</span> <span class="mf">19.798</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">713.431</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">94</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">94</span><span class="o">%</span> <span class="mf">17.591</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">723.965</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">95</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">95</span><span class="o">%</span> <span class="mf">13.725</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">734.361</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">96</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">96</span><span class="o">%</span> <span class="mf">16.737</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">744.846</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">98</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">98</span><span class="o">%</span> <span class="mf">22.701</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">755.443</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span> <span class="mi">99</span> <span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">99</span><span class="o">%</span> <span class="mf">18.718</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">765.954</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="o">/</span><span class="mi">1</span> <span class="mi">100</span><span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">100</span><span class="o">%</span> <span class="mf">6.613</span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">767.802</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="o">/</span><span class="mi">1</span> <span class="mi">100</span><span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">100</span><span class="o">%</span> <span class="mf">0.000</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span> <span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mf">670.295</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+
+<span class="n">Summary</span> <span class="n">statistics</span><span class="p">:</span>
+   <span class="n">Connections</span> <span class="n">per</span> <span class="n">host</span>    <span class="p">:</span> <span class="mi">1</span>
+   <span class="n">Total</span> <span class="n">files</span> <span class="n">transferred</span> <span class="p">:</span> <span class="mi">1</span>
+   <span class="n">Total</span> <span class="nb">bytes</span> <span class="n">transferred</span> <span class="p">:</span> <span class="mf">4.387</span><span class="n">MiB</span>
+   <span class="n">Total</span> <span class="n">duration</span>          <span class="p">:</span> <span class="mi">6706</span> <span class="n">ms</span>
+   <span class="n">Average</span> <span class="n">transfer</span> <span class="n">rate</span>   <span class="p">:</span> <span class="mf">669.835</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span>
+   <span class="n">Peak</span> <span class="n">transfer</span> <span class="n">rate</span>      <span class="p">:</span> <span class="mf">767.802</span><span class="n">KiB</span><span class="o">/</span><span class="n">s</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="throttling-load">
+<h2>Throttling Load<a class="headerlink" href="#throttling-load" title="Permalink to this headline">¶</a></h2>
+<p>To prevent the table loader from overloading the system resources, you can throttle the process with the –throttle option. The default is unlimited (no throttling). Throttle units are in megabits. Note that the total duration is increased in the example below.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstableloader</span> <span class="o">--</span><span class="n">nodes</span> <span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span> <span class="o">--</span><span class="n">throttle</span> <span class="mi">1</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">loadme</span><span class="o">/</span><span class="n">keyspace1</span><span class="o">/</span><span class="n">standard1</span><span class="o">-</span><span class="n">f8a4fa30aa2a11e8af27091830ac5256</span><span class="o">/</span>
+<span class="n">Established</span> <span class="n">connection</span> <span class="n">to</span> <span class="n">initial</span> <span class="n">hosts</span>
+<span class="n">Opening</span> <span class="n">sstables</span> <span class="ow">and</span> <span class="n">calculating</span> <span class="n">sections</span> <span class="n">to</span> <span class="n">stream</span>
+<span class="n">Streaming</span> <span class="n">relevant</span> <span class="n">part</span> <span class="n">of</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">loadme</span><span class="o">/</span><span class="n">keyspace1</span><span class="o">/</span><span class="n">standard1</span><span class="o">-</span><span class="n">f8a4fa30aa2a11e8af27091830ac5256</span><span class="o">/</span><span class="n">ma</span><span class="o">-</span><span class="mi">6</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span> <span class="n">to</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="o">/</span><span class="mi">1</span> <span class="mi">100</span><span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">100</span><span class="o">%</span> <span class="mi">0</span>  <span class="n">MB</span><span class="o">/</span><span class="n">s</span><span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mi">0</span> <span class="n">MB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">Summary</span> <span class="n">statistics</span><span class="p">:</span>
+   <span class="n">Connections</span> <span class="n">per</span> <span class="n">host</span><span class="p">:</span>         <span class="p">:</span> <span class="mi">1</span>
+   <span class="n">Total</span> <span class="n">files</span> <span class="n">transferred</span><span class="p">:</span>      <span class="p">:</span> <span class="mi">1</span>
+   <span class="n">Total</span> <span class="nb">bytes</span> <span class="n">transferred</span><span class="p">:</span>      <span class="p">:</span> <span class="mi">4595705</span>
+   <span class="n">Total</span> <span class="n">duration</span> <span class="p">(</span><span class="n">ms</span><span class="p">):</span>          <span class="p">:</span> <span class="mi">37634</span>
+   <span class="n">Average</span> <span class="n">transfer</span> <span class="n">rate</span> <span class="p">(</span><span class="n">MB</span><span class="o">/</span><span class="n">s</span><span class="p">):</span> <span class="p">:</span> <span class="mi">0</span>
+   <span class="n">Peak</span> <span class="n">transfer</span> <span class="n">rate</span> <span class="p">(</span><span class="n">MB</span><span class="o">/</span><span class="n">s</span><span class="p">):</span>    <span class="p">:</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="speeding-up-load">
+<h2>Speeding up Load<a class="headerlink" href="#speeding-up-load" title="Permalink to this headline">¶</a></h2>
+<p>To speed up the load process, the number of connections per host can be increased.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstableloader</span> <span class="o">--</span><span class="n">nodes</span> <span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span> <span class="o">--</span><span class="n">connections</span><span class="o">-</span><span class="n">per</span><span class="o">-</span><span class="n">host</span> <span class="mi">100</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">loadme</span><span class="o">/</span><span class="n">keyspace1</span><span class="o">/</span><span class="n">standard1</span><span class="o">-</span><span class="n">f8a4fa30aa2a11e8af27091830ac5256</span><span class="o">/</span>
+<span class="n">Established</span> <span class="n">connection</span> <span class="n">to</span> <span class="n">initial</span> <span class="n">hosts</span>
+<span class="n">Opening</span> <span class="n">sstables</span> <span class="ow">and</span> <span class="n">calculating</span> <span class="n">sections</span> <span class="n">to</span> <span class="n">stream</span>
+<span class="n">Streaming</span> <span class="n">relevant</span> <span class="n">part</span> <span class="n">of</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">loadme</span><span class="o">/</span><span class="n">keyspace1</span><span class="o">/</span><span class="n">standard1</span><span class="o">-</span><span class="n">f8a4fa30aa2a11e8af27091830ac5256</span><span class="o">/</span><span class="n">ma</span><span class="o">-</span><span class="mi">9</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span> <span class="n">to</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span>
+<span class="n">progress</span><span class="p">:</span> <span class="p">[</span><span class="o">/</span><span class="mf">172.17</span><span class="o">.</span><span class="mf">0.2</span><span class="p">]</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="o">/</span><span class="mi">1</span> <span class="mi">100</span><span class="o">%</span> <span class="n">total</span><span class="p">:</span> <span class="mi">100</span><span class="o">%</span> <span class="mi">0</span>  <span class="n">MB</span><span class="o">/</span><span class="n">s</span><span class="p">(</span><span class="n">avg</span><span class="p">:</span> <span class="mi">1</span> <span class="n">MB</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+<span class="n">Summary</span> <span class="n">statistics</span><span class="p">:</span>
+   <span class="n">Connections</span> <span class="n">per</span> <span class="n">host</span><span class="p">:</span>         <span class="p">:</span> <span class="mi">100</span>
+   <span class="n">Total</span> <span class="n">files</span> <span class="n">transferred</span><span class="p">:</span>      <span class="p">:</span> <span class="mi">1</span>
+   <span class="n">Total</span> <span class="nb">bytes</span> <span class="n">transferred</span><span class="p">:</span>      <span class="p">:</span> <span class="mi">4595705</span>
+   <span class="n">Total</span> <span class="n">duration</span> <span class="p">(</span><span class="n">ms</span><span class="p">):</span>          <span class="p">:</span> <span class="mi">3486</span>
+   <span class="n">Average</span> <span class="n">transfer</span> <span class="n">rate</span> <span class="p">(</span><span class="n">MB</span><span class="o">/</span><span class="n">s</span><span class="p">):</span> <span class="p">:</span> <span class="mi">1</span>
+   <span class="n">Peak</span> <span class="n">transfer</span> <span class="n">rate</span> <span class="p">(</span><span class="n">MB</span><span class="o">/</span><span class="n">s</span><span class="p">):</span>    <span class="p">:</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>This small data set doesn’t benefit much from the increase in connections per host, but note that the total duration has decreased in this example.</p>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="sstablemetadata.html" class="btn btn-default pull-right " role="button" title="sstablemetadata" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="sstablelevelreset.html" class="btn btn-default" role="button" title="sstablelevelreset" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../../js/doctools.js"></script>
+<script src="./../../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

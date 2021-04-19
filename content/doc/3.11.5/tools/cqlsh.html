@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/3.11.5/tools/cqlsh.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v3.11.5" href="../index.html"/> <link rel="up" title="Cassandra Tools" href="index.html"/> <link rel="next" title="Nodetool" href="nodetool.html"/> <link rel="prev" title="Cassandra Tools" href="index.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">Cassandra Tools</a></li>
+      
+
+      
+      <li>cqlsh: the CQL shell</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Cassandra Tools</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">cqlsh: the CQL shell</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#compatibility">Compatibility</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#optional-dependencies">Optional Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cqlshrc">cqlshrc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#command-line-options">Command Line Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#special-commands">Special Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nodetool.html">Nodetool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="cqlsh-the-cql-shell">
+<span id="cqlsh"></span><h1>cqlsh: the CQL shell<a class="headerlink" href="#cqlsh-the-cql-shell" title="Permalink to this headline">¶</a></h1>
+<p>cqlsh is a command line shell for interacting with Cassandra through CQL (the Cassandra Query Language).  It is shipped
+with every Cassandra package, and can be found in the bin/ directory alongside the cassandra executable.  cqlsh utilizes
+the Python native protocol driver, and connects to the single node specified on the command line.</p>
+<div class="section" id="compatibility">
+<h2>Compatibility<a class="headerlink" href="#compatibility" title="Permalink to this headline">¶</a></h2>
+<p>cqlsh is compatible with Python 2.7.</p>
+<p>In general, a given version of cqlsh is only guaranteed to work with the version of Cassandra that it was released with.
+In some cases, cqlsh make work with older or newer versions of Cassandra, but this is not officially supported.</p>
+</div>
+<div class="section" id="optional-dependencies">
+<h2>Optional Dependencies<a class="headerlink" href="#optional-dependencies" title="Permalink to this headline">¶</a></h2>
+<p>cqlsh ships with all essential dependencies.  However, there are some optional dependencies that can be installed to
+improve the capabilities of cqlsh.</p>
+<div class="section" id="pytz">
+<h3>pytz<a class="headerlink" href="#pytz" title="Permalink to this headline">¶</a></h3>
+<p>By default, cqlsh displays all timestamps with a UTC timezone.  To support display of timestamps with another timezone,
+the <a class="reference external" href="http://pytz.sourceforge.net/">pytz</a> library must be installed.  See the <code class="docutils literal notranslate"><span class="pre">timezone</span></code> option in <a class="reference internal" href="#cqlshrc">cqlshrc</a> for
+specifying a timezone to use.</p>
+</div>
+<div class="section" id="cython">
+<h3>cython<a class="headerlink" href="#cython" title="Permalink to this headline">¶</a></h3>
+<p>The performance of cqlsh’s <code class="docutils literal notranslate"><span class="pre">COPY</span></code> operations can be improved by installing <a class="reference external" href="http://cython.org/">cython</a>.  This will
+compile the python modules that are central to the performance of <code class="docutils literal notranslate"><span class="pre">COPY</span></code>.</p>
+</div>
+</div>
+<div class="section" id="cqlshrc">
+<h2>cqlshrc<a class="headerlink" href="#cqlshrc" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">cqlshrc</span></code> file holds configuration options for cqlsh.  By default this is in the user’s home directory at
+<code class="docutils literal notranslate"><span class="pre">~/.cassandra/cqlsh</span></code>, but a custom location can be specified with the <code class="docutils literal notranslate"><span class="pre">--cqlshrc</span></code> option.</p>
+<p>Example config values and documentation can be found in the <code class="docutils literal notranslate"><span class="pre">conf/cqlshrc.sample</span></code> file of a tarball installation.  You
+can also view the latest version of <a class="reference external" href="https://github.com/apache/cassandra/blob/trunk/conf/cqlshrc.sample">cqlshrc online</a>.</p>
+</div>
+<div class="section" id="command-line-options">
+<h2>Command Line Options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h2>
+<p>Usage:</p>
+<p><code class="docutils literal notranslate"><span class="pre">cqlsh</span> <span class="pre">[options]</span> <span class="pre">[host</span> <span class="pre">[port]]</span></code></p>
+<p>Options:</p>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">-C</span></code> <code class="docutils literal notranslate"><span class="pre">--color</span></code></dt>
+<dd>Force color output</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--no-color</span></code></dt>
+<dd>Disable color output</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--browser</span></code></dt>
+<dd>Specify the browser to use for displaying cqlsh help.  This can be one of the <a class="reference external" href="https://docs.python.org/2/library/webbrowser.html">supported browser names</a> (e.g. <code class="docutils literal notranslate"><span class="pre">firefox</span></code>) or a browser path followed by <code class="docutils literal notranslate"><span class="pre">%s</span></code> (e.g.
+<code class="docutils literal notranslate"><span class="pre">/usr/bin/google-chrome-stable</span> <span class="pre">%s</span></code>).</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--ssl</span></code></dt>
+<dd>Use SSL when connecting to Cassandra</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-u</span></code> <code class="docutils literal notranslate"><span class="pre">--user</span></code></dt>
+<dd>Username to authenticate against Cassandra with</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-p</span></code> <code class="docutils literal notranslate"><span class="pre">--password</span></code></dt>
+<dd>Password to authenticate against Cassandra with, should
+be used in conjunction with <code class="docutils literal notranslate"><span class="pre">--user</span></code></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-k</span></code> <code class="docutils literal notranslate"><span class="pre">--keyspace</span></code></dt>
+<dd>Keyspace to authenticate to, should be used in conjunction
+with <code class="docutils literal notranslate"><span class="pre">--user</span></code></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-f</span></code> <code class="docutils literal notranslate"><span class="pre">--file</span></code></dt>
+<dd>Execute commands from the given file, then exit</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--debug</span></code></dt>
+<dd>Print additional debugging information</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--encoding</span></code></dt>
+<dd>Specify a non-default encoding for output (defaults to UTF-8)</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--cqlshrc</span></code></dt>
+<dd>Specify a non-default location for the <code class="docutils literal notranslate"><span class="pre">cqlshrc</span></code> file</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-e</span></code> <code class="docutils literal notranslate"><span class="pre">--execute</span></code></dt>
+<dd>Execute the given statement, then exit</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--connect-timeout</span></code></dt>
+<dd>Specify the connection timeout in seconds (defaults to 2s)</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--request-timeout</span></code></dt>
+<dd>Specify the request timeout in seconds (defaults to 10s)</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-t</span></code> <code class="docutils literal notranslate"><span class="pre">--tty</span></code></dt>
+<dd>Force tty mode (command prompt)</dd>
+</dl>
+</div>
+<div class="section" id="special-commands">
+<h2>Special Commands<a class="headerlink" href="#special-commands" title="Permalink to this headline">¶</a></h2>
+<p>In addition to supporting regular CQL statements, cqlsh also supports a number of special commands that are not part of
+CQL.  These are detailed below.</p>
+<div class="section" id="consistency">
+<h3><code class="docutils literal notranslate"><span class="pre">CONSISTENCY</span></code><a class="headerlink" href="#consistency" title="Permalink to this headline">¶</a></h3>
+<p><cite>Usage</cite>: <code class="docutils literal notranslate"><span class="pre">CONSISTENCY</span> <span class="pre">&lt;consistency</span> <span class="pre">level&gt;</span></code></p>
+<p>Sets the consistency level for operations to follow.  Valid arguments include:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">ANY</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">ONE</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">TWO</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">THREE</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">QUORUM</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">ALL</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">LOCAL_QUORUM</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">LOCAL_ONE</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">SERIAL</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">LOCAL_SERIAL</span></code></li>
+</ul>
+</div>
+<div class="section" id="serial-consistency">
+<h3><code class="docutils literal notranslate"><span class="pre">SERIAL</span> <span class="pre">CONSISTENCY</span></code><a class="headerlink" href="#serial-consistency" title="Permalink to this headline">¶</a></h3>
+<p><cite>Usage</cite>: <code class="docutils literal notranslate"><span class="pre">SERIAL</span> <span class="pre">CONSISTENCY</span> <span class="pre">&lt;consistency</span> <span class="pre">level&gt;</span></code></p>
+<p>Sets the serial consistency level for operations to follow.  Valid arguments include:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">SERIAL</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">LOCAL_SERIAL</span></code></li>
+</ul>
+<p>The serial consistency level is only used by conditional updates (<code class="docutils literal notranslate"><span class="pre">INSERT</span></code>, <code class="docutils literal notranslate"><span class="pre">UPDATE</span></code> and <code class="docutils literal notranslate"><span class="pre">DELETE</span></code> with an <code class="docutils literal notranslate"><span class="pre">IF</span></code>
+condition). For those, the serial consistency level defines the consistency level of the serial phase (or “paxos” phase)
+while the normal consistency level defines the consistency for the “learn” phase, i.e. what type of reads will be
+guaranteed to see the update right away. For example, if a conditional write has a consistency level of <code class="docutils literal notranslate"><span class="pre">QUORUM</span></code> (and
+is successful), then a <code class="docutils literal notranslate"><span class="pre">QUORUM</span></code> read is guaranteed to see that write. But if the regular consistency level of that
+write is <code class="docutils literal notranslate"><span class="pre">ANY</span></code>, then only a read with a consistency level of <code class="docutils literal notranslate"><span class="pre">SERIAL</span></code> is guaranteed to see it (even a read with
+consistency <code class="docutils literal notranslate"><span class="pre">ALL</span></code> is not guaranteed to be enough).</p>
+</div>
+<div class="section" id="show-version">
+<h3><code class="docutils literal notranslate"><span class="pre">SHOW</span> <span class="pre">VERSION</span></code><a class="headerlink" href="#show-version" title="Permalink to this headline">¶</a></h3>
+<p>Prints the cqlsh, Cassandra, CQL, and native protocol versions in use.  Example:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh&gt; SHOW VERSION
+[cqlsh 5.0.1 | Cassandra 3.8 | CQL spec 3.4.2 | Native protocol v4]
+</pre></div>
+</div>
+</div>
+<div class="section" id="show-host">
+<h3><code class="docutils literal notranslate"><span class="pre">SHOW</span> <span class="pre">HOST</span></code><a class="headerlink" href="#show-host" title="Permalink to this headline">¶</a></h3>
+<p>Prints the IP address and port of the Cassandra node that cqlsh is connected to in addition to the cluster name.
+Example:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh&gt; SHOW HOST
+Connected to Prod_Cluster at 192.0.0.1:9042.
+</pre></div>
+</div>
+</div>
+<div class="section" id="show-session">
+<h3><code class="docutils literal notranslate"><span class="pre">SHOW</span> <span class="pre">SESSION</span></code><a class="headerlink" href="#show-session" title="Permalink to this headline">¶</a></h3>
+<p>Pretty prints a specific tracing session.</p>
+<p><cite>Usage</cite>: <code class="docutils literal notranslate"><span class="pre">SHOW</span> <span class="pre">SESSION</span> <span class="pre">&lt;session</span> <span class="pre">id&gt;</span></code></p>
+<p>Example usage:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh&gt; SHOW SESSION 95ac6470-327e-11e6-beca-dfb660d92ad8
+
+Tracing session: 95ac6470-327e-11e6-beca-dfb660d92ad8
+
+ activity                                                  | timestamp                  | source    | source_elapsed | client
+-----------------------------------------------------------+----------------------------+-----------+----------------+-----------
+                                        Execute CQL3 query | 2016-06-14 17:23:13.979000 | 127.0.0.1 |              0 | 127.0.0.1
+ Parsing SELECT * FROM system.local; [SharedPool-Worker-1] | 2016-06-14 17:23:13.982000 | 127.0.0.1 |           3843 | 127.0.0.1
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="source">
+<h3><code class="docutils literal notranslate"><span class="pre">SOURCE</span></code><a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h3>
+<p>Reads the contents of a file and executes each line as a CQL statement or special cqlsh command.</p>
+<p><cite>Usage</cite>: <code class="docutils literal notranslate"><span class="pre">SOURCE</span> <span class="pre">&lt;string</span> <span class="pre">filename&gt;</span></code></p>
+<p>Example usage:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh&gt; SOURCE &#39;/home/thobbs/commands.cql&#39;
+</pre></div>
+</div>
+</div>
+<div class="section" id="capture">
+<h3><code class="docutils literal notranslate"><span class="pre">CAPTURE</span></code><a class="headerlink" href="#capture" title="Permalink to this headline">¶</a></h3>
+<p>Begins capturing command output and appending it to a specified file.  Output will not be shown at the console while it
+is captured.</p>
+<p><cite>Usage</cite>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CAPTURE &#39;&lt;file&gt;&#39;;
+CAPTURE OFF;
+CAPTURE;
+</pre></div>
+</div>
+<p>That is, the path to the file to be appended to must be given inside a string literal. The path is interpreted relative
+to the current working directory. The tilde shorthand notation (<code class="docutils literal notranslate"><span class="pre">'~/mydir'</span></code>) is supported for referring to <code class="docutils literal notranslate"><span class="pre">$HOME</span></code>.</p>
+<p>Only query result output is captured. Errors and output from cqlsh-only commands will still be shown in the cqlsh
+session.</p>
+<p>To stop capturing output and show it in the cqlsh session again, use <code class="docutils literal notranslate"><span class="pre">CAPTURE</span> <span class="pre">OFF</span></code>.</p>
+<p>To inspect the current capture configuration, use <code class="docutils literal notranslate"><span class="pre">CAPTURE</span></code> with no arguments.</p>
+</div>
+<div class="section" id="help">
+<h3><code class="docutils literal notranslate"><span class="pre">HELP</span></code><a class="headerlink" href="#help" title="Permalink to this headline">¶</a></h3>
+<p>Gives information about cqlsh commands. To see available topics, enter <code class="docutils literal notranslate"><span class="pre">HELP</span></code> without any arguments. To see help on a
+topic, use <code class="docutils literal notranslate"><span class="pre">HELP</span> <span class="pre">&lt;topic&gt;</span></code>.  Also see the <code class="docutils literal notranslate"><span class="pre">--browser</span></code> argument for controlling what browser is used to display help.</p>
+</div>
+<div class="section" id="tracing">
+<h3><code class="docutils literal notranslate"><span class="pre">TRACING</span></code><a class="headerlink" href="#tracing" title="Permalink to this headline">¶</a></h3>
+<p>Enables or disables tracing for queries.  When tracing is enabled, once a query completes, a trace of the events during
+the query will be printed.</p>
+<p><cite>Usage</cite>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>TRACING ON
+TRACING OFF
+</pre></div>
+</div>
+</div>
+<div class="section" id="paging">
+<h3><code class="docutils literal notranslate"><span class="pre">PAGING</span></code><a class="headerlink" href="#paging" title="Permalink to this headline">¶</a></h3>
+<p>Enables paging, disables paging, or sets the page size for read queries.  When paging is enabled, only one page of data
+will be fetched at a time and a prompt will appear to fetch the next page.  Generally, it’s a good idea to leave paging
+enabled in an interactive session to avoid fetching and printing large amounts of data at once.</p>
+<p><cite>Usage</cite>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>PAGING ON
+PAGING OFF
+PAGING &lt;page size in rows&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="expand">
+<h3><code class="docutils literal notranslate"><span class="pre">EXPAND</span></code><a class="headerlink" href="#expand" title="Permalink to this headline">¶</a></h3>
+<p>Enables or disables vertical printing of rows.  Enabling <code class="docutils literal notranslate"><span class="pre">EXPAND</span></code> is useful when many columns are fetched, or the
+contents of a single column are large.</p>
+<p><cite>Usage</cite>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>EXPAND ON
+EXPAND OFF
+</pre></div>
+</div>
+</div>
+<div class="section" id="login">
+<h3><code class="docutils literal notranslate"><span class="pre">LOGIN</span></code><a class="headerlink" href="#login" title="Permalink to this headline">¶</a></h3>
+<p>Authenticate as a specified Cassandra user for the current session.</p>
+<p><cite>Usage</cite>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>LOGIN &lt;username&gt; [&lt;password&gt;]
+</pre></div>
+</div>
+</div>
+<div class="section" id="exit">
+<h3><code class="docutils literal notranslate"><span class="pre">EXIT</span></code><a class="headerlink" href="#exit" title="Permalink to this headline">¶</a></h3>
+<p>Ends the current session and terminates the cqlsh process.</p>
+<p><cite>Usage</cite>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>EXIT
+QUIT
+</pre></div>
+</div>
+</div>
+<div class="section" id="clear">
+<h3><code class="docutils literal notranslate"><span class="pre">CLEAR</span></code><a class="headerlink" href="#clear" title="Permalink to this headline">¶</a></h3>
+<p>Clears the console.</p>
+<p><cite>Usage</cite>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CLEAR
+CLS
+</pre></div>
+</div>
+</div>
+<div class="section" id="describe">
+<h3><code class="docutils literal notranslate"><span class="pre">DESCRIBE</span></code><a class="headerlink" href="#describe" title="Permalink to this headline">¶</a></h3>
+<p>Prints a description (typically a series of DDL statements) of a schema element or the cluster.  This is useful for
+dumping all or portions of the schema.</p>
+<p><cite>Usage</cite>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIBE CLUSTER
+DESCRIBE SCHEMA
+DESCRIBE KEYSPACES
+DESCRIBE KEYSPACE &lt;keyspace name&gt;
+DESCRIBE TABLES
+DESCRIBE TABLE &lt;table name&gt;
+DESCRIBE INDEX &lt;index name&gt;
+DESCRIBE MATERIALIZED VIEW &lt;view name&gt;
+DESCRIBE TYPES
+DESCRIBE TYPE &lt;type name&gt;
+DESCRIBE FUNCTIONS
+DESCRIBE FUNCTION &lt;function name&gt;
+DESCRIBE AGGREGATES
+DESCRIBE AGGREGATE &lt;aggregate function name&gt;
+</pre></div>
+</div>
+<p>In any of the commands, <code class="docutils literal notranslate"><span class="pre">DESC</span></code> may be used in place of <code class="docutils literal notranslate"><span class="pre">DESCRIBE</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">DESCRIBE</span> <span class="pre">CLUSTER</span></code> command prints the cluster name and partitioner:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh&gt; DESCRIBE CLUSTER
+
+Cluster: Test Cluster
+Partitioner: Murmur3Partitioner
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">DESCRIBE</span> <span class="pre">SCHEMA</span></code> command prints the DDL statements needed to recreate the entire schema.  This is especially
+useful for dumping the schema in order to clone a cluster or restore from a backup.</p>
+</div>
+<div class="section" id="copy-to">
+<h3><code class="docutils literal notranslate"><span class="pre">COPY</span> <span class="pre">TO</span></code><a class="headerlink" href="#copy-to" title="Permalink to this headline">¶</a></h3>
+<p>Copies data from a table to a CSV file.</p>
+<p><cite>Usage</cite>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>COPY &lt;table name&gt; [(&lt;column&gt;, ...)] TO &lt;file name&gt; WITH &lt;copy option&gt; [AND &lt;copy option&gt; ...]
+</pre></div>
+</div>
+<p>If no columns are specified, all columns from the table will be copied to the CSV file.  A subset of columns to copy may
+be specified by adding a comma-separated list of column names surrounded by parenthesis after the table name.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">&lt;file</span> <span class="pre">name&gt;</span></code> should be a string literal (with single quotes) representing a path to the destination file.  This
+can also the special value <code class="docutils literal notranslate"><span class="pre">STDOUT</span></code> (without single quotes) to print the CSV to stdout.</p>
+<p>See <a class="reference internal" href="#shared-copy-options"><span class="std std-ref">Shared COPY Options</span></a> for options that apply to both <code class="docutils literal notranslate"><span class="pre">COPY</span> <span class="pre">TO</span></code> and <code class="docutils literal notranslate"><span class="pre">COPY</span> <span class="pre">FROM</span></code>.</p>
+<div class="section" id="options-for-copy-to">
+<h4>Options for <code class="docutils literal notranslate"><span class="pre">COPY</span> <span class="pre">TO</span></code><a class="headerlink" href="#options-for-copy-to" title="Permalink to this headline">¶</a></h4>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">MAXREQUESTS</span></code></dt>
+<dd>The maximum number token ranges to fetch simultaneously. Defaults to 6.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PAGESIZE</span></code></dt>
+<dd>The number of rows to fetch in a single page. Defaults to 1000.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PAGETIMEOUT</span></code></dt>
+<dd>By default the page timeout is 10 seconds per 1000 entries
+in the page size or 10 seconds if pagesize is smaller.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">BEGINTOKEN</span></code>, <code class="docutils literal notranslate"><span class="pre">ENDTOKEN</span></code></dt>
+<dd>Token range to export.  Defaults to exporting the full ring.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MAXOUTPUTSIZE</span></code></dt>
+<dd>The maximum size of the output file measured in number of lines;
+beyond this maximum the output file will be split into segments.
+-1 means unlimited, and is the default.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></dt>
+<dd>The encoding used for characters. Defaults to <code class="docutils literal notranslate"><span class="pre">utf8</span></code>.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="copy-from">
+<h3><code class="docutils literal notranslate"><span class="pre">COPY</span> <span class="pre">FROM</span></code><a class="headerlink" href="#copy-from" title="Permalink to this headline">¶</a></h3>
+<p>Copies data from a CSV file to table.</p>
+<p><cite>Usage</cite>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>COPY &lt;table name&gt; [(&lt;column&gt;, ...)] FROM &lt;file name&gt; WITH &lt;copy option&gt; [AND &lt;copy option&gt; ...]
+</pre></div>
+</div>
+<p>If no columns are specified, all columns from the CSV file will be copied to the table.  A subset
+of columns to copy may be specified by adding a comma-separated list of column names surrounded
+by parenthesis after the table name.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">&lt;file</span> <span class="pre">name&gt;</span></code> should be a string literal (with single quotes) representing a path to the
+source file.  This can also the special value <code class="docutils literal notranslate"><span class="pre">STDIN</span></code> (without single quotes) to read the
+CSV data from stdin.</p>
+<p>See <a class="reference internal" href="#shared-copy-options"><span class="std std-ref">Shared COPY Options</span></a> for options that apply to both <code class="docutils literal notranslate"><span class="pre">COPY</span> <span class="pre">TO</span></code> and <code class="docutils literal notranslate"><span class="pre">COPY</span> <span class="pre">FROM</span></code>.</p>
+<div class="section" id="id1">
+<h4>Options for <code class="docutils literal notranslate"><span class="pre">COPY</span> <span class="pre">TO</span></code><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">INGESTRATE</span></code></dt>
+<dd>The maximum number of rows to process per second. Defaults to 100000.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MAXROWS</span></code></dt>
+<dd>The maximum number of rows to import. -1 means unlimited, and is the default.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SKIPROWS</span></code></dt>
+<dd>A number of initial rows to skip.  Defaults to 0.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SKIPCOLS</span></code></dt>
+<dd>A comma-separated list of column names to ignore.  By default, no columns are skipped.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MAXPARSEERRORS</span></code></dt>
+<dd>The maximum global number of parsing errors to ignore. -1 means unlimited, and is the default.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MAXINSERTERRORS</span></code></dt>
+<dd>The maximum global number of insert errors to ignore. -1 means unlimited.  The default is 1000.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ERRFILE</span></code> =</dt>
+<dd>A file to store all rows that could not be imported, by default this is <code class="docutils literal notranslate"><span class="pre">import_&lt;ks&gt;_&lt;table&gt;.err</span></code> where <code class="docutils literal notranslate"><span class="pre">&lt;ks&gt;</span></code> is
+your keyspace and <code class="docutils literal notranslate"><span class="pre">&lt;table&gt;</span></code> is your table name.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MAXBATCHSIZE</span></code></dt>
+<dd>The max number of rows inserted in a single batch. Defaults to 20.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MINBATCHSIZE</span></code></dt>
+<dd>The min number of rows inserted in a single batch. Defaults to 2.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CHUNKSIZE</span></code></dt>
+<dd>The number of rows that are passed to child worker processes from the main process at a time. Defaults to 1000.</dd>
+</dl>
+</div>
+<div class="section" id="shared-copy-options">
+<span id="id2"></span><h4>Shared COPY Options<a class="headerlink" href="#shared-copy-options" title="Permalink to this headline">¶</a></h4>
+<p>Options that are common to both <code class="docutils literal notranslate"><span class="pre">COPY</span> <span class="pre">TO</span></code> and <code class="docutils literal notranslate"><span class="pre">COPY</span> <span class="pre">FROM</span></code>.</p>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">NULLVAL</span></code></dt>
+<dd>The string placeholder for null values.  Defaults to <code class="docutils literal notranslate"><span class="pre">null</span></code>.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HEADER</span></code></dt>
+<dd>For <code class="docutils literal notranslate"><span class="pre">COPY</span> <span class="pre">TO</span></code>, controls whether the first line in the CSV output file will contain the column names.  For COPY FROM,
+specifies whether the first line in the CSV input file contains column names.  Defaults to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DECIMALSEP</span></code></dt>
+<dd>The character that is used as the decimal point separator.  Defaults to <code class="docutils literal notranslate"><span class="pre">.</span></code>.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">THOUSANDSSEP</span></code></dt>
+<dd>The character that is used to separate thousands. Defaults to the empty string.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">BOOLSTYlE</span></code></dt>
+<dd>The string literal format for boolean values.  Defaults to <code class="docutils literal notranslate"><span class="pre">True,False</span></code>.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">NUMPROCESSES</span></code></dt>
+<dd>The number of child worker processes to create for <code class="docutils literal notranslate"><span class="pre">COPY</span></code> tasks.  Defaults to a max of 4 for <code class="docutils literal notranslate"><span class="pre">COPY</span> <span class="pre">FROM</span></code> and 16
+for <code class="docutils literal notranslate"><span class="pre">COPY</span> <span class="pre">TO</span></code>.  However, at most (num_cores - 1) processes will be created.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MAXATTEMPTS</span></code></dt>
+<dd>The maximum number of failed attempts to fetch a range of data (when using <code class="docutils literal notranslate"><span class="pre">COPY</span> <span class="pre">TO</span></code>) or insert a chunk of data
+(when using <code class="docutils literal notranslate"><span class="pre">COPY</span> <span class="pre">FROM</span></code>) before giving up. Defaults to 5.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">REPORTFREQUENCY</span></code></dt>
+<dd>How often status updates are refreshed, in seconds.  Defaults to 0.25.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">RATEFILE</span></code></dt>
+<dd>An optional file to output rate statistics to.  By default, statistics are not output to a file.</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="nodetool.html" class="btn btn-default pull-right " role="button" title="Nodetool" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="index.html" class="btn btn-default" role="button" title="Cassandra Tools" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

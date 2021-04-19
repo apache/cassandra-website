@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Transient Replication is a new experimental feature soon to be available in 4.0. When enabled, it allows for the creation of keyspaces where replication fact...">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Introducing Transient Replication</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/blog/2018/12/03/introducing-transient-replication.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../../css/style.css">
+  
+
+  
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li>Introducing Transient Replication</li>
+        
+      
+
+      
+
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../../"><img src="./../../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../../">Home</a></li>
+          <li><a href="./../../../../download/">Download</a></li>
+          <li><a href="./../../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="content">
+  <div class="container">
+  <h2>Introducing Transient Replication</h2>
+    <p>Posted on December 03, 2018 by The Apache Cassandra Community</p>
+    <h5><a href="/blog">&laquo; Back to the Apache Cassandra Blog</a></h5>
+    <hr />
+  <p>Transient Replication is a new experimental feature soon to be available in 4.0. When enabled, it allows for the creation of keyspaces where replication factor can be specified as a number of copies (full replicas) and temporary copies (transient replicas). Transient replicas retain the data they replicate only long enough for it to be propagated to full replicas, via incremental repair, at which point the data is deleted. Writing to transient replicas can be avoided almost entirely if monotonic reads are not required because it is possible to achieve a quorum of acknowledged writes without them.</p>
+
+<p>This results in a savings in disk space, CPU, and IO. By deleting data as soon as it is no longer needed, transient replicas require only a fraction of the disk space of a full replica. By not having to store the data indefinitely, the CPU and IO required for compaction is reduced, and read queries are faster as they have less data to process.</p>
+
+<p>So what are the benefits of not actually keeping a full copy of the data? Well, for some installations and use cases, transient replicas can be almost free if <a href="https://en.wikipedia.org/wiki/Consistency_model#Monotonic_Read_Consistency">monotonic reads</a> are disabled. In future releases where monotonic reads are supported with Transient Replication, enabling monotonic reads would reduce the savings in CPU and IO, but even then they should still be significant.</p>
+
+<p>Transient Replication is designed to be transparent to applications:</p>
+
+<ul>
+  <li>Consistency levels continue to produce the same results for queries.</li>
+  <li>The number of replicas that can be lost before data loss occurs is unchanged.</li>
+  <li>The number of replicas that can be unavailable before some queries start to timeout or return unavailable is unchanged (with the exception of ONE).</li>
+</ul>
+
+<p>With Transient Replication, you can go from 3 replicas to 5 replicas, two of which are transient, without adding any hardware.</p>
+
+<p>If you are running an active-passive 2 DC setup with 3 replicas in each DC, you can make one replica in each DC transient and still have four full copies of the data in total.</p>
+
+<h2 id="feature-support">Feature support</h2>
+
+<p>Transient Replication is not intended to fully replace Cassandra’s existing approach to replication. There are features that currently don’t work with transiently replicated keyspaces and features that are unlikely ever to work with them.</p>
+
+<p>You can have keyspaces with and without Transient Replication enabled in the same cluster, so it is possible to use Transient Replication for just the use cases that are a good fit for the currently available functionality.</p>
+
+<h3 id="currently-unsupported-but-coming">Currently unsupported but coming:</h3>
+
+<ul>
+  <li>Monotonic reads</li>
+  <li>Batch log</li>
+  <li>LWT</li>
+  <li>Counters</li>
+</ul>
+
+<h3 id="will-never-be-supported">Will never be supported:</h3>
+
+<ul>
+  <li>Secondary indexes</li>
+  <li>Materialized views</li>
+</ul>
+
+<h2 id="how-transient-replication-works">How Transient Replication works</h2>
+
+<h3 id="overview">Overview</h3>
+
+<p>Transient replication extends Cassandra’s existing consistent hashing algorithm to designate some replicas of a point or range on the consistent hash ring as transient and some as full. The following image depicts a consistent hash ring with three replicas <strong>A</strong>, <strong>B</strong>, and <strong>C</strong>. The replicas are located at tokens 5, 10, 15 respectively. A key <strong><em>k</em></strong> hashes to token 3 on the ring.</p>
+
+<p><img src="/img/blog-post-introducing-transient-replication/diagram-hash-ring.gif" alt="A consistent hash ring without Transient Replication" title="A consistent hash ring without Rransient Replication" /></p>
+
+<p>Replicas are selected by walking the ring clockwise starting at the point on the ring the key hashes to. At RF=3, the replicas of key <strong><em>k **</em>are **A</strong>, <strong>B</strong>, <strong>C</strong>.
+With Transient Replication, the last N replicas (where N is the configured number of transient replicas) found while walking the ring are designated as transient.</p>
+
+<p>There are no nodes designated as transient replicas or full replicas. All nodes will fully replicate some ranges on the ring and transiently replicate others.</p>
+
+<p>The following image depicts a consistent hash ring at RF=3/1 (three replicas, one of which is transient). The replicas of <strong><em>k</em></strong> are still <strong>A</strong>, <strong>B</strong>, and <strong>C</strong>, but <strong>C</strong> is now transiently replicating <strong><em>k</em></strong>.</p>
+
+<p><img src="/img/blog-post-introducing-transient-replication/diagram-hash-ring-with-transient-replica.gif" alt="A consistent hash ring with Transient Replication" title="A consistent hash ring with Transient Replication" /></p>
+
+<p>Normally all replicas of a range receive all writes for that range, as depicted in the following image.</p>
+
+<p><img src="/img/blog-post-introducing-transient-replication/diagram-regular-write.gif" alt="Normal write behavior" title="Normal write behavior" /></p>
+
+<p>Transient replicas do not receive writes in the normal write path.</p>
+
+<p><img src="/img/blog-post-introducing-transient-replication/diagram-transient-write.gif" alt="Transient write behavior" title="Transient write behavior" /></p>
+
+<p>If sufficient full replicas are unavailable, transient replicas will receive writes.</p>
+
+<p><img src="/img/blog-post-introducing-transient-replication/diagram-transient-write-down-node.gif" alt="Transient write with unavailable node" title="Transient write with unavailable node" /></p>
+
+<p>This optimization, which is possible with Transient Replication, is called Cheap Quorums. This minimizes the amount of work that transient replicas have to do at write time, and reduces the amount of background compaction they will have to do.</p>
+
+<p><strong>Cheap Quorums and monotonic reads:</strong> Cheap Quorums may end up being incompatible with an initial implementation of monotonic reads, and operators will be able to make a conscious trade off between performance and monotonic reads.</p>
+
+<h3 id="rapid-write-protection">Rapid write protection</h3>
+
+<p>In keyspaces utilizing Transient Replication, writes are sent to every full replica and enough transient replicas to meet the requested consistency level (to make up for unavailable full replicas). In addition, enough transient replicas are selected to reach a quorum in every datacenter, though unless the consistency level requires it, the write will be acknowledged without ensuring all have been delivered.</p>
+
+<p>Because not all replicas are sent the write, it’s possible that insufficient replicas will respond, causing timeouts.  To prevent this, we implement rapid write protection, similar to rapid read protection, that sends writes to additional replicas if sufficient acknowledgements to meet the consistency level are not received promptly.</p>
+
+<p>The following animation shows rapid write protection in action.</p>
+
+<p><img src="/img/blog-post-introducing-transient-replication/diagram-rapid-write-protection.gif" alt="Animation of rapid write protection preventing a write timeout" title="Rapid write protection preventing a write timeout" /></p>
+
+<p>Rapid write protection is configured similarly to rapid read protection using the table option <code class="highlighter-rouge">additional_write_policy</code>. The policy determines how long to wait for acknowledgements before sending additional mutations. The default is to wait for P99 of the observed latency.</p>
+
+<h3 id="incremental-repair">Incremental repair</h3>
+
+<p>Incremental repair is used to clean up transient data at transient replicas and propagate it to full replicas.</p>
+
+<p>When incremental repair occurs transient replicas stream out transient data, but don’t receive any. Anti-compaction is used to separate transient and fully replicated data so that only fully replicated data is retained once incremental repair completes.</p>
+
+<p>The result of running an incremental repair is that all full replicas for a range are synchronized and can be used interchangeably to retrieve the repaired data set for a query.</p>
+
+<h3 id="read-path">Read path</h3>
+
+<p>Reads must always include at least one full replica and can include as many replicas (transient or full) as necessary to achieve the desired consistency level. At least one full replica is required in order to provide the data not available at transient replicas, but it doesn’t matter which full replica is picked because incremental repair synchronizes the repaired data set across full replicas.</p>
+
+<p>Reads at transient replicas are faster than reads at full replicas because reads at transient replicas are unlikely to return any results if monotonic reads are disabled, and they haven’t been receiving writes.</p>
+
+<h2 id="creating-keyspaces-with-transient-replication">Creating keyspaces with Transient Replication</h2>
+
+<p>Transient Replication is supported by SimpleStrategy and NetworkTopologyStrategy. When specifying the replication factor, you can specify the number of transient replicas in addition to the total number of replicas (including transient replicas). The syntax for a replication factor of 3 replicas total with one of them being transient would be “3/1”.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ALTER KEYSPACE foo WITH REPLICATION = {'class' : 'NetworkTopologyStrategy', 'DC1' : '3/1'};
+ALTER KEYSPACE foo WITH REPLICATION = {'class' : 'SimpleStrategy', 'replication_factor' : '3/1'};
+</code></pre>
+</div>
+
+<p>Monotonic reads are not supported with Transient Replication in 4.0, so any existing tables in the keyspace must have monotonic reads disabled by setting <code class="highlighter-rouge">read_repair = 'NONE'</code></p>
+
+<p>Once the keyspace has been altered, you will need to run incremental repair and then nodetool cleanup to ensure  transient data is cleaned up.</p>
+
+<h2 id="operational-matters">Operational matters</h2>
+
+<p>Transient replication requires rolling incremental repair to be run regularly in order to move data from transient replicas to full replicas. By default transient replicas will receive 1% of writes for transiently replicated ranges due to rapid write protection. If a node is down for an extended period of time, its transient replicas will receive additional write load and that data should be cleaned up using incremental repair. Running incremental repair regularly will ensure that the size of each repair is small.</p>
+
+<p>It’s also a good idea to run a small number of vnodes with transient replication so that when a node goes down the load is spread out over several other nodes that transiently replicate that range. Larges numbers of vnodes are known to be problematic, so it’s best to start with a cluster that is already close to or at its maximum size so that a small number of vnodes will be sufficient. If you intend to grow the cluster in the future, you will need to be cognizant of how this will interact with the number of vnodes you select.</p>
+
+<p>While the odds of any data loss should multiple nodes be permanently lost remain the same with transient replication, the magnitude of potential data loss does not. With 3/1 transient replication the permanent loss of two nodes could result in the loss of the entirety of the repaired data set. If you are running a multi-DC setup with a high level of replication such as 2 DCs, with 3/1 replicas in each, then you will have 4 full copies total and the added risk of transient replication is minimal.</p>
+
+<h2 id="experimental-features">Experimental features</h2>
+
+<p>Experimental features are a relatively new idea for Apache Cassandra. Although we recently voted to make materialized views an experimental feature retroactively, Transient Replication is the first experimental feature to be introduced as such.</p>
+
+<p>The goal of introducing experimental features is to allow for incremental development across multiple releases. In the case of Transient Replication, we can avoid a giant code drop that heavily modifies the code base, and the associated risks with incorporating a new feature that way.</p>
+
+<p>What it means for a feature to be experimental doesn’t have a set definition, but for Transient Replication it’s intended to set expectations. As of 4.0, Transient Replication’s intended audience is expert operators of Cassandra with the ability to write the book on how to safely deploy Transient Replication, debug any issues that result, and if necessary contribute code back to address problems as they are discovered.</p>
+
+<p>It’s expected that the feature set for Transient Replication will not change in minor updates to 4.0, but eventually it should be ready for use by a wider audience.</p>
+
+<h2 id="next-steps-for-transient-replication">Next steps for Transient Replication</h2>
+
+<p>If increasing availability or saving on capacity sounds good to you, then you can help make transient replication production-ready by testing it out or even deploying it. Experience and feedback from the community is one the of the things that will drive transient replication bug fixing and development.</p>
+
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/3.11.6/cql/security.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v3.11.6" href="../index.html"/> <link rel="up" title="The Cassandra Query Language (CQL)" href="index.html"/> <link rel="next" title="Functions" href="functions.html"/> <link rel="prev" title="Materialized Views" href="mvs.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">The Cassandra Query Language (CQL)</a></li>
+      
+
+      
+      <li>Security</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">The Cassandra Query Language (CQL)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="definitions.html">Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ddl.html">Data Definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dml.html">Data Manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indexes.html">Secondary Indexes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mvs.html">Materialized Views</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Security</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#database-roles">Database Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#users">Users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-control">Data Control</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json.html">JSON Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triggers.html">Triggers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendices.html">Appendices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html">Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="security">
+<span id="cql-security"></span><h1>Security<a class="headerlink" href="#security" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="database-roles">
+<span id="cql-roles"></span><h2>Database Roles<a class="headerlink" href="#database-roles" title="Permalink to this headline">¶</a></h2>
+<p>CQL uses database roles to represent users and group of users. Syntactically, a role is defined by:</p>
+<pre>
+<strong id="grammar-token-role-name">role_name</strong> ::=  <a class="reference internal" href="definitions.html#grammar-token-identifier"><code class="xref docutils literal notranslate"><span class="pre">identifier</span></code></a> | <a class="reference internal" href="definitions.html#grammar-token-string"><code class="xref docutils literal notranslate"><span class="pre">string</span></code></a>
+</pre>
+<div class="section" id="create-role">
+<span id="create-role-statement"></span><h3>CREATE ROLE<a class="headerlink" href="#create-role" title="Permalink to this headline">¶</a></h3>
+<p>Creating a role uses the <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">ROLE</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-create-role-statement">create_role_statement</strong> ::=  CREATE ROLE [ IF NOT EXISTS ] <a class="reference internal" href="#grammar-token-role-name"><code class="xref docutils literal notranslate"><span class="pre">role_name</span></code></a>
+                               [ WITH <a class="reference internal" href="#grammar-token-role-options"><code class="xref docutils literal notranslate"><span class="pre">role_options</span></code></a> ]
+<strong id="grammar-token-role-options">role_options         </strong> ::=  <a class="reference internal" href="#grammar-token-role-option"><code class="xref docutils literal notranslate"><span class="pre">role_option</span></code></a> ( AND <a class="reference internal" href="#grammar-token-role-option"><code class="xref docutils literal notranslate"><span class="pre">role_option</span></code></a> )*
+<strong id="grammar-token-role-option">role_option          </strong> ::=  PASSWORD '=' <a class="reference internal" href="definitions.html#grammar-token-string"><code class="xref docutils literal notranslate"><span class="pre">string</span></code></a>
+                          | LOGIN '=' <a class="reference internal" href="definitions.html#grammar-token-boolean"><code class="xref docutils literal notranslate"><span class="pre">boolean</span></code></a>
+                          | SUPERUSER '=' <a class="reference internal" href="definitions.html#grammar-token-boolean"><code class="xref docutils literal notranslate"><span class="pre">boolean</span></code></a>
+                          | OPTIONS '=' <a class="reference internal" href="types.html#grammar-token-map-literal"><code class="xref docutils literal notranslate"><span class="pre">map_literal</span></code></a>
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">ROLE</span> <span class="n">new_role</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">ROLE</span> <span class="n">alice</span> <span class="k">WITH</span> <span class="k">PASSWORD</span> <span class="o">=</span> <span class="s1">&#39;password_a&#39;</span> <span class="k">AND</span> <span class="k">LOGIN</span> <span class="o">=</span> <span class="n">true</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">ROLE</span> <span class="n">bob</span> <span class="k">WITH</span> <span class="k">PASSWORD</span> <span class="o">=</span> <span class="s1">&#39;password_b&#39;</span> <span class="k">AND</span> <span class="k">LOGIN</span> <span class="o">=</span> <span class="n">true</span> <span class="k">AND</span> <span class="k">SUPERUSER</span> <span class="o">=</span> <span class="n">true</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">ROLE</span> <span class="n">carlos</span> <span class="k">WITH</span> <span class="k">OPTIONS</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;custom_option1&#39;</span> <span class="p">:</span> <span class="s1">&#39;option1_value&#39;</span><span class="p">,</span> <span class="s1">&#39;custom_option2&#39;</span> <span class="p">:</span> <span class="mf">99</span> <span class="p">};</span>
+</pre></div>
+</div>
+<p>By default roles do not possess <code class="docutils literal notranslate"><span class="pre">LOGIN</span></code> privileges or <code class="docutils literal notranslate"><span class="pre">SUPERUSER</span></code> status.</p>
+<p><a class="reference internal" href="#cql-permissions"><span class="std std-ref">Permissions</span></a> on database resources are granted to roles; types of resources include keyspaces,
+tables, functions and roles themselves. Roles may be granted to other roles to create hierarchical permissions
+structures; in these hierarchies, permissions and <code class="docutils literal notranslate"><span class="pre">SUPERUSER</span></code> status are inherited, but the <code class="docutils literal notranslate"><span class="pre">LOGIN</span></code> privilege is
+not.</p>
+<p>If a role has the <code class="docutils literal notranslate"><span class="pre">LOGIN</span></code> privilege, clients may identify as that role when connecting. For the duration of that
+connection, the client will acquire any roles and privileges granted to that role.</p>
+<p>Only a client with with the <code class="docutils literal notranslate"><span class="pre">CREATE</span></code> permission on the database roles resource may issue <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">ROLE</span></code> requests (see
+the <a class="reference internal" href="#cql-permissions"><span class="std std-ref">relevant section</span></a> below), unless the client is a <code class="docutils literal notranslate"><span class="pre">SUPERUSER</span></code>. Role management in Cassandra
+is pluggable and custom implementations may support only a subset of the listed options.</p>
+<p>Role names should be quoted if they contain non-alphanumeric characters.</p>
+<div class="section" id="setting-credentials-for-internal-authentication">
+<span id="id1"></span><h4>Setting credentials for internal authentication<a class="headerlink" href="#setting-credentials-for-internal-authentication" title="Permalink to this headline">¶</a></h4>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">WITH</span> <span class="pre">PASSWORD</span></code> clause to set a password for internal authentication, enclosing the password in single
+quotation marks.</p>
+<p>If internal authentication has not been set up or the role does not have <code class="docutils literal notranslate"><span class="pre">LOGIN</span></code> privileges, the <code class="docutils literal notranslate"><span class="pre">WITH</span> <span class="pre">PASSWORD</span></code>
+clause is not necessary.</p>
+</div>
+<div class="section" id="creating-a-role-conditionally">
+<h4>Creating a role conditionally<a class="headerlink" href="#creating-a-role-conditionally" title="Permalink to this headline">¶</a></h4>
+<p>Attempting to create an existing role results in an invalid query condition unless the <code class="docutils literal notranslate"><span class="pre">IF</span> <span class="pre">NOT</span> <span class="pre">EXISTS</span></code> option is used.
+If the option is used and the role exists, the statement is a no-op:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">ROLE</span> <span class="n">other_role</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">ROLE</span> <span class="k">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">other_role</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="alter-role">
+<span id="alter-role-statement"></span><h3>ALTER ROLE<a class="headerlink" href="#alter-role" title="Permalink to this headline">¶</a></h3>
+<p>Altering a role options uses the <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">ROLE</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-alter-role-statement">alter_role_statement</strong> ::=  ALTER ROLE <a class="reference internal" href="#grammar-token-role-name"><code class="xref docutils literal notranslate"><span class="pre">role_name</span></code></a> WITH <a class="reference internal" href="#grammar-token-role-options"><code class="xref docutils literal notranslate"><span class="pre">role_options</span></code></a>
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">ALTER</span> <span class="k">ROLE</span> <span class="n">bob</span> <span class="k">WITH</span> <span class="k">PASSWORD</span> <span class="o">=</span> <span class="s1">&#39;PASSWORD_B&#39;</span> <span class="k">AND</span> <span class="k">SUPERUSER</span> <span class="o">=</span> <span class="n">false</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Conditions on executing <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">ROLE</span></code> statements:</p>
+<ul class="simple">
+<li>A client must have <code class="docutils literal notranslate"><span class="pre">SUPERUSER</span></code> status to alter the <code class="docutils literal notranslate"><span class="pre">SUPERUSER</span></code> status of another role</li>
+<li>A client cannot alter the <code class="docutils literal notranslate"><span class="pre">SUPERUSER</span></code> status of any role it currently holds</li>
+<li>A client can only modify certain properties of the role with which it identified at login (e.g. <code class="docutils literal notranslate"><span class="pre">PASSWORD</span></code>)</li>
+<li>To modify properties of a role, the client must be granted <code class="docutils literal notranslate"><span class="pre">ALTER</span></code> <a class="reference internal" href="#cql-permissions"><span class="std std-ref">permission</span></a> on that role</li>
+</ul>
+</div>
+<div class="section" id="drop-role">
+<span id="drop-role-statement"></span><h3>DROP ROLE<a class="headerlink" href="#drop-role" title="Permalink to this headline">¶</a></h3>
+<p>Dropping a role uses the <code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">ROLE</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-drop-role-statement">drop_role_statement</strong> ::=  DROP ROLE [ IF EXISTS ] <a class="reference internal" href="#grammar-token-role-name"><code class="xref docutils literal notranslate"><span class="pre">role_name</span></code></a>
+</pre>
+<p><code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">ROLE</span></code> requires the client to have <code class="docutils literal notranslate"><span class="pre">DROP</span></code> <a class="reference internal" href="#cql-permissions"><span class="std std-ref">permission</span></a> on the role in question. In
+addition, client may not <code class="docutils literal notranslate"><span class="pre">DROP</span></code> the role with which it identified at login. Finally, only a client with <code class="docutils literal notranslate"><span class="pre">SUPERUSER</span></code>
+status may <code class="docutils literal notranslate"><span class="pre">DROP</span></code> another <code class="docutils literal notranslate"><span class="pre">SUPERUSER</span></code> role.</p>
+<p>Attempting to drop a role which does not exist results in an invalid query condition unless the <code class="docutils literal notranslate"><span class="pre">IF</span> <span class="pre">EXISTS</span></code> option is
+used. If the option is used and the role does not exist the statement is a no-op.</p>
+</div>
+<div class="section" id="grant-role">
+<span id="grant-role-statement"></span><h3>GRANT ROLE<a class="headerlink" href="#grant-role" title="Permalink to this headline">¶</a></h3>
+<p>Granting a role to another uses the <code class="docutils literal notranslate"><span class="pre">GRANT</span> <span class="pre">ROLE</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-grant-role-statement">grant_role_statement</strong> ::=  GRANT <a class="reference internal" href="#grammar-token-role-name"><code class="xref docutils literal notranslate"><span class="pre">role_name</span></code></a> TO <a class="reference internal" href="#grammar-token-role-name"><code class="xref docutils literal notranslate"><span class="pre">role_name</span></code></a>
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">GRANT</span> <span class="n">report_writer</span> <span class="k">TO</span> <span class="n">alice</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>This statement grants the <code class="docutils literal notranslate"><span class="pre">report_writer</span></code> role to <code class="docutils literal notranslate"><span class="pre">alice</span></code>. Any permissions granted to <code class="docutils literal notranslate"><span class="pre">report_writer</span></code> are also
+acquired by <code class="docutils literal notranslate"><span class="pre">alice</span></code>.</p>
+<p>Roles are modelled as a directed acyclic graph, so circular grants are not permitted. The following examples result in
+error conditions:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">GRANT</span> <span class="n">role_a</span> <span class="k">TO</span> <span class="n">role_b</span><span class="p">;</span>
+<span class="k">GRANT</span> <span class="n">role_b</span> <span class="k">TO</span> <span class="n">role_a</span><span class="p">;</span>
+
+<span class="k">GRANT</span> <span class="n">role_a</span> <span class="k">TO</span> <span class="n">role_b</span><span class="p">;</span>
+<span class="k">GRANT</span> <span class="n">role_b</span> <span class="k">TO</span> <span class="n">role_c</span><span class="p">;</span>
+<span class="k">GRANT</span> <span class="n">role_c</span> <span class="k">TO</span> <span class="n">role_a</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="revoke-role">
+<span id="revoke-role-statement"></span><h3>REVOKE ROLE<a class="headerlink" href="#revoke-role" title="Permalink to this headline">¶</a></h3>
+<p>Revoking a role uses the <code class="docutils literal notranslate"><span class="pre">REVOKE</span> <span class="pre">ROLE</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-revoke-role-statement">revoke_role_statement</strong> ::=  REVOKE <a class="reference internal" href="#grammar-token-role-name"><code class="xref docutils literal notranslate"><span class="pre">role_name</span></code></a> FROM <a class="reference internal" href="#grammar-token-role-name"><code class="xref docutils literal notranslate"><span class="pre">role_name</span></code></a>
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">REVOKE</span> <span class="n">report_writer</span> <span class="k">FROM</span> <span class="n">alice</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>This statement revokes the <code class="docutils literal notranslate"><span class="pre">report_writer</span></code> role from <code class="docutils literal notranslate"><span class="pre">alice</span></code>. Any permissions that <code class="docutils literal notranslate"><span class="pre">alice</span></code> has acquired via the
+<code class="docutils literal notranslate"><span class="pre">report_writer</span></code> role are also revoked.</p>
+</div>
+<div class="section" id="list-roles">
+<span id="list-roles-statement"></span><h3>LIST ROLES<a class="headerlink" href="#list-roles" title="Permalink to this headline">¶</a></h3>
+<p>All the known roles (in the system or granted to specific role) can be listed using the <code class="docutils literal notranslate"><span class="pre">LIST</span> <span class="pre">ROLES</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-list-roles-statement">list_roles_statement</strong> ::=  LIST ROLES [ OF <a class="reference internal" href="#grammar-token-role-name"><code class="xref docutils literal notranslate"><span class="pre">role_name</span></code></a> ] [ NORECURSIVE ]
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">LIST</span> <span class="k">ROLES</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>returns all known roles in the system, this requires <code class="docutils literal notranslate"><span class="pre">DESCRIBE</span></code> permission on the database roles resource. And:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">LIST</span> <span class="k">ROLES</span> <span class="k">OF</span> <span class="n">alice</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>enumerates all roles granted to <code class="docutils literal notranslate"><span class="pre">alice</span></code>, including those transitively acquired. But:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">LIST</span> <span class="k">ROLES</span> <span class="k">OF</span> <span class="n">bob</span> <span class="k">NORECURSIVE</span>
+</pre></div>
+</div>
+<p>lists all roles directly granted to <code class="docutils literal notranslate"><span class="pre">bob</span></code> without including any of the transitively acquired ones.</p>
+</div>
+</div>
+<div class="section" id="users">
+<h2>Users<a class="headerlink" href="#users" title="Permalink to this headline">¶</a></h2>
+<p>Prior to the introduction of roles in Cassandra 2.2, authentication and authorization were based around the concept of a
+<code class="docutils literal notranslate"><span class="pre">USER</span></code>. For backward compatibility, the legacy syntax has been preserved with <code class="docutils literal notranslate"><span class="pre">USER</span></code> centric statements becoming
+synonyms for the <code class="docutils literal notranslate"><span class="pre">ROLE</span></code> based equivalents. In other words, creating/updating a user is just a different syntax for
+creating/updating a role.</p>
+<div class="section" id="create-user">
+<span id="create-user-statement"></span><h3>CREATE USER<a class="headerlink" href="#create-user" title="Permalink to this headline">¶</a></h3>
+<p>Creating a user uses the <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">USER</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-create-user-statement">create_user_statement</strong> ::=  CREATE USER [ IF NOT EXISTS ] <a class="reference internal" href="#grammar-token-role-name"><code class="xref docutils literal notranslate"><span class="pre">role_name</span></code></a> [ WITH PASSWORD <a class="reference internal" href="definitions.html#grammar-token-string"><code class="xref docutils literal notranslate"><span class="pre">string</span></code></a> ] [ <a class="reference internal" href="#grammar-token-user-option"><code class="xref docutils literal notranslate"><span class="pre">user_option</span></code></a> ]
+<strong id="grammar-token-user-option">user_option          </strong> ::=  SUPERUSER | NOSUPERUSER
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">USER</span> <span class="n">alice</span> <span class="k">WITH</span> <span class="k">PASSWORD</span> <span class="s1">&#39;password_a&#39;</span> <span class="k">SUPERUSER</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">USER</span> <span class="n">bob</span> <span class="k">WITH</span> <span class="k">PASSWORD</span> <span class="s1">&#39;password_b&#39;</span> <span class="k">NOSUPERUSER</span><span class="p">;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">USER</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">ROLE</span></code> where the <code class="docutils literal notranslate"><span class="pre">LOGIN</span></code> option is <code class="docutils literal notranslate"><span class="pre">true</span></code>. So, the following pairs of
+statements are equivalent:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">USER</span> <span class="n">alice</span> <span class="k">WITH</span> <span class="k">PASSWORD</span> <span class="s1">&#39;password_a&#39;</span> <span class="k">SUPERUSER</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">ROLE</span> <span class="n">alice</span> <span class="k">WITH</span> <span class="k">PASSWORD</span> <span class="o">=</span> <span class="s1">&#39;password_a&#39;</span> <span class="k">AND</span> <span class="k">LOGIN</span> <span class="o">=</span> <span class="n">true</span> <span class="k">AND</span> <span class="k">SUPERUSER</span> <span class="o">=</span> <span class="n">true</span><span class="p">;</span>
+
+<span class="k">CREATE</span> <span class="k">USER</span> <span class="k">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">alice</span> <span class="k">WITH</span> <span class="k">PASSWORD</span> <span class="s1">&#39;password_a&#39;</span> <span class="k">SUPERUSER</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">ROLE</span> <span class="k">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">alice</span> <span class="k">WITH</span> <span class="k">PASSWORD</span> <span class="o">=</span> <span class="s1">&#39;password_a&#39;</span> <span class="k">AND</span> <span class="k">LOGIN</span> <span class="o">=</span> <span class="n">true</span> <span class="k">AND</span> <span class="k">SUPERUSER</span> <span class="o">=</span> <span class="n">true</span><span class="p">;</span>
+
+<span class="k">CREATE</span> <span class="k">USER</span> <span class="n">alice</span> <span class="k">WITH</span> <span class="k">PASSWORD</span> <span class="s1">&#39;password_a&#39;</span> <span class="k">NOSUPERUSER</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">ROLE</span> <span class="n">alice</span> <span class="k">WITH</span> <span class="k">PASSWORD</span> <span class="o">=</span> <span class="s1">&#39;password_a&#39;</span> <span class="k">AND</span> <span class="k">LOGIN</span> <span class="o">=</span> <span class="n">true</span> <span class="k">AND</span> <span class="k">SUPERUSER</span> <span class="o">=</span> <span class="n">false</span><span class="p">;</span>
+
+<span class="k">CREATE</span> <span class="k">USER</span> <span class="n">alice</span> <span class="k">WITH</span> <span class="k">PASSWORD</span> <span class="s1">&#39;password_a&#39;</span> <span class="k">NOSUPERUSER</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">ROLE</span> <span class="n">alice</span> <span class="k">WITH</span> <span class="k">PASSWORD</span> <span class="o">=</span> <span class="s1">&#39;password_a&#39;</span> <span class="k">AND</span> <span class="k">LOGIN</span> <span class="o">=</span> <span class="n">true</span><span class="p">;</span>
+
+<span class="k">CREATE</span> <span class="k">USER</span> <span class="n">alice</span> <span class="k">WITH</span> <span class="k">PASSWORD</span> <span class="s1">&#39;password_a&#39;</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">ROLE</span> <span class="n">alice</span> <span class="k">WITH</span> <span class="k">PASSWORD</span> <span class="o">=</span> <span class="s1">&#39;password_a&#39;</span> <span class="k">AND</span> <span class="k">LOGIN</span> <span class="o">=</span> <span class="n">true</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="alter-user">
+<span id="alter-user-statement"></span><h3>ALTER USER<a class="headerlink" href="#alter-user" title="Permalink to this headline">¶</a></h3>
+<p>Altering the options of a user uses the <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">USER</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-alter-user-statement">alter_user_statement</strong> ::=  ALTER USER <a class="reference internal" href="#grammar-token-role-name"><code class="xref docutils literal notranslate"><span class="pre">role_name</span></code></a> [ WITH PASSWORD <a class="reference internal" href="definitions.html#grammar-token-string"><code class="xref docutils literal notranslate"><span class="pre">string</span></code></a> ] [ <a class="reference internal" href="#grammar-token-user-option"><code class="xref docutils literal notranslate"><span class="pre">user_option</span></code></a> ]
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">ALTER</span> <span class="k">USER</span> <span class="n">alice</span> <span class="k">WITH</span> <span class="k">PASSWORD</span> <span class="s1">&#39;PASSWORD_A&#39;</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">USER</span> <span class="n">bob</span> <span class="k">SUPERUSER</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="drop-user">
+<span id="drop-user-statement"></span><h3>DROP USER<a class="headerlink" href="#drop-user" title="Permalink to this headline">¶</a></h3>
+<p>Dropping a user uses the <code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">USER</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-drop-user-statement">drop_user_statement</strong> ::=  DROP USER [ IF EXISTS ] <a class="reference internal" href="#grammar-token-role-name"><code class="xref docutils literal notranslate"><span class="pre">role_name</span></code></a>
+</pre>
+</div>
+<div class="section" id="list-users">
+<span id="list-users-statement"></span><h3>LIST USERS<a class="headerlink" href="#list-users" title="Permalink to this headline">¶</a></h3>
+<p>Existing users can be listed using the <code class="docutils literal notranslate"><span class="pre">LIST</span> <span class="pre">USERS</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-list-users-statement">list_users_statement</strong> ::=  LIST USERS
+</pre>
+<p>Note that this statement is equivalent to:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">LIST</span> <span class="k">ROLES</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>but only roles with the <code class="docutils literal notranslate"><span class="pre">LOGIN</span></code> privilege are included in the output.</p>
+</div>
+</div>
+<div class="section" id="data-control">
+<h2>Data Control<a class="headerlink" href="#data-control" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="permissions">
+<span id="cql-permissions"></span><h3>Permissions<a class="headerlink" href="#permissions" title="Permalink to this headline">¶</a></h3>
+<p>Permissions on resources are granted to roles; there are several different types of resources in Cassandra and each type
+is modelled hierarchically:</p>
+<ul class="simple">
+<li>The hierarchy of Data resources, Keyspaces and Tables has the structure <code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">KEYSPACES</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">KEYSPACE</span></code> -&gt;
+<code class="docutils literal notranslate"><span class="pre">TABLE</span></code>.</li>
+<li>Function resources have the structure <code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">FUNCTIONS</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">KEYSPACE</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">FUNCTION</span></code></li>
+<li>Resources representing roles have the structure <code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">ROLES</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">ROLE</span></code></li>
+<li>Resources representing JMX ObjectNames, which map to sets of MBeans/MXBeans, have the structure <code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">MBEANS</span></code> -&gt;
+<code class="docutils literal notranslate"><span class="pre">MBEAN</span></code></li>
+</ul>
+<p>Permissions can be granted at any level of these hierarchies and they flow downwards. So granting a permission on a
+resource higher up the chain automatically grants that same permission on all resources lower down. For example,
+granting <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> on a <code class="docutils literal notranslate"><span class="pre">KEYSPACE</span></code> automatically grants it on all <code class="docutils literal notranslate"><span class="pre">TABLES</span></code> in that <code class="docutils literal notranslate"><span class="pre">KEYSPACE</span></code>. Likewise, granting
+a permission on <code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">FUNCTIONS</span></code> grants it on every defined function, regardless of which keyspace it is scoped in. It
+is also possible to grant permissions on all functions scoped to a particular keyspace.</p>
+<p>Modifications to permissions are visible to existing client sessions; that is, connections need not be re-established
+following permissions changes.</p>
+<p>The full set of available permissions is:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">CREATE</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">ALTER</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">DROP</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">SELECT</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">MODIFY</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">AUTHORIZE</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">DESCRIBE</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">EXECUTE</span></code></li>
+</ul>
+<p>Not all permissions are applicable to every type of resource. For instance, <code class="docutils literal notranslate"><span class="pre">EXECUTE</span></code> is only relevant in the context
+of functions or mbeans; granting <code class="docutils literal notranslate"><span class="pre">EXECUTE</span></code> on a resource representing a table is nonsensical. Attempting to <code class="docutils literal notranslate"><span class="pre">GRANT</span></code>
+a permission on resource to which it cannot be applied results in an error response. The following illustrates which
+permissions can be granted on which types of resource, and which statements are enabled by that permission.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="26%" />
+<col width="61%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Permission</th>
+<th class="head">Resource</th>
+<th class="head">Operations</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">CREATE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">KEYSPACES</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">KEYSPACE</span></code> and <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">TABLE</span></code> in any keyspace</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">CREATE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">KEYSPACE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">TABLE</span></code> in specified keyspace</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">CREATE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">FUNCTIONS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">FUNCTION</span></code> in any keyspace and <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">AGGREGATE</span></code> in any
+keyspace</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">CREATE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">FUNCTIONS</span> <span class="pre">IN</span> <span class="pre">KEYSPACE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">FUNCTION</span></code> and <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">AGGREGATE</span></code> in specified keyspace</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">CREATE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">ROLES</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">ROLE</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ALTER</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">KEYSPACES</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">KEYSPACE</span></code> and <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> in any keyspace</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ALTER</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">KEYSPACE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">KEYSPACE</span></code> and <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> in specified keyspace</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ALTER</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TABLE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ALTER</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">FUNCTIONS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">FUNCTION</span></code> and <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">AGGREGATE</span></code>: replacing any existing</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ALTER</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">FUNCTIONS</span> <span class="pre">IN</span> <span class="pre">KEYSPACE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">FUNCTION</span></code> and <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">AGGREGATE</span></code>: replacing existing in
+specified keyspace</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ALTER</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">FUNCTION</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">FUNCTION</span></code> and <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">AGGREGATE</span></code>: replacing existing</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ALTER</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">ROLES</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">ROLE</span></code> on any role</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ALTER</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ROLE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">ROLE</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DROP</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">KEYSPACES</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">KEYSPACE</span></code> and <code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">TABLE</span></code> in any keyspace</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DROP</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">KEYSPACE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">TABLE</span></code> in specified keyspace</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DROP</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TABLE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">TABLE</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DROP</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">FUNCTIONS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">FUNCTION</span></code> and <code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">AGGREGATE</span></code> in any keyspace</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DROP</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">FUNCTIONS</span> <span class="pre">IN</span> <span class="pre">KEYSPACE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">FUNCTION</span></code> and <code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">AGGREGATE</span></code> in specified keyspace</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DROP</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">FUNCTION</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">FUNCTION</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DROP</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">ROLES</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">ROLE</span></code> on any role</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DROP</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ROLE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">ROLE</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">SELECT</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">KEYSPACES</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SELECT</span></code> on any table</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">SELECT</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">KEYSPACE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SELECT</span></code> on any table in specified keyspace</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">SELECT</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TABLE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SELECT</span></code> on specified table</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">SELECT</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">MBEANS</span></code></td>
+<td>Call getter methods on any mbean</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">SELECT</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">MBEANS</span></code></td>
+<td>Call getter methods on any mbean matching a wildcard pattern</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">SELECT</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">MBEAN</span></code></td>
+<td>Call getter methods on named mbean</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">MODIFY</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">KEYSPACES</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">INSERT</span></code>, <code class="docutils literal notranslate"><span class="pre">UPDATE</span></code>, <code class="docutils literal notranslate"><span class="pre">DELETE</span></code> and <code class="docutils literal notranslate"><span class="pre">TRUNCATE</span></code> on any table</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">MODIFY</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">KEYSPACE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">INSERT</span></code>, <code class="docutils literal notranslate"><span class="pre">UPDATE</span></code>, <code class="docutils literal notranslate"><span class="pre">DELETE</span></code> and <code class="docutils literal notranslate"><span class="pre">TRUNCATE</span></code> on any table in
+specified keyspace</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">MODIFY</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TABLE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">INSERT</span></code>, <code class="docutils literal notranslate"><span class="pre">UPDATE</span></code>, <code class="docutils literal notranslate"><span class="pre">DELETE</span></code> and <code class="docutils literal notranslate"><span class="pre">TRUNCATE</span></code> on specified table</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">MODIFY</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">MBEANS</span></code></td>
+<td>Call setter methods on any mbean</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">MODIFY</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">MBEANS</span></code></td>
+<td>Call setter methods on any mbean matching a wildcard pattern</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">MODIFY</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">MBEAN</span></code></td>
+<td>Call setter methods on named mbean</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">AUTHORIZE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">KEYSPACES</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">GRANT</span> <span class="pre">PERMISSION</span></code> and <code class="docutils literal notranslate"><span class="pre">REVOKE</span> <span class="pre">PERMISSION</span></code> on any table</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">AUTHORIZE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">KEYSPACE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">GRANT</span> <span class="pre">PERMISSION</span></code> and <code class="docutils literal notranslate"><span class="pre">REVOKE</span> <span class="pre">PERMISSION</span></code> on any table in
+specified keyspace</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">AUTHORIZE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TABLE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">GRANT</span> <span class="pre">PERMISSION</span></code> and <code class="docutils literal notranslate"><span class="pre">REVOKE</span> <span class="pre">PERMISSION</span></code> on specified table</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">AUTHORIZE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">FUNCTIONS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">GRANT</span> <span class="pre">PERMISSION</span></code> and <code class="docutils literal notranslate"><span class="pre">REVOKE</span> <span class="pre">PERMISSION</span></code> on any function</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">AUTHORIZE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">FUNCTIONS</span> <span class="pre">IN</span> <span class="pre">KEYSPACE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">GRANT</span> <span class="pre">PERMISSION</span></code> and <code class="docutils literal notranslate"><span class="pre">REVOKE</span> <span class="pre">PERMISSION</span></code> in specified keyspace</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">AUTHORIZE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">FUNCTION</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">GRANT</span> <span class="pre">PERMISSION</span></code> and <code class="docutils literal notranslate"><span class="pre">REVOKE</span> <span class="pre">PERMISSION</span></code> on specified function</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">AUTHORIZE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">MBEANS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">GRANT</span> <span class="pre">PERMISSION</span></code> and <code class="docutils literal notranslate"><span class="pre">REVOKE</span> <span class="pre">PERMISSION</span></code> on any mbean</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">AUTHORIZE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">MBEANS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">GRANT</span> <span class="pre">PERMISSION</span></code> and <code class="docutils literal notranslate"><span class="pre">REVOKE</span> <span class="pre">PERMISSION</span></code> on any mbean matching
+a wildcard pattern</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">AUTHORIZE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">MBEAN</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">GRANT</span> <span class="pre">PERMISSION</span></code> and <code class="docutils literal notranslate"><span class="pre">REVOKE</span> <span class="pre">PERMISSION</span></code> on named mbean</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">AUTHORIZE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">ROLES</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">GRANT</span> <span class="pre">ROLE</span></code> and <code class="docutils literal notranslate"><span class="pre">REVOKE</span> <span class="pre">ROLE</span></code> on any role</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">AUTHORIZE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ROLES</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">GRANT</span> <span class="pre">ROLE</span></code> and <code class="docutils literal notranslate"><span class="pre">REVOKE</span> <span class="pre">ROLE</span></code> on specified roles</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DESCRIBE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">ROLES</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">LIST</span> <span class="pre">ROLES</span></code> on all roles or only roles granted to another,
+specified role</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DESCRIBE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">MBEANS</span></code></td>
+<td>Retrieve metadata about any mbean from the platform’s MBeanServer</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DESCRIBE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">MBEANS</span></code></td>
+<td>Retrieve metadata about any mbean matching a wildcard patter from the
+platform’s MBeanServer</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DESCRIBE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">MBEAN</span></code></td>
+<td>Retrieve metadata about a named mbean from the platform’s MBeanServer</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">EXECUTE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">FUNCTIONS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SELECT</span></code>, <code class="docutils literal notranslate"><span class="pre">INSERT</span></code> and <code class="docutils literal notranslate"><span class="pre">UPDATE</span></code> using any function, and use of
+any function in <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">AGGREGATE</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">EXECUTE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">FUNCTIONS</span> <span class="pre">IN</span> <span class="pre">KEYSPACE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SELECT</span></code>, <code class="docutils literal notranslate"><span class="pre">INSERT</span></code> and <code class="docutils literal notranslate"><span class="pre">UPDATE</span></code> using any function in specified
+keyspace and use of any function in keyspace in <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">AGGREGATE</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">EXECUTE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">FUNCTION</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SELECT</span></code>, <code class="docutils literal notranslate"><span class="pre">INSERT</span></code> and <code class="docutils literal notranslate"><span class="pre">UPDATE</span></code> using specified function and use
+of the function in <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">AGGREGATE</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">EXECUTE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ALL</span> <span class="pre">MBEANS</span></code></td>
+<td>Execute operations on any mbean</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">EXECUTE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">MBEANS</span></code></td>
+<td>Execute operations on any mbean matching a wildcard pattern</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">EXECUTE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">MBEAN</span></code></td>
+<td>Execute operations on named mbean</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="grant-permission">
+<span id="grant-permission-statement"></span><h3>GRANT PERMISSION<a class="headerlink" href="#grant-permission" title="Permalink to this headline">¶</a></h3>
+<p>Granting a permission uses the <code class="docutils literal notranslate"><span class="pre">GRANT</span> <span class="pre">PERMISSION</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-grant-permission-statement">grant_permission_statement</strong> ::=  GRANT <a class="reference internal" href="#grammar-token-permissions"><code class="xref docutils literal notranslate"><span class="pre">permissions</span></code></a> ON <a class="reference internal" href="#grammar-token-resource"><code class="xref docutils literal notranslate"><span class="pre">resource</span></code></a> TO <a class="reference internal" href="#grammar-token-role-name"><code class="xref docutils literal notranslate"><span class="pre">role_name</span></code></a>
+<strong id="grammar-token-permissions">permissions               </strong> ::=  ALL [ PERMISSIONS ] | <a class="reference internal" href="#grammar-token-permission"><code class="xref docutils literal notranslate"><span class="pre">permission</span></code></a> [ PERMISSION ]
+<strong id="grammar-token-permission">permission                </strong> ::=  CREATE | ALTER | DROP | SELECT | MODIFY | AUTHORIZE | DESCRIBE | EXECUTE
+<strong id="grammar-token-resource">resource                  </strong> ::=  ALL KEYSPACES
+                               | KEYSPACE <a class="reference internal" href="ddl.html#grammar-token-keyspace-name"><code class="xref docutils literal notranslate"><span class="pre">keyspace_name</span></code></a>
+                               | [ TABLE ] <a class="reference internal" href="ddl.html#grammar-token-table-name"><code class="xref docutils literal notranslate"><span class="pre">table_name</span></code></a>
+                               | ALL ROLES
+                               | ROLE <a class="reference internal" href="#grammar-token-role-name"><code class="xref docutils literal notranslate"><span class="pre">role_name</span></code></a>
+                               | ALL FUNCTIONS [ IN KEYSPACE <a class="reference internal" href="ddl.html#grammar-token-keyspace-name"><code class="xref docutils literal notranslate"><span class="pre">keyspace_name</span></code></a> ]
+                               | FUNCTION <a class="reference internal" href="functions.html#grammar-token-function-name"><code class="xref docutils literal notranslate"><span class="pre">function_name</span></code></a> '(' [ <a class="reference internal" href="types.html#grammar-token-cql-type"><code class="xref docutils literal notranslate"><span class="pre">cql_type</span></code></a> ( ',' <a class="reference internal" href="types.html#grammar-token-cql-type"><code class="xref docutils literal notranslate"><span class="pre">cql_type</span></code></a> )* ] ')'
+                               | ALL MBEANS
+                               | ( MBEAN | MBEANS ) <a class="reference internal" href="definitions.html#grammar-token-string"><code class="xref docutils literal notranslate"><span class="pre">string</span></code></a>
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">GRANT</span> <span class="k">SELECT</span> <span class="k">ON</span> <span class="k">ALL</span> <span class="k">KEYSPACES</span> <span class="k">TO</span> <span class="n">data_reader</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>This gives any user with the role <code class="docutils literal notranslate"><span class="pre">data_reader</span></code> permission to execute <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> statements on any table across all
+keyspaces:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">GRANT</span> <span class="k">MODIFY</span> <span class="k">ON</span> <span class="k">KEYSPACE</span> <span class="n">keyspace1</span> <span class="k">TO</span> <span class="n">data_writer</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>This give any user with the role <code class="docutils literal notranslate"><span class="pre">data_writer</span></code> permission to perform <code class="docutils literal notranslate"><span class="pre">UPDATE</span></code>, <code class="docutils literal notranslate"><span class="pre">INSERT</span></code>, <code class="docutils literal notranslate"><span class="pre">UPDATE</span></code>, <code class="docutils literal notranslate"><span class="pre">DELETE</span></code>
+and <code class="docutils literal notranslate"><span class="pre">TRUNCATE</span></code> queries on all tables in the <code class="docutils literal notranslate"><span class="pre">keyspace1</span></code> keyspace:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">GRANT</span> <span class="k">DROP</span> <span class="k">ON</span> <span class="n">keyspace1</span><span class="mf">.</span><span class="n">table1</span> <span class="k">TO</span> <span class="n">schema_owner</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>This gives any user with the <code class="docutils literal notranslate"><span class="pre">schema_owner</span></code> role permissions to <code class="docutils literal notranslate"><span class="pre">DROP</span></code> <code class="docutils literal notranslate"><span class="pre">keyspace1.table1</span></code>:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">GRANT</span> <span class="k">EXECUTE</span> <span class="k">ON</span> <span class="k">FUNCTION</span> <span class="n">keyspace1</span><span class="mf">.</span><span class="n">user_function</span><span class="p">(</span> <span class="nb">int</span> <span class="p">)</span> <span class="k">TO</span> <span class="n">report_writer</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>This grants any user with the <code class="docutils literal notranslate"><span class="pre">report_writer</span></code> role permission to execute <code class="docutils literal notranslate"><span class="pre">SELECT</span></code>, <code class="docutils literal notranslate"><span class="pre">INSERT</span></code> and <code class="docutils literal notranslate"><span class="pre">UPDATE</span></code> queries
+which use the function <code class="docutils literal notranslate"><span class="pre">keyspace1.user_function(</span> <span class="pre">int</span> <span class="pre">)</span></code>:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">GRANT</span> <span class="k">DESCRIBE</span> <span class="k">ON</span> <span class="k">ALL</span> <span class="k">ROLES</span> <span class="k">TO</span> <span class="n">role_admin</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>This grants any user with the <code class="docutils literal notranslate"><span class="pre">role_admin</span></code> role permission to view any and all roles in the system with a <code class="docutils literal notranslate"><span class="pre">LIST</span>
+<span class="pre">ROLES</span></code> statement</p>
+<div class="section" id="grant-all">
+<span id="id2"></span><h4>GRANT ALL<a class="headerlink" href="#grant-all" title="Permalink to this headline">¶</a></h4>
+<p>When the <code class="docutils literal notranslate"><span class="pre">GRANT</span> <span class="pre">ALL</span></code> form is used, the appropriate set of permissions is determined automatically based on the target
+resource.</p>
+</div>
+<div class="section" id="automatic-granting">
+<h4>Automatic Granting<a class="headerlink" href="#automatic-granting" title="Permalink to this headline">¶</a></h4>
+<p>When a resource is created, via a <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">KEYSPACE</span></code>, <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">TABLE</span></code>, <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">FUNCTION</span></code>, <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">AGGREGATE</span></code> or
+<code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">ROLE</span></code> statement, the creator (the role the database user who issues the statement is identified as), is
+automatically granted all applicable permissions on the new resource.</p>
+</div>
+</div>
+<div class="section" id="revoke-permission">
+<span id="revoke-permission-statement"></span><h3>REVOKE PERMISSION<a class="headerlink" href="#revoke-permission" title="Permalink to this headline">¶</a></h3>
+<p>Revoking a permission from a role uses the <code class="docutils literal notranslate"><span class="pre">REVOKE</span> <span class="pre">PERMISSION</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-revoke-permission-statement">revoke_permission_statement</strong> ::=  REVOKE <a class="reference internal" href="#grammar-token-permissions"><code class="xref docutils literal notranslate"><span class="pre">permissions</span></code></a> ON <a class="reference internal" href="#grammar-token-resource"><code class="xref docutils literal notranslate"><span class="pre">resource</span></code></a> FROM <a class="reference internal" href="#grammar-token-role-name"><code class="xref docutils literal notranslate"><span class="pre">role_name</span></code></a>
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">REVOKE</span> <span class="k">SELECT</span> <span class="k">ON</span> <span class="k">ALL</span> <span class="k">KEYSPACES</span> <span class="k">FROM</span> <span class="n">data_reader</span><span class="p">;</span>
+<span class="k">REVOKE</span> <span class="k">MODIFY</span> <span class="k">ON</span> <span class="k">KEYSPACE</span> <span class="n">keyspace1</span> <span class="k">FROM</span> <span class="n">data_writer</span><span class="p">;</span>
+<span class="k">REVOKE</span> <span class="k">DROP</span> <span class="k">ON</span> <span class="n">keyspace1</span><span class="mf">.</span><span class="n">table1</span> <span class="k">FROM</span> <span class="n">schema_owner</span><span class="p">;</span>
+<span class="k">REVOKE</span> <span class="k">EXECUTE</span> <span class="k">ON</span> <span class="k">FUNCTION</span> <span class="n">keyspace1</span><span class="mf">.</span><span class="n">user_function</span><span class="p">(</span> <span class="nb">int</span> <span class="p">)</span> <span class="k">FROM</span> <span class="n">report_writer</span><span class="p">;</span>
+<span class="k">REVOKE</span> <span class="k">DESCRIBE</span> <span class="k">ON</span> <span class="k">ALL</span> <span class="k">ROLES</span> <span class="k">FROM</span> <span class="n">role_admin</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="list-permissions">
+<span id="list-permissions-statement"></span><h3>LIST PERMISSIONS<a class="headerlink" href="#list-permissions" title="Permalink to this headline">¶</a></h3>
+<p>Listing granted permissions uses the <code class="docutils literal notranslate"><span class="pre">LIST</span> <span class="pre">PERMISSIONS</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-list-permissions-statement">list_permissions_statement</strong> ::=  LIST <a class="reference internal" href="#grammar-token-permissions"><code class="xref docutils literal notranslate"><span class="pre">permissions</span></code></a> [ ON <a class="reference internal" href="#grammar-token-resource"><code class="xref docutils literal notranslate"><span class="pre">resource</span></code></a> ] [ OF <a class="reference internal" href="#grammar-token-role-name"><code class="xref docutils literal notranslate"><span class="pre">role_name</span></code></a> [ NORECURSIVE ] ]
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">LIST</span> <span class="k">ALL</span> <span class="k">PERMISSIONS</span> <span class="k">OF</span> <span class="n">alice</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Show all permissions granted to <code class="docutils literal notranslate"><span class="pre">alice</span></code>, including those acquired transitively from any other roles:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">LIST</span> <span class="k">ALL</span> <span class="k">PERMISSIONS</span> <span class="k">ON</span> <span class="n">keyspace1</span><span class="mf">.</span><span class="n">table1</span> <span class="k">OF</span> <span class="n">bob</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Show all permissions on <code class="docutils literal notranslate"><span class="pre">keyspace1.table1</span></code> granted to <code class="docutils literal notranslate"><span class="pre">bob</span></code>, including those acquired transitively from any other
+roles. This also includes any permissions higher up the resource hierarchy which can be applied to <code class="docutils literal notranslate"><span class="pre">keyspace1.table1</span></code>.
+For example, should <code class="docutils literal notranslate"><span class="pre">bob</span></code> have <code class="docutils literal notranslate"><span class="pre">ALTER</span></code> permission on <code class="docutils literal notranslate"><span class="pre">keyspace1</span></code>, that would be included in the results of this
+query. Adding the <code class="docutils literal notranslate"><span class="pre">NORECURSIVE</span></code> switch restricts the results to only those permissions which were directly granted to
+<code class="docutils literal notranslate"><span class="pre">bob</span></code> or one of <code class="docutils literal notranslate"><span class="pre">bob</span></code>’s roles:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">LIST</span> <span class="k">SELECT</span> <span class="k">PERMISSIONS</span> <span class="k">OF</span> <span class="n">carlos</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Show any permissions granted to <code class="docutils literal notranslate"><span class="pre">carlos</span></code> or any of <code class="docutils literal notranslate"><span class="pre">carlos</span></code>’s roles, limited to <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> permissions on any
+resource.</p>
+</div>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="functions.html" class="btn btn-default pull-right " role="button" title="Functions" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="mvs.html" class="btn btn-default" role="button" title="Materialized Views" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

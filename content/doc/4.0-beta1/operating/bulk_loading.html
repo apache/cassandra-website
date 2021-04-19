@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-beta1/operating/bulk_loading.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha5" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Monitoring" href="metrics.html"/> <link rel="prev" title="Backups" href="backups.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">Operating Cassandra</a></li>
+      
+
+      
+      <li>Bulk Loading</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Operating Cassandra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="snitch.html">Snitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topo_changes.html">Adding, replacing, moving and removing nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="repair.html">Repair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_repair.html">Read repair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hints.html">Hints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html">Compaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bloom_filters.html">Bloom Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compression.html">Compression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cdc.html">Change Data Capture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backups.html">Backups</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Bulk Loading</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tools-for-bulk-loading">Tools for Bulk Loading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-sstableloader">Using sstableloader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-nodetool-import">Using nodetool import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bulk-loading-external-data">Bulk Loading External Data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html">Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html">Hardware Choices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="bulk-loading">
+<span id="id1"></span><h1>Bulk Loading<a class="headerlink" href="#bulk-loading" title="Permalink to this headline">¶</a></h1>
+<p>Bulk loading of data in Apache Cassandra is supported by different tools. The data to be bulk loaded must be in the form of SSTables. Cassandra does not support loading data in any other format such as CSV, JSON, and XML directly. Bulk loading could be used to:</p>
+<ul class="simple">
+<li>Restore incremental backups and snapshots. Backups and snapshots are already in the form of SSTables.</li>
+<li>Load existing SSTables into another cluster, which could have a different number of nodes or replication strategy.</li>
+<li>Load external data into a cluster</li>
+</ul>
+<p><a href="#id2"><span class="problematic" id="id3">**</span></a>Note*: CSV Data can be loaded via the cqlsh COPY command but we do not recommend this for bulk loading, which typically requires many GB or TB of data.</p>
+<div class="section" id="tools-for-bulk-loading">
+<h2>Tools for Bulk Loading<a class="headerlink" href="#tools-for-bulk-loading" title="Permalink to this headline">¶</a></h2>
+<p>Cassandra provides two commands or tools for bulk loading data. These are:</p>
+<ul class="simple">
+<li>Cassandra Bulk loader, also called <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code></li>
+<li>The <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">import</span></code> command</li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> and <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">import</span></code> are accessible if the Cassandra installation <code class="docutils literal notranslate"><span class="pre">bin</span></code> directory is in the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> environment variable.  Or these may be accessed directly from the <code class="docutils literal notranslate"><span class="pre">bin</span></code> directory. We shall discuss each of these next. We shall use the example or sample keyspaces and tables created in the Backups section.</p>
+</div>
+<div class="section" id="using-sstableloader">
+<h2>Using sstableloader<a class="headerlink" href="#using-sstableloader" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> is the main tool for bulk uploading data. The <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> streams SSTable data files to a running cluster. The <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> loads data conforming to the replication strategy and replication factor. The table to upload data to does need not to be empty.</p>
+<p>The only requirements to run <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> are:</p>
+<ol class="arabic simple">
+<li>One or more comma separated initial hosts to connect to and get ring information.</li>
+<li>A directory path for the SSTables to load.</li>
+</ol>
+<p>Its usage is as follows.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sstableloader [options] &lt;dir_path&gt;
+</pre></div>
+</div>
+<p>Sstableloader bulk loads the SSTables found in the directory <code class="docutils literal notranslate"><span class="pre">&lt;dir_path&gt;</span></code> to the configured cluster. The   <code class="docutils literal notranslate"><span class="pre">&lt;dir_path&gt;</span></code> is used as the target <em>keyspace/table</em> name. As an example, to load an SSTable named
+<code class="docutils literal notranslate"><span class="pre">Standard1-g-1-Data.db</span></code> into <code class="docutils literal notranslate"><span class="pre">Keyspace1/Standard1</span></code>, you will need to have the
+files <code class="docutils literal notranslate"><span class="pre">Standard1-g-1-Data.db</span></code> and <code class="docutils literal notranslate"><span class="pre">Standard1-g-1-Index.db</span></code> in a directory <code class="docutils literal notranslate"><span class="pre">/path/to/Keyspace1/Standard1/</span></code>.</p>
+<div class="section" id="sstableloader-option-to-accept-target-keyspace-name">
+<h3>Sstableloader Option to accept Target keyspace name<a class="headerlink" href="#sstableloader-option-to-accept-target-keyspace-name" title="Permalink to this headline">¶</a></h3>
+<p>Often as part of a backup strategy some Cassandra DBAs store an entire data directory. When corruption in data is found then they would like to restore data in the same cluster (for large clusters 200 nodes) but with different keyspace name.</p>
+<p>Currently <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> derives keyspace name from the folder structure. As  an option to specify target keyspace name as part of <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code>, version 4.0 adds support for the <code class="docutils literal notranslate"><span class="pre">--target-keyspace</span></code>  option (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-13884">CASSANDRA-13884</a>).</p>
+<p>The supported options are as follows from which only <code class="docutils literal notranslate"><span class="pre">-d,--nodes</span> <span class="pre">&lt;initial</span> <span class="pre">hosts&gt;</span></code>  is required.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>-alg,--ssl-alg &lt;ALGORITHM&gt;                                   Client SSL: algorithm
+
+-ap,--auth-provider &lt;auth provider&gt;                          Custom
+                                                             AuthProvider class name for
+                                                             cassandra authentication
+-ciphers,--ssl-ciphers &lt;CIPHER-SUITES&gt;                       Client SSL:
+                                                             comma-separated list of
+                                                             encryption suites to use
+-cph,--connections-per-host &lt;connectionsPerHost&gt;             Number of
+                                                             concurrent connections-per-host.
+-d,--nodes &lt;initial hosts&gt;                                   Required.
+                                                             Try to connect to these hosts (comma separated) initially for ring information
+
+-f,--conf-path &lt;path to config file&gt;                         cassandra.yaml file path for streaming throughput and client/server SSL.
+
+-h,--help                                                    Display this help message
+
+-i,--ignore &lt;NODES&gt;                                          Don&#39;t stream to this (comma separated) list of nodes
+
+-idct,--inter-dc-throttle &lt;inter-dc-throttle&gt;                Inter-datacenter throttle speed in Mbits (default unlimited)
+
+-k,--target-keyspace &lt;target keyspace name&gt;                  Target
+                                                             keyspace name
+-ks,--keystore &lt;KEYSTORE&gt;                                    Client SSL:
+                                                             full path to keystore
+-kspw,--keystore-password &lt;KEYSTORE-PASSWORD&gt;                Client SSL:
+                                                             password of the keystore
+--no-progress                                                Don&#39;t
+                                                             display progress
+-p,--port &lt;native transport port&gt;                            Port used
+                                                             for native connection (default 9042)
+-prtcl,--ssl-protocol &lt;PROTOCOL&gt;                             Client SSL:
+                                                             connections protocol to use (default: TLS)
+-pw,--password &lt;password&gt;                                    Password for
+                                                             cassandra authentication
+-sp,--storage-port &lt;storage port&gt;                            Port used
+                                                             for internode communication (default 7000)
+-spd,--server-port-discovery &lt;allow server port discovery&gt;   Use ports
+                                                             published by server to decide how to connect. With SSL requires StartTLS
+                                                             to be used.
+-ssp,--ssl-storage-port &lt;ssl storage port&gt;                   Port used
+                                                             for TLS internode communication (default 7001)
+-st,--store-type &lt;STORE-TYPE&gt;                                Client SSL:
+                                                             type of store
+-t,--throttle &lt;throttle&gt;                                     Throttle
+                                                             speed in Mbits (default unlimited)
+-ts,--truststore &lt;TRUSTSTORE&gt;                                Client SSL:
+                                                             full path to truststore
+-tspw,--truststore-password &lt;TRUSTSTORE-PASSWORD&gt;            Client SSL:
+                                                             Password of the truststore
+-u,--username &lt;username&gt;                                     Username for
+                                                             cassandra authentication
+-v,--verbose                                                 verbose
+                                                             output
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> file could be provided  on the command-line with <code class="docutils literal notranslate"><span class="pre">-f</span></code> option to set up streaming throughput, client and server encryption options. Only <code class="docutils literal notranslate"><span class="pre">stream_throughput_outbound_megabits_per_sec</span></code>, <code class="docutils literal notranslate"><span class="pre">server_encryption_options</span></code> and <code class="docutils literal notranslate"><span class="pre">client_encryption_options</span></code> are read from yaml. You can override options read from <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> with corresponding command line options.</p>
+</div>
+<div class="section" id="a-sstableloader-demo">
+<h3>A sstableloader Demo<a class="headerlink" href="#a-sstableloader-demo" title="Permalink to this headline">¶</a></h3>
+<p>We shall demonstrate using <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> by uploading incremental backup data for table <code class="docutils literal notranslate"><span class="pre">catalogkeyspace.magazine</span></code>.  We shall also use a snapshot of the same table to bulk upload in a different run of  <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code>.  The backups and snapshots for the <code class="docutils literal notranslate"><span class="pre">catalogkeyspace.magazine</span></code> table are listed as follows.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ cd ./cassandra/data/data/catalogkeyspace/magazine-
+446eae30c22a11e9b1350d927649052c
+[ec2-user@ip-10-0-2-238 magazine-446eae30c22a11e9b1350d927649052c]$ ls -l
+total 0
+drwxrwxr-x. 2 ec2-user ec2-user 226 Aug 19 02:38 backups
+drwxrwxr-x. 4 ec2-user ec2-user  40 Aug 19 02:45 snapshots
+</pre></div>
+</div>
+<p>The directory path structure of SSTables to be uploaded using <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> is used as the  target keyspace/table.</p>
+<p>We could have directly uploaded from the <code class="docutils literal notranslate"><span class="pre">backups</span></code> and <code class="docutils literal notranslate"><span class="pre">snapshots</span></code> directories respectively if the directory structure were in the format used by <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code>. But the directory path of backups and snapshots for SSTables  is <code class="docutils literal notranslate"><span class="pre">/catalogkeyspace/magazine-446eae30c22a11e9b1350d927649052c/backups</span></code> and <code class="docutils literal notranslate"><span class="pre">/catalogkeyspace/magazine-446eae30c22a11e9b1350d927649052c/snapshots</span></code> respectively, which cannot be used to upload SSTables to <code class="docutils literal notranslate"><span class="pre">catalogkeyspace.magazine</span></code> table. The directory path structure must be <code class="docutils literal notranslate"><span class="pre">/catalogkeyspace/magazine/</span></code> to use <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code>. We need to create a new directory structure to upload SSTables with <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> which is typical when using <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code>. Create a directory structure <code class="docutils literal notranslate"><span class="pre">/catalogkeyspace/magazine</span></code> and set its permissions.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ sudo mkdir -p /catalogkeyspace/magazine
+[ec2-user@ip-10-0-2-238 ~]$ sudo chmod -R 777 /catalogkeyspace/magazine
+</pre></div>
+</div>
+<div class="section" id="bulk-loading-from-an-incremental-backup">
+<h4>Bulk Loading from an Incremental Backup<a class="headerlink" href="#bulk-loading-from-an-incremental-backup" title="Permalink to this headline">¶</a></h4>
+<p>An incremental backup does not include the DDL for a table. The table must already exist. If the table was dropped it may be created using the <code class="docutils literal notranslate"><span class="pre">schema.cql</span></code> generated with every snapshot of a table. As we shall be using <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> to load SSTables to the <code class="docutils literal notranslate"><span class="pre">magazine</span></code> table, the table must exist prior to running <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code>. The table does not need to be empty but we have used an empty table as indicated by a CQL query:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:catalogkeyspace&gt; SELECT * FROM magazine;
+
+id | name | publisher
+----+------+-----------
+
+(0 rows)
+</pre></div>
+</div>
+<p>After the table to upload has been created copy the SSTable files from the <code class="docutils literal notranslate"><span class="pre">backups</span></code> directory to the <code class="docutils literal notranslate"><span class="pre">/catalogkeyspace/magazine/</span></code> directory that we created.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ sudo cp ./cassandra/data/data/catalogkeyspace/magazine-
+446eae30c22a11e9b1350d927649052c/backups/* /catalogkeyspace/magazine/
+</pre></div>
+</div>
+<p>Run the <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> to upload SSTables from the <code class="docutils literal notranslate"><span class="pre">/catalogkeyspace/magazine/</span></code> directory.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sstableloader --nodes 10.0.2.238  /catalogkeyspace/magazine/
+</pre></div>
+</div>
+<p>The output from the <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> command should be similar to the listed:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ sstableloader --nodes 10.0.2.238  /catalogkeyspace/magazine/
+Opening SSTables and calculating sections to stream
+Streaming relevant part of /catalogkeyspace/magazine/na-1-big-Data.db
+/catalogkeyspace/magazine/na-2-big-Data.db  to [35.173.233.153:7000, 10.0.2.238:7000,
+54.158.45.75:7000]
+progress: [35.173.233.153:7000]0:1/2 88 % total: 88% 0.018KiB/s (avg: 0.018KiB/s)
+progress: [35.173.233.153:7000]0:2/2 176% total: 176% 33.807KiB/s (avg: 0.036KiB/s)
+progress: [35.173.233.153:7000]0:2/2 176% total: 176% 0.000KiB/s (avg: 0.029KiB/s)
+progress: [35.173.233.153:7000]0:2/2 176% [10.0.2.238:7000]0:1/2 39 % total: 81% 0.115KiB/s
+(avg: 0.024KiB/s)
+progress: [35.173.233.153:7000]0:2/2 176% [10.0.2.238:7000]0:2/2 78 % total: 108%
+97.683KiB/s (avg: 0.033KiB/s)
+progress: [35.173.233.153:7000]0:2/2 176% [10.0.2.238:7000]0:2/2 78 %
+[54.158.45.75:7000]0:1/2 39 % total: 80% 0.233KiB/s (avg: 0.040KiB/s)
+progress: [35.173.233.153:7000]0:2/2 176% [10.0.2.238:7000]0:2/2 78 %
+[54.158.45.75:7000]0:2/2 78 % total: 96% 88.522KiB/s (avg: 0.049KiB/s)
+progress: [35.173.233.153:7000]0:2/2 176% [10.0.2.238:7000]0:2/2 78 %
+[54.158.45.75:7000]0:2/2 78 % total: 96% 0.000KiB/s (avg: 0.045KiB/s)
+progress: [35.173.233.153:7000]0:2/2 176% [10.0.2.238:7000]0:2/2 78 %
+[54.158.45.75:7000]0:2/2 78 % total: 96% 0.000KiB/s (avg: 0.044KiB/s)
+</pre></div>
+</div>
+<p>After the <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> has run query the <code class="docutils literal notranslate"><span class="pre">magazine</span></code> table and the loaded table should get listed when a query is run.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:catalogkeyspace&gt; SELECT * FROM magazine;
+
+id | name                      | publisher
+----+---------------------------+------------------
+ 1 |        Couchbase Magazine |        Couchbase
+ 0 | Apache Cassandra Magazine | Apache Cassandra
+
+(2 rows)
+cqlsh:catalogkeyspace&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="bulk-loading-from-a-snapshot">
+<h4>Bulk Loading from a Snapshot<a class="headerlink" href="#bulk-loading-from-a-snapshot" title="Permalink to this headline">¶</a></h4>
+<p>In this section we shall demonstrate restoring a snapshot of the <code class="docutils literal notranslate"><span class="pre">magazine</span></code> table to the <code class="docutils literal notranslate"><span class="pre">magazine</span></code> table.  As we used the same table to restore data from a backup the directory structure required by <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> should already exist.  If the directory structure needed to load SSTables to <code class="docutils literal notranslate"><span class="pre">catalogkeyspace.magazine</span></code> does not exist create the directories and set their permissions.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ sudo mkdir -p /catalogkeyspace/magazine
+[ec2-user@ip-10-0-2-238 ~]$ sudo chmod -R 777 /catalogkeyspace/magazine
+</pre></div>
+</div>
+<p>As we shall be copying the snapshot  files to the directory remove any files that may be in the directory.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ sudo rm /catalogkeyspace/magazine/*
+[ec2-user@ip-10-0-2-238 ~]$ cd /catalogkeyspace/magazine/
+[ec2-user@ip-10-0-2-238 magazine]$ ls -l
+total 0
+</pre></div>
+</div>
+<p>Copy the snapshot files to the <code class="docutils literal notranslate"><span class="pre">/catalogkeyspace/magazine</span></code> directory.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ sudo cp ./cassandra/data/data/catalogkeyspace/magazine-
+446eae30c22a11e9b1350d927649052c/snapshots/magazine/* /catalogkeyspace/magazine
+</pre></div>
+</div>
+<p>List the files in the <code class="docutils literal notranslate"><span class="pre">/catalogkeyspace/magazine</span></code> directory and a <code class="docutils literal notranslate"><span class="pre">schema.cql</span></code> should also get listed.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ cd /catalogkeyspace/magazine
+[ec2-user@ip-10-0-2-238 magazine]$ ls -l
+total 44
+-rw-r--r--. 1 root root   31 Aug 19 04:13 manifest.json
+-rw-r--r--. 1 root root   47 Aug 19 04:13 na-1-big-CompressionInfo.db
+-rw-r--r--. 1 root root   97 Aug 19 04:13 na-1-big-Data.db
+-rw-r--r--. 1 root root   10 Aug 19 04:13 na-1-big-Digest.crc32
+-rw-r--r--. 1 root root   16 Aug 19 04:13 na-1-big-Filter.db
+-rw-r--r--. 1 root root   16 Aug 19 04:13 na-1-big-Index.db
+-rw-r--r--. 1 root root 4687 Aug 19 04:13 na-1-big-Statistics.db
+-rw-r--r--. 1 root root   56 Aug 19 04:13 na-1-big-Summary.db
+-rw-r--r--. 1 root root   92 Aug 19 04:13 na-1-big-TOC.txt
+-rw-r--r--. 1 root root  815 Aug 19 04:13 schema.cql
+</pre></div>
+</div>
+<p>Alternatively create symlinks to the snapshot folder instead of copying the data, something like:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mkdir keyspace_name
+ln -s _path_to_snapshot_folder keyspace_name/table_name
+</pre></div>
+</div>
+<p>If the <code class="docutils literal notranslate"><span class="pre">magazine</span></code> table was dropped run the DDL in the <code class="docutils literal notranslate"><span class="pre">schema.cql</span></code> to create the table.  Run the <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> with the following command.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sstableloader --nodes 10.0.2.238  /catalogkeyspace/magazine/
+</pre></div>
+</div>
+<p>As the output from the command indicates SSTables get streamed to the cluster.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ sstableloader --nodes 10.0.2.238  /catalogkeyspace/magazine/
+
+Established connection to initial hosts
+Opening SSTables and calculating sections to stream
+Streaming relevant part of /catalogkeyspace/magazine/na-1-big-Data.db  to
+[35.173.233.153:7000, 10.0.2.238:7000, 54.158.45.75:7000]
+progress: [35.173.233.153:7000]0:1/1 176% total: 176% 0.017KiB/s (avg: 0.017KiB/s)
+progress: [35.173.233.153:7000]0:1/1 176% total: 176% 0.000KiB/s (avg: 0.014KiB/s)
+progress: [35.173.233.153:7000]0:1/1 176% [10.0.2.238:7000]0:1/1 78 % total: 108% 0.115KiB/s
+(avg: 0.017KiB/s)
+progress: [35.173.233.153:7000]0:1/1 176% [10.0.2.238:7000]0:1/1 78 %
+[54.158.45.75:7000]0:1/1 78 % total: 96% 0.232KiB/s (avg: 0.024KiB/s)
+progress: [35.173.233.153:7000]0:1/1 176% [10.0.2.238:7000]0:1/1 78 %
+[54.158.45.75:7000]0:1/1 78 % total: 96% 0.000KiB/s (avg: 0.022KiB/s)
+progress: [35.173.233.153:7000]0:1/1 176% [10.0.2.238:7000]0:1/1 78 %
+[54.158.45.75:7000]0:1/1 78 % total: 96% 0.000KiB/s (avg: 0.021KiB/s)
+</pre></div>
+</div>
+<p>Some other requirements of <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> that should be kept into consideration are:</p>
+<ul class="simple">
+<li>The SSTables to be loaded must be compatible with  the Cassandra version being loaded into.</li>
+<li>Repairing tables that have been loaded into a different cluster does not repair the source tables.</li>
+<li>Sstableloader makes use of port 7000 for internode communication.</li>
+<li>Before restoring incremental backups run <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">flush</span></code> to backup any data in memtables</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="using-nodetool-import">
+<h2>Using nodetool import<a class="headerlink" href="#using-nodetool-import" title="Permalink to this headline">¶</a></h2>
+<p>In this section we shall import SSTables into a table using the <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">import</span></code> command. The <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">refresh</span></code> command is deprecated, and it is recommended to use <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">import</span></code> instead. The <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">refresh</span></code> does not have an option to load new SSTables from a separate directory which the <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">import</span></code> does.</p>
+<p>The command usage is as follows.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nodetool [(-h &lt;host&gt; | --host &lt;host&gt;)] [(-p &lt;port&gt; | --port &lt;port&gt;)]
+       [(-pp | --print-port)] [(-pw &lt;password&gt; | --password &lt;password&gt;)]
+       [(-pwf &lt;passwordFilePath&gt; | --password-file &lt;passwordFilePath&gt;)]
+       [(-u &lt;username&gt; | --username &lt;username&gt;)] import
+       [(-c | --no-invalidate-caches)] [(-e | --extended-verify)]
+       [(-l | --keep-level)] [(-q | --quick)] [(-r | --keep-repaired)]
+       [(-t | --no-tokens)] [(-v | --no-verify)] [--] &lt;keyspace&gt; &lt;table&gt;
+       &lt;directory&gt; ...
+</pre></div>
+</div>
+<p>The arguments <code class="docutils literal notranslate"><span class="pre">keyspace</span></code>, <code class="docutils literal notranslate"><span class="pre">table</span></code> name and <code class="docutils literal notranslate"><span class="pre">directory</span></code> to import SSTables from are required.</p>
+<p>The supported options are as follows.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>-c, --no-invalidate-caches
+    Don&#39;t invalidate the row cache when importing
+
+-e, --extended-verify
+    Run an extended verify, verifying all values in the new SSTables
+
+-h &lt;host&gt;, --host &lt;host&gt;
+    Node hostname or ip address
+
+-l, --keep-level
+    Keep the level on the new SSTables
+
+-p &lt;port&gt;, --port &lt;port&gt;
+    Remote jmx agent port number
+
+-pp, --print-port
+    Operate in 4.0 mode with hosts disambiguated by port number
+
+-pw &lt;password&gt;, --password &lt;password&gt;
+    Remote jmx agent password
+
+-pwf &lt;passwordFilePath&gt;, --password-file &lt;passwordFilePath&gt;
+    Path to the JMX password file
+
+-q, --quick
+    Do a quick import without verifying SSTables, clearing row cache or
+    checking in which data directory to put the file
+
+-r, --keep-repaired
+    Keep any repaired information from the SSTables
+
+-t, --no-tokens
+    Don&#39;t verify that all tokens in the new SSTable are owned by the
+    current node
+
+-u &lt;username&gt;, --username &lt;username&gt;
+    Remote jmx agent username
+
+-v, --no-verify
+    Don&#39;t verify new SSTables
+
+--
+    This option can be used to separate command-line options from the
+    list of argument, (useful when arguments might be mistaken for
+    command-line options
+</pre></div>
+</div>
+<p>As the keyspace and table are specified on the command line  <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">import</span></code> does not have the same requirement that <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> does, which is to have the SSTables in a specific directory path. When importing snapshots or incremental backups with <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">import</span></code> the SSTables don’t need to be copied to another directory.</p>
+<div class="section" id="importing-data-from-an-incremental-backup">
+<h3>Importing Data from an Incremental Backup<a class="headerlink" href="#importing-data-from-an-incremental-backup" title="Permalink to this headline">¶</a></h3>
+<p>In this section we shall demonstrate using <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">import</span></code> to import SSTables from an incremental backup.  We shall use the example table <code class="docutils literal notranslate"><span class="pre">cqlkeyspace.t</span></code>. Drop table <code class="docutils literal notranslate"><span class="pre">t</span></code> as we are demonstrating to   restore the table.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:cqlkeyspace&gt; DROP table t;
+</pre></div>
+</div>
+<p>An incremental backup for a table does not include the schema definition for the table. If the schema definition is not kept as a separate backup,  the <code class="docutils literal notranslate"><span class="pre">schema.cql</span></code> from a backup of the table may be used to create the table as follows.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:cqlkeyspace&gt; CREATE TABLE IF NOT EXISTS cqlkeyspace.t (
+              ...         id int PRIMARY KEY,
+              ...         k int,
+              ...         v text)
+              ...         WITH ID = d132e240-c217-11e9-bbee-19821dcea330
+              ...         AND bloom_filter_fp_chance = 0.01
+              ...         AND crc_check_chance = 1.0
+              ...         AND default_time_to_live = 0
+              ...         AND gc_grace_seconds = 864000
+              ...         AND min_index_interval = 128
+              ...         AND max_index_interval = 2048
+              ...         AND memtable_flush_period_in_ms = 0
+              ...         AND speculative_retry = &#39;99p&#39;
+              ...         AND additional_write_policy = &#39;99p&#39;
+              ...         AND comment = &#39;&#39;
+              ...         AND caching = { &#39;keys&#39;: &#39;ALL&#39;, &#39;rows_per_partition&#39;: &#39;NONE&#39; }
+              ...         AND compaction = { &#39;max_threshold&#39;: &#39;32&#39;, &#39;min_threshold&#39;: &#39;4&#39;,
+&#39;class&#39;: &#39;org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy&#39; }
+              ...         AND compression = { &#39;chunk_length_in_kb&#39;: &#39;16&#39;, &#39;class&#39;:
+&#39;org.apache.cassandra.io.compress.LZ4Compressor&#39; }
+              ...         AND cdc = false
+              ...         AND extensions = {  };
+</pre></div>
+</div>
+<p>Initially the table could be empty, but does not have to be.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:cqlkeyspace&gt; SELECT * FROM t;
+
+id | k | v
+----+---+---
+
+(0 rows)
+</pre></div>
+</div>
+<p>Run the <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">import</span></code> command by providing the keyspace, table and the backups directory. We don’t need to copy the table backups to another directory to run  <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">import</span></code> as we had to when using <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code>.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ nodetool import -- cqlkeyspace t
+./cassandra/data/data/cqlkeyspace/t-d132e240c21711e9bbee19821dcea330/backups
+[ec2-user@ip-10-0-2-238 ~]$
+</pre></div>
+</div>
+<p>The SSTables get imported into the table. Run a query in cqlsh to list the data imported.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:cqlkeyspace&gt; SELECT * FROM t;
+
+id | k | v
+----+---+------
+ 1 | 1 | val1
+ 0 | 0 | val0
+</pre></div>
+</div>
+</div>
+<div class="section" id="importing-data-from-a-snapshot">
+<h3>Importing Data from a Snapshot<a class="headerlink" href="#importing-data-from-a-snapshot" title="Permalink to this headline">¶</a></h3>
+<p>Importing SSTables from a snapshot with the <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">import</span></code> command is similar to importing SSTables from an incremental backup. To demonstrate we shall import a snapshot for table <code class="docutils literal notranslate"><span class="pre">catalogkeyspace.journal</span></code>.  Drop the table as we are demonstrating to restore the table from a snapshot.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:cqlkeyspace&gt; use CATALOGKEYSPACE;
+cqlsh:catalogkeyspace&gt; DROP TABLE journal;
+</pre></div>
+</div>
+<p>We shall use the <code class="docutils literal notranslate"><span class="pre">catalog-ks</span></code> snapshot for the <code class="docutils literal notranslate"><span class="pre">journal</span></code> table. List the files in the snapshot. The snapshot includes a <code class="docutils literal notranslate"><span class="pre">schema.cql</span></code>, which is the schema definition for the <code class="docutils literal notranslate"><span class="pre">journal</span></code> table.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 catalog-ks]$ ls -l
+total 44
+-rw-rw-r--. 1 ec2-user ec2-user   31 Aug 19 02:44 manifest.json
+-rw-rw-r--. 3 ec2-user ec2-user   47 Aug 19 02:38 na-1-big-CompressionInfo.db
+-rw-rw-r--. 3 ec2-user ec2-user   97 Aug 19 02:38 na-1-big-Data.db
+-rw-rw-r--. 3 ec2-user ec2-user   10 Aug 19 02:38 na-1-big-Digest.crc32
+-rw-rw-r--. 3 ec2-user ec2-user   16 Aug 19 02:38 na-1-big-Filter.db
+-rw-rw-r--. 3 ec2-user ec2-user   16 Aug 19 02:38 na-1-big-Index.db
+-rw-rw-r--. 3 ec2-user ec2-user 4687 Aug 19 02:38 na-1-big-Statistics.db
+-rw-rw-r--. 3 ec2-user ec2-user   56 Aug 19 02:38 na-1-big-Summary.db
+-rw-rw-r--. 3 ec2-user ec2-user   92 Aug 19 02:38 na-1-big-TOC.txt
+-rw-rw-r--. 1 ec2-user ec2-user  814 Aug 19 02:44 schema.cql
+</pre></div>
+</div>
+<p>Copy the DDL from the <code class="docutils literal notranslate"><span class="pre">schema.cql</span></code> and run in cqlsh to create the <code class="docutils literal notranslate"><span class="pre">catalogkeyspace.journal</span></code> table.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:catalogkeyspace&gt; CREATE TABLE IF NOT EXISTS catalogkeyspace.journal (
+                  ...         id int PRIMARY KEY,
+                  ...         name text,
+                  ...         publisher text)
+                  ...         WITH ID = 296a2d30-c22a-11e9-b135-0d927649052c
+                  ...         AND bloom_filter_fp_chance = 0.01
+                  ...         AND crc_check_chance = 1.0
+                  ...         AND default_time_to_live = 0
+                  ...         AND gc_grace_seconds = 864000
+                  ...         AND min_index_interval = 128
+                  ...         AND max_index_interval = 2048
+                  ...         AND memtable_flush_period_in_ms = 0
+                  ...         AND speculative_retry = &#39;99p&#39;
+                  ...         AND additional_write_policy = &#39;99p&#39;
+                  ...         AND comment = &#39;&#39;
+                  ...         AND caching = { &#39;keys&#39;: &#39;ALL&#39;, &#39;rows_per_partition&#39;: &#39;NONE&#39; }
+                  ...         AND compaction = { &#39;min_threshold&#39;: &#39;4&#39;, &#39;max_threshold&#39;:
+&#39;32&#39;, &#39;class&#39;: &#39;org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy&#39; }
+                  ...         AND compression = { &#39;chunk_length_in_kb&#39;: &#39;16&#39;, &#39;class&#39;:
+&#39;org.apache.cassandra.io.compress.LZ4Compressor&#39; }
+                  ...         AND cdc = false
+                  ...         AND extensions = {  };
+</pre></div>
+</div>
+<p>Run the <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">import</span></code> command to import the SSTables for the snapshot.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ nodetool import -- catalogkeyspace journal
+./cassandra/data/data/catalogkeyspace/journal-
+296a2d30c22a11e9b1350d927649052c/snapshots/catalog-ks/
+[ec2-user@ip-10-0-2-238 ~]$
+</pre></div>
+</div>
+<p>Subsequently run a CQL query on the <code class="docutils literal notranslate"><span class="pre">journal</span></code> table and the data imported gets listed.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:catalogkeyspace&gt;
+cqlsh:catalogkeyspace&gt; SELECT * FROM journal;
+
+id | name                      | publisher
+----+---------------------------+------------------
+ 1 |        Couchbase Magazine |        Couchbase
+ 0 | Apache Cassandra Magazine | Apache Cassandra
+
+(2 rows)
+cqlsh:catalogkeyspace&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="bulk-loading-external-data">
+<h2>Bulk Loading External Data<a class="headerlink" href="#bulk-loading-external-data" title="Permalink to this headline">¶</a></h2>
+<p>Bulk loading external data directly is not supported by any of the tools we have discussed which include <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> and <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">import</span></code>.  The <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> and <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">import</span></code> require data to be in the form of SSTables.  Apache Cassandra supports a Java API for generating SSTables from input data. Subsequently the <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> or <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">import</span></code> could be used to bulk load the SSTables. Next, we shall discuss the <code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.io.sstable.CQLSSTableWriter</span></code> Java class for generating SSTables.</p>
+<div class="section" id="generating-sstables-with-cqlsstablewriter-java-api">
+<h3>Generating SSTables with CQLSSTableWriter Java API<a class="headerlink" href="#generating-sstables-with-cqlsstablewriter-java-api" title="Permalink to this headline">¶</a></h3>
+<p>To generate SSTables using the <code class="docutils literal notranslate"><span class="pre">CQLSSTableWriter</span></code> class the following need to be supplied at the least.</p>
+<ul class="simple">
+<li>An output directory to generate the SSTable in</li>
+<li>The schema for the SSTable</li>
+<li>A prepared insert statement</li>
+<li>A partitioner</li>
+</ul>
+<p>The output directory must already have been created. Create a directory (<code class="docutils literal notranslate"><span class="pre">/sstables</span></code> as an example) and set its permissions.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sudo mkdir /sstables
+sudo chmod  777 -R /sstables
+</pre></div>
+</div>
+<p>Next, we shall discuss To use <code class="docutils literal notranslate"><span class="pre">CQLSSTableWriter</span></code> could be used in a Java application. Create a Java constant for the output directory.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>public static final String OUTPUT_DIR = &quot;./sstables&quot;;
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">CQLSSTableWriter</span></code> Java API has the provision to create a user defined type. Create a new type to store <code class="docutils literal notranslate"><span class="pre">int</span></code> data:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>String type = &quot;CREATE TYPE CQLKeyspace.intType (a int, b int)&quot;;
+// Define a String variable for the SSTable schema.
+String schema = &quot;CREATE TABLE CQLKeyspace.t (&quot;
+                 + &quot;  id int PRIMARY KEY,&quot;
+                 + &quot;  k int,&quot;
+                 + &quot;  v1 text,&quot;
+                 + &quot;  v2 intType,&quot;
+                 + &quot;)&quot;;
+</pre></div>
+</div>
+<p>Define a <code class="docutils literal notranslate"><span class="pre">String</span></code> variable for the prepared insert statement to use:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>String insertStmt = &quot;INSERT INTO CQLKeyspace.t (id, k, v1, v2) VALUES (?, ?, ?, ?)&quot;;
+</pre></div>
+</div>
+<p>The partitioner to use does not need to be set as the default partitioner <code class="docutils literal notranslate"><span class="pre">Murmur3Partitioner</span></code> is used.</p>
+<p>All these variables or settings are used by the builder class <code class="docutils literal notranslate"><span class="pre">CQLSSTableWriter.Builder</span></code> to create a <code class="docutils literal notranslate"><span class="pre">CQLSSTableWriter</span></code> object.</p>
+<p>Create a File object for the output directory.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>File outputDir = new File(OUTPUT_DIR + File.separator + &quot;CQLKeyspace&quot; + File.separator + &quot;t&quot;);
+</pre></div>
+</div>
+<p>Next, obtain a <code class="docutils literal notranslate"><span class="pre">CQLSSTableWriter.Builder</span></code> object using <code class="docutils literal notranslate"><span class="pre">static</span></code> method <code class="docutils literal notranslate"><span class="pre">CQLSSTableWriter.builder()</span></code>. Set the output
+directory <code class="docutils literal notranslate"><span class="pre">File</span></code> object, user defined type, SSTable schema, buffer size,  prepared insert statement, and optionally any of the other builder options, and invoke the <code class="docutils literal notranslate"><span class="pre">build()</span></code> method to create a <code class="docutils literal notranslate"><span class="pre">CQLSSTableWriter</span></code> object:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CQLSSTableWriter writer = CQLSSTableWriter.builder()
+                                             .inDirectory(outputDir)
+                                             .withType(type)
+                                             .forTable(schema)
+                                             .withBufferSizeInMB(256)
+                                             .using(insertStmt).build();
+</pre></div>
+</div>
+<p>Next, set the SSTable data. If any user define types are used obtain a <code class="docutils literal notranslate"><span class="pre">UserType</span></code> object for these:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>UserType userType = writer.getUDType(&quot;intType&quot;);
+</pre></div>
+</div>
+<p>Add data rows for the resulting SSTable.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>writer.addRow(0, 0, &quot;val0&quot;, userType.newValue().setInt(&quot;a&quot;, 0).setInt(&quot;b&quot;, 0));
+   writer.addRow(1, 1, &quot;val1&quot;, userType.newValue().setInt(&quot;a&quot;, 1).setInt(&quot;b&quot;, 1));
+   writer.addRow(2, 2, &quot;val2&quot;, userType.newValue().setInt(&quot;a&quot;, 2).setInt(&quot;b&quot;, 2));
+</pre></div>
+</div>
+<p>Close the writer, finalizing the SSTable.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>writer.close();
+</pre></div>
+</div>
+<p>All the public methods the <code class="docutils literal notranslate"><span class="pre">CQLSSTableWriter</span></code> class provides including some other methods that are not discussed in the preceding example are as follows.</p>
+<p>All the public  methods the  <code class="docutils literal notranslate"><span class="pre">CQLSSTableWriter.Builder</span></code> class provides including some other methods that are not discussed in the preceding example are as follows.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Method</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>inDirectory(String directory)</td>
+<td>The directory where to write the SSTables.  This is a mandatory option.  The directory to use should already exist and be writable.</td>
+</tr>
+<tr class="row-odd"><td>inDirectory(File directory)</td>
+<td>The directory where to write the SSTables.  This is a mandatory option.  The directory to use should already exist and be writable.</td>
+</tr>
+<tr class="row-even"><td>forTable(String schema)</td>
+<td>The schema (CREATE TABLE statement) for the table for which SSTable is to be created.  The
+provided CREATE TABLE statement must use a fully-qualified table name, one that includes the
+keyspace name. This is a mandatory option.</td>
+</tr>
+<tr class="row-odd"><td>withPartitioner(IPartitioner partitioner)</td>
+<td>The partitioner to use. By default,  Murmur3Partitioner will be used. If this is not the
+partitioner used by the cluster for which the SSTables are created, the correct partitioner
+needs to be provided.</td>
+</tr>
+<tr class="row-even"><td>using(String insert)</td>
+<td>The INSERT or UPDATE statement defining the order of the values to add for a given CQL row.
+The provided INSERT statement must use a fully-qualified table name, one that includes the
+keyspace name. Moreover, said statement must use bind variables since these variables will
+be bound to values by the resulting SSTable writer. This is a mandatory option.</td>
+</tr>
+<tr class="row-odd"><td>withBufferSizeInMB(int size)</td>
+<td>The size of the buffer to use. This defines how much data will be buffered before being
+written as a new SSTable. This corresponds roughly to the data size that will have the
+created SSTable. The default is 128MB, which should be reasonable for a 1GB heap. If
+OutOfMemory exception gets generated while using the SSTable writer, should lower this
+value.</td>
+</tr>
+<tr class="row-even"><td>sorted()</td>
+<td>Creates a CQLSSTableWriter that expects sorted inputs. If this option is used, the resulting
+SSTable writer will expect rows to be added in SSTable sorted order (and an exception will
+be thrown if that is not the case during row insertion). The SSTable sorted order means that
+rows are added such that their partition keys respect the partitioner order. This option
+should only be used if the rows can be provided in order, which is rarely the case. If the
+rows can be provided in order however, using this sorted might be more efficient. If this
+option is used, some option like withBufferSizeInMB will be ignored.</td>
+</tr>
+<tr class="row-odd"><td>build()</td>
+<td>Builds a CQLSSTableWriter object.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="metrics.html" class="btn btn-default pull-right " role="button" title="Monitoring" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="backups.html" class="btn btn-default" role="button" title="Backups" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

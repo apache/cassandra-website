@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-beta2/new/java11.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha5" href="../index.html"/> <link rel="up" title="New Features in Apache Cassandra 4.0" href="index.html"/> <link rel="next" title="Virtual Tables" href="virtualtables.html"/> <link rel="prev" title="New Features in Apache Cassandra 4.0" href="index.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">New Features in Apache Cassandra 4.0</a></li>
+      
+
+      
+      <li>Support for Java 11</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">New Features in Apache Cassandra 4.0</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Support for Java 11</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#support-matrix">Support Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-java-8-to-build">Using Java 8 to Build</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-java-11-to-build">Using Java 11 to Build</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#common-issues">Common Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="virtualtables.html">Virtual Tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auditlogging.html">Audit Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fqllogging.html">Full Query Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="messaging.html">Improved Internode Messaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streaming.html">Improved Streaming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transientreplication.html">Transient Replication</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="support-for-java-11">
+<h1>Support for Java 11<a class="headerlink" href="#support-for-java-11" title="Permalink to this headline">¶</a></h1>
+<p>In the new Java release cadence a new Java version is made available every six months. The more frequent release cycle
+is favored as it brings new Java features to the developers as and when they are developed without the wait that the
+earlier 3 year release model incurred.  Not every Java version is a Long Term Support (LTS) version. After Java 8 the
+next LTS version is Java 11. Java 9, 10, 12 and 13 are all non-LTS versions.</p>
+<p>One of the objectives of the Apache Cassandra 4.0 version is to support the recent LTS Java versions 8 and 11 (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-9608">CASSANDRA-9608</a>). Java 8 and
+Java 11 may be used to build and run Apache Cassandra 4.0.</p>
+<p><strong>Note</strong>: Support for JDK 11 in Apache Cassandra 4.0 is an experimental feature, and not recommended for production use.</p>
+<div class="section" id="support-matrix">
+<h2>Support Matrix<a class="headerlink" href="#support-matrix" title="Permalink to this headline">¶</a></h2>
+<p>The support matrix for the Java versions for compiling and running Apache Cassandra 4.0 is detailed in Table 1. The
+build version is along the vertical axis and the run version is along the horizontal axis.</p>
+<p>Table 1 : Support Matrix for Java</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="30%" />
+<col width="37%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>&#160;</td>
+<td>Java 8 (Run)</td>
+<td>Java 11 (Run)</td>
+</tr>
+<tr class="row-even"><td>Java 8 (Build)</td>
+<td>Supported</td>
+<td>Supported</td>
+</tr>
+<tr class="row-odd"><td>Java 11(Build)</td>
+<td>Not Supported</td>
+<td>Supported</td>
+</tr>
+</tbody>
+</table>
+<p>Essentially Apache 4.0 source code built with Java 11 cannot be run with Java 8. Next, we shall discuss using each of Java 8 and 11 to build and run Apache Cassandra 4.0.</p>
+</div>
+<div class="section" id="using-java-8-to-build">
+<h2>Using Java 8 to Build<a class="headerlink" href="#using-java-8-to-build" title="Permalink to this headline">¶</a></h2>
+<p>To start with, install Java 8. As an example, for installing Java 8 on RedHat Linux the command is as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo yum install java-1.8.0-openjdk-devel
+</pre></div>
+</div>
+<p>Set <code class="docutils literal notranslate"><span class="pre">JAVA_HOME</span></code> and <code class="docutils literal notranslate"><span class="pre">JRE_HOME</span></code> environment variables in the shell bash script. First, open the bash script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo vi ~/.bashrc
+</pre></div>
+</div>
+<p>Set the environment variables including the <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
+$ export JRE_HOME=/usr/lib/jvm/java-1.8.0-openjdk/jre
+$ export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
+</pre></div>
+</div>
+<p>Download and install Apache Cassandra 4.0 source code from the Git along with the dependencies.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/apache/cassandra.git
+</pre></div>
+</div>
+<p>If Cassandra is already running stop Cassandra with the following command.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-172-30-3-146 bin]$ ./nodetool stopdaemon
+</pre></div>
+</div>
+<p>Build the source code from the <code class="docutils literal notranslate"><span class="pre">cassandra</span></code> directory, which has the <code class="docutils literal notranslate"><span class="pre">build.xml</span></code> build script. The Apache Ant uses the Java version set in the <code class="docutils literal notranslate"><span class="pre">JAVA_HOME</span></code> environment variable.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd ~/cassandra
+$ ant
+</pre></div>
+</div>
+<p>Apache Cassandra 4.0 gets built with Java 8.  Set the environment variable for <code class="docutils literal notranslate"><span class="pre">CASSANDRA_HOME</span></code> in the bash script. Also add the <code class="docutils literal notranslate"><span class="pre">CASSANDRA_HOME/bin</span></code> to the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> variable.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ export CASSANDRA_HOME=~/cassandra
+$ export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin:$CASSANDRA_HOME/bin
+</pre></div>
+</div>
+<p>To run Apache Cassandra 4.0 with either of Java 8 or Java 11 run the Cassandra application in the <code class="docutils literal notranslate"><span class="pre">CASSANDRA_HOME/bin</span></code> directory, which is in the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> env variable.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cassandra
+</pre></div>
+</div>
+<p>The Java version used to run Cassandra gets output as Cassandra is getting started. As an example if Java 11 is used, the run output should include similar to the following output snippet:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INFO</span>  <span class="p">[</span><span class="n">main</span><span class="p">]</span> <span class="mi">2019</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">31</span> <span class="mi">21</span><span class="p">:</span><span class="mi">18</span><span class="p">:</span><span class="mi">16</span><span class="p">,</span><span class="mi">862</span> <span class="n">CassandraDaemon</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">480</span> <span class="o">-</span> <span class="n">Hostname</span><span class="p">:</span> <span class="n">ip</span><span class="o">-</span><span class="mi">172</span><span class="o">-</span><span class="mi">30</span><span class="o">-</span><span class="mi">3</span><span class="o">-</span>
+<span class="mf">146.</span><span class="n">ec2</span><span class="o">.</span><span class="n">internal</span><span class="p">:</span><span class="mi">7000</span><span class="p">:</span><span class="mi">7001</span>
+<span class="n">INFO</span>  <span class="p">[</span><span class="n">main</span><span class="p">]</span> <span class="mi">2019</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">31</span> <span class="mi">21</span><span class="p">:</span><span class="mi">18</span><span class="p">:</span><span class="mi">16</span><span class="p">,</span><span class="mi">862</span> <span class="n">CassandraDaemon</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">487</span> <span class="o">-</span> <span class="n">JVM</span> <span class="n">vendor</span><span class="o">/</span><span class="n">version</span><span class="p">:</span> <span class="n">OpenJDK</span>
+<span class="mi">64</span><span class="o">-</span><span class="n">Bit</span> <span class="n">Server</span> <span class="n">VM</span><span class="o">/</span><span class="mf">11.0</span><span class="o">.</span><span class="mi">3</span>
+<span class="n">INFO</span>  <span class="p">[</span><span class="n">main</span><span class="p">]</span> <span class="mi">2019</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">31</span> <span class="mi">21</span><span class="p">:</span><span class="mi">18</span><span class="p">:</span><span class="mi">16</span><span class="p">,</span><span class="mi">863</span> <span class="n">CassandraDaemon</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">488</span> <span class="o">-</span> <span class="n">Heap</span> <span class="n">size</span><span class="p">:</span>
+<span class="mf">1004.000</span><span class="n">MiB</span><span class="o">/</span><span class="mf">1004.000</span><span class="n">MiB</span>
+</pre></div>
+</div>
+<p>The following output indicates a single node Cassandra 4.0 cluster has started.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INFO</span>  <span class="p">[</span><span class="n">main</span><span class="p">]</span> <span class="mi">2019</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">31</span> <span class="mi">21</span><span class="p">:</span><span class="mi">18</span><span class="p">:</span><span class="mi">19</span><span class="p">,</span><span class="mi">687</span> <span class="n">InboundConnectionInitiator</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">130</span> <span class="o">-</span> <span class="n">Listening</span> <span class="n">on</span>
+<span class="n">address</span><span class="p">:</span> <span class="p">(</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">7000</span><span class="p">),</span> <span class="n">nic</span><span class="p">:</span> <span class="n">lo</span><span class="p">,</span> <span class="n">encryption</span><span class="p">:</span> <span class="n">enabled</span> <span class="p">(</span><span class="n">openssl</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="o">...</span>
+<span class="n">INFO</span>  <span class="p">[</span><span class="n">main</span><span class="p">]</span> <span class="mi">2019</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">31</span> <span class="mi">21</span><span class="p">:</span><span class="mi">18</span><span class="p">:</span><span class="mi">19</span><span class="p">,</span><span class="mi">850</span> <span class="n">StorageService</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">512</span> <span class="o">-</span> <span class="n">Unable</span> <span class="n">to</span> <span class="n">gossip</span> <span class="k">with</span> <span class="nb">any</span>
+<span class="n">peers</span> <span class="n">but</span> <span class="n">continuing</span> <span class="n">anyway</span> <span class="n">since</span> <span class="n">node</span> <span class="ow">is</span> <span class="ow">in</span> <span class="n">its</span> <span class="n">own</span> <span class="n">seed</span> <span class="nb">list</span>
+<span class="n">INFO</span>  <span class="p">[</span><span class="n">main</span><span class="p">]</span> <span class="mi">2019</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">31</span> <span class="mi">21</span><span class="p">:</span><span class="mi">18</span><span class="p">:</span><span class="mi">19</span><span class="p">,</span><span class="mi">864</span> <span class="n">StorageService</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">695</span> <span class="o">-</span> <span class="n">Loading</span> <span class="n">persisted</span> <span class="n">ring</span> <span class="n">state</span>
+<span class="n">INFO</span>  <span class="p">[</span><span class="n">main</span><span class="p">]</span> <span class="mi">2019</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">31</span> <span class="mi">21</span><span class="p">:</span><span class="mi">18</span><span class="p">:</span><span class="mi">19</span><span class="p">,</span><span class="mi">865</span> <span class="n">StorageService</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">814</span> <span class="o">-</span> <span class="n">Starting</span> <span class="n">up</span> <span class="n">server</span> <span class="n">gossip</span>
+<span class="n">INFO</span>  <span class="p">[</span><span class="n">main</span><span class="p">]</span> <span class="mi">2019</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">31</span> <span class="mi">21</span><span class="p">:</span><span class="mi">18</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span><span class="mi">088</span> <span class="n">BufferPool</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">216</span> <span class="o">-</span> <span class="n">Global</span> <span class="n">buffer</span> <span class="n">pool</span> <span class="ow">is</span> <span class="n">enabled</span><span class="p">,</span>
+<span class="n">when</span> <span class="n">pool</span> <span class="ow">is</span> <span class="n">exhausted</span> <span class="p">(</span><span class="nb">max</span> <span class="ow">is</span> <span class="mf">251.000</span><span class="n">MiB</span><span class="p">)</span> <span class="n">it</span> <span class="n">will</span> <span class="n">allocate</span> <span class="n">on</span> <span class="n">heap</span>
+<span class="n">INFO</span>  <span class="p">[</span><span class="n">main</span><span class="p">]</span> <span class="mi">2019</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">31</span> <span class="mi">21</span><span class="p">:</span><span class="mi">18</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span><span class="mi">110</span> <span class="n">StorageService</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">875</span> <span class="o">-</span> <span class="n">This</span> <span class="n">node</span> <span class="n">will</span> <span class="ow">not</span> <span class="n">auto</span>
+<span class="n">bootstrap</span> <span class="n">because</span> <span class="n">it</span> <span class="ow">is</span> <span class="n">configured</span> <span class="n">to</span> <span class="n">be</span> <span class="n">a</span> <span class="n">seed</span> <span class="n">node</span><span class="o">.</span>
+<span class="o">...</span>
+<span class="o">...</span>
+<span class="n">INFO</span>  <span class="p">[</span><span class="n">main</span><span class="p">]</span> <span class="mi">2019</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">31</span> <span class="mi">21</span><span class="p">:</span><span class="mi">18</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span><span class="mi">809</span> <span class="n">StorageService</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">1507</span> <span class="o">-</span> <span class="n">JOINING</span><span class="p">:</span> <span class="n">Finish</span> <span class="n">joining</span> <span class="n">ring</span>
+<span class="n">INFO</span>  <span class="p">[</span><span class="n">main</span><span class="p">]</span> <span class="mi">2019</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">31</span> <span class="mi">21</span><span class="p">:</span><span class="mi">18</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span><span class="mi">921</span> <span class="n">StorageService</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">2508</span> <span class="o">-</span> <span class="n">Node</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">7000</span> <span class="n">state</span>
+<span class="n">jump</span> <span class="n">to</span> <span class="n">NORMAL</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-java-11-to-build">
+<h2>Using Java 11 to Build<a class="headerlink" href="#using-java-11-to-build" title="Permalink to this headline">¶</a></h2>
+<p>If Java 11 is used to build Apache Cassandra 4.0, first Java 11 must be installed and the environment variables set. As an example, to download and install Java 11 on RedHat Linux run the following command.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ yum install java-11-openjdk-devel
+</pre></div>
+</div>
+<p>Set the environment variables in the bash script for Java 11. The first command is to open the bash script.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo vi ~/.bashrc
+$ export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+$ export JRE_HOME=/usr/lib/jvm/java-11-openjdk/jre
+$ export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
+</pre></div>
+</div>
+<p>To build source code with Java 11 one of the following two options must be used.</p>
+<blockquote>
+<div><ol class="arabic">
+<li><dl class="first docutils">
+<dt>Include Apache Ant command-line option <code class="docutils literal notranslate"><span class="pre">-Duse.jdk=11</span></code> as follows:</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span>$ ant -Duse.jdk=11
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Set environment variable <code class="docutils literal notranslate"><span class="pre">CASSANDRA_USE_JDK11</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code>:</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span>$ export CASSANDRA_USE_JDK11=true
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ol>
+</div></blockquote>
+<p>As an example, set the environment variable <code class="docutils literal notranslate"><span class="pre">CASSANDRA_USE_JDK11</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-172-30-3-146 cassandra]$ export CASSANDRA_USE_JDK11=true
+[ec2-user@ip-172-30-3-146 cassandra]$ ant
+Buildfile: /home/ec2-user/cassandra/build.xml
+</pre></div>
+</div>
+<p>Or, set the command-line option.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-172-30-3-146 cassandra]$ ant -Duse.jdk11=true
+</pre></div>
+</div>
+<p>The build output should include the following.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>_build_java:
+    [echo] Compiling for Java 11
+...
+...
+build:
+
+_main-jar:
+         [copy] Copying 1 file to /home/ec2-user/cassandra/build/classes/main/META-INF
+     [jar] Building jar: /home/ec2-user/cassandra/build/apache-cassandra-4.0-SNAPSHOT.jar
+...
+...
+_build-test:
+   [javac] Compiling 739 source files to /home/ec2-user/cassandra/build/test/classes
+    [copy] Copying 25 files to /home/ec2-user/cassandra/build/test/classes
+...
+...
+jar:
+   [mkdir] Created dir: /home/ec2-user/cassandra/build/classes/stress/META-INF
+   [mkdir] Created dir: /home/ec2-user/cassandra/build/tools/lib
+     [jar] Building jar: /home/ec2-user/cassandra/build/tools/lib/stress.jar
+   [mkdir] Created dir: /home/ec2-user/cassandra/build/classes/fqltool/META-INF
+     [jar] Building jar: /home/ec2-user/cassandra/build/tools/lib/fqltool.jar
+
+BUILD SUCCESSFUL
+Total time: 1 minute 3 seconds
+[ec2-user@ip-172-30-3-146 cassandra]$
+</pre></div>
+</div>
+</div>
+<div class="section" id="common-issues">
+<h2>Common Issues<a class="headerlink" href="#common-issues" title="Permalink to this headline">¶</a></h2>
+<p>One of the two options mentioned must be used to compile with JDK 11 or the build fails and the following error message is output.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-172-30-3-146 cassandra]$ ant
+Buildfile: /home/ec2-user/cassandra/build.xml
+validate-build-conf:
+
+BUILD FAILED
+/home/ec2-user/cassandra/build.xml:293: -Duse.jdk11=true or $CASSANDRA_USE_JDK11=true must
+be set when building from java 11
+Total time: 1 second
+[ec2-user@ip-172-30-3-146 cassandra]$
+</pre></div>
+</div>
+<p>The Java 11 built Apache Cassandra 4.0 source code may be run with Java 11 only. If a Java 11 built code is run with Java 8 the following error message gets output.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[root@localhost ~]# ssh -i cassandra.pem ec2-user@ec2-3-85-85-75.compute-1.amazonaws.com
+Last login: Wed Jul 31 20:47:26 2019 from 75.155.255.51
+[ec2-user@ip-172-30-3-146 ~]$ echo $JAVA_HOME
+/usr/lib/jvm/java-1.8.0-openjdk
+[ec2-user@ip-172-30-3-146 ~]$ cassandra
+...
+...
+Error: A JNI error has occurred, please check your installation and try again
+Exception in thread &quot;main&quot; java.lang.UnsupportedClassVersionError:
+org/apache/cassandra/service/CassandraDaemon has been compiled by a more recent version of
+the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes
+class file versions up to 52.0
+  at java.lang.ClassLoader.defineClass1(Native Method)
+  at java.lang.ClassLoader.defineClass(ClassLoader.java:763)
+  at ...
+...
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">CASSANDRA_USE_JDK11</span></code> variable or the command-line option <code class="docutils literal notranslate"><span class="pre">-Duse.jdk11</span></code> cannot be used to build with Java 8. To demonstrate set <code class="docutils literal notranslate"><span class="pre">JAVA_HOME</span></code> to version 8.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[root@localhost ~]# ssh -i cassandra.pem ec2-user@ec2-3-85-85-75.compute-1.amazonaws.com
+Last login: Wed Jul 31 21:41:50 2019 from 75.155.255.51
+[ec2-user@ip-172-30-3-146 ~]$ echo $JAVA_HOME
+/usr/lib/jvm/java-1.8.0-openjdk
+</pre></div>
+</div>
+<p>Set the <code class="docutils literal notranslate"><span class="pre">CASSANDRA_USE_JDK11=true</span></code> or command-line option <code class="docutils literal notranslate"><span class="pre">-Duse.jdk11=true</span></code>. Subsequently, run Apache Ant to start the build. The build fails with error message listed.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-172-30-3-146 ~]$ cd
+cassandra
+[ec2-user@ip-172-30-3-146 cassandra]$ export CASSANDRA_USE_JDK11=true
+[ec2-user@ip-172-30-3-146 cassandra]$ ant
+Buildfile: /home/ec2-user/cassandra/build.xml
+
+validate-build-conf:
+
+BUILD FAILED
+/home/ec2-user/cassandra/build.xml:285: -Duse.jdk11=true or $CASSANDRA_USE_JDK11=true cannot
+be set when building from java 8
+
+Total time: 0 seconds
+</pre></div>
+</div>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="virtualtables.html" class="btn btn-default pull-right " role="button" title="Virtual Tables" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="index.html" class="btn btn-default" role="button" title="New Features in Apache Cassandra 4.0" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

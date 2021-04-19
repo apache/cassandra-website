@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/3.11.3/cql/functions.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v3.11.3" href="../index.html"/> <link rel="up" title="The Cassandra Query Language (CQL)" href="index.html"/> <link rel="next" title="JSON Support" href="json.html"/> <link rel="prev" title="Security" href="security.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">The Cassandra Query Language (CQL)</a></li>
+      
+
+      
+      <li>Functions</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">The Cassandra Query Language (CQL)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="definitions.html">Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ddl.html">Data Definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dml.html">Data Manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indexes.html">Secondary Indexes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mvs.html">Materialized Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scalar-functions">Scalar functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aggregate-functions">Aggregate functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="json.html">JSON Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triggers.html">Triggers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendices.html">Appendices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html">Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <span class="target" id="cql-functions"></span><div class="section" id="functions">
+<span id="native-functions"></span><span id="udfs"></span><h1>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h1>
+<p>CQL supports 2 main categories of functions:</p>
+<ul class="simple">
+<li>the <a class="reference internal" href="#scalar-functions"><span class="std std-ref">scalar functions</span></a>, which simply take a number of values and produce an output with it.</li>
+<li>the <a class="reference internal" href="#aggregate-functions"><span class="std std-ref">aggregate functions</span></a>, which are used to aggregate multiple rows results from a
+<code class="docutils literal"><span class="pre">SELECT</span></code> statement.</li>
+</ul>
+<p>In both cases, CQL provides a number of native &#8220;hard-coded&#8221; functions as well as the ability to create new user-defined
+functions.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">By default, the use of user-defined functions is disabled by default for security concerns (even when
+enabled, the execution of user-defined functions is sandboxed and a &#8220;rogue&#8221; function should not be allowed to do
+evil, but no sandbox is perfect so using user-defined functions is opt-in). See the <code class="docutils literal"><span class="pre">enable_user_defined_functions</span></code>
+in <code class="docutils literal"><span class="pre">cassandra.yaml</span></code> to enable them.</p>
+</div>
+<p>A function is identifier by its name:</p>
+<pre>
+<strong id="grammar-token-function_name">function_name</strong> ::=  [ <a class="reference internal" href="ddl.html#grammar-token-keyspace_name"><code class="xref docutils literal"><span class="pre">keyspace_name</span></code></a> '.' ] <a class="reference internal" href="ddl.html#grammar-token-name"><code class="xref docutils literal"><span class="pre">name</span></code></a>
+</pre>
+<div class="section" id="scalar-functions">
+<span id="id1"></span><h2>Scalar functions<a class="headerlink" href="#scalar-functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="scalar-native-functions">
+<span id="id2"></span><h3>Native functions<a class="headerlink" href="#scalar-native-functions" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="cast">
+<h4>Cast<a class="headerlink" href="#cast" title="Permalink to this headline">¶</a></h4>
+<p>The <code class="docutils literal"><span class="pre">cast</span></code> function can be used to converts one native datatype to another.</p>
+<p>The following table describes the conversions supported by the <code class="docutils literal"><span class="pre">cast</span></code> function. Cassandra will silently ignore any
+cast converting a datatype into its own datatype.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="87%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">From</th>
+<th class="head">To</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">ascii</span></code></td>
+<td><code class="docutils literal"><span class="pre">text</span></code>, <code class="docutils literal"><span class="pre">varchar</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">bigint</span></code></td>
+<td><code class="docutils literal"><span class="pre">tinyint</span></code>, <code class="docutils literal"><span class="pre">smallint</span></code>, <code class="docutils literal"><span class="pre">int</span></code>, <code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">double</span></code>, <code class="docutils literal"><span class="pre">decimal</span></code>, <code class="docutils literal"><span class="pre">varint</span></code>, <code class="docutils literal"><span class="pre">text</span></code>,
+<code class="docutils literal"><span class="pre">varchar</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">boolean</span></code></td>
+<td><code class="docutils literal"><span class="pre">text</span></code>, <code class="docutils literal"><span class="pre">varchar</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">counter</span></code></td>
+<td><code class="docutils literal"><span class="pre">tinyint</span></code>, <code class="docutils literal"><span class="pre">smallint</span></code>, <code class="docutils literal"><span class="pre">int</span></code>, <code class="docutils literal"><span class="pre">bigint</span></code>, <code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">double</span></code>, <code class="docutils literal"><span class="pre">decimal</span></code>, <code class="docutils literal"><span class="pre">varint</span></code>,
+<code class="docutils literal"><span class="pre">text</span></code>, <code class="docutils literal"><span class="pre">varchar</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">date</span></code></td>
+<td><code class="docutils literal"><span class="pre">timestamp</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">decimal</span></code></td>
+<td><code class="docutils literal"><span class="pre">tinyint</span></code>, <code class="docutils literal"><span class="pre">smallint</span></code>, <code class="docutils literal"><span class="pre">int</span></code>, <code class="docutils literal"><span class="pre">bigint</span></code>, <code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">double</span></code>, <code class="docutils literal"><span class="pre">varint</span></code>, <code class="docutils literal"><span class="pre">text</span></code>,
+<code class="docutils literal"><span class="pre">varchar</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">double</span></code></td>
+<td><code class="docutils literal"><span class="pre">tinyint</span></code>, <code class="docutils literal"><span class="pre">smallint</span></code>, <code class="docutils literal"><span class="pre">int</span></code>, <code class="docutils literal"><span class="pre">bigint</span></code>, <code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">decimal</span></code>, <code class="docutils literal"><span class="pre">varint</span></code>, <code class="docutils literal"><span class="pre">text</span></code>,
+<code class="docutils literal"><span class="pre">varchar</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">float</span></code></td>
+<td><code class="docutils literal"><span class="pre">tinyint</span></code>, <code class="docutils literal"><span class="pre">smallint</span></code>, <code class="docutils literal"><span class="pre">int</span></code>, <code class="docutils literal"><span class="pre">bigint</span></code>, <code class="docutils literal"><span class="pre">double</span></code>, <code class="docutils literal"><span class="pre">decimal</span></code>, <code class="docutils literal"><span class="pre">varint</span></code>, <code class="docutils literal"><span class="pre">text</span></code>,
+<code class="docutils literal"><span class="pre">varchar</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">inet</span></code></td>
+<td><code class="docutils literal"><span class="pre">text</span></code>, <code class="docutils literal"><span class="pre">varchar</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">int</span></code></td>
+<td><code class="docutils literal"><span class="pre">tinyint</span></code>, <code class="docutils literal"><span class="pre">smallint</span></code>, <code class="docutils literal"><span class="pre">bigint</span></code>, <code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">double</span></code>, <code class="docutils literal"><span class="pre">decimal</span></code>, <code class="docutils literal"><span class="pre">varint</span></code>, <code class="docutils literal"><span class="pre">text</span></code>,
+<code class="docutils literal"><span class="pre">varchar</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">smallint</span></code></td>
+<td><code class="docutils literal"><span class="pre">tinyint</span></code>, <code class="docutils literal"><span class="pre">int</span></code>, <code class="docutils literal"><span class="pre">bigint</span></code>, <code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">double</span></code>, <code class="docutils literal"><span class="pre">decimal</span></code>, <code class="docutils literal"><span class="pre">varint</span></code>, <code class="docutils literal"><span class="pre">text</span></code>,
+<code class="docutils literal"><span class="pre">varchar</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">time</span></code></td>
+<td><code class="docutils literal"><span class="pre">text</span></code>, <code class="docutils literal"><span class="pre">varchar</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">timestamp</span></code></td>
+<td><code class="docutils literal"><span class="pre">date</span></code>, <code class="docutils literal"><span class="pre">text</span></code>, <code class="docutils literal"><span class="pre">varchar</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">timeuuid</span></code></td>
+<td><code class="docutils literal"><span class="pre">timestamp</span></code>, <code class="docutils literal"><span class="pre">date</span></code>, <code class="docutils literal"><span class="pre">text</span></code>, <code class="docutils literal"><span class="pre">varchar</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">tinyint</span></code></td>
+<td><code class="docutils literal"><span class="pre">tinyint</span></code>, <code class="docutils literal"><span class="pre">smallint</span></code>, <code class="docutils literal"><span class="pre">int</span></code>, <code class="docutils literal"><span class="pre">bigint</span></code>, <code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">double</span></code>, <code class="docutils literal"><span class="pre">decimal</span></code>, <code class="docutils literal"><span class="pre">varint</span></code>,
+<code class="docutils literal"><span class="pre">text</span></code>, <code class="docutils literal"><span class="pre">varchar</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">uuid</span></code></td>
+<td><code class="docutils literal"><span class="pre">text</span></code>, <code class="docutils literal"><span class="pre">varchar</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">varint</span></code></td>
+<td><code class="docutils literal"><span class="pre">tinyint</span></code>, <code class="docutils literal"><span class="pre">smallint</span></code>, <code class="docutils literal"><span class="pre">int</span></code>, <code class="docutils literal"><span class="pre">bigint</span></code>, <code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">double</span></code>, <code class="docutils literal"><span class="pre">decimal</span></code>, <code class="docutils literal"><span class="pre">text</span></code>,
+<code class="docutils literal"><span class="pre">varchar</span></code></td>
+</tr>
+</tbody>
+</table>
+<p>The conversions rely strictly on Java&#8217;s semantics. For example, the double value 1 will be converted to the text value
+&#8216;1.0&#8217;. For instance:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">avg</span><span class="p">(</span><span class="k">cast</span><span class="p">(</span><span class="k">count</span> <span class="k">as</span> <span class="nb">double</span><span class="p">))</span> <span class="k">FROM</span> <span class="n">myTable</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="token">
+<h4>Token<a class="headerlink" href="#token" title="Permalink to this headline">¶</a></h4>
+<p>The <code class="docutils literal"><span class="pre">token</span></code> function allows to compute the token for a given partition key. The exact signature of the token function
+depends on the table concerned and of the partitioner used by the cluster.</p>
+<p>The type of the arguments of the <code class="docutils literal"><span class="pre">token</span></code> depend on the type of the partition key columns. The return type depend on
+the partitioner in use:</p>
+<ul class="simple">
+<li>For Murmur3Partitioner, the return type is <code class="docutils literal"><span class="pre">bigint</span></code>.</li>
+<li>For RandomPartitioner, the return type is <code class="docutils literal"><span class="pre">varint</span></code>.</li>
+<li>For ByteOrderedPartitioner, the return type is <code class="docutils literal"><span class="pre">blob</span></code>.</li>
+</ul>
+<p>For instance, in a cluster using the default Murmur3Partitioner, if a table is defined by:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">users</span> <span class="p">(</span>
+    <span class="n">userid</span> <span class="nb">text</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+    <span class="n">username</span> <span class="nb">text</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>then the <code class="docutils literal"><span class="pre">token</span></code> function will take a single argument of type <code class="docutils literal"><span class="pre">text</span></code> (in that case, the partition key is <code class="docutils literal"><span class="pre">userid</span></code>
+(there is no clustering columns so the partition key is the same than the primary key)), and the return type will be
+<code class="docutils literal"><span class="pre">bigint</span></code>.</p>
+</div>
+<div class="section" id="uuid">
+<h4>Uuid<a class="headerlink" href="#uuid" title="Permalink to this headline">¶</a></h4>
+<p>The <code class="docutils literal"><span class="pre">uuid</span></code> function takes no parameters and generates a random type 4 uuid suitable for use in <code class="docutils literal"><span class="pre">INSERT</span></code> or
+<code class="docutils literal"><span class="pre">UPDATE</span></code> statements.</p>
+</div>
+<div class="section" id="timeuuid-functions">
+<span id="id3"></span><h4>Timeuuid functions<a class="headerlink" href="#timeuuid-functions" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="now">
+<h5><code class="docutils literal"><span class="pre">now</span></code><a class="headerlink" href="#now" title="Permalink to this headline">¶</a></h5>
+<p>The <code class="docutils literal"><span class="pre">now</span></code> function takes no arguments and generates, on the coordinator node, a new unique timeuuid (at the time where
+the statement using it is executed). Note that this method is useful for insertion but is largely non-sensical in
+<code class="docutils literal"><span class="pre">WHERE</span></code> clauses. For instance, a query of the form:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">myTable</span> <span class="k">WHERE</span> <span class="n">t</span> <span class="o">=</span> <span class="n">now</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>will never return any result by design, since the value returned by <code class="docutils literal"><span class="pre">now()</span></code> is guaranteed to be unique.</p>
+</div>
+<div class="section" id="mintimeuuid-and-maxtimeuuid">
+<h5><code class="docutils literal"><span class="pre">minTimeuuid</span></code> and <code class="docutils literal"><span class="pre">maxTimeuuid</span></code><a class="headerlink" href="#mintimeuuid-and-maxtimeuuid" title="Permalink to this headline">¶</a></h5>
+<p>The <code class="docutils literal"><span class="pre">minTimeuuid</span></code> (resp. <code class="docutils literal"><span class="pre">maxTimeuuid</span></code>) function takes a <code class="docutils literal"><span class="pre">timestamp</span></code> value <code class="docutils literal"><span class="pre">t</span></code> (which can be <cite>either a timestamp
+or a date string &lt;timestamps&gt;</cite>) and return a <em>fake</em> <code class="docutils literal"><span class="pre">timeuuid</span></code> corresponding to the <em>smallest</em> (resp. <em>biggest</em>)
+possible <code class="docutils literal"><span class="pre">timeuuid</span></code> having for timestamp <code class="docutils literal"><span class="pre">t</span></code>. So for instance:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">myTable</span>
+ <span class="k">WHERE</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="n">maxTimeuuid</span><span class="p">(</span><span class="s1">&#39;2013-01-01 00:05+0000&#39;</span><span class="p">)</span>
+   <span class="k">AND</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">minTimeuuid</span><span class="p">(</span><span class="s1">&#39;2013-02-02 10:00+0000&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will select all rows where the <code class="docutils literal"><span class="pre">timeuuid</span></code> column <code class="docutils literal"><span class="pre">t</span></code> is strictly older than <code class="docutils literal"><span class="pre">'2013-01-01</span> <span class="pre">00:05+0000'</span></code> but strictly
+younger than <code class="docutils literal"><span class="pre">'2013-02-02</span> <span class="pre">10:00+0000'</span></code>. Please note that <code class="docutils literal"><span class="pre">t</span> <span class="pre">&gt;=</span> <span class="pre">maxTimeuuid('2013-01-01</span> <span class="pre">00:05+0000')</span></code> would still
+<em>not</em> select a <code class="docutils literal"><span class="pre">timeuuid</span></code> generated exactly at &#8216;2013-01-01 00:05+0000&#8217; and is essentially equivalent to <code class="docutils literal"><span class="pre">t</span> <span class="pre">&gt;</span>
+<span class="pre">maxTimeuuid('2013-01-01</span> <span class="pre">00:05+0000')</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We called the values generated by <code class="docutils literal"><span class="pre">minTimeuuid</span></code> and <code class="docutils literal"><span class="pre">maxTimeuuid</span></code> <em>fake</em> UUID because they do no respect
+the Time-Based UUID generation process specified by the <a class="reference external" href="http://www.ietf.org/rfc/rfc4122.txt">RFC 4122</a>. In
+particular, the value returned by these 2 methods will not be unique. This means you should only use those methods
+for querying (as in the example above). Inserting the result of those methods is almost certainly <em>a bad idea</em>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="time-conversion-functions">
+<h4>Time conversion functions<a class="headerlink" href="#time-conversion-functions" title="Permalink to this headline">¶</a></h4>
+<p>A number of functions are provided to “convert” a <code class="docutils literal"><span class="pre">timeuuid</span></code>, a <code class="docutils literal"><span class="pre">timestamp</span></code> or a <code class="docutils literal"><span class="pre">date</span></code> into another <code class="docutils literal"><span class="pre">native</span></code>
+type.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="15%" />
+<col width="65%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Function name</th>
+<th class="head">Input type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">toDate</span></code></td>
+<td><code class="docutils literal"><span class="pre">timeuuid</span></code></td>
+<td>Converts the <code class="docutils literal"><span class="pre">timeuuid</span></code> argument into a <code class="docutils literal"><span class="pre">date</span></code> type</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">toDate</span></code></td>
+<td><code class="docutils literal"><span class="pre">timestamp</span></code></td>
+<td>Converts the <code class="docutils literal"><span class="pre">timestamp</span></code> argument into a <code class="docutils literal"><span class="pre">date</span></code> type</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">toTimestamp</span></code></td>
+<td><code class="docutils literal"><span class="pre">timeuuid</span></code></td>
+<td>Converts the <code class="docutils literal"><span class="pre">timeuuid</span></code> argument into a <code class="docutils literal"><span class="pre">timestamp</span></code> type</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">toTimestamp</span></code></td>
+<td><code class="docutils literal"><span class="pre">date</span></code></td>
+<td>Converts the <code class="docutils literal"><span class="pre">date</span></code> argument into a <code class="docutils literal"><span class="pre">timestamp</span></code> type</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">toUnixTimestamp</span></code></td>
+<td><code class="docutils literal"><span class="pre">timeuuid</span></code></td>
+<td>Converts the <code class="docutils literal"><span class="pre">timeuuid</span></code> argument into a <code class="docutils literal"><span class="pre">bigInt</span></code> raw value</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">toUnixTimestamp</span></code></td>
+<td><code class="docutils literal"><span class="pre">timestamp</span></code></td>
+<td>Converts the <code class="docutils literal"><span class="pre">timestamp</span></code> argument into a <code class="docutils literal"><span class="pre">bigInt</span></code> raw value</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">toUnixTimestamp</span></code></td>
+<td><code class="docutils literal"><span class="pre">date</span></code></td>
+<td>Converts the <code class="docutils literal"><span class="pre">date</span></code> argument into a <code class="docutils literal"><span class="pre">bigInt</span></code> raw value</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">dateOf</span></code></td>
+<td><code class="docutils literal"><span class="pre">timeuuid</span></code></td>
+<td>Similar to <code class="docutils literal"><span class="pre">toTimestamp(timeuuid)</span></code> (DEPRECATED)</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">unixTimestampOf</span></code></td>
+<td><code class="docutils literal"><span class="pre">timeuuid</span></code></td>
+<td>Similar to <code class="docutils literal"><span class="pre">toUnixTimestamp(timeuuid)</span></code> (DEPRECATED)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="blob-conversion-functions">
+<h4>Blob conversion functions<a class="headerlink" href="#blob-conversion-functions" title="Permalink to this headline">¶</a></h4>
+<p>A number of functions are provided to “convert” the native types into binary data (<code class="docutils literal"><span class="pre">blob</span></code>). For every
+<code class="docutils literal"><span class="pre">&lt;native-type&gt;</span></code> <code class="docutils literal"><span class="pre">type</span></code> supported by CQL (a notable exceptions is <code class="docutils literal"><span class="pre">blob</span></code>, for obvious reasons), the function
+<code class="docutils literal"><span class="pre">typeAsBlob</span></code> takes a argument of type <code class="docutils literal"><span class="pre">type</span></code> and return it as a <code class="docutils literal"><span class="pre">blob</span></code>. Conversely, the function <code class="docutils literal"><span class="pre">blobAsType</span></code>
+takes a 64-bit <code class="docutils literal"><span class="pre">blob</span></code> argument and convert it to a <code class="docutils literal"><span class="pre">bigint</span></code> value. And so for instance, <code class="docutils literal"><span class="pre">bigintAsBlob(3)</span></code> is
+<code class="docutils literal"><span class="pre">0x0000000000000003</span></code> and <code class="docutils literal"><span class="pre">blobAsBigint(0x0000000000000003)</span></code> is <code class="docutils literal"><span class="pre">3</span></code>.</p>
+</div>
+</div>
+<div class="section" id="user-defined-functions">
+<span id="user-defined-scalar-functions"></span><h3>User-defined functions<a class="headerlink" href="#user-defined-functions" title="Permalink to this headline">¶</a></h3>
+<p>User-defined functions allow execution of user-provided code in Cassandra. By default, Cassandra supports defining
+functions in <em>Java</em> and <em>JavaScript</em>. Support for other JSR 223 compliant scripting languages (such as Python, Ruby, and
+Scala) can be added by adding a JAR to the classpath.</p>
+<p>UDFs are part of the Cassandra schema. As such, they are automatically propagated to all nodes in the cluster.</p>
+<p>UDFs can be <em>overloaded</em> - i.e. multiple UDFs with different argument types but the same function name. Example:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">FUNCTION</span> <span class="n">sample</span> <span class="p">(</span> <span class="n">arg</span> <span class="nb">int</span> <span class="p">)</span> <span class="mf">...</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">FUNCTION</span> <span class="n">sample</span> <span class="p">(</span> <span class="n">arg</span> <span class="nb">text</span> <span class="p">)</span> <span class="mf">...</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>User-defined functions are susceptible to all of the normal problems with the chosen programming language. Accordingly,
+implementations should be safe against null pointer exceptions, illegal arguments, or any other potential source of
+exceptions. An exception during function execution will result in the entire statement failing.</p>
+<p>It is valid to use <em>complex</em> types like collections, tuple types and user-defined types as argument and return types.
+Tuple types and user-defined types are handled by the conversion functions of the DataStax Java Driver. Please see the
+documentation of the Java Driver for details on handling tuple types and user-defined types.</p>
+<p>Arguments for functions can be literals or terms. Prepared statement placeholders can be used, too.</p>
+<p>Note that you can use the double-quoted string syntax to enclose the UDF source code. For example:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">FUNCTION</span> <span class="n">some_function</span> <span class="p">(</span> <span class="n">arg</span> <span class="nb">int</span> <span class="p">)</span>
+    <span class="k">RETURNS</span> <span class="k">NULL</span> <span class="k">ON</span> <span class="k">NULL</span> <span class="k">INPUT</span>
+    <span class="k">RETURNS</span> <span class="nb">int</span>
+    <span class="k">LANGUAGE</span> <span class="n">java</span>
+    <span class="k">AS</span> <span class="s">$$</span> <span class="k">return</span> <span class="n">arg</span><span class="o">;</span> <span class="s">$$</span><span class="p">;</span>
+
+<span class="k">SELECT</span> <span class="n">some_function</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">atable</span> <span class="mf">...</span><span class="p">;</span>
+<span class="k">UPDATE</span> <span class="n">atable</span> <span class="k">SET</span> <span class="n">col</span> <span class="o">=</span> <span class="n">some_function</span><span class="p">(</span><span class="o">?</span><span class="p">)</span> <span class="mf">...</span><span class="p">;</span>
+
+<span class="k">CREATE</span> <span class="k">TYPE</span> <span class="n">custom_type</span> <span class="p">(</span><span class="n">txt</span> <span class="nb">text</span><span class="p">,</span> <span class="n">i</span> <span class="nb">int</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">FUNCTION</span> <span class="n">fct_using_udt</span> <span class="p">(</span> <span class="n">udtarg</span> <span class="k">frozen</span> <span class="p">)</span>
+    <span class="k">RETURNS</span> <span class="k">NULL</span> <span class="k">ON</span> <span class="k">NULL</span> <span class="k">INPUT</span>
+    <span class="k">RETURNS</span> <span class="nb">text</span>
+    <span class="k">LANGUAGE</span> <span class="n">java</span>
+    <span class="k">AS</span> <span class="s">$$</span> <span class="k">return</span> <span class="n">udtarg</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&quot;txt&quot;</span><span class="o">);</span> <span class="s">$$</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>User-defined functions can be used in <code class="docutils literal"><span class="pre">SELECT</span></code>, <code class="docutils literal"><span class="pre">INSERT</span></code> and <code class="docutils literal"><span class="pre">UPDATE</span></code> statements.</p>
+<p>The implicitly available <code class="docutils literal"><span class="pre">udfContext</span></code> field (or binding for script UDFs) provides the necessary functionality to
+create new UDT and tuple values:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TYPE</span> <span class="n">custom_type</span> <span class="p">(</span><span class="n">txt</span> <span class="nb">text</span><span class="p">,</span> <span class="n">i</span> <span class="nb">int</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">FUNCTION</span> <span class="n">fct</span><span class="err">\</span><span class="n">_using</span><span class="err">\</span><span class="n">_udt</span> <span class="p">(</span> <span class="n">somearg</span> <span class="nb">int</span> <span class="p">)</span>
+    <span class="k">RETURNS</span> <span class="k">NULL</span> <span class="k">ON</span> <span class="k">NULL</span> <span class="k">INPUT</span>
+    <span class="k">RETURNS</span> <span class="n">custom_type</span>
+    <span class="k">LANGUAGE</span> <span class="n">java</span>
+    <span class="k">AS</span> <span class="s">$$</span>
+        <span class="n">UDTValue</span> <span class="n">udt</span> <span class="o">=</span> <span class="n">udfContext</span><span class="o">.</span><span class="na">newReturnUDTValue</span><span class="o">();</span>
+        <span class="n">udt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="s">&quot;txt&quot;</span><span class="o">,</span> <span class="s">&quot;some string&quot;</span><span class="o">);</span>
+        <span class="n">udt</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="s">&quot;i&quot;</span><span class="o">,</span> <span class="mi">42</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">udt</span><span class="o">;</span>
+    <span class="s">$$</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The definition of the <code class="docutils literal"><span class="pre">UDFContext</span></code> interface can be found in the Apache Cassandra source code for
+<code class="docutils literal"><span class="pre">org.apache.cassandra.cql3.functions.UDFContext</span></code>.</p>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UDFContext</span>
+<span class="o">{</span>
+    <span class="n">UDTValue</span> <span class="nf">newArgUDTValue</span><span class="o">(</span><span class="n">String</span> <span class="n">argName</span><span class="o">);</span>
+    <span class="n">UDTValue</span> <span class="nf">newArgUDTValue</span><span class="o">(</span><span class="kt">int</span> <span class="n">argNum</span><span class="o">);</span>
+    <span class="n">UDTValue</span> <span class="nf">newReturnUDTValue</span><span class="o">();</span>
+    <span class="n">UDTValue</span> <span class="nf">newUDTValue</span><span class="o">(</span><span class="n">String</span> <span class="n">udtName</span><span class="o">);</span>
+    <span class="n">TupleValue</span> <span class="nf">newArgTupleValue</span><span class="o">(</span><span class="n">String</span> <span class="n">argName</span><span class="o">);</span>
+    <span class="n">TupleValue</span> <span class="nf">newArgTupleValue</span><span class="o">(</span><span class="kt">int</span> <span class="n">argNum</span><span class="o">);</span>
+    <span class="n">TupleValue</span> <span class="nf">newReturnTupleValue</span><span class="o">();</span>
+    <span class="n">TupleValue</span> <span class="nf">newTupleValue</span><span class="o">(</span><span class="n">String</span> <span class="n">cqlDefinition</span><span class="o">);</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Java UDFs already have some imports for common interfaces and classes defined. These imports are:</p>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.nio.ByteBuffer</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Set</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.cassandra.cql3.functions.UDFContext</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.datastax.driver.core.TypeCodec</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.datastax.driver.core.TupleValue</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.datastax.driver.core.UDTValue</span><span class="o">;</span>
+</pre></div>
+</div>
+<p>Please note, that these convenience imports are not available for script UDFs.</p>
+<div class="section" id="create-function">
+<span id="create-function-statement"></span><h4>CREATE FUNCTION<a class="headerlink" href="#create-function" title="Permalink to this headline">¶</a></h4>
+<p>Creating a new user-defined function uses the <code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">FUNCTION</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-create_function_statement">create_function_statement</strong> ::=  CREATE [ OR REPLACE ] FUNCTION [ IF NOT EXISTS]
+                                   <a class="reference internal" href="#grammar-token-function_name"><code class="xref docutils literal"><span class="pre">function_name</span></code></a> '(' <a class="reference internal" href="#grammar-token-arguments_declaration"><code class="xref docutils literal"><span class="pre">arguments_declaration</span></code></a> ')'
+                                   [ CALLED | RETURNS NULL ] ON NULL INPUT
+                                   RETURNS <a class="reference internal" href="types.html#grammar-token-cql_type"><code class="xref docutils literal"><span class="pre">cql_type</span></code></a>
+                                   LANGUAGE <a class="reference internal" href="definitions.html#grammar-token-identifier"><code class="xref docutils literal"><span class="pre">identifier</span></code></a>
+                                   AS <a class="reference internal" href="definitions.html#grammar-token-string"><code class="xref docutils literal"><span class="pre">string</span></code></a>
+<strong id="grammar-token-arguments_declaration">arguments_declaration    </strong> ::=  <a class="reference internal" href="definitions.html#grammar-token-identifier"><code class="xref docutils literal"><span class="pre">identifier</span></code></a> <a class="reference internal" href="types.html#grammar-token-cql_type"><code class="xref docutils literal"><span class="pre">cql_type</span></code></a> ( ',' <a class="reference internal" href="definitions.html#grammar-token-identifier"><code class="xref docutils literal"><span class="pre">identifier</span></code></a> <a class="reference internal" href="types.html#grammar-token-cql_type"><code class="xref docutils literal"><span class="pre">cql_type</span></code></a> )*
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="n">somefunction</span><span class="p">(</span><span class="n">somearg</span> <span class="nb">int</span><span class="p">,</span> <span class="n">anotherarg</span> <span class="nb">text</span><span class="p">,</span> <span class="n">complexarg</span> <span class="k">frozen</span><span class="o">&lt;</span><span class="n">someUDT</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">listarg</span> <span class="k">list</span><span class="p">)</span>
+    <span class="k">RETURNS</span> <span class="k">NULL</span> <span class="k">ON</span> <span class="k">NULL</span> <span class="k">INPUT</span>
+    <span class="k">RETURNS</span> <span class="nb">text</span>
+    <span class="k">LANGUAGE</span> <span class="n">java</span>
+    <span class="k">AS</span> <span class="s">$$</span>
+        <span class="c1">// some Java code</span>
+    <span class="s">$$</span><span class="p">;</span>
+
+<span class="k">CREATE</span> <span class="k">FUNCTION</span> <span class="k">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">akeyspace</span><span class="mf">.</span><span class="n">fname</span><span class="p">(</span><span class="n">someArg</span> <span class="nb">int</span><span class="p">)</span>
+    <span class="k">CALLED</span> <span class="k">ON</span> <span class="k">NULL</span> <span class="k">INPUT</span>
+    <span class="k">RETURNS</span> <span class="nb">text</span>
+    <span class="k">LANGUAGE</span> <span class="n">java</span>
+    <span class="k">AS</span> <span class="s">$$</span>
+        <span class="c1">// some Java code</span>
+    <span class="s">$$</span><span class="p">;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">FUNCTION</span></code> with the optional <code class="docutils literal"><span class="pre">OR</span> <span class="pre">REPLACE</span></code> keywords either creates a function or replaces an existing one with
+the same signature. A <code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">FUNCTION</span></code> without <code class="docutils literal"><span class="pre">OR</span> <span class="pre">REPLACE</span></code> fails if a function with the same signature already
+exists.</p>
+<p>If the optional <code class="docutils literal"><span class="pre">IF</span> <span class="pre">NOT</span> <span class="pre">EXISTS</span></code> keywords are used, the function will
+only be created if another function with the same signature does not
+exist.</p>
+<p><code class="docutils literal"><span class="pre">OR</span> <span class="pre">REPLACE</span></code> and <code class="docutils literal"><span class="pre">IF</span> <span class="pre">NOT</span> <span class="pre">EXISTS</span></code> cannot be used together.</p>
+<p>Behavior on invocation with <code class="docutils literal"><span class="pre">null</span></code> values must be defined for each
+function. There are two options:</p>
+<ol class="arabic simple">
+<li><code class="docutils literal"><span class="pre">RETURNS</span> <span class="pre">NULL</span> <span class="pre">ON</span> <span class="pre">NULL</span> <span class="pre">INPUT</span></code> declares that the function will always
+return <code class="docutils literal"><span class="pre">null</span></code> if any of the input arguments is <code class="docutils literal"><span class="pre">null</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">CALLED</span> <span class="pre">ON</span> <span class="pre">NULL</span> <span class="pre">INPUT</span></code> declares that the function will always be
+executed.</li>
+</ol>
+<div class="section" id="function-signature">
+<h5>Function Signature<a class="headerlink" href="#function-signature" title="Permalink to this headline">¶</a></h5>
+<p>Signatures are used to distinguish individual functions. The signature consists of:</p>
+<ol class="arabic simple">
+<li>The fully qualified function name - i.e <em>keyspace</em> plus <em>function-name</em></li>
+<li>The concatenated list of all argument types</li>
+</ol>
+<p>Note that keyspace names, function names and argument types are subject to the default naming conventions and
+case-sensitivity rules.</p>
+<p>Functions belong to a keyspace. If no keyspace is specified in <code class="docutils literal"><span class="pre">&lt;function-name&gt;</span></code>, the current keyspace is used (i.e.
+the keyspace specified using the <code class="docutils literal"><span class="pre">USE</span></code> statement). It is not possible to create a user-defined function in one of the
+system keyspaces.</p>
+</div>
+</div>
+<div class="section" id="drop-function">
+<span id="drop-function-statement"></span><h4>DROP FUNCTION<a class="headerlink" href="#drop-function" title="Permalink to this headline">¶</a></h4>
+<p>Dropping a function uses the <code class="docutils literal"><span class="pre">DROP</span> <span class="pre">FUNCTION</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-drop_function_statement">drop_function_statement</strong> ::=  DROP FUNCTION [ IF EXISTS ] <a class="reference internal" href="#grammar-token-function_name"><code class="xref docutils literal"><span class="pre">function_name</span></code></a> [ '(' <a class="reference internal" href="#grammar-token-arguments_signature"><code class="xref docutils literal"><span class="pre">arguments_signature</span></code></a> ')' ]
+<strong id="grammar-token-arguments_signature">arguments_signature    </strong> ::=  <a class="reference internal" href="types.html#grammar-token-cql_type"><code class="xref docutils literal"><span class="pre">cql_type</span></code></a> ( ',' <a class="reference internal" href="types.html#grammar-token-cql_type"><code class="xref docutils literal"><span class="pre">cql_type</span></code></a> )*
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">DROP</span> <span class="k">FUNCTION</span> <span class="n">myfunction</span><span class="p">;</span>
+<span class="k">DROP</span> <span class="k">FUNCTION</span> <span class="n">mykeyspace</span><span class="mf">.</span><span class="n">afunction</span><span class="p">;</span>
+<span class="k">DROP</span> <span class="k">FUNCTION</span> <span class="n">afunction</span> <span class="p">(</span> <span class="nb">int</span> <span class="p">);</span>
+<span class="k">DROP</span> <span class="k">FUNCTION</span> <span class="n">afunction</span> <span class="p">(</span> <span class="nb">text</span> <span class="p">);</span>
+</pre></div>
+</div>
+<p>You must specify the argument types (<a class="reference internal" href="#grammar-token-arguments_signature"><code class="xref std std-token docutils literal"><span class="pre">arguments_signature</span></code></a>) of the function to drop if there are multiple
+functions with the same name but a different signature (overloaded functions).</p>
+<p><code class="docutils literal"><span class="pre">DROP</span> <span class="pre">FUNCTION</span></code> with the optional <code class="docutils literal"><span class="pre">IF</span> <span class="pre">EXISTS</span></code> keywords drops a function if it exists, but does not throw an error if
+it doesn&#8217;t</p>
+</div>
+</div>
+</div>
+<div class="section" id="aggregate-functions">
+<span id="id4"></span><h2>Aggregate functions<a class="headerlink" href="#aggregate-functions" title="Permalink to this headline">¶</a></h2>
+<p>Aggregate functions work on a set of rows. They receive values for each row and returns one value for the whole set.</p>
+<p>If <code class="docutils literal"><span class="pre">normal</span></code> columns, <code class="docutils literal"><span class="pre">scalar</span> <span class="pre">functions</span></code>, <code class="docutils literal"><span class="pre">UDT</span></code> fields, <code class="docutils literal"><span class="pre">writetime</span></code> or <code class="docutils literal"><span class="pre">ttl</span></code> are selected together with
+aggregate functions, the values returned for them will be the ones of the first row matching the query.</p>
+<div class="section" id="native-aggregates">
+<h3>Native aggregates<a class="headerlink" href="#native-aggregates" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="count">
+<span id="count-function"></span><h4>Count<a class="headerlink" href="#count" title="Permalink to this headline">¶</a></h4>
+<p>The <code class="docutils literal"><span class="pre">count</span></code> function can be used to count the rows returned by a query. Example:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="k">COUNT</span> <span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">plays</span><span class="p">;</span>
+<span class="k">SELECT</span> <span class="k">COUNT</span> <span class="p">(</span><span class="mf">1</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">plays</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>It also can be used to count the non null value of a given column:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="k">COUNT</span> <span class="p">(</span><span class="n">scores</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">plays</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="max-and-min">
+<h4>Max and Min<a class="headerlink" href="#max-and-min" title="Permalink to this headline">¶</a></h4>
+<p>The <code class="docutils literal"><span class="pre">max</span></code> and <code class="docutils literal"><span class="pre">min</span></code> functions can be used to compute the maximum and the minimum value returned by a query for a
+given column. For instance:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">MIN</span> <span class="p">(</span><span class="n">players</span><span class="p">),</span> <span class="n">MAX</span> <span class="p">(</span><span class="n">players</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">plays</span> <span class="k">WHERE</span> <span class="n">game</span> <span class="o">=</span> <span class="s1">&#39;quake&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sum">
+<h4>Sum<a class="headerlink" href="#sum" title="Permalink to this headline">¶</a></h4>
+<p>The <code class="docutils literal"><span class="pre">sum</span></code> function can be used to sum up all the values returned by a query for a given column. For instance:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">SUM</span> <span class="p">(</span><span class="n">players</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">plays</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="avg">
+<h4>Avg<a class="headerlink" href="#avg" title="Permalink to this headline">¶</a></h4>
+<p>The <code class="docutils literal"><span class="pre">avg</span></code> function can be used to compute the average of all the values returned by a query for a given column. For
+instance:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">AVG</span> <span class="p">(</span><span class="n">players</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">plays</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="user-defined-aggregates">
+<span id="user-defined-aggregates-functions"></span><h3>User-Defined Aggregates<a class="headerlink" href="#user-defined-aggregates" title="Permalink to this headline">¶</a></h3>
+<p>User-defined aggregates allow the creation of custom aggregate functions. Common examples of aggregate functions are
+<em>count</em>, <em>min</em>, and <em>max</em>.</p>
+<p>Each aggregate requires an <em>initial state</em> (<code class="docutils literal"><span class="pre">INITCOND</span></code>, which defaults to <code class="docutils literal"><span class="pre">null</span></code>) of type <code class="docutils literal"><span class="pre">STYPE</span></code>. The first
+argument of the state function must have type <code class="docutils literal"><span class="pre">STYPE</span></code>. The remaining arguments of the state function must match the
+types of the user-defined aggregate arguments. The state function is called once for each row, and the value returned by
+the state function becomes the new state. After all rows are processed, the optional <code class="docutils literal"><span class="pre">FINALFUNC</span></code> is executed with last
+state value as its argument.</p>
+<p><code class="docutils literal"><span class="pre">STYPE</span></code> is mandatory in order to be able to distinguish possibly overloaded versions of the state and/or final
+function (since the overload can appear after creation of the aggregate).</p>
+<p>User-defined aggregates can be used in <code class="docutils literal"><span class="pre">SELECT</span></code> statement.</p>
+<p>A complete working example for user-defined aggregates (assuming that a keyspace has been selected using the <code class="docutils literal"><span class="pre">USE</span></code>
+statement):</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="n">averageState</span><span class="p">(</span><span class="n">state</span> <span class="k">tuple</span><span class="o">&lt;</span><span class="nb">int</span><span class="p">,</span><span class="nb">bigint</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">val</span> <span class="nb">int</span><span class="p">)</span>
+    <span class="k">CALLED</span> <span class="k">ON</span> <span class="k">NULL</span> <span class="k">INPUT</span>
+    <span class="k">RETURNS</span> <span class="k">tuple</span>
+    <span class="k">LANGUAGE</span> <span class="n">java</span>
+    <span class="k">AS</span> <span class="s">$$</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">val</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">state</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">state</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="mi">0</span><span class="o">)+</span><span class="mi">1</span><span class="o">);</span>
+            <span class="n">state</span><span class="o">.</span><span class="na">setLong</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">state</span><span class="o">.</span><span class="na">getLong</span><span class="o">(</span><span class="mi">1</span><span class="o">)+</span><span class="n">val</span><span class="o">.</span><span class="na">intValue</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">state</span><span class="o">;</span>
+    <span class="s">$$</span><span class="p">;</span>
+
+<span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="n">averageFinal</span> <span class="p">(</span><span class="n">state</span> <span class="k">tuple</span><span class="o">&lt;</span><span class="nb">int</span><span class="p">,</span><span class="nb">bigint</span><span class="o">&gt;</span><span class="p">)</span>
+    <span class="k">CALLED</span> <span class="k">ON</span> <span class="k">NULL</span> <span class="k">INPUT</span>
+    <span class="k">RETURNS</span> <span class="nb">double</span>
+    <span class="k">LANGUAGE</span> <span class="n">java</span>
+    <span class="k">AS</span> <span class="s">$$</span>
+        <span class="kt">double</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">state</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="na">getLong</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+        <span class="n">r</span> <span class="o">/=</span> <span class="n">state</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">Double</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">r</span><span class="o">);</span>
+    <span class="s">$$</span><span class="p">;</span>
+
+<span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">AGGREGATE</span> <span class="n">average</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">SFUNC</span> <span class="n">averageState</span>
+    <span class="k">STYPE</span> <span class="k">tuple</span>
+    <span class="k">FINALFUNC</span> <span class="n">averageFinal</span>
+    <span class="k">INITCOND</span> <span class="p">(</span><span class="mf">0</span><span class="p">,</span> <span class="mf">0</span><span class="p">);</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">atable</span> <span class="p">(</span>
+    <span class="n">pk</span> <span class="nb">int</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+    <span class="n">val</span> <span class="nb">int</span>
+<span class="p">);</span>
+
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">atable</span> <span class="p">(</span><span class="n">pk</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mf">1</span><span class="p">,</span><span class="mf">1</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">atable</span> <span class="p">(</span><span class="n">pk</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mf">2</span><span class="p">,</span><span class="mf">2</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">atable</span> <span class="p">(</span><span class="n">pk</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mf">3</span><span class="p">,</span><span class="mf">3</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">atable</span> <span class="p">(</span><span class="n">pk</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mf">4</span><span class="p">,</span><span class="mf">4</span><span class="p">);</span>
+
+<span class="k">SELECT</span> <span class="n">average</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">atable</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="section" id="create-aggregate">
+<span id="create-aggregate-statement"></span><h4>CREATE AGGREGATE<a class="headerlink" href="#create-aggregate" title="Permalink to this headline">¶</a></h4>
+<p>Creating (or replacing) a user-defined aggregate function uses the <code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">AGGREGATE</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-create_aggregate_statement">create_aggregate_statement</strong> ::=  CREATE [ OR REPLACE ] AGGREGATE [ IF NOT EXISTS ]
+                                    <a class="reference internal" href="#grammar-token-function_name"><code class="xref docutils literal"><span class="pre">function_name</span></code></a> '(' <a class="reference internal" href="#grammar-token-arguments_signature"><code class="xref docutils literal"><span class="pre">arguments_signature</span></code></a> ')'
+                                    SFUNC <a class="reference internal" href="#grammar-token-function_name"><code class="xref docutils literal"><span class="pre">function_name</span></code></a>
+                                    STYPE <a class="reference internal" href="types.html#grammar-token-cql_type"><code class="xref docutils literal"><span class="pre">cql_type</span></code></a>
+                                    [ FINALFUNC <a class="reference internal" href="#grammar-token-function_name"><code class="xref docutils literal"><span class="pre">function_name</span></code></a> ]
+                                    [ INITCOND <a class="reference internal" href="definitions.html#grammar-token-term"><code class="xref docutils literal"><span class="pre">term</span></code></a> ]
+</pre>
+<p>See above for a complete example.</p>
+<p><code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">AGGREGATE</span></code> with the optional <code class="docutils literal"><span class="pre">OR</span> <span class="pre">REPLACE</span></code> keywords either creates an aggregate or replaces an existing one
+with the same signature. A <code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">AGGREGATE</span></code> without <code class="docutils literal"><span class="pre">OR</span> <span class="pre">REPLACE</span></code> fails if an aggregate with the same signature
+already exists.</p>
+<p><code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">AGGREGATE</span></code> with the optional <code class="docutils literal"><span class="pre">IF</span> <span class="pre">NOT</span> <span class="pre">EXISTS</span></code> keywords either creates an aggregate if it does not already
+exist.</p>
+<p><code class="docutils literal"><span class="pre">OR</span> <span class="pre">REPLACE</span></code> and <code class="docutils literal"><span class="pre">IF</span> <span class="pre">NOT</span> <span class="pre">EXISTS</span></code> cannot be used together.</p>
+<p><code class="docutils literal"><span class="pre">STYPE</span></code> defines the type of the state value and must be specified.</p>
+<p>The optional <code class="docutils literal"><span class="pre">INITCOND</span></code> defines the initial state value for the aggregate. It defaults to <code class="docutils literal"><span class="pre">null</span></code>. A non-<code class="docutils literal"><span class="pre">null</span></code>
+<code class="docutils literal"><span class="pre">INITCOND</span></code> must be specified for state functions that are declared with <code class="docutils literal"><span class="pre">RETURNS</span> <span class="pre">NULL</span> <span class="pre">ON</span> <span class="pre">NULL</span> <span class="pre">INPUT</span></code>.</p>
+<p><code class="docutils literal"><span class="pre">SFUNC</span></code> references an existing function to be used as the state modifying function. The type of first argument of the
+state function must match <code class="docutils literal"><span class="pre">STYPE</span></code>. The remaining argument types of the state function must match the argument types of
+the aggregate function. State is not updated for state functions declared with <code class="docutils literal"><span class="pre">RETURNS</span> <span class="pre">NULL</span> <span class="pre">ON</span> <span class="pre">NULL</span> <span class="pre">INPUT</span></code> and called
+with <code class="docutils literal"><span class="pre">null</span></code>.</p>
+<p>The optional <code class="docutils literal"><span class="pre">FINALFUNC</span></code> is called just before the aggregate result is returned. It must take only one argument with
+type <code class="docutils literal"><span class="pre">STYPE</span></code>. The return type of the <code class="docutils literal"><span class="pre">FINALFUNC</span></code> may be a different type. A final function declared with <code class="docutils literal"><span class="pre">RETURNS</span>
+<span class="pre">NULL</span> <span class="pre">ON</span> <span class="pre">NULL</span> <span class="pre">INPUT</span></code> means that the aggregate&#8217;s return value will be <code class="docutils literal"><span class="pre">null</span></code>, if the last state is <code class="docutils literal"><span class="pre">null</span></code>.</p>
+<p>If no <code class="docutils literal"><span class="pre">FINALFUNC</span></code> is defined, the overall return type of the aggregate function is <code class="docutils literal"><span class="pre">STYPE</span></code>. If a <code class="docutils literal"><span class="pre">FINALFUNC</span></code> is
+defined, it is the return type of that function.</p>
+</div>
+<div class="section" id="drop-aggregate">
+<span id="drop-aggregate-statement"></span><h4>DROP AGGREGATE<a class="headerlink" href="#drop-aggregate" title="Permalink to this headline">¶</a></h4>
+<p>Dropping an user-defined aggregate function uses the <code class="docutils literal"><span class="pre">DROP</span> <span class="pre">AGGREGATE</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-drop_aggregate_statement">drop_aggregate_statement</strong> ::=  DROP AGGREGATE [ IF EXISTS ] <a class="reference internal" href="#grammar-token-function_name"><code class="xref docutils literal"><span class="pre">function_name</span></code></a> [ '(' <a class="reference internal" href="#grammar-token-arguments_signature"><code class="xref docutils literal"><span class="pre">arguments_signature</span></code></a> ')' ]
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql"><div class="highlight"><pre><span></span><span class="k">DROP</span> <span class="k">AGGREGATE</span> <span class="n">myAggregate</span><span class="p">;</span>
+<span class="k">DROP</span> <span class="k">AGGREGATE</span> <span class="n">myKeyspace</span><span class="mf">.</span><span class="n">anAggregate</span><span class="p">;</span>
+<span class="k">DROP</span> <span class="k">AGGREGATE</span> <span class="n">someAggregate</span> <span class="p">(</span> <span class="nb">int</span> <span class="p">);</span>
+<span class="k">DROP</span> <span class="k">AGGREGATE</span> <span class="n">someAggregate</span> <span class="p">(</span> <span class="nb">text</span> <span class="p">);</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">DROP</span> <span class="pre">AGGREGATE</span></code> statement removes an aggregate created using <code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">AGGREGATE</span></code>. You must specify the argument
+types of the aggregate to drop if there are multiple aggregates with the same name but a different signature (overloaded
+aggregates).</p>
+<p><code class="docutils literal"><span class="pre">DROP</span> <span class="pre">AGGREGATE</span></code> with the optional <code class="docutils literal"><span class="pre">IF</span> <span class="pre">EXISTS</span></code> keywords drops an aggregate if it exists, and does nothing if a
+function with the signature does not exist.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="json.html" class="btn btn-default pull-right " role="button" title="JSON Support" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="security.html" class="btn btn-default" role="button" title="Security" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-beta3/new/transientreplication.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-beta3" href="../index.html"/> <link rel="up" title="New Features in Apache Cassandra 4.0" href="index.html"/> <link rel="next" title="Architecture" href="../architecture/index.html"/> <link rel="prev" title="Improved Streaming" href="streaming.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">New Features in Apache Cassandra 4.0</a></li>
+      
+
+      
+      <li>Transient Replication</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">New Features in Apache Cassandra 4.0</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="java11.html">Support for Java 11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="virtualtables.html">Virtual Tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auditlogging.html">Audit Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fqllogging.html">Full Query Logging (FQL)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="messaging.html">Improved Internode Messaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streaming.html">Improved Streaming</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Transient Replication</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#objective">Objective</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enabling-transient-replication">Enabling Transient Replication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cheap-quorums">Cheap Quorums</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#speculative-write-option">Speculative Write Option</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pending-ranges-and-transient-replicas">Pending Ranges and Transient Replicas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#read-repair-and-transient-replicas">Read Repair and Transient Replicas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#transitioning-between-full-replicas-and-transient-replicas">Transitioning between Full Replicas and Transient Replicas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#transient-replication-supports-each-quorum">Transient Replication supports EACH_QUORUM</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="transient-replication">
+<h1>Transient Replication<a class="headerlink" href="#transient-replication" title="Permalink to this headline">¶</a></h1>
+<p><strong>Note</strong>:</p>
+<p>Transient Replication (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-14404">CASSANDRA-14404</a>) is an experimental feature designed for expert Apache Cassandra users who are able to validate every aspect of the database for their application and deployment.
+That means being able to check that operations like reads, writes, decommission, remove, rebuild, repair, and replace all work with your queries, data, configuration, operational practices, and availability requirements.
+Apache Cassandra 4.0 has the initial implementation of transient replication. Future releases of Cassandra will make this feature suitable for a wider audience.
+It is anticipated that a future version will support monotonic reads with transient replication as well as LWT, logged batches, and counters. Being experimental, Transient replication is <strong>not</strong> recommended for production use.</p>
+<div class="section" id="objective">
+<h2>Objective<a class="headerlink" href="#objective" title="Permalink to this headline">¶</a></h2>
+<p>The objective of transient replication is to decouple storage requirements from data redundancy (or consensus group size) using incremental repair, in order to reduce storage overhead.
+Certain nodes act as full replicas (storing all the data for a given token range), and some nodes act as transient replicas, storing only unrepaired data for the same token ranges.</p>
+<p>The optimization that is made possible with transient replication is called “Cheap quorums”, which implies that data redundancy is increased without corresponding increase in storage usage.</p>
+<p>Transient replication is useful when sufficient full replicas are available to receive and store all the data.
+Transient replication allows you to configure a subset of replicas to only replicate data that hasn’t been incrementally repaired.
+As an optimization, we can avoid writing data to a transient replica if we have successfully written data to the full replicas.</p>
+<p>After incremental repair, transient data stored on transient replicas can be discarded.</p>
+</div>
+<div class="section" id="enabling-transient-replication">
+<h2>Enabling Transient Replication<a class="headerlink" href="#enabling-transient-replication" title="Permalink to this headline">¶</a></h2>
+<p>Transient replication is not enabled by default.  Transient replication must be enabled on each node in a cluster separately by setting the following configuration property in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enable_transient_replication</span><span class="p">:</span> <span class="n">true</span>
+</pre></div>
+</div>
+<p>Transient replication may be configured with both <code class="docutils literal notranslate"><span class="pre">SimpleStrategy</span></code> and <code class="docutils literal notranslate"><span class="pre">NetworkTopologyStrategy</span></code>. Transient replication is configured by setting replication factor as <code class="docutils literal notranslate"><span class="pre">&lt;total_replicas&gt;/&lt;transient_replicas&gt;</span></code>.</p>
+<p>As an example, create a keyspace with replication factor (RF) 3.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">KEYSPACE</span> <span class="n">CassandraKeyspaceSimple</span> <span class="n">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;SimpleStrategy&#39;</span><span class="p">,</span>
+<span class="s1">&#39;replication_factor&#39;</span> <span class="p">:</span> <span class="mi">3</span><span class="o">/</span><span class="mi">1</span><span class="p">};</span>
+</pre></div>
+</div>
+<p>As another example, <code class="docutils literal notranslate"><span class="pre">some_keysopace</span> <span class="pre">keyspace</span></code> will have 3 replicas in DC1, 1 of which is transient, and 5 replicas in DC2, 2 of which are transient:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">KEYSPACE</span> <span class="n">some_keysopace</span> <span class="n">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;NetworkTopologyStrategy&#39;</span><span class="p">,</span>
+<span class="s1">&#39;DC1&#39;</span> <span class="p">:</span> <span class="s1">&#39;3/1&#39;&#39;, &#39;</span><span class="n">DC2</span><span class="s1">&#39; : &#39;</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="s1">&#39;};</span>
+</pre></div>
+</div>
+<p>Transiently replicated keyspaces only support tables with <code class="docutils literal notranslate"><span class="pre">read_repair</span></code> set to <code class="docutils literal notranslate"><span class="pre">NONE</span></code>.</p>
+<p>Important Restrictions:</p>
+<ul class="simple">
+<li>RF cannot be altered while some endpoints are not in a normal state (no range movements).</li>
+<li>You can’t add full replicas if there are any transient replicas. You must first remove all transient replicas, then change the # of full replicas, then add back the transient replicas.</li>
+<li>You can only safely increase number of transients one at a time with incremental repair run in between each time.</li>
+</ul>
+<p>Additionally, transient replication cannot be used for:</p>
+<ul class="simple">
+<li>Monotonic Reads</li>
+<li>Lightweight Transactions (LWTs)</li>
+<li>Logged Batches</li>
+<li>Counters</li>
+<li>Keyspaces using materialized views</li>
+<li>Secondary indexes (2i)</li>
+</ul>
+</div>
+<div class="section" id="cheap-quorums">
+<h2>Cheap Quorums<a class="headerlink" href="#cheap-quorums" title="Permalink to this headline">¶</a></h2>
+<p>Cheap quorums are a set of optimizations on the write path to avoid writing to transient replicas unless sufficient full replicas are not available to satisfy the requested consistency level.
+Hints are never written for transient replicas.  Optimizations on the read path prefer reading from transient replicas.
+When writing at quorum to a table configured to use transient replication the quorum will always prefer available full
+replicas over transient replicas so that transient replicas don’t have to process writes. Tail latency is reduced by
+rapid write protection (similar to rapid read protection) when full replicas are slow or unavailable by sending writes
+to transient replicas. Transient replicas can serve reads faster as they don’t have to do anything beyond bloom filter
+checks if they have no data. With vnodes and large cluster sizes they will not have a large quantity of data
+even for failure of one or more full replicas where transient replicas start to serve a steady amount of write traffic
+for some of their transiently replicated ranges.</p>
+</div>
+<div class="section" id="speculative-write-option">
+<h2>Speculative Write Option<a class="headerlink" href="#speculative-write-option" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">TABLE</span></code> adds an option <code class="docutils literal notranslate"><span class="pre">speculative_write_threshold</span></code> for  use with transient replicas. The option is of type <code class="docutils literal notranslate"><span class="pre">simple</span></code> with default value as <code class="docutils literal notranslate"><span class="pre">99PERCENTILE</span></code>. When replicas are slow or unresponsive  <code class="docutils literal notranslate"><span class="pre">speculative_write_threshold</span></code> specifies the threshold at which a cheap quorum write will be upgraded to include transient replicas.</p>
+</div>
+<div class="section" id="pending-ranges-and-transient-replicas">
+<h2>Pending Ranges and Transient Replicas<a class="headerlink" href="#pending-ranges-and-transient-replicas" title="Permalink to this headline">¶</a></h2>
+<p>Pending ranges refers to the movement of token ranges between transient replicas. When a transient range is moved, there
+will be a period of time where both transient replicas would need to receive any write intended for the logical
+transient replica so that after the movement takes effect a read quorum is able to return a response. Nodes are <em>not</em>
+temporarily transient replicas during expansion. They stream data like a full replica for the transient range before they
+can serve reads. A pending state is incurred similar to how there is a pending state for full replicas. Transient replicas
+also always receive writes when they are pending. Pending transient ranges are sent a bit more data and reading from
+them is avoided.</p>
+</div>
+<div class="section" id="read-repair-and-transient-replicas">
+<h2>Read Repair and Transient Replicas<a class="headerlink" href="#read-repair-and-transient-replicas" title="Permalink to this headline">¶</a></h2>
+<p>Read repair never attempts to repair a transient replica. Reads will always include at least one full replica.
+They should also prefer transient replicas where possible. Range scans ensure the entire scanned range performs
+replica selection that satisfies the requirement that every range scanned includes one full replica. During incremental
+&amp; validation repair handling, at transient replicas anti-compaction does not output any data for transient ranges as the
+data will be dropped after repair, and  transient replicas never have data streamed to them.</p>
+</div>
+<div class="section" id="transitioning-between-full-replicas-and-transient-replicas">
+<h2>Transitioning between Full Replicas and Transient Replicas<a class="headerlink" href="#transitioning-between-full-replicas-and-transient-replicas" title="Permalink to this headline">¶</a></h2>
+<p>The additional state transitions that transient replication introduces requires streaming and <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">cleanup</span></code> to
+behave differently.  When data is streamed it is ensured that it is streamed from a full replica and not a transient replica.</p>
+<p>Transitioning from not replicated to transiently replicated means that a node must stay pending until the next incremental
+repair completes at which point the data for that range is known to be available at full replicas.</p>
+<p>Transitioning from transiently replicated to fully replicated requires streaming from a full replica and is identical
+to how data is streamed when transitioning from not replicated to replicated. The transition is managed so the transient
+replica is not read from as a full replica until streaming completes. It can be used immediately for a write quorum.</p>
+<p>Transitioning from fully replicated to transiently replicated requires cleanup to remove repaired data from the transiently
+replicated range to reclaim space. It can be used immediately for a write quorum.</p>
+<p>Transitioning from transiently replicated to not replicated requires cleanup to be run to remove the formerly transiently replicated data.</p>
+<p>When transient replication is in use ring changes are supported including   add/remove node, change RF, add/remove DC.</p>
+</div>
+<div class="section" id="transient-replication-supports-each-quorum">
+<h2>Transient Replication supports EACH_QUORUM<a class="headerlink" href="#transient-replication-supports-each-quorum" title="Permalink to this headline">¶</a></h2>
+<p>(<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-14727">CASSANDRA-14727</a>) adds support for Transient Replication support for <code class="docutils literal notranslate"><span class="pre">EACH_QUORUM</span></code>. Per (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-14768">CASSANDRA-14768</a>), we ensure we write to at least a <code class="docutils literal notranslate"><span class="pre">QUORUM</span></code> of nodes in every DC,
+regardless of how many responses we need to wait for and our requested consistency level. This is to minimally surprise
+users with transient replication; with normal writes, we soft-ensure that we reach <code class="docutils literal notranslate"><span class="pre">QUORUM</span></code> in all DCs we are able to,
+by writing to every node; even if we don’t wait for ACK, we have in both cases sent sufficient messages.</p>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="../architecture/index.html" class="btn btn-default pull-right " role="button" title="Architecture" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="streaming.html" class="btn btn-default" role="button" title="Improved Streaming" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

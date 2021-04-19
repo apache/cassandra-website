@@ -1,0 +1,140 @@
+---
+layout: docpage
+
+title: "Documentation"
+
+is_homepage: false
+is_sphinx_doc: true
+
+doc-title: "Time Window CompactionStrategy"
+doc-header-links: '
+  <link rel="top" title="Apache Cassandra Documentation v4.0-rc1" href="../../index.html"/>
+'
+doc-search-path: "../../search.html"
+
+extra-footer: '
+<script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+      URL_ROOT:    "",
+      VERSION:     "",
+      COLLAPSE_INDEX: false,
+      FILE_SUFFIX: ".html",
+      HAS_SOURCE:  false,
+      SOURCELINK_SUFFIX: ".txt"
+    };
+</script>
+'
+
+---
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="time-window-compactionstrategy">
+<span id="twcs"></span><h1>Time Window CompactionStrategy<a class="headerlink" href="#time-window-compactionstrategy" title="Permalink to this headline">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">TimeWindowCompactionStrategy</span></code> (TWCS) is designed specifically for workloads where it’s beneficial to have data on
+disk grouped by the timestamp of the data, a common goal when the workload is time-series in nature or when all data is
+written with a TTL. In an expiring/TTL workload, the contents of an entire SSTable likely expire at approximately the
+same time, allowing them to be dropped completely, and space reclaimed much more reliably than when using
+<code class="docutils literal notranslate"><span class="pre">SizeTieredCompactionStrategy</span></code> or <code class="docutils literal notranslate"><span class="pre">LeveledCompactionStrategy</span></code>. The basic concept is that
+<code class="docutils literal notranslate"><span class="pre">TimeWindowCompactionStrategy</span></code> will create 1 sstable per file for a given window, where a window is simply calculated
+as the combination of two primary options:</p>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">compaction_window_unit</span></code> (default: DAYS)</dt>
+<dd>A Java TimeUnit (MINUTES, HOURS, or DAYS).</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">compaction_window_size</span></code> (default: 1)</dt>
+<dd>The number of units that make up a window.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">unsafe_aggressive_sstable_expiration</span></code> (default: false)</dt>
+<dd>Expired sstables will be dropped without checking its data is shadowing other sstables. This is a potentially
+risky option that can lead to data loss or deleted data re-appearing, going beyond what
+<cite>unchecked_tombstone_compaction</cite> does for single  sstable compaction. Due to the risk the jvm must also be
+started with <cite>-Dcassandra.unsafe_aggressive_sstable_expiration=true</cite>.</dd>
+</dl>
+<p>Taken together, the operator can specify windows of virtually any size, and <cite>TimeWindowCompactionStrategy</cite> will work to
+create a single sstable for writes within that window. For efficiency during writing, the newest window will be
+compacted using <cite>SizeTieredCompactionStrategy</cite>.</p>
+<p>Ideally, operators should select a <code class="docutils literal notranslate"><span class="pre">compaction_window_unit</span></code> and <code class="docutils literal notranslate"><span class="pre">compaction_window_size</span></code> pair that produces
+approximately 20-30 windows - if writing with a 90 day TTL, for example, a 3 Day window would be a reasonable choice
+(<code class="docutils literal notranslate"><span class="pre">'compaction_window_unit':'DAYS','compaction_window_size':3</span></code>).</p>
+<div class="section" id="timewindowcompactionstrategy-operational-concerns">
+<h2>TimeWindowCompactionStrategy Operational Concerns<a class="headerlink" href="#timewindowcompactionstrategy-operational-concerns" title="Permalink to this headline">¶</a></h2>
+<p>The primary motivation for TWCS is to separate data on disk by timestamp and to allow fully expired SSTables to drop
+more efficiently. One potential way this optimal behavior can be subverted is if data is written to SSTables out of
+order, with new data and old data in the same SSTable. Out of order data can appear in two ways:</p>
+<ul class="simple">
+<li>If the user mixes old data and new data in the traditional write path, the data will be comingled in the memtables
+and flushed into the same SSTable, where it will remain comingled.</li>
+<li>If the user’s read requests for old data cause read repairs that pull old data into the current memtable, that data
+will be comingled and flushed into the same SSTable.</li>
+</ul>
+<p>While TWCS tries to minimize the impact of comingled data, users should attempt to avoid this behavior.  Specifically,
+users should avoid queries that explicitly set the timestamp via CQL <code class="docutils literal notranslate"><span class="pre">USING</span> <span class="pre">TIMESTAMP</span></code>. Additionally, users should run
+frequent repairs (which streams data in such a way that it does not become comingled).</p>
+</div>
+<div class="section" id="changing-timewindowcompactionstrategy-options">
+<h2>Changing TimeWindowCompactionStrategy Options<a class="headerlink" href="#changing-timewindowcompactionstrategy-options" title="Permalink to this headline">¶</a></h2>
+<p>Operators wishing to enable <code class="docutils literal notranslate"><span class="pre">TimeWindowCompactionStrategy</span></code> on existing data should consider running a major compaction
+first, placing all existing data into a single (old) window. Subsequent newer writes will then create typical SSTables
+as expected.</p>
+<p>Operators wishing to change <code class="docutils literal notranslate"><span class="pre">compaction_window_unit</span></code> or <code class="docutils literal notranslate"><span class="pre">compaction_window_size</span></code> can do so, but may trigger
+additional compactions as adjacent windows are joined together. If the window size is decrease d (for example, from 24
+hours to 12 hours), then the existing SSTables will not be modified - TWCS can not split existing SSTables into multiple
+windows.</p>
+</div>
+</div>
+
+
+
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

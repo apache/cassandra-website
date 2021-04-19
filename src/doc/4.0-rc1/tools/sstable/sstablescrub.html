@@ -1,0 +1,226 @@
+---
+layout: docpage
+
+title: "Documentation"
+
+is_homepage: false
+is_sphinx_doc: true
+
+doc-parent: "Cassandra Tools"
+
+doc-parent: "SSTable Tools"
+
+doc-title: "sstablescrub"
+doc-header-links: '
+  <link rel="top" title="Apache Cassandra Documentation v4.0-rc1" href="../../index.html"/>
+      <link rel="up" title="SSTable Tools" href="index.html"/>
+      <link rel="next" title="sstablesplit" href="sstablesplit.html"/>
+      <link rel="prev" title="sstablerepairedset" href="sstablerepairedset.html"/>
+'
+doc-search-path: "../../search.html"
+
+extra-footer: '
+<script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+      URL_ROOT:    "",
+      VERSION:     "",
+      COLLAPSE_INDEX: false,
+      FILE_SUFFIX: ".html",
+      HAS_SOURCE:  false,
+      SOURCELINK_SUFFIX: ".txt"
+    };
+</script>
+'
+
+---
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Cassandra Tools</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cqlsh.html">cqlsh: the CQL shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generatetokens.html">generatetokens</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodetool/nodetool.html">Nodetool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodetool/nodetool.html#usage">Usage</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">SSTable Tools</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sstabledump.html">sstabledump</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableexpiredblockers.html">sstableexpiredblockers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablelevelreset.html">sstablelevelreset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableloader.html">sstableloader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablemetadata.html">sstablemetadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableofflinerelevel.html">sstableofflinerelevel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablerepairedset.html">sstablerepairedset</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sstablescrub</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablesplit.html">sstablesplit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableupgrade.html">sstableupgrade</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableutil.html">sstableutil</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableverify.html">sstableverify</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cassandra_stress.html">Cassandra Stress</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="sstablescrub">
+<h1>sstablescrub<a class="headerlink" href="#sstablescrub" title="Permalink to this headline">¶</a></h1>
+<p>Fix a broken sstable. The scrub process rewrites the sstable, skipping any corrupted rows. Because these rows are lost, follow this process with a repair.</p>
+<p>ref: <a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-4321">https://issues.apache.org/jira/browse/CASSANDRA-4321</a></p>
+<p>Cassandra must be stopped before this tool is executed, or unexpected results will occur. Note: the script does not verify that Cassandra is stopped.</p>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>sstablescrub &lt;options&gt; &lt;keyspace&gt; &lt;table&gt;</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="88%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>–debug</td>
+<td>display stack traces</td>
+</tr>
+<tr class="row-even"><td>-e,–header-fix &lt;arg&gt;</td>
+<td><p class="first">Option whether and how to perform a check of the sstable serialization-headers and fix , fixable issues.
+Possible argument values:</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>validate-only: validate the serialization-headers, but do not fix those. Do not continue with scrub - i.e. only validate the header (dry-run of fix-only).</li>
+<li>validate: (default) validate the serialization-headers, but do not fix those and only continue with scrub if no error were detected.</li>
+<li>fix-only: validate and fix the serialization-headers, don’t continue with scrub.</li>
+<li>fix: validate and fix the serialization-headers, do not fix and do not continue with scrub if the serialization-header check encountered errors.</li>
+<li>off: don’t perform the serialization-header checks.</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-odd"><td>-h,–help</td>
+<td>display this help message</td>
+</tr>
+<tr class="row-even"><td>-m,–manifest-check</td>
+<td>only check and repair the leveled manifest, without actually scrubbing the sstables</td>
+</tr>
+<tr class="row-odd"><td>-n,–no-validate</td>
+<td>do not validate columns using column validator</td>
+</tr>
+<tr class="row-even"><td>-r,–reinsert-overflowed-ttl</td>
+<td>Rewrites rows with overflowed expiration date affected by CASSANDRA-14092
+with the maximum supported expiration date of 2038-01-19T03:14:06+00:00. The rows are rewritten with the original timestamp incremented by one millisecond to override/supersede any potential tombstone that may have been generated during compaction of the affected rows.</td>
+</tr>
+<tr class="row-odd"><td>-s,–skip-corrupted</td>
+<td>skip corrupt rows in counter tables</td>
+</tr>
+<tr class="row-even"><td>-v,–verbose</td>
+<td>verbose output</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="basic-scrub">
+<h2>Basic Scrub<a class="headerlink" href="#basic-scrub" title="Permalink to this headline">¶</a></h2>
+<p>The scrub without options will do a snapshot first, then write all non-corrupted files to a new sstable.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstablescrub</span> <span class="n">keyspace1</span> <span class="n">standard1</span>
+<span class="n">Pre</span><span class="o">-</span><span class="n">scrub</span> <span class="n">sstables</span> <span class="n">snapshotted</span> <span class="n">into</span> <span class="n">snapshot</span> <span class="n">pre</span><span class="o">-</span><span class="n">scrub</span><span class="o">-</span><span class="mi">1534424070883</span>
+<span class="n">Scrubbing</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace1/standard1-6365332094dd11e88f324f9c503e4753/mc-5-big-Data.db&#39;</span><span class="p">)</span> <span class="p">(</span><span class="mf">17.142</span><span class="n">MiB</span><span class="p">)</span>
+<span class="n">Scrub</span> <span class="n">of</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace1/standard1-6365332094dd11e88f324f9c503e4753/mc-5-big-Data.db&#39;</span><span class="p">)</span> <span class="n">complete</span><span class="p">:</span> <span class="mi">73367</span> <span class="n">rows</span> <span class="ow">in</span> <span class="n">new</span> <span class="n">sstable</span> <span class="ow">and</span> <span class="mi">0</span> <span class="n">empty</span> <span class="p">(</span><span class="n">tombstoned</span><span class="p">)</span> <span class="n">rows</span> <span class="n">dropped</span>
+<span class="n">Checking</span> <span class="n">leveled</span> <span class="n">manifest</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="scrub-without-validation">
+<h2>Scrub without Validation<a class="headerlink" href="#scrub-without-validation" title="Permalink to this headline">¶</a></h2>
+<p>ref: <a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-9406">https://issues.apache.org/jira/browse/CASSANDRA-9406</a></p>
+<p>Use the –no-validate option to retain data that may be misrepresented (e.g., an integer stored in a long field) but not corrupt. This data usually doesn not present any errors to the client.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstablescrub</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">validate</span> <span class="n">keyspace1</span> <span class="n">standard1</span>
+<span class="n">Pre</span><span class="o">-</span><span class="n">scrub</span> <span class="n">sstables</span> <span class="n">snapshotted</span> <span class="n">into</span> <span class="n">snapshot</span> <span class="n">pre</span><span class="o">-</span><span class="n">scrub</span><span class="o">-</span><span class="mi">1536243158517</span>
+<span class="n">Scrubbing</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace1/standard1-bc9cf530b1da11e886c66d2c86545d91/mc-2-big-Data.db&#39;</span><span class="p">)</span> <span class="p">(</span><span class="mf">4.482</span><span class="n">MiB</span><span class="p">)</span>
+<span class="n">Scrub</span> <span class="n">of</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace1/standard1-bc9cf530b1da11e886c66d2c86545d91/mc-2-big-Data.db&#39;</span><span class="p">)</span> <span class="n">complete</span><span class="p">;</span> <span class="n">looks</span> <span class="n">like</span> <span class="nb">all</span> <span class="mi">0</span> <span class="n">rows</span> <span class="n">were</span> <span class="n">tombstoned</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="skip-corrupted-counter-tables">
+<h2>Skip Corrupted Counter Tables<a class="headerlink" href="#skip-corrupted-counter-tables" title="Permalink to this headline">¶</a></h2>
+<p>ref: <a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-5930">https://issues.apache.org/jira/browse/CASSANDRA-5930</a></p>
+<p>If counter tables are corrupted in a way that prevents sstablescrub from completing, you can use the –skip-corrupted option to skip scrubbing those counter tables. This workaround is not necessary in versions 2.0+.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstablescrub</span> <span class="o">--</span><span class="n">skip</span><span class="o">-</span><span class="n">corrupted</span> <span class="n">keyspace1</span> <span class="n">counter1</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dealing-with-overflow-dates">
+<h2>Dealing with Overflow Dates<a class="headerlink" href="#dealing-with-overflow-dates" title="Permalink to this headline">¶</a></h2>
+<p>ref: <a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-14092">https://issues.apache.org/jira/browse/CASSANDRA-14092</a></p>
+<p>Using the option –reinsert-overflowed-ttl allows a rewriting of rows that had a max TTL going over the maximum (causing an overflow).</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstablescrub</span> <span class="o">--</span><span class="n">reinsert</span><span class="o">-</span><span class="n">overflowed</span><span class="o">-</span><span class="n">ttl</span> <span class="n">keyspace1</span> <span class="n">counter1</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="manifest-check">
+<h2>Manifest Check<a class="headerlink" href="#manifest-check" title="Permalink to this headline">¶</a></h2>
+<p>As of Cassandra version 2.0, this option is no longer relevant, since level data was moved from a separate manifest into the sstable metadata.</p>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="sstablesplit.html" class="btn btn-default pull-right " role="button" title="sstablesplit" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="sstablerepairedset.html" class="btn btn-default" role="button" title="sstablerepairedset" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

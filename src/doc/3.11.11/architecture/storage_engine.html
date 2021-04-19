@@ -1,0 +1,207 @@
+---
+layout: docpage
+
+title: "Documentation"
+
+is_homepage: false
+is_sphinx_doc: true
+
+doc-parent: "Architecture"
+
+doc-title: "Storage Engine"
+doc-header-links: '
+  <link rel="top" title="Apache Cassandra Documentation v3.11.11" href="../index.html"/>
+      <link rel="up" title="Architecture" href="index.html"/>
+      <link rel="next" title="Guarantees" href="guarantees.html"/>
+      <link rel="prev" title="Dynamo" href="dynamo.html"/>
+'
+doc-search-path: "../search.html"
+
+extra-footer: '
+<script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+      URL_ROOT:    "",
+      VERSION:     "",
+      COLLAPSE_INDEX: false,
+      FILE_SUFFIX: ".html",
+      HAS_SOURCE:  false,
+      SOURCELINK_SUFFIX: ".txt"
+    };
+</script>
+'
+
+---
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Architecture</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dynamo.html">Dynamo</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Storage Engine</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#commitlog">CommitLog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#memtables">Memtables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sstables">SSTables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="guarantees.html">Guarantees</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="storage-engine">
+<h1>Storage Engine<a class="headerlink" href="#storage-engine" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="commitlog">
+<span id="commit-log"></span><h2>CommitLog<a class="headerlink" href="#commitlog" title="Permalink to this headline">¶</a></h2>
+<p>Commitlogs are an append only log of all mutations local to a Cassandra node. Any data written to Cassandra will first be written to a commit log before being written to a memtable. This provides durability in the case of unexpected shutdown. On startup, any mutations in the commit log will be applied to memtables.</p>
+<p>All mutations write optimized by storing in commitlog segments, reducing the number of seeks needed to write to disk. Commitlog Segments are limited by the “commitlog_segment_size_in_mb” option, once the size is reached, a new commitlog segment is created. Commitlog segments can be archived, deleted, or recycled once all its data has been flushed to SSTables.  Commitlog segments are truncated when Cassandra has written data older than a certain point to the SSTables. Running “nodetool drain” before stopping Cassandra will write everything in the memtables to SSTables and remove the need to sync with the commitlogs on startup.</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">commitlog_segment_size_in_mb</span></code>: The default size is 32, which is almost always fine, but if you are archiving commitlog segments (see commitlog_archiving.properties), then you probably want a finer granularity of archiving; 8 or 16 MB is reasonable. Max mutation size is also configurable via max_mutation_size_in_kb setting in cassandra.yaml. The default is half the size commitlog_segment_size_in_mb * 1024.</li>
+</ul>
+<p><strong>*NOTE: If max_mutation_size_in_kb is set explicitly then commitlog_segment_size_in_mb must be set to at least twice the size of max_mutation_size_in_kb / 1024*</strong></p>
+<p><em>Default Value:</em> 32</p>
+<p>Commitlogs are an append only log of all mutations local to a Cassandra node. Any data written to Cassandra will first be written to a commit log before being written to a memtable. This provides durability in the case of unexpected shutdown. On startup, any mutations in the commit log will be applied.</p>
+<ul>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">commitlog_sync</span></code>: may be either “periodic” or “batch.”</p>
+<ul>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">batch</span></code>: In batch mode, Cassandra won’t ack writes until the commit log has been fsynced to disk. It will wait “commitlog_sync_batch_window_in_ms” milliseconds between fsyncs. This window should be kept short because the writer threads will be unable to do extra work while waiting. You may need to increase concurrent_writes for the same reason.</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">commitlog_sync_batch_window_in_ms</span></code>: Time to wait between “batch” fsyncs</li>
+</ul>
+<p><em>Default Value:</em> 2</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">periodic</span></code>: In periodic mode, writes are immediately ack’ed, and the CommitLog is simply synced every “commitlog_sync_period_in_ms” milliseconds.</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">commitlog_sync_period_in_ms</span></code>: Time to wait between “periodic” fsyncs</li>
+</ul>
+<p><em>Default Value:</em> 10000</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><em>Default Value:</em> periodic</p>
+<p><strong>* NOTE: In the event of an unexpected shutdown, Cassandra can lose up to the sync period or more if the sync is delayed. If using “batch” mode, it is recommended to store commitlogs in a separate, dedicated device.</strong></p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">commitlog_directory</span></code>: This option is commented out by default When running on magnetic HDD, this should be a separate spindle than the data directories. If not set, the default directory is $CASSANDRA_HOME/data/commitlog.</li>
+</ul>
+<p><em>Default Value:</em> /var/lib/cassandra/commitlog</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">commitlog_compression</span></code>: Compression to apply to the commitlog. If omitted, the commit log will be written uncompressed. LZ4, Snappy, Deflate and Zstd compressors are supported.</li>
+</ul>
+<p>(Default Value: (complex option):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#   - class_name: LZ4Compressor</span>
+<span class="c1">#     parameters:</span>
+<span class="c1">#         -</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">commitlog_total_space_in_mb</span></code>: Total space to use for commit logs on disk.</li>
+</ul>
+<p>If space gets above this value, Cassandra will flush every dirty CF in the oldest segment and remove it. So a small total commitlog space will tend to cause more flush activity on less-active columnfamilies.</p>
+<p>The default value is the smaller of 8192, and 1/4 of the total space of the commitlog volume.</p>
+<p><em>Default Value:</em> 8192</p>
+</div>
+<div class="section" id="memtables">
+<span id="id1"></span><h2>Memtables<a class="headerlink" href="#memtables" title="Permalink to this headline">¶</a></h2>
+<p>Memtables are in-memory structures where Cassandra buffers writes.  In general, there is one active memtable per table.
+Eventually, memtables are flushed onto disk and become immutable <a class="reference internal" href="#sstables">SSTables</a>.  This can be triggered in several
+ways:</p>
+<ul class="simple">
+<li>The memory usage of the memtables exceeds the configured threshold  (see <code class="docutils literal notranslate"><span class="pre">memtable_cleanup_threshold</span></code>)</li>
+<li>The <a class="reference internal" href="#commit-log"><span class="std std-ref">CommitLog</span></a> approaches its maximum size, and forces memtable flushes in order to allow commitlog segments to
+be freed</li>
+</ul>
+<p>Memtables may be stored entirely on-heap or partially off-heap, depending on <code class="docutils literal notranslate"><span class="pre">memtable_allocation_type</span></code>.</p>
+</div>
+<div class="section" id="sstables">
+<h2>SSTables<a class="headerlink" href="#sstables" title="Permalink to this headline">¶</a></h2>
+<p>SSTables are the immutable data files that Cassandra uses for persisting data on disk.</p>
+<p>As SSTables are flushed to disk from <a class="reference internal" href="#memtables"><span class="std std-ref">Memtables</span></a> or are streamed from other nodes, Cassandra triggers compactions
+which combine multiple SSTables into one.  Once the new SSTable has been written, the old SSTables can be removed.</p>
+<p>Each SSTable is comprised of multiple components stored in separate files:</p>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">Data.db</span></code></dt>
+<dd>The actual data, i.e. the contents of rows.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Index.db</span></code></dt>
+<dd>An index from partition keys to positions in the <code class="docutils literal notranslate"><span class="pre">Data.db</span></code> file.  For wide partitions, this may also include an
+index to rows within a partition.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Summary.db</span></code></dt>
+<dd>A sampling of (by default) every 128th entry in the <code class="docutils literal notranslate"><span class="pre">Index.db</span></code> file.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Filter.db</span></code></dt>
+<dd>A Bloom Filter of the partition keys in the SSTable.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CompressionInfo.db</span></code></dt>
+<dd>Metadata about the offsets and lengths of compression chunks in the <code class="docutils literal notranslate"><span class="pre">Data.db</span></code> file.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Statistics.db</span></code></dt>
+<dd>Stores metadata about the SSTable, including information about timestamps, tombstones, clustering keys, compaction,
+repair, compression, TTLs, and more.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Digest.crc32</span></code></dt>
+<dd>A CRC-32 digest of the <code class="docutils literal notranslate"><span class="pre">Data.db</span></code> file.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">TOC.txt</span></code></dt>
+<dd>A plain text list of the component files for the SSTable.</dd>
+</dl>
+<p>Within the <code class="docutils literal notranslate"><span class="pre">Data.db</span></code> file, rows are organized by partition.  These partitions are sorted in token order (i.e. by a
+hash of the partition key when the default partitioner, <code class="docutils literal notranslate"><span class="pre">Murmur3Partition</span></code>, is used).  Within a partition, rows are
+stored in the order of their clustering keys.</p>
+<p>SSTables can be optionally compressed using block-based compression.</p>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="guarantees.html" class="btn btn-default pull-right " role="button" title="Guarantees" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="dynamo.html" class="btn btn-default" role="button" title="Dynamo" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

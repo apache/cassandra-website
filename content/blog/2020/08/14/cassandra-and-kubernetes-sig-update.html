@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Five operators for Apache Cassandra have been created that have made it easier to run containerized Cassandra on Kubernetes. Recently the major contributors ...">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Cassandra and Kubernetes: SIG Update and Survey</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/blog/2020/08/14/cassandra-and-kubernetes-sig-update.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../../css/style.css">
+  
+
+  
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li>Cassandra and Kubernetes: SIG Update and Survey</li>
+        
+      
+
+      
+
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../../"><img src="./../../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../../">Home</a></li>
+          <li><a href="./../../../../download/">Download</a></li>
+          <li><a href="./../../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="content">
+  <div class="container">
+  <h2>Cassandra and Kubernetes: SIG Update and Survey</h2>
+    <p>Posted on August 14, 2020 by the Apache Cassandra Community</p>
+    <h5><a href="/blog">&laquo; Back to the Apache Cassandra Blog</a></h5>
+    <hr />
+  <p>Five operators for Apache Cassandra have been created that have made it easier to run containerized Cassandra on Kubernetes. Recently the major contributors to these operators came together to discuss the creation of a community-based operator with the intent of making one that makes it easy to run C* on K8s. One of the project’s organizational goals is that the end result will eventually become part of the Apache Software Foundation or the Apache Cassandra project.</p>
+
+<p>The community created a special interest group (SIG) to set goals for what the operator should do at different levels to find a path for creating a standard community-based operator. The Operator Framework suggests five maturity levels for <a href="https://operatorframework.io/operator-capabilities/">operator capabilities</a> starting from basic installation to auto-pilot.</p>
+
+<p><img src="/img/blog-post-cassandra-and-kubernetes-sig-update/operator-capabilities.png" alt="Operator Capability Maturity Levels" /></p>
+
+<p>(Source: <a href="https://operatorframework.io/operator-capabilities/">OperatorFramework.io</a>)</p>
+
+<p>The five Cassandra Kubernetes operators all come from different backgrounds, so the first major goal is to develop a common understanding as to what an operator needs to do and at which level. This first step involves collaborating on a Custom Resource Definition (CRD) that will set the syntax / schema which will be used to create Cassandra clusters on Kubernetes. Once this is done, a software extension can be developed in a variety of languages including Go, Java, or using the Operator SDK in Helm or Ansible <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/operator/">without making changes to Kubernetes</a>.</p>
+
+<p>We’re not starting from zero, as the creators of the five operators are actively participating in the SIG. Hopefully much of the decided upon CRD will have code fragments that can be leveraged from the other projects. The <a href="https://github.com/Anant/awesome-cassandra/blob/master/README.md#deploying-cassandra-on-kubernetes--kubernetized-cassandra">major operators out publicly today</a> are those by Sky UK, Orange Telecom, Instaclustr, Elassandra, and DataStax (list sourced from the <a href="https://github.com/Anant/awesome-cassandra/blob/master/README.md">awesome-cassandra</a> project):</p>
+
+<ul>
+  <li><a href="https://github.com/Orange-OpenSource/cassandra-k8s-operator">CassKop - Cassandra Kubernetes Operator</a> - This Kubernetes operator by Orange automates Cassandra operations such as deploying a new rack aware cluster, adding/removing nodes, configuring the C and JVM parameters, upgrading JVM and C versions. Written in Go. This one was also one of the first ones out and is the only one that can support multiple Kubernetes clusters using <a href="https://orange-opensource.github.io/casskop/docs/2_setup/3_multi_casskop">Multi-CassKop</a></li>
+  <li><a href="https://github.com/sky-uk/cassandra-operator">Cassandra Operator</a> - A Kubernetes operator by SkyUK that manages Cassandra clusters inside Kubernetes. Well designed and organized. This was among the first operators to be released.</li>
+  <li><a href="https://github.com/instaclustr/cassandra-operator">Instaclustr - Kubernetes Operator for Cassandra operator</a> - The Cassandra operator by Instaclustr manages Cassandra clusters deployed to Kubernetes and automates tasks related to operating an Cassandra cluster.</li>
+  <li><a href="https://github.com/datastax/cass-operator">Cass Operator</a> - DataStax’s Kubernetes Operator supports Apache Cassandra as well as DSE containers on Kubernetes. Cassandra configuration is managed directly in the CRD, and Cassandra nodes are managed via a RESTful management API.</li>
+  <li><a href="https://github.com/strapdata/elassandra-operator">Elassandra Operator</a> - The Elassandra Kubernetes Operator automates the deployment and management of Elassandra clusters deployed in multiple Kubernetes clusters.</li>
+</ul>
+
+<p>If you’re interested in catching up on what the SIG has been talking about, you can watch the YouTube videos of the sessions and read up on the working documents:</p>
+
+<p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ODz9eEdspXE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+</p>
+
+<p>As with any Kubernetes operator, the goal is to create a robot which takes the manual work of setting up complex configurations of containers in Kubernetes easier. An operator can also be seen as a translator between the logical concepts of the software and the concrete Kubernetes resources such as nodes, pods, services. Combined with controllers, operators can abstract out operations such that the human operators can focus on problems related to their industry or domain.  As mentioned above, the different operator capability levels offer a roadmap to creating a robust operator for Cassandra users that is easy to use, set up, maintain and upgrade, and expand a cluster.</p>
+
+<p>When a platform needs Cassandra, it’s probably exhausted the other potential datastores available because it needs high availability and fault tolerance, at high speeds, around the world. Kubernetes is a technology that can match well with Cassandra’s capabilities because it shares the features of being linearly scalable, vendor neutral, and cloud agnostic. There is a healthy debate about whether Cassandra belongs in Kubernetes — <a href="https://cloud.google.com/blog/products/databases/to-run-or-not-to-run-a-database-on-kubernetes-what-to-consider">and whether databases belong in Kubernetes at all</a> — because other orchestration tools are good enough, though the growing user base of Kubernetes in hobby and commercial realms suggests that we need to provide an operator that can keep up with the demand.</p>
+
+<p>Most likely if someone is thinking about moving Cassandra workloads from public cloud, on-premises VMs, or even on-premises bare metal servers to either a public or private cloud hosted K8s, they’ll want to evaluate whether or not the existing architecture could run and be performant.</p>
+
+<p>As part of the SIG, we’re also coming up with reference architectures on which to test the operator. Here are some of the common and most basic reference architectures that are likely candidates.</p>
+
+<ul>
+  <li><strong>Single Workload in Single Region</strong>
+    <ul>
+      <li>1 DCs in 1 region, with 3 nodes (3 total)</li>
+      <li>DC expands to 6 (6 total)</li>
+      <li>DC contracts to 3 ( 3 total)</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/img/blog-post-cassandra-and-kubernetes-sig-update/single-region-single-datacenter.png" alt="Single Workload / Datacenter in a Single Region" /></p>
+
+<ul>
+  <li><strong>Multi-Workload in Single Region</strong>
+    <ul>
+      <li>2 DCs, both in the same region, with 3 nodes in each DC (6 total)</li>
+      <li>Both DCs expand to 6 each (12 total)</li>
+      <li>Both DCs contract to 3 each ( 6 total)</li>
+      <li>Add a third DC in the same region with 3 nodes (9 nodes)</li>
+      <li>Remove third DC</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/img/blog-post-cassandra-and-kubernetes-sig-update/single-region-multi-datacenter.png" alt="Multiple Workloads / Datacenters in a Single Region" /></p>
+
+<ul>
+  <li><strong>Single Workload in Multi-Regions</strong>
+    <ul>
+      <li>2 DCs, 1 in each region, with 3 nodes in each DC (6 total)</li>
+      <li>Both DCs expand to 6 each (12 total)</li>
+      <li>Both DCs contract to 3 each ( 6 total)</li>
+      <li>Add a third DC in a 3rd region with 3 nodes (9 total)</li>
+      <li>Remove third DC</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Although each organization is different, these scenarios or combinations of these scenarios account for 80% of most pure Apache Cassandra use cases. The SIG would love to know more about Cassandra users’ use cases for Kubernetes. Please take <a href="https://docs.google.com/forms/d/e/1FAIpQLScdoTCMxsDwRzt-U898fVmeksBlAf5fud2GVsGqC0T_IQz2Tg/viewform">this short survey</a>, which will remain open through September 17, 2020.</p>
+
+<p>Join the <a href="https://cwiki.apache.org/confluence/display/CASSANDRA/Cassandra+Kubernetes+Operator+SIG">biweekly meetings</a> to stay informed.</p>
+
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-alpha4/new/messaging.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha4" href="../index.html"/> <link rel="up" title="New Features in Apache Cassandra 4.0" href="index.html"/> <link rel="next" title="Improved Streaming" href="streaming.html"/> <link rel="prev" title="Full Query Logging" href="fqllogging.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">New Features in Apache Cassandra 4.0</a></li>
+      
+
+      
+      <li>Improved Internode Messaging</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">New Features in Apache Cassandra 4.0</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="java11.html">Support for Java 11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="virtualtables.html">Virtual Tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auditlogging.html">Audit Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fqllogging.html">Full Query Logging</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Improved Internode Messaging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#optimized-internode-messaging-protocol">Optimized Internode Messaging Protocol</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nio-messaging">NIO Messaging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#resource-limits-on-queued-messages">Resource limits on Queued Messages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#virtual-tables-for-messaging-metrics">Virtual Tables for Messaging Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hint-messaging">Hint Messaging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internode-application-timeout">Internode Application Timeout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#paxos-prepare-and-propose-stage-for-local-requests-optimized">Paxos prepare and propose stage for local requests optimized</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quality-assurance">Quality Assurance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#added-a-message-size-limit">Added a Message size limit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#recover-from-unknown-table-when-deserializing-internode-messages">Recover from unknown table when deserializing internode messages</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="streaming.html">Improved Streaming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transientreplication.html">Transient Replication</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="improved-internode-messaging">
+<h1>Improved Internode Messaging<a class="headerlink" href="#improved-internode-messaging" title="Permalink to this headline">¶</a></h1>
+<p>Apache Cassandra 4.0 has added several new improvements to internode messaging.</p>
+<div class="section" id="optimized-internode-messaging-protocol">
+<h2>Optimized Internode Messaging Protocol<a class="headerlink" href="#optimized-internode-messaging-protocol" title="Permalink to this headline">¶</a></h2>
+<p>The internode messaging protocol has been optimized (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-14485">CASSANDRA-14485</a>). Previously the <code class="docutils literal notranslate"><span class="pre">IPAddressAndPort</span></code> of the sender was included with each message that was sent even though the <code class="docutils literal notranslate"><span class="pre">IPAddressAndPort</span></code> had already been sent once when the initial connection/session was established. In Cassandra 4.0 <code class="docutils literal notranslate"><span class="pre">IPAddressAndPort</span></code> has been removed from every separate message sent  and only sent when connection/session is initiated.</p>
+<p>Another improvement is that at several instances (listed) a fixed 4-byte integer value has been replaced with <code class="docutils literal notranslate"><span class="pre">vint</span></code> as a <code class="docutils literal notranslate"><span class="pre">vint</span></code> is almost always less than 1 byte:</p>
+<ul class="simple">
+<li>The <code class="docutils literal notranslate"><span class="pre">paramSize</span></code> (the number of parameters in the header)</li>
+<li>Each individual parameter value</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">payloadSize</span></code></li>
+</ul>
+</div>
+<div class="section" id="nio-messaging">
+<h2>NIO Messaging<a class="headerlink" href="#nio-messaging" title="Permalink to this headline">¶</a></h2>
+<p>In Cassandra 4.0 peer-to-peer (internode) messaging has been switched to non-blocking I/O (NIO) via Netty (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-8457">CASSANDRA-8457</a>).</p>
+<p>As serialization format,  each message contains a header with several fixed fields, an optional key-value parameters section, and then the message payload itself. Note: the IP address in the header may be either IPv4 (4 bytes) or IPv6 (16 bytes).</p>
+<blockquote>
+<div>The diagram below shows the IPv4 address for brevity.</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>           <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">2</span> <span class="mi">2</span> <span class="mi">2</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">3</span> <span class="mi">3</span> <span class="mi">3</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">4</span> <span class="mi">4</span> <span class="mi">4</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">5</span> <span class="mi">5</span> <span class="mi">5</span> <span class="mi">5</span> <span class="mi">6</span> <span class="mi">6</span>
+ <span class="mi">0</span> <span class="mi">2</span> <span class="mi">4</span> <span class="mi">6</span> <span class="mi">8</span> <span class="mi">0</span> <span class="mi">2</span> <span class="mi">4</span> <span class="mi">6</span> <span class="mi">8</span> <span class="mi">0</span> <span class="mi">2</span> <span class="mi">4</span> <span class="mi">6</span> <span class="mi">8</span> <span class="mi">0</span> <span class="mi">2</span> <span class="mi">4</span> <span class="mi">6</span> <span class="mi">8</span> <span class="mi">0</span> <span class="mi">2</span> <span class="mi">4</span> <span class="mi">6</span> <span class="mi">8</span> <span class="mi">0</span> <span class="mi">2</span> <span class="mi">4</span> <span class="mi">6</span> <span class="mi">8</span> <span class="mi">0</span> <span class="mi">2</span>
+<span class="o">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span>
+<span class="o">|</span>                       <span class="n">PROTOCOL</span> <span class="n">MAGIC</span>                          <span class="o">|</span>
+<span class="o">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span>
+<span class="o">|</span>                         <span class="n">Message</span> <span class="n">ID</span>                            <span class="o">|</span>
+<span class="o">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span>
+<span class="o">|</span>                         <span class="n">Timestamp</span>                             <span class="o">|</span>
+<span class="o">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span>
+<span class="o">|</span>  <span class="n">Addr</span> <span class="nb">len</span> <span class="o">|</span>           <span class="n">IP</span> <span class="n">Address</span> <span class="p">(</span><span class="n">IPv4</span><span class="p">)</span>                       <span class="o">/</span>
+<span class="o">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span>
+<span class="o">/</span>           <span class="o">|</span>                 <span class="n">Verb</span>                              <span class="o">/</span>
+<span class="o">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span>
+<span class="o">/</span>           <span class="o">|</span>            <span class="n">Parameters</span> <span class="n">size</span>                        <span class="o">/</span>
+<span class="o">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span>
+<span class="o">/</span>           <span class="o">|</span>             <span class="n">Parameter</span> <span class="n">data</span>                        <span class="o">/</span>
+<span class="o">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span>
+<span class="o">/</span>                                                               <span class="o">|</span>
+<span class="o">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span>
+<span class="o">|</span>                        <span class="n">Payload</span> <span class="n">size</span>                           <span class="o">|</span>
+<span class="o">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span>
+<span class="o">|</span>                                                               <span class="o">/</span>
+<span class="o">/</span>                           <span class="n">Payload</span>                             <span class="o">/</span>
+<span class="o">/</span>                                                               <span class="o">|</span>
+<span class="o">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span>
+</pre></div>
+</div>
+<p>An individual parameter has a String key and a byte array value. The key is serialized with its length, encoded as two bytes, followed by the UTF-8 byte encoding of the string. The body is serialized with its length, encoded as four bytes, followed by the bytes of the value.</p>
+</div>
+<div class="section" id="resource-limits-on-queued-messages">
+<h2>Resource limits on Queued Messages<a class="headerlink" href="#resource-limits-on-queued-messages" title="Permalink to this headline">¶</a></h2>
+<p>System stability is improved by enforcing strict resource limits (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-15066">CASSANDRA-15066</a>) on the number of outbound messages that are queued, measured by the <code class="docutils literal notranslate"><span class="pre">serializedSize</span></code> of the message. There are three separate limits imposed simultaneously to ensure that progress is always made without any reasonable combination of failures impacting a node’s stability.</p>
+<ol class="arabic simple">
+<li>Global, per-endpoint and per-connection limits are imposed on messages queued for delivery to other nodes and waiting to be processed on arrival from other nodes in the cluster.  These limits are applied to the on-wire size of the message being sent or received.</li>
+<li>The basic per-link limit is consumed in isolation before any endpoint or global limit is imposed. Each node-pair has three links: urgent, small and large.  So any given node may have a maximum of <code class="docutils literal notranslate"><span class="pre">N*3</span> <span class="pre">*</span> <span class="pre">(internode_application_send_queue_capacity_in_bytes</span> <span class="pre">+</span> <span class="pre">internode_application_receive_queue_capacity_in_bytes)</span></code> messages queued without any coordination between them although in practice, with token-aware routing, only RF*tokens nodes should need to communicate with significant bandwidth.</li>
+<li>The per-endpoint limit is imposed on all messages exceeding the per-link limit, simultaneously with the global limit, on all links to or from a single node in the cluster. The global limit is imposed on all messages exceeding the per-link limit, simultaneously with the per-endpoint limit, on all links to or from any node in the cluster. The following configuration settings have been added to <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> for resource limits on queued messages.</li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">internode_application_send_queue_capacity_in_bytes</span><span class="p">:</span> <span class="mi">4194304</span> <span class="c1">#4MiB</span>
+<span class="n">internode_application_send_queue_reserve_endpoint_capacity_in_bytes</span><span class="p">:</span> <span class="mi">134217728</span>  <span class="c1">#128MiB</span>
+<span class="n">internode_application_send_queue_reserve_global_capacity_in_bytes</span><span class="p">:</span> <span class="mi">536870912</span>    <span class="c1">#512MiB</span>
+<span class="n">internode_application_receive_queue_capacity_in_bytes</span><span class="p">:</span> <span class="mi">4194304</span>                  <span class="c1">#4MiB</span>
+<span class="n">internode_application_receive_queue_reserve_endpoint_capacity_in_bytes</span><span class="p">:</span> <span class="mi">134217728</span> <span class="c1">#128MiB</span>
+<span class="n">internode_application_receive_queue_reserve_global_capacity_in_bytes</span><span class="p">:</span> <span class="mi">536870912</span>   <span class="c1">#512MiB</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="virtual-tables-for-messaging-metrics">
+<h2>Virtual Tables for Messaging Metrics<a class="headerlink" href="#virtual-tables-for-messaging-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Metrics is improved by keeping metrics using virtual tables for inter-node inbound and outbound messaging (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-15066">CASSANDRA-15066</a>). For inbound messaging a  virtual table (<code class="docutils literal notranslate"><span class="pre">internode_inbound</span></code>) has been added to keep metrics for:</p>
+<ul class="simple">
+<li>Bytes and count of messages that could not be serialized or flushed due to an error</li>
+<li>Bytes and count of messages scheduled</li>
+<li>Bytes and count of messages successfully processed</li>
+<li>Bytes and count of messages successfully received</li>
+<li>Nanos and count of messages throttled</li>
+<li>Bytes and count of messages expired</li>
+<li>Corrupt frames recovered and unrecovered</li>
+</ul>
+<p>A separate virtual table (<code class="docutils literal notranslate"><span class="pre">internode_outbound</span></code>) has been added for outbound inter-node messaging. The outbound virtual table keeps metrics for:</p>
+<ul class="simple">
+<li>Bytes and count of messages  pending</li>
+<li>Bytes and count of messages  sent</li>
+<li>Bytes and count of messages  expired</li>
+<li>Bytes and count of messages that could not be sent due to an error</li>
+<li>Bytes and count of messages overloaded</li>
+<li>Active Connection Count</li>
+<li>Connection Attempts</li>
+<li>Successful Connection Attempts</li>
+</ul>
+</div>
+<div class="section" id="hint-messaging">
+<h2>Hint Messaging<a class="headerlink" href="#hint-messaging" title="Permalink to this headline">¶</a></h2>
+<p>A specialized version of hint message that takes an already encoded in a <code class="docutils literal notranslate"><span class="pre">ByteBuffer</span></code> hint and sends it verbatim has been added. It is an optimization for when dispatching a hint file of the current messaging version to a node of the same messaging version, which is the most common case. It saves on extra <code class="docutils literal notranslate"><span class="pre">ByteBuffer</span></code> allocations one redundant hint deserialization-serialization cycle.</p>
+</div>
+<div class="section" id="internode-application-timeout">
+<h2>Internode Application Timeout<a class="headerlink" href="#internode-application-timeout" title="Permalink to this headline">¶</a></h2>
+<p>A configuration setting has been added to <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> for the maximum continuous period a connection may be unwritable in application space.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># internode_application_timeout_in_ms = 30000</span>
+</pre></div>
+</div>
+<p>Some other new features include logging of message size to trace message for tracing a query.</p>
+</div>
+<div class="section" id="paxos-prepare-and-propose-stage-for-local-requests-optimized">
+<h2>Paxos prepare and propose stage for local requests optimized<a class="headerlink" href="#paxos-prepare-and-propose-stage-for-local-requests-optimized" title="Permalink to this headline">¶</a></h2>
+<p>In pre-4.0 Paxos prepare and propose messages always go through entire <code class="docutils literal notranslate"><span class="pre">MessagingService</span></code> stack in Cassandra even if request is to be served locally, we can enhance and make local requests severed w/o involving <code class="docutils literal notranslate"><span class="pre">MessagingService</span></code>. Similar things are done elsewhere in Cassandra which skips <code class="docutils literal notranslate"><span class="pre">MessagingService</span></code> stage for local requests.</p>
+<p>This is what it looks like in pre 4.0 if we have tracing on and run a light-weight transaction:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Sending PAXOS_PREPARE message to /A.B.C.D [MessagingService-Outgoing-/A.B.C.D] | 2017-09-11
+21:55:18.971000 | A.B.C.D | 15045
+… REQUEST_RESPONSE message received from /A.B.C.D [MessagingService-Incoming-/A.B.C.D] |
+2017-09-11 21:55:18.976000 | A.B.C.D | 20270
+… Processing response from /A.B.C.D [SharedPool-Worker-4] | 2017-09-11 21:55:18.976000 |
+A.B.C.D | 20372
+</pre></div>
+</div>
+<p>Same thing applies for Propose stage as well.</p>
+<p>In version 4.0 Paxos prepare and propose stage for local requests are optimized (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-13862">CASSANDRA-13862</a>).</p>
+</div>
+<div class="section" id="quality-assurance">
+<h2>Quality Assurance<a class="headerlink" href="#quality-assurance" title="Permalink to this headline">¶</a></h2>
+<p>Several other quality assurance improvements have been made in version 4.0 (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-15066">CASSANDRA-15066</a>).</p>
+<div class="section" id="framing">
+<h3>Framing<a class="headerlink" href="#framing" title="Permalink to this headline">¶</a></h3>
+<p>Version 4.0 introduces framing to all internode messages, i.e. the grouping of messages into a single logical payload with headers and trailers; these frames are guaranteed to either contain at most one message, that is split into its own unique sequence of frames (for large messages), or that a frame contains only complete messages.</p>
+</div>
+<div class="section" id="corruption-prevention">
+<h3>Corruption prevention<a class="headerlink" href="#corruption-prevention" title="Permalink to this headline">¶</a></h3>
+<p>Previously, intra-datacenter internode messages would be unprotected from corruption by default, as only LZ4 provided any integrity checks. All messages to post 4.0 nodes are written to explicit frames, which may be:</p>
+<ul class="simple">
+<li>LZ4 encoded</li>
+<li>CRC protected</li>
+</ul>
+<p>The Unprotected option is still available.</p>
+</div>
+<div class="section" id="resilience">
+<h3>Resilience<a class="headerlink" href="#resilience" title="Permalink to this headline">¶</a></h3>
+<p>For resilience, all frames are written with a separate CRC protected header, of 8 and 6 bytes respectively. If corruption occurs in this header, the connection must be reset, as before. If corruption occurs anywhere outside of the header, the corrupt frame will be skipped, leaving the connection intact and avoiding the loss of any messages unnecessarily.</p>
+<p>Previously, any issue at any point in the stream would result in the connection being reset, with the loss of any in-flight messages.</p>
+</div>
+<div class="section" id="efficiency">
+<h3>Efficiency<a class="headerlink" href="#efficiency" title="Permalink to this headline">¶</a></h3>
+<p>The overall memory usage, and number of byte shuffles, on both inbound and outbound messages is reduced.</p>
+<p>Outbound the Netty LZ4 encoder maintains a chunk size buffer (64KiB), that is filled before any compressed frame can be produced. Our frame encoders avoid this redundant copy, as well as freeing 192KiB per endpoint.</p>
+<p>Inbound, frame decoders guarantee only to copy the number of bytes necessary to parse a frame, and to never store more bytes than necessary. This improvement applies twice to LZ4 connections, improving both the message decode and the LZ4 frame decode.</p>
+</div>
+<div class="section" id="inbound-path">
+<h3>Inbound Path<a class="headerlink" href="#inbound-path" title="Permalink to this headline">¶</a></h3>
+<p>Version 4.0 introduces several improvements to the inbound path.</p>
+<p>An appropriate message handler is used based on whether large or small messages are expected on a particular connection as set in a flag. <code class="docutils literal notranslate"><span class="pre">NonblockingBufferHandler</span></code>, running on event loop, is used for small messages, and <code class="docutils literal notranslate"><span class="pre">BlockingBufferHandler</span></code>, running off event loop, for large messages. The single implementation of <code class="docutils literal notranslate"><span class="pre">InboundMessageHandler</span></code> handles messages of any size effectively by deriving size of the incoming message from the byte stream. In addition to deriving size of the message from the stream, incoming message expiration time is proactively read, before attempting to deserialize the entire message. If it’s expired at the time when a message is encountered the message is just skipped in the byte stream altogether.
+And if a message fails to be deserialized while still on the receiving side - say, because of table id or column being unknown - bytes are skipped, without dropping the entire connection and losing all the buffered messages. An immediately reply back is sent to the coordinator node with the failure reason, rather than waiting for the coordinator callback to expire. This logic is extended to a corrupted frame; a corrupted frame is safely skipped over without dropping the connection.</p>
+<p>Inbound path imposes strict limits on memory utilization. Specifically, the memory occupied by all parsed, but unprocessed messages is bound - on per-connection, per-endpoint, and global basis. Once a connection exceeds its local unprocessed capacity and cannot borrow any permits from per-endpoint and global reserve, it simply stops processing further messages, providing natural backpressure - until sufficient capacity is regained.</p>
+</div>
+<div class="section" id="outbound-connections">
+<h3>Outbound Connections<a class="headerlink" href="#outbound-connections" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="opening-a-connection">
+<h4>Opening a connection<a class="headerlink" href="#opening-a-connection" title="Permalink to this headline">¶</a></h4>
+<p>A consistent approach is adopted for all kinds of failure to connect, including: refused by endpoint, incompatible versions, or unexpected exceptions;</p>
+<ul class="simple">
+<li>Retry forever, until either success or no messages waiting to deliver.</li>
+<li>Wait incrementally longer periods before reconnecting, up to a maximum of 1s.</li>
+<li>While failing to connect, no reserve queue limits are acquired.</li>
+</ul>
+</div>
+<div class="section" id="closing-a-connection">
+<h4>Closing a connection<a class="headerlink" href="#closing-a-connection" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>Correctly drains outbound messages that are waiting to be delivered (unless disconnected and fail to reconnect).</li>
+<li>Messages written to a closing connection are either delivered or rejected, with a new connection being opened if the old is irrevocably closed.</li>
+<li>Unused connections are pruned eventually.</li>
+</ul>
+</div>
+<div class="section" id="reconnecting">
+<h4>Reconnecting<a class="headerlink" href="#reconnecting" title="Permalink to this headline">¶</a></h4>
+<p>We sometimes need to reconnect a perfectly valid connection, e.g. if the preferred IP address changes. We ensure that the underlying connection has no in-progress operations before closing it and reconnecting.</p>
+</div>
+<div class="section" id="message-failure">
+<h4>Message Failure<a class="headerlink" href="#message-failure" title="Permalink to this headline">¶</a></h4>
+<p>Propagates to callbacks instantly, better preventing overload by reclaiming committed memory.</p>
+<div class="section" id="expiry">
+<h5>Expiry<a class="headerlink" href="#expiry" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>No longer experiences head-of-line blocking (e.g. undroppable message preventing all droppable messages from being expired).</li>
+<li>While overloaded, expiry is attempted eagerly on enqueuing threads.</li>
+<li>While disconnected we schedule regular pruning, to handle the case where messages are no longer being sent, but we have a large backlog to expire.</li>
+</ul>
+</div>
+<div class="section" id="overload">
+<h5>Overload<a class="headerlink" href="#overload" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>Tracked by bytes queued, as opposed to number of messages.</li>
+</ul>
+</div>
+<div class="section" id="serialization-errors">
+<h5>Serialization Errors<a class="headerlink" href="#serialization-errors" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>Do not result in the connection being invalidated; the message is simply completed with failure, and then erased from the frame.</li>
+<li>Includes detected mismatch between calculated serialization size to actual.</li>
+</ul>
+<p>Failures to flush to network, perhaps because the connection has been reset are not currently notified to callback handlers, as the necessary information has been discarded, though it would be possible to do so in future if we decide it is worth our while.</p>
+</div>
+</div>
+<div class="section" id="qos">
+<h4>QoS<a class="headerlink" href="#qos" title="Permalink to this headline">¶</a></h4>
+<p>“Gossip” connection has been replaced with a general purpose “Urgent” connection, for any small messages impacting system stability.</p>
+</div>
+<div class="section" id="metrics">
+<h4>Metrics<a class="headerlink" href="#metrics" title="Permalink to this headline">¶</a></h4>
+<p>We track, and expose via Virtual Table and JMX, the number of messages and bytes that: we could not serialize or flush due to an error, we dropped due to overload or timeout, are pending, and have successfully sent.</p>
+</div>
+</div>
+</div>
+<div class="section" id="added-a-message-size-limit">
+<h2>Added a Message size limit<a class="headerlink" href="#added-a-message-size-limit" title="Permalink to this headline">¶</a></h2>
+<p>Cassandra pre-4.0 doesn’t protect the server from allocating huge buffers for the inter-node Message objects. Adding a message size limit would be good to deal with issues such as a malfunctioning cluster participant. Version 4.0 introduced max message size config param, akin to max mutation size - set to endpoint reserve capacity by default.</p>
+</div>
+<div class="section" id="recover-from-unknown-table-when-deserializing-internode-messages">
+<h2>Recover from unknown table when deserializing internode messages<a class="headerlink" href="#recover-from-unknown-table-when-deserializing-internode-messages" title="Permalink to this headline">¶</a></h2>
+<p>As discussed in (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-9289">CASSANDRA-9289</a>) it would be nice to gracefully recover from seeing an unknown table in a message from another node. Pre-4.0, we close the connection and reconnect, which can cause other concurrent queries to fail.
+Version 4.0  fixes the issue by wrapping message in-stream with
+<code class="docutils literal notranslate"><span class="pre">TrackedDataInputPlus</span></code>, catching
+<code class="docutils literal notranslate"><span class="pre">UnknownCFException</span></code>, and skipping the remaining bytes in this message. TCP won’t be closed and it will remain connected for other messages.</p>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="streaming.html" class="btn btn-default pull-right " role="button" title="Improved Streaming" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="fqllogging.html" class="btn btn-default" role="button" title="Full Query Logging" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/3.11.8/operating/security.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v3.11.8" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Hardware Choices" href="hardware.html"/> <link rel="prev" title="Monitoring" href="metrics.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">Operating Cassandra</a></li>
+      
+
+      
+      <li>Security</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Operating Cassandra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="snitch.html">Snitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topo_changes.html">Adding, replacing, moving and removing nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="repair.html">Repair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_repair.html">Read repair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hints.html">Hints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction.html">Compaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bloom_filters.html">Bloom Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compression.html">Compression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cdc.html">Change Data Capture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backups.html">Backups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bulk_loading.html">Bulk Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html">Monitoring</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Security</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tls-ssl-encryption">TLS/SSL Encryption</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#roles">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#authentication">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#authorization">Authorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#caching">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jmx-access">JMX access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html">Hardware Choices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="security">
+<h1>Security<a class="headerlink" href="#security" title="Permalink to this headline">¶</a></h1>
+<p>There are three main components to the security features provided by Cassandra:</p>
+<ul class="simple">
+<li>TLS/SSL encryption for client and inter-node communication</li>
+<li>Client authentication</li>
+<li>Authorization</li>
+</ul>
+<div class="section" id="tls-ssl-encryption">
+<h2>TLS/SSL Encryption<a class="headerlink" href="#tls-ssl-encryption" title="Permalink to this headline">¶</a></h2>
+<p>Cassandra provides secure communication between a client machine and a database cluster and between nodes within a
+cluster. Enabling encryption ensures that data in flight is not compromised and is transferred securely. The options for
+client-to-node and node-to-node encryption are managed separately and may be configured independently.</p>
+<p>In both cases, the JVM defaults for supported protocols and cipher suites are used when encryption is enabled. These can
+be overidden using the settings in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code>, but this is not recommended unless there are policies in place
+which dictate certain settings or a need to disable vulnerable ciphers or protocols in cases where the JVM cannot be
+updated.</p>
+<p>FIPS compliant settings can be configured at the JVM level and should not involve changing encryption settings in
+cassandra.yaml. See <a class="reference external" href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/FIPS.html">the java document on FIPS</a>
+for more details.</p>
+<p>For information on generating the keystore and truststore files used in SSL communications, see the
+<a class="reference external" href="http://download.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html#CreateKeystore">java documentation on creating keystores</a></p>
+<div class="section" id="inter-node-encryption">
+<h3>Inter-node Encryption<a class="headerlink" href="#inter-node-encryption" title="Permalink to this headline">¶</a></h3>
+<p>The settings for managing inter-node encryption are found in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> in the <code class="docutils literal notranslate"><span class="pre">server_encryption_options</span></code>
+section. To enable inter-node encryption, change the <code class="docutils literal notranslate"><span class="pre">internode_encryption</span></code> setting from its default value of <code class="docutils literal notranslate"><span class="pre">none</span></code>
+to one value from: <code class="docutils literal notranslate"><span class="pre">rack</span></code>, <code class="docutils literal notranslate"><span class="pre">dc</span></code> or <code class="docutils literal notranslate"><span class="pre">all</span></code>.</p>
+</div>
+<div class="section" id="client-to-node-encryption">
+<h3>Client to Node Encryption<a class="headerlink" href="#client-to-node-encryption" title="Permalink to this headline">¶</a></h3>
+<p>The settings for managing client to node encryption are found in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> in the <code class="docutils literal notranslate"><span class="pre">client_encryption_options</span></code>
+section. There are two primary toggles here for enabling encryption, <code class="docutils literal notranslate"><span class="pre">enabled</span></code> and <code class="docutils literal notranslate"><span class="pre">optional</span></code>.</p>
+<ul class="simple">
+<li>If neither is set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, client connections are entirely unencrypted.</li>
+<li>If <code class="docutils literal notranslate"><span class="pre">enabled</span></code> is set to <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">optional</span></code> is set to <code class="docutils literal notranslate"><span class="pre">false</span></code>, all client connections must be secured.</li>
+<li>If both options are set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, both encrypted and unencrypted connections are supported using the same port.
+Client connections using encryption with this configuration will be automatically detected and handled by the server.</li>
+</ul>
+<p>As an alternative to the <code class="docutils literal notranslate"><span class="pre">optional</span></code> setting, separate ports can also be configured for secure and unsecure connections
+where operational requirements demand it. To do so, set <code class="docutils literal notranslate"><span class="pre">optional</span></code> to false and use the <code class="docutils literal notranslate"><span class="pre">native_transport_port_ssl</span></code>
+setting in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> to specify the port to be used for secure client communication.</p>
+</div>
+</div>
+<div class="section" id="roles">
+<span id="operation-roles"></span><h2>Roles<a class="headerlink" href="#roles" title="Permalink to this headline">¶</a></h2>
+<p>Cassandra uses database roles, which may represent either a single user or a group of users, in both authentication and
+permissions management. Role management is an extension point in Cassandra and may be configured using the
+<code class="docutils literal notranslate"><span class="pre">role_manager</span></code> setting in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code>. The default setting uses <code class="docutils literal notranslate"><span class="pre">CassandraRoleManager</span></code>, an implementation
+which stores role information in the tables of the <code class="docutils literal notranslate"><span class="pre">system_auth</span></code> keyspace.</p>
+<p>See also the <a class="reference internal" href="../cql/security.html#cql-roles"><span class="std std-ref">CQL documentation on roles</span></a>.</p>
+</div>
+<div class="section" id="authentication">
+<h2>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h2>
+<p>Authentication is pluggable in Cassandra and is configured using the <code class="docutils literal notranslate"><span class="pre">authenticator</span></code> setting in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code>.
+Cassandra ships with two options included in the default distribution.</p>
+<p>By default, Cassandra is configured with <code class="docutils literal notranslate"><span class="pre">AllowAllAuthenticator</span></code> which performs no authentication checks and therefore
+requires no credentials. It is used to disable authentication completely. Note that authentication is a necessary
+condition of Cassandra’s permissions subsystem, so if authentication is disabled, effectively so are permissions.</p>
+<p>The default distribution also includes <code class="docutils literal notranslate"><span class="pre">PasswordAuthenticator</span></code>, which stores encrypted credentials in a system table.
+This can be used to enable simple username/password authentication.</p>
+<div class="section" id="enabling-password-authentication">
+<span id="password-authentication"></span><h3>Enabling Password Authentication<a class="headerlink" href="#enabling-password-authentication" title="Permalink to this headline">¶</a></h3>
+<p>Before enabling client authentication on the cluster, client applications should be pre-configured with their intended
+credentials. When a connection is initiated, the server will only ask for credentials once authentication is
+enabled, so setting up the client side config in advance is safe. In contrast, as soon as a server has authentication
+enabled, any connection attempt without proper credentials will be rejected which may cause availability problems for
+client applications. Once clients are setup and ready for authentication to be enabled, follow this procedure to enable
+it on the cluster.</p>
+<p>Pick a single node in the cluster on which to perform the initial configuration. Ideally, no clients should connect
+to this node during the setup process, so you may want to remove it from client config, block it at the network level
+or possibly add a new temporary node to the cluster for this purpose. On that node, perform the following steps:</p>
+<ol class="arabic simple">
+<li>Open a <code class="docutils literal notranslate"><span class="pre">cqlsh</span></code> session and change the replication factor of the <code class="docutils literal notranslate"><span class="pre">system_auth</span></code> keyspace. By default, this keyspace
+uses <code class="docutils literal notranslate"><span class="pre">SimpleReplicationStrategy</span></code> and a <code class="docutils literal notranslate"><span class="pre">replication_factor</span></code> of 1. It is recommended to change this for any
+non-trivial deployment to ensure that should nodes become unavailable, login is still possible. Best practice is to
+configure a replication factor of 3 to 5 per-DC.</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ALTER KEYSPACE system_auth WITH replication = {&#39;class&#39;: &#39;NetworkTopologyStrategy&#39;, &#39;DC1&#39;: 3, &#39;DC2&#39;: 3};
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>Edit <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> to change the <code class="docutils literal notranslate"><span class="pre">authenticator</span></code> option like so:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>authenticator: PasswordAuthenticator
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>Restart the node.</li>
+<li>Open a new <code class="docutils literal notranslate"><span class="pre">cqlsh</span></code> session using the credentials of the default superuser:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh -u cassandra -p cassandra
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li>During login, the credentials for the default superuser are read with a consistency level of <code class="docutils literal notranslate"><span class="pre">QUORUM</span></code>, whereas
+those for all other users (including superusers) are read at <code class="docutils literal notranslate"><span class="pre">LOCAL_ONE</span></code>. In the interests of performance and
+availability, as well as security, operators should create another superuser and disable the default one. This step
+is optional, but highly recommended. While logged in as the default superuser, create another superuser role which
+can be used to bootstrap further configuration.</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># create a new superuser
+CREATE ROLE dba WITH SUPERUSER = true AND LOGIN = true AND PASSWORD = &#39;super&#39;;
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li>Start a new cqlsh session, this time logging in as the new_superuser and disable the default superuser.</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ALTER ROLE cassandra WITH SUPERUSER = false AND LOGIN = false;
+</pre></div>
+</div>
+<ol class="arabic simple" start="7">
+<li>Finally, set up the roles and credentials for your application users with <a class="reference internal" href="../cql/security.html#create-role-statement"><span class="std std-ref">CREATE ROLE</span></a>
+statements.</li>
+</ol>
+<p>At the end of these steps, the one node is configured to use password authentication. To roll that out across the
+cluster, repeat steps 2 and 3 on each node in the cluster. Once all nodes have been restarted, authentication will be
+fully enabled throughout the cluster.</p>
+<p>Note that using <code class="docutils literal notranslate"><span class="pre">PasswordAuthenticator</span></code> also requires the use of <a class="reference internal" href="#operation-roles"><span class="std std-ref">CassandraRoleManager</span></a>.</p>
+<p>See also: <a class="reference internal" href="../cql/security.html#setting-credentials-for-internal-authentication"><span class="std std-ref">Setting credentials for internal authentication</span></a>, <a class="reference internal" href="../cql/security.html#create-role-statement"><span class="std std-ref">CREATE ROLE</span></a>,
+<a class="reference internal" href="../cql/security.html#alter-role-statement"><span class="std std-ref">ALTER ROLE</span></a>, <a class="reference internal" href="../cql/ddl.html#alter-keyspace-statement"><span class="std std-ref">ALTER KEYSPACE</span></a> and <a class="reference internal" href="../cql/security.html#grant-permission-statement"><span class="std std-ref">GRANT PERMISSION</span></a>,</p>
+</div>
+</div>
+<div class="section" id="authorization">
+<h2>Authorization<a class="headerlink" href="#authorization" title="Permalink to this headline">¶</a></h2>
+<p>Authorization is pluggable in Cassandra and is configured using the <code class="docutils literal notranslate"><span class="pre">authorizer</span></code> setting in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code>.
+Cassandra ships with two options included in the default distribution.</p>
+<p>By default, Cassandra is configured with <code class="docutils literal notranslate"><span class="pre">AllowAllAuthorizer</span></code> which performs no checking and so effectively grants all
+permissions to all roles. This must be used if <code class="docutils literal notranslate"><span class="pre">AllowAllAuthenticator</span></code> is the configured authenticator.</p>
+<p>The default distribution also includes <code class="docutils literal notranslate"><span class="pre">CassandraAuthorizer</span></code>, which does implement full permissions management
+functionality and stores its data in Cassandra system tables.</p>
+<div class="section" id="enabling-internal-authorization">
+<h3>Enabling Internal Authorization<a class="headerlink" href="#enabling-internal-authorization" title="Permalink to this headline">¶</a></h3>
+<p>Permissions are modelled as a whitelist, with the default assumption that a given role has no access to any database
+resources. The implication of this is that once authorization is enabled on a node, all requests will be rejected until
+the required permissions have been granted. For this reason, it is strongly recommended to perform the initial setup on
+a node which is not processing client requests.</p>
+<p>The following assumes that authentication has already been enabled via the process outlined in
+<a class="reference internal" href="#password-authentication"><span class="std std-ref">Enabling Password Authentication</span></a>. Perform these steps to enable internal authorization across the cluster:</p>
+<ol class="arabic simple">
+<li>On the selected node, edit <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> to change the <code class="docutils literal notranslate"><span class="pre">authorizer</span></code> option like so:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>authorizer: CassandraAuthorizer
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>Restart the node.</li>
+<li>Open a new <code class="docutils literal notranslate"><span class="pre">cqlsh</span></code> session using the credentials of a role with superuser credentials:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh -u dba -p super
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>Configure the appropriate access privileges for your clients using <a class="reference external" href="cql.html#grant-permission">GRANT PERMISSION</a>
+statements. On the other nodes, until configuration is updated and the node restarted, this will have no effect so
+disruption to clients is avoided.</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>GRANT SELECT ON ks.t1 TO db_user;
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li>Once all the necessary permissions have been granted, repeat steps 1 and 2 for each node in turn. As each node
+restarts and clients reconnect, the enforcement of the granted permissions will begin.</li>
+</ol>
+<p>See also: <a class="reference internal" href="../cql/security.html#grant-permission-statement"><span class="std std-ref">GRANT PERMISSION</span></a>, <cite>GRANT ALL &lt;grant-all&gt;</cite> and <a class="reference internal" href="../cql/security.html#revoke-permission-statement"><span class="std std-ref">REVOKE PERMISSION</span></a></p>
+</div>
+</div>
+<div class="section" id="caching">
+<h2>Caching<a class="headerlink" href="#caching" title="Permalink to this headline">¶</a></h2>
+<p>Enabling authentication and authorization places additional load on the cluster by frequently reading from the
+<code class="docutils literal notranslate"><span class="pre">system_auth</span></code> tables. Furthermore, these reads are in the critical paths of many client operations, and so has the
+potential to severely impact quality of service. To mitigate this, auth data such as credentials, permissions and role
+details are cached for a configurable period. The caching can be configured (and even disabled) from <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code>
+or using a JMX client. The JMX interface also supports invalidation of the various caches, but any changes made via JMX
+are not persistent and will be re-read from <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> when the node is restarted.</p>
+<p>Each cache has 3 options which can be set:</p>
+<dl class="docutils">
+<dt>Validity Period</dt>
+<dd>Controls the expiration of cache entries. After this period, entries are invalidated and removed from the cache.</dd>
+<dt>Refresh Rate</dt>
+<dd>Controls the rate at which background reads are performed to pick up any changes to the underlying data. While these
+async refreshes are performed, caches will continue to serve (possibly) stale data. Typically, this will be set to a
+shorter time than the validity period.</dd>
+<dt>Max Entries</dt>
+<dd>Controls the upper bound on cache size.</dd>
+</dl>
+<p>The naming for these options in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> follows the convention:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">&lt;type&gt;_validity_in_ms</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;type&gt;_update_interval_in_ms</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;type&gt;_cache_max_entries</span></code></li>
+</ul>
+<p>Where <code class="docutils literal notranslate"><span class="pre">&lt;type&gt;</span></code> is one of <code class="docutils literal notranslate"><span class="pre">credentials</span></code>, <code class="docutils literal notranslate"><span class="pre">permissions</span></code>, or <code class="docutils literal notranslate"><span class="pre">roles</span></code>.</p>
+<p>As mentioned, these are also exposed via JMX in the mbeans under the <code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.auth</span></code> domain.</p>
+</div>
+<div class="section" id="jmx-access">
+<h2>JMX access<a class="headerlink" href="#jmx-access" title="Permalink to this headline">¶</a></h2>
+<p>Access control for JMX clients is configured separately to that for CQL. For both authentication and authorization, two
+providers are available; the first based on standard JMX security and the second which integrates more closely with
+Cassandra’s own auth subsystem.</p>
+<p>The default settings for Cassandra make JMX accessible only from localhost. To enable remote JMX connections, edit
+<code class="docutils literal notranslate"><span class="pre">cassandra-env.sh</span></code> (or <code class="docutils literal notranslate"><span class="pre">cassandra-env.ps1</span></code> on Windows) to change the <code class="docutils literal notranslate"><span class="pre">LOCAL_JMX</span></code> setting to <code class="docutils literal notranslate"><span class="pre">yes</span></code>. Under the
+standard configuration, when remote JMX connections are enabled, <a class="reference internal" href="#standard-jmx-auth"><span class="std std-ref">standard JMX authentication</span></a>
+is also switched on.</p>
+<p>Note that by default, local-only connections are not subject to authentication, but this can be enabled.</p>
+<p>If enabling remote connections, it is recommended to also use <a class="reference internal" href="#jmx-with-ssl"><span class="std std-ref">SSL</span></a> connections.</p>
+<p>Finally, after enabling auth and/or SSL, ensure that tools which use JMX, such as <a class="reference internal" href="../tools/nodetool.html#nodetool"><span class="std std-ref">nodetool</span></a>, are
+correctly configured and working as expected.</p>
+<div class="section" id="standard-jmx-auth">
+<span id="id1"></span><h3>Standard JMX Auth<a class="headerlink" href="#standard-jmx-auth" title="Permalink to this headline">¶</a></h3>
+<p>Users permitted to connect to the JMX server are specified in a simple text file. The location of this file is set in
+<code class="docutils literal notranslate"><span class="pre">cassandra-env.sh</span></code> by the line:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>JVM_OPTS=&quot;$JVM_OPTS -Dcom.sun.management.jmxremote.password.file=/etc/cassandra/jmxremote.password&quot;
+</pre></div>
+</div>
+<p>Edit the password file to add username/password pairs:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>jmx_user jmx_password
+</pre></div>
+</div>
+<p>Secure the credentials file so that only the user running the Cassandra process can read it :</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ chown cassandra:cassandra /etc/cassandra/jmxremote.password
+$ chmod 400 /etc/cassandra/jmxremote.password
+</pre></div>
+</div>
+<p>Optionally, enable access control to limit the scope of what defined users can do via JMX. Note that this is a fairly
+blunt instrument in this context as most operational tools in Cassandra require full read/write access. To configure a
+simple access file, uncomment this line in <code class="docutils literal notranslate"><span class="pre">cassandra-env.sh</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#JVM_OPTS=&quot;$JVM_OPTS -Dcom.sun.management.jmxremote.access.file=/etc/cassandra/jmxremote.access&quot;
+</pre></div>
+</div>
+<p>Then edit the access file to grant your JMX user readwrite permission:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>jmx_user readwrite
+</pre></div>
+</div>
+<p>Cassandra must be restarted to pick up the new settings.</p>
+<p>See also : <a class="reference external" href="http://docs.oracle.com/javase/7/docs/technotes/guides/management/agent.html#gdenv">Using File-Based Password Authentication In JMX</a></p>
+</div>
+<div class="section" id="cassandra-integrated-auth">
+<h3>Cassandra Integrated Auth<a class="headerlink" href="#cassandra-integrated-auth" title="Permalink to this headline">¶</a></h3>
+<p>An alternative to the out-of-the-box JMX auth is to useeCassandra’s own authentication and/or authorization providers
+for JMX clients. This is potentially more flexible and secure but it come with one major caveat. Namely that it is not
+available until <cite>after</cite> a node has joined the ring, because the auth subsystem is not fully configured until that point
+However, it is often critical for monitoring purposes to have JMX access particularly during bootstrap. So it is
+recommended, where possible, to use local only JMX auth during bootstrap and then, if remote connectivity is required,
+to switch to integrated auth once the node has joined the ring and initial setup is complete.</p>
+<p>With this option, the same database roles used for CQL authentication can be used to control access to JMX, so updates
+can be managed centrally using just <code class="docutils literal notranslate"><span class="pre">cqlsh</span></code>. Furthermore, fine grained control over exactly which operations are
+permitted on particular MBeans can be acheived via <a class="reference internal" href="../cql/security.html#grant-permission-statement"><span class="std std-ref">GRANT PERMISSION</span></a>.</p>
+<p>To enable integrated authentication, edit <code class="docutils literal notranslate"><span class="pre">cassandra-env.sh</span></code> to uncomment these lines:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#JVM_OPTS=&quot;$JVM_OPTS -Dcassandra.jmx.remote.login.config=CassandraLogin&quot;
+#JVM_OPTS=&quot;$JVM_OPTS -Djava.security.auth.login.config=$CASSANDRA_HOME/conf/cassandra-jaas.config&quot;
+</pre></div>
+</div>
+<p>And disable the JMX standard auth by commenting this line:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>JVM_OPTS=&quot;$JVM_OPTS -Dcom.sun.management.jmxremote.password.file=/etc/cassandra/jmxremote.password&quot;
+</pre></div>
+</div>
+<p>To enable integrated authorization, uncomment this line:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#JVM_OPTS=&quot;$JVM_OPTS -Dcassandra.jmx.authorizer=org.apache.cassandra.auth.jmx.AuthorizationProxy&quot;
+</pre></div>
+</div>
+<p>Check standard access control is off by ensuring this line is commented out:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#JVM_OPTS=&quot;$JVM_OPTS -Dcom.sun.management.jmxremote.access.file=/etc/cassandra/jmxremote.access&quot;
+</pre></div>
+</div>
+<p>With integrated authentication and authorization enabled, operators can define specific roles and grant them access to
+the particular JMX resources that they need. For example, a role with the necessary permissions to use tools such as
+jconsole or jmc in read-only mode would be defined as:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CREATE ROLE jmx WITH LOGIN = false;
+GRANT SELECT ON ALL MBEANS TO jmx;
+GRANT DESCRIBE ON ALL MBEANS TO jmx;
+GRANT EXECUTE ON MBEAN &#39;java.lang:type=Threading&#39; TO jmx;
+GRANT EXECUTE ON MBEAN &#39;com.sun.management:type=HotSpotDiagnostic&#39; TO jmx;
+
+# Grant the jmx role to one with login permissions so that it can access the JMX tooling
+CREATE ROLE ks_user WITH PASSWORD = &#39;password&#39; AND LOGIN = true AND SUPERUSER = false;
+GRANT jmx TO ks_user;
+</pre></div>
+</div>
+<p>Fine grained access control to individual MBeans is also supported:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>GRANT EXECUTE ON MBEAN &#39;org.apache.cassandra.db:type=Tables,keyspace=test_keyspace,table=t1&#39; TO ks_user;
+GRANT EXECUTE ON MBEAN &#39;org.apache.cassandra.db:type=Tables,keyspace=test_keyspace,table=*&#39; TO ks_owner;
+</pre></div>
+</div>
+<p>This permits the <code class="docutils literal notranslate"><span class="pre">ks_user</span></code> role to invoke methods on the MBean representing a single table in <code class="docutils literal notranslate"><span class="pre">test_keyspace</span></code>, while
+granting the same permission for all table level MBeans in that keyspace to the <code class="docutils literal notranslate"><span class="pre">ks_owner</span></code> role.</p>
+<p>Adding/removing roles and granting/revoking of permissions is handled dynamically once the initial setup is complete, so
+no further restarts are required if permissions are altered.</p>
+<p>See also: <a class="reference internal" href="../cql/security.html#cql-permissions"><span class="std std-ref">Permissions</span></a>.</p>
+</div>
+<div class="section" id="jmx-with-ssl">
+<span id="id2"></span><h3>JMX With SSL<a class="headerlink" href="#jmx-with-ssl" title="Permalink to this headline">¶</a></h3>
+<p>JMX SSL configuration is controlled by a number of system properties, some of which are optional. To turn on SSL, edit
+the relevant lines in <code class="docutils literal notranslate"><span class="pre">cassandra-env.sh</span></code> (or <code class="docutils literal notranslate"><span class="pre">cassandra-env.ps1</span></code> on Windows) to uncomment and set the values of these
+properties as required:</p>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">com.sun.management.jmxremote.ssl</span></code></dt>
+<dd>set to true to enable SSL</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">com.sun.management.jmxremote.ssl.need.client.auth</span></code></dt>
+<dd>set to true to enable validation of client certificates</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">com.sun.management.jmxremote.registry.ssl</span></code></dt>
+<dd>enables SSL sockets for the RMI registry from which clients obtain the JMX connector stub</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">com.sun.management.jmxremote.ssl.enabled.protocols</span></code></dt>
+<dd>by default, the protocols supported by the JVM will be used, override with a comma-separated list. Note that this is
+not usually necessary and using the defaults is the preferred option.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">com.sun.management.jmxremote.ssl.enabled.cipher.suites</span></code></dt>
+<dd>by default, the cipher suites supported by the JVM will be used, override with a comma-separated list. Note that
+this is not usually necessary and using the defaults is the preferred option.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">javax.net.ssl.keyStore</span></code></dt>
+<dd>set the path on the local filesystem of the keystore containing server private keys and public certificates</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">javax.net.ssl.keyStorePassword</span></code></dt>
+<dd>set the password of the keystore file</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">javax.net.ssl.trustStore</span></code></dt>
+<dd>if validation of client certificates is required, use this property to specify the path of the truststore containing
+the public certificates of trusted clients</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">javax.net.ssl.trustStorePassword</span></code></dt>
+<dd>set the password of the truststore file</dd>
+</dl>
+<p>See also: <a class="reference external" href="http://docs.oracle.com/javase/7/docs/technotes/guides/management/agent.html#gdemv">Oracle Java7 Docs</a>,
+<a class="reference external" href="https://www.lullabot.com/articles/monitor-java-with-jmx">Monitor Java with JMX</a></p>
+</div>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="hardware.html" class="btn btn-default pull-right " role="button" title="Hardware Choices" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="metrics.html" class="btn btn-default" role="button" title="Monitoring" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

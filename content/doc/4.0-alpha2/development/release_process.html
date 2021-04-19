@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-alpha2/development/release_process.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha2" href="../index.html"/> <link rel="up" title="Contributing to Cassandra" href="index.html"/> <link rel="next" title="Frequently Asked Questions" href="../faq/index.html"/> <link rel="prev" title="Dependency Management" href="dependencies.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">Contributing to Cassandra</a></li>
+      
+
+      
+      <li>Release Process</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Contributing to Cassandra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="gettingstarted.html">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ide.html">Building and IDE Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="patches.html">Contributing Code Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_style.html">Code Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="how_to_review.html">Review Checklist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="how_to_commit.html">How-to Commit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html">Working on Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ci.html">Jenkins CI Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dependencies.html">Dependency Management</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Release Process</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-release-artifacts">Create Release Artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#call-for-a-vote">Call for a Vote</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#post-vote-operations">Post-vote operations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="release-process">
+<h1><a class="toc-backref" href="#id3">Release Process</a><a class="headerlink" href="#release-process" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#release-process" id="id3">Release Process</a><ul>
+<li><a class="reference internal" href="#prerequisites" id="id4">Prerequisites</a><ul>
+<li><a class="reference internal" href="#create-and-publish-your-gpg-key" id="id5">Create and publish your GPG key</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#create-release-artifacts" id="id6">Create Release Artifacts</a><ul>
+<li><a class="reference internal" href="#perform-the-release" id="id7">Perform the Release</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#call-for-a-vote" id="id8">Call for a Vote</a></li>
+<li><a class="reference internal" href="#post-vote-operations" id="id9">Post-vote operations</a><ul>
+<li><a class="reference internal" href="#publish-artifacts" id="id10">Publish Artifacts</a></li>
+<li><a class="reference internal" href="#promote-nexus-repository" id="id11">Promote Nexus Repository</a></li>
+<li><a class="reference internal" href="#sign-and-upload-distribution-packages-to-bintray" id="id12">Sign and Upload Distribution Packages to Bintray</a></li>
+<li><a class="reference internal" href="#update-and-publish-website" id="id13">Update and Publish Website</a></li>
+<li><a class="reference internal" href="#release-version-in-jira" id="id14">Release version in JIRA</a></li>
+<li><a class="reference internal" href="#update-to-next-development-version" id="id15">Update to Next Development Version</a></li>
+<li><a class="reference internal" href="#wait-for-artifacts-to-sync" id="id16">Wait for Artifacts to Sync</a></li>
+<li><a class="reference internal" href="#send-release-announcement" id="id17">Send Release Announcement</a></li>
+<li><a class="reference internal" href="#update-slack-cassandra-topic" id="id18">Update Slack Cassandra topic</a></li>
+<li><a class="reference internal" href="#tweet-from-cassandra" id="id19">Tweet from &#64;Cassandra</a></li>
+<li><a class="reference internal" href="#delete-old-releases" id="id20">Delete Old Releases</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<dl class="last docutils">
+<dt>WORK IN PROGRESS</dt>
+<dd><ul class="first last simple">
+<li>A number of these steps still have been finalised/tested.</li>
+<li>The use of people.apache.org needs to be replaced with svnpubsub and dist.apache.org</li>
+</ul>
+</dd>
+</dl>
+</div>
+<p>The steps for Release Managers to create, vote and publish releases for Apache Cassandra.</p>
+<p>While a committer can perform the initial steps of creating and calling a vote on a proposed release, only a PMC can complete the process of publishing and announcing the release.</p>
+<div class="section" id="prerequisites">
+<h2><a class="toc-backref" href="#id4">Prerequisites</a><a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Background docs</dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="http://www.apache.org/legal/release-policy.html">ASF Release Policy</a></li>
+<li><a class="reference external" href="http://www.apache.org/dev/release-distribution">ASF Release Distribution Policy</a></li>
+<li><a class="reference external" href="http://www.eu.apache.org/dev/release-publishing.html">ASF Release Best Practices</a></li>
+</ul>
+</dd>
+</dl>
+<p>A debian based linux OS is required to run the release steps from. Debian-based distros provide the required RPM, dpkg and repository management tools.</p>
+<div class="section" id="create-and-publish-your-gpg-key">
+<h3><a class="toc-backref" href="#id5">Create and publish your GPG key</a><a class="headerlink" href="#create-and-publish-your-gpg-key" title="Permalink to this headline">¶</a></h3>
+<p>To create a GPG key, follow the <a class="reference external" href="http://www.apache.org/dev/openpgp.html">guidelines</a>.
+Include your public key in:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>https://dist.apache.org/repos/dist/release/cassandra/KEYS
+</pre></div>
+</div>
+<p>Publish your GPG key in a PGP key server, such as <a class="reference external" href="http://pgp.mit.edu/">MIT Keyserver</a>.</p>
+</div>
+</div>
+<div class="section" id="create-release-artifacts">
+<h2><a class="toc-backref" href="#id6">Create Release Artifacts</a><a class="headerlink" href="#create-release-artifacts" title="Permalink to this headline">¶</a></h2>
+<p>Any committer can perform the following steps to create and call a vote on a proposed release.</p>
+<p>Check that no open jira tickets are urgent and currently being worked on.
+Also check with a PMC that there’s security vulnerabilities currently being worked on in private.</p>
+<div class="section" id="perform-the-release">
+<h3><a class="toc-backref" href="#id7">Perform the Release</a><a class="headerlink" href="#perform-the-release" title="Permalink to this headline">¶</a></h3>
+<p>Run the following commands to generate and upload release artifacts, to a nexus staging repository and distribution location:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cd ~/git
+git clone https://github.com/apache/cassandra-builds.git
+# Edit the variables at the top of `cassandra-builds/cassandra-release/prepare_release.sh`
+
+# After cloning cassandra-builds repo, the prepare_release.sh is run from the actual cassandra git checkout,
+# on the branch/commit that we wish to tag for the tentative release along with version number to tag.
+# For example here &lt;version-branch&gt; might be `3.11` and &lt;version&gt; `3.11.3`
+cd ~/git/cassandra/
+git checkout cassandra-&lt;version-branch&gt;
+../cassandra-builds/cassandra-release/prepare_release.sh -v &lt;version&gt;
+</pre></div>
+</div>
+<p>If successful, take note of the email text output which can be used in the next section “Call for a Vote”.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">prepare_release.sh</span></code> script does not yet generate and upload the rpm distribution packages.
+To generate and upload them do:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cd ~/git/cassandra-build
+docker build -f docker/centos7-image.docker docker/
+docker run --rm -v `pwd`/dist:/dist `docker images -f label=org.cassandra.buildenv=centos -q` /home/build/build-rpms.sh &lt;version&gt;-tentative
+rpmsign --addsign dist/*.rpm
+</pre></div>
+</div>
+<p>For more information on the above steps see the <a class="reference external" href="https://github.com/apache/cassandra-builds">cassandra-builds documentation</a>.
+The next step is to copy and commit these binaries to staging svnpubsub:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># FIXME the following commands is wrong while people.apache.org is still used instead of svnpubsub and dist.apache.org
+cd ~/git
+svn co https://dist.apache.org/repos/dist/dev/cassandra cassandra-dist-dev
+mkdir cassandra-dist-dev/&lt;version&gt;
+cp cassandra-build/dist/*.rpm cassandra-dist-dev/&lt;version&gt;/
+
+svn add cassandra-dist-dev/&lt;version&gt;
+svn ci cassandra-dist-dev/&lt;version&gt;
+</pre></div>
+</div>
+<p>After committing the binaries to staging, increment the version number in Cassandra on the <cite>cassandra-&lt;version-branch&gt;</cite></p>
+<blockquote>
+<div>cd ~/git/cassandra/
+git checkout cassandra-&lt;version-branch&gt;
+edit build.xml          # update <a href="#id1"><span class="problematic" id="id2">`</span></a>&lt;property name=”base.version” value=”…”/&gt; `
+edit debian/changelog   # add entry for new version
+edit CHANGES.txt        # add entry for new version
+git commit -m “Update version to &lt;next-version&gt;” build.xml debian/changelog CHANGES.txt
+git push</div></blockquote>
+</div>
+</div>
+<div class="section" id="call-for-a-vote">
+<h2><a class="toc-backref" href="#id8">Call for a Vote</a><a class="headerlink" href="#call-for-a-vote" title="Permalink to this headline">¶</a></h2>
+<p>Fill out the following email template and send to the dev mailing list:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>I propose the following artifacts for release as &lt;version&gt;.
+
+sha1: &lt;git-sha&gt;
+
+Git: https://gitbox.apache.org/repos/asf?p=cassandra.git;a=shortlog;h=refs/tags/&lt;version&gt;-tentative
+
+Artifacts: https://repository.apache.org/content/repositories/orgapachecassandra-&lt;nexus-id&gt;/org/apache/cassandra/apache-cassandra/&lt;version&gt;/
+
+Staging repository: https://repository.apache.org/content/repositories/orgapachecassandra-&lt;nexus-id&gt;/
+
+The distribution packages are available here: https://dist.apache.org/repos/dist/dev/cassandra/${version}/
+
+The vote will be open for 72 hours (longer if needed).
+
+[1]: (CHANGES.txt) https://git1-us-west.apache.org/repos/asf?p=cassandra.git;a=blob_plain;f=CHANGES.txt;hb=&lt;version&gt;-tentative
+[2]: (NEWS.txt) https://git1-us-west.apache.org/repos/asf?p=cassandra.git;a=blob_plain;f=NEWS.txt;hb=&lt;version&gt;-tentative
+</pre></div>
+</div>
+</div>
+<div class="section" id="post-vote-operations">
+<h2><a class="toc-backref" href="#id9">Post-vote operations</a><a class="headerlink" href="#post-vote-operations" title="Permalink to this headline">¶</a></h2>
+<p>Any PMC can perform the following steps to formalize and publish a successfully voted release.</p>
+<div class="section" id="publish-artifacts">
+<h3><a class="toc-backref" href="#id10">Publish Artifacts</a><a class="headerlink" href="#publish-artifacts" title="Permalink to this headline">¶</a></h3>
+<p>Run the following commands to publish the voted release artifacts:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cd ~/git
+git clone https://github.com/apache/cassandra-builds.git
+# edit the variables at the top of `finish_release.sh`
+
+# After cloning cassandra-builds repo, `finish_release.sh` is run from the actual cassandra git checkout,
+# on the tentative release tag that we wish to tag for the final release version number tag.
+cd ~/git/cassandra/
+git checkout &lt;version&gt;-tentative
+../cassandra-builds/cassandra-release/finish_release.sh -v &lt;version&gt; &lt;staging_number&gt;
+</pre></div>
+</div>
+<p>If successful, take note of the email text output which can be used in the next section “Send Release Announcement”.
+The output will also list the next steps that are required. The first of these is to commit changes made to your <a class="reference external" href="https://dist.apache.org/repos/dist/release/cassandra/">https://dist.apache.org/repos/dist/release/cassandra/</a> checkout.</p>
+</div>
+<div class="section" id="promote-nexus-repository">
+<h3><a class="toc-backref" href="#id11">Promote Nexus Repository</a><a class="headerlink" href="#promote-nexus-repository" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>Login to <a class="reference external" href="https://repository.apache.org">Nexus repository</a> again.</li>
+<li>Click on “Staging” and then on the repository with id “cassandra-staging”.</li>
+<li>Find your closed staging repository, right click on it and choose “Promote”.</li>
+<li>Select the “Releases” repository and click “Promote”.</li>
+<li>Next click on “Repositories”, select the “Releases” repository and validate that your artifacts exist as you expect them.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="sign-and-upload-distribution-packages-to-bintray">
+<h3><a class="toc-backref" href="#id12">Sign and Upload Distribution Packages to Bintray</a><a class="headerlink" href="#sign-and-upload-distribution-packages-to-bintray" title="Permalink to this headline">¶</a></h3>
+<p>Run the following command:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cd ~/git
+# FIXME the next command is wrong while people.apache.org is used instead of svnpubsub and dist.apache.org
+svn mv https://dist.apache.org/repos/dist/dev/cassandra/&lt;version&gt; https://dist.apache.org/repos/dist/release/cassandra/
+
+# Create the yum metadata, sign the metadata, and sign some files within the signed repo metadata that the ASF sig tool errors out on
+svn co https://dist.apache.org/repos/dist/release/cassandra/redhat/ cassandra-dist-redhat
+cd cassandra-dist-redhat/&lt;abbreviated-version&gt;x/
+createrepo .
+gpg --detach-sign --armor repodata/repomd.xml
+for f in `find repodata/ -name *.bz2`; do
+  gpg --detach-sign --armor $f;
+done
+
+svn co https://dist.apache.org/repos/dist/release/cassandra/&lt;version&gt; cassandra-dist-&lt;version&gt;
+cd cassandra-dist-&lt;version&gt;
+cassandra-build/cassandra-release/upload_bintray.sh cassandra-dist-&lt;version&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="update-and-publish-website">
+<h3><a class="toc-backref" href="#id13">Update and Publish Website</a><a class="headerlink" href="#update-and-publish-website" title="Permalink to this headline">¶</a></h3>
+<p>See <a href="#id21"><span class="problematic" id="id22">`docs https://svn.apache.org/repos/asf/cassandra/site/src/README`_</span></a> for building and publishing the website.
+Also update the CQL doc if appropriate.</p>
+</div>
+<div class="section" id="release-version-in-jira">
+<h3><a class="toc-backref" href="#id14">Release version in JIRA</a><a class="headerlink" href="#release-version-in-jira" title="Permalink to this headline">¶</a></h3>
+<p>Release the JIRA version.</p>
+<blockquote>
+<div><ul class="simple">
+<li>In JIRA go to the version that you want to release and release it.</li>
+<li>Create a new version, if it has not been done before.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="update-to-next-development-version">
+<h3><a class="toc-backref" href="#id15">Update to Next Development Version</a><a class="headerlink" href="#update-to-next-development-version" title="Permalink to this headline">¶</a></h3>
+<p>Edit and commit <code class="docutils literal notranslate"><span class="pre">build.xml</span></code> so the base.version property points to the next version.</p>
+</div>
+<div class="section" id="wait-for-artifacts-to-sync">
+<h3><a class="toc-backref" href="#id16">Wait for Artifacts to Sync</a><a class="headerlink" href="#wait-for-artifacts-to-sync" title="Permalink to this headline">¶</a></h3>
+<p>Wait for the artifacts to sync at <a class="reference external" href="http://www.apache.org/dist/cassandra/">http://www.apache.org/dist/cassandra/</a></p>
+</div>
+<div class="section" id="send-release-announcement">
+<h3><a class="toc-backref" href="#id17">Send Release Announcement</a><a class="headerlink" href="#send-release-announcement" title="Permalink to this headline">¶</a></h3>
+<p>Fill out the following email template and send to both user and dev mailing lists:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The Cassandra team is pleased to announce the release of Apache Cassandra version &lt;version&gt;.
+
+Apache Cassandra is a fully distributed database. It is the right choice
+when you need scalability and high availability without compromising
+performance.
+
+ http://cassandra.apache.org/
+
+Downloads of source and binary distributions are listed in our download
+section:
+
+ http://cassandra.apache.org/download/
+
+This version is &lt;the first|a bug fix&gt; release[1] on the &lt;version-base&gt; series. As always,
+please pay attention to the release notes[2] and let us know[3] if you
+were to encounter any problem.
+
+Enjoy!
+
+[1]: (CHANGES.txt) https://git1-us-west.apache.org/repos/asf?p=cassandra.git;a=blob_plain;f=CHANGES.txt;hb=&lt;version&gt;
+[2]: (NEWS.txt) https://git1-us-west.apache.org/repos/asf?p=cassandra.git;a=blob_plain;f=NEWS.txt;hb=&lt;version&gt;
+[3]: https://issues.apache.org/jira/browse/CASSANDRA
+</pre></div>
+</div>
+</div>
+<div class="section" id="update-slack-cassandra-topic">
+<h3><a class="toc-backref" href="#id18">Update Slack Cassandra topic</a><a class="headerlink" href="#update-slack-cassandra-topic" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Update topic in <code class="docutils literal notranslate"><span class="pre">cassandra</span></code> <a class="reference internal" href="../contactus.html#slack"><span class="std std-ref">Slack room</span></a></dt>
+<dd>/topic cassandra.apache.org | Latest releases: 3.11.4, 3.0.18, 2.2.14, 2.1.21 | ask, don’t ask to ask</dd>
+</dl>
+</div>
+<div class="section" id="tweet-from-cassandra">
+<h3><a class="toc-backref" href="#id19">Tweet from &#64;Cassandra</a><a class="headerlink" href="#tweet-from-cassandra" title="Permalink to this headline">¶</a></h3>
+<p>Tweet the new release, from the &#64;Cassandra account</p>
+</div>
+<div class="section" id="delete-old-releases">
+<h3><a class="toc-backref" href="#id20">Delete Old Releases</a><a class="headerlink" href="#delete-old-releases" title="Permalink to this headline">¶</a></h3>
+<p>As described in <a class="reference external" href="http://www.apache.org/dev/release.html#when-to-archive">When to Archive</a>.
+Also check people.apache.org as previous release scripts used it.</p>
+</div>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="../faq/index.html" class="btn btn-default pull-right " role="button" title="Frequently Asked Questions" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="dependencies.html" class="btn btn-default" role="button" title="Dependency Management" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

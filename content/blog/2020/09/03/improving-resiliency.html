@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="As part of CASSANDRA-15013, we have improved Cassandra’s ability to handle high throughput workloads, while having enough safeguards in place to protect itse...">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Improving Apache Cassandra’s Front Door and Backpressure</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/blog/2020/09/03/improving-resiliency.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../../css/style.css">
+  
+
+  
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li>Improving Apache Cassandra’s Front Door and Backpressure</li>
+        
+      
+
+      
+
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../../"><img src="./../../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../../">Home</a></li>
+          <li><a href="./../../../../download/">Download</a></li>
+          <li><a href="./../../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="content">
+  <div class="container">
+  <h2>Improving Apache Cassandra’s Front Door and Backpressure</h2>
+    <p>Posted on September 03, 2020 by the Apache Cassandra Community</p>
+    <h5><a href="/blog">&laquo; Back to the Apache Cassandra Blog</a></h5>
+    <hr />
+  <p>As part of <a href="https://issues.apache.org/jira/browse/CASSANDRA-15013">CASSANDRA-15013</a>, we have improved Cassandra’s ability to handle high throughput workloads, while having enough safeguards in place to protect itself from potentially going out of memory. In order to better explain the change we have made, let us understand at a high level, on how an incoming request is processed by Cassandra before the fix, followed by what we changed, and the new relevant configuration knobs available.</p>
+
+<h3 id="how-inbound-requests-were-handled-before">How inbound requests were handled before</h3>
+
+<p>Let us take the scenario of a client application sending requests to C* cluster. For the purpose of this blog, let us focus on one of the C* coordinator nodes.</p>
+
+<p><img src="/img/blog-post-improving-resiliency/image1.png" alt="alt_text" title="image_tooltip" /></p>
+
+<p>Below is the microscopic view of client-server interaction at the C* coordinator node. Each client connection to Cassandra node happens over a netty channel, and for efficiency purposes, each Netty eventloop thread is responsible for more than one netty channel.</p>
+
+<p><img src="/img/blog-post-improving-resiliency/image2.png" alt="alt_text" title="image_tooltip" /></p>
+
+<p>The eventloop threads read requests coming off of netty channels and enqueue them into a bounded inbound queue in the Cassandra node.</p>
+
+<p><img src="/img/blog-post-improving-resiliency/image3.png" alt="alt_text" title="image_tooltip" /></p>
+
+<p>A thread pool dequeues requests from the inbound queue, processes them asynchronously and enqueues the response into an outbound queue. There exist multiple outbound queues, one for each eventloop thread to avoid races.</p>
+
+<p><img src="/img/blog-post-improving-resiliency/image4.png" alt="alt_text" title="image_tooltip" /></p>
+
+<p><img src="/img/blog-post-improving-resiliency/image5.png" alt="alt_text" title="image_tooltip" /></p>
+
+<p><img src="/img/blog-post-improving-resiliency/image6.png" alt="alt_text" title="image_tooltip" /></p>
+
+<p>The same eventloop threads that are responsible for enqueuing incoming requests into the inbound queue, are also responsible for dequeuing responses off from the outbound queue and shipping responses back to the client.</p>
+
+<p><img src="/img/blog-post-improving-resiliency/image7.png" alt="alt_text" title="image_tooltip" /></p>
+
+<p><img src="/img/blog-post-improving-resiliency/image8.png" alt="alt_text" title="image_tooltip" /></p>
+
+<h4 id="issue-with-this-workflow">Issue with this workflow</h4>
+
+<p>Let us take a scenario where there is a spike in operations from the client. The eventloop threads are now enqueuing requests at a much higher rate than the rate at which the requests are being processed by the native transport thread pool. Eventually, the inbound queue reaches its limit and says it cannot store any more requests in the queue.</p>
+
+<p><img src="/img/blog-post-improving-resiliency/image9.png" alt="alt_text" title="image_tooltip" /></p>
+
+<p>Consequently, the eventloop threads get into a blocked state as they try to enqueue more requests into an already full inbound queue. They wait until they can successfully enqueue the request in hand, into the queue.</p>
+
+<p><img src="/img/blog-post-improving-resiliency/image10.png" alt="alt_text" title="image_tooltip" /></p>
+
+<p>As noted earlier, these blocked eventloop threads are also supposed to dequeue responses from the outbound queue. Given they are in blocked state, the outbound queue (which is unbounded) grows endlessly, with all the responses, eventually resulting in C*  going out of memory. This is a vicious cycle because, since the eventloop threads are blocked, there is no one to ship responses back to the client; eventually client side timeout triggers, and clients may send more requests due to retries. This is an unfortunate situation to be in, since Cassandra is doing all the work of processing these requests as fast as it can, but there is no one to ship the produced responses back to the client.</p>
+
+<p><img src="/img/blog-post-improving-resiliency/image11.png" alt="alt_text" title="image_tooltip" /></p>
+
+<p>So far, we have built a fair understanding of how the front door of C* works with regard to handling client requests, and how blocked eventloop threads can affect Cassandra.</p>
+
+<h3 id="what-we-changed">What we changed</h3>
+
+<h4 id="backpressure">Backpressure</h4>
+
+<p>The essential root cause of the issue is that eventloop threads are getting blocked. Let us not block them by making the bounded inbound queue unbounded. If we are not careful here though, we could have an out of memory situation, this time because of the unbounded inbound queue. So we defined an overloaded state for the node based on the memory usage of the inbound queue.</p>
+
+<p>We introduced two levels of thresholds, one at the node level, and the other more granular, at client IP. The one at client IP helps to isolate rogue client IPs, while not affecting other good clients, if there is such a situation.</p>
+
+<p>These thresholds can be set using cassandra yaml file.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>native_transport_max_concurrent_requests_in_bytes_per_ip
+native_transport_max_concurrent_requests_in_bytes
+</code></pre>
+</div>
+
+<p>These thresholds can be further changed at runtime (<a href="https://issues.apache.org/jira/browse/CASSANDRA-15519">CASSANDRA-15519</a>).</p>
+
+<h4 id="configurable-server-response-to-the-client-as-part-of-backpressure">Configurable server response to the client as part of backpressure</h4>
+
+<p>If C* happens to be in overloaded state (as defined by the thresholds mentioned above), C* can react in one of the following ways:</p>
+
+<ul>
+  <li>Apply backpressure by setting “Autoread” to false on the netty channel in question (default behavior).</li>
+  <li>Respond back to the client with Overloaded Exception (if client sets “THROW_ON_OVERLOAD” connection startup option to “true.”</li>
+</ul>
+
+<p>Let us look at the client request-response workflow again, in both these cases.</p>
+
+<h4 id="throw_on_overload--false-default"><strong>THROW_ON_OVERLOAD = false (default)</strong></h4>
+
+<p>If the inbound queue is full (i.e. the thresholds are met).</p>
+
+<p><img src="/img/blog-post-improving-resiliency/image12.png" alt="alt_text" title="image_tooltip" /></p>
+
+<p>C* sets autoread to false on the netty channel, which means it will stop reading bytes off of the netty channel.</p>
+
+<p><img src="/img/blog-post-improving-resiliency/image13.png" alt="alt_text" title="image_tooltip" /></p>
+
+<p>Consequently, the kernel socket inbound buffer becomes full since no bytes are being read off of it by netty eventloop.</p>
+
+<p><img src="/img/blog-post-improving-resiliency/image14.png" alt="alt_text" title="image_tooltip" /></p>
+
+<p>Once the Kernel Socket Inbound Buffer is full on the server side, things start getting piled up in the Kernel Socket Outbound Buffer on the client side, and once this buffer gets full, client will start experiencing backpressure.</p>
+
+<p><img src="/img/blog-post-improving-resiliency/image15.png" alt="alt_text" title="image_tooltip" /></p>
+
+<h4 id="throw_on_overload--true"><strong>THROW_ON_OVERLOAD = true</strong></h4>
+
+<p>If the inbound queue is full (i.e. the thresholds are met), eventloop threads do not enqueue the request into the Inbound Queue. Instead, the eventloop thread creates an OverloadedException response message and enqueues it into the flusher queue, which will then be shipped back to the client.</p>
+
+<p><img src="/img/blog-post-improving-resiliency/image16.png" alt="alt_text" title="image_tooltip" /></p>
+
+<p>This way, Cassandra is able to serve very large throughput, while protecting itself from getting into memory starvation issues. This patch has been vetted through thorough performance benchmarking. Detailed performance analysis can be found <a href="https://issues.apache.org/jira/browse/CASSANDRA-15013?focusedCommentId=16881762&amp;page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-16881762">here</a>.</p>
+
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

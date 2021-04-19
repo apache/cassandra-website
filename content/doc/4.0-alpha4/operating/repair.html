@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-alpha4/operating/repair.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha4" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Read repair" href="read_repair.html"/> <link rel="prev" title="Adding, replacing, moving and removing nodes" href="topo_changes.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">Operating Cassandra</a></li>
+      
+
+      
+      <li>Repair</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Operating Cassandra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="snitch.html">Snitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topo_changes.html">Adding, replacing, moving and removing nodes</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Repair</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#incremental-and-full-repairs">Incremental and Full Repairs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usage-and-best-practices">Usage and Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#other-options">Other Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#full-repair-example">Full Repair Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_repair.html">Read repair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hints.html">Hints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html">Compaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bloom_filters.html">Bloom Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compression.html">Compression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cdc.html">Change Data Capture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backups.html">Backups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bulk_loading.html">Bulk Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html">Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html">Hardware Choices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="repair">
+<span id="id1"></span><h1>Repair<a class="headerlink" href="#repair" title="Permalink to this headline">¶</a></h1>
+<p>Cassandra is designed to remain available if one of it’s nodes is down or unreachable. However, when a node is down or
+unreachable, it needs to eventually discover the writes it missed. Hints attempt to inform a node of missed writes, but
+are a best effort, and aren’t guaranteed to inform a node of 100% of the writes it missed. These inconsistencies can
+eventually result in data loss as nodes are replaced or tombstones expire.</p>
+<p>These inconsistencies are fixed with the repair process. Repair synchronizes the data between nodes by comparing their
+respective datasets for their common token ranges, and streaming the differences for any out of sync sections between
+the nodes. It compares the data with merkle trees, which are a hierarchy of hashes.</p>
+<div class="section" id="incremental-and-full-repairs">
+<h2>Incremental and Full Repairs<a class="headerlink" href="#incremental-and-full-repairs" title="Permalink to this headline">¶</a></h2>
+<p>There are 2 types of repairs: full repairs, and incremental repairs. Full repairs operate over all of the data in the
+token range being repaired. Incremental repairs only repair data that’s been written since the previous incremental repair.</p>
+<p>Incremental repairs are the default repair type, and if run regularly, can significantly reduce the time and io cost of
+performing a repair. However, it’s important to understand that once an incremental repair marks data as repaired, it won’t
+try to repair it again. This is fine for syncing up missed writes, but it doesn’t protect against things like disk corruption,
+data loss by operator error, or bugs in Cassandra. For this reason, full repairs should still be run occasionally.</p>
+</div>
+<div class="section" id="usage-and-best-practices">
+<h2>Usage and Best Practices<a class="headerlink" href="#usage-and-best-practices" title="Permalink to this headline">¶</a></h2>
+<p>Since repair can result in a lot of disk and network io, it’s not run automatically by Cassandra. It is run by the operator
+via nodetool.</p>
+<p>Incremental repair is the default and is run with the following command:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nodetool repair
+</pre></div>
+</div>
+<p>A full repair can be run with the following command:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nodetool repair --full
+</pre></div>
+</div>
+<p>Additionally, repair can be run on a single keyspace:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nodetool repair [options] &lt;keyspace_name&gt;
+</pre></div>
+</div>
+<p>Or even on specific tables:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nodetool repair [options] &lt;keyspace_name&gt; &lt;table1&gt; &lt;table2&gt;
+</pre></div>
+</div>
+<p>The repair command only repairs token ranges on the node being repaired, it doesn’t repair the whole cluster. By default, repair
+will operate on all token ranges replicated by the node you’re running repair on, which will cause duplicate work if you run it
+on every node. The <code class="docutils literal notranslate"><span class="pre">-pr</span></code> flag will only repair the “primary” ranges on a node, so you can repair your entire cluster by running
+<code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">repair</span> <span class="pre">-pr</span></code> on each node in a single datacenter.</p>
+<p>The specific frequency of repair that’s right for your cluster, of course, depends on several factors. However, if you’re
+just starting out and looking for somewhere to start, running an incremental repair every 1-3 days, and a full repair every
+1-3 weeks is probably reasonable. If you don’t want to run incremental repairs, a full repair every 5 days is a good place
+to start.</p>
+<p>At a minimum, repair should be run often enough that the gc grace period never expires on unrepaired data. Otherwise, deleted
+data could reappear. With a default gc grace period of 10 days, repairing every node in your cluster at least once every 7 days
+will prevent this, while providing enough slack to allow for delays.</p>
+</div>
+<div class="section" id="other-options">
+<h2>Other Options<a class="headerlink" href="#other-options" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">-pr,</span> <span class="pre">--partitioner-range</span></code></dt>
+<dd>Restricts repair to the ‘primary’ token ranges of the node being repaired. A primary range is just a token range for
+which a node is the first replica in the ring.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-prv,</span> <span class="pre">--preview</span></code></dt>
+<dd>Estimates the amount of streaming that would occur for the given repair command. This builds the merkle trees, and prints
+the expected streaming activity, but does not actually do any streaming. By default, incremental repairs are estimated,
+add the <code class="docutils literal notranslate"><span class="pre">--full</span></code> flag to estimate a full repair.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-vd,</span> <span class="pre">--validate</span></code></dt>
+<dd>Verifies that the repaired data is the same across all nodes. Similiar to <code class="docutils literal notranslate"><span class="pre">--preview</span></code>, this builds and compares merkle
+trees of repaired data, but doesn’t do any streaming. This is useful for troubleshooting. If this shows that the repaired
+data is out of sync, a full repair should be run.</dd>
+</dl>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="../tools/nodetool/repair.html#nodetool-repair"><span class="std std-ref">nodetool repair docs</span></a></p>
+</div>
+</div>
+<div class="section" id="full-repair-example">
+<h2>Full Repair Example<a class="headerlink" href="#full-repair-example" title="Permalink to this headline">¶</a></h2>
+<p>Full repair is typically needed to redistribute data after increasing the replication factor of a keyspace or after adding a node to the cluster. Full repair involves streaming SSTables. To demonstrate full repair start with a three node cluster.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ nodetool status
+Datacenter: us-east-1
+=====================
+Status=Up/Down
+|/ State=Normal/Leaving/Joining/Moving
+--  Address   Load        Tokens  Owns  Host ID                              Rack
+UN  10.0.1.115  547 KiB     256    ?  b64cb32a-b32a-46b4-9eeb-e123fa8fc287  us-east-1b
+UN  10.0.3.206  617.91 KiB  256    ?  74863177-684b-45f4-99f7-d1006625dc9e  us-east-1d
+UN  10.0.2.238  670.26 KiB  256    ?  4dcdadd2-41f9-4f34-9892-1f20868b27c7  us-east-1c
+</pre></div>
+</div>
+<p>Create a keyspace with replication factor 3:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh&gt; DROP KEYSPACE cqlkeyspace;
+cqlsh&gt; CREATE KEYSPACE CQLKeyspace
+  ... WITH replication = {&#39;class&#39;: &#39;SimpleStrategy&#39;, &#39;replication_factor&#39; : 3};
+</pre></div>
+</div>
+<p>Add a table to the keyspace:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh&gt; use cqlkeyspace;
+cqlsh:cqlkeyspace&gt; CREATE TABLE t (
+           ...   id int,
+           ...   k int,
+           ...   v text,
+           ...   PRIMARY KEY (id)
+           ... );
+</pre></div>
+</div>
+<p>Add table data:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:cqlkeyspace&gt; INSERT INTO t (id, k, v) VALUES (0, 0, &#39;val0&#39;);
+cqlsh:cqlkeyspace&gt; INSERT INTO t (id, k, v) VALUES (1, 1, &#39;val1&#39;);
+cqlsh:cqlkeyspace&gt; INSERT INTO t (id, k, v) VALUES (2, 2, &#39;val2&#39;);
+</pre></div>
+</div>
+<p>A query lists the data added:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:cqlkeyspace&gt; SELECT * FROM t;
+
+id | k | v
+----+---+------
+ 1 | 1 | val1
+ 0 | 0 | val0
+ 2 | 2 | val2
+(3 rows)
+</pre></div>
+</div>
+<p>Make the following changes to a three node cluster:</p>
+<ol class="arabic simple">
+<li>Increase the replication factor from 3 to 4.</li>
+<li>Add a 4th node to the cluster</li>
+</ol>
+<p>When the replication factor is increased the following message gets output indicating that a full repair is needed as per (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-13079">CASSANDRA-13079</a>):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:cqlkeyspace&gt; ALTER KEYSPACE CQLKeyspace
+           ... WITH replication = {&#39;class&#39;: &#39;SimpleStrategy&#39;, &#39;replication_factor&#39; : 4};
+Warnings :
+When increasing replication factor you need to run a full (-full) repair to distribute the
+data.
+</pre></div>
+</div>
+<p>Perform a full repair on the keyspace <code class="docutils literal notranslate"><span class="pre">cqlkeyspace</span></code> table <code class="docutils literal notranslate"><span class="pre">t</span></code> with following command:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nodetool repair -full cqlkeyspace t
+</pre></div>
+</div>
+<p>Full repair completes in about a second as indicated by the output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ nodetool repair -full cqlkeyspace t
+[2019-08-17 03:06:21,445] Starting repair command #1 (fd576da0-c09b-11e9-b00c-1520e8c38f00), repairing keyspace cqlkeyspace with repair options (parallelism: parallel, primary range: false, incremental: false, job threads: 1, ColumnFamilies: [t], dataCenters: [], hosts: [], previewKind: NONE, # of ranges: 1024, pull repair: false, force repair: false, optimise streams: false)
+[2019-08-17 03:06:23,059] Repair session fd8e5c20-c09b-11e9-b00c-1520e8c38f00 for range [(-8792657144775336505,-8786320730900698730], (-5454146041421260303,-5439402053041523135], (4288357893651763201,4324309707046452322], ... , (4350676211955643098,4351706629422088296]] finished (progress: 0%)
+[2019-08-17 03:06:23,077] Repair completed successfully
+[2019-08-17 03:06:23,077] Repair command #1 finished in 1 second
+[ec2-user@ip-10-0-2-238 ~]$
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">nodetool</span>&#160; <span class="pre">tpstats</span></code> command should list a repair having been completed as <code class="docutils literal notranslate"><span class="pre">Repair-Task</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">Completed</span></code> column value of 1:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ nodetool tpstats
+Pool Name Active   Pending Completed   Blocked  All time blocked
+ReadStage  0           0           99       0              0
+…
+Repair-Task 0       0           1        0              0
+RequestResponseStage                  0        0        2078        0               0
+</pre></div>
+</div>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="read_repair.html" class="btn btn-default pull-right " role="button" title="Read repair" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="topo_changes.html" class="btn btn-default" role="button" title="Adding, replacing, moving and removing nodes" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

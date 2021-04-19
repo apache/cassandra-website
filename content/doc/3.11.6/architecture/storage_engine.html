@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/3.11.6/architecture/storage_engine.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v3.11.6" href="../index.html"/> <link rel="up" title="Architecture" href="index.html"/> <link rel="next" title="Guarantees" href="guarantees.html"/> <link rel="prev" title="Dynamo" href="dynamo.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">Architecture</a></li>
+      
+
+      
+      <li>Storage Engine</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Architecture</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dynamo.html">Dynamo</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Storage Engine</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#commitlog">CommitLog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#memtables">Memtables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sstables">SSTables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="guarantees.html">Guarantees</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="storage-engine">
+<h1>Storage Engine<a class="headerlink" href="#storage-engine" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="commitlog">
+<span id="commit-log"></span><h2>CommitLog<a class="headerlink" href="#commitlog" title="Permalink to this headline">¶</a></h2>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">todo</p>
+</div>
+</div>
+<div class="section" id="memtables">
+<span id="id1"></span><h2>Memtables<a class="headerlink" href="#memtables" title="Permalink to this headline">¶</a></h2>
+<p>Memtables are in-memory structures where Cassandra buffers writes.  In general, there is one active memtable per table.
+Eventually, memtables are flushed onto disk and become immutable <a class="reference internal" href="#sstables">SSTables</a>.  This can be triggered in several
+ways:</p>
+<ul class="simple">
+<li>The memory usage of the memtables exceeds the configured threshold  (see <code class="docutils literal notranslate"><span class="pre">memtable_cleanup_threshold</span></code>)</li>
+<li>The <a class="reference internal" href="#commit-log"><span class="std std-ref">CommitLog</span></a> approaches its maximum size, and forces memtable flushes in order to allow commitlog segments to
+be freed</li>
+</ul>
+<p>Memtables may be stored entirely on-heap or partially off-heap, depending on <code class="docutils literal notranslate"><span class="pre">memtable_allocation_type</span></code>.</p>
+</div>
+<div class="section" id="sstables">
+<h2>SSTables<a class="headerlink" href="#sstables" title="Permalink to this headline">¶</a></h2>
+<p>SSTables are the immutable data files that Cassandra uses for persisting data on disk.</p>
+<p>As SSTables are flushed to disk from <a class="reference internal" href="#memtables"><span class="std std-ref">Memtables</span></a> or are streamed from other nodes, Cassandra triggers compactions
+which combine multiple SSTables into one.  Once the new SSTable has been written, the old SSTables can be removed.</p>
+<p>Each SSTable is comprised of multiple components stored in separate files:</p>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">Data.db</span></code></dt>
+<dd>The actual data, i.e. the contents of rows.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Index.db</span></code></dt>
+<dd>An index from partition keys to positions in the <code class="docutils literal notranslate"><span class="pre">Data.db</span></code> file.  For wide partitions, this may also include an
+index to rows within a partition.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Summary.db</span></code></dt>
+<dd>A sampling of (by default) every 128th entry in the <code class="docutils literal notranslate"><span class="pre">Index.db</span></code> file.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Filter.db</span></code></dt>
+<dd>A Bloom Filter of the partition keys in the SSTable.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CompressionInfo.db</span></code></dt>
+<dd>Metadata about the offsets and lengths of compression chunks in the <code class="docutils literal notranslate"><span class="pre">Data.db</span></code> file.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Statistics.db</span></code></dt>
+<dd>Stores metadata about the SSTable, including information about timestamps, tombstones, clustering keys, compaction,
+repair, compression, TTLs, and more.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Digest.crc32</span></code></dt>
+<dd>A CRC-32 digest of the <code class="docutils literal notranslate"><span class="pre">Data.db</span></code> file.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">TOC.txt</span></code></dt>
+<dd>A plain text list of the component files for the SSTable.</dd>
+</dl>
+<p>Within the <code class="docutils literal notranslate"><span class="pre">Data.db</span></code> file, rows are organized by partition.  These partitions are sorted in token order (i.e. by a
+hash of the partition key when the default partitioner, <code class="docutils literal notranslate"><span class="pre">Murmur3Partition</span></code>, is used).  Within a partition, rows are
+stored in the order of their clustering keys.</p>
+<p>SSTables can be optionally compressed using block-based compression.</p>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="guarantees.html" class="btn btn-default pull-right " role="button" title="Guarantees" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="dynamo.html" class="btn btn-default" role="button" title="Dynamo" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

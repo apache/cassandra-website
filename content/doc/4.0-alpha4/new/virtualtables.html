@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-alpha4/new/virtualtables.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha4" href="../index.html"/> <link rel="up" title="New Features in Apache Cassandra 4.0" href="index.html"/> <link rel="next" title="Audit Logging" href="auditlogging.html"/> <link rel="prev" title="Support for Java 11" href="java11.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">New Features in Apache Cassandra 4.0</a></li>
+      
+
+      
+      <li>Virtual Tables</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">New Features in Apache Cassandra 4.0</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="java11.html">Support for Java 11</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Virtual Tables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#definition">Definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#objective">Objective</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-are-virtual-tables-different-from-regular-tables">How  are Virtual Tables different from regular tables?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#virtual-keyspaces">Virtual Keyspaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#virtual-table-limitations">Virtual Table Limitations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#listing-and-describing-virtual-tables">Listing and Describing Virtual Tables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-system-virtual-schema-keyspace">The system_virtual_schema keyspace</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auditlogging.html">Audit Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fqllogging.html">Full Query Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="messaging.html">Improved Internode Messaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streaming.html">Improved Streaming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transientreplication.html">Transient Replication</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="virtual-tables">
+<h1>Virtual Tables<a class="headerlink" href="#virtual-tables" title="Permalink to this headline">¶</a></h1>
+<p>Apache Cassandra 4.0 implements virtual tables (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-7622">CASSANDRA-7622</a>).</p>
+<div class="section" id="definition">
+<h2>Definition<a class="headerlink" href="#definition" title="Permalink to this headline">¶</a></h2>
+<p>A virtual table is a table that is backed by an API instead of data explicitly managed and stored as SSTables. Apache Cassandra 4.0 implements a virtual keyspace interface for virtual tables. Virtual tables are specific to each node.</p>
+</div>
+<div class="section" id="objective">
+<h2>Objective<a class="headerlink" href="#objective" title="Permalink to this headline">¶</a></h2>
+<p>A virtual table could have several uses including:</p>
+<ul class="simple">
+<li>Expose metrics through CQL</li>
+<li>Expose YAML configuration information</li>
+</ul>
+</div>
+<div class="section" id="how-are-virtual-tables-different-from-regular-tables">
+<h2>How  are Virtual Tables different from regular tables?<a class="headerlink" href="#how-are-virtual-tables-different-from-regular-tables" title="Permalink to this headline">¶</a></h2>
+<p>Virtual tables and virtual keyspaces are quite different from regular tables and keyspaces respectively such as:</p>
+<ul class="simple">
+<li>Virtual tables are read-only, but it is likely to change</li>
+<li>Virtual tables are not replicated</li>
+<li>Virtual tables are local only and non distributed</li>
+<li>Virtual tables have no associated SSTables</li>
+<li>Consistency level of the queries sent virtual tables are ignored</li>
+<li>Virtual tables are managed by Cassandra and a user cannot run  DDL to create new virtual tables or DML to modify existing virtual       tables</li>
+<li>Virtual tables are created in special keyspaces and not just any keyspace</li>
+<li>All existing virtual tables use <code class="docutils literal notranslate"><span class="pre">LocalPartitioner</span></code>. Since a virtual table is not replicated the partitioner sorts in order of     partition   keys instead of by their hash.</li>
+<li>Making advanced queries with <code class="docutils literal notranslate"><span class="pre">ALLOW</span> <span class="pre">FILTERING</span></code> and aggregation functions may be used with virtual tables even though in normal  tables we   dont recommend it</li>
+</ul>
+</div>
+<div class="section" id="virtual-keyspaces">
+<h2>Virtual Keyspaces<a class="headerlink" href="#virtual-keyspaces" title="Permalink to this headline">¶</a></h2>
+<p>Apache Cassandra 4.0 has added two new keyspaces for virtual tables: <code class="docutils literal notranslate"><span class="pre">system_virtual_schema</span></code> and <code class="docutils literal notranslate"><span class="pre">system_views</span></code>. Run the following command to list the keyspaces:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cqlsh</span><span class="o">&gt;</span> <span class="n">DESC</span> <span class="n">KEYSPACES</span><span class="p">;</span>
+<span class="n">system_schema</span>  <span class="n">system</span>       <span class="n">system_distributed</span>  <span class="n">system_virtual_schema</span>
+<span class="n">system_auth</span>      <span class="n">system_traces</span>       <span class="n">system_views</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">system_virtual_schema</span> <span class="pre">keyspace</span></code> contains schema information on virtual tables. The <code class="docutils literal notranslate"><span class="pre">system_views</span></code> keyspace contains the actual virtual tables.</p>
+</div>
+<div class="section" id="virtual-table-limitations">
+<h2>Virtual Table Limitations<a class="headerlink" href="#virtual-table-limitations" title="Permalink to this headline">¶</a></h2>
+<p>Virtual tables and virtual keyspaces have some limitations initially though some of these could change such as:</p>
+<ul class="simple">
+<li>Cannot alter or drop virtual keyspaces or tables</li>
+<li>Cannot truncate virtual tables</li>
+<li>Expiring columns are not supported by virtual tables</li>
+<li>Conditional updates are not supported by virtual tables</li>
+<li>Cannot create tables in virtual keyspaces</li>
+<li>Cannot perform any operations against virtual keyspace</li>
+<li>Secondary indexes are not supported on virtual tables</li>
+<li>Cannot create functions in virtual keyspaces</li>
+<li>Cannot create types in virtual keyspaces</li>
+<li>Materialized views are not supported on virtual tables</li>
+<li>Virtual tables don’t support <code class="docutils literal notranslate"><span class="pre">DELETE</span></code> statements</li>
+<li>Cannot <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">TRIGGER</span></code> against a virtual table</li>
+<li>Conditional <code class="docutils literal notranslate"><span class="pre">BATCH</span></code> statements cannot include mutations for virtual tables</li>
+<li>Cannot include a virtual table statement in a logged batch</li>
+<li>Mutations for virtual and regular tables cannot exist in the same batch</li>
+<li>Conditional <code class="docutils literal notranslate"><span class="pre">BATCH</span></code> statements cannot include mutations for virtual tables</li>
+<li>Cannot create aggregates in virtual keyspaces; but may run aggregate functions on select</li>
+</ul>
+</div>
+<div class="section" id="listing-and-describing-virtual-tables">
+<h2>Listing and Describing Virtual Tables<a class="headerlink" href="#listing-and-describing-virtual-tables" title="Permalink to this headline">¶</a></h2>
+<p>Virtual tables in a virtual keyspace may be listed with <code class="docutils literal notranslate"><span class="pre">DESC</span> <span class="pre">TABLES</span></code>.  The <code class="docutils literal notranslate"><span class="pre">system_views</span></code> virtual keyspace tables include the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cqlsh</span><span class="o">&gt;</span> <span class="n">USE</span> <span class="n">system_views</span><span class="p">;</span>
+<span class="n">cqlsh</span><span class="p">:</span><span class="n">system_views</span><span class="o">&gt;</span> <span class="n">DESC</span> <span class="n">TABLES</span><span class="p">;</span>
+<span class="n">coordinator_scans</span>   <span class="n">clients</span>             <span class="n">tombstones_scanned</span>  <span class="n">internode_inbound</span>
+<span class="n">disk_usage</span>          <span class="n">sstable_tasks</span>       <span class="n">live_scanned</span>        <span class="n">caches</span>
+<span class="n">local_writes</span>        <span class="n">max_partition_size</span>  <span class="n">local_reads</span>
+<span class="n">coordinator_writes</span>  <span class="n">internode_outbound</span>  <span class="n">thread_pools</span>
+<span class="n">local_scans</span>         <span class="n">coordinator_reads</span>   <span class="n">settings</span>
+</pre></div>
+</div>
+<p>Some of the salient virtual tables in <code class="docutils literal notranslate"><span class="pre">system_views</span></code> virtual keyspace are described in Table 1.</p>
+<p>Table 1 : Virtual Tables in system_views</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="26%" />
+<col width="74%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Virtual Table</td>
+<td>Description</td>
+</tr>
+<tr class="row-even"><td>clients</td>
+<td>Lists information about all connected clients.</td>
+</tr>
+<tr class="row-odd"><td>disk_usage</td>
+<td>Disk usage including disk_space, keyspace_name,
+and table_name by system keyspaces.</td>
+</tr>
+<tr class="row-even"><td>local_writes</td>
+<td>A table metric for local writes
+including count, keyspace_name,
+max, median, per_second, and
+table_name.</td>
+</tr>
+<tr class="row-odd"><td>caches</td>
+<td>Displays the general cache information including
+cache name, capacity_bytes, entry_count, hit_count,
+hit_ratio double, recent_hit_rate_per_second,
+recent_request_rate_per_second, request_count, and
+size_bytes.</td>
+</tr>
+<tr class="row-even"><td>local_reads</td>
+<td>A table metric for  local reads information.</td>
+</tr>
+<tr class="row-odd"><td>sstable_tasks</td>
+<td>Lists currently running tasks such as compactions
+and upgrades on SSTables.</td>
+</tr>
+<tr class="row-even"><td>internode_inbound</td>
+<td>Lists information about the inbound
+internode messaging.</td>
+</tr>
+<tr class="row-odd"><td>thread_pools</td>
+<td>Lists metrics for each thread pool.</td>
+</tr>
+<tr class="row-even"><td>settings</td>
+<td>Displays configuration settings in cassandra.yaml.</td>
+</tr>
+<tr class="row-odd"><td>max_partition_size</td>
+<td>A table metric for maximum partition size.</td>
+</tr>
+<tr class="row-even"><td>internode_outbound</td>
+<td>Information about the outbound internode messaging.</td>
+</tr>
+</tbody>
+</table>
+<p>We shall discuss some of the virtual tables in more detail next.</p>
+<div class="section" id="clients-virtual-table">
+<h3>Clients Virtual Table<a class="headerlink" href="#clients-virtual-table" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">clients</span></code> virtual table lists all active connections (connected clients) including their ip address, port, connection stage, driver name, driver version, hostname, protocol version, request count, ssl enabled, ssl protocol and user name:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cqlsh</span><span class="p">:</span><span class="n">system_views</span><span class="o">&gt;</span> <span class="n">select</span> <span class="o">*</span> <span class="kn">from</span> <span class="nn">system_views.clients</span><span class="p">;</span>
+ <span class="n">address</span>   <span class="o">|</span> <span class="n">port</span>  <span class="o">|</span> <span class="n">connection_stage</span> <span class="o">|</span> <span class="n">driver_name</span> <span class="o">|</span> <span class="n">driver_version</span> <span class="o">|</span> <span class="n">hostname</span>  <span class="o">|</span> <span class="n">protocol_version</span> <span class="o">|</span> <span class="n">request_count</span> <span class="o">|</span> <span class="n">ssl_cipher_suite</span> <span class="o">|</span> <span class="n">ssl_enabled</span> <span class="o">|</span> <span class="n">ssl_protocol</span> <span class="o">|</span> <span class="n">username</span>
+<span class="o">-----------+-------+------------------+-------------+----------------+-----------+------------------+---------------+------------------+-------------+--------------+-----------</span>
+ <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span> <span class="o">|</span> <span class="mi">50628</span> <span class="o">|</span>            <span class="n">ready</span> <span class="o">|</span>        <span class="n">null</span> <span class="o">|</span>           <span class="n">null</span> <span class="o">|</span> <span class="n">localhost</span> <span class="o">|</span>                <span class="mi">4</span> <span class="o">|</span>            <span class="mi">55</span> <span class="o">|</span>             <span class="n">null</span> <span class="o">|</span>       <span class="kc">False</span> <span class="o">|</span>         <span class="n">null</span> <span class="o">|</span> <span class="n">anonymous</span>
+ <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span> <span class="o">|</span> <span class="mi">50630</span> <span class="o">|</span>            <span class="n">ready</span> <span class="o">|</span>        <span class="n">null</span> <span class="o">|</span>           <span class="n">null</span> <span class="o">|</span> <span class="n">localhost</span> <span class="o">|</span>                <span class="mi">4</span> <span class="o">|</span>            <span class="mi">70</span> <span class="o">|</span>             <span class="n">null</span> <span class="o">|</span>       <span class="kc">False</span> <span class="o">|</span>         <span class="n">null</span> <span class="o">|</span> <span class="n">anonymous</span>
+
+<span class="p">(</span><span class="mi">2</span> <span class="n">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Some examples of how <code class="docutils literal notranslate"><span class="pre">clients</span></code> can be used are:</p>
+<ul class="simple">
+<li>To find applications using old incompatible versions of   drivers before upgrading and with <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">enableoldprotocolversions</span></code> and  <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">disableoldprotocolversions</span></code> during upgrades.</li>
+<li>To identify clients sending too many requests.</li>
+<li>To find if SSL is enabled during the migration to and from   ssl.</li>
+</ul>
+<p>The virtual tables may be described with <code class="docutils literal notranslate"><span class="pre">DESCRIBE</span></code> statement. The DDL listed however cannot be run to create a virtual table. As an example describe the <code class="docutils literal notranslate"><span class="pre">system_views.clients</span></code> virtual table:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">cqlsh</span><span class="p">:</span><span class="n">system_views</span><span class="o">&gt;</span> <span class="n">DESC</span> <span class="n">TABLE</span> <span class="n">system_views</span><span class="o">.</span><span class="n">clients</span><span class="p">;</span>
+<span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">system_views</span><span class="o">.</span><span class="n">clients</span> <span class="p">(</span>
+   <span class="n">address</span> <span class="n">inet</span><span class="p">,</span>
+   <span class="n">connection_stage</span> <span class="n">text</span><span class="p">,</span>
+   <span class="n">driver_name</span> <span class="n">text</span><span class="p">,</span>
+   <span class="n">driver_version</span> <span class="n">text</span><span class="p">,</span>
+   <span class="n">hostname</span> <span class="n">text</span><span class="p">,</span>
+   <span class="n">port</span> <span class="nb">int</span><span class="p">,</span>
+   <span class="n">protocol_version</span> <span class="nb">int</span><span class="p">,</span>
+   <span class="n">request_count</span> <span class="n">bigint</span><span class="p">,</span>
+   <span class="n">ssl_cipher_suite</span> <span class="n">text</span><span class="p">,</span>
+   <span class="n">ssl_enabled</span> <span class="n">boolean</span><span class="p">,</span>
+   <span class="n">ssl_protocol</span> <span class="n">text</span><span class="p">,</span>
+   <span class="n">username</span> <span class="n">text</span><span class="p">,</span>
+   <span class="n">PRIMARY</span> <span class="n">KEY</span> <span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span> <span class="n">WITH</span> <span class="n">CLUSTERING</span> <span class="n">ORDER</span> <span class="n">BY</span> <span class="p">(</span><span class="n">port</span> <span class="n">ASC</span><span class="p">)</span>
+   <span class="n">AND</span> <span class="n">compaction</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;None&#39;</span><span class="p">}</span>
+   <span class="n">AND</span> <span class="n">compression</span> <span class="o">=</span> <span class="p">{};</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="caches-virtual-table">
+<h3>Caches Virtual Table<a class="headerlink" href="#caches-virtual-table" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">caches</span></code> virtual table lists information about the  caches. The four caches presently created are chunks, counters, keys and rows. A query on the <code class="docutils literal notranslate"><span class="pre">caches</span></code> virtual table returns the following details:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cqlsh</span><span class="p">:</span><span class="n">system_views</span><span class="o">&gt;</span> <span class="n">SELECT</span> <span class="o">*</span> <span class="n">FROM</span> <span class="n">system_views</span><span class="o">.</span><span class="n">caches</span><span class="p">;</span>
+<span class="n">name</span>     <span class="o">|</span> <span class="n">capacity_bytes</span> <span class="o">|</span> <span class="n">entry_count</span> <span class="o">|</span> <span class="n">hit_count</span> <span class="o">|</span> <span class="n">hit_ratio</span> <span class="o">|</span> <span class="n">recent_hit_rate_per_second</span> <span class="o">|</span> <span class="n">recent_request_rate_per_second</span> <span class="o">|</span> <span class="n">request_count</span> <span class="o">|</span> <span class="n">size_bytes</span>
+<span class="o">---------+----------------+-------------+-----------+-----------+----------------------------+--------------------------------+---------------+------------</span>
+  <span class="n">chunks</span> <span class="o">|</span>      <span class="mi">229638144</span> <span class="o">|</span>          <span class="mi">29</span> <span class="o">|</span>       <span class="mi">166</span> <span class="o">|</span>      <span class="mf">0.83</span> <span class="o">|</span>                          <span class="mi">5</span> <span class="o">|</span>                              <span class="mi">6</span> <span class="o">|</span>           <span class="mi">200</span> <span class="o">|</span>     <span class="mi">475136</span>
+<span class="n">counters</span> <span class="o">|</span>       <span class="mi">26214400</span> <span class="o">|</span>           <span class="mi">0</span> <span class="o">|</span>         <span class="mi">0</span> <span class="o">|</span>       <span class="n">NaN</span> <span class="o">|</span>                          <span class="mi">0</span> <span class="o">|</span>                              <span class="mi">0</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>          <span class="mi">0</span>
+    <span class="n">keys</span> <span class="o">|</span>       <span class="mi">52428800</span> <span class="o">|</span>          <span class="mi">14</span> <span class="o">|</span>       <span class="mi">124</span> <span class="o">|</span>  <span class="mf">0.873239</span> <span class="o">|</span>                          <span class="mi">4</span> <span class="o">|</span>                              <span class="mi">4</span> <span class="o">|</span>           <span class="mi">142</span> <span class="o">|</span>       <span class="mi">1248</span>
+    <span class="n">rows</span> <span class="o">|</span>              <span class="mi">0</span> <span class="o">|</span>           <span class="mi">0</span> <span class="o">|</span>         <span class="mi">0</span> <span class="o">|</span>       <span class="n">NaN</span> <span class="o">|</span>                          <span class="mi">0</span> <span class="o">|</span>                              <span class="mi">0</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>          <span class="mi">0</span>
+
+<span class="p">(</span><span class="mi">4</span> <span class="n">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="settings-virtual-table">
+<h3>Settings Virtual Table<a class="headerlink" href="#settings-virtual-table" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">settings</span></code> table  is rather useful and lists all the current configuration settings from the <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code>.  The encryption options are overridden to hide the sensitive truststore information or passwords.  The configuration settings however cannot be set using DML  on the virtual table presently:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cqlsh</span><span class="p">:</span><span class="n">system_views</span><span class="o">&gt;</span> <span class="n">SELECT</span> <span class="o">*</span> <span class="n">FROM</span> <span class="n">system_views</span><span class="o">.</span><span class="n">settings</span><span class="p">;</span>
+
+<span class="n">name</span>                                 <span class="o">|</span> <span class="n">value</span>
+<span class="o">-------------------------------------+--------------------</span>
+  <span class="n">allocate_tokens_for_keyspace</span>       <span class="o">|</span> <span class="n">null</span>
+  <span class="n">audit_logging_options_enabled</span>      <span class="o">|</span> <span class="n">false</span>
+  <span class="n">auto_snapshot</span>                      <span class="o">|</span> <span class="n">true</span>
+  <span class="n">automatic_sstable_upgrade</span>          <span class="o">|</span> <span class="n">false</span>
+  <span class="n">cluster_name</span>                       <span class="o">|</span> <span class="n">Test</span> <span class="n">Cluster</span>
+  <span class="n">enable_transient_replication</span>       <span class="o">|</span> <span class="n">false</span>
+  <span class="n">hinted_handoff_enabled</span>             <span class="o">|</span> <span class="n">true</span>
+  <span class="n">hints_directory</span>                    <span class="o">|</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ec2</span><span class="o">-</span><span class="n">user</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">hints</span>
+  <span class="n">incremental_backups</span>                <span class="o">|</span> <span class="n">false</span>
+  <span class="n">initial_token</span>                      <span class="o">|</span> <span class="n">null</span>
+                           <span class="o">...</span>
+                           <span class="o">...</span>
+                           <span class="o">...</span>
+  <span class="n">rpc_address</span>                        <span class="o">|</span> <span class="n">localhost</span>
+  <span class="n">ssl_storage_port</span>                   <span class="o">|</span> <span class="mi">7001</span>
+  <span class="n">start_native_transport</span>             <span class="o">|</span> <span class="n">true</span>
+  <span class="n">storage_port</span>                       <span class="o">|</span> <span class="mi">7000</span>
+  <span class="n">stream_entire_sstables</span>             <span class="o">|</span> <span class="n">true</span>
+  <span class="p">(</span><span class="mi">224</span> <span class="n">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">settings</span></code> table can be really useful if yaml file has been changed since startup and dont know running configuration, or to find if they have been modified via jmx/nodetool or virtual tables.</p>
+</div>
+<div class="section" id="thread-pools-virtual-table">
+<h3>Thread Pools Virtual Table<a class="headerlink" href="#thread-pools-virtual-table" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">thread_pools</span></code> table lists information about all thread pools. Thread pool information includes active tasks, active tasks limit, blocked tasks, blocked tasks all time,  completed tasks, and pending tasks. A query on the <code class="docutils literal notranslate"><span class="pre">thread_pools</span></code> returns following details:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cqlsh</span><span class="p">:</span><span class="n">system_views</span><span class="o">&gt;</span> <span class="n">select</span> <span class="o">*</span> <span class="kn">from</span> <span class="nn">system_views.thread_pools</span><span class="p">;</span>
+
+<span class="n">name</span>                         <span class="o">|</span> <span class="n">active_tasks</span> <span class="o">|</span> <span class="n">active_tasks_limit</span> <span class="o">|</span> <span class="n">blocked_tasks</span> <span class="o">|</span> <span class="n">blocked_tasks_all_time</span> <span class="o">|</span> <span class="n">completed_tasks</span> <span class="o">|</span> <span class="n">pending_tasks</span>
+<span class="o">------------------------------+--------------+--------------------+---------------+------------------------+-----------------+---------------</span>
+            <span class="n">AntiEntropyStage</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>                  <span class="mi">1</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>               <span class="mi">0</span> <span class="o">|</span>             <span class="mi">0</span>
+        <span class="n">CacheCleanupExecutor</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>                  <span class="mi">1</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>               <span class="mi">0</span> <span class="o">|</span>             <span class="mi">0</span>
+          <span class="n">CompactionExecutor</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>                  <span class="mi">2</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>             <span class="mi">881</span> <span class="o">|</span>             <span class="mi">0</span>
+        <span class="n">CounterMutationStage</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>                 <span class="mi">32</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>               <span class="mi">0</span> <span class="o">|</span>             <span class="mi">0</span>
+                 <span class="n">GossipStage</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>                  <span class="mi">1</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>               <span class="mi">0</span> <span class="o">|</span>             <span class="mi">0</span>
+             <span class="n">HintsDispatcher</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>                  <span class="mi">2</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>               <span class="mi">0</span> <span class="o">|</span>             <span class="mi">0</span>
+       <span class="n">InternalResponseStage</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>                  <span class="mi">2</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>               <span class="mi">0</span> <span class="o">|</span>             <span class="mi">0</span>
+         <span class="n">MemtableFlushWriter</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>                  <span class="mi">2</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>               <span class="mi">1</span> <span class="o">|</span>             <span class="mi">0</span>
+           <span class="n">MemtablePostFlush</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>                  <span class="mi">1</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>               <span class="mi">2</span> <span class="o">|</span>             <span class="mi">0</span>
+       <span class="n">MemtableReclaimMemory</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>                  <span class="mi">1</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>               <span class="mi">1</span> <span class="o">|</span>             <span class="mi">0</span>
+              <span class="n">MigrationStage</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>                  <span class="mi">1</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>               <span class="mi">0</span> <span class="o">|</span>             <span class="mi">0</span>
+                   <span class="n">MiscStage</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>                  <span class="mi">1</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>               <span class="mi">0</span> <span class="o">|</span>             <span class="mi">0</span>
+               <span class="n">MutationStage</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>                 <span class="mi">32</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>               <span class="mi">0</span> <span class="o">|</span>             <span class="mi">0</span>
+   <span class="n">Native</span><span class="o">-</span><span class="n">Transport</span><span class="o">-</span><span class="n">Requests</span> <span class="o">|</span>            <span class="mi">1</span> <span class="o">|</span>                <span class="mi">128</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>             <span class="mi">130</span> <span class="o">|</span>             <span class="mi">0</span>
+      <span class="n">PendingRangeCalculator</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>                  <span class="mi">1</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>               <span class="mi">1</span> <span class="o">|</span>             <span class="mi">0</span>
+<span class="n">PerDiskMemtableFlushWriter_0</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>                  <span class="mi">2</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>               <span class="mi">1</span> <span class="o">|</span>             <span class="mi">0</span>
+                   <span class="n">ReadStage</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>                 <span class="mi">32</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>              <span class="mi">13</span> <span class="o">|</span>             <span class="mi">0</span>
+                 <span class="n">Repair</span><span class="o">-</span><span class="n">Task</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>         <span class="mi">2147483647</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>               <span class="mi">0</span> <span class="o">|</span>             <span class="mi">0</span>
+        <span class="n">RequestResponseStage</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>                  <span class="mi">2</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>               <span class="mi">0</span> <span class="o">|</span>             <span class="mi">0</span>
+                     <span class="n">Sampler</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>                  <span class="mi">1</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>               <span class="mi">0</span> <span class="o">|</span>             <span class="mi">0</span>
+    <span class="n">SecondaryIndexManagement</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>                  <span class="mi">1</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>               <span class="mi">0</span> <span class="o">|</span>             <span class="mi">0</span>
+          <span class="n">ValidationExecutor</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>         <span class="mi">2147483647</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>               <span class="mi">0</span> <span class="o">|</span>             <span class="mi">0</span>
+           <span class="n">ViewBuildExecutor</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>                  <span class="mi">1</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>               <span class="mi">0</span> <span class="o">|</span>             <span class="mi">0</span>
+           <span class="n">ViewMutationStage</span> <span class="o">|</span>            <span class="mi">0</span> <span class="o">|</span>                 <span class="mi">32</span> <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span>                      <span class="mi">0</span> <span class="o">|</span>               <span class="mi">0</span> <span class="o">|</span>             <span class="mi">0</span>
+</pre></div>
+</div>
+<p>(24 rows)</p>
+</div>
+<div class="section" id="internode-inbound-messaging-virtual-table">
+<h3>Internode Inbound Messaging Virtual Table<a class="headerlink" href="#internode-inbound-messaging-virtual-table" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">internode_inbound</span></code>  virtual table is for the internode inbound messaging. Initially no internode inbound messaging may get listed. In addition to the address, port, datacenter and rack information includes  corrupt frames recovered, corrupt frames unrecovered, error bytes, error count, expired bytes, expired count, processed bytes, processed count, received bytes, received count, scheduled bytes, scheduled count, throttled count, throttled nanos, using bytes, using reserve bytes. A query on the <code class="docutils literal notranslate"><span class="pre">internode_inbound</span></code> returns following details:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cqlsh</span><span class="p">:</span><span class="n">system_views</span><span class="o">&gt;</span> <span class="n">SELECT</span> <span class="o">*</span> <span class="n">FROM</span> <span class="n">system_views</span><span class="o">.</span><span class="n">internode_inbound</span><span class="p">;</span>
+<span class="n">address</span> <span class="o">|</span> <span class="n">port</span> <span class="o">|</span> <span class="n">dc</span> <span class="o">|</span> <span class="n">rack</span> <span class="o">|</span> <span class="n">corrupt_frames_recovered</span> <span class="o">|</span> <span class="n">corrupt_frames_unrecovered</span> <span class="o">|</span>
+<span class="n">error_bytes</span> <span class="o">|</span> <span class="n">error_count</span> <span class="o">|</span> <span class="n">expired_bytes</span> <span class="o">|</span> <span class="n">expired_count</span> <span class="o">|</span> <span class="n">processed_bytes</span> <span class="o">|</span>
+<span class="n">processed_count</span> <span class="o">|</span> <span class="n">received_bytes</span> <span class="o">|</span> <span class="n">received_count</span> <span class="o">|</span> <span class="n">scheduled_bytes</span> <span class="o">|</span> <span class="n">scheduled_count</span> <span class="o">|</span> <span class="n">throttled_count</span> <span class="o">|</span> <span class="n">throttled_nanos</span> <span class="o">|</span> <span class="n">using_bytes</span> <span class="o">|</span> <span class="n">using_reserve_bytes</span>
+<span class="o">---------+------+----+------+--------------------------+----------------------------+-</span>
+<span class="o">----------</span>
+<span class="p">(</span><span class="mi">0</span> <span class="n">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sstables-tasks-virtual-table">
+<h3>SSTables Tasks Virtual Table<a class="headerlink" href="#sstables-tasks-virtual-table" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">sstable_tasks</span></code> could be used to get information about running tasks. It lists following columns:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cqlsh</span><span class="p">:</span><span class="n">system_views</span><span class="o">&gt;</span> <span class="n">SELECT</span> <span class="o">*</span> <span class="n">FROM</span> <span class="n">sstable_tasks</span><span class="p">;</span>
+<span class="n">keyspace_name</span> <span class="o">|</span> <span class="n">table_name</span> <span class="o">|</span> <span class="n">task_id</span>                              <span class="o">|</span> <span class="n">kind</span>       <span class="o">|</span> <span class="n">progress</span> <span class="o">|</span> <span class="n">total</span>    <span class="o">|</span> <span class="n">unit</span>
+<span class="o">---------------+------------+--------------------------------------+------------+----------+----------+-------</span>
+       <span class="n">basic</span> <span class="o">|</span>      <span class="n">wide2</span> <span class="o">|</span> <span class="n">c3909740</span><span class="o">-</span><span class="n">cdf7</span><span class="o">-</span><span class="mf">11e9</span><span class="o">-</span><span class="n">a8ed</span><span class="o">-</span><span class="mi">0</span><span class="n">f03de2d9ae1</span> <span class="o">|</span> <span class="n">compaction</span> <span class="o">|</span> <span class="mi">60418761</span> <span class="o">|</span> <span class="mi">70882110</span> <span class="o">|</span> <span class="nb">bytes</span>
+       <span class="n">basic</span> <span class="o">|</span>      <span class="n">wide2</span> <span class="o">|</span> <span class="n">c7556770</span><span class="o">-</span><span class="n">cdf7</span><span class="o">-</span><span class="mf">11e9</span><span class="o">-</span><span class="n">a8ed</span><span class="o">-</span><span class="mi">0</span><span class="n">f03de2d9ae1</span> <span class="o">|</span> <span class="n">compaction</span> <span class="o">|</span>  <span class="mi">2995623</span> <span class="o">|</span> <span class="mi">40314679</span> <span class="o">|</span> <span class="nb">bytes</span>
+</pre></div>
+</div>
+<p>As another example, to find how much time is remaining for SSTable tasks, use the following query:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="n">total</span> <span class="o">-</span> <span class="n">progress</span> <span class="n">AS</span> <span class="n">remaining</span>
+<span class="n">FROM</span> <span class="n">system_views</span><span class="o">.</span><span class="n">sstable_tasks</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="other-virtual-tables">
+<h3>Other Virtual Tables<a class="headerlink" href="#other-virtual-tables" title="Permalink to this headline">¶</a></h3>
+<p>Some examples of using other virtual tables are as follows.</p>
+<p>Find tables with most disk usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cqlsh</span><span class="o">&gt;</span> <span class="n">SELECT</span> <span class="o">*</span> <span class="n">FROM</span> <span class="n">disk_usage</span> <span class="n">WHERE</span> <span class="n">mebibytes</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="n">ALLOW</span> <span class="n">FILTERING</span><span class="p">;</span>
+
+<span class="n">keyspace_name</span> <span class="o">|</span> <span class="n">table_name</span> <span class="o">|</span> <span class="n">mebibytes</span>
+<span class="o">---------------+------------+-----------</span>
+   <span class="n">keyspace1</span> <span class="o">|</span>  <span class="n">standard1</span> <span class="o">|</span>       <span class="mi">288</span>
+  <span class="n">tlp_stress</span> <span class="o">|</span>   <span class="n">keyvalue</span> <span class="o">|</span>      <span class="mi">3211</span>
+</pre></div>
+</div>
+<p>Find queries on table/s with greatest read latency:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cqlsh</span><span class="o">&gt;</span> <span class="n">SELECT</span> <span class="o">*</span> <span class="n">FROM</span>  <span class="n">local_read_latency</span> <span class="n">WHERE</span> <span class="n">per_second</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="n">ALLOW</span> <span class="n">FILTERING</span><span class="p">;</span>
+
+<span class="n">keyspace_name</span> <span class="o">|</span> <span class="n">table_name</span> <span class="o">|</span> <span class="n">p50th_ms</span> <span class="o">|</span> <span class="n">p99th_ms</span> <span class="o">|</span> <span class="n">count</span>    <span class="o">|</span> <span class="n">max_ms</span>  <span class="o">|</span> <span class="n">per_second</span>
+<span class="o">---------------+------------+----------+----------+----------+---------+------------</span>
+  <span class="n">tlp_stress</span> <span class="o">|</span>   <span class="n">keyvalue</span> <span class="o">|</span>    <span class="mf">0.043</span> <span class="o">|</span>    <span class="mf">0.152</span> <span class="o">|</span> <span class="mi">49785158</span> <span class="o">|</span> <span class="mf">186.563</span> <span class="o">|</span>  <span class="mf">11418.356</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="the-system-virtual-schema-keyspace">
+<h2>The system_virtual_schema keyspace<a class="headerlink" href="#the-system-virtual-schema-keyspace" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">system_virtual_schema</span></code> keyspace has three tables: <code class="docutils literal notranslate"><span class="pre">keyspaces</span></code>,  <code class="docutils literal notranslate"><span class="pre">columns</span></code> and  <code class="docutils literal notranslate"><span class="pre">tables</span></code> for the virtual keyspace definitions, virtual table definitions, and virtual column definitions  respectively. It is used by Cassandra internally and a user would not need to access it directly.</p>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="auditlogging.html" class="btn btn-default pull-right " role="button" title="Audit Logging" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="java11.html" class="btn btn-default" role="button" title="Support for Java 11" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

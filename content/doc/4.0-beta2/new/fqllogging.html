@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-beta2/new/fqllogging.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha5" href="../index.html"/> <link rel="up" title="New Features in Apache Cassandra 4.0" href="index.html"/> <link rel="next" title="Improved Internode Messaging" href="messaging.html"/> <link rel="prev" title="Audit Logging" href="auditlogging.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">New Features in Apache Cassandra 4.0</a></li>
+      
+
+      
+      <li>Full Query Logging</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">New Features in Apache Cassandra 4.0</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="java11.html">Support for Java 11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="virtualtables.html">Virtual Tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auditlogging.html">Audit Logging</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Full Query Logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#objective">Objective</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#full-query-logger">Full Query Logger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-full-query-logging">Configuring Full Query Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-cql-statements">Running CQL Statements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#viewing-the-full-query-logs">Viewing the Full Query Logs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#full-query-replay">Full Query Replay</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#full-query-compare">Full Query Compare</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#performance-overhead-of-fql">Performance Overhead of FQL</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="messaging.html">Improved Internode Messaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streaming.html">Improved Streaming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transientreplication.html">Transient Replication</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="full-query-logging">
+<h1>Full Query Logging<a class="headerlink" href="#full-query-logging" title="Permalink to this headline">¶</a></h1>
+<p>Apache Cassandra 4.0 adds a new feature to support a means of logging all queries as they were invoked (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-13983">CASSANDRA-13983</a>). For correctness testing it’s useful to be able to capture production traffic so that it can be replayed against both the old and new versions of Cassandra while comparing the results.</p>
+<p>Cassandra 4.0 includes an implementation of a full query logging (FQL) that uses chronicle-queue to implement a rotating log of queries. Some of the features of FQL are:</p>
+<ul class="simple">
+<li>Single thread asynchronously writes log entries to disk to reduce impact on query latency</li>
+<li>Heap memory usage bounded by a weighted queue with configurable maximum weight sitting in front of logging thread</li>
+<li>If the weighted queue is full producers can be blocked or samples can be dropped</li>
+<li>Disk utilization is bounded by deleting old log segments once a configurable size is reached</li>
+<li>The on disk serialization uses a flexible schema binary format (chronicle-wire) making it easy to skip unrecognized fields, add new ones, and omit old ones.</li>
+<li>Can be enabled and configured via JMX, disabled, and reset (delete on disk data), logging path is configurable via both JMX and YAML</li>
+<li>Introduce new <code class="docutils literal notranslate"><span class="pre">fqltool</span></code> in <code class="docutils literal notranslate"><span class="pre">/bin</span></code> that currently implements <code class="docutils literal notranslate"><span class="pre">Dump</span></code> which can dump in a readable format full query logs as well as follow active full query logs. FQL <code class="docutils literal notranslate"><span class="pre">Replay</span></code> and <code class="docutils literal notranslate"><span class="pre">Compare</span></code> are also available.</li>
+</ul>
+<p>Cassandra 4.0 has a binary full query log based on Chronicle Queue that can be controlled using <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">enablefullquerylog</span></code>, <code class="docutils literal notranslate"><span class="pre">disablefullquerylog</span></code>, and <code class="docutils literal notranslate"><span class="pre">resetfullquerylog</span></code>. The log contains all queries invoked, approximate time they were invoked, any parameters necessary to bind wildcard values, and all query options. A readable version of the log can be dumped or tailed using the new <code class="docutils literal notranslate"><span class="pre">bin/fqltool</span></code> utility. The full query log is designed to be safe to use in production and limits utilization of heap memory and disk space with limits you can specify when enabling the log.</p>
+<div class="section" id="objective">
+<h2>Objective<a class="headerlink" href="#objective" title="Permalink to this headline">¶</a></h2>
+<p>Full Query Logging logs all requests to the CQL interface. The full query logs could be used for debugging, performance benchmarking, testing and auditing CQL queries. The audit logs also include CQL requests but full query logging is dedicated to CQL requests only with features such as FQL Replay and FQL Compare that are not available in audit logging.</p>
+</div>
+<div class="section" id="full-query-logger">
+<h2>Full Query Logger<a class="headerlink" href="#full-query-logger" title="Permalink to this headline">¶</a></h2>
+<p>The Full Query Logger is a logger that logs entire query contents after the query finishes. FQL only logs the queries that successfully complete. The other queries (e.g. timed out, failed) are not to be logged. Queries are logged in one of two modes: single query or batch of queries. The log for an invocation of a batch of queries includes the following attributes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span> <span class="o">-</span> <span class="n">The</span> <span class="nb">type</span> <span class="n">of</span> <span class="n">the</span> <span class="n">batch</span>
+<span class="n">queries</span> <span class="o">-</span> <span class="n">CQL</span> <span class="n">text</span> <span class="n">of</span> <span class="n">the</span> <span class="n">queries</span>
+<span class="n">values</span> <span class="o">-</span> <span class="n">Values</span> <span class="n">to</span> <span class="n">bind</span> <span class="n">to</span> <span class="k">as</span> <span class="n">parameters</span> <span class="k">for</span> <span class="n">the</span> <span class="n">queries</span>
+<span class="n">queryOptions</span> <span class="o">-</span> <span class="n">Options</span> <span class="n">associated</span> <span class="k">with</span> <span class="n">the</span> <span class="n">query</span> <span class="n">invocation</span>
+<span class="n">queryState</span> <span class="o">-</span> <span class="n">Timestamp</span> <span class="n">state</span> <span class="n">associated</span> <span class="k">with</span> <span class="n">the</span> <span class="n">query</span> <span class="n">invocation</span>
+<span class="n">batchTimeMillis</span> <span class="o">-</span> <span class="n">Approximate</span> <span class="n">time</span> <span class="ow">in</span> <span class="n">milliseconds</span> <span class="n">since</span> <span class="n">the</span> <span class="n">epoch</span> <span class="n">since</span> <span class="n">the</span> <span class="n">batch</span> <span class="n">was</span> <span class="n">invoked</span>
+</pre></div>
+</div>
+<p>The log for single CQL query includes the following attributes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">query</span> <span class="o">-</span> <span class="n">CQL</span> <span class="n">query</span> <span class="n">text</span>
+<span class="n">queryOptions</span> <span class="o">-</span> <span class="n">Options</span> <span class="n">associated</span> <span class="k">with</span> <span class="n">the</span> <span class="n">query</span> <span class="n">invocation</span>
+<span class="n">queryState</span> <span class="o">-</span> <span class="n">Timestamp</span> <span class="n">state</span> <span class="n">associated</span> <span class="k">with</span> <span class="n">the</span> <span class="n">query</span> <span class="n">invocation</span>
+<span class="n">queryTimeMillis</span> <span class="o">-</span> <span class="n">Approximate</span> <span class="n">time</span> <span class="ow">in</span> <span class="n">milliseconds</span> <span class="n">since</span> <span class="n">the</span> <span class="n">epoch</span> <span class="n">since</span> <span class="n">the</span> <span class="n">batch</span> <span class="n">was</span> <span class="n">invoked</span>
+</pre></div>
+</div>
+<p>Full query logging is backed up by <code class="docutils literal notranslate"><span class="pre">BinLog</span></code>. BinLog is a quick and dirty binary log. Its goal is good enough performance, predictable footprint, simplicity in terms of implementation and configuration and most importantly minimal impact on producers of log records. Performance safety is accomplished by feeding items to the binary log using a weighted queue and dropping records if the binary log falls sufficiently far behind. Simplicity and good enough performance is achieved by using a single log writing thread as well as Chronicle Queue to handle writing the log, making it available for readers, as well as log rolling.</p>
+<p>Weighted queue is a wrapper around any blocking queue that turns it into a blocking weighted queue. The queue will weigh each element being added and removed. Adding to the queue is blocked if adding would violate the weight bound. If an element weighs in at larger than the capacity of the queue then exactly one such element will be allowed into the queue at a time. If the weight of an object changes after it is added it could create issues. Checking weight should be cheap so memorize expensive to compute weights. If weight throws that can also result in leaked permits so it’s always a good idea to memorize weight so it doesn’t throw. In the interests of not writing unit tests for methods no one uses there is a lot of <code class="docutils literal notranslate"><span class="pre">UnsupportedOperationException</span></code>. If you need them then add them and add proper unit tests to <code class="docutils literal notranslate"><span class="pre">WeightedQueueTest</span></code>. “Good” tests. 100% coverage including exception paths and resource leaks.</p>
+<p>The FQL tracks information about store files:</p>
+<ul class="simple">
+<li>Store files as they are added and their storage impact. Delete them if over storage limit.</li>
+<li>The files in the chronicle queue that have already rolled</li>
+<li>The number of bytes in store files that have already rolled</li>
+</ul>
+<p>FQL logger sequence is as follows:</p>
+<ol class="arabic simple">
+<li>Start the consumer thread that writes log records. Can only be done once.</li>
+<li>Offer a record to the log. If the in memory queue is full the record will be dropped and offer will return false.</li>
+<li>Put a record into the log. If the in memory queue is full the putting thread will be blocked until there is space or it is interrupted.</li>
+<li>Clean up the buffers on thread exit, finalization will check again once this is no longer reachable ensuring there are no stragglers in the queue.</li>
+<li>Stop the consumer thread that writes log records. Can be called multiple times.</li>
+</ol>
+<p>Next, we shall demonstrate full query logging with an example.</p>
+</div>
+<div class="section" id="configuring-full-query-logging">
+<h2>Configuring Full Query Logging<a class="headerlink" href="#configuring-full-query-logging" title="Permalink to this headline">¶</a></h2>
+<p>Full Query Logger default options are configured on a per node basis in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> with following configuration property.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">full_query_logging_options</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>As an example setup create a three node Cassandra 4.0 cluster.  The <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">status</span></code> command lists the nodes in the cluster.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ nodetool status
+Datacenter: us-east-1
+=====================
+Status=Up/Down
+|/ State=Normal/Leaving/Joining/Moving
+--  AddressLoad   Tokens  Owns (effective)  Host ID Rack
+UN  10.0.1.115  442.42 KiB  25632.6%   b64cb32a-b32a-46b4-9eeb-e123fa8fc287  us-east-1b
+UN  10.0.3.206  559.52 KiB  25631.9%   74863177-684b-45f4-99f7-d1006625dc9e  us-east-1d
+UN  10.0.2.238  587.87 KiB  25635.5%   4dcdadd2-41f9-4f34-9892-1f20868b27c7  us-east-1c
+</pre></div>
+</div>
+<p>In subsequent sub-sections we shall discuss enabling and configuring full query logging.</p>
+<div class="section" id="setting-the-fql-directory">
+<h3>Setting the FQL Directory<a class="headerlink" href="#setting-the-fql-directory" title="Permalink to this headline">¶</a></h3>
+<p>A dedicated directory path must be provided to write full query log data to when the full query log is enabled. The directory for FQL must exist, and have permissions set. The full query log will recursively delete the contents of this path at times. It is recommended not to place links in this directory to other sections of the filesystem. The <code class="docutils literal notranslate"><span class="pre">full_query_log_dir</span></code> property in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> is pre-configured.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">full_query_log_dir</span><span class="p">:</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">cassandrafullquerylog</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">log_dir</span></code> option may be used to configure the FQL directory if the <code class="docutils literal notranslate"><span class="pre">full_query_log_dir</span></code>  is not set.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">full_query_logging_options</span><span class="p">:</span>
+   <span class="c1"># log_dir:</span>
+</pre></div>
+</div>
+<p>Create the FQL directory if  it does not exist and set its permissions.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">cassandrafullquerylog</span>
+<span class="n">sudo</span> <span class="n">chmod</span> <span class="o">-</span><span class="n">R</span> <span class="mi">777</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">cassandrafullquerylog</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-the-roll-cycle">
+<h3>Setting the Roll Cycle<a class="headerlink" href="#setting-the-roll-cycle" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">roll_cycle</span></code> option sets how often to roll FQL log segments so they can potentially be reclaimed. Supported values are <code class="docutils literal notranslate"><span class="pre">MINUTELY</span></code>, <code class="docutils literal notranslate"><span class="pre">HOURLY</span></code> and <code class="docutils literal notranslate"><span class="pre">DAILY</span></code>. Default setting is <code class="docutils literal notranslate"><span class="pre">HOURLY</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">roll_cycle</span><span class="p">:</span> <span class="n">HOURLY</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-other-options">
+<h3>Setting Other Options<a class="headerlink" href="#setting-other-options" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">block</span></code> option specifies whether the FQL should block if the FQL falls behind or should drop log records. Default value of <code class="docutils literal notranslate"><span class="pre">block</span></code> is <code class="docutils literal notranslate"><span class="pre">true</span></code>. The <code class="docutils literal notranslate"><span class="pre">max_queue_weight</span></code> option sets the maximum weight of in memory queue for records waiting to be written to the file before blocking or dropping. The <code class="docutils literal notranslate"><span class="pre">max_log_size</span></code> option sets the maximum size of the rolled files to retain on disk before deleting the oldest file. The <code class="docutils literal notranslate"><span class="pre">archive_command</span></code> option sets the archive command to execute on rolled log files. The <code class="docutils literal notranslate"><span class="pre">max_archive_retries</span></code> option sets the max number of retries of failed archive commands.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># block: true</span>
+   <span class="c1"># max_queue_weight: 268435456 # 256 MiB</span>
+   <span class="c1"># max_log_size: 17179869184 # 16 GiB</span>
+   <span class="c1">## archive command is &quot;/path/to/script.sh %path&quot; where %path is replaced with the file</span>
+<span class="n">being</span> <span class="n">rolled</span><span class="p">:</span>
+   <span class="c1"># archive_command:</span>
+   <span class="c1"># max_archive_retries: 10</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">max_queue_weight</span></code> must be &gt; 0. Similarly <code class="docutils literal notranslate"><span class="pre">max_log_size</span></code> must be &gt; 0. An example full query logging options is as follows.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">full_query_log_dir</span><span class="p">:</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">cassandrafullquerylog</span>
+
+<span class="c1"># default options for full query logging - these can be overridden from command line when</span>
+<span class="n">executing</span>
+<span class="c1"># nodetool enablefullquerylog</span>
+<span class="c1"># nodetool enablefullquerylog</span>
+<span class="c1">#full_query_logging_options:</span>
+   <span class="c1"># log_dir:</span>
+   <span class="n">roll_cycle</span><span class="p">:</span> <span class="n">HOURLY</span>
+   <span class="c1"># block: true</span>
+   <span class="c1"># max_queue_weight: 268435456 # 256 MiB</span>
+   <span class="c1"># max_log_size: 17179869184 # 16 GiB</span>
+   <span class="c1">## archive command is &quot;/path/to/script.sh %path&quot; where %path is replaced with the file</span>
+<span class="n">being</span> <span class="n">rolled</span><span class="p">:</span>
+   <span class="c1"># archive_command:</span>
+   <span class="c1"># max_archive_retries: 10</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">full_query_log_dir</span></code> setting is not within the <code class="docutils literal notranslate"><span class="pre">full_query_logging_options</span></code> but still is for full query logging.</p>
+</div>
+<div class="section" id="enabling-full-query-logging">
+<h3>Enabling Full Query Logging<a class="headerlink" href="#enabling-full-query-logging" title="Permalink to this headline">¶</a></h3>
+<p>Full Query Logging is enabled on a per-node basis. .  The <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">enablefullquerylog</span></code> command is used to enable full query logging. Defaults for the options are configured in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> and these can be overridden from command line.</p>
+<p>The syntax of the nodetool enablefullquerylog command is as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">nodetool</span> <span class="p">[(</span><span class="o">-</span><span class="n">h</span> <span class="o">&lt;</span><span class="n">host</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">host</span> <span class="o">&lt;</span><span class="n">host</span><span class="o">&gt;</span><span class="p">)]</span> <span class="p">[(</span><span class="o">-</span><span class="n">p</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">port</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;</span><span class="p">)]</span>
+<span class="p">[(</span><span class="o">-</span><span class="n">pp</span> <span class="o">|</span> <span class="o">--</span><span class="nb">print</span><span class="o">-</span><span class="n">port</span><span class="p">)]</span> <span class="p">[(</span><span class="o">-</span><span class="n">pw</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">password</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span><span class="p">)]</span>
+<span class="p">[(</span><span class="o">-</span><span class="n">pwf</span> <span class="o">&lt;</span><span class="n">passwordFilePath</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">password</span><span class="o">-</span><span class="n">file</span> <span class="o">&lt;</span><span class="n">passwordFilePath</span><span class="o">&gt;</span><span class="p">)]</span>
+<span class="p">[(</span><span class="o">-</span><span class="n">u</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">username</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span><span class="p">)]</span> <span class="n">enablefullquerylog</span>
+<span class="p">[</span><span class="o">--</span><span class="n">archive</span><span class="o">-</span><span class="n">command</span> <span class="o">&lt;</span><span class="n">archive_command</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">blocking</span><span class="p">]</span>
+<span class="p">[</span><span class="o">--</span><span class="nb">max</span><span class="o">-</span><span class="n">archive</span><span class="o">-</span><span class="n">retries</span> <span class="o">&lt;</span><span class="n">archive_retries</span><span class="o">&gt;</span><span class="p">]</span>
+<span class="p">[</span><span class="o">--</span><span class="nb">max</span><span class="o">-</span><span class="n">log</span><span class="o">-</span><span class="n">size</span> <span class="o">&lt;</span><span class="n">max_log_size</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">max</span><span class="o">-</span><span class="n">queue</span><span class="o">-</span><span class="n">weight</span> <span class="o">&lt;</span><span class="n">max_queue_weight</span><span class="o">&gt;</span><span class="p">]</span>
+<span class="p">[</span><span class="o">--</span><span class="n">path</span> <span class="o">&lt;</span><span class="n">path</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">roll</span><span class="o">-</span><span class="n">cycle</span> <span class="o">&lt;</span><span class="n">roll_cycle</span><span class="o">&gt;</span><span class="p">]</span>
+
+<span class="n">OPTIONS</span>
+  <span class="o">--</span><span class="n">archive</span><span class="o">-</span><span class="n">command</span> <span class="o">&lt;</span><span class="n">archive_command</span><span class="o">&gt;</span>
+ <span class="n">Command</span> <span class="n">that</span> <span class="n">will</span> <span class="n">handle</span> <span class="n">archiving</span> <span class="n">rolled</span> <span class="n">full</span> <span class="n">query</span> <span class="n">log</span> <span class="n">files</span><span class="o">.</span>
+ <span class="n">Format</span> <span class="ow">is</span> <span class="s2">&quot;/path/to/script.sh %path&quot;</span> <span class="n">where</span> <span class="o">%</span><span class="n">path</span> <span class="n">will</span> <span class="n">be</span> <span class="n">replaced</span>
+ <span class="k">with</span> <span class="n">the</span> <span class="n">file</span> <span class="n">to</span> <span class="n">archive</span>
+
+  <span class="o">--</span><span class="n">blocking</span>
+ <span class="n">If</span> <span class="n">the</span> <span class="n">queue</span> <span class="ow">is</span> <span class="n">full</span> <span class="n">whether</span> <span class="n">to</span> <span class="n">block</span> <span class="n">producers</span> <span class="ow">or</span> <span class="n">drop</span> <span class="n">samples</span><span class="o">.</span>
+
+  <span class="o">-</span><span class="n">h</span> <span class="o">&lt;</span><span class="n">host</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">--</span><span class="n">host</span> <span class="o">&lt;</span><span class="n">host</span><span class="o">&gt;</span>
+ <span class="n">Node</span> <span class="n">hostname</span> <span class="ow">or</span> <span class="n">ip</span> <span class="n">address</span>
+
+  <span class="o">--</span><span class="nb">max</span><span class="o">-</span><span class="n">archive</span><span class="o">-</span><span class="n">retries</span> <span class="o">&lt;</span><span class="n">archive_retries</span><span class="o">&gt;</span>
+ <span class="n">Max</span> <span class="n">number</span> <span class="n">of</span> <span class="n">archive</span> <span class="n">retries</span><span class="o">.</span>
+
+  <span class="o">--</span><span class="nb">max</span><span class="o">-</span><span class="n">log</span><span class="o">-</span><span class="n">size</span> <span class="o">&lt;</span><span class="n">max_log_size</span><span class="o">&gt;</span>
+ <span class="n">How</span> <span class="n">many</span> <span class="nb">bytes</span> <span class="n">of</span> <span class="n">log</span> <span class="n">data</span> <span class="n">to</span> <span class="n">store</span> <span class="n">before</span> <span class="n">dropping</span> <span class="n">segments</span><span class="o">.</span> <span class="n">Might</span>
+ <span class="ow">not</span> <span class="n">be</span> <span class="n">respected</span> <span class="k">if</span> <span class="n">a</span> <span class="n">log</span> <span class="n">file</span> <span class="n">hasn</span><span class="s1">&#39;t rolled so it can be deleted.</span>
+
+  <span class="o">--</span><span class="nb">max</span><span class="o">-</span><span class="n">queue</span><span class="o">-</span><span class="n">weight</span> <span class="o">&lt;</span><span class="n">max_queue_weight</span><span class="o">&gt;</span>
+ <span class="n">Maximum</span> <span class="n">number</span> <span class="n">of</span> <span class="nb">bytes</span> <span class="n">of</span> <span class="n">query</span> <span class="n">data</span> <span class="n">to</span> <span class="n">queue</span> <span class="n">to</span> <span class="n">disk</span> <span class="n">before</span>
+ <span class="n">blocking</span> <span class="ow">or</span> <span class="n">dropping</span> <span class="n">samples</span><span class="o">.</span>
+
+  <span class="o">-</span><span class="n">p</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">--</span><span class="n">port</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;</span>
+ <span class="n">Remote</span> <span class="n">jmx</span> <span class="n">agent</span> <span class="n">port</span> <span class="n">number</span>
+
+  <span class="o">--</span><span class="n">path</span> <span class="o">&lt;</span><span class="n">path</span><span class="o">&gt;</span>
+ <span class="n">Path</span> <span class="n">to</span> <span class="n">store</span> <span class="n">the</span> <span class="n">full</span> <span class="n">query</span> <span class="n">log</span> <span class="n">at</span><span class="o">.</span> <span class="n">Will</span> <span class="n">have</span> <span class="n">it</span><span class="s1">&#39;s contents</span>
+ <span class="n">recursively</span> <span class="n">deleted</span><span class="o">.</span>
+
+  <span class="o">-</span><span class="n">pp</span><span class="p">,</span> <span class="o">--</span><span class="nb">print</span><span class="o">-</span><span class="n">port</span>
+ <span class="n">Operate</span> <span class="ow">in</span> <span class="mf">4.0</span> <span class="n">mode</span> <span class="k">with</span> <span class="n">hosts</span> <span class="n">disambiguated</span> <span class="n">by</span> <span class="n">port</span> <span class="n">number</span>
+
+  <span class="o">-</span><span class="n">pw</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">--</span><span class="n">password</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
+ <span class="n">Remote</span> <span class="n">jmx</span> <span class="n">agent</span> <span class="n">password</span>
+
+  <span class="o">-</span><span class="n">pwf</span> <span class="o">&lt;</span><span class="n">passwordFilePath</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">--</span><span class="n">password</span><span class="o">-</span><span class="n">file</span> <span class="o">&lt;</span><span class="n">passwordFilePath</span><span class="o">&gt;</span>
+ <span class="n">Path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">JMX</span> <span class="n">password</span> <span class="n">file</span>
+
+  <span class="o">--</span><span class="n">roll</span><span class="o">-</span><span class="n">cycle</span> <span class="o">&lt;</span><span class="n">roll_cycle</span><span class="o">&gt;</span>
+ <span class="n">How</span> <span class="n">often</span> <span class="n">to</span> <span class="n">roll</span> <span class="n">the</span> <span class="n">log</span> <span class="n">file</span> <span class="p">(</span><span class="n">MINUTELY</span><span class="p">,</span> <span class="n">HOURLY</span><span class="p">,</span> <span class="n">DAILY</span><span class="p">)</span><span class="o">.</span>
+
+  <span class="o">-</span><span class="n">u</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">--</span><span class="n">username</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span>
+ <span class="n">Remote</span> <span class="n">jmx</span> <span class="n">agent</span> <span class="n">username</span>
+</pre></div>
+</div>
+<p>Run the following command on each node in the cluster.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nodetool</span> <span class="n">enablefullquerylog</span> <span class="o">--</span><span class="n">path</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">cassandrafullquerylog</span>
+</pre></div>
+</div>
+<p>After the full query logging has been  enabled run some CQL statements to generate full query logs.</p>
+</div>
+</div>
+<div class="section" id="running-cql-statements">
+<h2>Running CQL Statements<a class="headerlink" href="#running-cql-statements" title="Permalink to this headline">¶</a></h2>
+<p>Start CQL interface  with <code class="docutils literal notranslate"><span class="pre">cqlsh</span></code> command.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ cqlsh
+Connected to Cassandra Cluster at 127.0.0.1:9042.
+[cqlsh 5.0.1 | Cassandra 4.0-SNAPSHOT | CQL spec 3.4.5 | Native protocol v4]
+Use HELP for help.
+cqlsh&gt;
+</pre></div>
+</div>
+<p>Run some CQL statements. Create a keyspace.  Create a table and add some data. Query the table.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cqlsh</span><span class="o">&gt;</span> <span class="n">CREATE</span> <span class="n">KEYSPACE</span> <span class="n">AuditLogKeyspace</span>
+  <span class="o">...</span> <span class="n">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;SimpleStrategy&#39;</span><span class="p">,</span> <span class="s1">&#39;replication_factor&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">};</span>
+<span class="n">cqlsh</span><span class="o">&gt;</span> <span class="n">USE</span> <span class="n">AuditLogKeyspace</span><span class="p">;</span>
+<span class="n">cqlsh</span><span class="p">:</span><span class="n">auditlogkeyspace</span><span class="o">&gt;</span> <span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">t</span> <span class="p">(</span>
+<span class="o">...</span><span class="n">id</span> <span class="nb">int</span><span class="p">,</span>
+<span class="o">...</span><span class="n">k</span> <span class="nb">int</span><span class="p">,</span>
+<span class="o">...</span><span class="n">v</span> <span class="n">text</span><span class="p">,</span>
+<span class="o">...</span><span class="n">PRIMARY</span> <span class="n">KEY</span> <span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+<span class="o">...</span> <span class="p">);</span>
+<span class="n">cqlsh</span><span class="p">:</span><span class="n">auditlogkeyspace</span><span class="o">&gt;</span> <span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">t</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="n">VALUES</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;val0&#39;</span><span class="p">);</span>
+<span class="n">cqlsh</span><span class="p">:</span><span class="n">auditlogkeyspace</span><span class="o">&gt;</span> <span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">t</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="n">VALUES</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;val1&#39;</span><span class="p">);</span>
+<span class="n">cqlsh</span><span class="p">:</span><span class="n">auditlogkeyspace</span><span class="o">&gt;</span> <span class="n">SELECT</span> <span class="o">*</span> <span class="n">FROM</span> <span class="n">t</span><span class="p">;</span>
+
+<span class="nb">id</span> <span class="o">|</span> <span class="n">k</span> <span class="o">|</span> <span class="n">v</span>
+<span class="o">----+---+------</span>
+ <span class="mi">0</span> <span class="o">|</span> <span class="mi">1</span> <span class="o">|</span> <span class="n">val1</span>
+
+<span class="p">(</span><span class="mi">1</span> <span class="n">rows</span><span class="p">)</span>
+<span class="n">cqlsh</span><span class="p">:</span><span class="n">auditlogkeyspace</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="viewing-the-full-query-logs">
+<h2>Viewing the Full Query Logs<a class="headerlink" href="#viewing-the-full-query-logs" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">fqltool</span></code> is used to view the full query logs.  The <code class="docutils literal notranslate"><span class="pre">fqltool</span></code> has the following usage syntax.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fqltool</span> <span class="o">&lt;</span><span class="n">command</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">args</span><span class="o">&gt;</span><span class="p">]</span>
+
+<span class="n">The</span> <span class="n">most</span> <span class="n">commonly</span> <span class="n">used</span> <span class="n">fqltool</span> <span class="n">commands</span> <span class="n">are</span><span class="p">:</span>
+   <span class="n">compare</span>   <span class="n">Compare</span> <span class="n">result</span> <span class="n">files</span> <span class="n">generated</span> <span class="n">by</span> <span class="n">fqltool</span> <span class="n">replay</span>
+   <span class="n">dump</span> <span class="n">Dump</span> <span class="n">the</span> <span class="n">contents</span> <span class="n">of</span> <span class="n">a</span> <span class="n">full</span> <span class="n">query</span> <span class="n">log</span>
+   <span class="n">help</span> <span class="n">Display</span> <span class="n">help</span> <span class="n">information</span>
+   <span class="n">replay</span>    <span class="n">Replay</span> <span class="n">full</span> <span class="n">query</span> <span class="n">logs</span>
+
+<span class="n">See</span> <span class="s1">&#39;fqltool help &lt;command&gt;&#39;</span> <span class="k">for</span> <span class="n">more</span> <span class="n">information</span> <span class="n">on</span> <span class="n">a</span> <span class="n">specific</span> <span class="n">command</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">fqltool</span> <span class="pre">dump</span></code> command is used to dump (list) the contents of a full query log. Run the <code class="docutils literal notranslate"><span class="pre">fqltool</span> <span class="pre">dump</span></code> command after some CQL statements have been run.</p>
+<p>The full query logs get listed. Truncated output is as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 cassandrafullquerylog]$ fqltool dump ./
+WARN  [main] 2019-08-02 03:07:53,635 Slf4jExceptionHandler.java:42 - Using Pauser.sleepy() as not enough processors, have 2, needs 8+
+Type: single-query
+Query start time: 1564708322030
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:1564708322
+Query: SELECT * FROM system.peers
+Values:
+
+Type: single-query
+Query start time: 1564708322054
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:1564708322
+Query: SELECT * FROM system.local WHERE key=&#39;local&#39;
+Values:
+
+Type: single-query
+Query start time: 1564708322109
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:1564708322
+Query: SELECT * FROM system_schema.keyspaces
+Values:
+
+Type: single-query
+Query start time: 1564708322116
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:1564708322
+Query: SELECT * FROM system_schema.tables
+Values:
+
+Type: single-query
+Query start time: 1564708322139
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:1564708322
+Query: SELECT * FROM system_schema.columns
+Values:
+
+Type: single-query
+Query start time: 1564708322142
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:1564708322
+Query: SELECT * FROM system_schema.functions
+Values:
+
+Type: single-query
+Query start time: 1564708322141
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:1564708322
+Query: SELECT * FROM system_schema.aggregates
+Values:
+
+Type: single-query
+Query start time: 1564708322143
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:1564708322
+Query: SELECT * FROM system_schema.types
+Values:
+
+Type: single-query
+Query start time: 1564708322144
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:1564708322
+Query: SELECT * FROM system_schema.indexes
+Values:
+
+Type: single-query
+Query start time: 1564708322142
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:1564708322
+Query: SELECT * FROM system_schema.triggers
+Values:
+
+Type: single-query
+Query start time: 1564708322145
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:1564708322
+Query: SELECT * FROM system_schema.views
+Values:
+
+Type: single-query
+Query start time: 1564708345408
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:-2147483648
+Query: CREATE KEYSPACE AuditLogKeyspace
+WITH replication = {&#39;class&#39;: &#39;SimpleStrategy&#39;, &#39;replication_factor&#39; : 1};
+Values:
+
+Type: single-query
+Query start time: 1564708345675
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:1564708345
+Query: SELECT peer, rpc_address, schema_version FROM system.peers
+Values:
+
+Type: single-query
+Query start time: 1564708345676
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:1564708345
+Query: SELECT schema_version FROM system.local WHERE key=&#39;local&#39;
+Values:
+
+Type: single-query
+Query start time: 1564708346323
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:1564708346
+Query: SELECT * FROM system_schema.keyspaces WHERE keyspace_name = &#39;auditlogkeyspace&#39;
+Values:
+
+Type: single-query
+Query start time: 1564708360873
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:-2147483648
+Query: USE AuditLogKeyspace;
+Values:
+
+Type: single-query
+Query start time: 1564708360874
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:-2147483648
+Query: USE &quot;auditlogkeyspace&quot;
+Values:
+
+Type: single-query
+Query start time: 1564708378837
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:-2147483648
+Query: CREATE TABLE t (
+    id int,
+    k int,
+    v text,
+    PRIMARY KEY (id)
+);
+Values:
+
+Type: single-query
+Query start time: 1564708379247
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:1564708379
+Query: SELECT * FROM system_schema.tables WHERE keyspace_name = &#39;auditlogkeyspace&#39; AND table_name = &#39;t&#39;
+Values:
+
+Type: single-query
+Query start time: 1564708379255
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:1564708379
+Query: SELECT * FROM system_schema.views WHERE keyspace_name = &#39;auditlogkeyspace&#39; AND view_name = &#39;t&#39;
+Values:
+
+Type: single-query
+Query start time: 1564708397144
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:1564708397
+Query: INSERT INTO t (id, k, v) VALUES (0, 0, &#39;val0&#39;);
+Values:
+
+Type: single-query
+Query start time: 1564708397167
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:1564708397
+Query: INSERT INTO t (id, k, v) VALUES (0, 1, &#39;val1&#39;);
+Values:
+
+Type: single-query
+Query start time: 1564708434782
+Protocol version: 4
+Generated timestamp:-9223372036854775808
+Generated nowInSeconds:1564708434
+Query: SELECT * FROM t;
+Values:
+
+[ec2-user@ip-10-0-2-238 cassandrafullquerylog]$
+</pre></div>
+</div>
+<p>Full query logs are generated on each node.  Enabling of full query logging on one node and the log files generated on the node are as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[root@localhost ~]# ssh -i cassandra.pem ec2-user@52.1.243.83
+Last login: Fri Aug  2 00:14:53 2019 from 75.155.255.51
+[ec2-user@ip-10-0-3-206 ~]$ sudo mkdir /tmp/cassandrafullquerylog
+[ec2-user@ip-10-0-3-206 ~]$ sudo chmod -R 777 /tmp/cassandrafullquerylog
+[ec2-user@ip-10-0-3-206 ~]$ nodetool enablefullquerylog --path /tmp/cassandrafullquerylog
+[ec2-user@ip-10-0-3-206 ~]$ cd /tmp/cassandrafullquerylog
+[ec2-user@ip-10-0-3-206 cassandrafullquerylog]$ ls -l
+total 44
+-rw-rw-r--. 1 ec2-user ec2-user 83886080 Aug  2 01:24 20190802-01.cq4
+-rw-rw-r--. 1 ec2-user ec2-user    65536 Aug  2 01:23 directory-listing.cq4t
+[ec2-user@ip-10-0-3-206 cassandrafullquerylog]$
+</pre></div>
+</div>
+<p>Enabling of full query logging on another node and the log files generated on the node are as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[root@localhost ~]# ssh -i cassandra.pem ec2-user@3.86.103.229
+Last login: Fri Aug  2 00:13:04 2019 from 75.155.255.51
+[ec2-user@ip-10-0-1-115 ~]$ sudo mkdir /tmp/cassandrafullquerylog
+[ec2-user@ip-10-0-1-115 ~]$ sudo chmod -R 777 /tmp/cassandrafullquerylog
+[ec2-user@ip-10-0-1-115 ~]$ nodetool enablefullquerylog --path /tmp/cassandrafullquerylog
+[ec2-user@ip-10-0-1-115 ~]$ cd /tmp/cassandrafullquerylog
+[ec2-user@ip-10-0-1-115 cassandrafullquerylog]$ ls -l
+total 44
+-rw-rw-r--. 1 ec2-user ec2-user 83886080 Aug  2 01:24 20190802-01.cq4
+-rw-rw-r--. 1 ec2-user ec2-user    65536 Aug  2 01:23 directory-listing.cq4t
+[ec2-user@ip-10-0-1-115 cassandrafullquerylog]$
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">resetfullquerylog</span></code> resets the full query logger if it is enabled. Also deletes any generated files in the last used full query log path as well as the one configured in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code>. It stops the full query log and cleans files in the configured full query log directory from <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> as well as JMX.</p>
+</div>
+<div class="section" id="full-query-replay">
+<h2>Full Query Replay<a class="headerlink" href="#full-query-replay" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">fqltool</span></code> provides the <code class="docutils literal notranslate"><span class="pre">replay</span></code> command (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-14618">CASSANDRA-14618</a>) to replay the full query logs. The FQL replay could be run on a different machine or even a different cluster  for testing, debugging and performance benchmarking.</p>
+<p>The main objectives of <code class="docutils literal notranslate"><span class="pre">fqltool</span> <span class="pre">replay</span></code> are:</p>
+<ul class="simple">
+<li>To be able to compare different runs of production traffic against different versions/configurations of Cassandra.</li>
+<li>Take FQL logs from several machines and replay them in “order” by the timestamps recorded.</li>
+<li>Record the results from each run to be able to compare different runs (against different clusters/versions/etc).</li>
+<li>If fqltool replay is run against 2 or more clusters, the results could be compared.</li>
+</ul>
+<p>The FQL replay could also be used on the same node on which the full query log are generated to recreate a dropped database object.</p>
+<blockquote>
+<div>The syntax of <code class="docutils literal notranslate"><span class="pre">fqltool</span> <span class="pre">replay</span></code> is as follows:</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">fqltool</span> <span class="n">replay</span> <span class="p">[</span><span class="o">--</span><span class="n">keyspace</span> <span class="o">&lt;</span><span class="n">keyspace</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">results</span> <span class="o">&lt;</span><span class="n">results</span><span class="o">&gt;</span><span class="p">]</span>
+<span class="p">[</span><span class="o">--</span><span class="n">store</span><span class="o">-</span><span class="n">queries</span> <span class="o">&lt;</span><span class="n">store_queries</span><span class="o">&gt;</span><span class="p">]</span> <span class="o">--</span><span class="n">target</span> <span class="o">&lt;</span><span class="n">target</span><span class="o">&gt;...</span> <span class="p">[</span><span class="o">--</span><span class="p">]</span> <span class="o">&lt;</span><span class="n">path1</span><span class="o">&gt;</span>
+<span class="p">[</span><span class="o">&lt;</span><span class="n">path2</span><span class="o">&gt;...&lt;</span><span class="n">pathN</span><span class="o">&gt;</span><span class="p">]</span>
+
+<span class="n">OPTIONS</span>
+  <span class="o">--</span><span class="n">keyspace</span> <span class="o">&lt;</span><span class="n">keyspace</span><span class="o">&gt;</span>
+ <span class="n">Only</span> <span class="n">replay</span> <span class="n">queries</span> <span class="n">against</span> <span class="n">this</span> <span class="n">keyspace</span> <span class="ow">and</span> <span class="n">queries</span> <span class="n">without</span>
+ <span class="n">keyspace</span> <span class="nb">set</span><span class="o">.</span>
+
+  <span class="o">--</span><span class="n">results</span> <span class="o">&lt;</span><span class="n">results</span><span class="o">&gt;</span>
+ <span class="n">Where</span> <span class="n">to</span> <span class="n">store</span> <span class="n">the</span> <span class="n">results</span> <span class="n">of</span> <span class="n">the</span> <span class="n">queries</span><span class="p">,</span> <span class="n">this</span> <span class="n">should</span> <span class="n">be</span> <span class="n">a</span>
+ <span class="n">directory</span><span class="o">.</span> <span class="n">Leave</span> <span class="n">this</span> <span class="n">option</span> <span class="n">out</span> <span class="n">to</span> <span class="n">avoid</span> <span class="n">storing</span> <span class="n">results</span><span class="o">.</span>
+
+  <span class="o">--</span><span class="n">store</span><span class="o">-</span><span class="n">queries</span> <span class="o">&lt;</span><span class="n">store_queries</span><span class="o">&gt;</span>
+ <span class="n">Path</span> <span class="n">to</span> <span class="n">store</span> <span class="n">the</span> <span class="n">queries</span> <span class="n">executed</span><span class="o">.</span> <span class="n">Stores</span> <span class="n">queries</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">same</span> <span class="n">order</span>
+ <span class="k">as</span> <span class="n">the</span> <span class="n">result</span> <span class="n">sets</span> <span class="n">are</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">result</span> <span class="n">files</span><span class="o">.</span> <span class="n">Requires</span> <span class="o">--</span><span class="n">results</span>
+
+  <span class="o">--</span><span class="n">target</span> <span class="o">&lt;</span><span class="n">target</span><span class="o">&gt;</span>
+ <span class="n">Hosts</span> <span class="n">to</span> <span class="n">replay</span> <span class="n">the</span> <span class="n">logs</span> <span class="n">to</span><span class="p">,</span> <span class="n">can</span> <span class="n">be</span> <span class="n">repeated</span> <span class="n">to</span> <span class="n">replay</span> <span class="n">to</span> <span class="n">more</span>
+ <span class="n">hosts</span><span class="o">.</span>
+
+  <span class="o">--</span>
+ <span class="n">This</span> <span class="n">option</span> <span class="n">can</span> <span class="n">be</span> <span class="n">used</span> <span class="n">to</span> <span class="n">separate</span> <span class="n">command</span><span class="o">-</span><span class="n">line</span> <span class="n">options</span> <span class="kn">from</span> <span class="nn">the</span>
+ <span class="nb">list</span> <span class="n">of</span> <span class="n">argument</span><span class="p">,</span> <span class="p">(</span><span class="n">useful</span> <span class="n">when</span> <span class="n">arguments</span> <span class="n">might</span> <span class="n">be</span> <span class="n">mistaken</span> <span class="k">for</span>
+ <span class="n">command</span><span class="o">-</span><span class="n">line</span> <span class="n">options</span>
+
+  <span class="o">&lt;</span><span class="n">path1</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">path2</span><span class="o">&gt;...&lt;</span><span class="n">pathN</span><span class="o">&gt;</span><span class="p">]</span>
+ <span class="n">Paths</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">full</span> <span class="n">query</span> <span class="n">logs</span> <span class="n">to</span> <span class="n">replay</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>As an example of using <code class="docutils literal notranslate"><span class="pre">fqltool</span> <span class="pre">replay</span></code>, drop a keyspace.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cqlsh</span><span class="p">:</span><span class="n">auditlogkeyspace</span><span class="o">&gt;</span> <span class="n">DROP</span> <span class="n">KEYSPACE</span> <span class="n">AuditLogKeyspace</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Subsequently run <code class="docutils literal notranslate"><span class="pre">fqltool</span> <span class="pre">replay</span></code>.   The directory to store results of queries and the directory to store the queries run are specified and these directories must be created and permissions set before running <code class="docutils literal notranslate"><span class="pre">fqltool</span> <span class="pre">replay</span></code>. The <code class="docutils literal notranslate"><span class="pre">--results</span></code> and <code class="docutils literal notranslate"><span class="pre">--store-queries</span></code> directories are optional but if <code class="docutils literal notranslate"><span class="pre">--store-queries</span></code> is to be set the <code class="docutils literal notranslate"><span class="pre">--results</span></code> must also be set.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 cassandra]$ fqltool replay --keyspace AuditLogKeyspace --results
+/cassandra/fql/logs/results/replay --store-queries /cassandra/fql/logs/queries/replay --
+target 3.91.56.164 -- /tmp/cassandrafullquerylog
+</pre></div>
+</div>
+<p>Describe the keyspaces after running <code class="docutils literal notranslate"><span class="pre">fqltool</span> <span class="pre">replay</span></code> and the keyspace that was dropped gets listed again.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cqlsh</span><span class="p">:</span><span class="n">auditlogkeyspace</span><span class="o">&gt;</span> <span class="n">DESC</span> <span class="n">KEYSPACES</span><span class="p">;</span>
+
+<span class="n">system_schema</span>  <span class="n">system</span>  <span class="n">system_distributed</span>  <span class="n">system_virtual_schema</span>
+<span class="n">system_auth</span>    <span class="n">auditlogkeyspace</span>  <span class="n">system_traces</span>  <span class="n">system_views</span>
+
+<span class="n">cqlsh</span><span class="p">:</span><span class="n">auditlogkeyspace</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="full-query-compare">
+<h2>Full Query Compare<a class="headerlink" href="#full-query-compare" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">fqltool</span> <span class="pre">compare</span></code> command (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-14619">CASSANDRA-14619</a>) is used to compare result files generated by <code class="docutils literal notranslate"><span class="pre">fqltool</span> <span class="pre">replay</span></code>. The <code class="docutils literal notranslate"><span class="pre">fqltool</span> <span class="pre">compare</span></code> command that can take the recorded runs from <code class="docutils literal notranslate"><span class="pre">fqltool</span> <span class="pre">replay</span></code> and compares them, it should output any differences and potentially all queries against the mismatching partition up until the mismatch.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">fqltool</span> <span class="pre">compare</span></code>  could be used for comparing result files generated by different versions of Cassandra or different Cassandra configurations as an example. The command usage is as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ fqltool help compare
+NAME
+  fqltool compare - Compare result files generated by fqltool replay
+
+SYNOPSIS
+  fqltool compare --queries &lt;queries&gt; [--] &lt;path1&gt; [&lt;path2&gt;...&lt;pathN&gt;]
+
+OPTIONS
+  --queries &lt;queries&gt;
+ Directory to read the queries from. It is produced by the fqltool
+ replay --store-queries option.
+
+  --
+ This option can be used to separate command-line options from the
+ list of argument, (useful when arguments might be mistaken for
+ command-line options
+
+  &lt;path1&gt; [&lt;path2&gt;...&lt;pathN&gt;]
+ Directories containing result files to compare.
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">fqltool</span> <span class="pre">compare</span></code> stores each row as a separate chronicle document to be able to avoid reading up the entire result set in memory when comparing document formats:</p>
+<p>To mark the start of a new result set:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-------------------</span>
+<span class="n">version</span><span class="p">:</span> <span class="n">int16</span>
+<span class="nb">type</span><span class="p">:</span> <span class="n">column_definitions</span>
+<span class="n">column_count</span><span class="p">:</span> <span class="n">int32</span><span class="p">;</span>
+<span class="n">column_definition</span><span class="p">:</span> <span class="n">text</span><span class="p">,</span> <span class="n">text</span>
+<span class="n">column_definition</span><span class="p">:</span> <span class="n">text</span><span class="p">,</span> <span class="n">text</span>
+<span class="o">....</span>
+<span class="o">--------------------</span>
+</pre></div>
+</div>
+<p>To mark a failed query set:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---------------------</span>
+<span class="n">version</span><span class="p">:</span> <span class="n">int16</span>
+<span class="nb">type</span><span class="p">:</span> <span class="n">query_failed</span>
+<span class="n">message</span><span class="p">:</span> <span class="n">text</span>
+<span class="o">---------------------</span>
+</pre></div>
+</div>
+<p>To mark a row set:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--------------------</span>
+<span class="n">version</span><span class="p">:</span> <span class="n">int16</span>
+<span class="nb">type</span><span class="p">:</span> <span class="n">row</span>
+<span class="n">row_column_count</span><span class="p">:</span> <span class="n">int32</span>
+<span class="n">column</span><span class="p">:</span> <span class="nb">bytes</span>
+<span class="o">---------------------</span>
+</pre></div>
+</div>
+<p>To mark the end of a result set:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-------------------</span>
+<span class="n">version</span><span class="p">:</span> <span class="n">int16</span>
+<span class="nb">type</span><span class="p">:</span> <span class="n">end_resultset</span>
+<span class="o">-------------------</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="performance-overhead-of-fql">
+<h2>Performance Overhead of FQL<a class="headerlink" href="#performance-overhead-of-fql" title="Permalink to this headline">¶</a></h2>
+<p>In performance testing FQL appears to have little or no overhead in <code class="docutils literal notranslate"><span class="pre">WRITE</span></code> only workloads, and a minor overhead in <code class="docutils literal notranslate"><span class="pre">MIXED</span></code> workload.</p>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="messaging.html" class="btn btn-default pull-right " role="button" title="Improved Internode Messaging" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="auditlogging.html" class="btn btn-default" role="button" title="Audit Logging" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-beta3/data_modeling/data_modeling_refining.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-beta3" href="../index.html"/> <link rel="up" title="Data Modeling" href="index.html"/> <link rel="next" title="Defining Database Schema" href="data_modeling_schema.html"/> <link rel="prev" title="Physical Data Modeling" href="data_modeling_physical.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">Data Modeling</a></li>
+      
+
+      
+      <li>Evaluating and Refining Data Models</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Data Modeling</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_conceptual.html">Conceptual Data Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_rdbms.html">RDBMS Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_queries.html">Defining Application Queries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_logical.html">Logical Data Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_physical.html">Physical Data Modeling</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Evaluating and Refining Data Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#calculating-partition-size">Calculating Partition Size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#calculating-size-on-disk">Calculating Size on Disk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#breaking-up-large-partitions">Breaking Up Large Partitions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_schema.html">Defining Database Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_tools.html">Cassandra Data Modeling Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="evaluating-and-refining-data-models">
+<h1>Evaluating and Refining Data Models<a class="headerlink" href="#evaluating-and-refining-data-models" title="Permalink to this headline">¶</a></h1>
+<p>Once you’ve created a physical model, there are some steps you’ll want
+to take to evaluate and refine table designs to help ensure optimal
+performance.</p>
+<div class="section" id="calculating-partition-size">
+<h2>Calculating Partition Size<a class="headerlink" href="#calculating-partition-size" title="Permalink to this headline">¶</a></h2>
+<p>The first thing that you want to look for is whether your tables will have
+partitions that will be overly large, or to put it another way, too
+wide. Partition size is measured by the number of cells (values) that
+are stored in the partition. Cassandra’s hard limit is 2 billion cells
+per partition, but you’ll likely run into performance issues before
+reaching that limit.</p>
+<p>In order to calculate the size of partitions, use the following
+formula:</p>
+<div class="math notranslate nohighlight">
+\[N_v = N_r (N_c - N_{pk} - N_s) + N_s\]</div>
+<p>The number of values (or cells) in the partition (N<sub>v</sub>) is equal to
+the number of static columns (N<sub>s</sub>) plus the product of the number
+of rows (N<sub>r</sub>) and the number of of values per row. The number of
+values per row is defined as the number of columns (N<sub>c</sub>) minus the
+number of primary key columns (N<sub>pk</sub>) and static columns
+(N<sub>s</sub>).</p>
+<p>The number of columns tends to be relatively static, although it
+is possible to alter tables at runtime. For this reason, a
+primary driver of partition size is the number of rows in the partition.
+This is a key factor that you must consider in determining whether a
+partition has the potential to get too large. Two billion values sounds
+like a lot, but in a sensor system where tens or hundreds of values are
+measured every millisecond, the number of values starts to add up pretty
+fast.</p>
+<p>Let’s take a look at one of the tables to analyze the partition size.
+Because it has a wide partition design with one partition per hotel,
+look at the <code class="docutils literal notranslate"><span class="pre">available_rooms_by_hotel_date</span></code> table. The table has
+four columns total (N<sub>c</sub> = 4), including three primary key columns
+(N<sub>pk</sub> = 3) and no static columns (N<sub>s</sub> = 0). Plugging these
+values into the formula, the result is:</p>
+<div class="math notranslate nohighlight">
+\[N_v = N_r (4 - 3 - 0) + 0 = 1N_r\]</div>
+<p>Therefore the number of values for this table is equal to the number of
+rows. You still need to determine a number of rows. To do this, make
+estimates based on the application design. The table is
+storing a record for each room, in each of hotel, for every night.
+Let’s assume the system will be used to store two years of
+inventory at a time, and there are 5,000 hotels in the system, with an
+average of 100 rooms in each hotel.</p>
+<p>Since there is a partition for each hotel, the estimated number of rows
+per partition is as follows:</p>
+<div class="math notranslate nohighlight">
+\[N_r = 100 rooms/hotel \times 730 days = 73,000 rows\]</div>
+<p>This relatively small number of rows per partition is not going to get
+you in too much trouble, but if you start storing more dates of inventory,
+or don’t manage the size of the inventory well using TTL, you could start
+having issues. You still might want to look at breaking up this large
+partition, which you’ll see how to do shortly.</p>
+<p>When performing sizing calculations, it is tempting to assume the
+nominal or average case for variables such as the number of rows.
+Consider calculating the worst case as well, as these sorts of
+predictions have a way of coming true in successful systems.</p>
+</div>
+<div class="section" id="calculating-size-on-disk">
+<h2>Calculating Size on Disk<a class="headerlink" href="#calculating-size-on-disk" title="Permalink to this headline">¶</a></h2>
+<p>In addition to calculating the size of a partition, it is also an
+excellent idea to estimate the amount of disk space that will be
+required for each table you plan to store in the cluster. In order to
+determine the size, use the following formula to determine the size
+S<sub>t</sub> of a partition:</p>
+<div class="math notranslate nohighlight">
+\[S_t = \displaystyle\sum_i sizeOf\big (c_{k_i}\big) + \displaystyle\sum_j sizeOf\big(c_{s_j}\big) + N_r\times \bigg(\displaystyle\sum_k sizeOf\big(c_{r_k}\big) + \displaystyle\sum_l sizeOf\big(c_{c_l}\big)\bigg) +\]</div>
+<div class="math notranslate nohighlight">
+\[N_v\times sizeOf\big(t_{avg}\big)\]</div>
+<p>This is a bit more complex than the previous formula, but let’s break it
+down a bit at a time. Let’s take a look at the notation first:</p>
+<ul class="simple">
+<li>In this formula, c<sub>k</sub> refers to partition key columns,
+c<sub>s</sub> to static columns, c<sub>r</sub> to regular columns, and
+c<sub>c</sub> to clustering columns.</li>
+<li>The term t<sub>avg</sub> refers to the average number of bytes of
+metadata stored per cell, such as timestamps. It is typical to use an
+estimate of 8 bytes for this value.</li>
+<li>You’ll recognize the number of rows N<sub>r</sub> and number of values
+N<sub>v</sub> from previous calculations.</li>
+<li>The <strong>sizeOf()</strong> function refers to the size in bytes of the CQL data
+type of each referenced column.</li>
+</ul>
+<p>The first term asks you to sum the size of the partition key columns. For
+this example, the <code class="docutils literal notranslate"><span class="pre">available_rooms_by_hotel_date</span></code> table has a single
+partition key column, the <code class="docutils literal notranslate"><span class="pre">hotel_id</span></code>, which is of type
+<code class="docutils literal notranslate"><span class="pre">text</span></code>. Assuming that hotel identifiers are simple 5-character codes,
+you have a 5-byte value, so the sum of the partition key column sizes is
+5 bytes.</p>
+<p>The second term asks you to sum the size of the static columns. This table
+has no static columns, so the size is 0 bytes.</p>
+<p>The third term is the most involved, and for good reason—it is
+calculating the size of the cells in the partition. Sum the size of
+the clustering columns and regular columns. The two clustering columns
+are the <code class="docutils literal notranslate"><span class="pre">date</span></code>, which is 4 bytes, and the <code class="docutils literal notranslate"><span class="pre">room_number</span></code>,
+which is a 2-byte short integer, giving a sum of 6 bytes.
+There is only a single regular column, the boolean <code class="docutils literal notranslate"><span class="pre">is_available</span></code>,
+which is 1 byte in size. Summing the regular column size
+(1 byte) plus the clustering column size (6 bytes) gives a total of 7
+bytes. To finish up the term, multiply this value by the number of
+rows (73,000), giving a result of 511,000 bytes (0.51 MB).</p>
+<p>The fourth term is simply counting the metadata that that Cassandra
+stores for each cell. In the storage format used by Cassandra 3.0 and
+later, the amount of metadata for a given cell varies based on the type
+of data being stored, and whether or not custom timestamp or TTL values
+are specified for individual cells. For this table, reuse the number
+of values from the previous calculation (73,000) and multiply by 8,
+which gives 0.58 MB.</p>
+<p>Adding these terms together, you get a final estimate:</p>
+<div class="math notranslate nohighlight">
+\[Partition size = 16 bytes + 0 bytes + 0.51 MB + 0.58 MB = 1.1 MB\]</div>
+<p>This formula is an approximation of the actual size of a partition on
+disk, but is accurate enough to be quite useful. Remembering that the
+partition must be able to fit on a single node, it looks like the table
+design will not put a lot of strain on disk storage.</p>
+<p>Cassandra’s storage engine was re-implemented for the 3.0 release,
+including a new format for SSTable files. The previous format stored a
+separate copy of the clustering columns as part of the record for each
+cell. The newer format eliminates this duplication, which reduces the
+size of stored data and simplifies the formula for computing that size.</p>
+<p>Keep in mind also that this estimate only counts a single replica of
+data. You will need to multiply the value obtained here by the number of
+partitions and the number of replicas specified by the keyspace’s
+replication strategy in order to determine the total required total
+capacity for each table. This will come in handy when you
+plan your cluster.</p>
+</div>
+<div class="section" id="breaking-up-large-partitions">
+<h2>Breaking Up Large Partitions<a class="headerlink" href="#breaking-up-large-partitions" title="Permalink to this headline">¶</a></h2>
+<p>As discussed previously, the goal is to design tables that can provide
+the data you need with queries that touch a single partition, or failing
+that, the minimum possible number of partitions. However, as shown in
+the examples, it is quite possible to design wide
+partition-style tables that approach Cassandra’s built-in limits.
+Performing sizing analysis on tables may reveal partitions that are
+potentially too large, either in number of values, size on disk, or
+both.</p>
+<p>The technique for splitting a large partition is straightforward: add an
+additional column to the partition key. In most cases, moving one of the
+existing columns into the partition key will be sufficient. Another
+option is to introduce an additional column to the table to act as a
+sharding key, but this requires additional application logic.</p>
+<p>Continuing to examine the available rooms example, if you add the <code class="docutils literal notranslate"><span class="pre">date</span></code>
+column to the partition key for the <code class="docutils literal notranslate"><span class="pre">available_rooms_by_hotel_date</span></code>
+table, each partition would then represent the availability of rooms
+at a specific hotel on a specific date. This will certainly yield
+partitions that are significantly smaller, perhaps too small, as the
+data for consecutive days will likely be on separate nodes.</p>
+<p>Another technique known as <strong>bucketing</strong> is often used to break the data
+into moderate-size partitions. For example, you could bucketize the
+<code class="docutils literal notranslate"><span class="pre">available_rooms_by_hotel_date</span></code> table by adding a <code class="docutils literal notranslate"><span class="pre">month</span></code> column to
+the partition key, perhaps represented as an integer. The comparision
+with the original design is shown in the figure below. While the
+<code class="docutils literal notranslate"><span class="pre">month</span></code> column is partially duplicative of the <code class="docutils literal notranslate"><span class="pre">date</span></code>, it provides
+a nice way of grouping related data in a partition that will not get
+too large.</p>
+<img alt="../_images/data_modeling_hotel_bucketing.png" src="../_images/data_modeling_hotel_bucketing.png" />
+<p>If you really felt strongly about preserving a wide partition design, you
+could instead add the <code class="docutils literal notranslate"><span class="pre">room_id</span></code> to the partition key, so that each
+partition would represent the availability of the room across all
+dates. Because there was no query identified that involves searching
+availability of a specific room, the first or second design approach
+is most suitable to the application needs.</p>
+<p><em>Material adapted from Cassandra, The Definitive Guide. Published by
+O’Reilly Media, Inc. Copyright © 2020 Jeff Carpenter, Eben Hewitt.
+All rights reserved. Used with permission.</em></p>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="data_modeling_schema.html" class="btn btn-default pull-right " role="button" title="Defining Database Schema" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="data_modeling_physical.html" class="btn btn-default" role="button" title="Physical Data Modeling" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-beta2/getting_started/installing.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha5" href="../index.html"/> <link rel="up" title="Getting Started" href="index.html"/> <link rel="next" title="Configuring Cassandra" href="configuring.html"/> <link rel="prev" title="Getting Started" href="index.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">Getting Started</a></li>
+      
+
+      
+      <li>Installing Cassandra</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Getting Started</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Installing Cassandra</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#choosing-an-installation-method">Choosing an installation method</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installing-the-binary-tarball">Installing the binary tarball</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installing-the-debian-packages">Installing the Debian packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installing-the-rpm-packages">Installing the RPM packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#further-installation-info">Further installation info</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="configuring.html">Configuring Cassandra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="querying.html">Inserting and querying</a></li>
+<li class="toctree-l2"><a class="reference internal" href="drivers.html">Client drivers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="production.html">Production Recommendations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="installing-cassandra">
+<h1>Installing Cassandra<a class="headerlink" href="#installing-cassandra" title="Permalink to this headline">¶</a></h1>
+<p>These are the instructions for deploying the supported releases of Apache Cassandra on Linux servers.</p>
+<p>Cassandra runs on a wide array of Linux distributions including (but not limited to):</p>
+<ul class="simple">
+<li>Ubuntu, most notably LTS releases 16.04 to 18.04</li>
+<li>CentOS &amp; RedHat Enterprise Linux (RHEL) including 6.6 to 7.7</li>
+<li>Amazon Linux AMIs including 2016.09 through to Linux 2</li>
+<li>Debian versions 8 &amp; 9</li>
+<li>SUSE Enterprise Linux 12</li>
+</ul>
+<p>This is not an exhaustive list of operating system platforms, nor is it prescriptive. However users will be
+well-advised to conduct exhaustive tests of their own particularly for less-popular distributions of Linux.
+Deploying on older versions is not recommended unless you have previous experience with the older distribution
+in a production environment.</p>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Install the latest version of Java 8, either the <a class="reference external" href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Oracle Java Standard Edition 8</a> or <a class="reference external" href="http://openjdk.java.net/">OpenJDK 8</a>. To
+verify that you have the correct version of java installed, type <code class="docutils literal notranslate"><span class="pre">java</span> <span class="pre">-version</span></code>.</li>
+<li><strong>NOTE</strong>: <em>Experimental</em> support for Java 11 was added in Cassandra 4.0 (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-9608">CASSANDRA-9608</a>).
+Running Cassandra on Java 11 is <em>experimental</em>. Do so at your own risk. For more information, see
+<a class="reference external" href="https://github.com/apache/cassandra/blob/trunk/NEWS.txt">NEWS.txt</a>.</li>
+<li>For using cqlsh, the latest version of <a class="reference external" href="https://www.python.org/downloads/">Python 2.7</a> or Python 3.6+. To verify that you have
+the correct version of Python installed, type <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">--version</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="choosing-an-installation-method">
+<h2>Choosing an installation method<a class="headerlink" href="#choosing-an-installation-method" title="Permalink to this headline">¶</a></h2>
+<p>For most users, installing the binary tarball is the simplest choice. The tarball unpacks all its contents
+into a single location with binaries and configuration files located in their own subdirectories. The most
+obvious attribute of the tarball installation is it does not require <code class="docutils literal notranslate"><span class="pre">root</span></code> permissions and can be
+installed on any Linux distribution.</p>
+<p>Packaged installations require <code class="docutils literal notranslate"><span class="pre">root</span></code> permissions. Install the RPM build on CentOS and RHEL-based
+distributions if you want to install Cassandra using YUM. Install the Debian build on Ubuntu and other
+Debian-based distributions if you want to install Cassandra using APT. Note that both the YUM and APT
+methods required <code class="docutils literal notranslate"><span class="pre">root</span></code> permissions and will install the binaries and configuration files as the
+<code class="docutils literal notranslate"><span class="pre">cassandra</span></code> OS user.</p>
+</div>
+<div class="section" id="installing-the-binary-tarball">
+<h2>Installing the binary tarball<a class="headerlink" href="#installing-the-binary-tarball" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Verify the version of Java installed. For example:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ java -version
+openjdk version &quot;1.8.0_222&quot;
+OpenJDK Runtime Environment (build 1.8.0_222-8u222-b10-1ubuntu1~16.04.1-b10)
+OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode)
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>Download the binary tarball from one of the mirrors on the <a class="reference external" href="http://cassandra.apache.org/download/">Apache Cassandra Download</a>
+site. For example, to download 4.0:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ curl -OL http://apache.mirror.digitalpacific.com.au/cassandra/4.0.0/apache-cassandra-4.0.0-bin.tar.gz
+</pre></div>
+</div>
+<p>NOTE: The mirrors only host the latest versions of each major supported release. To download an earlier
+version of Cassandra, visit the <a class="reference external" href="http://archive.apache.org/dist/cassandra/">Apache Archives</a>.</p>
+<ol class="arabic simple" start="3">
+<li>OPTIONAL: Verify the integrity of the downloaded tarball using one of the methods <a class="reference external" href="https://www.apache.org/dyn/closer.cgi#verify">here</a>.
+For example, to verify the hash of the downloaded file using GPG:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ gpg --print-md SHA256 apache-cassandra-4.0.0-bin.tar.gz
+apache-cassandra-4.0.0-bin.tar.gz: 28757DDE 589F7041 0F9A6A95 C39EE7E6
+                                   CDE63440 E2B06B91 AE6B2006 14FA364D
+</pre></div>
+</div>
+<p>Compare the signature with the SHA256 file from the Downloads site:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ curl -L https://downloads.apache.org/cassandra/4.0.0/apache-cassandra-4.0.0-bin.tar.gz.sha256
+28757dde589f70410f9a6a95c39ee7e6cde63440e2b06b91ae6b200614fa364d
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>Unpack the tarball:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ tar xzvf apache-cassandra-4.0.0-bin.tar.gz
+</pre></div>
+</div>
+<p>The files will be extracted to the <code class="docutils literal notranslate"><span class="pre">apache-cassandra-4.0.0/</span></code> directory. This is the tarball installation
+location.</p>
+<ol class="arabic simple" start="5">
+<li>Located in the tarball installation location are the directories for the scripts, binaries, utilities, configuration, data and log files:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;tarball_installation&gt;/
+    bin/
+    conf/
+    data/
+    doc/
+    interface/
+    javadoc/
+    lib/
+    logs/
+    pylib/
+    tools/
+</pre></div>
+</div>
+<p>For information on how to configure your installation, see
+<a class="reference external" href="http://cassandra.apache.org/doc/latest/getting_started/configuring.html">Configuring Cassandra</a>.</p>
+<ol class="arabic simple" start="6">
+<li>Start Cassandra:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cd apache-cassandra-4.0.0/
+$ bin/cassandra
+</pre></div>
+</div>
+<p>NOTE: This will run Cassandra as the authenticated Linux user.</p>
+<p>You can monitor the progress of the startup with:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ tail -f logs/system.log
+</pre></div>
+</div>
+<p>Cassandra is ready when you see an entry like this in the <code class="docutils literal notranslate"><span class="pre">system.log</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>INFO  [main] 2019-12-17 03:03:37,526 Server.java:156 - Starting listening for CQL clients on localhost/127.0.0.1:9042 (unencrypted)...
+</pre></div>
+</div>
+<ol class="arabic simple" start="7">
+<li>Check the status of Cassandra:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ bin/nodetool status
+</pre></div>
+</div>
+<p>The status column in the output should report UN which stands for “Up/Normal”.</p>
+<p>Alternatively, connect to the database with:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ bin/cqlsh
+</pre></div>
+</div>
+</div>
+<div class="section" id="installing-the-debian-packages">
+<h2>Installing the Debian packages<a class="headerlink" href="#installing-the-debian-packages" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Verify the version of Java installed. For example:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ java -version
+openjdk version &quot;1.8.0_222&quot;
+OpenJDK Runtime Environment (build 1.8.0_222-8u222-b10-1ubuntu1~16.04.1-b10)
+OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode)
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>Add the Apache repository of Cassandra to the file <code class="docutils literal notranslate"><span class="pre">cassandra.sources.list</span></code>. The latest major version
+is 4.0 and the corresponding distribution name is <code class="docutils literal notranslate"><span class="pre">40x</span></code> (with an “x” as the suffix).
+For older releases use <code class="docutils literal notranslate"><span class="pre">311x</span></code> for C* 3.11 series, <code class="docutils literal notranslate"><span class="pre">30x</span></code> for 3.0, <code class="docutils literal notranslate"><span class="pre">22x</span></code> for 2.2 and <code class="docutils literal notranslate"><span class="pre">21x</span></code> for 2.1.
+For example, to add the repository for version 4.0 (<code class="docutils literal notranslate"><span class="pre">40x</span></code>):</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ echo &quot;deb http://www.apache.org/dist/cassandra/debian 40x main&quot; | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list
+deb http://www.apache.org/dist/cassandra/debian 40x main
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>Add the Apache Cassandra repository keys to the list of trusted keys on the server:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ curl https://www.apache.org/dist/cassandra/KEYS | sudo apt-key add -
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  266k  100  266k    0     0   320k      0 --:--:-- --:--:-- --:--:--  320k
+OK
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>Update the package index from sources:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get update
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li>Install Cassandra with APT:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install cassandra
+</pre></div>
+</div>
+<p>NOTE: A new Linux user <code class="docutils literal notranslate"><span class="pre">cassandra</span></code> will get created as part of the installation. The Cassandra service
+will also be run as this user.</p>
+<ol class="arabic simple" start="6">
+<li>The Cassandra service gets started automatically after installation. Monitor the progress of
+the startup with:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ tail -f /var/log/cassandra/system.log
+</pre></div>
+</div>
+<p>Cassandra is ready when you see an entry like this in the <code class="docutils literal notranslate"><span class="pre">system.log</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>INFO  [main] 2019-12-17 03:03:37,526 Server.java:156 - Starting listening for CQL clients on localhost/127.0.0.1:9042 (unencrypted)...
+</pre></div>
+</div>
+<p>NOTE: For information on how to configure your installation, see
+<a class="reference external" href="http://cassandra.apache.org/doc/latest/getting_started/configuring.html">Configuring Cassandra</a>.</p>
+<ol class="arabic simple" start="7">
+<li>Check the status of Cassandra:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ nodetool status
+</pre></div>
+</div>
+<p>The status column in the output should report <code class="docutils literal notranslate"><span class="pre">UN</span></code> which stands for “Up/Normal”.</p>
+<p>Alternatively, connect to the database with:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cqlsh
+</pre></div>
+</div>
+</div>
+<div class="section" id="installing-the-rpm-packages">
+<h2>Installing the RPM packages<a class="headerlink" href="#installing-the-rpm-packages" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Verify the version of Java installed. For example:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ java -version
+openjdk version &quot;1.8.0_222&quot;
+OpenJDK Runtime Environment (build 1.8.0_232-b09)
+OpenJDK 64-Bit Server VM (build 25.232-b09, mixed mode)
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>Add the Apache repository of Cassandra to the file <code class="docutils literal notranslate"><span class="pre">/etc/yum.repos.d/cassandra.repo</span></code> (as the <code class="docutils literal notranslate"><span class="pre">root</span></code>
+user). The latest major version is 4.0 and the corresponding distribution name is <code class="docutils literal notranslate"><span class="pre">40x</span></code> (with an “x” as the suffix).
+For older releases use <code class="docutils literal notranslate"><span class="pre">311x</span></code> for C* 3.11 series, <code class="docutils literal notranslate"><span class="pre">30x</span></code> for 3.0, <code class="docutils literal notranslate"><span class="pre">22x</span></code> for 2.2 and <code class="docutils literal notranslate"><span class="pre">21x</span></code> for 2.1.
+For example, to add the repository for version 4.0 (<code class="docutils literal notranslate"><span class="pre">40x</span></code>):</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[cassandra]
+name=Apache Cassandra
+baseurl=https://downloads.apache.org/cassandra/redhat/40x/
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://downloads.apache.org/cassandra/KEYS
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>Update the package index from sources:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ sudo yum update
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>Install Cassandra with YUM:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ sudo yum install cassandra
+</pre></div>
+</div>
+<p>NOTE: A new Linux user <code class="docutils literal notranslate"><span class="pre">cassandra</span></code> will get created as part of the installation. The Cassandra service
+will also be run as this user.</p>
+<ol class="arabic simple" start="5">
+<li>Start the Cassandra service:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ sudo service cassandra start
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li>Monitor the progress of the startup with:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ tail -f /var/log/cassandra/system.log
+</pre></div>
+</div>
+<p>Cassandra is ready when you see an entry like this in the <code class="docutils literal notranslate"><span class="pre">system.log</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>INFO  [main] 2019-12-17 03:03:37,526 Server.java:156 - Starting listening for CQL clients on localhost/127.0.0.1:9042 (unencrypted)...
+</pre></div>
+</div>
+<p>NOTE: For information on how to configure your installation, see
+<a class="reference external" href="http://cassandra.apache.org/doc/latest/getting_started/configuring.html">Configuring Cassandra</a>.</p>
+<ol class="arabic simple" start="7">
+<li>Check the status of Cassandra:</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ nodetool status
+</pre></div>
+</div>
+<p>The status column in the output should report <code class="docutils literal notranslate"><span class="pre">UN</span></code> which stands for “Up/Normal”.</p>
+<p>Alternatively, connect to the database with:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cqlsh
+</pre></div>
+</div>
+</div>
+<div class="section" id="further-installation-info">
+<h2>Further installation info<a class="headerlink" href="#further-installation-info" title="Permalink to this headline">¶</a></h2>
+<p>For help with installation issues, see the <a class="reference external" href="http://cassandra.apache.org/doc/latest/troubleshooting/index.html">Troubleshooting</a> section.</p>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="configuring.html" class="btn btn-default pull-right " role="button" title="Configuring Cassandra" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="index.html" class="btn btn-default" role="button" title="Getting Started" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

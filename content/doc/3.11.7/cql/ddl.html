@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/3.11.7/cql/ddl.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v3.11.7" href="../index.html"/> <link rel="up" title="The Cassandra Query Language (CQL)" href="index.html"/> <link rel="next" title="Data Manipulation" href="dml.html"/> <link rel="prev" title="Data Types" href="types.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">The Cassandra Query Language (CQL)</a></li>
+      
+
+      
+      <li>Data Definition</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">The Cassandra Query Language (CQL)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="definitions.html">Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">Data Types</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Data Definition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#common-definitions">Common definitions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-keyspace">CREATE KEYSPACE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#use">USE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#alter-keyspace">ALTER KEYSPACE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#drop-keyspace">DROP KEYSPACE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-table">CREATE TABLE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#alter-table">ALTER TABLE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#drop-table">DROP TABLE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#truncate">TRUNCATE</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dml.html">Data Manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indexes.html">Secondary Indexes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mvs.html">Materialized Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json.html">JSON Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triggers.html">Triggers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendices.html">Appendices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html">Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="data-definition">
+<span id="id1"></span><h1>Data Definition<a class="headerlink" href="#data-definition" title="Permalink to this headline">¶</a></h1>
+<p>CQL stores data in <em>tables</em>, whose schema defines the layout of said data in the table, and those tables are grouped in
+<em>keyspaces</em>. A keyspace defines a number of options that applies to all the tables it contains, most prominently of
+which is the <a class="reference internal" href="../architecture/dynamo.html#replication-strategy"><span class="std std-ref">replication strategy</span></a> used by the keyspace. It is generally encouraged to use
+one keyspace by <em>application</em>, and thus many cluster may define only one keyspace.</p>
+<p>This section describes the statements used to create, modify, and remove those keyspace and tables.</p>
+<div class="section" id="common-definitions">
+<h2>Common definitions<a class="headerlink" href="#common-definitions" title="Permalink to this headline">¶</a></h2>
+<p>The names of the keyspaces and tables are defined by the following grammar:</p>
+<pre>
+<strong id="grammar-token-keyspace-name">keyspace_name</strong> ::=  <a class="reference internal" href="#grammar-token-name"><code class="xref docutils literal notranslate"><span class="pre">name</span></code></a>
+<strong id="grammar-token-table-name">table_name   </strong> ::=  [ <a class="reference internal" href="#grammar-token-keyspace-name"><code class="xref docutils literal notranslate"><span class="pre">keyspace_name</span></code></a> '.' ] <a class="reference internal" href="#grammar-token-name"><code class="xref docutils literal notranslate"><span class="pre">name</span></code></a>
+<strong id="grammar-token-name">name         </strong> ::=  <a class="reference internal" href="#grammar-token-unquoted-name"><code class="xref docutils literal notranslate"><span class="pre">unquoted_name</span></code></a> | <a class="reference internal" href="#grammar-token-quoted-name"><code class="xref docutils literal notranslate"><span class="pre">quoted_name</span></code></a>
+<strong id="grammar-token-unquoted-name">unquoted_name</strong> ::=  re('[a-zA-Z_0-9]{1, 48}')
+<strong id="grammar-token-quoted-name">quoted_name  </strong> ::=  '&quot;' <a class="reference internal" href="#grammar-token-unquoted-name"><code class="xref docutils literal notranslate"><span class="pre">unquoted_name</span></code></a> '&quot;'
+</pre>
+<p>Both keyspace and table name should be comprised of only alphanumeric characters, cannot be empty and are limited in
+size to 48 characters (that limit exists mostly to avoid filenames (which may include the keyspace and table name) to go
+over the limits of certain file systems). By default, keyspace and table names are case insensitive (<code class="docutils literal notranslate"><span class="pre">myTable</span></code> is
+equivalent to <code class="docutils literal notranslate"><span class="pre">mytable</span></code>) but case sensitivity can be forced by using double-quotes (<code class="docutils literal notranslate"><span class="pre">&quot;myTable&quot;</span></code> is different from
+<code class="docutils literal notranslate"><span class="pre">mytable</span></code>).</p>
+<p>Further, a table is always part of a keyspace and a table name can be provided fully-qualified by the keyspace it is
+part of. If is is not fully-qualified, the table is assumed to be in the <em>current</em> keyspace (see <a class="reference internal" href="#use-statement"><span class="std std-ref">USE statement</span></a>).</p>
+<p>Further, the valid names for columns is simply defined as:</p>
+<pre>
+<strong id="grammar-token-column-name">column_name</strong> ::=  <a class="reference internal" href="definitions.html#grammar-token-identifier"><code class="xref docutils literal notranslate"><span class="pre">identifier</span></code></a>
+</pre>
+<p>We also define the notion of statement options for use in the following section:</p>
+<pre>
+<strong id="grammar-token-options">options</strong> ::=  <a class="reference internal" href="#grammar-token-option"><code class="xref docutils literal notranslate"><span class="pre">option</span></code></a> ( AND <a class="reference internal" href="#grammar-token-option"><code class="xref docutils literal notranslate"><span class="pre">option</span></code></a> )*
+<strong id="grammar-token-option">option </strong> ::=  <a class="reference internal" href="definitions.html#grammar-token-identifier"><code class="xref docutils literal notranslate"><span class="pre">identifier</span></code></a> '=' ( <a class="reference internal" href="definitions.html#grammar-token-identifier"><code class="xref docutils literal notranslate"><span class="pre">identifier</span></code></a> | <a class="reference internal" href="definitions.html#grammar-token-constant"><code class="xref docutils literal notranslate"><span class="pre">constant</span></code></a> | <a class="reference internal" href="types.html#grammar-token-map-literal"><code class="xref docutils literal notranslate"><span class="pre">map_literal</span></code></a> )
+</pre>
+</div>
+<div class="section" id="create-keyspace">
+<span id="create-keyspace-statement"></span><h2>CREATE KEYSPACE<a class="headerlink" href="#create-keyspace" title="Permalink to this headline">¶</a></h2>
+<p>A keyspace is created using a <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">KEYSPACE</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-create-keyspace-statement">create_keyspace_statement</strong> ::=  CREATE KEYSPACE [ IF NOT EXISTS ] <a class="reference internal" href="#grammar-token-keyspace-name"><code class="xref docutils literal notranslate"><span class="pre">keyspace_name</span></code></a> WITH <a class="reference internal" href="#grammar-token-options"><code class="xref docutils literal notranslate"><span class="pre">options</span></code></a>
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">KEYSPACE</span> <span class="n">Excelsior</span>
+           <span class="k">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;SimpleStrategy&#39;</span><span class="p">,</span> <span class="s1">&#39;replication_factor&#39;</span> <span class="p">:</span> <span class="mf">3</span><span class="p">};</span>
+
+<span class="k">CREATE</span> <span class="k">KEYSPACE</span> <span class="n">Excalibur</span>
+           <span class="k">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;NetworkTopologyStrategy&#39;</span><span class="p">,</span> <span class="s1">&#39;DC1&#39;</span> <span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s1">&#39;DC2&#39;</span> <span class="p">:</span> <span class="mf">3</span><span class="p">}</span>
+            <span class="k">AND</span> <span class="n">durable_writes</span> <span class="o">=</span> <span class="n">false</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The supported <code class="docutils literal notranslate"><span class="pre">options</span></code> are:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="16%" />
+<col width="9%" />
+<col width="9%" />
+<col width="8%" />
+<col width="58%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">name</th>
+<th class="head">kind</th>
+<th class="head">mandatory</th>
+<th class="head">default</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">replication</span></code></td>
+<td><em>map</em></td>
+<td>yes</td>
+<td>&#160;</td>
+<td>The replication strategy and options to use for the keyspace (see
+details below).</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">durable_writes</span></code></td>
+<td><em>simple</em></td>
+<td>no</td>
+<td>true</td>
+<td>Whether to use the commit log for updates on this keyspace
+(disable this option at your own risk!).</td>
+</tr>
+</tbody>
+</table>
+<p>The <code class="docutils literal notranslate"><span class="pre">replication</span></code> property is mandatory and must at least contains the <code class="docutils literal notranslate"><span class="pre">'class'</span></code> sub-option which defines the
+<a class="reference internal" href="../architecture/dynamo.html#replication-strategy"><span class="std std-ref">replication strategy</span></a> class to use. The rest of the sub-options depends on what replication
+strategy is used. By default, Cassandra support the following <code class="docutils literal notranslate"><span class="pre">'class'</span></code>:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">'SimpleStrategy'</span></code>: A simple strategy that defines a replication factor for the whole cluster. The only sub-options
+supported is <code class="docutils literal notranslate"><span class="pre">'replication_factor'</span></code> to define that replication factor and is mandatory.</li>
+<li><code class="docutils literal notranslate"><span class="pre">'NetworkTopologyStrategy'</span></code>: A replication strategy that allows to set the replication factor independently for
+each data-center. The rest of the sub-options are key-value pairs where a key is a data-center name and its value is
+the associated replication factor.</li>
+</ul>
+<p>Attempting to create a keyspace that already exists will return an error unless the <code class="docutils literal notranslate"><span class="pre">IF</span> <span class="pre">NOT</span> <span class="pre">EXISTS</span></code> option is used. If
+it is used, the statement will be a no-op if the keyspace already exists.</p>
+</div>
+<div class="section" id="use">
+<span id="use-statement"></span><h2>USE<a class="headerlink" href="#use" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">USE</span></code> statement allows to change the <em>current</em> keyspace (for the <em>connection</em> on which it is executed). A number
+of objects in CQL are bound to a keyspace (tables, user-defined types, functions, …) and the current keyspace is the
+default keyspace used when those objects are referred without a fully-qualified name (that is, without being prefixed a
+keyspace name). A <code class="docutils literal notranslate"><span class="pre">USE</span></code> statement simply takes the keyspace to use as current as argument:</p>
+<pre>
+<strong id="grammar-token-use-statement">use_statement</strong> ::=  USE <a class="reference internal" href="#grammar-token-keyspace-name"><code class="xref docutils literal notranslate"><span class="pre">keyspace_name</span></code></a>
+</pre>
+</div>
+<div class="section" id="alter-keyspace">
+<span id="alter-keyspace-statement"></span><h2>ALTER KEYSPACE<a class="headerlink" href="#alter-keyspace" title="Permalink to this headline">¶</a></h2>
+<p>An <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">KEYSPACE</span></code> statement allows to modify the options of a keyspace:</p>
+<pre>
+<strong id="grammar-token-alter-keyspace-statement">alter_keyspace_statement</strong> ::=  ALTER KEYSPACE <a class="reference internal" href="#grammar-token-keyspace-name"><code class="xref docutils literal notranslate"><span class="pre">keyspace_name</span></code></a> WITH <a class="reference internal" href="#grammar-token-options"><code class="xref docutils literal notranslate"><span class="pre">options</span></code></a>
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">ALTER</span> <span class="k">KEYSPACE</span> <span class="n">Excelsior</span>
+          <span class="k">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;SimpleStrategy&#39;</span><span class="p">,</span> <span class="s1">&#39;replication_factor&#39;</span> <span class="p">:</span> <span class="mf">4</span><span class="p">};</span>
+</pre></div>
+</div>
+<p>The supported options are the same than for <a class="reference internal" href="#create-keyspace-statement"><span class="std std-ref">creating a keyspace</span></a>.</p>
+</div>
+<div class="section" id="drop-keyspace">
+<span id="drop-keyspace-statement"></span><h2>DROP KEYSPACE<a class="headerlink" href="#drop-keyspace" title="Permalink to this headline">¶</a></h2>
+<p>Dropping a keyspace can be done using the <code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">KEYSPACE</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-drop-keyspace-statement">drop_keyspace_statement</strong> ::=  DROP KEYSPACE [ IF EXISTS ] <a class="reference internal" href="#grammar-token-keyspace-name"><code class="xref docutils literal notranslate"><span class="pre">keyspace_name</span></code></a>
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">DROP</span> <span class="k">KEYSPACE</span> <span class="n">Excelsior</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Dropping a keyspace results in the immediate, irreversible removal of that keyspace, including all the tables, UTD and
+functions in it, and all the data contained in those tables.</p>
+<p>If the keyspace does not exists, the statement will return an error, unless <code class="docutils literal notranslate"><span class="pre">IF</span> <span class="pre">EXISTS</span></code> is used in which case the
+operation is a no-op.</p>
+</div>
+<div class="section" id="create-table">
+<span id="create-table-statement"></span><h2>CREATE TABLE<a class="headerlink" href="#create-table" title="Permalink to this headline">¶</a></h2>
+<p>Creating a new table uses the <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">TABLE</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-create-table-statement">create_table_statement</strong> ::=  CREATE TABLE [ IF NOT EXISTS ] <a class="reference internal" href="#grammar-token-table-name"><code class="xref docutils literal notranslate"><span class="pre">table_name</span></code></a>
+                            '('
+                                <a class="reference internal" href="#grammar-token-column-definition"><code class="xref docutils literal notranslate"><span class="pre">column_definition</span></code></a>
+                                ( ',' <a class="reference internal" href="#grammar-token-column-definition"><code class="xref docutils literal notranslate"><span class="pre">column_definition</span></code></a> )*
+                                [ ',' PRIMARY KEY '(' <a class="reference internal" href="#grammar-token-primary-key"><code class="xref docutils literal notranslate"><span class="pre">primary_key</span></code></a> ')' ]
+                            ')' [ WITH <a class="reference internal" href="#grammar-token-table-options"><code class="xref docutils literal notranslate"><span class="pre">table_options</span></code></a> ]
+<strong id="grammar-token-column-definition">column_definition     </strong> ::=  <a class="reference internal" href="#grammar-token-column-name"><code class="xref docutils literal notranslate"><span class="pre">column_name</span></code></a> <a class="reference internal" href="types.html#grammar-token-cql-type"><code class="xref docutils literal notranslate"><span class="pre">cql_type</span></code></a> [ STATIC ] [ PRIMARY KEY]
+<strong id="grammar-token-primary-key">primary_key           </strong> ::=  <a class="reference internal" href="#grammar-token-partition-key"><code class="xref docutils literal notranslate"><span class="pre">partition_key</span></code></a> [ ',' <a class="reference internal" href="#grammar-token-clustering-columns"><code class="xref docutils literal notranslate"><span class="pre">clustering_columns</span></code></a> ]
+<strong id="grammar-token-partition-key">partition_key         </strong> ::=  <a class="reference internal" href="#grammar-token-column-name"><code class="xref docutils literal notranslate"><span class="pre">column_name</span></code></a>
+                            | '(' <a class="reference internal" href="#grammar-token-column-name"><code class="xref docutils literal notranslate"><span class="pre">column_name</span></code></a> ( ',' <a class="reference internal" href="#grammar-token-column-name"><code class="xref docutils literal notranslate"><span class="pre">column_name</span></code></a> )* ')'
+<strong id="grammar-token-clustering-columns">clustering_columns    </strong> ::=  <a class="reference internal" href="#grammar-token-column-name"><code class="xref docutils literal notranslate"><span class="pre">column_name</span></code></a> ( ',' <a class="reference internal" href="#grammar-token-column-name"><code class="xref docutils literal notranslate"><span class="pre">column_name</span></code></a> )*
+<strong id="grammar-token-table-options">table_options         </strong> ::=  COMPACT STORAGE [ AND <a class="reference internal" href="#grammar-token-table-options"><code class="xref docutils literal notranslate"><span class="pre">table_options</span></code></a> ]
+                            | CLUSTERING ORDER BY '(' <a class="reference internal" href="#grammar-token-clustering-order"><code class="xref docutils literal notranslate"><span class="pre">clustering_order</span></code></a> ')' [ AND <a class="reference internal" href="#grammar-token-table-options"><code class="xref docutils literal notranslate"><span class="pre">table_options</span></code></a> ]
+                            | <a class="reference internal" href="#grammar-token-options"><code class="xref docutils literal notranslate"><span class="pre">options</span></code></a>
+<strong id="grammar-token-clustering-order">clustering_order      </strong> ::=  <a class="reference internal" href="#grammar-token-column-name"><code class="xref docutils literal notranslate"><span class="pre">column_name</span></code></a> (ASC | DESC) ( ',' <a class="reference internal" href="#grammar-token-column-name"><code class="xref docutils literal notranslate"><span class="pre">column_name</span></code></a> (ASC | DESC) )*
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">monkeySpecies</span> <span class="p">(</span>
+    <span class="n">species</span> <span class="nb">text</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+    <span class="n">common_name</span> <span class="nb">text</span><span class="p">,</span>
+    <span class="n">population</span> <span class="nb">varint</span><span class="p">,</span>
+    <span class="n">average_size</span> <span class="nb">int</span>
+<span class="p">)</span> <span class="k">WITH</span> <span class="n">comment</span><span class="o">=</span><span class="s1">&#39;Important biological records&#39;</span>
+   <span class="k">AND</span> <span class="n">read_repair_chance</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">timeline</span> <span class="p">(</span>
+    <span class="n">userid</span> <span class="nb">uuid</span><span class="p">,</span>
+    <span class="n">posted_month</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">posted_time</span> <span class="nb">uuid</span><span class="p">,</span>
+    <span class="n">body</span> <span class="nb">text</span><span class="p">,</span>
+    <span class="n">posted_by</span> <span class="nb">text</span><span class="p">,</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">userid</span><span class="p">,</span> <span class="n">posted_month</span><span class="p">,</span> <span class="n">posted_time</span><span class="p">)</span>
+<span class="p">)</span> <span class="k">WITH</span> <span class="n">compaction</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;class&#39;</span> <span class="p">:</span> <span class="s1">&#39;LeveledCompactionStrategy&#39;</span> <span class="p">};</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">loads</span> <span class="p">(</span>
+    <span class="n">machine</span> <span class="nb">inet</span><span class="p">,</span>
+    <span class="n">cpu</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">mtime</span> <span class="nb">timeuuid</span><span class="p">,</span>
+    <span class="n">load</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">((</span><span class="n">machine</span><span class="p">,</span> <span class="n">cpu</span><span class="p">),</span> <span class="n">mtime</span><span class="p">)</span>
+<span class="p">)</span> <span class="k">WITH</span> <span class="k">CLUSTERING</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="p">(</span><span class="n">mtime</span> <span class="k">DESC</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>A CQL table has a name and is composed of a set of <em>rows</em>. Creating a table amounts to defining which <a class="reference internal" href="#column-definition"><span class="std std-ref">columns</span></a> the rows will be composed, which of those columns compose the <a class="reference internal" href="#primary-key"><span class="std std-ref">primary key</span></a>, as
+well as optional <a class="reference internal" href="#create-table-options"><span class="std std-ref">options</span></a> for the table.</p>
+<p>Attempting to create an already existing table will return an error unless the <code class="docutils literal notranslate"><span class="pre">IF</span> <span class="pre">NOT</span> <span class="pre">EXISTS</span></code> directive is used. If
+it is used, the statement will be a no-op if the table already exists.</p>
+<div class="section" id="column-definitions">
+<span id="column-definition"></span><h3>Column definitions<a class="headerlink" href="#column-definitions" title="Permalink to this headline">¶</a></h3>
+<p>Every rows in a CQL table has a set of predefined columns defined at the time of the table creation (or added later
+using an <a class="reference internal" href="#alter-table-statement"><span class="std std-ref">alter statement</span></a>).</p>
+<p>A <a class="reference internal" href="#grammar-token-column-definition"><code class="xref std std-token docutils literal notranslate"><span class="pre">column_definition</span></code></a> is primarily comprised of the name of the column defined and it’s <a class="reference internal" href="types.html#data-types"><span class="std std-ref">type</span></a>,
+which restrict which values are accepted for that column. Additionally, a column definition can have the following
+modifiers:</p>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">STATIC</span></code></dt>
+<dd>it declares the column as being a <a class="reference internal" href="#static-columns"><span class="std std-ref">static column</span></a>.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PRIMARY</span> <span class="pre">KEY</span></code></dt>
+<dd>it declares the column as being the sole component of the <a class="reference internal" href="#primary-key"><span class="std std-ref">primary key</span></a> of the table.</dd>
+</dl>
+<div class="section" id="static-columns">
+<span id="id2"></span><h4>Static columns<a class="headerlink" href="#static-columns" title="Permalink to this headline">¶</a></h4>
+<p>Some columns can be declared as <code class="docutils literal notranslate"><span class="pre">STATIC</span></code> in a table definition. A column that is static will be “shared” by all the
+rows belonging to the same partition (having the same <a class="reference internal" href="#partition-key"><span class="std std-ref">partition key</span></a>). For instance:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t</span> <span class="p">(</span>
+    <span class="n">pk</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">t</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">v</span> <span class="nb">text</span><span class="p">,</span>
+    <span class="n">s</span> <span class="nb">text</span> <span class="k">static</span><span class="p">,</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">pk</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+<span class="p">);</span>
+
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">t</span> <span class="p">(</span><span class="n">pk</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mf">0</span><span class="p">,</span> <span class="mf">0</span><span class="p">,</span> <span class="s1">&#39;val0&#39;</span><span class="p">,</span> <span class="s1">&#39;static0&#39;</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">t</span> <span class="p">(</span><span class="n">pk</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mf">0</span><span class="p">,</span> <span class="mf">1</span><span class="p">,</span> <span class="s1">&#39;val1&#39;</span><span class="p">,</span> <span class="s1">&#39;static1&#39;</span><span class="p">);</span>
+
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">t</span><span class="p">;</span>
+   <span class="n">pk</span> <span class="o">|</span> <span class="n">t</span> <span class="o">|</span> <span class="n">v</span>      <span class="o">|</span> <span class="n">s</span>
+  <span class="c1">----+---+--------+-----------</span>
+   <span class="mf">0</span>  <span class="o">|</span> <span class="mf">0</span> <span class="o">|</span> <span class="s1">&#39;val0&#39;</span> <span class="o">|</span> <span class="s1">&#39;static1&#39;</span>
+   <span class="mf">0</span>  <span class="o">|</span> <span class="mf">1</span> <span class="o">|</span> <span class="s1">&#39;val1&#39;</span> <span class="o">|</span> <span class="s1">&#39;static1&#39;</span>
+</pre></div>
+</div>
+<p>As can be seen, the <code class="docutils literal notranslate"><span class="pre">s</span></code> value is the same (<code class="docutils literal notranslate"><span class="pre">static1</span></code>) for both of the row in the partition (the partition key in
+that example being <code class="docutils literal notranslate"><span class="pre">pk</span></code>, both rows are in that same partition): the 2nd insertion has overridden the value for <code class="docutils literal notranslate"><span class="pre">s</span></code>.</p>
+<p>The use of static columns as the following restrictions:</p>
+<ul class="simple">
+<li>tables with the <code class="docutils literal notranslate"><span class="pre">COMPACT</span> <span class="pre">STORAGE</span></code> option (see below) cannot use them.</li>
+<li>a table without clustering columns cannot have static columns (in a table without clustering columns, every partition
+has only one row, and so every column is inherently static).</li>
+<li>only non <code class="docutils literal notranslate"><span class="pre">PRIMARY</span> <span class="pre">KEY</span></code> columns can be static.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="the-primary-key">
+<span id="primary-key"></span><h3>The Primary key<a class="headerlink" href="#the-primary-key" title="Permalink to this headline">¶</a></h3>
+<p>Within a table, a row is uniquely identified by its <code class="docutils literal notranslate"><span class="pre">PRIMARY</span> <span class="pre">KEY</span></code>, and hence all table <strong>must</strong> define a PRIMARY KEY
+(and only one). A <code class="docutils literal notranslate"><span class="pre">PRIMARY</span> <span class="pre">KEY</span></code> definition is composed of one or more of the columns defined in the table.
+Syntactically, the primary key is defined the keywords <code class="docutils literal notranslate"><span class="pre">PRIMARY</span> <span class="pre">KEY</span></code> followed by comma-separated list of the column
+names composing it within parenthesis, but if the primary key has only one column, one can alternatively follow that
+column definition by the <code class="docutils literal notranslate"><span class="pre">PRIMARY</span> <span class="pre">KEY</span></code> keywords. The order of the columns in the primary key definition matter.</p>
+<p>A CQL primary key is composed of 2 parts:</p>
+<ul>
+<li><p class="first">the <a class="reference internal" href="#partition-key"><span class="std std-ref">partition key</span></a> part. It is the first component of the primary key definition. It can be a
+single column or, using additional parenthesis, can be multiple columns. A table always have at least a partition key,
+the smallest possible table definition is:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t</span> <span class="p">(</span><span class="n">k</span> <span class="nb">text</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">the <a class="reference internal" href="#clustering-columns"><span class="std std-ref">clustering columns</span></a>. Those are the columns after the first component of the primary key
+definition, and the order of those columns define the <em>clustering order</em>.</p>
+</li>
+</ul>
+<p>Some example of primary key definition are:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">PRIMARY</span> <span class="pre">KEY</span> <span class="pre">(a)</span></code>: <code class="docutils literal notranslate"><span class="pre">a</span></code> is the partition key and there is no clustering columns.</li>
+<li><code class="docutils literal notranslate"><span class="pre">PRIMARY</span> <span class="pre">KEY</span> <span class="pre">(a,</span> <span class="pre">b,</span> <span class="pre">c)</span></code> : <code class="docutils literal notranslate"><span class="pre">a</span></code> is the partition key and <code class="docutils literal notranslate"><span class="pre">b</span></code> and <code class="docutils literal notranslate"><span class="pre">c</span></code> are the clustering columns.</li>
+<li><code class="docutils literal notranslate"><span class="pre">PRIMARY</span> <span class="pre">KEY</span> <span class="pre">((a,</span> <span class="pre">b),</span> <span class="pre">c)</span></code> : <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> compose the partition key (this is often called a <em>composite</em> partition
+key) and <code class="docutils literal notranslate"><span class="pre">c</span></code> is the clustering column.</li>
+</ul>
+<div class="section" id="the-partition-key">
+<span id="partition-key"></span><h4>The partition key<a class="headerlink" href="#the-partition-key" title="Permalink to this headline">¶</a></h4>
+<p>Within a table, CQL defines the notion of a <em>partition</em>. A partition is simply the set of rows that share the same value
+for their partition key. Note that if the partition key is composed of multiple columns, then rows belong to the same
+partition only they have the same values for all those partition key column. So for instance, given the following table
+definition and content:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t</span> <span class="p">(</span>
+    <span class="n">a</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">b</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">c</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">d</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">((</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+<span class="p">);</span>
+
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">t</span><span class="p">;</span>
+   <span class="n">a</span> <span class="o">|</span> <span class="n">b</span> <span class="o">|</span> <span class="n">c</span> <span class="o">|</span> <span class="n">d</span>
+  <span class="c1">---+---+---+---</span>
+   <span class="mf">0</span> <span class="o">|</span> <span class="mf">0</span> <span class="o">|</span> <span class="mf">0</span> <span class="o">|</span> <span class="mf">0</span>    <span class="c1">// row 1</span>
+   <span class="mf">0</span> <span class="o">|</span> <span class="mf">0</span> <span class="o">|</span> <span class="mf">1</span> <span class="o">|</span> <span class="mf">1</span>    <span class="c1">// row 2</span>
+   <span class="mf">0</span> <span class="o">|</span> <span class="mf">1</span> <span class="o">|</span> <span class="mf">2</span> <span class="o">|</span> <span class="mf">2</span>    <span class="c1">// row 3</span>
+   <span class="mf">0</span> <span class="o">|</span> <span class="mf">1</span> <span class="o">|</span> <span class="mf">3</span> <span class="o">|</span> <span class="mf">3</span>    <span class="c1">// row 4</span>
+   <span class="mf">1</span> <span class="o">|</span> <span class="mf">1</span> <span class="o">|</span> <span class="mf">4</span> <span class="o">|</span> <span class="mf">4</span>    <span class="c1">// row 5</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">row</span> <span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">row</span> <span class="pre">2</span></code> are in the same partition, <code class="docutils literal notranslate"><span class="pre">row</span> <span class="pre">3</span></code> and <code class="docutils literal notranslate"><span class="pre">row</span> <span class="pre">4</span></code> are also in the same partition (but a
+different one) and <code class="docutils literal notranslate"><span class="pre">row</span> <span class="pre">5</span></code> is in yet another partition.</p>
+<p>Note that a table always has a partition key, and that if the table has no <a class="reference internal" href="#clustering-columns"><span class="std std-ref">clustering columns</span></a>, then every partition of that table is only comprised of a single row (since the primary key
+uniquely identifies rows and the primary key is equal to the partition key if there is no clustering columns).</p>
+<p>The most important property of partition is that all the rows belonging to the same partition are guarantee to be stored
+on the same set of replica nodes. In other words, the partition key of a table defines which of the rows will be
+localized together in the Cluster, and it is thus important to choose your partition key wisely so that rows that needs
+to be fetch together are in the same partition (so that querying those rows together require contacting a minimum of
+nodes).</p>
+<p>Please note however that there is a flip-side to this guarantee: as all rows sharing a partition key are guaranteed to
+be stored on the same set of replica node, a partition key that groups too much data can create a hotspot.</p>
+<p>Another useful property of a partition is that when writing data, all the updates belonging to a single partition are
+done <em>atomically</em> and in <em>isolation</em>, which is not the case across partitions.</p>
+<p>The proper choice of the partition key and clustering columns for a table is probably one of the most important aspect
+of data modeling in Cassandra, and it largely impact which queries can be performed, and how efficiently they are.</p>
+</div>
+<div class="section" id="the-clustering-columns">
+<span id="clustering-columns"></span><h4>The clustering columns<a class="headerlink" href="#the-clustering-columns" title="Permalink to this headline">¶</a></h4>
+<p>The clustering columns of a table defines the clustering order for the partition of that table. For a given
+<a class="reference internal" href="#partition-key"><span class="std std-ref">partition</span></a>, all the rows are physically ordered inside Cassandra by that clustering order. For
+instance, given:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t</span> <span class="p">(</span>
+    <span class="n">a</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">b</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">c</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+<span class="p">);</span>
+
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">t</span><span class="p">;</span>
+   <span class="n">a</span> <span class="o">|</span> <span class="n">b</span> <span class="o">|</span> <span class="n">c</span>
+  <span class="c1">---+---+---</span>
+   <span class="mf">0</span> <span class="o">|</span> <span class="mf">0</span> <span class="o">|</span> <span class="mf">4</span>     <span class="c1">// row 1</span>
+   <span class="mf">0</span> <span class="o">|</span> <span class="mf">1</span> <span class="o">|</span> <span class="mf">9</span>     <span class="c1">// row 2</span>
+   <span class="mf">0</span> <span class="o">|</span> <span class="mf">2</span> <span class="o">|</span> <span class="mf">2</span>     <span class="c1">// row 3</span>
+   <span class="mf">0</span> <span class="o">|</span> <span class="mf">3</span> <span class="o">|</span> <span class="mf">3</span>     <span class="c1">// row 4</span>
+</pre></div>
+</div>
+<p>then the rows (which all belong to the same partition) are all stored internally in the order of the values of their
+<code class="docutils literal notranslate"><span class="pre">b</span></code> column (the order they are displayed above). So where the partition key of the table allows to group rows on the
+same replica set, the clustering columns controls how those rows are stored on the replica. That sorting allows the
+retrieval of a range of rows within a partition (for instance, in the example above, <code class="docutils literal notranslate"><span class="pre">SELECT</span> <span class="pre">*</span> <span class="pre">FROM</span> <span class="pre">t</span> <span class="pre">WHERE</span> <span class="pre">a</span> <span class="pre">=</span> <span class="pre">0</span> <span class="pre">AND</span> <span class="pre">b</span>
+<span class="pre">&gt;</span> <span class="pre">1</span> <span class="pre">and</span> <span class="pre">b</span> <span class="pre">&lt;=</span> <span class="pre">3</span></code>) to be very efficient.</p>
+</div>
+</div>
+<div class="section" id="table-options">
+<span id="create-table-options"></span><h3>Table options<a class="headerlink" href="#table-options" title="Permalink to this headline">¶</a></h3>
+<p>A CQL table has a number of options that can be set at creation (and, for most of them, <a class="reference internal" href="#alter-table-statement"><span class="std std-ref">altered</span></a> later). These options are specified after the <code class="docutils literal notranslate"><span class="pre">WITH</span></code> keyword.</p>
+<p>Amongst those options, two important ones cannot be changed after creation and influence which queries can be done
+against the table: the <code class="docutils literal notranslate"><span class="pre">COMPACT</span> <span class="pre">STORAGE</span></code> option and the <code class="docutils literal notranslate"><span class="pre">CLUSTERING</span> <span class="pre">ORDER</span></code> option. Those, as well as the other
+options of a table are described in the following sections.</p>
+<div class="section" id="compact-tables">
+<span id="id3"></span><h4>Compact tables<a class="headerlink" href="#compact-tables" title="Permalink to this headline">¶</a></h4>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Since Cassandra 3.0, compact tables have the exact same layout internally than non compact ones (for the
+same schema obviously), and declaring a table compact <strong>only</strong> creates artificial limitations on the table definition
+and usage that are necessary to ensure backward compatibility with the deprecated Thrift API. And as <code class="docutils literal notranslate"><span class="pre">COMPACT</span>
+<span class="pre">STORAGE</span></code> cannot, as of Cassandra 3.11.7, be removed, it is strongly discouraged to create new table with the
+<code class="docutils literal notranslate"><span class="pre">COMPACT</span> <span class="pre">STORAGE</span></code> option.</p>
+</div>
+<p>A <em>compact</em> table is one defined with the <code class="docutils literal notranslate"><span class="pre">COMPACT</span> <span class="pre">STORAGE</span></code> option. This option is mainly targeted towards backward
+compatibility for definitions created before CQL version 3 (see <a class="reference external" href="http://www.datastax.com/dev/blog/thrift-to-cql3">www.datastax.com/dev/blog/thrift-to-cql3</a> for more details) and shouldn’t be used for new tables. Declaring a
+table with this option creates limitations for the table which are largely arbitrary but necessary for backward
+compatibility with the (deprecated) Thrift API. Amongst those limitation:</p>
+<ul class="simple">
+<li>a compact table cannot use collections nor static columns.</li>
+<li>if a compact table has at least one clustering column, then it must have <em>exactly</em> one column outside of the primary
+key ones. This imply you cannot add or remove columns after creation in particular.</li>
+<li>a compact table is limited in the indexes it can create, and no materialized view can be created on it.</li>
+</ul>
+</div>
+<div class="section" id="reversing-the-clustering-order">
+<span id="clustering-order"></span><h4>Reversing the clustering order<a class="headerlink" href="#reversing-the-clustering-order" title="Permalink to this headline">¶</a></h4>
+<p>The clustering order of a table is defined by the <a class="reference internal" href="#clustering-columns"><span class="std std-ref">clustering columns</span></a> of that table. By
+default, that ordering is based on natural order of those clustering order, but the <code class="docutils literal notranslate"><span class="pre">CLUSTERING</span> <span class="pre">ORDER</span></code> allows to
+change that clustering order to use the <em>reverse</em> natural order for some (potentially all) of the columns.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">CLUSTERING</span> <span class="pre">ORDER</span></code> option takes the comma-separated list of the clustering column, each with a <code class="docutils literal notranslate"><span class="pre">ASC</span></code> (for
+<em>ascendant</em>, e.g. the natural order) or <code class="docutils literal notranslate"><span class="pre">DESC</span></code> (for <em>descendant</em>, e.g. the reverse natural order). Note in particular
+that the default (if the <code class="docutils literal notranslate"><span class="pre">CLUSTERING</span> <span class="pre">ORDER</span></code> option is not used) is strictly equivalent to using the option with all
+clustering columns using the <code class="docutils literal notranslate"><span class="pre">ASC</span></code> modifier.</p>
+<p>Note that this option is basically a hint for the storage engine to change the order in which it stores the row but it
+has 3 visible consequences:</p>
+<dl class="docutils">
+<dt># it limits which <code class="docutils literal notranslate"><span class="pre">ORDER</span> <span class="pre">BY</span></code> clause are allowed for <a class="reference internal" href="dml.html#select-statement"><span class="std std-ref">selects</span></a> on that table. You can only</dt>
+<dd>order results by the clustering order or the reverse clustering order. Meaning that if a table has 2 clustering column
+<code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> and you defined <code class="docutils literal notranslate"><span class="pre">WITH</span> <span class="pre">CLUSTERING</span> <span class="pre">ORDER</span> <span class="pre">(a</span> <span class="pre">DESC,</span> <span class="pre">b</span> <span class="pre">ASC)</span></code>, then in queries you will be allowed to use
+<code class="docutils literal notranslate"><span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">(a</span> <span class="pre">DESC,</span> <span class="pre">b</span> <span class="pre">ASC)</span></code> and (reverse clustering order) <code class="docutils literal notranslate"><span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">(a</span> <span class="pre">ASC,</span> <span class="pre">b</span> <span class="pre">DESC)</span></code> but <strong>not</strong> <code class="docutils literal notranslate"><span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">(a</span>
+<span class="pre">ASC,</span> <span class="pre">b</span> <span class="pre">ASC)</span></code> (nor <code class="docutils literal notranslate"><span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">(a</span> <span class="pre">DESC,</span> <span class="pre">b</span> <span class="pre">DESC)</span></code>).</dd>
+<dt># it also change the default order of results when queried (if no <code class="docutils literal notranslate"><span class="pre">ORDER</span> <span class="pre">BY</span></code> is provided). Results are always returned</dt>
+<dd>in clustering order (within a partition).</dd>
+<dt># it has a small performance impact on some queries as queries in reverse clustering order are slower than the one in</dt>
+<dd>forward clustering order. In practice, this means that if you plan on querying mostly in the reverse natural order of
+your columns (which is common with time series for instance where you often want data from the newest to the oldest),
+it is an optimization to declare a descending clustering order.</dd>
+</dl>
+</div>
+<div class="section" id="other-table-options">
+<span id="create-table-general-options"></span><h4>Other table options<a class="headerlink" href="#other-table-options" title="Permalink to this headline">¶</a></h4>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">review (misses cdc if nothing else) and link to proper categories when appropriate (compaction for instance)</p>
+</div>
+<p>A table supports the following options:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="9%" />
+<col width="11%" />
+<col width="52%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">option</th>
+<th class="head">kind</th>
+<th class="head">default</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">comment</span></code></td>
+<td><em>simple</em></td>
+<td>none</td>
+<td>A free-form, human-readable comment.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">read_repair_chance</span></code></td>
+<td><em>simple</em></td>
+<td>0.1</td>
+<td>The probability with which to query extra nodes (e.g.
+more nodes than required by the consistency level) for
+the purpose of read repairs.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dclocal_read_repair_chance</span></code></td>
+<td><em>simple</em></td>
+<td>0</td>
+<td>The probability with which to query extra nodes (e.g.
+more nodes than required by the consistency level)
+belonging to the same data center than the read
+coordinator for the purpose of read repairs.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">gc_grace_seconds</span></code></td>
+<td><em>simple</em></td>
+<td>864000</td>
+<td>Time to wait before garbage collecting tombstones
+(deletion markers).</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span></code></td>
+<td><em>simple</em></td>
+<td>0.00075</td>
+<td>The target probability of false positive of the sstable
+bloom filters. Said bloom filters will be sized to provide
+the provided probability (thus lowering this value impact
+the size of bloom filters in-memory and on-disk)</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">default_time_to_live</span></code></td>
+<td><em>simple</em></td>
+<td>0</td>
+<td>The default expiration time (“TTL”) in seconds for a
+table.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">compaction</span></code></td>
+<td><em>map</em></td>
+<td><em>see below</em></td>
+<td><a class="reference internal" href="#cql-compaction-options"><span class="std std-ref">Compaction options</span></a>.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">compression</span></code></td>
+<td><em>map</em></td>
+<td><em>see below</em></td>
+<td><a class="reference internal" href="#cql-compression-options"><span class="std std-ref">Compression options</span></a>.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">caching</span></code></td>
+<td><em>map</em></td>
+<td><em>see below</em></td>
+<td><a class="reference internal" href="#cql-caching-options"><span class="std std-ref">Caching options</span></a>.</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="compaction-options">
+<span id="cql-compaction-options"></span><h5>Compaction options<a class="headerlink" href="#compaction-options" title="Permalink to this headline">¶</a></h5>
+<p>The <code class="docutils literal notranslate"><span class="pre">compaction</span></code> options must at least define the <code class="docutils literal notranslate"><span class="pre">'class'</span></code> sub-option, that defines the compaction strategy class
+to use. The default supported class are <code class="docutils literal notranslate"><span class="pre">'SizeTieredCompactionStrategy'</span></code> (<a class="reference internal" href="../operating/compaction.html#stcs"><span class="std std-ref">STCS</span></a>),
+<code class="docutils literal notranslate"><span class="pre">'LeveledCompactionStrategy'</span></code> (<a class="reference internal" href="../operating/compaction.html#lcs"><span class="std std-ref">LCS</span></a>) and <code class="docutils literal notranslate"><span class="pre">'TimeWindowCompactionStrategy'</span></code> (<a class="reference internal" href="../operating/compaction.html#twcs"><span class="std std-ref">TWCS</span></a>) (the
+<code class="docutils literal notranslate"><span class="pre">'DateTieredCompactionStrategy'</span></code> is also supported but is deprecated and <code class="docutils literal notranslate"><span class="pre">'TimeWindowCompactionStrategy'</span></code> should be
+preferred instead). Custom strategy can be provided by specifying the full class name as a <a class="reference internal" href="definitions.html#constants"><span class="std std-ref">string constant</span></a>.</p>
+<p>All default strategies support a number of <a class="reference internal" href="../operating/compaction.html#compaction-options"><span class="std std-ref">common options</span></a>, as well as options specific to
+the strategy chosen (see the section corresponding to your strategy for details: <a class="reference internal" href="../operating/compaction.html#stcs-options"><span class="std std-ref">STCS</span></a>, <a class="reference internal" href="../operating/compaction.html#lcs-options"><span class="std std-ref">LCS</span></a> and <a class="reference internal" href="../operating/compaction.html#twcs"><span class="std std-ref">TWCS</span></a>).</p>
+</div>
+<div class="section" id="compression-options">
+<span id="cql-compression-options"></span><h5>Compression options<a class="headerlink" href="#compression-options" title="Permalink to this headline">¶</a></h5>
+<p>The <code class="docutils literal notranslate"><span class="pre">compression</span></code> options define if and how the sstables of the table are compressed. The following sub-options are
+available:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="13%" />
+<col width="66%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">class</span></code></td>
+<td>LZ4Compressor</td>
+<td>The compression algorithm to use. Default compressor are: LZ4Compressor,
+SnappyCompressor and DeflateCompressor. Use <code class="docutils literal notranslate"><span class="pre">'enabled'</span> <span class="pre">:</span> <span class="pre">false</span></code> to disable
+compression. Custom compressor can be provided by specifying the full class
+name as a “string constant”:#constants.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">enabled</span></code></td>
+<td>true</td>
+<td>Enable/disable sstable compression.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">chunk_length_in_kb</span></code></td>
+<td>64</td>
+<td>On disk SSTables are compressed by block (to allow random reads). This
+defines the size (in KB) of said block. Bigger values may improve the
+compression rate, but increases the minimum size of data to be read from disk
+for a read</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">crc_check_chance</span></code></td>
+<td>1.0</td>
+<td>When compression is enabled, each compressed block includes a checksum of
+that block for the purpose of detecting disk bitrot and avoiding the
+propagation of corruption to other replica. This option defines the
+probability with which those checksums are checked during read. By default
+they are always checked. Set to 0 to disable checksum checking and to 0.5 for
+instance to check them every other read   |</td>
+</tr>
+</tbody>
+</table>
+<p>For instance, to create a table with LZ4Compressor and a chunk_lenth_in_kb of 4KB:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">simple</span> <span class="p">(</span>
+   <span class="n">id</span> <span class="nb">int</span><span class="p">,</span>
+   <span class="k">key</span> <span class="nb">text</span><span class="p">,</span>
+   <span class="n">value</span> <span class="nb">text</span><span class="p">,</span>
+   <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="k">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+<span class="p">)</span> <span class="k">with</span> <span class="n">compression</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;LZ4Compressor&#39;</span><span class="p">,</span> <span class="s1">&#39;chunk_length_in_kb&#39;</span><span class="p">:</span> <span class="mf">4</span><span class="p">};</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="caching-options">
+<span id="cql-caching-options"></span><h5>Caching options<a class="headerlink" href="#caching-options" title="Permalink to this headline">¶</a></h5>
+<p>The <code class="docutils literal notranslate"><span class="pre">caching</span></code> options allows to configure both the <em>key cache</em> and the <em>row cache</em> for the table. The following
+sub-options are available:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="8%" />
+<col width="72%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">keys</span></code></td>
+<td>ALL</td>
+<td>Whether to cache keys (“key cache”) for this table. Valid values are: <code class="docutils literal notranslate"><span class="pre">ALL</span></code> and
+<code class="docutils literal notranslate"><span class="pre">NONE</span></code>.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">rows_per_partition</span></code></td>
+<td>NONE</td>
+<td>The amount of rows to cache per partition (“row cache”). If an integer <code class="docutils literal notranslate"><span class="pre">n</span></code> is
+specified, the first <code class="docutils literal notranslate"><span class="pre">n</span></code> queried rows of a partition will be cached. Other
+possible options are <code class="docutils literal notranslate"><span class="pre">ALL</span></code>, to cache all rows of a queried partition, or <code class="docutils literal notranslate"><span class="pre">NONE</span></code>
+to disable row caching.</td>
+</tr>
+</tbody>
+</table>
+<p>For instance, to create a table with both a key cache and 10 rows per partition:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">simple</span> <span class="p">(</span>
+<span class="n">id</span> <span class="nb">int</span><span class="p">,</span>
+<span class="k">key</span> <span class="nb">text</span><span class="p">,</span>
+<span class="n">value</span> <span class="nb">text</span><span class="p">,</span>
+<span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="k">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+<span class="p">)</span> <span class="k">WITH</span> <span class="n">caching</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;keys&#39;</span><span class="p">:</span> <span class="s1">&#39;ALL&#39;</span><span class="p">,</span> <span class="s1">&#39;rows_per_partition&#39;</span><span class="p">:</span> <span class="mf">10</span><span class="p">};</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="other-considerations">
+<h5>Other considerations:<a class="headerlink" href="#other-considerations" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>Adding new columns (see <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> below) is a constant time operation. There is thus no need to try to
+anticipate future usage when creating a table.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="alter-table">
+<span id="alter-table-statement"></span><h2>ALTER TABLE<a class="headerlink" href="#alter-table" title="Permalink to this headline">¶</a></h2>
+<p>Altering an existing table uses the <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-alter-table-statement">alter_table_statement  </strong> ::=  ALTER TABLE <a class="reference internal" href="#grammar-token-table-name"><code class="xref docutils literal notranslate"><span class="pre">table_name</span></code></a> <a class="reference internal" href="#grammar-token-alter-table-instruction"><code class="xref docutils literal notranslate"><span class="pre">alter_table_instruction</span></code></a>
+<strong id="grammar-token-alter-table-instruction">alter_table_instruction</strong> ::=  ADD <a class="reference internal" href="#grammar-token-column-name"><code class="xref docutils literal notranslate"><span class="pre">column_name</span></code></a> <a class="reference internal" href="types.html#grammar-token-cql-type"><code class="xref docutils literal notranslate"><span class="pre">cql_type</span></code></a> ( ',' <a class="reference internal" href="#grammar-token-column-name"><code class="xref docutils literal notranslate"><span class="pre">column_name</span></code></a> <a class="reference internal" href="types.html#grammar-token-cql-type"><code class="xref docutils literal notranslate"><span class="pre">cql_type</span></code></a> )*
+                             | DROP <a class="reference internal" href="#grammar-token-column-name"><code class="xref docutils literal notranslate"><span class="pre">column_name</span></code></a> ( <a class="reference internal" href="#grammar-token-column-name"><code class="xref docutils literal notranslate"><span class="pre">column_name</span></code></a> )*
+                             | WITH <a class="reference internal" href="#grammar-token-options"><code class="xref docutils literal notranslate"><span class="pre">options</span></code></a>
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">addamsFamily</span> <span class="k">ADD</span> <span class="n">gravesite</span> <span class="nb">varchar</span><span class="p">;</span>
+
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">addamsFamily</span>
+       <span class="k">WITH</span> <span class="n">comment</span> <span class="o">=</span> <span class="s1">&#39;A most excellent and useful table&#39;</span>
+       <span class="k">AND</span> <span class="n">read_repair_chance</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> statement can:</p>
+<ul class="simple">
+<li>Add new column(s) to the table (through the <code class="docutils literal notranslate"><span class="pre">ADD</span></code> instruction). Note that the primary key of a table cannot be
+changed and thus newly added column will, by extension, never be part of the primary key. Also note that <a class="reference internal" href="#compact-tables"><span class="std std-ref">compact
+tables</span></a> have restrictions regarding column addition. Note that this is constant (in the amount of
+data the cluster contains) time operation.</li>
+<li>Remove column(s) from the table. This drops both the column and all its content, but note that while the column
+becomes immediately unavailable, its content is only removed lazily during compaction. Please also see the warnings
+below. Due to lazy removal, the altering itself is a constant (in the amount of data removed or contained in the
+cluster) time operation.</li>
+<li>Change some of the table options (through the <code class="docutils literal notranslate"><span class="pre">WITH</span></code> instruction). The <a class="reference internal" href="#create-table-options"><span class="std std-ref">supported options</span></a> are the same that when creating a table (outside of <code class="docutils literal notranslate"><span class="pre">COMPACT</span> <span class="pre">STORAGE</span></code> and <code class="docutils literal notranslate"><span class="pre">CLUSTERING</span>
+<span class="pre">ORDER</span></code> that cannot be changed after creation). Note that setting any <code class="docutils literal notranslate"><span class="pre">compaction</span></code> sub-options has the effect of
+erasing all previous <code class="docutils literal notranslate"><span class="pre">compaction</span></code> options, so you need to re-specify all the sub-options if you want to keep them.
+The same note applies to the set of <code class="docutils literal notranslate"><span class="pre">compression</span></code> sub-options.</li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Dropping a column assumes that the timestamps used for the value of this column are “real” timestamp in
+microseconds. Using “real” timestamps in microseconds is the default is and is <strong>strongly</strong> recommended but as
+Cassandra allows the client to provide any timestamp on any table it is theoretically possible to use another
+convention. Please be aware that if you do so, dropping a column will not work correctly.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Once a column is dropped, it is allowed to re-add a column with the same name than the dropped one
+<strong>unless</strong> the type of the dropped column was a (non-frozen) column (due to an internal technical limitation).</p>
+</div>
+</div>
+<div class="section" id="drop-table">
+<span id="drop-table-statement"></span><h2>DROP TABLE<a class="headerlink" href="#drop-table" title="Permalink to this headline">¶</a></h2>
+<p>Dropping a table uses the <code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">TABLE</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-drop-table-statement">drop_table_statement</strong> ::=  DROP TABLE [ IF EXISTS ] <a class="reference internal" href="#grammar-token-table-name"><code class="xref docutils literal notranslate"><span class="pre">table_name</span></code></a>
+</pre>
+<p>Dropping a table results in the immediate, irreversible removal of the table, including all data it contains.</p>
+<p>If the table does not exist, the statement will return an error, unless <code class="docutils literal notranslate"><span class="pre">IF</span> <span class="pre">EXISTS</span></code> is used in which case the
+operation is a no-op.</p>
+</div>
+<div class="section" id="truncate">
+<span id="truncate-statement"></span><h2>TRUNCATE<a class="headerlink" href="#truncate" title="Permalink to this headline">¶</a></h2>
+<p>A table can be truncated using the <code class="docutils literal notranslate"><span class="pre">TRUNCATE</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-truncate-statement">truncate_statement</strong> ::=  TRUNCATE [ TABLE ] <a class="reference internal" href="#grammar-token-table-name"><code class="xref docutils literal notranslate"><span class="pre">table_name</span></code></a>
+</pre>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">TRUNCATE</span> <span class="pre">TABLE</span> <span class="pre">foo</span></code> is allowed for consistency with other DDL statements but tables are the only object
+that can be truncated currently and so the <code class="docutils literal notranslate"><span class="pre">TABLE</span></code> keyword can be omitted.</p>
+<p>Truncating a table permanently removes all existing data from the table, but without removing the table itself.</p>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="dml.html" class="btn btn-default pull-right " role="button" title="Data Manipulation" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="types.html" class="btn btn-default" role="button" title="Data Types" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

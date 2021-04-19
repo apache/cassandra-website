@@ -1,0 +1,160 @@
+---
+layout: docpage
+
+title: "Documentation"
+
+is_homepage: false
+is_sphinx_doc: true
+
+doc-parent: "Operating Cassandra"
+
+doc-title: "Bloom Filters"
+doc-header-links: '
+  <link rel="top" title="Apache Cassandra Documentation v3.11.11" href="../index.html"/>
+      <link rel="up" title="Operating Cassandra" href="index.html"/>
+      <link rel="next" title="Compression" href="compression.html"/>
+      <link rel="prev" title="Compaction" href="compaction.html"/>
+'
+doc-search-path: "../search.html"
+
+extra-footer: '
+<script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+      URL_ROOT:    "",
+      VERSION:     "",
+      COLLAPSE_INDEX: false,
+      FILE_SUFFIX: ".html",
+      HAS_SOURCE:  false,
+      SOURCELINK_SUFFIX: ".txt"
+    };
+</script>
+'
+
+---
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Operating Cassandra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="snitch.html">Snitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topo_changes.html">Adding, replacing, moving and removing nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="repair.html">Repair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_repair.html">Read repair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hints.html">Hints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction.html">Compaction</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Bloom Filters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#changing">Changing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="compression.html">Compression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cdc.html">Change Data Capture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backups.html">Backups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bulk_loading.html">Bulk Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html">Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html">Hardware Choices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="bloom-filters">
+<h1>Bloom Filters<a class="headerlink" href="#bloom-filters" title="Permalink to this headline">¶</a></h1>
+<p>In the read path, Cassandra merges data on disk (in SSTables) with data in RAM (in memtables). To avoid checking every
+SSTable data file for the partition being requested, Cassandra employs a data structure known as a bloom filter.</p>
+<p>Bloom filters are a probabilistic data structure that allows Cassandra to determine one of two possible states: - The
+data definitely does not exist in the given file, or - The data probably exists in the given file.</p>
+<p>While bloom filters can not guarantee that the data exists in a given SSTable, bloom filters can be made more accurate
+by allowing them to consume more RAM. Operators have the opportunity to tune this behavior per table by adjusting the
+the <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span></code> to a float between 0 and 1.</p>
+<p>The default value for <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span></code> is 0.1 for tables using LeveledCompactionStrategy and 0.01 for all
+other cases.</p>
+<p>Bloom filters are stored in RAM, but are stored offheap, so operators should not consider bloom filters when selecting
+the maximum heap size.  As accuracy improves (as the <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span></code> gets closer to 0), memory usage
+increases non-linearly - the bloom filter for <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span> <span class="pre">=</span> <span class="pre">0.01</span></code> will require about three times as much
+memory as the same table with <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span> <span class="pre">=</span> <span class="pre">0.1</span></code>.</p>
+<p>Typical values for <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span></code> are usually between 0.01 (1%) to 0.1 (10%) false-positive chance, where
+Cassandra may scan an SSTable for a row, only to find that it does not exist on the disk. The parameter should be tuned
+by use case:</p>
+<ul class="simple">
+<li>Users with more RAM and slower disks may benefit from setting the <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span></code> to a numerically lower
+number (such as 0.01) to avoid excess IO operations</li>
+<li>Users with less RAM, more dense nodes, or very fast disks may tolerate a higher <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span></code> in order to
+save RAM at the expense of excess IO operations</li>
+<li>In workloads that rarely read, or that only perform reads by scanning the entire data set (such as analytics
+workloads), setting the <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span></code> to a much higher number is acceptable.</li>
+</ul>
+<div class="section" id="changing">
+<h2>Changing<a class="headerlink" href="#changing" title="Permalink to this headline">¶</a></h2>
+<p>The bloom filter false positive chance is visible in the <code class="docutils literal notranslate"><span class="pre">DESCRIBE</span> <span class="pre">TABLE</span></code> output as the field
+<code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span></code>. Operators can change the value with an <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> statement:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ALTER TABLE keyspace.table WITH bloom_filter_fp_chance=0.01
+</pre></div>
+</div>
+<p>Operators should be aware, however, that this change is not immediate: the bloom filter is calculated when the file is
+written, and persisted on disk as the Filter component of the SSTable. Upon issuing an <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> statement, new
+files on disk will be written with the new <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span></code>, but existing sstables will not be modified until
+they are compacted - if an operator needs a change to <code class="docutils literal notranslate"><span class="pre">bloom_filter_fp_chance</span></code> to take effect, they can trigger an
+SSTable rewrite using <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">scrub</span></code> or <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">upgradesstables</span> <span class="pre">-a</span></code>, both of which will rebuild the sstables on
+disk, regenerating the bloom filters in the progress.</p>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="compression.html" class="btn btn-default pull-right " role="button" title="Compression" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="compaction.html" class="btn btn-default" role="button" title="Compaction" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

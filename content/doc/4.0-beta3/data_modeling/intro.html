@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-beta3/data_modeling/intro.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-beta3" href="../index.html"/> <link rel="up" title="Data Modeling" href="index.html"/> <link rel="next" title="Conceptual Data Modeling" href="data_modeling_conceptual.html"/> <link rel="prev" title="Data Modeling" href="index.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">Data Modeling</a></li>
+      
+
+      
+      <li>Introduction</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Data Modeling</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-data-modeling">What is Data Modeling?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#query-driven-modeling">Query-driven modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#goals">Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#partitions">Partitions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#comparing-with-relational-data-model">Comparing with Relational Data Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#examples-of-data-modeling">Examples of Data Modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#designing-schema">Designing Schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-model-analysis">Data Model Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-materialized-views">Using Materialized Views</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_conceptual.html">Conceptual Data Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_rdbms.html">RDBMS Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_queries.html">Defining Application Queries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_logical.html">Logical Data Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_physical.html">Physical Data Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_refining.html">Evaluating and Refining Data Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_schema.html">Defining Database Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_tools.html">Cassandra Data Modeling Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>Apache Cassandra stores data in tables, with each table consisting of rows and columns. CQL (Cassandra Query Language) is used to query the data stored in tables. Apache Cassandra data model is based around and optimized for querying. Cassandra does not support relational data modeling intended for relational databases.</p>
+<div class="section" id="what-is-data-modeling">
+<h2>What is Data Modeling?<a class="headerlink" href="#what-is-data-modeling" title="Permalink to this headline">¶</a></h2>
+<p>Data modeling is the process of identifying entities and their relationships. In relational databases, data is placed in normalized tables with foreign keys used to reference related data in other tables. Queries that the application will make are driven by the structure of the tables and related data are queried as table joins.</p>
+<p>In Cassandra, data modeling is query-driven. The data access patterns and application queries determine the structure and organization of data which then used to design the database tables.</p>
+<p>Data is modeled around specific queries. Queries are best designed to access a single table, which implies that all entities involved in a query must be in the same table to make data access (reads) very fast. Data is modeled to best suit a query or a set of queries. A table could have one or more entities as best suits a query. As entities do typically have relationships among them and queries could involve entities with relationships among them, a single entity may be included in multiple tables.</p>
+</div>
+<div class="section" id="query-driven-modeling">
+<h2>Query-driven modeling<a class="headerlink" href="#query-driven-modeling" title="Permalink to this headline">¶</a></h2>
+<p>Unlike a relational database model in which queries make use of table joins to get data from multiple tables, joins are not supported in Cassandra so all required fields (columns) must be grouped together in a single table. Since each query is backed by a table, data is duplicated across multiple tables in a process known as denormalization. Data duplication and a high write throughput are used to achieve a high read performance.</p>
+</div>
+<div class="section" id="goals">
+<h2>Goals<a class="headerlink" href="#goals" title="Permalink to this headline">¶</a></h2>
+<p>The choice of the primary key and partition key is important to distribute data evenly across the cluster. Keeping the number of partitions read for a query to a minimum is also important because different partitions could be located on different nodes and the coordinator would need to send a request to each node adding to the request overhead and latency. Even if the different partitions involved in a query are on the same node, fewer partitions make for a more efficient query.</p>
+</div>
+<div class="section" id="partitions">
+<h2>Partitions<a class="headerlink" href="#partitions" title="Permalink to this headline">¶</a></h2>
+<p>Apache Cassandra is a distributed database that stores data across a cluster of nodes. A partition key is used to partition data among the nodes. Cassandra partitions data over the storage nodes using a variant of consistent hashing for data distribution. Hashing is a technique used to map data with which given a key, a hash function generates a hash value (or simply a hash) that is stored in a hash table. A partition key is generated from the first field of a primary key.   Data partitioned into hash tables using partition keys provides for rapid lookup.  Fewer the partitions used for a query faster is the response time for the query.</p>
+<p>As an example of partitioning, consider table <code class="docutils literal notranslate"><span class="pre">t</span></code> in which <code class="docutils literal notranslate"><span class="pre">id</span></code> is the only field in the primary key.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">t</span> <span class="p">(</span>
+   <span class="nb">id</span> <span class="nb">int</span><span class="p">,</span>
+   <span class="n">k</span> <span class="nb">int</span><span class="p">,</span>
+   <span class="n">v</span> <span class="n">text</span><span class="p">,</span>
+   <span class="n">PRIMARY</span> <span class="n">KEY</span> <span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<p>The partition key is generated from the primary key <code class="docutils literal notranslate"><span class="pre">id</span></code> for data distribution across the nodes in a cluster.</p>
+<p>Consider a variation of table <code class="docutils literal notranslate"><span class="pre">t</span></code> that has two fields constituting the primary key to make a composite or compound primary key.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">t</span> <span class="p">(</span>
+   <span class="nb">id</span> <span class="nb">int</span><span class="p">,</span>
+   <span class="n">c</span> <span class="n">text</span><span class="p">,</span>
+   <span class="n">k</span> <span class="nb">int</span><span class="p">,</span>
+   <span class="n">v</span> <span class="n">text</span><span class="p">,</span>
+   <span class="n">PRIMARY</span> <span class="n">KEY</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<p>For the table <code class="docutils literal notranslate"><span class="pre">t</span></code> with a composite primary key the first field <code class="docutils literal notranslate"><span class="pre">id</span></code> is used to generate the partition key and the second field <code class="docutils literal notranslate"><span class="pre">c</span></code> is the clustering key used for sorting within a partition.  Using clustering keys to sort data makes retrieval of adjacent data more efficient.</p>
+<p>In general,  the first field or component of a primary key is hashed to generate the partition key and the remaining fields or components are the clustering keys that are used to sort data within a partition. Partitioning data  improves the efficiency of reads and writes. The other fields that are not primary key fields may be indexed separately to further improve query performance.</p>
+<p>The partition key could be generated from multiple fields if they are grouped as the first component of a primary key.  As another variation of the table <code class="docutils literal notranslate"><span class="pre">t</span></code>, consider a table with the first component of the primary key made of two fields grouped using parentheses.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">t</span> <span class="p">(</span>
+   <span class="n">id1</span> <span class="nb">int</span><span class="p">,</span>
+   <span class="n">id2</span> <span class="nb">int</span><span class="p">,</span>
+   <span class="n">c1</span> <span class="n">text</span><span class="p">,</span>
+   <span class="n">c2</span> <span class="n">text</span>
+   <span class="n">k</span> <span class="nb">int</span><span class="p">,</span>
+   <span class="n">v</span> <span class="n">text</span><span class="p">,</span>
+   <span class="n">PRIMARY</span> <span class="n">KEY</span> <span class="p">((</span><span class="n">id1</span><span class="p">,</span><span class="n">id2</span><span class="p">),</span><span class="n">c1</span><span class="p">,</span><span class="n">c2</span><span class="p">)</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<p>For the preceding table <code class="docutils literal notranslate"><span class="pre">t</span></code> the first component of the primary key constituting fields <code class="docutils literal notranslate"><span class="pre">id1</span></code> and <code class="docutils literal notranslate"><span class="pre">id2</span></code> is used to generate the partition key and the rest of the fields <code class="docutils literal notranslate"><span class="pre">c1</span></code> and <code class="docutils literal notranslate"><span class="pre">c2</span></code> are the clustering keys used for sorting within a partition.</p>
+</div>
+<div class="section" id="comparing-with-relational-data-model">
+<h2>Comparing with Relational Data Model<a class="headerlink" href="#comparing-with-relational-data-model" title="Permalink to this headline">¶</a></h2>
+<p>Relational databases store data in tables that have relations with other tables using foreign keys. A relational database’s approach to data modeling is table-centric. Queries must use table joins to get data from multiple tables that have a relation between them. Apache Cassandra does not have the concept of foreign keys or relational integrity. Apache Cassandra’s data model is based around designing efficient queries; queries that don’t involve multiple tables. Relational databases normalize data to avoid duplication. Apache Cassandra in contrast de-normalizes data by duplicating data in multiple tables for a query-centric data model. If a Cassandra data model cannot fully integrate the complexity of relationships between the different entities for a particular query, client-side joins in application code may be used.</p>
+</div>
+<div class="section" id="examples-of-data-modeling">
+<h2>Examples of Data Modeling<a class="headerlink" href="#examples-of-data-modeling" title="Permalink to this headline">¶</a></h2>
+<p>As an example, a <code class="docutils literal notranslate"><span class="pre">magazine</span></code> data set consists of data for magazines with attributes such as magazine id, magazine name, publication frequency, publication date, and publisher.  A basic query (Q1) for magazine data is to list all the magazine names including their publication frequency. As not all data attributes are needed for Q1 the data model would only consist of <code class="docutils literal notranslate"><span class="pre">id</span></code> ( for partition key), magazine name and publication frequency as shown in Figure 1.</p>
+<div class="figure">
+<img alt="../_images/Figure_1_data_model.jpg" src="../_images/Figure_1_data_model.jpg" />
+</div>
+<p>Figure 1. Data Model for Q1</p>
+<p>Another query (Q2)  is to list all the magazine names by publisher.  For Q2 the data model would consist of an additional attribute <code class="docutils literal notranslate"><span class="pre">publisher</span></code> for the partition key. The <code class="docutils literal notranslate"><span class="pre">id</span></code> would become the clustering key for sorting within a partition.   Data model for Q2 is illustrated in Figure 2.</p>
+<div class="figure">
+<img alt="../_images/Figure_2_data_model.jpg" src="../_images/Figure_2_data_model.jpg" />
+</div>
+<p>Figure 2. Data Model for Q2</p>
+</div>
+<div class="section" id="designing-schema">
+<h2>Designing Schema<a class="headerlink" href="#designing-schema" title="Permalink to this headline">¶</a></h2>
+<p>After the conceptual data model has been created a schema may be  designed for a query. For Q1 the following schema may be used.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">magazine_name</span> <span class="p">(</span><span class="nb">id</span> <span class="nb">int</span> <span class="n">PRIMARY</span> <span class="n">KEY</span><span class="p">,</span> <span class="n">name</span> <span class="n">text</span><span class="p">,</span> <span class="n">publicationFrequency</span> <span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For Q2 the schema definition would include a clustering key for sorting.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">magazine_publisher</span> <span class="p">(</span><span class="n">publisher</span> <span class="n">text</span><span class="p">,</span><span class="nb">id</span> <span class="nb">int</span><span class="p">,</span><span class="n">name</span> <span class="n">text</span><span class="p">,</span> <span class="n">publicationFrequency</span> <span class="n">text</span><span class="p">,</span>
+<span class="n">PRIMARY</span> <span class="n">KEY</span> <span class="p">(</span><span class="n">publisher</span><span class="p">,</span> <span class="nb">id</span><span class="p">))</span> <span class="n">WITH</span> <span class="n">CLUSTERING</span> <span class="n">ORDER</span> <span class="n">BY</span> <span class="p">(</span><span class="nb">id</span> <span class="n">DESC</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="data-model-analysis">
+<h2>Data Model Analysis<a class="headerlink" href="#data-model-analysis" title="Permalink to this headline">¶</a></h2>
+<p>The data model is a conceptual model that must be analyzed and optimized based on storage, capacity, redundancy and consistency.  A data model may need to be modified as a result of the analysis. Considerations or limitations that are used in data model analysis include:</p>
+<ul class="simple">
+<li>Partition Size</li>
+<li>Data Redundancy</li>
+<li>Disk space</li>
+<li>Lightweight Transactions (LWT)</li>
+</ul>
+<p>The two measures of partition size are the number of values in a partition and partition size on disk. Though requirements for these measures may vary based on the application a general guideline is to keep number of values per partition to below 100,000 and disk space per partition to below 100MB.</p>
+<p>Data redundancies as duplicate data in tables and multiple partition replicates are to be expected in the design of a data model , but nevertheless should be kept in consideration as a parameter to keep to the minimum. LWT transactions (compare-and-set, conditional update) could affect performance and queries using LWT should be kept to the minimum.</p>
+</div>
+<div class="section" id="using-materialized-views">
+<h2>Using Materialized Views<a class="headerlink" href="#using-materialized-views" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Materialized views (MVs) are experimental in the latest (4.0) release.</p>
+</div>
+<p>Materialized views (MVs) could be used to implement multiple queries for a single table. A materialized view is a table built from data from another table, the base table, with new primary key and new properties. Changes to the base table data automatically add and update data in a MV.  Different queries may be implemented using a materialized view as an MV’s primary key differs from the base table. Queries are optimized by the primary key definition.</p>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="data_modeling_conceptual.html" class="btn btn-default pull-right " role="button" title="Conceptual Data Modeling" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="index.html" class="btn btn-default" role="button" title="Data Modeling" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

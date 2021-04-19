@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-alpha2/tools/sstable/sstableupgrade.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha2" href="../../index.html"/> <link rel="up" title="SSTable Tools" href="index.html"/> <link rel="next" title="sstableutil" href="sstableutil.html"/> <link rel="prev" title="sstablesplit" href="sstablesplit.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">SSTable Tools</a></li>
+      
+
+      
+      <li>sstableupgrade</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../../"><img src="./../../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../../">Home</a></li>
+          <li><a href="./../../../../download/">Download</a></li>
+          <li><a href="./../../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Cassandra Tools</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cqlsh.html">cqlsh: the CQL shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodetool/nodetool.html">Nodetool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodetool/nodetool.html#usage">Usage</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">SSTable Tools</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sstabledump.html">sstabledump</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableexpiredblockers.html">sstableexpiredblockers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablelevelreset.html">sstablelevelreset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableloader.html">sstableloader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablemetadata.html">sstablemetadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableofflinerelevel.html">sstableofflinerelevel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablerepairedset.html">sstablerepairedset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablescrub.html">sstablescrub</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablesplit.html">sstablesplit</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sstableupgrade</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableutil.html">sstableutil</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableverify.html">sstableverify</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cassandra_stress.html">Cassandra Stress</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="sstableupgrade">
+<h1>sstableupgrade<a class="headerlink" href="#sstableupgrade" title="Permalink to this headline">¶</a></h1>
+<p>Upgrade the sstables in the given table (or snapshot) to the current version of Cassandra. This process is typically done after a Cassandra version upgrade. This operation will rewrite the sstables in the specified table to match the currently installed version of Cassandra. The sstableupgrade command can also be used to downgrade sstables to a previous version.</p>
+<p>The snapshot option will only upgrade the specified snapshot. Upgrading snapshots is required before attempting to restore a snapshot taken in a major version older than the major version Cassandra is currently running. This will replace the files in the given snapshot as well as break any hard links to live sstables.</p>
+<p>Cassandra must be stopped before this tool is executed, or unexpected results will occur. Note: the script does not verify that Cassandra is stopped.</p>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>sstableupgrade &lt;options&gt; &lt;keyspace&gt; &lt;table&gt; [snapshot_name]</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="70%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>–debug</td>
+<td>display stack traces</td>
+</tr>
+<tr class="row-even"><td>-h,–help</td>
+<td>display this help message</td>
+</tr>
+<tr class="row-odd"><td>-k,–keep-source</td>
+<td>do not delete the source sstables</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="rewrite-tables-to-the-current-cassandra-version">
+<h2>Rewrite tables to the current Cassandra version<a class="headerlink" href="#rewrite-tables-to-the-current-cassandra-version" title="Permalink to this headline">¶</a></h2>
+<p>Start with a set of sstables in one version of Cassandra:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="o">-</span><span class="n">al</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace1</span><span class="o">/</span><span class="n">standard1</span><span class="o">-</span><span class="mi">9695</span><span class="n">b790a63211e8a6fb091830ac5256</span><span class="o">/</span>
+<span class="o">...</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>      <span class="mi">348</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">45</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">CRC</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>  <span class="mi">5620000</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">45</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>       <span class="mi">10</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">45</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">Digest</span><span class="o">.</span><span class="n">sha1</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>    <span class="mi">25016</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">45</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">Filter</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>   <span class="mi">480000</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">45</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">Index</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>     <span class="mi">9895</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">45</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">Statistics</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>     <span class="mi">3562</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">45</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">Summary</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>       <span class="mi">79</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">45</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">TOC</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>After upgrading the Cassandra version, upgrade the sstables:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstableupgrade</span> <span class="n">keyspace1</span> <span class="n">standard1</span>
+<span class="n">Found</span> <span class="mi">1</span> <span class="n">sstables</span> <span class="n">that</span> <span class="n">need</span> <span class="n">upgrading</span><span class="o">.</span>
+<span class="n">Upgrading</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace1/standard1-9695b790a63211e8a6fb091830ac5256/keyspace1-standard1-ka-1-Data.db&#39;</span><span class="p">)</span>
+<span class="n">Upgrade</span> <span class="n">of</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace1/standard1-9695b790a63211e8a6fb091830ac5256/keyspace1-standard1-ka-1-Data.db&#39;</span><span class="p">)</span> <span class="n">complete</span><span class="o">.</span>
+
+<span class="n">ls</span> <span class="o">-</span><span class="n">al</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace1</span><span class="o">/</span><span class="n">standard1</span><span class="o">-</span><span class="mi">9695</span><span class="n">b790a63211e8a6fb091830ac5256</span><span class="o">/</span>
+<span class="o">...</span>
+<span class="n">drwxr</span><span class="o">-</span><span class="n">xr</span><span class="o">-</span><span class="n">x</span>   <span class="mi">2</span> <span class="n">user</span>  <span class="n">wheel</span>       <span class="mi">64</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">48</span> <span class="n">backups</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>      <span class="mi">292</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">48</span> <span class="n">mc</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">CRC</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>  <span class="mi">4599475</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">48</span> <span class="n">mc</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>       <span class="mi">10</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">48</span> <span class="n">mc</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Digest</span><span class="o">.</span><span class="n">crc32</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>    <span class="mi">25256</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">48</span> <span class="n">mc</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Filter</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>   <span class="mi">330807</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">48</span> <span class="n">mc</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Index</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>    <span class="mi">10312</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">48</span> <span class="n">mc</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Statistics</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>     <span class="mi">3506</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">48</span> <span class="n">mc</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Summary</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>       <span class="mi">80</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">48</span> <span class="n">mc</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">TOC</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="rewrite-tables-to-the-current-cassandra-version-and-keep-tables-in-old-version">
+<h2>Rewrite tables to the current Cassandra version, and keep tables in old version<a class="headerlink" href="#rewrite-tables-to-the-current-cassandra-version-and-keep-tables-in-old-version" title="Permalink to this headline">¶</a></h2>
+<p>Again, starting with a set of sstables in one version:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="o">-</span><span class="n">al</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace1</span><span class="o">/</span><span class="n">standard1</span><span class="o">-</span><span class="n">db532690a63411e8b4ae091830ac5256</span><span class="o">/</span>
+<span class="o">...</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>      <span class="mi">348</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">58</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">CRC</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>  <span class="mi">5620000</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">58</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>       <span class="mi">10</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">58</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">Digest</span><span class="o">.</span><span class="n">sha1</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>    <span class="mi">25016</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">58</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">Filter</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>   <span class="mi">480000</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">58</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">Index</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>     <span class="mi">9895</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">58</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">Statistics</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>     <span class="mi">3562</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">58</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">Summary</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>       <span class="mi">79</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">58</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">TOC</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>After upgrading the Cassandra version, upgrade the sstables, retaining the original sstables:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstableupgrade</span> <span class="n">keyspace1</span> <span class="n">standard1</span> <span class="o">-</span><span class="n">k</span>
+<span class="n">Found</span> <span class="mi">1</span> <span class="n">sstables</span> <span class="n">that</span> <span class="n">need</span> <span class="n">upgrading</span><span class="o">.</span>
+<span class="n">Upgrading</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace1/standard1-db532690a63411e8b4ae091830ac5256/keyspace1-standard1-ka-1-Data.db&#39;</span><span class="p">)</span>
+<span class="n">Upgrade</span> <span class="n">of</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace1/standard1-db532690a63411e8b4ae091830ac5256/keyspace1-standard1-ka-1-Data.db&#39;</span><span class="p">)</span> <span class="n">complete</span><span class="o">.</span>
+
+<span class="n">ls</span> <span class="o">-</span><span class="n">al</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace1</span><span class="o">/</span><span class="n">standard1</span><span class="o">-</span><span class="n">db532690a63411e8b4ae091830ac5256</span><span class="o">/</span>
+<span class="o">...</span>
+<span class="n">drwxr</span><span class="o">-</span><span class="n">xr</span><span class="o">-</span><span class="n">x</span>   <span class="mi">2</span> <span class="n">user</span>  <span class="n">wheel</span>       <span class="mi">64</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">14</span><span class="p">:</span><span class="mi">00</span> <span class="n">backups</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--@</span>  <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>      <span class="mi">348</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">58</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">CRC</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--@</span>  <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>  <span class="mi">5620000</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">58</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--@</span>  <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>       <span class="mi">10</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">58</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">Digest</span><span class="o">.</span><span class="n">sha1</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--@</span>  <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>    <span class="mi">25016</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">58</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">Filter</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--@</span>  <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>   <span class="mi">480000</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">58</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">Index</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--@</span>  <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>     <span class="mi">9895</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">58</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">Statistics</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--@</span>  <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>     <span class="mi">3562</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">58</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">Summary</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--@</span>  <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>       <span class="mi">79</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">58</span> <span class="n">keyspace1</span><span class="o">-</span><span class="n">standard1</span><span class="o">-</span><span class="n">ka</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">TOC</span><span class="o">.</span><span class="n">txt</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>      <span class="mi">292</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">14</span><span class="p">:</span><span class="mi">01</span> <span class="n">mc</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">CRC</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>  <span class="mi">4596370</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">14</span><span class="p">:</span><span class="mi">01</span> <span class="n">mc</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>       <span class="mi">10</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">14</span><span class="p">:</span><span class="mi">01</span> <span class="n">mc</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Digest</span><span class="o">.</span><span class="n">crc32</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>    <span class="mi">25256</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">14</span><span class="p">:</span><span class="mi">01</span> <span class="n">mc</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Filter</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>   <span class="mi">330801</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">14</span><span class="p">:</span><span class="mi">01</span> <span class="n">mc</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Index</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>    <span class="mi">10312</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">14</span><span class="p">:</span><span class="mi">01</span> <span class="n">mc</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Statistics</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>     <span class="mi">3506</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">14</span><span class="p">:</span><span class="mi">01</span> <span class="n">mc</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Summary</span><span class="o">.</span><span class="n">db</span>
+<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span> <span class="n">user</span>  <span class="n">wheel</span>       <span class="mi">80</span> <span class="n">Aug</span> <span class="mi">22</span> <span class="mi">14</span><span class="p">:</span><span class="mi">01</span> <span class="n">mc</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">TOC</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="rewrite-a-snapshot-to-the-current-cassandra-version">
+<h2>Rewrite a snapshot to the current Cassandra version<a class="headerlink" href="#rewrite-a-snapshot-to-the-current-cassandra-version" title="Permalink to this headline">¶</a></h2>
+<p>Find the snapshot name:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nodetool</span> <span class="n">listsnapshots</span>
+
+<span class="n">Snapshot</span> <span class="n">Details</span><span class="p">:</span>
+<span class="n">Snapshot</span> <span class="n">name</span>       <span class="n">Keyspace</span> <span class="n">name</span>                <span class="n">Column</span> <span class="n">family</span> <span class="n">name</span>           <span class="kc">True</span> <span class="n">size</span>          <span class="n">Size</span> <span class="n">on</span> <span class="n">disk</span>
+<span class="o">...</span>
+<span class="mi">1534962986979</span>       <span class="n">keyspace1</span>                    <span class="n">standard1</span>                    <span class="mf">5.85</span> <span class="n">MB</span>            <span class="mf">5.85</span> <span class="n">MB</span>
+</pre></div>
+</div>
+<p>Then rewrite the snapshot:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstableupgrade</span> <span class="n">keyspace1</span> <span class="n">standard1</span> <span class="mi">1534962986979</span>
+<span class="n">Found</span> <span class="mi">1</span> <span class="n">sstables</span> <span class="n">that</span> <span class="n">need</span> <span class="n">upgrading</span><span class="o">.</span>
+<span class="n">Upgrading</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace1/standard1-5850e9f0a63711e8a5c5091830ac5256/snapshots/1534962986979/keyspace1-standard1-ka-1-Data.db&#39;</span><span class="p">)</span>
+<span class="n">Upgrade</span> <span class="n">of</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace1/standard1-5850e9f0a63711e8a5c5091830ac5256/snapshots/1534962986979/keyspace1-standard1-ka-1-Data.db&#39;</span><span class="p">)</span> <span class="n">complete</span><span class="o">.</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="sstableutil.html" class="btn btn-default pull-right " role="button" title="sstableutil" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="sstablesplit.html" class="btn btn-default" role="button" title="sstablesplit" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../../js/doctools.js"></script>
+<script src="./../../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

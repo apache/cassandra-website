@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-alpha2/troubleshooting/reading_logs.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha2" href="../index.html"/> <link rel="up" title="Troubleshooting" href="index.html"/> <link rel="next" title="Use Nodetool" href="use_nodetool.html"/> <link rel="prev" title="Find The Misbehaving Nodes" href="finding_nodes.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">Troubleshooting</a></li>
+      
+
+      
+      <li>Cassandra Logs</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Troubleshooting</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="finding_nodes.html">Find The Misbehaving Nodes</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Cassandra Logs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#common-log-files">Common Log Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#getting-more-information">Getting More Information</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="use_nodetool.html">Use Nodetool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use_tools.html">Diving Deep, Use External Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="cassandra-logs">
+<span id="reading-logs"></span><h1>Cassandra Logs<a class="headerlink" href="#cassandra-logs" title="Permalink to this headline">¶</a></h1>
+<p>Cassandra has rich support for logging and attempts to give operators maximum
+insight into the database while at the same time limiting noise to the logs.</p>
+<div class="section" id="common-log-files">
+<h2>Common Log Files<a class="headerlink" href="#common-log-files" title="Permalink to this headline">¶</a></h2>
+<p>Cassandra has three main logs, the <code class="docutils literal notranslate"><span class="pre">system.log</span></code>, <code class="docutils literal notranslate"><span class="pre">debug.log</span></code> and
+<code class="docutils literal notranslate"><span class="pre">gc.log</span></code> which hold general logging messages, debugging logging messages, and
+java garbage collection logs respectively.</p>
+<p>These logs by default live in <code class="docutils literal notranslate"><span class="pre">${CASSANDRA_HOME}/logs</span></code>, but most Linux
+distributions relocate logs to <code class="docutils literal notranslate"><span class="pre">/var/log/cassandra</span></code>. Operators can tune
+this location as well as what levels are logged using the provided
+<code class="docutils literal notranslate"><span class="pre">logback.xml</span></code> file.</p>
+<div class="section" id="system-log">
+<h3><code class="docutils literal notranslate"><span class="pre">system.log</span></code><a class="headerlink" href="#system-log" title="Permalink to this headline">¶</a></h3>
+<p>This log is the default Cassandra log and is a good place to start any
+investigation. Some examples of activities logged to this log:</p>
+<ul class="simple">
+<li>Uncaught exceptions. These can be very useful for debugging errors.</li>
+<li><code class="docutils literal notranslate"><span class="pre">GCInspector</span></code> messages indicating long garbage collector pauses. When long
+pauses happen Cassandra will print how long and also what was the state of
+the system (thread state) at the time of that pause. This can help narrow
+down a capacity issue (either not enough heap or not enough spare CPU).</li>
+<li>Information about nodes joining and leaving the cluster as well as token
+metadata (data ownersip) changes. This is useful for debugging network
+partitions, data movements, and more.</li>
+<li>Keyspace/Table creation, modification, deletion.</li>
+<li><code class="docutils literal notranslate"><span class="pre">StartupChecks</span></code> that ensure optimal configuration of the operating system
+to run Cassandra</li>
+<li>Information about some background operational tasks (e.g. Index
+Redistribution).</li>
+</ul>
+<p>As with any application, looking for <code class="docutils literal notranslate"><span class="pre">ERROR</span></code> or <code class="docutils literal notranslate"><span class="pre">WARN</span></code> lines can be a
+great first step:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ # Search for warnings or errors in the latest system.log
+$ grep &#39;WARN\|ERROR&#39; system.log | tail
+...
+
+$ # Search for warnings or errors in all rotated system.log
+$ zgrep &#39;WARN\|ERROR&#39; system.log.* | less
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="debug-log">
+<h3><code class="docutils literal notranslate"><span class="pre">debug.log</span></code><a class="headerlink" href="#debug-log" title="Permalink to this headline">¶</a></h3>
+<p>This log contains additional debugging information that may be useful when
+troubleshooting but may be much noiser than the normal <code class="docutils literal notranslate"><span class="pre">system.log</span></code>. Some
+examples of activities logged to this log:</p>
+<ul class="simple">
+<li>Information about compactions, including when they start, which sstables
+they contain, and when they finish.</li>
+<li>Information about memtable flushes to disk, including when they happened,
+how large the flushes were, and which commitlog segments the flush impacted.</li>
+</ul>
+<p>This log can be <em>very</em> noisy, so it is highly recommended to use <code class="docutils literal notranslate"><span class="pre">grep</span></code> and
+other log analysis tools to dive deep. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ # Search for messages involving a CompactionTask with 5 lines of context
+$ grep CompactionTask debug.log -C 5
+...
+
+$ # Look at the distribution of flush tasks per keyspace
+$ grep &quot;Enqueuing flush&quot; debug.log | cut -f 10 -d &#39; &#39; | sort | uniq -c
+    6 compaction_history:
+    1 test_keyspace:
+    2 local:
+    17 size_estimates:
+    17 sstable_activity:
+</pre></div>
+</div>
+</div>
+<div class="section" id="gc-log">
+<h3><code class="docutils literal notranslate"><span class="pre">gc.log</span></code><a class="headerlink" href="#gc-log" title="Permalink to this headline">¶</a></h3>
+<p>The gc log is a standard Java GC log. With the default <code class="docutils literal notranslate"><span class="pre">jvm.options</span></code>
+settings you get a lot of valuable information in this log such as
+application pause times, and why pauses happened. This may help narrow
+down throughput or latency issues to a mistuned JVM. For example you can
+view the last few pauses:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ grep stopped gc.log.0.current | tail
+2018-08-29T00:19:39.522+0000: 3022663.591: Total time for which application threads were stopped: 0.0332813 seconds, Stopping threads took: 0.0008189 seconds
+2018-08-29T00:19:44.369+0000: 3022668.438: Total time for which application threads were stopped: 0.0312507 seconds, Stopping threads took: 0.0007025 seconds
+2018-08-29T00:19:49.796+0000: 3022673.865: Total time for which application threads were stopped: 0.0307071 seconds, Stopping threads took: 0.0006662 seconds
+2018-08-29T00:19:55.452+0000: 3022679.521: Total time for which application threads were stopped: 0.0309578 seconds, Stopping threads took: 0.0006832 seconds
+2018-08-29T00:20:00.127+0000: 3022684.197: Total time for which application threads were stopped: 0.0310082 seconds, Stopping threads took: 0.0007090 seconds
+2018-08-29T00:20:06.583+0000: 3022690.653: Total time for which application threads were stopped: 0.0317346 seconds, Stopping threads took: 0.0007106 seconds
+2018-08-29T00:20:10.079+0000: 3022694.148: Total time for which application threads were stopped: 0.0299036 seconds, Stopping threads took: 0.0006889 seconds
+2018-08-29T00:20:15.739+0000: 3022699.809: Total time for which application threads were stopped: 0.0078283 seconds, Stopping threads took: 0.0006012 seconds
+2018-08-29T00:20:15.770+0000: 3022699.839: Total time for which application threads were stopped: 0.0301285 seconds, Stopping threads took: 0.0003789 seconds
+2018-08-29T00:20:15.798+0000: 3022699.867: Total time for which application threads were stopped: 0.0279407 seconds, Stopping threads took: 0.0003627 seconds
+</pre></div>
+</div>
+<p>This shows a lot of valuable information including how long the application
+was paused (meaning zero user queries were being serviced during the e.g. 33ms
+JVM pause) as well as how long it took to enter the safepoint. You can use this
+raw data to e.g. get the longest pauses:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ grep stopped gc.log.0.current | cut -f 11 -d &#39; &#39; | sort -n  | tail | xargs -IX grep X gc.log.0.current | sort -k 1
+2018-08-28T17:13:40.520-0700: 1.193: Total time for which application threads were stopped: 0.0157914 seconds, Stopping threads took: 0.0000355 seconds
+2018-08-28T17:13:41.206-0700: 1.879: Total time for which application threads were stopped: 0.0249811 seconds, Stopping threads took: 0.0000318 seconds
+2018-08-28T17:13:41.638-0700: 2.311: Total time for which application threads were stopped: 0.0561130 seconds, Stopping threads took: 0.0000328 seconds
+2018-08-28T17:13:41.677-0700: 2.350: Total time for which application threads were stopped: 0.0362129 seconds, Stopping threads took: 0.0000597 seconds
+2018-08-28T17:13:41.781-0700: 2.454: Total time for which application threads were stopped: 0.0442846 seconds, Stopping threads took: 0.0000238 seconds
+2018-08-28T17:13:41.976-0700: 2.649: Total time for which application threads were stopped: 0.0377115 seconds, Stopping threads took: 0.0000250 seconds
+2018-08-28T17:13:42.172-0700: 2.845: Total time for which application threads were stopped: 0.0475415 seconds, Stopping threads took: 0.0001018 seconds
+2018-08-28T17:13:42.825-0700: 3.498: Total time for which application threads were stopped: 0.0379155 seconds, Stopping threads took: 0.0000571 seconds
+2018-08-28T17:13:43.574-0700: 4.247: Total time for which application threads were stopped: 0.0323812 seconds, Stopping threads took: 0.0000574 seconds
+2018-08-28T17:13:44.602-0700: 5.275: Total time for which application threads were stopped: 0.0238975 seconds, Stopping threads took: 0.0000788 seconds
+</pre></div>
+</div>
+<p>In this case any client waiting on a query would have experienced a <cite>56ms</cite>
+latency at 17:13:41.</p>
+<p>Note that GC pauses are not _only_ garbage collection, although
+generally speaking high pauses with fast safepoints indicate a lack of JVM heap
+or mistuned JVM GC algorithm. High pauses with slow safepoints typically
+indicate that the JVM is having trouble entering a safepoint which usually
+indicates slow disk drives (Cassandra makes heavy use of memory mapped reads
+which the JVM doesn’t know could have disk latency, so the JVM safepoint logic
+doesn’t handle a blocking memory mapped read particularly well).</p>
+<p>Using these logs you can even get a pause distribution with something like
+<a class="reference external" href="https://github.com/bitly/data_hacks/blob/master/data_hacks/histogram.py">histogram.py</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ grep stopped gc.log.0.current | cut -f 11 -d &#39; &#39; | sort -n | histogram.py
+# NumSamples = 410293; Min = 0.00; Max = 11.49
+# Mean = 0.035346; Variance = 0.002216; SD = 0.047078; Median 0.036498
+# each ∎ represents a count of 5470
+    0.0001 -     1.1496 [410255]: ∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎
+    1.1496 -     2.2991 [    15]:
+    2.2991 -     3.4486 [     5]:
+    3.4486 -     4.5981 [     1]:
+    4.5981 -     5.7475 [     5]:
+    5.7475 -     6.8970 [     9]:
+    6.8970 -     8.0465 [     1]:
+    8.0465 -     9.1960 [     0]:
+    9.1960 -    10.3455 [     0]:
+   10.3455 -    11.4949 [     2]:
+</pre></div>
+</div>
+<p>We can see in this case while we have very good average performance something
+is causing multi second JVM pauses … In this case it was mostly safepoint
+pauses caused by slow disks:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ grep stopped gc.log.0.current | cut -f 11 -d &#39; &#39; | sort -n | tail | xargs -IX grep X  gc.log.0.current| sort -k 1
+2018-07-27T04:52:27.413+0000: 187831.482: Total time for which application threads were stopped: 6.5037022 seconds, Stopping threads took: 0.0005212 seconds
+2018-07-30T23:38:18.354+0000: 514582.423: Total time for which application threads were stopped: 6.3262938 seconds, Stopping threads took: 0.0004882 seconds
+2018-08-01T02:37:48.380+0000: 611752.450: Total time for which application threads were stopped: 10.3879659 seconds, Stopping threads took: 0.0004475 seconds
+2018-08-06T22:04:14.990+0000: 1113739.059: Total time for which application threads were stopped: 6.0917409 seconds, Stopping threads took: 0.0005553 seconds
+2018-08-14T00:04:06.091+0000: 1725730.160: Total time for which application threads were stopped: 6.0141054 seconds, Stopping threads took: 0.0004976 seconds
+2018-08-17T06:23:06.755+0000: 2007670.824: Total time for which application threads were stopped: 6.0133694 seconds, Stopping threads took: 0.0006011 seconds
+2018-08-23T06:35:46.068+0000: 2526830.137: Total time for which application threads were stopped: 6.4767751 seconds, Stopping threads took: 6.4426849 seconds
+2018-08-23T06:36:29.018+0000: 2526873.087: Total time for which application threads were stopped: 11.4949489 seconds, Stopping threads took: 11.4638297 seconds
+2018-08-23T06:37:12.671+0000: 2526916.741: Total time for which application threads were stopped: 6.3867003 seconds, Stopping threads took: 6.3507166 seconds
+2018-08-23T06:37:47.156+0000: 2526951.225: Total time for which application threads were stopped: 7.9528200 seconds, Stopping threads took: 7.9197756 seconds
+</pre></div>
+</div>
+<p>Sometimes reading and understanding java GC logs is hard, but you can take the
+raw GC files and visualize them using tools such as <a class="reference external" href="https://github.com/chewiebug/GCViewer">GCViewer</a> which take the Cassandra GC log as
+input and show you detailed visual information on your garbage collection
+performance. This includes pause analysis as well as throughput information.
+For a stable Cassandra JVM you probably want to aim for pauses less than
+<cite>200ms</cite> and GC throughput greater than <cite>99%</cite> (ymmv).</p>
+<p>Java GC pauses are one of the leading causes of tail latency in Cassandra
+(along with drive latency) so sometimes this information can be crucial
+while debugging tail latency issues.</p>
+</div>
+</div>
+<div class="section" id="getting-more-information">
+<h2>Getting More Information<a class="headerlink" href="#getting-more-information" title="Permalink to this headline">¶</a></h2>
+<p>If the default logging levels are insuficient, <code class="docutils literal notranslate"><span class="pre">nodetool</span></code> can set higher
+or lower logging levels for various packages and classes using the
+<code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">setlogginglevel</span></code> command. Start by viewing the current levels:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ nodetool getlogginglevels
+
+Logger Name                                        Log Level
+ROOT                                                    INFO
+org.apache.cassandra                                   DEBUG
+</pre></div>
+</div>
+<p>Perhaps the <code class="docutils literal notranslate"><span class="pre">Gossiper</span></code> is acting up and we wish to enable it at <code class="docutils literal notranslate"><span class="pre">TRACE</span></code>
+level for even more insight:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ nodetool setlogginglevel org.apache.cassandra.gms.Gossiper TRACE
+
+$ nodetool getlogginglevels
+
+Logger Name                                        Log Level
+ROOT                                                    INFO
+org.apache.cassandra                                   DEBUG
+org.apache.cassandra.gms.Gossiper                      TRACE
+
+$ grep TRACE debug.log | tail -2
+TRACE [GossipStage:1] 2018-07-04 17:07:47,879 Gossiper.java:1234 - Updating
+heartbeat state version to 2344 from 2343 for 127.0.0.2:7000 ...
+TRACE [GossipStage:1] 2018-07-04 17:07:47,879 Gossiper.java:923 - local
+heartbeat version 2341 greater than 2340 for 127.0.0.1:7000
+</pre></div>
+</div>
+<p>Note that any changes made this way are reverted on next Cassandra process
+restart. To make the changes permanent add the appropriate rule to
+<code class="docutils literal notranslate"><span class="pre">logback.xml</span></code>.</p>
+<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span><span class="gh">diff --git a/conf/logback.xml b/conf/logback.xml</span>
+<span class="gh">index b2c5b10..71b0a49 100644</span>
+<span class="gd">--- a/conf/logback.xml</span>
+<span class="gi">+++ b/conf/logback.xml</span>
+<span class="gu">@@ -98,4 +98,5 @@ appender reference in the root level section below.</span>
+   &lt;/root&gt;
+
+   &lt;logger name=&quot;org.apache.cassandra&quot; level=&quot;DEBUG&quot;/&gt;
+<span class="gi">+  &lt;logger name=&quot;org.apache.cassandra.gms.Gossiper&quot; level=&quot;TRACE&quot;/&gt;</span>
+ &lt;/configuration&gt;
+</pre></div>
+</div>
+<div class="section" id="full-query-logger">
+<h3>Full Query Logger<a class="headerlink" href="#full-query-logger" title="Permalink to this headline">¶</a></h3>
+<p>Cassandra 4.0 additionally ships with support for full query logging. This
+is a highly performant binary logging tool which captures Cassandra queries
+in real time, writes them (if possible) to a log file, and ensures the total
+size of the capture does not exceed a particular limit. FQL is enabled with
+<code class="docutils literal notranslate"><span class="pre">nodetool</span></code> and the logs are read with the provided <code class="docutils literal notranslate"><span class="pre">bin/fqltool</span></code> utility:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mkdir /var/tmp/fql_logs
+$ nodetool enablefullquerylog --path /var/tmp/fql_logs
+
+# ... do some querying
+
+$ bin/fqltool dump /var/tmp/fql_logs/20180705-00.cq4 | tail
+Query time: 1530750927224
+Query: SELECT * FROM system_virtual_schema.columns WHERE keyspace_name =
+&#39;system_views&#39; AND table_name = &#39;sstable_tasks&#39;;
+Values:
+
+Type: single
+Protocol version: 4
+Query time: 1530750934072
+Query: select * from keyspace1.standard1 ;
+Values:
+
+$ nodetool disablefullquerylog
+</pre></div>
+</div>
+<p>Note that if you want more information than this tool provides, there are other
+live capture options available such as <a class="reference internal" href="use_tools.html#packet-capture"><span class="std std-ref">packet capture</span></a>.</p>
+</div>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="use_nodetool.html" class="btn btn-default pull-right " role="button" title="Use Nodetool" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="finding_nodes.html" class="btn btn-default" role="button" title="Find The Misbehaving Nodes" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-beta3/architecture/guarantees.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-beta3" href="../index.html"/> <link rel="up" title="Architecture" href="index.html"/> <link rel="next" title="The Cassandra Query Language (CQL)" href="../cql/index.html"/> <link rel="prev" title="Storage Engine" href="storage_engine.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">Architecture</a></li>
+      
+
+      
+      <li>Guarantees</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Architecture</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dynamo.html">Dynamo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="storage_engine.html">Storage Engine</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Guarantees</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-cap">What is CAP?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#high-scalability">High Scalability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#high-availability">High Availability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#durability">Durability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#eventual-consistency">Eventual Consistency</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lightweight-transactions-with-linearizable-consistency">Lightweight transactions with linearizable consistency</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#batched-writes">Batched Writes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#secondary-indexes">Secondary Indexes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="guarantees">
+<span id="id1"></span><h1>Guarantees<a class="headerlink" href="#guarantees" title="Permalink to this headline">¶</a></h1>
+<p>Apache Cassandra is a highly scalable and reliable database.  Cassandra is used in web based applications that serve large number of clients and the quantity of data processed is web-scale  (Petabyte) large.  Cassandra   makes some guarantees about its scalability, availability and reliability. To fully understand the inherent limitations of a storage system in an environment in which a certain level of network partition failure is to be expected and taken into account when designing the system it is important to first briefly  introduce the CAP theorem.</p>
+<div class="section" id="what-is-cap">
+<h2>What is CAP?<a class="headerlink" href="#what-is-cap" title="Permalink to this headline">¶</a></h2>
+<p>According to the CAP theorem it is not possible for a distributed data store to provide more than two of the following guarantees simultaneously.</p>
+<ul class="simple">
+<li>Consistency: Consistency implies that every read receives the most recent write or errors out</li>
+<li>Availability: Availability implies that every request receives a response. It is not guaranteed that the response contains the most recent write or data.</li>
+<li>Partition tolerance: Partition tolerance refers to the tolerance of a storage system to failure of a network partition.  Even if some of the messages are dropped or delayed the system continues to operate.</li>
+</ul>
+<p>CAP theorem implies that when using a network partition, with the inherent risk of partition failure, one has to choose between consistency and availability and both cannot be guaranteed at the same time. CAP theorem is illustrated in Figure 1.</p>
+<div class="figure">
+<img alt="../_images/Figure_1_guarantees.jpg" src="../_images/Figure_1_guarantees.jpg" />
+</div>
+<p>Figure 1. CAP Theorem</p>
+<p>High availability is a priority in web based applications and to this objective Cassandra chooses Availability and Partition Tolerance from the CAP guarantees, compromising on data Consistency to some extent.</p>
+<p>Cassandra makes the following guarantees.</p>
+<ul class="simple">
+<li>High Scalability</li>
+<li>High Availability</li>
+<li>Durability</li>
+<li>Eventual Consistency of writes to a single table</li>
+<li>Lightweight transactions with linearizable consistency</li>
+<li>Batched writes across multiple tables are guaranteed to succeed completely or not at all</li>
+<li>Secondary indexes are guaranteed to be consistent with their local replicas data</li>
+</ul>
+</div>
+<div class="section" id="high-scalability">
+<h2>High Scalability<a class="headerlink" href="#high-scalability" title="Permalink to this headline">¶</a></h2>
+<p>Cassandra is a highly scalable storage system in which nodes may be added/removed as needed. Using gossip-based protocol a unified and consistent membership  list is kept at each node.</p>
+</div>
+<div class="section" id="high-availability">
+<h2>High Availability<a class="headerlink" href="#high-availability" title="Permalink to this headline">¶</a></h2>
+<p>Cassandra guarantees high availability of data by  implementing a fault-tolerant storage system. Failure detection in a node is detected using a gossip-based protocol.</p>
+</div>
+<div class="section" id="durability">
+<h2>Durability<a class="headerlink" href="#durability" title="Permalink to this headline">¶</a></h2>
+<p>Cassandra guarantees data durability by using replicas. Replicas are multiple copies of a data stored on different nodes in a cluster. In a multi-datacenter environment the replicas may be stored on different datacenters. If one replica is lost due to unrecoverable  node/datacenter failure the data is not completely lost as replicas are still available.</p>
+</div>
+<div class="section" id="eventual-consistency">
+<h2>Eventual Consistency<a class="headerlink" href="#eventual-consistency" title="Permalink to this headline">¶</a></h2>
+<p>Meeting the requirements of performance, reliability, scalability and high availability in production Cassandra is an eventually consistent storage system. Eventually consistent implies that all updates reach all replicas eventually. Divergent versions of the same data may exist temporarily but they are eventually reconciled to a consistent state. Eventual consistency is a tradeoff to achieve high availability and it involves some read and write latencies.</p>
+</div>
+<div class="section" id="lightweight-transactions-with-linearizable-consistency">
+<h2>Lightweight transactions with linearizable consistency<a class="headerlink" href="#lightweight-transactions-with-linearizable-consistency" title="Permalink to this headline">¶</a></h2>
+<p>Data must be read and written in a sequential order. Paxos consensus protocol is used to implement lightweight transactions. Paxos protocol implements lightweight transactions that are able to handle concurrent operations using linearizable consistency. Linearizable consistency is sequential consistency with real-time constraints and it ensures transaction isolation with compare and set (CAS) transaction. With CAS replica data is compared and data that is found to be out of date is set to the most consistent value. Reads with linearizable consistency allow reading the current state of the data, which may possibly be uncommitted, without making a new addition or update.</p>
+</div>
+<div class="section" id="batched-writes">
+<h2>Batched Writes<a class="headerlink" href="#batched-writes" title="Permalink to this headline">¶</a></h2>
+<p>The guarantee for batched writes across multiple tables is that they will eventually succeed, or none will.  Batch data is first written to batchlog system data, and when the batch data has been successfully stored in the cluster the batchlog data is removed.  The batch is replicated to another node to ensure the full batch completes in the event the coordinator node fails.</p>
+</div>
+<div class="section" id="secondary-indexes">
+<h2>Secondary Indexes<a class="headerlink" href="#secondary-indexes" title="Permalink to this headline">¶</a></h2>
+<p>A secondary index is an index on a column and is used to query a table that is normally not queryable. Secondary indexes when built are guaranteed to be consistent with their local replicas.</p>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="../cql/index.html" class="btn btn-default pull-right " role="button" title="The Cassandra Query Language (CQL)" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="storage_engine.html" class="btn btn-default" role="button" title="Storage Engine" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

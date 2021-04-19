@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-beta3/operating/backups.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-beta3" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Bulk Loading" href="bulk_loading.html"/> <link rel="prev" title="Change Data Capture" href="cdc.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">Operating Cassandra</a></li>
+      
+
+      
+      <li>Backups</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Operating Cassandra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="snitch.html">Snitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topo_changes.html">Adding, replacing, moving and removing nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="repair.html">Repair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_repair.html">Read repair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hints.html">Hints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html">Compaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bloom_filters.html">Bloom Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compression.html">Compression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cdc.html">Change Data Capture</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Backups</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#types-of-backups">Types of Backups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-directory-structure">Data Directory Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#snapshots">Snapshots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#incremental-backups">Incremental Backups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#restoring-from-incremental-backups-and-snapshots">Restoring from  Incremental Backups and Snapshots</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bulk_loading.html">Bulk Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html">Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html">Hardware Choices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="backups">
+<h1>Backups<a class="headerlink" href="#backups" title="Permalink to this headline">¶</a></h1>
+<p>Apache Cassandra stores data in immutable SSTable files. Backups in Apache Cassandra database are backup copies of the database data that is stored as SSTable files. Backups are used for several purposes including the following:</p>
+<ul class="simple">
+<li>To store a data copy for durability</li>
+<li>To be able to restore a table if table data is lost due to node/partition/network failure</li>
+<li>To be able to transfer the SSTable files to a different machine;  for portability</li>
+</ul>
+<div class="section" id="types-of-backups">
+<h2>Types of Backups<a class="headerlink" href="#types-of-backups" title="Permalink to this headline">¶</a></h2>
+<p>Apache Cassandra supports two kinds of backup strategies.</p>
+<ul class="simple">
+<li>Snapshots</li>
+<li>Incremental Backups</li>
+</ul>
+<p>A <em>snapshot</em> is a copy of a table’s SSTable files at a given time, created via hard links.  The DDL to create the table is stored as well.  Snapshots may be created by a user or created automatically.
+The setting (<code class="docutils literal notranslate"><span class="pre">snapshot_before_compaction</span></code>) in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> determines if snapshots are created before each compaction.
+By default <code class="docutils literal notranslate"><span class="pre">snapshot_before_compaction</span></code> is set to false.
+Snapshots may be created automatically before keyspace truncation or dropping of a table by setting <code class="docutils literal notranslate"><span class="pre">auto_snapshot</span></code> to true (default) in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code>.
+Truncates could be delayed due to the auto snapshots and another setting in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> determines how long the coordinator should wait for truncates to complete.
+By default Cassandra waits 60 seconds for auto snapshots to complete.</p>
+<p>An <em>incremental backup</em> is a copy of a table’s SSTable files created by a hard link when memtables are flushed to disk as SSTables.
+Typically incremental backups are paired with snapshots to reduce the backup time as well as reduce disk space.
+Incremental backups are not enabled by default and must be enabled explicitly in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> (with <code class="docutils literal notranslate"><span class="pre">incremental_backups</span></code> setting) or with the Nodetool.
+Once enabled, Cassandra creates a hard link to each SSTable flushed or streamed locally in a <code class="docutils literal notranslate"><span class="pre">backups/</span></code> subdirectory of the keyspace data. Incremental backups of system tables are also created.</p>
+</div>
+<div class="section" id="data-directory-structure">
+<h2>Data Directory Structure<a class="headerlink" href="#data-directory-structure" title="Permalink to this headline">¶</a></h2>
+<p>The directory structure of Cassandra data consists of different directories for keyspaces, and tables with the data files within the table directories.  Directories  backups and snapshots to store backups and snapshots respectively for a particular table are also stored within the table directory. The directory structure for Cassandra is illustrated in Figure 1.</p>
+<div class="figure">
+<img alt="../_images/Figure_1_backups.jpg" src="../_images/Figure_1_backups.jpg" />
+</div>
+<p>Figure 1. Directory Structure for Cassandra Data</p>
+<div class="section" id="setting-up-example-tables-for-backups-and-snapshots">
+<h3>Setting Up Example Tables for Backups and Snapshots<a class="headerlink" href="#setting-up-example-tables-for-backups-and-snapshots" title="Permalink to this headline">¶</a></h3>
+<p>In this section we shall create some example data that could be used to demonstrate incremental backups and snapshots. We have used a three node Cassandra cluster.
+First, the keyspaces are created. Subsequently tables are created within a keyspace and table data is added. We have used two keyspaces <code class="docutils literal notranslate"><span class="pre">CQLKeyspace</span></code> and <code class="docutils literal notranslate"><span class="pre">CatalogKeyspace</span></code> with two tables within each.
+Create <code class="docutils literal notranslate"><span class="pre">CQLKeyspace</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh&gt; CREATE KEYSPACE CQLKeyspace
+  ... WITH replication = {&#39;class&#39;: &#39;SimpleStrategy&#39;, &#39;replication_factor&#39; : 3};
+</pre></div>
+</div>
+<p>Create table <code class="docutils literal notranslate"><span class="pre">t</span></code> in the <code class="docutils literal notranslate"><span class="pre">CQLKeyspace</span></code> keyspace.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh&gt; USE CQLKeyspace;
+cqlsh:cqlkeyspace&gt; CREATE TABLE t (
+              ...     id int,
+              ...     k int,
+              ...     v text,
+              ...     PRIMARY KEY (id)
+              ... );
+</pre></div>
+</div>
+<p>Add data to table <code class="docutils literal notranslate"><span class="pre">t</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:cqlkeyspace&gt;
+cqlsh:cqlkeyspace&gt; INSERT INTO t (id, k, v) VALUES (0, 0, &#39;val0&#39;);
+cqlsh:cqlkeyspace&gt; INSERT INTO t (id, k, v) VALUES (1, 1, &#39;val1&#39;);
+</pre></div>
+</div>
+<p>A table query lists the data:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:cqlkeyspace&gt; SELECT * FROM t;
+
+id | k | v
+----+---+------
+ 1 | 1 | val1
+ 0 | 0 | val0
+
+ (2 rows)
+</pre></div>
+</div>
+<p>Create another table <code class="docutils literal notranslate"><span class="pre">t2</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:cqlkeyspace&gt; CREATE TABLE t2 (
+              ...     id int,
+              ...     k int,
+              ...     v text,
+              ...     PRIMARY KEY (id)
+              ... );
+</pre></div>
+</div>
+<p>Add data to table <code class="docutils literal notranslate"><span class="pre">t2</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:cqlkeyspace&gt; INSERT INTO t2 (id, k, v) VALUES (0, 0, &#39;val0&#39;);
+cqlsh:cqlkeyspace&gt; INSERT INTO t2 (id, k, v) VALUES (1, 1, &#39;val1&#39;);
+cqlsh:cqlkeyspace&gt; INSERT INTO t2 (id, k, v) VALUES (2, 2, &#39;val2&#39;);
+</pre></div>
+</div>
+<p>A table query lists table data:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:cqlkeyspace&gt; SELECT * FROM t2;
+
+id | k | v
+----+---+------
+ 1 | 1 | val1
+ 0 | 0 | val0
+ 2 | 2 | val2
+
+ (3 rows)
+</pre></div>
+</div>
+<p>Create a second keyspace <code class="docutils literal notranslate"><span class="pre">CatalogKeyspace</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:cqlkeyspace&gt; CREATE KEYSPACE CatalogKeyspace
+              ... WITH replication = {&#39;class&#39;: &#39;SimpleStrategy&#39;, &#39;replication_factor&#39; : 3};
+</pre></div>
+</div>
+<p>Create a table called <code class="docutils literal notranslate"><span class="pre">journal</span></code> in <code class="docutils literal notranslate"><span class="pre">CatalogKeyspace</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:cqlkeyspace&gt; USE CatalogKeyspace;
+cqlsh:catalogkeyspace&gt; CREATE TABLE journal (
+                  ...     id int,
+                  ...     name text,
+                  ...     publisher text,
+                  ...     PRIMARY KEY (id)
+                  ... );
+</pre></div>
+</div>
+<p>Add data to table <code class="docutils literal notranslate"><span class="pre">journal</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:catalogkeyspace&gt; INSERT INTO journal (id, name, publisher) VALUES (0, &#39;Apache
+Cassandra Magazine&#39;, &#39;Apache Cassandra&#39;);
+cqlsh:catalogkeyspace&gt; INSERT INTO journal (id, name, publisher) VALUES (1, &#39;Couchbase
+Magazine&#39;, &#39;Couchbase&#39;);
+</pre></div>
+</div>
+<p>Query table <code class="docutils literal notranslate"><span class="pre">journal</span></code> to list its data:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:catalogkeyspace&gt; SELECT * FROM journal;
+
+id | name                      | publisher
+----+---------------------------+------------------
+ 1 |        Couchbase Magazine |        Couchbase
+ 0 | Apache Cassandra Magazine | Apache Cassandra
+
+ (2 rows)
+</pre></div>
+</div>
+<p>Add another table called <code class="docutils literal notranslate"><span class="pre">magazine</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:catalogkeyspace&gt; CREATE TABLE magazine (
+                  ...     id int,
+                  ...     name text,
+                  ...     publisher text,
+                  ...     PRIMARY KEY (id)
+                  ... );
+</pre></div>
+</div>
+<p>Add table data to <code class="docutils literal notranslate"><span class="pre">magazine</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:catalogkeyspace&gt; INSERT INTO magazine (id, name, publisher) VALUES (0, &#39;Apache
+Cassandra Magazine&#39;, &#39;Apache Cassandra&#39;);
+cqlsh:catalogkeyspace&gt; INSERT INTO magazine (id, name, publisher) VALUES (1, &#39;Couchbase
+Magazine&#39;, &#39;Couchbase&#39;);
+</pre></div>
+</div>
+<p>List table <code class="docutils literal notranslate"><span class="pre">magazine</span></code>’s data:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:catalogkeyspace&gt; SELECT * from magazine;
+
+id | name                      | publisher
+----+---------------------------+------------------
+ 1 |        Couchbase Magazine |        Couchbase
+ 0 | Apache Cassandra Magazine | Apache Cassandra
+
+ (2 rows)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="snapshots">
+<h2>Snapshots<a class="headerlink" href="#snapshots" title="Permalink to this headline">¶</a></h2>
+<p>In this section including sub-sections we shall demonstrate creating snapshots.  The command used to create a snapshot is <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">snapshot</span></code> and its usage is as follows:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ nodetool help snapshot
+NAME
+       nodetool snapshot - Take a snapshot of specified keyspaces or a snapshot
+       of the specified table
+
+SYNOPSIS
+       nodetool [(-h &lt;host&gt; | --host &lt;host&gt;)] [(-p &lt;port&gt; | --port &lt;port&gt;)]
+               [(-pp | --print-port)] [(-pw &lt;password&gt; | --password &lt;password&gt;)]
+               [(-pwf &lt;passwordFilePath&gt; | --password-file &lt;passwordFilePath&gt;)]
+               [(-u &lt;username&gt; | --username &lt;username&gt;)] snapshot
+               [(-cf &lt;table&gt; | --column-family &lt;table&gt; | --table &lt;table&gt;)]
+               [(-kt &lt;ktlist&gt; | --kt-list &lt;ktlist&gt; | -kc &lt;ktlist&gt; | --kc.list &lt;ktlist&gt;)]
+               [(-sf | --skip-flush)] [(-t &lt;tag&gt; | --tag &lt;tag&gt;)] [--] [&lt;keyspaces...&gt;]
+
+OPTIONS
+       -cf &lt;table&gt;, --column-family &lt;table&gt;, --table &lt;table&gt;
+           The table name (you must specify one and only one keyspace for using
+           this option)
+
+       -h &lt;host&gt;, --host &lt;host&gt;
+           Node hostname or ip address
+
+       -kt &lt;ktlist&gt;, --kt-list &lt;ktlist&gt;, -kc &lt;ktlist&gt;, --kc.list &lt;ktlist&gt;
+           The list of Keyspace.table to take snapshot.(you must not specify
+           only keyspace)
+
+       -p &lt;port&gt;, --port &lt;port&gt;
+           Remote jmx agent port number
+
+       -pp, --print-port
+           Operate in 4.0 mode with hosts disambiguated by port number
+
+       -pw &lt;password&gt;, --password &lt;password&gt;
+           Remote jmx agent password
+
+       -pwf &lt;passwordFilePath&gt;, --password-file &lt;passwordFilePath&gt;
+           Path to the JMX password file
+
+       -sf, --skip-flush
+           Do not flush memtables before snapshotting (snapshot will not
+           contain unflushed data)
+
+       -t &lt;tag&gt;, --tag &lt;tag&gt;
+           The name of the snapshot
+
+       -u &lt;username&gt;, --username &lt;username&gt;
+           Remote jmx agent username
+
+       --
+           This option can be used to separate command-line options from the
+           list of argument, (useful when arguments might be mistaken for
+           command-line options
+
+       [&lt;keyspaces...&gt;]
+           List of keyspaces. By default, all keyspaces
+</pre></div>
+</div>
+<div class="section" id="configuring-for-snapshots">
+<h3>Configuring for Snapshots<a class="headerlink" href="#configuring-for-snapshots" title="Permalink to this headline">¶</a></h3>
+<p>To demonstrate creating snapshots with Nodetool on the commandline  we have set
+<code class="docutils literal notranslate"><span class="pre">auto_snapshots</span></code> setting to <code class="docutils literal notranslate"><span class="pre">false</span></code> in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>auto_snapshot: false
+</pre></div>
+</div>
+<p>Also set <code class="docutils literal notranslate"><span class="pre">snapshot_before_compaction</span></code>  to <code class="docutils literal notranslate"><span class="pre">false</span></code> to disable creating snapshots automatically before compaction:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>snapshot_before_compaction: false
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-snapshots">
+<h3>Creating Snapshots<a class="headerlink" href="#creating-snapshots" title="Permalink to this headline">¶</a></h3>
+<p>To demonstrate creating snapshots start with no snapshots. Search for snapshots and none get listed:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ find -name snapshots
+</pre></div>
+</div>
+<p>We shall be using the example keyspaces and tables to create snapshots.</p>
+<div class="section" id="taking-snapshots-of-all-tables-in-a-keyspace">
+<h4>Taking Snapshots of all Tables in a Keyspace<a class="headerlink" href="#taking-snapshots-of-all-tables-in-a-keyspace" title="Permalink to this headline">¶</a></h4>
+<p>To take snapshots of all tables in a keyspace and also optionally tag the snapshot the syntax becomes:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nodetool snapshot --tag &lt;tag&gt;  --&lt;keyspace&gt;
+</pre></div>
+</div>
+<p>As an example create a snapshot called <code class="docutils literal notranslate"><span class="pre">catalog-ks</span></code> for all the tables in the <code class="docutils literal notranslate"><span class="pre">catalogkeyspace</span></code> keyspace:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ nodetool snapshot --tag catalog-ks -- catalogkeyspace
+Requested creating snapshot(s) for [catalogkeyspace] with snapshot name [catalog-ks] and
+options {skipFlush=false}
+Snapshot directory: catalog-ks
+</pre></div>
+</div>
+<p>Search for snapshots and  <code class="docutils literal notranslate"><span class="pre">snapshots</span></code> directories for the tables <code class="docutils literal notranslate"><span class="pre">journal</span></code> and <code class="docutils literal notranslate"><span class="pre">magazine</span></code>, which are in the <code class="docutils literal notranslate"><span class="pre">catalogkeyspace</span></code> keyspace should get listed:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ find -name snapshots
+./cassandra/data/data/catalogkeyspace/journal-296a2d30c22a11e9b1350d927649052c/snapshots
+./cassandra/data/data/catalogkeyspace/magazine-446eae30c22a11e9b1350d927649052c/snapshots
+</pre></div>
+</div>
+<p>Snapshots of all tables in   multiple keyspaces may be created similarly, as an example:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nodetool snapshot --tag catalog-cql-ks --catalogkeyspace,cqlkeyspace
+</pre></div>
+</div>
+</div>
+<div class="section" id="taking-snapshots-of-single-table-in-a-keyspace">
+<h4>Taking Snapshots of Single Table in a Keyspace<a class="headerlink" href="#taking-snapshots-of-single-table-in-a-keyspace" title="Permalink to this headline">¶</a></h4>
+<p>To take a snapshot of a single table the <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">snapshot</span></code> command syntax becomes as follows:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nodetool snapshot --tag &lt;tag&gt; --table &lt;table&gt;  --&lt;keyspace&gt;
+</pre></div>
+</div>
+<p>As an example create a snapshot for table <code class="docutils literal notranslate"><span class="pre">magazine</span></code> in keyspace <code class="docutils literal notranslate"><span class="pre">catalokeyspace</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ nodetool snapshot --tag magazine --table magazine  --
+catalogkeyspace
+Requested creating snapshot(s) for [catalogkeyspace] with snapshot name [magazine] and
+options {skipFlush=false}
+Snapshot directory: magazine
+</pre></div>
+</div>
+</div>
+<div class="section" id="taking-snapshot-of-multiple-tables-from-same-keyspace">
+<h4>Taking Snapshot of Multiple  Tables from same Keyspace<a class="headerlink" href="#taking-snapshot-of-multiple-tables-from-same-keyspace" title="Permalink to this headline">¶</a></h4>
+<p>To take snapshots of multiple tables in a keyspace the list of <em>Keyspace.table</em> must be specified with option <code class="docutils literal notranslate"><span class="pre">--kt-list</span></code>. As an example create snapshots for tables <code class="docutils literal notranslate"><span class="pre">t</span></code> and <code class="docutils literal notranslate"><span class="pre">t2</span></code> in the <code class="docutils literal notranslate"><span class="pre">cqlkeyspace</span></code> keyspace:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nodetool snapshot --kt-list cqlkeyspace.t,cqlkeyspace.t2 --tag multi-table
+[ec2-user@ip-10-0-2-238 ~]$ nodetool snapshot --kt-list cqlkeyspace.t,cqlkeyspace.t2 --tag
+multi-table
+Requested creating snapshot(s) for [cqlkeyspace.t,cqlkeyspace.t2] with snapshot name [multi-
+table] and options {skipFlush=false}
+Snapshot directory: multi-table
+</pre></div>
+</div>
+<p>Multiple snapshots of the same set of tables may be created and tagged with a different name. As an example, create another snapshot for the same set of tables <code class="docutils literal notranslate"><span class="pre">t</span></code> and <code class="docutils literal notranslate"><span class="pre">t2</span></code> in the <code class="docutils literal notranslate"><span class="pre">cqlkeyspace</span></code> keyspace and tag the snapshots differently:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ nodetool snapshot --kt-list cqlkeyspace.t,cqlkeyspace.t2 --tag
+multi-table-2
+Requested creating snapshot(s) for [cqlkeyspace.t,cqlkeyspace.t2] with snapshot name [multi-
+table-2] and options {skipFlush=false}
+Snapshot directory: multi-table-2
+</pre></div>
+</div>
+</div>
+<div class="section" id="taking-snapshot-of-multiple-tables-from-different-keyspaces">
+<h4>Taking Snapshot of Multiple  Tables from Different Keyspaces<a class="headerlink" href="#taking-snapshot-of-multiple-tables-from-different-keyspaces" title="Permalink to this headline">¶</a></h4>
+<p>To take snapshots of multiple tables that are in different keyspaces the command syntax is the same as when multiple tables are in the same keyspace. Each <em>keyspace.table</em> must be specified separately in the <code class="docutils literal notranslate"><span class="pre">--kt-list</span></code> option. As an example, create a snapshot for table <code class="docutils literal notranslate"><span class="pre">t</span></code> in the <code class="docutils literal notranslate"><span class="pre">cqlkeyspace</span></code> and table <code class="docutils literal notranslate"><span class="pre">journal</span></code> in the catalogkeyspace and tag the snapshot <code class="docutils literal notranslate"><span class="pre">multi-ks</span></code>.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ nodetool snapshot --kt-list
+catalogkeyspace.journal,cqlkeyspace.t --tag multi-ks
+Requested creating snapshot(s) for [catalogkeyspace.journal,cqlkeyspace.t] with snapshot
+name [multi-ks] and options {skipFlush=false}
+Snapshot directory: multi-ks
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="listing-snapshots">
+<h3>Listing Snapshots<a class="headerlink" href="#listing-snapshots" title="Permalink to this headline">¶</a></h3>
+<p>To list snapshots use the <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">listsnapshots</span></code> command. All the snapshots that we created in the preceding examples get listed:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ nodetool listsnapshots
+Snapshot Details:
+Snapshot name Keyspace name   Column family name True size Size on disk
+multi-table   cqlkeyspace     t2                 4.86 KiB  5.67 KiB
+multi-table   cqlkeyspace     t                  4.89 KiB  5.7 KiB
+multi-ks      cqlkeyspace     t                  4.89 KiB  5.7 KiB
+multi-ks      catalogkeyspace journal            4.9 KiB   5.73 KiB
+magazine      catalogkeyspace magazine           4.9 KiB   5.73 KiB
+multi-table-2 cqlkeyspace     t2                 4.86 KiB  5.67 KiB
+multi-table-2 cqlkeyspace     t                  4.89 KiB  5.7 KiB
+catalog-ks    catalogkeyspace journal            4.9 KiB   5.73 KiB
+catalog-ks    catalogkeyspace magazine           4.9 KiB   5.73 KiB
+
+Total TrueDiskSpaceUsed: 44.02 KiB
+</pre></div>
+</div>
+</div>
+<div class="section" id="finding-snapshots-directories">
+<h3>Finding Snapshots Directories<a class="headerlink" href="#finding-snapshots-directories" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">snapshots</span></code> directories may be listed with <code class="docutils literal notranslate"><span class="pre">find</span> <span class="pre">–name</span> <span class="pre">snapshots</span></code> command:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ find -name snapshots
+./cassandra/data/data/cqlkeyspace/t-d132e240c21711e9bbee19821dcea330/snapshots
+./cassandra/data/data/cqlkeyspace/t2-d993a390c22911e9b1350d927649052c/snapshots
+./cassandra/data/data/catalogkeyspace/journal-296a2d30c22a11e9b1350d927649052c/snapshots
+./cassandra/data/data/catalogkeyspace/magazine-446eae30c22a11e9b1350d927649052c/snapshots
+[ec2-user@ip-10-0-2-238 ~]$
+</pre></div>
+</div>
+<p>To list the snapshots for a particular table first change directory ( with <code class="docutils literal notranslate"><span class="pre">cd</span></code>) to the <code class="docutils literal notranslate"><span class="pre">snapshots</span></code> directory for the table. As an example, list the snapshots for the <code class="docutils literal notranslate"><span class="pre">catalogkeyspace/journal</span></code> table. Two snapshots get listed:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ cd ./cassandra/data/data/catalogkeyspace/journal-
+296a2d30c22a11e9b1350d927649052c/snapshots
+[ec2-user@ip-10-0-2-238 snapshots]$ ls -l
+total 0
+drwxrwxr-x. 2 ec2-user ec2-user 265 Aug 19 02:44 catalog-ks
+drwxrwxr-x. 2 ec2-user ec2-user 265 Aug 19 02:52 multi-ks
+</pre></div>
+</div>
+<p>A <code class="docutils literal notranslate"><span class="pre">snapshots</span></code> directory lists the SSTable files in the snapshot. <code class="docutils literal notranslate"><span class="pre">Schema.cql</span></code> file is also created in each snapshot for the schema definition DDL that may be run in CQL to create the table when restoring from a snapshot:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 snapshots]$ cd catalog-ks
+[ec2-user@ip-10-0-2-238 catalog-ks]$ ls -l
+total 44
+-rw-rw-r--. 1 ec2-user ec2-user   31 Aug 19 02:44 manifest.jsonZ
+
+-rw-rw-r--. 4 ec2-user ec2-user   47 Aug 19 02:38 na-1-big-CompressionInfo.db
+-rw-rw-r--. 4 ec2-user ec2-user   97 Aug 19 02:38 na-1-big-Data.db
+-rw-rw-r--. 4 ec2-user ec2-user   10 Aug 19 02:38 na-1-big-Digest.crc32
+-rw-rw-r--. 4 ec2-user ec2-user   16 Aug 19 02:38 na-1-big-Filter.db
+-rw-rw-r--. 4 ec2-user ec2-user   16 Aug 19 02:38 na-1-big-Index.db
+-rw-rw-r--. 4 ec2-user ec2-user 4687 Aug 19 02:38 na-1-big-Statistics.db
+-rw-rw-r--. 4 ec2-user ec2-user   56 Aug 19 02:38 na-1-big-Summary.db
+-rw-rw-r--. 4 ec2-user ec2-user   92 Aug 19 02:38 na-1-big-TOC.txt
+-rw-rw-r--. 1 ec2-user ec2-user  814 Aug 19 02:44 schema.cql
+</pre></div>
+</div>
+</div>
+<div class="section" id="clearing-snapshots">
+<h3>Clearing Snapshots<a class="headerlink" href="#clearing-snapshots" title="Permalink to this headline">¶</a></h3>
+<p>Snapshots may be cleared or deleted with the <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">clearsnapshot</span></code> command.  Either a specific snapshot name must be specified or the <code class="docutils literal notranslate"><span class="pre">–all</span></code> option must be specified.
+As an example delete a snapshot called <code class="docutils literal notranslate"><span class="pre">magazine</span></code> from keyspace <code class="docutils literal notranslate"><span class="pre">cqlkeyspace</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nodetool clearsnapshot -t magazine – cqlkeyspace
+Delete all snapshots from cqlkeyspace with the –all option.
+nodetool clearsnapshot –all -- cqlkeyspace
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="incremental-backups">
+<h2>Incremental Backups<a class="headerlink" href="#incremental-backups" title="Permalink to this headline">¶</a></h2>
+<p>In the following sub-sections we shall discuss configuring and creating incremental backups.</p>
+<div class="section" id="configuring-for-incremental-backups">
+<h3>Configuring for Incremental Backups<a class="headerlink" href="#configuring-for-incremental-backups" title="Permalink to this headline">¶</a></h3>
+<p>To create incremental backups set <code class="docutils literal notranslate"><span class="pre">incremental_backups</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code> in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code>.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>incremental_backups: true
+</pre></div>
+</div>
+<p>This is the only setting needed to create incremental backups.  By default <code class="docutils literal notranslate"><span class="pre">incremental_backups</span></code> setting is  set to <code class="docutils literal notranslate"><span class="pre">false</span></code> because a new set of SSTable files is created for each data flush and if several CQL statements are to be run the <code class="docutils literal notranslate"><span class="pre">backups</span></code> directory could  fill up quickly and use up storage that is needed to store table data.
+Incremental backups may also be enabled on the command line with the Nodetool command <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">enablebackup</span></code>. Incremental backups may be disabled with <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">disablebackup</span></code> command. Status of incremental backups, whether they are enabled may be found with <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">statusbackup</span></code>.</p>
+</div>
+<div class="section" id="creating-incremental-backups">
+<h3>Creating Incremental Backups<a class="headerlink" href="#creating-incremental-backups" title="Permalink to this headline">¶</a></h3>
+<p>After each table is created flush the table data with <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">flush</span></code> command. Incremental backups get created.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ nodetool flush cqlkeyspace t
+[ec2-user@ip-10-0-2-238 ~]$ nodetool flush cqlkeyspace t2
+[ec2-user@ip-10-0-2-238 ~]$ nodetool flush catalogkeyspace journal magazine
+</pre></div>
+</div>
+</div>
+<div class="section" id="finding-incremental-backups">
+<h3>Finding Incremental Backups<a class="headerlink" href="#finding-incremental-backups" title="Permalink to this headline">¶</a></h3>
+<p>Incremental backups are created within the Cassandra’s <code class="docutils literal notranslate"><span class="pre">data</span></code> directory within a table directory. Backups may be found with following command.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ find -name backups
+
+./cassandra/data/data/cqlkeyspace/t-d132e240c21711e9bbee19821dcea330/backups
+./cassandra/data/data/cqlkeyspace/t2-d993a390c22911e9b1350d927649052c/backups
+./cassandra/data/data/catalogkeyspace/journal-296a2d30c22a11e9b1350d927649052c/backups
+./cassandra/data/data/catalogkeyspace/magazine-446eae30c22a11e9b1350d927649052c/backups
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-an-incremental-backup">
+<h3>Creating an Incremental Backup<a class="headerlink" href="#creating-an-incremental-backup" title="Permalink to this headline">¶</a></h3>
+<p>This section discusses how incremental backups are created in more detail starting with when a new keyspace is created and a table is added.  Create a keyspace called <code class="docutils literal notranslate"><span class="pre">CQLKeyspace</span></code> (arbitrary name).</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh&gt; CREATE KEYSPACE CQLKeyspace
+  ... WITH replication = {&#39;class&#39;: &#39;SimpleStrategy&#39;, &#39;replication_factor&#39; : 3}
+</pre></div>
+</div>
+<p>Create a table called <code class="docutils literal notranslate"><span class="pre">t</span></code> within the <code class="docutils literal notranslate"><span class="pre">CQLKeyspace</span></code> keyspace:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh&gt; USE CQLKeyspace;
+cqlsh:cqlkeyspace&gt; CREATE TABLE t (
+              ...     id int,
+              ...     k int,
+              ...     v text,
+              ...     PRIMARY KEY (id)
+              ... );
+</pre></div>
+</div>
+<p>Flush the keyspace and table:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ nodetool flush cqlkeyspace t
+</pre></div>
+</div>
+<p>Search for backups and a <code class="docutils literal notranslate"><span class="pre">backups</span></code> directory should get listed even though we have added no table data yet.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ find -name backups
+
+./cassandra/data/data/cqlkeyspace/t-d132e240c21711e9bbee19821dcea330/backups
+</pre></div>
+</div>
+<p>Change directory to the <code class="docutils literal notranslate"><span class="pre">backups</span></code> directory and list files and no files get listed as no table data has been added yet:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ cd ./cassandra/data/data/cqlkeyspace/t-
+d132e240c21711e9bbee19821dcea330/backups
+[ec2-user@ip-10-0-2-238 backups]$ ls -l
+total 0
+</pre></div>
+</div>
+<p>Next, add a row of data to table <code class="docutils literal notranslate"><span class="pre">t</span></code> that we created:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:cqlkeyspace&gt; INSERT INTO t (id, k, v) VALUES (0, 0, &#39;val0&#39;);
+</pre></div>
+</div>
+<p>Run the <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">flush</span></code> command to flush table data:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ nodetool flush cqlkeyspace t
+</pre></div>
+</div>
+<p>List the files and directories in the <code class="docutils literal notranslate"><span class="pre">backups</span></code> directory and SSTable files for an incremental backup get listed:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ cd ./cassandra/data/data/cqlkeyspace/t-
+d132e240c21711e9bbee19821dcea330/backups
+[ec2-user@ip-10-0-2-238 backups]$ ls -l
+total 36
+-rw-rw-r--. 2 ec2-user ec2-user   47 Aug 19 00:32 na-1-big-CompressionInfo.db
+-rw-rw-r--. 2 ec2-user ec2-user   43 Aug 19 00:32 na-1-big-Data.db
+-rw-rw-r--. 2 ec2-user ec2-user   10 Aug 19 00:32 na-1-big-Digest.crc32
+-rw-rw-r--. 2 ec2-user ec2-user   16 Aug 19 00:32 na-1-big-Filter.db
+-rw-rw-r--. 2 ec2-user ec2-user    8 Aug 19 00:32 na-1-big-Index.db
+-rw-rw-r--. 2 ec2-user ec2-user 4673 Aug 19 00:32 na-1-big-Statistics.db
+-rw-rw-r--. 2 ec2-user ec2-user   56 Aug 19 00:32 na-1-big-Summary.db
+-rw-rw-r--. 2 ec2-user ec2-user   92 Aug 19 00:32 na-1-big-TOC.txt
+</pre></div>
+</div>
+<p>Add another row of data:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh:cqlkeyspace&gt; INSERT INTO t (id, k, v) VALUES (1, 1, &#39;val1&#39;);
+</pre></div>
+</div>
+<p>Again, run the <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">flush</span></code> command:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 backups]$  nodetool flush cqlkeyspace t
+</pre></div>
+</div>
+<p>A new incremental backup gets created for the new  data added. List the files in the <code class="docutils literal notranslate"><span class="pre">backups</span></code> directory for table <code class="docutils literal notranslate"><span class="pre">t</span></code> and two sets of SSTable files get listed, one for each incremental backup. The SSTable files are timestamped, which distinguishes the first incremental backup from the second:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 backups]$ ls -l
+total 72
+-rw-rw-r--. 2 ec2-user ec2-user   47 Aug 19 00:32 na-1-big-CompressionInfo.db
+-rw-rw-r--. 2 ec2-user ec2-user   43 Aug 19 00:32 na-1-big-Data.db
+-rw-rw-r--. 2 ec2-user ec2-user   10 Aug 19 00:32 na-1-big-Digest.crc32
+-rw-rw-r--. 2 ec2-user ec2-user   16 Aug 19 00:32 na-1-big-Filter.db
+-rw-rw-r--. 2 ec2-user ec2-user    8 Aug 19 00:32 na-1-big-Index.db
+-rw-rw-r--. 2 ec2-user ec2-user 4673 Aug 19 00:32 na-1-big-Statistics.db
+-rw-rw-r--. 2 ec2-user ec2-user   56 Aug 19 00:32 na-1-big-Summary.db
+-rw-rw-r--. 2 ec2-user ec2-user   92 Aug 19 00:32 na-1-big-TOC.txt
+-rw-rw-r--. 2 ec2-user ec2-user   47 Aug 19 00:35 na-2-big-CompressionInfo.db
+-rw-rw-r--. 2 ec2-user ec2-user   41 Aug 19 00:35 na-2-big-Data.db
+-rw-rw-r--. 2 ec2-user ec2-user   10 Aug 19 00:35 na-2-big-Digest.crc32
+-rw-rw-r--. 2 ec2-user ec2-user   16 Aug 19 00:35 na-2-big-Filter.db
+-rw-rw-r--. 2 ec2-user ec2-user    8 Aug 19 00:35 na-2-big-Index.db
+-rw-rw-r--. 2 ec2-user ec2-user 4673 Aug 19 00:35 na-2-big-Statistics.db
+-rw-rw-r--. 2 ec2-user ec2-user   56 Aug 19 00:35 na-2-big-Summary.db
+-rw-rw-r--. 2 ec2-user ec2-user   92 Aug 19 00:35 na-2-big-TOC.txt
+[ec2-user@ip-10-0-2-238 backups]$
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">backups</span></code> directory for table <code class="docutils literal notranslate"><span class="pre">cqlkeyspace/t</span></code> is created within the <code class="docutils literal notranslate"><span class="pre">data</span></code> directory for the table:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ cd ./cassandra/data/data/cqlkeyspace/t-
+d132e240c21711e9bbee19821dcea330
+[ec2-user@ip-10-0-2-238 t-d132e240c21711e9bbee19821dcea330]$ ls -l
+total 36
+drwxrwxr-x. 2 ec2-user ec2-user  226 Aug 19 02:30 backups
+-rw-rw-r--. 2 ec2-user ec2-user   47 Aug 19 02:30 na-1-big-CompressionInfo.db
+-rw-rw-r--. 2 ec2-user ec2-user   79 Aug 19 02:30 na-1-big-Data.db
+-rw-rw-r--. 2 ec2-user ec2-user   10 Aug 19 02:30 na-1-big-Digest.crc32
+-rw-rw-r--. 2 ec2-user ec2-user   16 Aug 19 02:30 na-1-big-Filter.db
+-rw-rw-r--. 2 ec2-user ec2-user   16 Aug 19 02:30 na-1-big-Index.db
+-rw-rw-r--. 2 ec2-user ec2-user 4696 Aug 19 02:30 na-1-big-Statistics.db
+-rw-rw-r--. 2 ec2-user ec2-user   56 Aug 19 02:30 na-1-big-Summary.db
+-rw-rw-r--. 2 ec2-user ec2-user   92 Aug 19 02:30 na-1-big-TOC.txt
+</pre></div>
+</div>
+<p>The incremental backups for the other keyspaces/tables get created similarly. As an example the <code class="docutils literal notranslate"><span class="pre">backups</span></code> directory for table <code class="docutils literal notranslate"><span class="pre">catalogkeyspace/magazine</span></code> is created within the data directory:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 ~]$ cd ./cassandra/data/data/catalogkeyspace/magazine-
+446eae30c22a11e9b1350d927649052c
+[ec2-user@ip-10-0-2-238 magazine-446eae30c22a11e9b1350d927649052c]$ ls -l
+total 36
+drwxrwxr-x. 2 ec2-user ec2-user  226 Aug 19 02:38 backups
+-rw-rw-r--. 2 ec2-user ec2-user   47 Aug 19 02:38 na-1-big-CompressionInfo.db
+-rw-rw-r--. 2 ec2-user ec2-user   97 Aug 19 02:38 na-1-big-Data.db
+-rw-rw-r--. 2 ec2-user ec2-user   10 Aug 19 02:38 na-1-big-Digest.crc32
+-rw-rw-r--. 2 ec2-user ec2-user   16 Aug 19 02:38 na-1-big-Filter.db
+-rw-rw-r--. 2 ec2-user ec2-user   16 Aug 19 02:38 na-1-big-Index.db
+-rw-rw-r--. 2 ec2-user ec2-user 4687 Aug 19 02:38 na-1-big-Statistics.db
+-rw-rw-r--. 2 ec2-user ec2-user   56 Aug 19 02:38 na-1-big-Summary.db
+-rw-rw-r--. 2 ec2-user ec2-user   92 Aug 19 02:38 na-1-big-TOC.txt
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="restoring-from-incremental-backups-and-snapshots">
+<h2>Restoring from  Incremental Backups and Snapshots<a class="headerlink" href="#restoring-from-incremental-backups-and-snapshots" title="Permalink to this headline">¶</a></h2>
+<p>The two main tools/commands for restoring a table after it has been dropped are:</p>
+<ul class="simple">
+<li>sstableloader</li>
+<li>nodetool import</li>
+</ul>
+<p>A snapshot contains essentially the same set of SSTable files as an incremental backup does with a few additional files. A snapshot includes a <code class="docutils literal notranslate"><span class="pre">schema.cql</span></code> file for the schema DDL to create a table in CQL. A table backup does not include DDL which must be obtained from a snapshot when restoring from an incremental backup.</p>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="bulk_loading.html" class="btn btn-default pull-right " role="button" title="Bulk Loading" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="cdc.html" class="btn btn-default" role="button" title="Change Data Capture" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

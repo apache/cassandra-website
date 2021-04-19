@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-beta3/tools/sstable/sstablemetadata.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-beta3" href="../../index.html"/> <link rel="up" title="SSTable Tools" href="index.html"/> <link rel="next" title="sstableofflinerelevel" href="sstableofflinerelevel.html"/> <link rel="prev" title="sstableloader" href="sstableloader.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">SSTable Tools</a></li>
+      
+
+      
+      <li>sstablemetadata</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../../"><img src="./../../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../../">Home</a></li>
+          <li><a href="./../../../../download/">Download</a></li>
+          <li><a href="./../../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Cassandra Tools</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cqlsh.html">cqlsh: the CQL shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodetool/nodetool.html">Nodetool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodetool/nodetool.html#usage">Usage</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">SSTable Tools</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sstabledump.html">sstabledump</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableexpiredblockers.html">sstableexpiredblockers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablelevelreset.html">sstablelevelreset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableloader.html">sstableloader</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sstablemetadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableofflinerelevel.html">sstableofflinerelevel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablerepairedset.html">sstablerepairedset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablescrub.html">sstablescrub</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablesplit.html">sstablesplit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableupgrade.html">sstableupgrade</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableutil.html">sstableutil</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableverify.html">sstableverify</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cassandra_stress.html">Cassandra Stress</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="sstablemetadata">
+<h1>sstablemetadata<a class="headerlink" href="#sstablemetadata" title="Permalink to this headline">¶</a></h1>
+<p>Print information about an sstable from the related Statistics.db and Summary.db files to standard output.</p>
+<p>ref: <a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-7159">https://issues.apache.org/jira/browse/CASSANDRA-7159</a> and <a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-10838">https://issues.apache.org/jira/browse/CASSANDRA-10838</a></p>
+<p>Cassandra must be stopped before this tool is executed, or unexpected results will occur. Note: the script does not verify that Cassandra is stopped.</p>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>sstablemetadata &lt;options&gt; &lt;sstable filename(s)&gt;</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="76%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>–gc_grace_seconds &lt;arg&gt;</td>
+<td>The gc_grace_seconds to use when calculating droppable tombstones</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="print-all-the-metadata">
+<h2>Print all the metadata<a class="headerlink" href="#print-all-the-metadata" title="Permalink to this headline">¶</a></h2>
+<p>Run sstablemetadata against the <a href="#id1"><span class="problematic" id="id2">*</span></a>Data.db file(s) related to a table. If necessary, find the <a href="#id3"><span class="problematic" id="id4">*</span></a>Data.db file(s) using sstableutil.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstableutil</span> <span class="n">keyspace1</span> <span class="n">standard1</span> <span class="o">|</span> <span class="n">grep</span> <span class="n">Data</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace1</span><span class="o">/</span><span class="n">standard1</span><span class="o">-</span><span class="n">f6845640a6cb11e8b6836d2c86545d91</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span>
+
+<span class="n">sstablemetadata</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace1</span><span class="o">/</span><span class="n">standard1</span><span class="o">-</span><span class="n">f6845640a6cb11e8b6836d2c86545d91</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span>
+
+<span class="n">SSTable</span><span class="p">:</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace1</span><span class="o">/</span><span class="n">standard1</span><span class="o">-</span><span class="n">f6845640a6cb11e8b6836d2c86545d91</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">big</span>
+<span class="n">Partitioner</span><span class="p">:</span> <span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">cassandra</span><span class="o">.</span><span class="n">dht</span><span class="o">.</span><span class="n">Murmur3Partitioner</span>
+<span class="n">Bloom</span> <span class="n">Filter</span> <span class="n">FP</span> <span class="n">chance</span><span class="p">:</span> <span class="mf">0.010000</span>
+<span class="n">Minimum</span> <span class="n">timestamp</span><span class="p">:</span> <span class="mi">1535025576141000</span>
+<span class="n">Maximum</span> <span class="n">timestamp</span><span class="p">:</span> <span class="mi">1535025604309000</span>
+<span class="n">SSTable</span> <span class="nb">min</span> <span class="n">local</span> <span class="n">deletion</span> <span class="n">time</span><span class="p">:</span> <span class="mi">2147483647</span>
+<span class="n">SSTable</span> <span class="nb">max</span> <span class="n">local</span> <span class="n">deletion</span> <span class="n">time</span><span class="p">:</span> <span class="mi">2147483647</span>
+<span class="n">Compressor</span><span class="p">:</span> <span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">cassandra</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">compress</span><span class="o">.</span><span class="n">LZ4Compressor</span>
+<span class="n">TTL</span> <span class="nb">min</span><span class="p">:</span> <span class="mi">86400</span>
+<span class="n">TTL</span> <span class="nb">max</span><span class="p">:</span> <span class="mi">86400</span>
+<span class="n">First</span> <span class="n">token</span><span class="p">:</span> <span class="o">-</span><span class="mi">9223004712949498654</span> <span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="mi">39373333373831303130</span><span class="p">)</span>
+<span class="n">Last</span> <span class="n">token</span><span class="p">:</span> <span class="mi">9222554117157811897</span> <span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="mi">4</span><span class="n">f3438394e39374d3730</span><span class="p">)</span>
+<span class="n">Estimated</span> <span class="n">droppable</span> <span class="n">tombstones</span><span class="p">:</span> <span class="mf">0.9188263888888889</span>
+<span class="n">SSTable</span> <span class="n">Level</span><span class="p">:</span> <span class="mi">0</span>
+<span class="n">Repaired</span> <span class="n">at</span><span class="p">:</span> <span class="mi">0</span>
+<span class="n">Replay</span> <span class="n">positions</span> <span class="n">covered</span><span class="p">:</span> <span class="p">{</span><span class="n">CommitLogPosition</span><span class="p">(</span><span class="n">segmentId</span><span class="o">=</span><span class="mi">1535025390651</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">226400</span><span class="p">)</span><span class="o">=</span><span class="n">CommitLogPosition</span><span class="p">(</span><span class="n">segmentId</span><span class="o">=</span><span class="mi">1535025390651</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">6849139</span><span class="p">)}</span>
+<span class="n">totalColumnsSet</span><span class="p">:</span> <span class="mi">100000</span>
+<span class="n">totalRows</span><span class="p">:</span> <span class="mi">20000</span>
+<span class="n">Estimated</span> <span class="n">tombstone</span> <span class="n">drop</span> <span class="n">times</span><span class="p">:</span>
+<span class="mi">1535039100</span><span class="p">:</span>     <span class="mi">80390</span>
+<span class="mi">1535039160</span><span class="p">:</span>      <span class="mi">5645</span>
+<span class="mi">1535039220</span><span class="p">:</span>     <span class="mi">13965</span>
+<span class="n">Count</span>               <span class="n">Row</span> <span class="n">Size</span>        <span class="n">Cell</span> <span class="n">Count</span>
+<span class="mi">1</span>                          <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">2</span>                          <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">3</span>                          <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">4</span>                          <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">5</span>                          <span class="mi">0</span>             <span class="mi">20000</span>
+<span class="mi">6</span>                          <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">7</span>                          <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">8</span>                          <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">10</span>                         <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">12</span>                         <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">14</span>                         <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">17</span>                         <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">20</span>                         <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">24</span>                         <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">29</span>                         <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">35</span>                         <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">42</span>                         <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">50</span>                         <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">60</span>                         <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">72</span>                         <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">86</span>                         <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">103</span>                        <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">124</span>                        <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">149</span>                        <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">179</span>                        <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">215</span>                        <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">258</span>                    <span class="mi">20000</span>                 <span class="mi">0</span>
+<span class="mi">310</span>                        <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">372</span>                        <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">446</span>                        <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">535</span>                        <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">642</span>                        <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">770</span>                        <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">924</span>                        <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">1109</span>                       <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">1331</span>                       <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">1597</span>                       <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">1916</span>                       <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">2299</span>                       <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">2759</span>                       <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">3311</span>                       <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">3973</span>                       <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">4768</span>                       <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">5722</span>                       <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">6866</span>                       <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">8239</span>                       <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">9887</span>                       <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">11864</span>                      <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">14237</span>                      <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">17084</span>                      <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">20501</span>                      <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">24601</span>                      <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">29521</span>                      <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">35425</span>                      <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">42510</span>                      <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">51012</span>                      <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">61214</span>                      <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">73457</span>                      <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">88148</span>                      <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">105778</span>                     <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">126934</span>                     <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">152321</span>                     <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">182785</span>                     <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">219342</span>                     <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">263210</span>                     <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">315852</span>                     <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">379022</span>                     <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">454826</span>                     <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">545791</span>                     <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">654949</span>                     <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">785939</span>                     <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">943127</span>                     <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">1131752</span>                    <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">1358102</span>                    <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">1629722</span>                    <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">1955666</span>                    <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">2346799</span>                    <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">2816159</span>                    <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">3379391</span>                    <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">4055269</span>                    <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">4866323</span>                    <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">5839588</span>                    <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">7007506</span>                    <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">8409007</span>                    <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">10090808</span>                   <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">12108970</span>                   <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">14530764</span>                   <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">17436917</span>                   <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">20924300</span>                   <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">25109160</span>                   <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">30130992</span>                   <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">36157190</span>                   <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">43388628</span>                   <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">52066354</span>                   <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">62479625</span>                   <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">74975550</span>                   <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">89970660</span>                   <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">107964792</span>                  <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">129557750</span>                  <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">155469300</span>                  <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">186563160</span>                  <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">223875792</span>                  <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">268650950</span>                  <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">322381140</span>                  <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">386857368</span>                  <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">464228842</span>                  <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">557074610</span>                  <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">668489532</span>                  <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">802187438</span>                  <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">962624926</span>                  <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">1155149911</span>                 <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">1386179893</span>                 <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">1663415872</span>                 <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">1996099046</span>                 <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">2395318855</span>                 <span class="mi">0</span>                 <span class="mi">0</span>
+<span class="mi">2874382626</span>                 <span class="mi">0</span>
+<span class="mi">3449259151</span>                 <span class="mi">0</span>
+<span class="mi">4139110981</span>                 <span class="mi">0</span>
+<span class="mi">4966933177</span>                 <span class="mi">0</span>
+<span class="mi">5960319812</span>                 <span class="mi">0</span>
+<span class="mi">7152383774</span>                 <span class="mi">0</span>
+<span class="mi">8582860529</span>                 <span class="mi">0</span>
+<span class="mi">10299432635</span>                 <span class="mi">0</span>
+<span class="mi">12359319162</span>                 <span class="mi">0</span>
+<span class="mi">14831182994</span>                 <span class="mi">0</span>
+<span class="mi">17797419593</span>                 <span class="mi">0</span>
+<span class="mi">21356903512</span>                 <span class="mi">0</span>
+<span class="mi">25628284214</span>                 <span class="mi">0</span>
+<span class="mi">30753941057</span>                 <span class="mi">0</span>
+<span class="mi">36904729268</span>                 <span class="mi">0</span>
+<span class="mi">44285675122</span>                 <span class="mi">0</span>
+<span class="mi">53142810146</span>                 <span class="mi">0</span>
+<span class="mi">63771372175</span>                 <span class="mi">0</span>
+<span class="mi">76525646610</span>                 <span class="mi">0</span>
+<span class="mi">91830775932</span>                 <span class="mi">0</span>
+<span class="mi">110196931118</span>                 <span class="mi">0</span>
+<span class="mi">132236317342</span>                 <span class="mi">0</span>
+<span class="mi">158683580810</span>                 <span class="mi">0</span>
+<span class="mi">190420296972</span>                 <span class="mi">0</span>
+<span class="mi">228504356366</span>                 <span class="mi">0</span>
+<span class="mi">274205227639</span>                 <span class="mi">0</span>
+<span class="mi">329046273167</span>                 <span class="mi">0</span>
+<span class="mi">394855527800</span>                 <span class="mi">0</span>
+<span class="mi">473826633360</span>                 <span class="mi">0</span>
+<span class="mi">568591960032</span>                 <span class="mi">0</span>
+<span class="mi">682310352038</span>                 <span class="mi">0</span>
+<span class="mi">818772422446</span>                 <span class="mi">0</span>
+<span class="mi">982526906935</span>                 <span class="mi">0</span>
+<span class="mi">1179032288322</span>                 <span class="mi">0</span>
+<span class="mi">1414838745986</span>                 <span class="mi">0</span>
+<span class="n">Estimated</span> <span class="n">cardinality</span><span class="p">:</span> <span class="mi">20196</span>
+<span class="n">EncodingStats</span> <span class="n">minTTL</span><span class="p">:</span> <span class="mi">0</span>
+<span class="n">EncodingStats</span> <span class="n">minLocalDeletionTime</span><span class="p">:</span> <span class="mi">1442880000</span>
+<span class="n">EncodingStats</span> <span class="n">minTimestamp</span><span class="p">:</span> <span class="mi">1535025565275000</span>
+<span class="n">KeyType</span><span class="p">:</span> <span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">cassandra</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">marshal</span><span class="o">.</span><span class="n">BytesType</span>
+<span class="n">ClusteringTypes</span><span class="p">:</span> <span class="p">[</span><span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">cassandra</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">marshal</span><span class="o">.</span><span class="n">UTF8Type</span><span class="p">]</span>
+<span class="n">StaticColumns</span><span class="p">:</span> <span class="p">{</span><span class="n">C3</span><span class="p">:</span><span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">cassandra</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">marshal</span><span class="o">.</span><span class="n">BytesType</span><span class="p">,</span> <span class="n">C4</span><span class="p">:</span><span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">cassandra</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">marshal</span><span class="o">.</span><span class="n">BytesType</span><span class="p">,</span> <span class="n">C0</span><span class="p">:</span><span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">cassandra</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">marshal</span><span class="o">.</span><span class="n">BytesType</span><span class="p">,</span> <span class="n">C1</span><span class="p">:</span><span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">cassandra</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">marshal</span><span class="o">.</span><span class="n">BytesType</span><span class="p">,</span> <span class="n">C2</span><span class="p">:</span><span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">cassandra</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">marshal</span><span class="o">.</span><span class="n">BytesType</span><span class="p">}</span>
+<span class="n">RegularColumns</span><span class="p">:</span> <span class="p">{}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="specify-gc-grace-seconds">
+<h2>Specify gc grace seconds<a class="headerlink" href="#specify-gc-grace-seconds" title="Permalink to this headline">¶</a></h2>
+<p>To see the ratio of droppable tombstones given a configured gc grace seconds, use the gc_grace_seconds option. Because the sstablemetadata tool doesn’t access the schema directly, this is a way to more accurately estimate droppable tombstones – for example, if you pass in gc_grace_seconds matching what is configured in the schema. The gc_grace_seconds value provided is subtracted from the curent machine time (in seconds).</p>
+<p>ref: <a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-12208">https://issues.apache.org/jira/browse/CASSANDRA-12208</a></p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sstablemetadata /var/lib/cassandra/data/keyspace1/standard1-41b52700b4ed11e896476d2c86545d91/mc-12-big-Data.db | grep &quot;Estimated tombstone drop times&quot; -A4
+Estimated tombstone drop times:
+1536599100:         1
+1536599640:         1
+1536599700:         2
+
+echo $(date +%s)
+1536602005
+
+# if gc_grace_seconds was configured at 100, all of the tombstones would be currently droppable
+sstablemetadata --gc_grace_seconds 100 /var/lib/cassandra/data/keyspace1/standard1-41b52700b4ed11e896476d2c86545d91/mc-12-big-Data.db | grep &quot;Estimated droppable tombstones&quot;
+Estimated droppable tombstones: 4.0E-5
+
+# if gc_grace_seconds was configured at 4700, some of the tombstones would be currently droppable
+sstablemetadata --gc_grace_seconds 4700 /var/lib/cassandra/data/keyspace1/standard1-41b52700b4ed11e896476d2c86545d91/mc-12-big-Data.db | grep &quot;Estimated droppable tombstones&quot;
+Estimated droppable tombstones: 9.61111111111111E-6
+
+# if gc_grace_seconds was configured at 100, none of the tombstones would be currently droppable
+sstablemetadata --gc_grace_seconds 5000 /var/lib/cassandra/data/keyspace1/standard1-41b52700b4ed11e896476d2c86545d91/mc-12-big-Data.db | grep &quot;Estimated droppable tombstones&quot;
+Estimated droppable tombstones: 0.0
+</pre></div>
+</div>
+</div>
+<div class="section" id="explanation-of-each-value-printed-above">
+<h2>Explanation of each value printed above<a class="headerlink" href="#explanation-of-each-value-printed-above" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="27%" />
+<col width="73%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Value</th>
+<th class="head">Explanation</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>SSTable</td>
+<td>prefix of the sstable filenames related to this sstable</td>
+</tr>
+<tr class="row-odd"><td>Partitioner</td>
+<td>partitioner type used to distribute data across nodes; defined in cassandra.yaml</td>
+</tr>
+<tr class="row-even"><td>Bloom Filter FP</td>
+<td>precision of Bloom filter used in reads; defined in the table definition</td>
+</tr>
+<tr class="row-odd"><td>Minimum timestamp</td>
+<td>minimum timestamp of any entry in this sstable, in epoch microseconds</td>
+</tr>
+<tr class="row-even"><td>Maximum timestamp</td>
+<td>maximum timestamp of any entry in this sstable, in epoch microseconds</td>
+</tr>
+<tr class="row-odd"><td>SSTable min local deletion time</td>
+<td>minimum timestamp of deletion date, based on TTL, in epoch seconds</td>
+</tr>
+<tr class="row-even"><td>SSTable max local deletion time</td>
+<td>maximum timestamp of deletion date, based on TTL, in epoch seconds</td>
+</tr>
+<tr class="row-odd"><td>Compressor</td>
+<td>blank (-) by default; if not blank, indicates type of compression enabled on the table</td>
+</tr>
+<tr class="row-even"><td>TTL min</td>
+<td>time-to-live in seconds; default 0 unless defined in the table definition</td>
+</tr>
+<tr class="row-odd"><td>TTL max</td>
+<td>time-to-live in seconds; default 0 unless defined in the table definition</td>
+</tr>
+<tr class="row-even"><td>First token</td>
+<td>lowest token and related key found in the sstable summary</td>
+</tr>
+<tr class="row-odd"><td>Last token</td>
+<td>highest token and related key found in the sstable summary</td>
+</tr>
+<tr class="row-even"><td>Estimated droppable tombstones</td>
+<td>ratio of tombstones to columns, using configured gc grace seconds if relevant</td>
+</tr>
+<tr class="row-odd"><td>SSTable level</td>
+<td>compaction level of this sstable, if leveled compaction (LCS) is used</td>
+</tr>
+<tr class="row-even"><td>Repaired at</td>
+<td>the timestamp this sstable was marked as repaired via sstablerepairedset, in epoch milliseconds</td>
+</tr>
+<tr class="row-odd"><td>Replay positions covered</td>
+<td>the interval of time and commitlog positions related to this sstable</td>
+</tr>
+<tr class="row-even"><td>totalColumnsSet</td>
+<td>number of cells in the table</td>
+</tr>
+<tr class="row-odd"><td>totalRows</td>
+<td>number of rows in the table</td>
+</tr>
+<tr class="row-even"><td>Estimated tombstone drop times</td>
+<td>approximate number of rows that will expire, ordered by epoch seconds</td>
+</tr>
+<tr class="row-odd"><td>Count  Row Size  Cell Count</td>
+<td>two histograms in two columns; one represents distribution of Row Size
+and the other represents distribution of Cell Count</td>
+</tr>
+<tr class="row-even"><td>Estimated cardinality</td>
+<td>an estimate of unique values, used for compaction</td>
+</tr>
+<tr class="row-odd"><td>EncodingStats* minTTL</td>
+<td>in epoch milliseconds</td>
+</tr>
+<tr class="row-even"><td>EncodingStats* minLocalDeletionTime</td>
+<td>in epoch seconds</td>
+</tr>
+<tr class="row-odd"><td>EncodingStats* minTimestamp</td>
+<td>in epoch microseconds</td>
+</tr>
+<tr class="row-even"><td>KeyType</td>
+<td>the type of partition key, useful in reading and writing data
+from/to storage; defined in the table definition</td>
+</tr>
+<tr class="row-odd"><td>ClusteringTypes</td>
+<td>the type of clustering key, useful in reading and writing data
+from/to storage; defined in the table definition</td>
+</tr>
+<tr class="row-even"><td>StaticColumns</td>
+<td>a list of the shared columns in the table</td>
+</tr>
+<tr class="row-odd"><td>RegularColumns</td>
+<td>a list of non-static, non-key columns in the table</td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>For the encoding stats values, the delta of this and the current epoch time is used when encoding and storing data in the most optimal way.</li>
+</ul>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="sstableofflinerelevel.html" class="btn btn-default pull-right " role="button" title="sstableofflinerelevel" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="sstableloader.html" class="btn btn-default" role="button" title="sstableloader" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../../js/doctools.js"></script>
+<script src="./../../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

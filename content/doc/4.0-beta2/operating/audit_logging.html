@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-beta2/operating/audit_logging.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-alpha5" href="../index.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+
+      
+      <li>Audit Logging</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="audit-logging">
+<h1>Audit Logging<a class="headerlink" href="#audit-logging" title="Permalink to this headline">¶</a></h1>
+<p>Audit logging in Cassandra logs every incoming CQL command request, Authentication (successful as well as unsuccessful login)
+to C* node. Currently, there are two implementations provided, the custom logger can be implemented and injected with the
+class name as a parameter in cassandra.yaml.</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">BinAuditLogger</span></code> An efficient way to log events to file in a binary format.</li>
+<li><code class="docutils literal notranslate"><span class="pre">FileAuditLogger</span></code> Logs events to  <code class="docutils literal notranslate"><span class="pre">audit/audit.log</span></code> file using slf4j logger.</li>
+</ul>
+<p><em>Recommendation</em> <code class="docutils literal notranslate"><span class="pre">BinAuditLogger</span></code> is a community recommended logger considering the performance</p>
+<div class="section" id="what-does-it-capture">
+<h2>What does it capture<a class="headerlink" href="#what-does-it-capture" title="Permalink to this headline">¶</a></h2>
+<p>Audit logging captures following events</p>
+<ul class="simple">
+<li>Successful as well as unsuccessful login attempts.</li>
+<li>All database commands executed via Native protocol (CQL) attempted or successfully executed.</li>
+</ul>
+</div>
+<div class="section" id="limitations">
+<h2>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h2>
+<p>Executing prepared statements will log the query as provided by the client in the prepare call, along with the execution time stamp and all other attributes (see below). Actual values bound for prepared statement execution will not show up in the audit log.</p>
+</div>
+<div class="section" id="what-does-it-log">
+<h2>What does it log<a class="headerlink" href="#what-does-it-log" title="Permalink to this headline">¶</a></h2>
+<p>Each audit log implementation has access to the following attributes, and for the default text based logger these fields are concatenated with <cite>|</cite> s to yield the final message.</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">user</span></code>: User name(if available)</li>
+<li><code class="docutils literal notranslate"><span class="pre">host</span></code>: Host IP, where the command is being executed</li>
+<li><code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">ip</span> <span class="pre">address</span></code>: Source IP address from where the request initiated</li>
+<li><code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">port</span></code>: Source port number from where the request initiated</li>
+<li><code class="docutils literal notranslate"><span class="pre">timestamp</span></code>: unix time stamp</li>
+<li><code class="docutils literal notranslate"><span class="pre">type</span></code>: Type of the request (SELECT, INSERT, etc.,)</li>
+<li><code class="docutils literal notranslate"><span class="pre">category</span></code> - Category of the request (DDL, DML, etc.,)</li>
+<li><code class="docutils literal notranslate"><span class="pre">keyspace</span></code> - Keyspace(If applicable) on which request is targeted to be executed</li>
+<li><code class="docutils literal notranslate"><span class="pre">scope</span></code> - Table/Aggregate name/ function name/ trigger name etc., as applicable</li>
+<li><code class="docutils literal notranslate"><span class="pre">operation</span></code> - CQL command being executed</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="how-to-configure">
+<h2>How to configure<a class="headerlink" href="#how-to-configure" title="Permalink to this headline">¶</a></h2>
+<p>Auditlog can be configured using cassandra.yaml. If you want to try Auditlog on one node, it can also be enabled and configured using <code class="docutils literal notranslate"><span class="pre">nodetool</span></code>.</p>
+<div class="section" id="cassandra-yaml-configurations-for-auditlog">
+<h3>cassandra.yaml configurations for AuditLog<a class="headerlink" href="#cassandra-yaml-configurations-for-auditlog" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">enabled</span></code>: This option enables/ disables audit log</li>
+<li><code class="docutils literal notranslate"><span class="pre">logger</span></code>: Class name of the logger/ custom logger.</li>
+<li><code class="docutils literal notranslate"><span class="pre">audit_logs_dir</span></code>: Auditlogs directory location, if not set, default to <cite>cassandra.logdir.audit</cite> or <cite>cassandra.logdir</cite> + /audit/</li>
+<li><code class="docutils literal notranslate"><span class="pre">included_keyspaces</span></code>: Comma separated list of keyspaces to be included in audit log, default - includes all keyspaces</li>
+<li><code class="docutils literal notranslate"><span class="pre">excluded_keyspaces</span></code>: Comma separated list of keyspaces to be excluded from audit log, default - excludes no keyspace except <cite>system</cite>,  <cite>system_schema</cite> and <cite>system_virtual_schema</cite></li>
+<li><code class="docutils literal notranslate"><span class="pre">included_categories</span></code>: Comma separated list of Audit Log Categories to be included in audit log, default - includes all categories</li>
+<li><code class="docutils literal notranslate"><span class="pre">excluded_categories</span></code>: Comma separated list of Audit Log Categories to be excluded from audit log, default - excludes no category</li>
+<li><code class="docutils literal notranslate"><span class="pre">included_users</span></code>: Comma separated list of users to be included in audit log, default - includes all users</li>
+<li><code class="docutils literal notranslate"><span class="pre">excluded_users</span></code>: Comma separated list of users to be excluded from audit log, default - excludes no user</li>
+</ul>
+</div></blockquote>
+<p>List of available categories are: QUERY, DML, DDL, DCL, OTHER, AUTH, ERROR, PREPARE</p>
+</div>
+<div class="section" id="nodetool-command-to-enable-auditlog">
+<h3>NodeTool command to enable AuditLog<a class="headerlink" href="#nodetool-command-to-enable-auditlog" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">enableauditlog</span></code>: Enables AuditLog with yaml defaults. yaml configurations can be overridden using options via nodetool command.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nodetool enableauditlog
+</pre></div>
+</div>
+<div class="section" id="options">
+<h4>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h4>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">--excluded-categories</span></code></dt>
+<dd>Comma separated list of Audit Log Categories to be excluded for
+audit log. If not set the value from cassandra.yaml will be used</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--excluded-keyspaces</span></code></dt>
+<dd>Comma separated list of keyspaces to be excluded for audit log. If
+not set the value from cassandra.yaml will be used.
+Please remeber that <cite>system</cite>, <cite>system_schema</cite> and <cite>system_virtual_schema</cite> are excluded by default,
+if you are overwriting this option via nodetool,
+remember to add these keyspaces back if you dont want them in audit logs</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--excluded-users</span></code></dt>
+<dd>Comma separated list of users to be excluded for audit log. If not
+set the value from cassandra.yaml will be used</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--included-categories</span></code></dt>
+<dd>Comma separated list of Audit Log Categories to be included for
+audit log. If not set the value from cassandra.yaml will be used</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--included-keyspaces</span></code></dt>
+<dd>Comma separated list of keyspaces to be included for audit log. If
+not set the value from cassandra.yaml will be used</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--included-users</span></code></dt>
+<dd>Comma separated list of users to be included for audit log. If not
+set the value from cassandra.yaml will be used</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--logger</span></code></dt>
+<dd>Logger name to be used for AuditLogging. Default BinAuditLogger. If
+not set the value from cassandra.yaml will be used</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="nodetool-command-to-disable-auditlog">
+<h3>NodeTool command to disable AuditLog<a class="headerlink" href="#nodetool-command-to-disable-auditlog" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">disableauditlog</span></code>: Disables AuditLog.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nodetool disableuditlog
+</pre></div>
+</div>
+</div>
+<div class="section" id="nodetool-command-to-reload-auditlog-filters">
+<h3>NodeTool command to reload AuditLog filters<a class="headerlink" href="#nodetool-command-to-reload-auditlog-filters" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">enableauditlog</span></code>: NodeTool enableauditlog command can be used to reload auditlog filters when called with default or previous <code class="docutils literal notranslate"><span class="pre">loggername</span></code> and updated filters</p>
+<p>E.g.,</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nodetool enableauditlog --loggername &lt;Default/ existing loggerName&gt; --included-keyspaces &lt;New Filter values&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="view-the-contents-of-auditlog-files">
+<h2>View the contents of AuditLog Files<a class="headerlink" href="#view-the-contents-of-auditlog-files" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">auditlogviewer</span></code> is the new tool introduced to help view the contents of binlog file in human readable text format.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>auditlogviewer &lt;path1&gt; [&lt;path2&gt;...&lt;pathN&gt;] [options]
+</pre></div>
+</div>
+<div class="section" id="id1">
+<h3>Options<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">-f,--follow</span></code></dt>
+<dd><dl class="first last docutils">
+<dt>Upon reacahing the end of the log continue indefinitely</dt>
+<dd>waiting for more records</dd>
+</dl>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-r,--roll_cycle</span></code></dt>
+<dd><dl class="first last docutils">
+<dt>How often to roll the log file was rolled. May be</dt>
+<dd>necessary for Chronicle to correctly parse file names. (MINUTELY, HOURLY,
+DAILY). Default HOURLY.</dd>
+</dl>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-h,--help</span></code></dt>
+<dd>display this help message</dd>
+</dl>
+<p>For example, to dump the contents of audit log files on the console</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>auditlogviewer /logs/cassandra/audit
+</pre></div>
+</div>
+</div>
+<div class="section" id="sample-output">
+<h3>Sample output<a class="headerlink" href="#sample-output" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>LogMessage: user:anonymous|host:localhost/X.X.X.X|source:/X.X.X.X|port:60878|timestamp:1521158923615|type:USE_KS|category:DDL|ks:dev1|operation:USE &quot;dev1&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="configuring-binauditlogger">
+<h2>Configuring BinAuditLogger<a class="headerlink" href="#configuring-binauditlogger" title="Permalink to this headline">¶</a></h2>
+<p>To use <code class="docutils literal notranslate"><span class="pre">BinAuditLogger</span></code> as a logger in AuditLogging, set the logger to <code class="docutils literal notranslate"><span class="pre">BinAuditLogger</span></code> in cassandra.yaml under <code class="docutils literal notranslate"><span class="pre">audit_logging_options</span></code> section. <code class="docutils literal notranslate"><span class="pre">BinAuditLogger</span></code> can be futher configued using its advanced options in cassandra.yaml.</p>
+<div class="section" id="adcanced-options-for-binauditlogger">
+<h3>Adcanced Options for BinAuditLogger<a class="headerlink" href="#adcanced-options-for-binauditlogger" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">block</span></code></dt>
+<dd>Indicates if the AuditLog should block if the it falls behind or should drop audit log records. Default is set to <code class="docutils literal notranslate"><span class="pre">true</span></code> so that AuditLog records wont be lost</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">max_queue_weight</span></code></dt>
+<dd>Maximum weight of in memory queue for records waiting to be written to the audit log file before blocking or dropping the log records. Default is set to <code class="docutils literal notranslate"><span class="pre">256</span> <span class="pre">*</span> <span class="pre">1024</span> <span class="pre">*</span> <span class="pre">1024</span></code></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">max_log_size</span></code></dt>
+<dd>Maximum size of the rolled files to retain on disk before deleting the oldest file. Default is set to <code class="docutils literal notranslate"><span class="pre">16L</span> <span class="pre">*</span> <span class="pre">1024L</span> <span class="pre">*</span> <span class="pre">1024L</span> <span class="pre">*</span> <span class="pre">1024L</span></code></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">roll_cycle</span></code></dt>
+<dd>How often to roll Audit log segments so they can potentially be reclaimed. Available options are: MINUTELY, HOURLY, DAILY, LARGE_DAILY, XLARGE_DAILY, HUGE_DAILY.For more options, refer: net.openhft.chronicle.queue.RollCycles. Default is set to <code class="docutils literal notranslate"><span class="pre">&quot;HOURLY&quot;</span></code></dd>
+</dl>
+</div>
+</div>
+<div class="section" id="configuring-fileauditlogger">
+<h2>Configuring FileAuditLogger<a class="headerlink" href="#configuring-fileauditlogger" title="Permalink to this headline">¶</a></h2>
+<p>To use <code class="docutils literal notranslate"><span class="pre">FileAuditLogger</span></code> as a logger in AuditLogging, apart from setting the class name in cassandra.yaml, following configuration is needed to have the audit log events to flow through separate log file instead of system.log</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!-- Audit Logging (FileAuditLogger) rolling file appender to audit.log --&gt;</span>
+<span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;AUDIT&quot;</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;file&gt;</span>${cassandra.logdir}/audit/audit.log<span class="nt">&lt;/file&gt;</span>
+  <span class="nt">&lt;rollingPolicy</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy&quot;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- rollover daily --&gt;</span>
+    <span class="nt">&lt;fileNamePattern&gt;</span>${cassandra.logdir}/audit/audit.log.%d{yyyy-MM-dd}.%i.zip<span class="nt">&lt;/fileNamePattern&gt;</span>
+    <span class="c">&lt;!-- each file should be at most 50MB, keep 30 days worth of history, but at most 5GB --&gt;</span>
+    <span class="nt">&lt;maxFileSize&gt;</span>50MB<span class="nt">&lt;/maxFileSize&gt;</span>
+    <span class="nt">&lt;maxHistory&gt;</span>30<span class="nt">&lt;/maxHistory&gt;</span>
+    <span class="nt">&lt;totalSizeCap&gt;</span>5GB<span class="nt">&lt;/totalSizeCap&gt;</span>
+  <span class="nt">&lt;/rollingPolicy&gt;</span>
+  <span class="nt">&lt;encoder&gt;</span>
+    <span class="nt">&lt;pattern&gt;</span>%-5level [%thread] %date{ISO8601} %F:%L - %msg%n<span class="nt">&lt;/pattern&gt;</span>
+  <span class="nt">&lt;/encoder&gt;</span>
+<span class="nt">&lt;/appender&gt;</span>
+
+<span class="c">&lt;!-- Audit Logging additivity to redirect audt logging events to audit/audit.log --&gt;</span>
+<span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">&quot;org.apache.cassandra.audit&quot;</span> <span class="na">additivity=</span><span class="s">&quot;false&quot;</span> <span class="na">level=</span><span class="s">&quot;INFO&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">&quot;AUDIT&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/logger&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>

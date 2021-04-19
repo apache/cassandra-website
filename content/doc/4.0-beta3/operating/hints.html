@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html>
+  
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
+">
+  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
+  <meta name="robots" content="index,follow" />
+  <meta name="language" content="en" />  
+
+  <title>Documentation</title>
+
+  <link rel="canonical" href="http://cassandra.apache.org/doc/4.0-beta3/operating/hints.html">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="./../../../css/style.css">
+  
+  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  
+
+   <link rel="top" title="Apache Cassandra Documentation v4.0-beta3" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Compaction" href="compaction/index.html"/> <link rel="prev" title="Read repair" href="read_repair.html"/> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  
+  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
+</head>
+
+  <body>
+    <!-- breadcrumbs -->
+<div class="topnav">
+  <div class="container breadcrumb-container">
+    <ul class="breadcrumb">
+      <li>
+        <div class="dropdown">
+          <img class="asf-logo" src="./../../../img/asf_feather.png" />
+          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="http://www.apache.org">Apache Homepage</a></li>
+            <li><a href="http://www.apache.org/licenses/">License</a></li>
+            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="http://www.apache.org/security/">Security</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+      <li><a href="./../../../">Apache Cassandra</a></li>
+      
+
+      
+        
+        <li><a href="./../../../doc/latest/">Documentation</a></li>
+        
+      
+
+      
+      <li><a href="./">Operating Cassandra</a></li>
+      
+
+      
+      <li>Hints</li>
+      
+    </ul>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
+      </div><!-- /.navbar-header -->
+
+      <div id="cassandra-menu" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./../../../">Home</a></li>
+          <li><a href="./../../../download/">Download</a></li>
+          <li><a href="./../../../doc/latest/">Documentation</a></li>
+          <li><a href="./../../../community/">Community</a></li>
+          <li>
+            <a href="./../../../blog/">Blog</a>
+        </li>
+        </ul>
+      </div><!-- /#cassandra-menu -->
+
+      
+    </div>
+  </nav><!-- /.navbar -->
+</div><!-- /.topnav -->
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Operating Cassandra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="snitch.html">Snitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topo_changes.html">Adding, replacing, moving and removing nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="repair.html">Repair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_repair.html">Read repair</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Hints</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hinted-handoff">Hinted Handoff</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-hints">Configuring Hints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-hints-at-runtime-with-nodetool">Configuring Hints at Runtime with <code class="docutils literal notranslate"><span class="pre">nodetool</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#monitoring-hint-delivery">Monitoring Hint Delivery</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html">Compaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bloom_filters.html">Bloom Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compression.html">Compression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cdc.html">Change Data Capture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backups.html">Backups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bulk_loading.html">Bulk Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html">Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html">Hardware Choices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="hints">
+<span id="id1"></span><h1>Hints<a class="headerlink" href="#hints" title="Permalink to this headline">¶</a></h1>
+<p>Hinting is a data repair technique applied during write operations. When
+replica nodes are unavailable to accept a mutation, either due to failure or
+more commonly routine maintenance, coordinators attempting to write to those
+replicas store temporary hints on their local filesystem for later application
+to the unavailable replica. Hints are an important way to help reduce the
+duration of data inconsistency. Coordinators replay hints quickly after
+unavailable replica nodes return to the ring. Hints are best effort, however,
+and do not guarantee eventual consistency like <a class="reference internal" href="repair.html#repair"><span class="std std-ref">anti-entropy repair</span></a> does.</p>
+<p>Hints are useful because of how Apache Cassandra replicates data to provide
+fault tolerance, high availability and durability. Cassandra <a class="reference internal" href="../architecture/dynamo.html#consistent-hashing-token-ring"><span class="std std-ref">partitions
+data across the cluster</span></a> using consistent
+hashing, and then replicates keys to multiple nodes along the hash ring. To
+guarantee availability, all replicas of a key can accept mutations without
+consensus, but this means it is possible for some replicas to accept a mutation
+while others do not. When this happens an inconsistency is introduced.</p>
+<p>Hints are one of the three ways, in addition to read-repair and
+full/incremental anti-entropy repair, that Cassandra implements the eventual
+consistency guarantee that all updates are eventually received by all replicas.
+Hints, like read-repair, are best effort and not an alternative to performing
+full repair, but they do help reduce the duration of inconsistency between
+replicas in practice.</p>
+<div class="section" id="hinted-handoff">
+<h2>Hinted Handoff<a class="headerlink" href="#hinted-handoff" title="Permalink to this headline">¶</a></h2>
+<p>Hinted handoff is the process by which Cassandra applies hints to unavailable
+nodes.</p>
+<p>For example, consider a mutation is to be made at <code class="docutils literal notranslate"><span class="pre">Consistency</span> <span class="pre">Level</span></code>
+<code class="docutils literal notranslate"><span class="pre">LOCAL_QUORUM</span></code> against a keyspace with <code class="docutils literal notranslate"><span class="pre">Replication</span> <span class="pre">Factor</span></code> of <code class="docutils literal notranslate"><span class="pre">3</span></code>.
+Normally the client sends the mutation to a single coordinator, who then sends
+the mutation to all three replicas, and when two of the three replicas
+acknowledge the mutation the coordinator responds successfully to the client.
+If a replica node is unavailable, however, the coordinator stores a hint
+locally to the filesystem for later application. New hints will be retained for
+up to <code class="docutils literal notranslate"><span class="pre">max_hint_window_in_ms</span></code> of downtime (defaults to <code class="docutils literal notranslate"><span class="pre">3</span> <span class="pre">hours</span></code>).  If the
+unavailable replica does return to the cluster before the window expires, the
+coordinator applies any pending hinted mutations against the replica to ensure
+that eventual consistency is maintained.</p>
+<div class="figure" id="id2">
+<img alt="Hinted Handoff Example" src="../_images/hints.svg" /><p class="caption"><span class="caption-text">Hinted Handoff in Action</span></p>
+</div>
+<ul class="simple">
+<li>(<code class="docutils literal notranslate"><span class="pre">t0</span></code>): The write is sent by the client, and the coordinator sends it
+to the three replicas. Unfortunately <code class="docutils literal notranslate"><span class="pre">replica_2</span></code> is restarting and cannot
+receive the mutation.</li>
+<li>(<code class="docutils literal notranslate"><span class="pre">t1</span></code>): The client receives a quorum acknowledgement from the coordinator.
+At this point the client believe the write to be durable and visible to reads
+(which it is).</li>
+<li>(<code class="docutils literal notranslate"><span class="pre">t2</span></code>): After the write timeout (default <code class="docutils literal notranslate"><span class="pre">2s</span></code>), the coordinator decides
+that <code class="docutils literal notranslate"><span class="pre">replica_2</span></code> is unavailable and stores a hint to its local disk.</li>
+<li>(<code class="docutils literal notranslate"><span class="pre">t3</span></code>): Later, when <code class="docutils literal notranslate"><span class="pre">replica_2</span></code> starts back up it sends a gossip message
+to all nodes, including the coordinator.</li>
+<li>(<code class="docutils literal notranslate"><span class="pre">t4</span></code>): The coordinator replays hints including the missed mutation
+against <code class="docutils literal notranslate"><span class="pre">replica_2</span></code>.</li>
+</ul>
+<p>If the node does not return in time, the destination replica will be
+permanently out of sync until either read-repair or full/incremental
+anti-entropy repair propagates the mutation.</p>
+<div class="section" id="application-of-hints">
+<h3>Application of Hints<a class="headerlink" href="#application-of-hints" title="Permalink to this headline">¶</a></h3>
+<p>Hints are streamed in bulk, a segment at a time, to the target replica node and
+the target node replays them locally. After the target node has replayed a
+segment it deletes the segment and receives the next segment. This continues
+until all hints are drained.</p>
+</div>
+<div class="section" id="storage-of-hints-on-disk">
+<h3>Storage of Hints on Disk<a class="headerlink" href="#storage-of-hints-on-disk" title="Permalink to this headline">¶</a></h3>
+<p>Hints are stored in flat files in the coordinator node’s
+<code class="docutils literal notranslate"><span class="pre">$CASSANDRA_HOME/data/hints</span></code> directory. A hint includes a hint id, the target
+replica node on which the mutation is meant to be stored, the serialized
+mutation (stored as a blob) that couldn’t be delivered to the replica node, the
+mutation timestamp, and the Cassandra version used to serialize the mutation.
+By default hints are compressed using <code class="docutils literal notranslate"><span class="pre">LZ4Compressor</span></code>. Multiple hints are
+appended to the same hints file.</p>
+<p>Since hints contain the original unmodified mutation timestamp, hint application
+is idempotent and cannot overwrite a future mutation.</p>
+</div>
+<div class="section" id="hints-for-timed-out-write-requests">
+<h3>Hints for Timed Out Write Requests<a class="headerlink" href="#hints-for-timed-out-write-requests" title="Permalink to this headline">¶</a></h3>
+<p>Hints are also stored for write requests that time out. The
+<code class="docutils literal notranslate"><span class="pre">write_request_timeout_in_ms</span></code> setting in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> configures the
+timeout for write requests.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>write_request_timeout_in_ms: 2000
+</pre></div>
+</div>
+<p>The coordinator waits for the configured amount of time for write requests to
+complete, at which point it will time out and generate a hint for the timed out
+request. The lowest acceptable value for <code class="docutils literal notranslate"><span class="pre">write_request_timeout_in_ms</span></code> is 10 ms.</p>
+</div>
+</div>
+<div class="section" id="configuring-hints">
+<h2>Configuring Hints<a class="headerlink" href="#configuring-hints" title="Permalink to this headline">¶</a></h2>
+<p>Hints are enabled by default as they are critical for data consistency. The
+<code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> configuration file provides several settings for configuring
+hints:</p>
+<p>Table 1. Settings for Hints</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="37%" />
+<col width="36%" />
+<col width="26%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Setting</td>
+<td>Description</td>
+<td>Default Value</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">hinted_handoff_enabled</span></code></td>
+<td>Enables/Disables hinted handoffs</td>
+<td><code class="docutils literal notranslate"><span class="pre">true</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">hinted_handoff_disabled_datacenters</span></code></td>
+<td><p class="first">A list of data centers that do not perform
+hinted handoffs even when handoff is
+otherwise enabled.
+Example:</p>
+<blockquote class="last">
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hinted_handoff_disabled_datacenters</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DC1</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DC2</span>
+</pre></div>
+</div>
+</div></blockquote>
+</td>
+<td><code class="docutils literal notranslate"><span class="pre">unset</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">max_hint_window_in_ms</span></code></td>
+<td>Defines the maximum amount of time (ms)
+a node shall have hints generated after it
+has failed.</td>
+<td><code class="docutils literal notranslate"><span class="pre">10800000</span></code> # 3 hours</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">hinted_handoff_throttle_in_kb</span></code></td>
+<td>Maximum throttle in KBs per second, per
+delivery thread. This will be reduced
+proportionally to the number of nodes in
+the cluster.
+(If there are two nodes in the cluster,
+each delivery thread will use the maximum
+rate; if there are 3, each will throttle
+to half of the maximum,since it is expected
+for two nodes to be delivering hints
+simultaneously.)</td>
+<td><code class="docutils literal notranslate"><span class="pre">1024</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">max_hints_delivery_threads</span></code></td>
+<td>Number of threads with which to deliver
+hints; Consider increasing this number when
+you have multi-dc deployments, since
+cross-dc handoff tends to be slower</td>
+<td><code class="docutils literal notranslate"><span class="pre">2</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">hints_directory</span></code></td>
+<td>Directory where Cassandra stores hints.</td>
+<td><code class="docutils literal notranslate"><span class="pre">$CASSANDRA_HOME/data/hints</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">hints_flush_period_in_ms</span></code></td>
+<td>How often hints should be flushed from the
+internal buffers to disk. Will <em>not</em>
+trigger fsync.</td>
+<td><code class="docutils literal notranslate"><span class="pre">10000</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">max_hints_file_size_in_mb</span></code></td>
+<td>Maximum size for a single hints file, in
+megabytes.</td>
+<td><code class="docutils literal notranslate"><span class="pre">128</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">hints_compression</span></code></td>
+<td>Compression to apply to the hint files.
+If omitted, hints files will be written
+uncompressed. LZ4, Snappy, and Deflate
+compressors are supported.</td>
+<td><code class="docutils literal notranslate"><span class="pre">LZ4Compressor</span></code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="configuring-hints-at-runtime-with-nodetool">
+<h2>Configuring Hints at Runtime with <code class="docutils literal notranslate"><span class="pre">nodetool</span></code><a class="headerlink" href="#configuring-hints-at-runtime-with-nodetool" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">nodetool</span></code> provides several commands for configuring hints or getting hints
+related information. The nodetool commands override the corresponding
+settings if any in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> for the node running the command.</p>
+<p>Table 2. Nodetool Commands for Hints</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="57%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Command</td>
+<td>Description</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">disablehandoff</span></code></td>
+<td>Disables storing and delivering hints</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">disablehintsfordc</span></code></td>
+<td>Disables storing and delivering hints to a
+data center</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">enablehandoff</span></code></td>
+<td>Re-enables future hints storing and
+delivery on the current node</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">enablehintsfordc</span></code></td>
+<td>Enables hints for a data center that was
+previously disabled</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">getmaxhintwindow</span></code></td>
+<td>Prints the max hint window in ms. New in
+Cassandra 4.0.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">handoffwindow</span></code></td>
+<td>Prints current hinted handoff window</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">pausehandoff</span></code></td>
+<td>Pauses hints delivery process</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">resumehandoff</span></code></td>
+<td>Resumes hints delivery process</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span>
+<span class="pre">sethintedhandoffthrottlekb</span></code></td>
+<td>Sets hinted handoff throttle in kb
+per second, per delivery thread</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">setmaxhintwindow</span></code></td>
+<td>Sets the specified max hint window in ms</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">statushandoff</span></code></td>
+<td>Status of storing future hints on the
+current node</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">truncatehints</span></code></td>
+<td>Truncates all hints on the local node, or
+truncates hints for the endpoint(s)
+specified.</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="make-hints-play-faster-at-runtime">
+<h3>Make Hints Play Faster at Runtime<a class="headerlink" href="#make-hints-play-faster-at-runtime" title="Permalink to this headline">¶</a></h3>
+<p>The default of <code class="docutils literal notranslate"><span class="pre">1024</span> <span class="pre">kbps</span></code> handoff throttle is conservative for most modern
+networks, and it is entirely possible that in a simple node restart you may
+accumulate many gigabytes hints that may take hours to play back. For example if
+you are ingesting <code class="docutils literal notranslate"><span class="pre">100</span> <span class="pre">Mbps</span></code> of data per node, a single 10 minute long
+restart will create <code class="docutils literal notranslate"><span class="pre">10</span> <span class="pre">minutes</span> <span class="pre">*</span> <span class="pre">(100</span> <span class="pre">megabit</span> <span class="pre">/</span> <span class="pre">second)</span> <span class="pre">~=</span> <span class="pre">7</span> <span class="pre">GiB</span></code> of data
+which at <code class="docutils literal notranslate"><span class="pre">(1024</span> <span class="pre">KiB</span> <span class="pre">/</span> <span class="pre">second)</span></code> would take <code class="docutils literal notranslate"><span class="pre">7.5</span> <span class="pre">GiB</span> <span class="pre">/</span> <span class="pre">(1024</span> <span class="pre">KiB</span> <span class="pre">/</span> <span class="pre">second)</span> <span class="pre">=</span>
+<span class="pre">2.03</span> <span class="pre">hours</span></code> to play back. The exact math depends on the load balancing strategy
+(round robin is better than token aware), number of tokens per node (more
+tokens is better than fewer), and naturally the cluster’s write rate, but
+regardless you may find yourself wanting to increase this throttle at runtime.</p>
+<p>If you find yourself in such a situation, you may consider raising
+the <code class="docutils literal notranslate"><span class="pre">hinted_handoff_throttle</span></code> dynamically via the
+<code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">sethintedhandoffthrottlekb</span></code> command.</p>
+</div>
+<div class="section" id="allow-a-node-to-be-down-longer-at-runtime">
+<h3>Allow a Node to be Down Longer at Runtime<a class="headerlink" href="#allow-a-node-to-be-down-longer-at-runtime" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes a node may be down for more than the normal <code class="docutils literal notranslate"><span class="pre">max_hint_window_in_ms</span></code>,
+(default of three hours), but the hardware and data itself will still be
+accessible.  In such a case you may consider raising the
+<code class="docutils literal notranslate"><span class="pre">max_hint_window_in_ms</span></code> dynamically via the <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">setmaxhintwindow</span></code>
+command added in Cassandra 4.0 (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-11720">CASSANDRA-11720</a>).
+This will instruct Cassandra to continue holding hints for the down
+endpoint for a longer amount of time.</p>
+<p>This command should be applied on all nodes in the cluster that may be holding
+hints. If needed, the setting can be applied permanently by setting the
+<code class="docutils literal notranslate"><span class="pre">max_hint_window_in_ms</span></code> setting in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> followed by a rolling
+restart.</p>
+</div>
+</div>
+<div class="section" id="monitoring-hint-delivery">
+<h2>Monitoring Hint Delivery<a class="headerlink" href="#monitoring-hint-delivery" title="Permalink to this headline">¶</a></h2>
+<p>Cassandra 4.0 adds histograms available to understand how long it takes to deliver
+hints which is useful for operators to better identify problems (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-13234">CASSANDRA-13234</a>).</p>
+<p>There are also metrics available for tracking <span class="xref std std-ref">Hinted Handoff</span>
+and <a class="reference internal" href="metrics.html#hintsservice-metrics"><span class="std std-ref">Hints Service</span></a> metrics.</p>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="compaction/index.html" class="btn btn-default pull-right " role="button" title="Compaction" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="read_repair.html" class="btn btn-default" role="button" title="Read repair" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr />
+
+<footer>
+  <div class="container">
+    <div class="col-md-4 social-blk">
+      <span class="social">
+        <a href="https://twitter.com/cassandra"
+           class="twitter-follow-button"
+           data-show-count="false" data-size="large">Follow @cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
+           class="twitter-hashtag-button"
+           data-size="large"
+           data-related="ApacheCassandra">Tweet #cassandra</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      </span>
+      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
+          <span><i class="fa fa-rss"></i></span>
+      </a>
+    </div>
+
+    <div class="col-md-8 trademark">
+      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
+      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
+      <p>
+    </div>
+  </div><!-- /.container -->
+</footer>
+
+<!-- Javascript. Placed here so pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./../../../js/underscore-min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="./../../../js/doctools.js"></script>
+<script src="./../../../js/searchtools.js"></script>
+
+ <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
+
+
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+  try {
+    var pageTracker = _gat._getTracker("UA-11583863-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+
+  </body>
+</html>
