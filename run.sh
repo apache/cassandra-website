@@ -156,13 +156,15 @@ Options
                                   argument and value are split by a colon ':'. For example:
                                     -v CASSANDRA_REPOSITORY_URL_ARG:https://github/user/my_cassandra_fork.git
 
-        -g                        Flag to enable generation of versioned docs when running website 'build', and
+        -g                        Enable generation of versioned docs when running website 'build', and
                                   'preview'. This option is ignored in all other cases.
 
-        -a                        Flag to disable automatically committing the generated docs to the Cassandra
+        -a                        Disable automatically committing the generated docs to the Cassandra
                                   repository when using a single branch. Use this option when you use your local
                                   checkout of the Cassandra repository and want to commit any newly generated AsciiDoc
                                   to the repository yourself.
+
+        -d                        Dry run. Only display the docker command that will be executed but never execute it.
 
     * website-ui
         -c CONTAINER_TAG          Tag defined by CONTAINER_TAG of the website container.
@@ -172,7 +174,7 @@ EOF
 
 
 parse_website_command_options() {
-  while getopts "e:c:b:t:u:z:v:gah" opt_flag; do
+  while getopts "e:c:b:t:u:z:v:gadh" opt_flag; do
     case $opt_flag in
       e)
         env_file=$OPTARG
@@ -200,6 +202,9 @@ parse_website_command_options() {
       ;;
       a)
         automatically_commit_generated_version_docs="disabled"
+      ;;
+      d)
+        dry_run="enabled"
       ;;
       h)
         usage
@@ -258,8 +263,16 @@ get_source_location_information() {
 
 exec_docker_command() {
   echo
-  echo "Executing docker command: 'docker $1'"
-#  eval "docker $1"
+
+  if [ "${dry_run}" = "enabled" ]
+  then
+    echo "Dry run mode enabled. Docker command generated:"
+    echo "docker $1"
+  else
+    echo "Executing docker command:"
+    echo "docker $1"
+    eval "docker $1"
+  fi
 }
 
 
@@ -494,6 +507,7 @@ repository_url=()
 ui_bundle_zip_url=""
 command_generate_docs=""
 automatically_commit_generated_version_docs="enabled"
+dry_run="disabled"
 
 
 if [ "$#" -eq 0 ]
