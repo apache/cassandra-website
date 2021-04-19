@@ -42,10 +42,12 @@ Components
 Commands
   Each of the components contains their own set of commands. Below is a list of the components and its associated commands.
     * website
-        container       Build the container used to carry out the tasks.
-        docs            Generates the documentation the Cassandra versions defined.
-        build           Build the website using Antora.
-        preview         Launch a server that monitors the site content and renders the site when a change is detected.
+        container       Builds the container used to carry out the tasks.
+        docs            Generates the AsciiDoc (.adoc) documentation files only for the specified Cassandra versions.
+                          No website HTML files are rendered.
+        build           Renders the HTML files for the website using Antora. Cassandra documentation can be optionally
+                          generated and rendered as part of this operation. See options below.
+        preview         Launches a server that monitors the site content and renders the site when a change is detected.
 
     * website-ui
         container       Build the container used to carry out the tasks.
