@@ -1,7 +1,7 @@
 #!/bin/bash
 
 debug() {
-  echo "[DEBUG] $1"
+  >&2 echo "[DEBUG] $*"
 }
 
 # website
@@ -29,7 +29,7 @@ debug() {
 # ./run website-ui preview
 
 usage() {
-  cat << EOF
+  cat <<EOF
 This script builds the Cassandra website UI components, generates the Cassandra versioned documentation, and renders the website.
 
 usage: ./run [OPTIONS] <COMPONENT> <COMMAND>
@@ -112,7 +112,7 @@ EOF
 
   echo "${command_help_line} $(echo "${previous_word}" | tr -s ',' '.')"
 
-    cat << EOF
+  cat <<EOF
         help/tasks      Lists the above commands and their description.
 
 Options
@@ -164,6 +164,10 @@ Options
                                   checkout of the Cassandra repository and want to commit any newly generated AsciiDoc
                                   to the repository yourself.
 
+        -p                        Preserve containers after docker exists. By default this script will force docker to
+                                  remove the container once it stops. Use this option to persist the container after it
+                                  has finished running.
+
         -d                        Dry run. Only display the docker command that will be executed but never execute it.
 
     * website-ui
@@ -172,9 +176,9 @@ EOF
     exit 0
 }
 
-
 parse_website_command_options() {
-  while getopts "e:c:b:t:u:z:v:gadh" opt_flag; do
+  while getopts "e:c:b:t:u:z:v:gapdh" opt_flag
+  do
     case $opt_flag in
       e)
         env_file=$OPTARG
@@ -203,6 +207,9 @@ parse_website_command_options() {
       a)
         automatically_commit_generated_version_docs="disabled"
       ;;
+      p)
+        persist_container_after_run="enabled"
+      ;;
       d)
         dry_run="enabled"
       ;;
@@ -213,15 +220,16 @@ parse_website_command_options() {
         usage
       ;;
     esac
-done
+  done
 }
 
-
+# This function requires the following two variables to be defined at a higher scope level
+#
+# url_source_value  - Value assigned to url_source_name.
+# location_source   - Path to the object. If the path is relative it will be resolved to an absolut path.
+# location_type     - Type of path the location_source represents.
 get_source_location_information() {
-  local location_source
-
-  location_source=$1
-  location_type=""
+  location_source="${url_source_value}"
 
   if [ "$(cut -d'/' -f1 <<< "${location_source}")" = "~" ]
   then
@@ -257,9 +265,42 @@ get_source_location_information() {
     esac
   fi
 
-  echo "${location_type}:${location_source}"
+  # Resolve any relative local file or directory paths
+  if [ "$(cut -d'/' -f1 <<< "${location_source}")" = "." ] && [ "${location_type}" != "unknown" ] && [ "${location_type}" != "url" ]
+  then
+    local file_name=""
+    local directory_path="${location_source}"
+    if [ "${location_type}" = "file" ]
+    then
+      file_name=$(basename "${location_source}")
+      directory_path="${directory_path//$file_name/}"
+    fi
+
+    pushd "${directory_path}" > /dev/null || location_type="unknown"
+    location_source=$(pwd)
+    popd > /dev/null || location_type="unknown"
+
+    if [ -n "${file_name}" ]
+    then
+      location_source="${location_source}/${file_name}"
+    fi
+  fi
 }
 
+exec_docker_run_command() {
+  local remove_container_option="--rm"
+
+  if [ "${persist_container_after_run}" = "enabled" ]
+  then
+    remove_container_option=""
+  fi
+
+  exec_docker_command "run -i -t ${remove_container_option} $*"
+}
+
+exec_docker_build_command() {
+  exec_docker_command "build $*"
+}
 
 exec_docker_command() {
   echo
@@ -267,14 +308,13 @@ exec_docker_command() {
   if [ "${dry_run}" = "enabled" ]
   then
     echo "Dry run mode enabled. Docker command generated:"
-    echo "docker $1"
+    echo "docker $*"
   else
     echo "Executing docker command:"
-    echo "docker $1"
-    eval "docker $1"
+    echo "docker $*"
+    eval "docker $*"
   fi
 }
-
 
 build_website_container() {
   local docker_build_args
@@ -283,34 +323,21 @@ build_website_container() {
     docker_build_args+=(--build-arg "$(sed '0,/:/ s/:/=/' <<< "${key_value}")")
   done
 
-  exec_docker_command "build -f ./Dockerfile -t ${container_tag} ${docker_build_args[*]} ./"
+  exec_docker_build_command "-f ./Dockerfile -t ${container_tag} ${docker_build_args[*]} ./"
 }
-
 
 build_website_ui_container() {
-  exec_docker_command "build -f ./site-ui/Dockerfile -t ${container_tag} ./site-ui/"
+  exec_docker_build_command "-f ./site-ui/Dockerfile -t ${container_tag} ./site-ui/"
 }
 
-
+# This function requires the following two variables to be defined at a higher scope level
+#
+# url_source_name   - Name for any of the following: file, directory, or repository.
+# url_source_value  - Value assigned to url_source_name. This value may change if it points to a local object.
 set_antora_url_source() {
-  local antora_env_name
-  local antora_env_value
-
-  local url_source_name
-  local url_source_value
-
-  local location_type
-  local location_source
-
-  antora_env_name="$1"
-  url_source_name="$2"
-  url_source_value="$3"
-
-  antora_env_value="${url_source_value}"
-
-  location_info=$(get_source_location_information "${url_source_value}")
-  location_type=$(sed '0,/:/s/:/=/' <<< "${location_info}" | cut -d'=' -f1)
-  location_source=$(sed '0,/:/s/:/=/' <<< "${location_info}" | cut -d'=' -f2)
+  local location_source=""
+  local location_type=""
+  get_source_location_information
 
   if [ "${location_type}" = "dir" ] || [ "${location_type}" = "file" ]
   then
@@ -318,38 +345,30 @@ set_antora_url_source() {
     then
       cassandra_website_source_set="true"
     fi
-    antora_env_value="/home/build/${url_source_name}"
-    vol_args+=("-v ${location_source}:${antora_env_value}")
+    url_source_value="/home/build/${url_source_name}"
+    vol_args+=("-v ${location_source}:${url_source_value}")
   fi
-
-  env_args+=("-e ${antora_env_name}=${antora_env_value}")
 }
 
-
 run_docker_website_command() {
-  local container_command
-
-  container_command="$1"
-
+  local container_command=$1
   local port_map_option=""
 
-  if [ "${command}" = "preview" ]
+  if [ "${container_command}" = "preview" ]
   then
     port_map_option="-p 5151:5151/tcp"
   fi
 
   local env_file_arg
-  local env_args
-  local vol_args
+  local env_args=()
+  local vol_args=()
 
   local repository_name
   local repository_value
-  local location_type
 
   local antora_content_source_env_name
 
   local cassandra_website_source_set
-
 
   if [ -z "$(docker images -q "${container_tag}")" ]
   then
@@ -360,9 +379,6 @@ run_docker_website_command() {
   then
     env_file_arg="--env-file ${env_file}"
   fi
-
-  env_args=()
-  vol_args=()
 
   # We want to handle the following argument inputs and convert them to their equivalent ANTORA_CONTENT_SOURCES docker
   # environment variable.
@@ -378,52 +394,71 @@ run_docker_website_command() {
   do
     for repository_source in $(eval echo \$\{"repository_${repository_source_type}"\[\*\]\})
     do
-      repository_name=$(sed '0,/:/s/:/=/' <<< "${repository_source}" | cut -d'=' -f1)
-      repository_value=$(sed '0,/:/s/:/=/' <<< "${repository_source}" | cut -d'=' -f2)
+      repository_name=$(sed '1,/:/s/:/=/' <<< "${repository_source}" | cut -d'=' -f1)
+      repository_value=$(sed '1,/:/s/:/=/' <<< "${repository_source}" | cut -d'=' -f2)
 
-      antora_content_source_env_name="ANTORA_CONTENT_SOURCES_$(tr '[:lower:]' '[:upper:]' <<< "${repository_name}" | sed 's/\-/_/g')_$(tr '[:lower:]' '[:upper:]' <<< "${repository_source_type}")"
+      # When we are asked to generate only the docs (i.e. command argument passed is 'docs'), we can ignore all
+      # repository information except for the cassandra repository.
+      if [ "${container_command}" = "generate-docs" ] && [ "${repository_name}" != "cassandra" ]
+      then
+        continue
+      fi
+
+      antora_content_source_env_name="ANTORA_CONTENT_SOURCES_$(
+        tr '[:lower:]' '[:upper:]' <<< "${repository_name}" |
+        sed 's/\-/_/g'
+      )_$(
+        tr '[:lower:]' '[:upper:]' <<< "${repository_source_type}"
+      )"
 
       if [ "${repository_source_type}" = "url" ]
       then
-        set_antora_url_source "${antora_content_source_env_name}" "${repository_name}" "${repository_value}"
-      else
-        env_args+=("-e ${antora_content_source_env_name}=${repository_value}")
+        local url_source_name="${repository_name}"
+        local url_source_value="${repository_value}"
+        set_antora_url_source
+        repository_value="${url_source_value}"
       fi
+
+      env_args+=("-e ${antora_content_source_env_name}=${repository_value}")
     done
   done
 
-  if [ "${cassandra_website_source_set}" = "false" ]
-  then
-    vol_args+=("-v $(pwd):/home/build/cassandra-website")
-  fi
-
   env_args+=("-e CREATE_GIT_COMMIT_WHEN_GENERATING_DOCS=${automatically_commit_generated_version_docs}")
 
-  if [ -n "${ui_bundle_zip_url}" ]
+  if [ "${container_command}" = "build-site" ] || [ "${container_command}" = "preview" ]
   then
-    ui_bundle_name=$(rev <<< "${ui_bundle_zip_url}" | cut -d'/' -f1 | rev)
+    if [ "${cassandra_website_source_set}" = "false" ]
+    then
+      vol_args+=("-v $(pwd):/home/build/cassandra-website")
+    fi
 
-    set_antora_url_source "ANTORA_UI_BUNDLE_URL" "${ui_bundle_name}" "${ui_bundle_zip_url}"
+    if [ -n "${ui_bundle_zip_url}" ]
+    then
+      local url_source_name=""
+      url_source_name=$(rev <<< "${ui_bundle_zip_url}" | cut -d'/' -f1 | rev)
+      local url_source_value="${ui_bundle_zip_url}"
+      set_antora_url_source
+      env_args+=("-e ANTORA_UI_BUNDLE_URL=${url_source_value}")
+    fi
   fi
 
-  exec_docker_command "run -i -t ${port_map_option} ${vol_args[*]} ${env_file_arg} ${env_args[*]} ${container_tag} ${command_generate_docs} ${container_command}"
+  exec_docker_run_command "${port_map_option} ${vol_args[*]} ${env_file_arg} ${env_args[*]} ${container_tag} ${command_generate_docs} ${container_command}"
 }
 
+run_website_docs() {
+  run_docker_website_command "generate-docs"
+}
 
 run_website_build() {
   run_docker_website_command "build-site"
 }
 
-
 run_website_preview() {
   run_docker_website_command "preview"
 }
 
-
 run_website_command() {
-  debug "run_website_command"
-
-  local command=${1}
+  local command=$1
 
   if [ -z "${container_tag}" ]
   then
@@ -436,7 +471,7 @@ run_website_command() {
     ;;
 
     docs)
-      debug "Generates the documentation for the specified Cassandra versions."
+      run_website_docs
     ;;
 
     build)
@@ -447,16 +482,10 @@ run_website_command() {
       run_website_preview
     ;;
   esac
-
-  for ps_id in $(docker ps -a -q --filter 'exited=0')
-  do
-    docker rm "${ps_id}" > /dev/null
-  done
 }
 
-
 run_website_ui_command() {
-  local command=${1}
+  local command=$1
 
   if [ -z "${container_tag}" ]
   then
@@ -485,14 +514,9 @@ run_website_ui_command() {
         port_map_option="-p 5252:5252/tcp"
       fi
 
-      exec_docker_command "run -i -t ${port_map_option} -v $(pwd)/site-ui/:/home/site-ui ${container_tag} $*"
+      exec_docker_run_command "${port_map_option} -v $(pwd)/site-ui/:/home/site-ui ${container_tag} $*"
     ;;
   esac
-
-  for ps_id in $(docker ps -a -q --filter 'exited=0')
-  do
-    docker rm "${ps_id}" > /dev/null
-  done
 }
 
 ### Main ###
@@ -507,8 +531,8 @@ repository_url=()
 ui_bundle_zip_url=""
 command_generate_docs=""
 automatically_commit_generated_version_docs="enabled"
+persist_container_after_run="disabled"
 dry_run="disabled"
-
 
 if [ "$#" -eq 0 ]
 then
@@ -520,12 +544,12 @@ shift $((OPTIND - 1))
 
 if [ "$#" -eq 0 ]
 then
-    usage
+  usage
 fi
 
-arg_component="${1}"
+arg_component=$1
 shift 1
-arg_command="${1}"
+arg_command=$1
 
 debug "${arg_component}"
 debug "${arg_command}"
@@ -554,4 +578,5 @@ case "${arg_component}" in
 
   *)
     usage
+  ;;
 esac
