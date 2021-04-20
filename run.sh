@@ -36,8 +36,8 @@ usage: ./run [OPTIONS] <COMPONENT> <COMMAND>
 
 Components
   The following values can be supplied for the COMPONENT argument.
-    * website
-    * website-ui
+    * website           This component is used to generate the website content and Apache Cassandra documentation.
+    * website-ui        This component is used to generate the UI components that style the Apache Cassandra website.
 
 Commands
   Each of the components contains their own set of commands. Below is a list of the components and its associated commands.
@@ -152,8 +152,10 @@ Options
 
         -v BUILD_ARG:VALUE        A container build argument defined by BUILD_ARG that overrides the default value with
                                   the value for VALUE. This option can be specified multiple times and is only applied
-                                  when using the 'build' command. This option is ignored in all other cases. The build
-                                  argument and value are split by a colon ':'. For example:
+                                  when using the 'build' command. This option is ignored in all other cases. Possible
+                                  arguments for BUILD_ARG are 'UID_ARG', 'GID_ARG', 'NODE_VERSION_ARG',
+                                  'ENTR_VERSION_ARG', and 'CASSANDRA_REPOSITORY_URL_ARG'. The build argument and value
+                                  are split by a colon ':'. For example:
                                     -v CASSANDRA_REPOSITORY_URL_ARG:https://github/user/my_cassandra_fork.git
 
         -g                        Enable generation of versioned docs when running website 'build', and
@@ -172,6 +174,12 @@ Options
 
     * website-ui
         -c CONTAINER_TAG          Tag defined by CONTAINER_TAG of the website container.
+
+        -p                        Preserve containers after docker exists. By default this script will force docker to
+                                  remove the container once it stops. Use this option to persist the container after it
+                                  has finished running.
+
+        -d                        Dry run. Only display the docker command that will be executed but never execute it.
 EOF
     exit 0
 }
@@ -230,60 +238,52 @@ parse_website_command_options() {
 # location_type     - Type of path the location_source represents.
 get_source_location_information() {
   location_source="${url_source_value}"
+  location_type="unknown"
+
+  case $(cut -d':' -f1 <<< "${location_source}") in
+    http | https)
+      location_type="url"
+      return
+    ;;
+    file)
+      location_source=${location_source//file\:\/\//}
+    ;;
+  esac
 
   if [ "$(cut -d'/' -f1 <<< "${location_source}")" = "~" ]
   then
     location_source="${location_source//\~/$HOME}"
   fi
 
+  local file_name=""
+  local relative_path=""
   if [ -d "${location_source}" ]
   then
     location_type="dir"
+    if [ "${location_source:0:1}" = "." ]
+    then
+      relative_path="${location_source}"
+    fi
   elif [ -f "${location_source}" ]
   then
     location_type="file"
-  else
-    case $(cut -d':' -f1 <<< "${location_source}") in
-      http | https)
-        location_type="url"
-      ;;
-      file)
-        location_source=$(sed 's/^file:\/\///g' <<< "${location_source}")
-        if [ -d "${location_source}" ]
-        then
-          location_type="dir"
-        elif [ -f "${location_source}" ]
-        then
-          location_type="file"
-        else
-          location_type="unknown"
-        fi
-      ;;
-      *)
-        location_type="unknown"
-      ;;
-    esac
+    if [ "${location_source:0:1}" = "." ]
+    then
+      file_name="$(basename "${location_source}")"
+      relative_path="${location_source//${file_name}/}"
+    fi
   fi
 
-  # Resolve any relative local file or directory paths
-  if [ "$(cut -d'/' -f1 <<< "${location_source}")" = "." ] && [ "${location_type}" != "unknown" ] && [ "${location_type}" != "url" ]
+  if [ -n "${relative_path}" ]
   then
-    local file_name=""
-    local directory_path="${location_source}"
-    if [ "${location_type}" = "file" ]
-    then
-      file_name=$(basename "${location_source}")
-      directory_path="${directory_path//$file_name/}"
-    fi
-
-    pushd "${directory_path}" > /dev/null || location_type="unknown"
+    pushd "${relative_path}" > /dev/null || { echo "Failed to change directory to '${relative_path}'."; exit 1; }
     location_source=$(pwd)
-    popd > /dev/null || location_type="unknown"
+    popd > /dev/null || { echo "Failed to change back to working directory after changing to '${relative_path}'."; exit 1; }
+  fi
 
-    if [ -n "${file_name}" ]
-    then
-      location_source="${location_source}/${file_name}"
-    fi
+  if [ -n "${file_name}" ]
+  then
+    location_source="${location_source}/${file_name}"
   fi
 }
 
@@ -556,8 +556,6 @@ debug "${arg_command}"
 
 case "${arg_component}" in
   website)
-    #  parse_website_command_options "$@"
-
     debug "env_file: ${env_file}"
     debug "local_cassandra_repository_path: ${local_cassandra_repository_path}"
     debug "container_tag: ${container_tag}"
