@@ -139,7 +139,7 @@ generate_site_yaml() {
   local branches=""
   local tags=""
   local content_source_options=()
-  for repo in CASSANDRA CASSANDRA_WEBSITE
+  for repo in ${ANTORA_CONTENT_SOURCE_REPOSITORIES[*]}
   do
     repository_url=$(eval echo "$"ANTORA_CONTENT_SOURCES_${repo}_URL"")
     start_path=$(eval echo "$"ANTORA_CONTENT_SOURCES_${repo}_START_PATH"")
@@ -223,6 +223,10 @@ run_preview_mode() {
 GENERATE_CASSANDRA_VERSIONS=$(sed 's/^[[:space:]]]*//' <<< "${ANTORA_CONTENT_SOURCES_CASSANDRA_BRANCHES} ${ANTORA_CONTENT_SOURCES_CASSANDRA_TAGS}")
 export GENERATE_CASSANDRA_VERSIONS
 
+ANTORA_CONTENT_SOURCE_REPOSITORIES=(
+  CASSANDRA_WEBSITE
+)
+
 # Initialise commands and assume none of them will run
 COMMAND_GENERATE_DOCS="skip"
 COMMAND_BUILD_SITE="skip"
@@ -234,6 +238,7 @@ do
   case $1 in
     "generate-docs")
       COMMAND_GENERATE_DOCS="run"
+      ANTORA_CONTENT_SOURCE_REPOSITORIES+=(CASSANDRA)
     ;;
     "build-site")
       COMMAND_BUILD_SITE="run"
