@@ -380,11 +380,19 @@ run_docker_website_command() {
     env_file_arg="--env-file ${env_file}"
   fi
 
-  # We want to handle the following argument inputs and convert them to their equivalent ANTORA_CONTENT_SOURCES docker
-  # environment variable.
-  # cassandra:trunk,my_test_branch_311,my_test_branch_40 -> ANTORA_CONTENT_SOURCES_CASSANDRA_BRANCHES=trunk,my_test_branch_311,my_test_branch_40
-  # cassandra:cassandra-4.0,cassandra-3.11,cassandra-3.0 -> ANTORA_CONTENT_SOURCES_CASSANDRA_TAGS=cassandra-4.0,cassandra-3.11,cassandra-3.0
-  # cassandra:https://github.com/myfork/cassandra.git -> ANTORA_CONTENT_SOURCES_CASSANDRA_URL=https://github.com/myfork/cassandra.git
+  # If we are either building or previewing the site, no branches have specified, and no URL specified, use the current
+  # local copy of the cassandra-website and current branch.
+  if [ "${container_command}" != "generate-docs" ] && [ ${#repository_branches[*]} -eq 0 ] && [ ${#repository_url[*]} -eq 0 ]
+  then
+    repository_branches+=(cassandra-website:"$(git rev-parse --abbrev-ref HEAD)")
+    repository_url+=(cassandra-website:.)
+  fi
+
+  # The following are examples of the optional repository inputs we want to parse and convert into their equivalent
+  # ANTORA_CONTENT_SOURCES_* docker environment s.
+  # branch option - cassandra:trunk,my_test_branch_311,my_test_branch_40 -> ANTORA_CONTENT_SOURCES_CASSANDRA_BRANCHES=trunk,my_test_branch_311,my_test_branch_40
+  # tag option - cassandra:cassandra-4.0,cassandra-3.11,cassandra-3.0 -> ANTORA_CONTENT_SOURCES_CASSANDRA_TAGS=cassandra-4.0,cassandra-3.11,cassandra-3.0
+  # url option - cassandra:https://github.com/myfork/cassandra.git -> ANTORA_CONTENT_SOURCES_CASSANDRA_URL=https://github.com/myfork/cassandra.git
   #
   # We can do this by iterating through each of the repository source arrays and splitting the repository name from its
   # supplied value. The eval command for the inner for loop resolves to "${repository_<type>[*]}". This combined with
@@ -425,7 +433,7 @@ run_docker_website_command() {
 
   env_args+=("-e CREATE_GIT_COMMIT_WHEN_GENERATING_DOCS=${automatically_commit_generated_version_docs}")
 
-  if [ "${container_command}" = "build-site" ] || [ "${container_command}" = "preview" ]
+  if [ "${container_command}" != "generate-docs" ]
   then
     if [ "${cassandra_website_source_set}" = "false" ]
     then
@@ -551,22 +559,8 @@ arg_component=$1
 shift 1
 arg_command=$1
 
-debug "${arg_component}"
-debug "${arg_command}"
-
 case "${arg_component}" in
   website)
-    debug "env_file: ${env_file}"
-    debug "local_cassandra_repository_path: ${local_cassandra_repository_path}"
-    debug "container_tag: ${container_tag}"
-    debug "container_build_args: ${container_build_args[*]}"
-    debug "repository_branches: ${repository_branches[*]}"
-    debug "repository_tags: ${repository_tags[*]}"
-    debug "repository_url: ${repository_url[*]}"
-    debug "ui_bundle_zip_url: ${ui_bundle_zip_url}"
-    debug "command_generate_docs: ${command_generate_docs}"
-    debug "automatically_commit_generated_version_docs: ${automatically_commit_generated_version_docs}"
-
     run_website_command "$@"
   ;;
 
