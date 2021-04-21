@@ -419,13 +419,22 @@ run_docker_website_command() {
         tr '[:lower:]' '[:upper:]' <<< "${repository_source_type}"
       )"
 
-      if [ "${repository_source_type}" = "url" ]
-      then
-        local url_source_name="${repository_name}"
-        local url_source_value="${repository_value}"
-        set_antora_url_source
-        repository_value="${url_source_value}"
-      fi
+      case "${repository_source_type}" in
+        url)
+          local url_source_name="${repository_name}"
+          local url_source_value="${repository_value}"
+          set_antora_url_source
+          repository_value="${url_source_value}"
+        ;;
+        branches | tags)
+          # Check if we have a comma delimited list. If so, replace the commas with spaces and quote the string so the
+          # spaces and values are preserved when passed to Docker.
+          if [ "$(tr -dc ',' <<< "${repository_value}" | wc -c)" -gt 0 ]
+          then
+            repository_value="\"${repository_value//,/ }\""
+          fi
+        ;;
+      esac
 
       env_args+=("-e ${antora_content_source_env_name}=${repository_value}")
     done
