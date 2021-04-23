@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Improving Apache Cassandra’s Front Door and Backpressure | Blog</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<link rel="stylesheet" href="/style.css">
+		<script src="/init.js"></script>
+		
+		<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400&family=Red+Hat+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+	
+			
+	
+	</head>
+	<body class="blog-index">
+		<div class="container mx-auto">
+			<div id="mobile-nav-overlay" class="hide">
+				<div class="mobile-nav flex flex-column text-center">
+					<a class="mobile-nav-link" href="/cassandra-basics/">Cassandra Basics</a>
+					<a class="mobile-nav-link" href="/quickstart/">Quickstart</a>
+					<a class="mobile-nav-link" href="/ecosystem/">Ecosystem</a>
+					<a class="mobile-nav-link" href="https://cassandra.apache.org/doc/latest/">Documentation</a>
+					<a class="mobile-nav-link" href="/community/">Community</a>
+					<a class="mobile-nav-link" href="/case-studies/">Case Studies</a>
+					<a class="mobile-nav-link" href="/resources/">Resources</a>
+					<a class="mobile-nav-link" href="/blog/">Blog</a>
+					<a class="mobile-nav-link" href="/download/">Download</a>
+				</div>
+			</div>
+			<header class="grad">
+				<div class="eye"></div>
+				<div id="top-nav" class="inner flex flex-vert-center flex-space-between relative">
+					<div class="logo"><a href="/"><img src="/img/logo-white.svg" alt=""></a></div>
+					<div class="mobile-nav-icon">
+						<img class="toggle-icon" src="/img/hamburger-nav.svg">
+					</div>
+					
+					<ul class="nav-links flex flex-vert-center flex-space-between">
+						<li>
+							<a class="nav-link">Get Started</a>
+							<ul class="sub-menu bg-white">
+								<li class="pa-micro">
+									<a href="/cassandra-basics/">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-basics.png" alt="cassandra basics icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Cassandra Basics
+										</div>
+									</a>
+								</li>
+								<li class="pa-micro">
+									<a href="/quickstart/">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-rocket.png" alt="cassandra basics icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Quickstart
+										</div>
+									</a>
+								</li>
+								<li class="pa-micro">
+									<a href="/ecosystem/">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Ecosystem
+										</div>
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li><a class="nav-link" href="https://cassandra.apache.org/doc/latest/">Documentation</a></li>
+						<li>
+							<a class="nav-link" href="/community/">Community</a>
+							<ul class="sub-menu bg-white">
+								<li class="pa-micro">
+									<a href="/community/#code-of-conduct">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-welcome.png" alt="welcome icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Welcome
+										</div>
+									</a>
+								</li>
+								<li class="pa-micro">
+									<a href="/community/#discussion">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-discussions.png" alt="discussions icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Discussions
+										</div>
+									</a>
+								</li>
+								<li class="pa-micro">
+									<a href="/community/#project-governance">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-governance.png" alt="Governance icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Governance
+										</div>
+									</a>
+								</li>
+								<li class="pa-micro">
+									<a href="/community/#how-to-contribute">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-contribute.png" alt="Contribute icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Contribute
+										</div>
+									</a>
+								</li>
+								<li class="pa-micro">
+									<a href="/community/#meet-the-community">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-community.png" alt="Meet the Community icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Meet the Community
+										</div>
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a class="nav-link">Learn</a>
+							<ul class="sub-menu bg-white">
+								<li class="pa-micro">
+									<a href="/case-studies/">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-case-study.png" alt="Case Studies icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Case Studies
+										</div>
+									</a>
+								</li>
+								<li class="pa-micro">
+									<a href="/resources/">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-resources.png" alt="Resources icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Resources
+										</div>
+									</a>
+								</li>
+								<li class="pa-micro">
+									<a href="/blog/">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-blog.png" alt="Blog icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Blog
+										</div>
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li><a class="nav-link btn btn--filled" href="/download/">Download Now</a></li>
+					</ul>
+					
+				</div>
+				<div class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+					<h1 class="ma-large">
+                        Improving Apache Cassandra’s Front Door and Backpressure
+                    </h1>
+					<h3> September 03, 2020 | The Apache Cassandra Community</h3> 
+				</div>
+			</header>
+			<section id="blog-post" class="arrow py-xlarge">
+				<div class="inner">
+                    <h2>
+                        <h5><a href="/blog">« Back to the Apache Cassandra Blog</a></h5>
+                        <hr>
+                        <p>As part of <a target="_blank" href="https://issues.apache.org/jira/browse/CASSANDRA-15013">CASSANDRA-15013</a>, we have improved Cassandra’s ability to handle high throughput workloads, while having enough safeguards in place to protect itself from potentially going out of memory. In order to better explain the change we have made, let us understand at a high level, on how an incoming request is processed by Cassandra before the fix, followed by what we changed, and the new relevant configuration knobs available.</p>
+
+                        <h3 id="how-inbound-requests-were-handled-before">How inbound requests were handled before</h3>
+
+                        <p>Let us take the scenario of a client application sending requests to C* cluster. For the purpose of this blog, let us focus on one of the C* coordinator nodes.</p>
+
+                        <p><img src="../img/blog/blog-post-improving-resiliency/image1.png" alt="alt_text" title="image_tooltip"></p>
+
+                        <p>Below is the microscopic view of client-server interaction at the C* coordinator node. Each client connection to Cassandra node happens over a netty channel, and for efficiency purposes, each Netty eventloop thread is responsible for more than one netty channel.</p>
+
+                        <p><img src="../img/blog/blog-post-improving-resiliency/image2.png" alt="alt_text" title="image_tooltip"></p>
+
+                        <p>The eventloop threads read requests coming off of netty channels and enqueue them into a bounded inbound queue in the Cassandra node.</p>
+
+                        <p><img src="../img/blog/blog-post-improving-resiliency/image3.png" alt="alt_text" title="image_tooltip"></p>
+
+                        <p>A thread pool dequeues requests from the inbound queue, processes them asynchronously and enqueues the response into an outbound queue. There exist multiple outbound queues, one for each eventloop thread to avoid races.</p>
+
+                        <p><img src="../img/blog/blog-post-improving-resiliency/image4.png" alt="alt_text" title="image_tooltip"></p>
+
+                        <p><img src="../img/blog/blog-post-improving-resiliency/image5.png" alt="alt_text" title="image_tooltip"></p>
+
+                        <p><img src="../img/blog/blog-post-improving-resiliency/image6.png" alt="alt_text" title="image_tooltip"></p>
+
+                        <p>The same eventloop threads that are responsible for enqueuing incoming requests into the inbound queue, are also responsible for dequeuing responses off from the outbound queue and shipping responses back to the client.</p>
+
+                        <p><img src="../img/blog/blog-post-improving-resiliency/image7.png" alt="alt_text" title="image_tooltip"></p>
+
+                        <p><img src="../img/blog/blog-post-improving-resiliency/image8.png" alt="alt_text" title="image_tooltip"></p>
+
+                        <h4 id="issue-with-this-workflow">Issue with this workflow</h4>
+
+                        <p>Let us take a scenario where there is a spike in operations from the client. The eventloop threads are now enqueuing requests at a much higher rate than the rate at which the requests are being processed by the native transport thread pool. Eventually, the inbound queue reaches its limit and says it cannot store any more requests in the queue.</p>
+
+                        <p><img src="../img/blog/blog-post-improving-resiliency/image9.png" alt="alt_text" title="image_tooltip"></p>
+
+                        <p>Consequently, the eventloop threads get into a blocked state as they try to enqueue more requests into an already full inbound queue. They wait until they can successfully enqueue the request in hand, into the queue.</p>
+
+                        <p><img src="../img/blog/blog-post-improving-resiliency/image10.png" alt="alt_text" title="image_tooltip"></p>
+
+                        <p>As noted earlier, these blocked eventloop threads are also supposed to dequeue responses from the outbound queue. Given they are in blocked state, the outbound queue (which is unbounded) grows endlessly, with all the responses, eventually resulting in C*  going out of memory. This is a vicious cycle because, since the eventloop threads are blocked, there is no one to ship responses back to the client; eventually client side timeout triggers, and clients may send more requests due to retries. This is an unfortunate situation to be in, since Cassandra is doing all the work of processing these requests as fast as it can, but there is no one to ship the produced responses back to the client.</p>
+
+                        <p><img src="../img/blog/blog-post-improving-resiliency/image11.png" alt="alt_text" title="image_tooltip"></p>
+
+                        <p>So far, we have built a fair understanding of how the front door of C* works with regard to handling client requests, and how blocked eventloop threads can affect Cassandra.</p>
+
+                        <h3 id="what-we-changed">What we changed</h3>
+
+                        <h4 id="backpressure">Backpressure</h4>
+
+                        <p>The essential root cause of the issue is that eventloop threads are getting blocked. Let us not block them by making the bounded inbound queue unbounded. If we are not careful here though, we could have an out of memory situation, this time because of the unbounded inbound queue. So we defined an overloaded state for the node based on the memory usage of the inbound queue.</p>
+
+                        <p>We introduced two levels of thresholds, one at the node level, and the other more granular, at client IP. The one at client IP helps to isolate rogue client IPs, while not affecting other good clients, if there is such a situation.</p>
+
+                        <p>These thresholds can be set using cassandra yaml file.</p>
+
+                        <div class="highlighter-rouge"><pre class="highlight"><code>native_transport_max_concurrent_requests_in_bytes_per_ip
+                        native_transport_max_concurrent_requests_in_bytes
+                        </code></pre>
+                        </div>
+
+                        <p>These thresholds can be further changed at runtime (<a target="_blank" href="https://issues.apache.org/jira/browse/CASSANDRA-15519">CASSANDRA-15519</a>).</p>
+
+                        <h4 id="configurable-server-response-to-the-client-as-part-of-backpressure">Configurable server response to the client as part of backpressure</h4>
+
+                        <p>If C* happens to be in overloaded state (as defined by the thresholds mentioned above), C* can react in one of the following ways:</p>
+
+                        <ul>
+                        <li>Apply backpressure by setting “Autoread” to false on the netty channel in question (default behavior).</li>
+                        <li>Respond back to the client with Overloaded Exception (if client sets “THROW_ON_OVERLOAD” connection startup option to “true.”</li>
+                        </ul>
+
+                        <p>Let us look at the client request-response workflow again, in both these cases.</p>
+
+                        <h4 id="throw_on_overload--false-default"><strong>THROW_ON_OVERLOAD = false (default)</strong></h4>
+
+                        <p>If the inbound queue is full (i.e. the thresholds are met).</p>
+
+                        <p><img src="../img/blog/blog-post-improving-resiliency/image12.png" alt="alt_text" title="image_tooltip"></p>
+
+                        <p>C* sets autoread to false on the netty channel, which means it will stop reading bytes off of the netty channel.</p>
+
+                        <p><img src="../img/blog/blog-post-improving-resiliency/image13.png" alt="alt_text" title="image_tooltip"></p>
+
+                        <p>Consequently, the kernel socket inbound buffer becomes full since no bytes are being read off of it by netty eventloop.</p>
+
+                        <p><img src="../img/blog/blog-post-improving-resiliency/image14.png" alt="alt_text" title="image_tooltip"></p>
+
+                        <p>Once the Kernel Socket Inbound Buffer is full on the server side, things start getting piled up in the Kernel Socket Outbound Buffer on the client side, and once this buffer gets full, client will start experiencing backpressure.</p>
+
+                        <p><img src="../img/blog/blog-post-improving-resiliency/image15.png" alt="alt_text" title="image_tooltip"></p>
+
+                        <h4 id="throw_on_overload--true"><strong>THROW_ON_OVERLOAD = true</strong></h4>
+
+                        <p>If the inbound queue is full (i.e. the thresholds are met), eventloop threads do not enqueue the request into the Inbound Queue. Instead, the eventloop thread creates an OverloadedException response message and enqueues it into the flusher queue, which will then be shipped back to the client.</p>
+
+                        <p><img src="../img/blog/blog-post-improving-resiliency/image16.png" alt="alt_text" title="image_tooltip"></p>
+
+                        <p>This way, Cassandra is able to serve very large throughput, while protecting itself from getting into memory starvation issues. This patch has been vetted through thorough performance benchmarking. Detailed performance analysis can be found <a target="_blank" href="https://issues.apache.org/jira/browse/CASSANDRA-15013?focusedCommentId=16881762&amp;page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-16881762">here</a>.</p>
+
+				</div>
+			</section>
+			<footer class="grad grad--two flex-center pb-xlarge">
+				<div class="inner text-center z2 relative">
+					<h2 class="white py-small">Get started with Cassandra, fast.</h2>
+					<a href="/quickstart/" class="btn btn--filled ma-medium">Quickstart Guide</a>
+				</div>
+				<div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+					<div class="col-2">
+						<div class="logo mb-medium"><img src="/img/logo-white.svg" alt=""></div>
+						<p>Apache Cassandra powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+					</div>
+					<div class="col-2 flex flex-center">
+						<ul class="columns-2">
+							<li class="mb-small"><a href="/">Home</a></li>
+							<li class="mb-small"><a href="/cassandra-basics/">Cassandra Basics</a></li>
+							<li class="mb-small"><a href="/quickstart/">Quickstart</a></li>
+							<li class="mb-small"><a href="/ecosystem/">Ecosystem</a></li>
+							<li class="mb-small"><a href="https://cassandra.apache.org/doc/latest/">Documentation</a></li>
+							<li class="mb-small"><a href="/community/">Community</a></li>
+							<li class="mb-small"><a href="/case-studies/">Case Studies</a></li>
+							<li class="mb-small"><a href="/resources/">Resources</a></li>
+							<li class="mb-small"><a href="/blog/">Blog</a></li>
+							
+						</ul>
+					</div>
+				</div>
+			</footer>
+			<div class="lower-footer bg-white pa-medium">
+				<div class="flex flex-row flex-vert-center">
+					<div class="pr-medium"><img src="../img/feather-small.png" alt="ASF" width="20"></div>
+					<div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+					<div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+					<div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+					<div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+					<div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+					<div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+				</div>
+				<p class="my-medium">&copy; <script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0. Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.</p>
+			</div>
+		</div>
+                <div id="fade" class="hidden"></div>
+			<div id="modal" class="modal hidden">
+				<div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+				<div id="mod-content" class="vid-mod-content resp-container">
+			</div>
+		</div>
+	</body>
+</html>

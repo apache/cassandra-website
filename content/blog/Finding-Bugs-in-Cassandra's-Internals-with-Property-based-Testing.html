@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Finding Bugs in Cassandra's Internals with Property-based Testing | Blog</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<link rel="stylesheet" href="/style.css">
+		<script src="/init.js"></script>
+		
+		<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400&family=Red+Hat+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+	
+			
+	</head>
+	<body class="blog-index">
+		<div class="container mx-auto">
+			<div id="mobile-nav-overlay" class="hide">
+				<div class="mobile-nav flex flex-column text-center">
+					<a class="mobile-nav-link" href="/cassandra-basics/">Cassandra Basics</a>
+					<a class="mobile-nav-link" href="/quickstart/">Quickstart</a>
+					<a class="mobile-nav-link" href="/ecosystem/">Ecosystem</a>
+					<a class="mobile-nav-link" href="https://cassandra.apache.org/doc/latest/">Documentation</a>
+					<a class="mobile-nav-link" href="/community/">Community</a>
+					<a class="mobile-nav-link" href="/case-studies/">Case Studies</a>
+					<a class="mobile-nav-link" href="/resources/">Resources</a>
+					<a class="mobile-nav-link" href="/blog/">Blog</a>
+					<a class="mobile-nav-link" href="/download/">Download</a>
+				</div>
+			</div>
+			<header class="grad">
+				<div class="eye"></div>
+				<div id="top-nav" class="inner flex flex-vert-center flex-space-between relative">
+					<div class="logo"><a href="/"><img src="/img/logo-white.svg" alt=""></a></div>
+					<div class="mobile-nav-icon">
+						<img class="toggle-icon" src="/img/hamburger-nav.svg">
+					</div>
+					
+					<ul class="nav-links flex flex-vert-center flex-space-between">
+						<li>
+							<a class="nav-link">Get Started</a>
+							<ul class="sub-menu bg-white">
+								<li class="pa-micro">
+									<a href="/cassandra-basics/">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-basics.png" alt="cassandra basics icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Cassandra Basics
+										</div>
+									</a>
+								</li>
+								<li class="pa-micro">
+									<a href="/quickstart/">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-rocket.png" alt="cassandra basics icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Quickstart
+										</div>
+									</a>
+								</li>
+								<li class="pa-micro">
+									<a href="/ecosystem/">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Ecosystem
+										</div>
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li><a class="nav-link" href="https://cassandra.apache.org/doc/latest/">Documentation</a></li>
+						<li>
+							<a class="nav-link" href="/community/">Community</a>
+							<ul class="sub-menu bg-white">
+								<li class="pa-micro">
+									<a href="/community/#code-of-conduct">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-welcome.png" alt="welcome icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Welcome
+										</div>
+									</a>
+								</li>
+								<li class="pa-micro">
+									<a href="/community/#discussion">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-discussions.png" alt="discussions icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Discussions
+										</div>
+									</a>
+								</li>
+								<li class="pa-micro">
+									<a href="/community/#project-governance">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-governance.png" alt="Governance icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Governance
+										</div>
+									</a>
+								</li>
+								<li class="pa-micro">
+									<a href="/community/#how-to-contribute">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-contribute.png" alt="Contribute icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Contribute
+										</div>
+									</a>
+								</li>
+								<li class="pa-micro">
+									<a href="/community/#meet-the-community">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-community.png" alt="Meet the Community icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Meet the Community
+										</div>
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a class="nav-link">Learn</a>
+							<ul class="sub-menu bg-white">
+								<li class="pa-micro">
+									<a href="/case-studies/">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-case-study.png" alt="Case Studies icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Case Studies
+										</div>
+									</a>
+								</li>
+								<li class="pa-micro">
+									<a href="/resources/">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-resources.png" alt="Resources icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Resources
+										</div>
+									</a>
+								</li>
+								<li class="pa-micro">
+									<a href="/blog/">
+										<div class="sub-nav-icon">
+											<img src="/img/sub-menu-blog.png" alt="Blog icon">
+										</div>
+										<div class="sub-nav-text teal py-small">
+											Blog
+										</div>
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li><a class="nav-link btn btn--filled" href="/download/">Download Now</a></li>
+					</ul>
+					
+				</div>
+				<div class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+					<h1 class="ma-large">
+                        Finding Bugs in Cassandra's Internals with Property-based Testing
+                    </h1>
+					<h3> October 17, 2018 | The Apache Cassandra Community</h3> 
+				</div>
+			</header>
+			<section id="blog-post" class="arrow py-xlarge">
+				<div class="inner">
+                    <h5><a href="/blog">« Back to the Apache Cassandra Blog</a></h5>
+                    <hr>
+                    <p>As of September 1st, the Apache Cassandra community has shifted the focus of Cassandra 4.0 development from new feature work to testing, validation, and hardening, with the goal of releasing a stable 4.0 that every Cassandra user, from small deployments to large corporations, can deploy with confidence. There are several projects and methodologies that the community is undertaking to this end. One of these is the adoption of property-based testing, which was <a href="http://cassandra.apache.org/blog/2018/08/21/testing_apache_cassandra.html">previously introduced here</a>. This post will take a look at a specific use of this approach and how it found a bug in a new feature meant to ensure data integrity between the client and Cassandra.</p>
+                  
+                  <h4 id="detecting-corruption-is-a-property">Detecting Corruption is a Property</h4>
+                  
+                  <p>In this post, we demonstrate property-based testing in Cassandra through the integration of the <a target="_blank" href="https://github.com/ncredinburgh/QuickTheories">QuickTheories</a> library introduced as part of the work done for <a target="_blank" href="https://issues.apache.org/jira/browse/CASSANDRA-13304">CASSANDRA-13304</a>.</p>
+                  
+                  <p>This ticket modifies the framing of Cassandra’s native client protocol to include checksums in addition to the existing, optional compression. Clients can opt-in to this new feature to retain data integrity across the many hops between themselves and Cassandra. This is meant to address cases where hardware and protocol level checksums fail (due to underlying hardware issues) — a case that has been seen in production. A description of the protocol changes can be found in the ticket but for the purposes of this discussion the salient part is that two checksums are added: one that covers the length(s) of the data (if compressed there are two lengths), and one for the data itself. Before merging this feature, property-based testing using QuickTheories was used to uncover a bug in the calculation of the checksum over the lengths. This bug could have led to silent corruption at worst or unexpected errors during deserialization at best.</p>
+                  
+                  <p>The test used to find this bug is shown below. This example tests the property that when a frame is corrupted, that corruption should be caught by checksum comparison. The test is wrapped inside of a standard JUnit test case but, once called by JUnit, execution is handed over to QuickTheories to generate and execute hundreds of examples. These examples are dictated by the types of input that should be generated (the arguments to <code class="highlighter-rouge">forAll</code>). The execution of each individual example is done by <code class="highlighter-rouge">checkAssert</code> and its argument, the <code class="highlighter-rouge">roundTripWithCorruption</code> function.</p>
+                  
+                  <div><div>
+					  <pre>
+@Test
+public void corruptionCausesFailure()
+{
+	qt().withExamples(500)
+		.forAll(inputWithCorruptablePosition(),
+				integers().between(0, Byte.MAX_VALUE).map(Integer::byteValue),
+				compressors(),
+				checksumTypes())
+		.checkAssert(this::roundTripWithCorruption);
+}
+                  </pre></div></div>
+                  
+                  <p>The <code class="highlighter-rouge">roundTripWithCorruption</code> function is a generalization of a unit test that worked similarly but for a single case. It is given an input to transform and a position in the transformed output to insert corruption, as well as what byte to write to the corrupted position. The additional arguments (the compressor and checksum type) are used to ensure coverage of Cassandra’s various compression and checksumming implementations.</p>
+                  
+                  <div><div><pre>
+private void roundTripWithCorruption(Pair&lt;String, Integer&gt; inputAndCorruptablePosition,
+	byte corruptionValue,
+	Compressor compressor,
+	ChecksumType checksum) {
+		String input = inputAndCorruptablePosition.left;
+		ByteBuf expectedBuf = Unpooled.wrappedBuffer(input.getBytes());
+		int byteToCorrupt = inputAndCorruptablePosition.right;
+		ChecksummingTransformer transformer = new ChecksummingTransformer(checksum, DEFAULT_BLOCK_SIZE, compressor);
+		ByteBuf outbound = transformer.transformOutbound(expectedBuf);
+
+		// make sure we're actually expecting to produce some corruption
+		if (outbound.getByte(byteToCorrupt) == corruptionValue)
+		return;
+
+		if (byteToCorrupt &gt;= outbound.writerIndex())
+		return;
+
+		try {
+			int oldIndex = outbound.writerIndex();
+			outbound.writerIndex(byteToCorrupt);
+			outbound.writeByte(corruptionValue);
+			outbound.writerIndex(oldIndex);
+			ByteBuf inbound = transformer.transformInbound(outbound, FLAGS);
+
+			// verify that the content was actually corrupted
+			expectedBuf.readerIndex(0);
+			Assert.assertEquals(expectedBuf, inbound);
+		} catch(ProtocolException e) {
+			return;
+		}
+	}
+</pre></div></div>
+                  
+                  <p>The remaining piece is how those arguments are generated — the arguments to <code class="highlighter-rouge">forAll</code> mentioned above. Each argument is a function that returns an input generator. For each example, an input is pulled from each generator and passed to <code class="highlighter-rouge">roundTripWithCorruption</code>.  The <code class="highlighter-rouge">compressors()</code> and <code class="highlighter-rouge">checksums()</code> generators aren’t copied here. They can be found in the <a target="_blank" href="https://github.com/apache/cassandra/blob/65fb17a88bd096b1e952ccca31ad709759644a1b/test/unit/org/apache/cassandra/transport/frame/checksum/ChecksummingTransformerTest.java#L209-L217">source</a> and are based on built-in generator methods, provided by QuickTheories, that select a value from a list of values. The second argument, <code class="highlighter-rouge">integers().between(0, Byte.MAX_VALUE).map(Integer::byteValue)</code>, generates non-negative numbers that fit into a single byte. These numbers will be passed as the <code class="highlighter-rouge">corruptionValue</code> argument.</p>
+                  
+                  <p>The <code class="highlighter-rouge">inputWithCorruptiblePosition</code> generator, copied below, generates strings to use as input to the transformation function and a position within the output byte stream to corrupt. Because compression prevents knowledge of the output size of the frame, the generator tries to choose a somewhat reasonable position to corrupt by limiting the choice to the size of the generated string (it’s uncommon for compression to generate a larger string and the implementation discards the compressed value if it does). It also avoids corrupting the first two bytes of the stream which are not covered by a checksum and therefore can be corrupted without being caught. The function above ensures that corruption is actually introduced and that corrupting a position larger than the size of the output does not occur.</p>
+                  
+                  <div><pre>
+private Gen&lt;Pair&lt;String, Integer&gt;&gt; inputWithCorruptablePosition()
+{
+	return inputs().flatMap(s -&gt; integers().between(2, s.length() + 2)
+		.map(i -&gt; Pair.create(s, i)));
+}
+                  </pre></div>
+                  
+                  <p>With all those pieces in place, if the test were run before the bug were fixed, it would fail with the following output.</p>
+                  
+                  <div><div><pre>
+java.lang.AssertionError: Property falsified after 2 example(s) 
+Smallest found falsifying value(s) :-
+{(c,3), 0, null, Adler32}
+
+Cause was :-
+java.lang.IndexOutOfBoundsException: readerIndex(10) + length(16711681) exceeds writerIndex(15): UnpooledHeapByteBuf(ridx: 10, widx: 15, cap: 54/54)
+	at io.netty.buffer.AbstractByteBuf.checkReadableBytes0(AbstractByteBuf.java:1401)
+	at io.netty.buffer.AbstractByteBuf.checkReadableBytes(AbstractByteBuf.java:1388)
+	at io.netty.buffer.AbstractByteBuf.readBytes(AbstractByteBuf.java:870)
+	at org.apache.cassandra.transport.frame.checksum.ChecksummingTransformer.transformInbound(ChecksummingTransformer.java:289)
+	at org.apache.cassandra.transport.frame.checksum.ChecksummingTransformerTest.roundTripWithCorruption(ChecksummingTransformerTest.java:106)
+...
+Other found falsifying value(s) :- 
+{(c,3), 0, null, CRC32}
+{(c,3), 1, null, CRC32}
+{(c,3), 9, null, CRC32}
+{(c,3), 11, null, CRC32}
+{(c,3), 36, null, CRC32}
+{(c,3), 50, null, CRC32}
+{(c,3), 74, null, CRC32}
+{(c,3), 99, null, CRC32}
+
+Seed was 179207634899674
+                  </pre></div></div>
+                  
+                  <p>The output shows more than a single failing example. This is because QuickTheories, like most property-based testing libraries, comes with a shrinker, which performs the task of taking a failure and minimizing its inputs. This aids in debugging because there are multiple failing examples to look at often removing noise in the process. Additionally, a seed value is provided so the same series of tests and failures can be generated again — another useful feature when debugging. In this case, the library generated an example that contains a single byte of input, which will corrupt the fourth byte in the output stream by setting it to zero, using no compression, and using Adler32 for checksumming. It can be seen from the other failing examples that using CRC32 also fails. This is due to improper calculation of the checksum, regardless of the algorithm. In particular, the checksum was only calculated over the least significant byte of each length rather than all eight bytes. By corrupting the fourth byte of the output stream (the first length’s second-most significant byte not covered by the calculation), an invalid length is read and later used.</p>
+                  
+                  <h4 id="where-to-find-more">Where to Find More</h4>
+                  
+                  <p>Property-based testing is a broad topic, much of which is not covered by this post. In addition to Cassandra, it has been used successfully in several places including <a target="_blank" href="https://ieeexplore.ieee.org/document/7107466/">car</a> <a target="_blank" href="https://arxiv.org/pdf/1703.06574.pdf">operating
+                  systems</a> and <a target="_blank" href="https://youtu.be/hXnS_Xjwk2Y?t=1023">suppliers’ products</a>, <a target="_blank" href="https://dl.acm.org/citation.cfm?id=2034662">GNOME Glib</a>, <a target="_blank" href="https://github.com/WesleyAC/raft/tree/master/src">distributed consensus</a>, and other <a target="_blank" href="https://www.youtube.com/watch?v=x9mW54GJpG0">distributed</a> <a target="_blank" href="https://youtu.be/hXnS_Xjwk2Y?t=1382">databases</a>. It can also be combined with other approaches such as fault-injection and memory leak detection. Stateful models can also be built to generate a series of commands instead of running each example on one generated set of inputs. Our goal is to evangelize this approach within the Cassandra developer community and encourage more testing of this kind as part of our work to deliver the most stable major release of Cassandra yet.</p>
+                  
+                  
+                    
+                    
+				</div>
+			</section>
+			<footer class="grad grad--two flex-center pb-xlarge">
+				<div class="inner text-center z2 relative">
+					<h2 class="white py-small">Get started with Cassandra, fast.</h2>
+					<a href="/quickstart/" class="btn btn--filled ma-medium">Quickstart Guide</a>
+				</div>
+				<div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+					<div class="col-2">
+						<div class="logo mb-medium"><img src="/img/logo-white.svg" alt=""></div>
+						<p>Apache Cassandra powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+					</div>
+					<div class="col-2 flex flex-center">
+						<ul class="columns-2">
+							<li class="mb-small"><a href="/">Home</a></li>
+							<li class="mb-small"><a href="/cassandra-basics/">Cassandra Basics</a></li>
+							<li class="mb-small"><a href="/quickstart/">Quickstart</a></li>
+							<li class="mb-small"><a href="/ecosystem/">Ecosystem</a></li>
+							<li class="mb-small"><a href="https://cassandra.apache.org/doc/latest/">Documentation</a></li>
+							<li class="mb-small"><a href="/community/">Community</a></li>
+							<li class="mb-small"><a href="/case-studies/">Case Studies</a></li>
+							<li class="mb-small"><a href="/resources/">Resources</a></li>
+							<li class="mb-small"><a href="/blog/">Blog</a></li>
+							
+						</ul>
+					</div>
+				</div>
+			</footer>
+			<div class="lower-footer bg-white pa-medium">
+				<div class="flex flex-row flex-vert-center">
+					<div class="pr-medium"><img src="../img/feather-small.png" alt="ASF" width="20"></div>
+					<div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+					<div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+					<div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+					<div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+					<div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+					<div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+				</div>
+				<p class="my-medium">&copy; <script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0. Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.</p>
+			</div>
+		</div>
+                <div id="fade" class="hidden"></div>
+			<div id="modal" class="modal hidden">
+				<div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+				<div id="mod-content" class="vid-mod-content resp-container">
+			</div>
+		</div>
+	</body>
+</html>
