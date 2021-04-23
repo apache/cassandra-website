@@ -150,7 +150,7 @@ Options
                                   host.  For example:
                                     -z ~/local/path/to/ui-bundle.zip
 
-        -v BUILD_ARG:VALUE        A container build argument defined by BUILD_ARG that overrides the default value with
+        -a BUILD_ARG:VALUE        A container build argument defined by BUILD_ARG that overrides the default value with
                                   the value for VALUE. This option can be specified multiple times and is only applied
                                   when using the 'build' command. This option is ignored in all other cases. Possible
                                   arguments for BUILD_ARG are 'UID_ARG', 'GID_ARG', 'NODE_VERSION_ARG',
@@ -158,13 +158,26 @@ Options
                                   are split by a colon ':'. For example:
                                     -v CASSANDRA_REPOSITORY_URL_ARG:https://github/user/my_cassandra_fork.git
 
-        -g                        Enable generation of versioned docs when running website 'build', and
-                                  'preview'. This option is ignored in all other cases.
+        -g                        Enable generation of versioned AsciiDoc (.adoc) files from the Cassandra source
+                                  repository and include them when generating the website HTML. Use this option when you
+                                  want to generate a new version of the Cassandra AsciiDocs before generating the
+                                  website and documentation HTML. This option can be used with only the website 'build',
+                                  and 'preview' commands. For all other commands this option is ignored.
 
-        -a                        Disable automatically committing the generated docs to the Cassandra
-                                  repository when using a single branch. Use this option when you use your local
-                                  checkout of the Cassandra repository and want to commit any newly generated AsciiDoc
-                                  to the repository yourself.
+        -i                        Enable the inclusion of the versioned AsciiDoc (.adoc) files from the Cassandra source
+                                  repository when generating the website HTML. This option is unnecessary when the '-g'
+                                  option is used. Use this option when the AsciiDoc files are already committed to the
+                                  Cassandra source repository and you want them to be used for the versioned docs in the
+                                  generated HTML website. This option can be used with only the website 'build', and
+                                  'preview' commands. For all other commands this option is ignored.
+
+        -n                        Disable committing the generated docs to the Cassandra repository. This option can be
+                                  used when only a single branch is specified as the Cassandra repository source. If
+                                  using multiple branches, the AsciiDoc files generated for each branch need to be
+                                  committed to their respective branch. This is so Antora can generate the website HTML
+                                  documentation for each branch. Use this option when you use your local checkout of the
+                                  Cassandra repository and want to commit any newly generated AsciiDoc files to the
+                                  repository yourself.
 
         -p                        Preserve containers after docker exists. By default this script will force docker to
                                   remove the container once it stops. Use this option to persist the container after it
@@ -185,7 +198,7 @@ EOF
 }
 
 parse_website_command_options() {
-  while getopts "e:c:b:t:u:z:v:gapdh" opt_flag
+  while getopts "e:c:b:t:u:z:a:ginpdh" opt_flag
   do
     case $opt_flag in
       e)
@@ -206,14 +219,18 @@ parse_website_command_options() {
       z)
         ui_bundle_zip_url="$OPTARG"
       ;;
-      v)
+      a)
         container_build_args+=("$OPTARG")
       ;;
       g)
         command_generate_docs="generate-docs"
+        include_version_docs_when_generating_website="enabled"
       ;;
-      a)
-        automatically_commit_generated_version_docs="disabled"
+      i)
+        include_version_docs_when_generating_website="enabled"
+      ;;
+      n)
+        commit_generated_version_docs_to_repository="disabled"
       ;;
       p)
         persist_container_after_run="enabled"
@@ -334,6 +351,9 @@ build_website_ui_container() {
 #
 # url_source_name   - Name for any of the following: file, directory, or repository.
 # url_source_value  - Value assigned to url_source_name. This value may change if it points to a local object.
+# cassandra_website_volume_mount_set  - Flag indicating if a volume mount has been defined for the local
+#                                       cassandra-website directory.
+# cassandra_website_source_set        - Flag indicating if a source for the cassandra-website content has been defined.
 set_antora_url_source() {
   local location_source=""
   local location_type=""
@@ -343,10 +363,15 @@ set_antora_url_source() {
   then
     if [ "${url_source_name}" = "cassandra-website" ]
     then
-      cassandra_website_source_set="true"
+      cassandra_website_volume_mount_set="true"
     fi
     url_source_value="/home/build/${url_source_name}"
     vol_args+=("-v ${location_source}:${url_source_value}")
+  fi
+
+  if [ "${url_source_name}" = "cassandra-website" ]
+  then
+    cassandra_website_source_set="true"
   fi
 }
 
@@ -368,6 +393,7 @@ run_docker_website_command() {
 
   local antora_content_source_env_name
 
+  local cassandra_website_volume_mount_set
   local cassandra_website_source_set
 
   if [ -z "$(docker images -q "${container_tag}")" ]
@@ -380,14 +406,6 @@ run_docker_website_command() {
     env_file_arg="--env-file ${env_file}"
   fi
 
-  # If we are either building or previewing the site, no branches have specified, and no URL specified, use the current
-  # local copy of the cassandra-website and current branch.
-  if [ "${container_command}" != "generate-docs" ] && [ ${#repository_branches[*]} -eq 0 ] && [ ${#repository_url[*]} -eq 0 ]
-  then
-    repository_branches+=(cassandra-website:"$(git rev-parse --abbrev-ref HEAD)")
-    repository_url+=(cassandra-website:.)
-  fi
-
   # The following are examples of the optional repository inputs we want to parse and convert into their equivalent
   # ANTORA_CONTENT_SOURCES_* docker environment s.
   # branch option - cassandra:trunk,my_test_branch_311,my_test_branch_40 -> ANTORA_CONTENT_SOURCES_CASSANDRA_BRANCHES=trunk,my_test_branch_311,my_test_branch_40
@@ -397,6 +415,7 @@ run_docker_website_command() {
   # We can do this by iterating through each of the repository source arrays and splitting the repository name from its
   # supplied value. The eval command for the inner for loop resolves to "${repository_<type>[*]}". This combined with
   # the outer for loop means we will process all the values in arrays: repository_branches, repository_tags, repository_url.
+  cassandra_website_volume_mount_set="false"
   cassandra_website_source_set="false"
   for repository_source_type in branches tags url
   do
@@ -411,13 +430,6 @@ run_docker_website_command() {
       then
         continue
       fi
-
-      antora_content_source_env_name="ANTORA_CONTENT_SOURCES_$(
-        tr '[:lower:]' '[:upper:]' <<< "${repository_name}" |
-        sed 's/\-/_/g'
-      )_$(
-        tr '[:lower:]' '[:upper:]' <<< "${repository_source_type}"
-      )"
 
       case "${repository_source_type}" in
         url)
@@ -436,18 +448,38 @@ run_docker_website_command() {
         ;;
       esac
 
+      antora_content_source_env_name="ANTORA_CONTENT_SOURCES_$(
+        tr '[:lower:]' '[:upper:]' <<< "${repository_name}" |
+        sed 's/\-/_/g'
+      )_$(
+        tr '[:lower:]' '[:upper:]' <<< "${repository_source_type}"
+      )"
+
       env_args+=("-e ${antora_content_source_env_name}=${repository_value}")
     done
   done
 
-  env_args+=("-e CREATE_GIT_COMMIT_WHEN_GENERATING_DOCS=${automatically_commit_generated_version_docs}")
-
   if [ "${container_command}" != "generate-docs" ]
   then
-    if [ "${cassandra_website_source_set}" = "false" ]
+    # Check if the local cassandra-website repository will be mounted inside the container. We need to mount the
+    # cassandra-website directory inside the container so the caller has access to the generated HTML website. The
+    # generated website HTML (and documentation if specified) output will be placed in the path mapped to the mounted
+    # local directory.
+    if [ "${cassandra_website_volume_mount_set}" = "false" ]
     then
       vol_args+=("-v $(pwd):/home/build/cassandra-website")
     fi
+
+    # Check if a source for the cassandra-website repository is specified. We need to define a source if none was
+    # supplied by the caller. By default we will use the mounted cassandra-website directory. This provides a good
+    # user experience as the caller can run the script with minimal arguments and it will render what is on their
+    # local clone of the repository.
+    if [ "${cassandra_website_source_set}" = "false" ]
+    then
+      env_args+=("-e ANTORA_CONTENT_SOURCES_CASSANDRA_WEBSITE_URL=/home/build/cassandra-website")
+    fi
+
+    env_args+=("-e INCLUDE_VERSION_DOCS_WHEN_GENERATING_WEBSITE=${include_version_docs_when_generating_website}")
 
     if [ -n "${ui_bundle_zip_url}" ]
     then
@@ -458,6 +490,8 @@ run_docker_website_command() {
       env_args+=("-e ANTORA_UI_BUNDLE_URL=${url_source_value}")
     fi
   fi
+
+  env_args+=("-e COMMIT_GENERATED_VERSION_DOCS_TO_REPOSITORY=${commit_generated_version_docs_to_repository}")
 
   exec_docker_run_command "${port_map_option} ${vol_args[*]} ${env_file_arg} ${env_args[*]} ${container_tag} ${command_generate_docs} ${container_command}"
 }
@@ -539,7 +573,6 @@ run_website_ui_command() {
 ### Main ###
 
 env_file=""
-local_cassandra_repository_path=""
 container_tag=""
 container_build_args=()
 repository_branches=()
@@ -547,7 +580,8 @@ repository_tags=()
 repository_url=()
 ui_bundle_zip_url=""
 command_generate_docs=""
-automatically_commit_generated_version_docs="enabled"
+commit_generated_version_docs_to_repository="enabled"
+include_version_docs_when_generating_website="disabled"
 persist_container_after_run="disabled"
 dry_run="disabled"
 
