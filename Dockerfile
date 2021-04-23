@@ -15,7 +15,6 @@ ARG UID_ARG=1000
 ARG GID_ARG=1000
 ARG NODE_VERSION_ARG="v12.16.2"
 ARG ENTR_VERSION_ARG="4.6"
-ARG CASSANDRA_REPOSITORY_URL_ARG="https://github.com/apache/cassandra.git"
 
 ENV  BUILD_USER=build
 
@@ -75,13 +74,12 @@ RUN ./configure && \
 
 WORKDIR ${BUILD_DIR}
 RUN mkdir -p ${BUILD_DIR}/cassandra-website && \
-    git clone ${CASSANDRA_REPOSITORY_URL_ARG} ${BUILD_DIR}/cassandra && \
-    mkdir -p ${BUILD_DIR}/cassandra/doc/build_gen && \
+    mkdir -p ${BUILD_DIR}/cassandra && \
     chmod -R a+rw ${BUILD_DIR} && \
     chown -R ${BUILD_USER}:${BUILD_USER} ${BUILD_DIR}
 
 # Set defaults for site build environment variables.
-ENV GIT_EMAIL_ADDRES="${BUILD_USER}@apache.org"
+ENV GIT_EMAIL_ADDRESS="${BUILD_USER}@apache.org"
 ENV GIT_USER_NAME="${BUILD_USER}"
 
 ENV ANTORA_SITE_TITLE="Apache Cassandra Documentation"
@@ -89,13 +87,13 @@ ENV ANTORA_SITE_URL="https://cassandra.apache.org/"
 ENV ANTORA_SITE_START_PAGE="Website"
 
 # Build from 3.11.5 as document generation for previous versions is broken.
-ENV ANTORA_CONTENT_SOURCES_CASSANDRA_URL="${CASSANDRA_REPOSITORY_URL_ARG}"
+ENV ANTORA_CONTENT_SOURCES_CASSANDRA_URL="https://github.com/apache/cassandra.git"
 ENV ANTORA_CONTENT_SOURCES_CASSANDRA_BRANCHES="trunk cassandra-4.0 cassandra-3.11 cassandra-3.11.8 cassandra-3.11.7 cassandra-3.11.6 cassandra-3.11.5"
 ENV ANTORA_CONTENT_SOURCES_CASSANDRA_TAGS=""
 ENV ANTORA_CONTENT_SOURCES_CASSANDRA_START_PATH="doc/source"
 
 ENV ANTORA_CONTENT_SOURCES_CASSANDRA_WEBSITE_URL="https://github.com/apache/cassandra-website.git"
-ENV ANTORA_CONTENT_SOURCES_CASSANDRA_WEBSITE_BRANCHES="trunk"
+ENV ANTORA_CONTENT_SOURCES_CASSANDRA_WEBSITE_BRANCHES="HEAD"
 ENV ANTORA_CONTENT_SOURCES_CASSANDRA_WEBSITE_TAGS=""
 ENV ANTORA_CONTENT_SOURCES_CASSANDRA_WEBSITE_START_PATH="site-content/source"
 
@@ -103,7 +101,8 @@ ENV ANTORA_UI_BUNDLE_URL="https://github.com/ianjevans/antora-ui-datastax/releas
 
 ENV CASSANDRA_DOWNLOADS_URL="https://downloads.apache.org/cassandra/"
 
-ENV CREATE_GIT_COMMIT_WHEN_GENERATING_DOCS="enabled"
+ENV INCLUDE_VERSION_DOCS_WHEN_GENERATING_WEBSITE="disabled"
+ENV COMMIT_GENERATED_VERSION_DOCS_TO_REPOSITORY="enabled"
 
 EXPOSE 5151/tcp
 
