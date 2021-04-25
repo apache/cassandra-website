@@ -9,9 +9,9 @@ is_sphinx_doc: false
 Downloading Cassandra
 ---------------------
 
-### Latest Beta Version
+### Latest RC Version
 
-Download the latest Apache Cassandra 4.0 beta release: {{ "latest" | full_release_link }}.
+Download the latest Apache Cassandra 4.0 RC release: {{ "latest" | full_release_link }}.
 
 ### Latest Stable Version
 
