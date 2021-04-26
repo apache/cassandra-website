@@ -38,8 +38,9 @@ class SiteYAML:
         for version in parser.version_list:
             version_key = version.key
 
+            # Add the latest version as "latest" as well as its version number.
             if parser.latest == version.release_number:
-                version_key = "latest"
+                self._asciidoc_attributes["latest"] = {"name": version.name, "date": version.date}
 
             self._asciidoc_attributes[version_key] = {"name": version.name, "date": version.date}
         self._asciidoc_attributes['url_downloads_cassandra'] = release_download_url
@@ -75,7 +76,7 @@ class DownloadsHTMLParser(html.parser.HTMLParser, abc.ABC):
         self._current_version = None
         self._previous_tag = None
 
-        self._version_pattern = re.compile(r"^\d+\.\d+[.\-alphbet]+\d+")
+        self._version_pattern = re.compile(r"^\d+\.\d+[.\-\w]+\d+")
         self._date_pattern = re.compile(r"^\d+-\d+-\d+")
 
         self.version_list = []
