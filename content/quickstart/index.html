@@ -172,7 +172,6 @@
 					<h3 class="text-center pb-large">Interested in getting started with Cassandra? Follow these instructions.</h3>
 					<article class="pa-large">
 						<h4 class="mb-medium">STEP 1: GET CASSANDRA USING DOCKER</h4>
-						
 						<p>You'll need to have Docker Desktop for Mac, Docker Desktop for Windows, or
 								similar software installed on your computer.</p>
 						<div class="highlighter-rouge">
@@ -184,76 +183,93 @@
 
 					<article class="my-medium pa-large">
 						<h4 class="mb-medium">STEP 2: START CASSANDRA</h4>
+						<p>A Docker network allows us to access the container's ports without exposing them on the host.</p>
 						<div class="highlighter-rouge">
-							<code>docker run --name cassandra cassandra</code>
+							<code>
+                                docker network create cassandra<br/>
+                                docker run --rm -d --name cassandra --hostname cassandra --network cassandra cassandra<br/>
+                            </code>
 						</div>
 					</article>
 
 					<article class="pa-large">
 						<h4 class="mb-medium">STEP 3: CREATE FILES</h4>
-						<p>In the directory where you plan to run the next step, create these two files so that some data can be automatically inserted in the next step.</p>
-						<p class="mt-medium">A <em>cqlshrc</em> file will log into the Cassandra database with the default superuser:</p>
+                        <p>The Cassandra Query Language (CQL) is very similar to SQL but suited for the JOINless structure of Cassandra.</p>
+                        <p>Create a file named <code>data.cql</code> and paste the following CQL script in it. This script will create a keyspace, the layer at which Cassandra replicates its data, a table to hold the data, and insert some data into that table:</p>
 						<div class="highlighter-rouge">
 							<code>
-								[authentication]<br/>
-								username = cassandra<br/>
-								password = cassandra<br/>
-							</code>
-						</div>
-						<p>Create a <em>scripts</em> directory and change to that directory. The following <em>data.cql</em> file will create a keyspace, the layer at which Cassandra replicates its data, a table to hold the data, and insert some data:</p>
-						<div class="highlighter-rouge">
-							<code>
-								# Create a keyspace<br/>
+								-- Create a keyspace<br/>
 								CREATE KEYSPACE IF NOT EXISTS store WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : '1' };<br/>
 								<br/>
-								# Create a table<br/>
+								-- Create a table<br/>
 								CREATE TABLE IF NOT EXISTS store.shopping_cart  (<br/>
 									userid text PRIMARY KEY,<br/>
 									item_count int,<br/>
 									last_update_timestamp timestamp<br/>
 								);<br/>
 								<br/>
-								# Insert some data<br/>
+								-- Insert some data<br/>
 								INSERT INTO store.shopping_cart<br/>
 								(userid, item_count, last_update_timestamp)<br/>
-								VALUES ('9876', 2, toTimeStamp(toDate(now))));<br/>
+								VALUES ('9876', 2, toTimeStamp(now()));<br/>
 								INSERT INTO store.shopping_cart<br/>
 								(userid, item_count, last_update_timestamp)<br/>
-								VALUES (1234, 5, toTimeStamp(toDate(now))));<br/>
+								VALUES ('1234', 5, toTimeStamp(now()));<br/>
 							</code>
 						</div>
-						<p>You should now have a <em>cqlshrc</em> file and <em>&lt;currentdir&gt;/scripts/data.cql</em> file.</p>
 					</article>	
 
 					<article class="my-medium pa-large">
-						<h4 class="mb-medium">STEP 4: RUN CQLSH TO INTERACT</h4>
-						<p>Cassandra is a distributed database that can read and write data across multiple nodes with peer-to-peer replication. The Cassandra Query Language (CQL) is similar to SQL but suited for the JOINless structure of Cassandra. The CQL shell, or <code>cqlsh</code>, is one tool to use in interacting with the database.</p>
+						<h4 class="mb-medium">STEP 4: LOAD DATA WITH CQLSH</h4>
+						<p>The CQL shell, or <code>cqlsh</code>, is one tool to use in interacting with the database. We'll use it to load some data into the database using the script you just saved.</p>
 						<div class="highlighter-rouge">
-							<code>docker run --rm -it -v /&lt;currentdir&gt;/scripts:/scripts  \<br/>
-								-v /&lt;currentdir/cqlshrc:/.cassandra/cqlshrc  \<br/>
-								--env CQLSH_HOST=host.docker.internal --env CQLSH_PORT=9042  nuvo/docker-cqlsh
-							</code>
+                            <code>
+                                docker run --rm --network cassandra -v "$(pwd)/data.cql:/scripts/data.cql" -e CQLSH_HOST=cassandra -e CQLSH_PORT=9042 nuvo/docker-cqlsh
+                            </code>
 						</div>
-						<p>For this quickstart, this cqlsh docker image also loads some data automatically, so you can start running queries.</p>
+                        <p>Note: The cassandra server itself (the first <code>docker run</code> command you ran) takes a few seconds to start up. The above command will throw an error if the server hasn't finished its init sequence yet, so give it a few seconds to spin up.</p>
 					</article>
+
 					<article class="my-medium pa-large">
-						<h4 class="mb-medium">STEP 5: READ SOME DATA</h4>
+						<h4 class="mb-medium">STEP 5: INTERACTIVE CQLSH</h4>
+						<p>Much like an SQL shell, you can also of course use CQLSH to run CQL commands interactively.</p>
+						<div class="highlighter-rouge">
+                            <code>
+                                docker run --rm -it --network cassandra nuvo/docker-cqlsh cqlsh cassandra 9042 --cqlversion='3.4.4'
+                            </code>
+						</div>
+                        <p>This should get you a prompt like so:</p>
+						<div class="highlighter-rouge">
+                            <code>
+                                Connected to Test Cluster at cassandra:9042.<br/>
+                                [cqlsh 5.0.1 | Cassandra 3.11.10 | CQL spec 3.4.4 | Native protocol v4]<br/>
+                                Use HELP for help.<br/>
+                                cqlsh&gt;<br/>
+                            </code>
+						</div>
+					</article>
+
+					<article class="my-medium pa-large">
+						<h4 class="mb-medium">STEP 6: READ SOME DATA</h4>
 						<div class="highlighter-rouge">
 							<code>SELECT * FROM store.shopping_cart;</code>
 						</div>
 					</article>
 
 					<article class="my-medium pa-large">
-						<h4 class="mb-medium">STEP 6: WRITE SOME MORE DATA</h4>
+						<h4 class="mb-medium">STEP 7: WRITE SOME MORE DATA</h4>
 						<div class="highlighter-rouge">
-							<code data-lang="plaintext" class="language-plaintext hljs">INSERT (userid, item_count) VALUES (4567, 20) INTO store.shopping_cart;</code>
+							<code data-lang="plaintext" class="language-plaintext hljs">INSERT INTO store.shopping_cart (userid, item_count) VALUES ('4567', 20);</code>
 						</div>
 					</article>	
 
 					<article class="my-medium pa-large">	
-						<h4 class="mb-medium">STEP 7: TERMINATE CASSANDRA</h4>
+						<h4 class="mb-medium">STEP 8: CLEAN UP</h4>
 						<div class="highlighter-rouge">
-							<code data-lang="plaintext" class="language-plaintext hljs">docker rm cassandra</code>
+							<code data-lang="plaintext" class="language-plaintext hljs">
+                                docker kill cassandra<br/>
+                                docker network rm cassandra<br/>
+                            </code>
 						</div>
 						<p><strong>CONGRATULATIONS!</strong></p>
 						<p class="mt-medium">Hey, that wasn&#8217;t so hard, was it?</p>
