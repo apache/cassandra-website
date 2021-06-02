@@ -1,129 +1,95 @@
+
+
 <!DOCTYPE html>
-<html>
-  
-
-
-
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
-">
-  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
-  <meta name="robots" content="index,follow" />
-  <meta name="language" content="en" />  
-
-  <title>Documentation</title>
-
-  <link rel="canonical" href="http://cassandra.apache.org/doc/latest/tools/sstable/sstableloader.html">
-
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-  <link rel="stylesheet" href="./../../../../css/style.css">
+  <meta charset="utf-8" />
   
-  <link rel="stylesheet" href="./../../../../css/sphinx.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>sstableloader &mdash; Apache Cassandra Documentation v4.0-rc2</title>
   
 
-   <link rel="top" title="Apache Cassandra Documentation v4.0-rc1" href="../../index.html"/> <link rel="up" title="SSTable Tools" href="index.html"/> <link rel="next" title="sstablemetadata" href="sstablemetadata.html"/> <link rel="prev" title="sstablelevelreset" href="sstablelevelreset.html"/> 
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
   
-  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
-<script async defer data-domain="cassandra.apache.org" src="https://plausible.cassandra.apache.org/js/plausible.js"></script></head>
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/extra.css" type="text/css" />
 
-  <body>
-    <!-- breadcrumbs -->
-<div class="topnav">
-  <div class="container breadcrumb-container">
-    <ul class="breadcrumb">
-      <li>
-        <div class="dropdown">
-          <img class="asf-logo" src="./../../../../img/asf_feather.png" />
-          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-            <li><a href="http://www.apache.org">Apache Homepage</a></li>
-            <li><a href="http://www.apache.org/licenses/">License</a></li>
-            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
-            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
-            <li><a href="http://www.apache.org/security/">Security</a></li>
-          </ul>
-        </div>
-      </li>
+  
+  
 
-      
-      <li><a href="./../../../../">Apache Cassandra</a></li>
-      
+  
+  
 
-      
-        
-        <li><a href="./../../../../doc/latest/">Documentation</a></li>
-        
-      
+  
 
-      
-      <li><a href="./">SSTable Tools</a></li>
-      
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-      
-      <li>sstableloader</li>
-      
-    </ul>
-  </div>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="sstablemetadata" href="sstablemetadata.html" />
+    <link rel="prev" title="sstablelevelreset" href="sstablelevelreset.html" /> 
+</head>
 
-  <!-- navbar -->
-  <nav class="navbar navbar-default navbar-static-top" role="navigation">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="./../../../../"><img src="./../../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
-      </div><!-- /.navbar-header -->
+<body class="wy-body-for-nav">
 
-      <div id="cassandra-menu" class="collapse navbar-collapse">
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="./../../../../">Home</a></li>
-          <li><a href="./../../../../download/">Download</a></li>
-          <li><a href="./../../../../doc/latest/">Documentation</a></li>
-          <li><a href="./../../../../community/">Community</a></li>
-          <li>
-            <a href="./../../../../blog/">Blog</a>
-        </li>
-        </ul>
-      </div><!-- /#cassandra-menu -->
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
 
-      
-    </div>
-  </nav><!-- /.navbar -->
-</div><!-- /.topnav -->
+          
+            <a href="../../index.html" class="icon icon-home"> Apache Cassandra
+          
 
-    <div class="container-fluid">
-  <div class="row">
-    <div class="col-md-3">
-      <div class="doc-navigation">
-        <div class="doc-menu" role="navigation">
-          <div class="navbar-header">
-            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-          </div>
-          <div class="navbar-collapse collapse sidebar-navbar-collapse">
-            <form id="doc-search-form" class="navbar-form" action="../../search.html" method="get" role="search">
-              <div class="form-group">
-                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0-rc2
               </div>
-            </form>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
             
             
+              
             
-            <ul class="current">
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../new/index.html">New Features in Apache Cassandra 4.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../architecture/index.html">Architecture</a></li>
@@ -140,7 +106,16 @@
 <li class="toctree-l3"><a class="reference internal" href="sstabledump.html">sstabledump</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sstableexpiredblockers.html">sstableexpiredblockers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sstablelevelreset.html">sstablelevelreset</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">sstableloader</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sstableloader</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#load-sstables-from-a-snapshot">Load sstables from a Snapshot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#use-a-config-file-for-ssl-clusters">Use a Config File for SSL Clusters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hide-progress-output">Hide Progress Output</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#get-more-detail">Get More Detail</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#throttling-load">Throttling Load</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#speeding-up-load">Speeding up Load</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="sstablemetadata.html">sstablemetadata</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sstableofflinerelevel.html">sstableofflinerelevel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sstablerepairedset.html">sstablerepairedset</a></li>
@@ -163,15 +138,74 @@
 </ul>
 
             
-            
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
-    <div class="col-md-8">
-      <div class="content doc-content">
-        <div class="content-container">
           
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Cassandra Tools</a> &raquo;</li>
+        
+          <li><a href="index.html">SSTable Tools</a> &raquo;</li>
+        
+      <li>sstableloader</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/tools/sstable/sstableloader.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
   <div class="section" id="sstableloader">
 <h1>sstableloader<a class="headerlink" href="#sstableloader" title="Permalink to this headline">¶</a></h1>
 <p>Bulk-load the sstables found in the directory &lt;dir_path&gt; to the configured cluster. The parent directories of &lt;dir_path&gt; are used as the target keyspace/table name. For example, to load an sstable named ma-1-big-Data.db into keyspace1/standard1, you will need to have the files ma-1-big-Data.db and ma-1-big-Index.db in a directory /path/to/keyspace1/standard1/. The tool will create new sstables, and does not clean up your copied files.</p>
@@ -182,81 +216,81 @@
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>sstableloader &lt;options&gt; &lt;dir_path&gt;</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="39%" />
-<col width="61%" />
+<col style="width: 39%" />
+<col style="width: 61%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>-d, –nodes &lt;initial hosts&gt;</td>
-<td>Required. Try to connect to these hosts (comma-separated)
-initially for ring information</td>
+<tbody>
+<tr class="row-odd"><td><p>-d, –nodes &lt;initial hosts&gt;</p></td>
+<td><p>Required. Try to connect to these hosts (comma-separated)
+initially for ring information</p></td>
 </tr>
-<tr class="row-even"><td>-u, –username &lt;username&gt;</td>
-<td>username for Cassandra authentication</td>
+<tr class="row-even"><td><p>-u, –username &lt;username&gt;</p></td>
+<td><p>username for Cassandra authentication</p></td>
 </tr>
-<tr class="row-odd"><td>-pw, –password &lt;password&gt;</td>
-<td>password for Cassandra authentication</td>
+<tr class="row-odd"><td><p>-pw, –password &lt;password&gt;</p></td>
+<td><p>password for Cassandra authentication</p></td>
 </tr>
-<tr class="row-even"><td>-p, –port &lt;native transport port&gt;</td>
-<td>port used for native connection (default 9042)</td>
+<tr class="row-even"><td><p>-p, –port &lt;native transport port&gt;</p></td>
+<td><p>port used for native connection (default 9042)</p></td>
 </tr>
-<tr class="row-odd"><td>-sp, –storage-port &lt;storage port&gt;</td>
-<td>port used for internode communication (default 7000)</td>
+<tr class="row-odd"><td><p>-sp, –storage-port &lt;storage port&gt;</p></td>
+<td><p>port used for internode communication (default 7000)</p></td>
 </tr>
-<tr class="row-even"><td>-ssp, –ssl-storage-port &lt;ssl storage port&gt;</td>
-<td>port used for TLS internode communication (default 7001)</td>
+<tr class="row-even"><td><p>-ssp, –ssl-storage-port &lt;ssl storage port&gt;</p></td>
+<td><p>port used for TLS internode communication (default 7001)</p></td>
 </tr>
-<tr class="row-odd"><td>–no-progress</td>
-<td>don’t display progress</td>
+<tr class="row-odd"><td><p>–no-progress</p></td>
+<td><p>don’t display progress</p></td>
 </tr>
-<tr class="row-even"><td>-t, –throttle &lt;throttle&gt;</td>
-<td>throttle speed in Mbits (default unlimited)</td>
+<tr class="row-even"><td><p>-t, –throttle &lt;throttle&gt;</p></td>
+<td><p>throttle speed in Mbits (default unlimited)</p></td>
 </tr>
-<tr class="row-odd"><td>-idct, –inter-dc-throttle &lt;inter-dc-throttle&gt;</td>
-<td>inter-datacenter throttle speed in Mbits (default unlimited)</td>
+<tr class="row-odd"><td><p>-idct, –inter-dc-throttle &lt;inter-dc-throttle&gt;</p></td>
+<td><p>inter-datacenter throttle speed in Mbits (default unlimited)</p></td>
 </tr>
-<tr class="row-even"><td>-cph, –connections-per-host &lt;connectionsPerHost&gt;</td>
-<td>number of concurrent connections-per-host</td>
+<tr class="row-even"><td><p>-cph, –connections-per-host &lt;connectionsPerHost&gt;</p></td>
+<td><p>number of concurrent connections-per-host</p></td>
 </tr>
-<tr class="row-odd"><td>-i, –ignore &lt;NODES&gt;</td>
-<td>don’t stream to this (comma separated) list of nodes</td>
+<tr class="row-odd"><td><p>-i, –ignore &lt;NODES&gt;</p></td>
+<td><p>don’t stream to this (comma separated) list of nodes</p></td>
 </tr>
-<tr class="row-even"><td>-alg, –ssl-alg &lt;ALGORITHM&gt;</td>
-<td>Client SSL: algorithm (default: SunX509)</td>
+<tr class="row-even"><td><p>-alg, –ssl-alg &lt;ALGORITHM&gt;</p></td>
+<td><p>Client SSL: algorithm (default: SunX509)</p></td>
 </tr>
-<tr class="row-odd"><td>-ciphers, –ssl-ciphers &lt;CIPHER-SUITES&gt;</td>
-<td>Client SSL: comma-separated list of encryption suites to use</td>
+<tr class="row-odd"><td><p>-ciphers, –ssl-ciphers &lt;CIPHER-SUITES&gt;</p></td>
+<td><p>Client SSL: comma-separated list of encryption suites to use</p></td>
 </tr>
-<tr class="row-even"><td>-ks, –keystore &lt;KEYSTORE&gt;</td>
-<td>Client SSL: full path to keystore</td>
+<tr class="row-even"><td><p>-ks, –keystore &lt;KEYSTORE&gt;</p></td>
+<td><p>Client SSL: full path to keystore</p></td>
 </tr>
-<tr class="row-odd"><td>-kspw, –keystore-password &lt;KEYSTORE-PASSWORD&gt;</td>
-<td>Client SSL: password of the keystore</td>
+<tr class="row-odd"><td><p>-kspw, –keystore-password &lt;KEYSTORE-PASSWORD&gt;</p></td>
+<td><p>Client SSL: password of the keystore</p></td>
 </tr>
-<tr class="row-even"><td>-st, –store-type &lt;STORE-TYPE&gt;</td>
-<td>Client SSL: type of store</td>
+<tr class="row-even"><td><p>-st, –store-type &lt;STORE-TYPE&gt;</p></td>
+<td><p>Client SSL: type of store</p></td>
 </tr>
-<tr class="row-odd"><td>-ts, –truststore &lt;TRUSTSTORE&gt;</td>
-<td>Client SSL: full path to truststore</td>
+<tr class="row-odd"><td><p>-ts, –truststore &lt;TRUSTSTORE&gt;</p></td>
+<td><p>Client SSL: full path to truststore</p></td>
 </tr>
-<tr class="row-even"><td>-tspw, –truststore-password &lt;TRUSTSTORE-PASSWORD&gt;</td>
-<td>Client SSL: password of the truststore</td>
+<tr class="row-even"><td><p>-tspw, –truststore-password &lt;TRUSTSTORE-PASSWORD&gt;</p></td>
+<td><p>Client SSL: password of the truststore</p></td>
 </tr>
-<tr class="row-odd"><td>-prtcl, –ssl-protocol &lt;PROTOCOL&gt;</td>
-<td>Client SSL: connections protocol to use (default: TLS)</td>
+<tr class="row-odd"><td><p>-prtcl, –ssl-protocol &lt;PROTOCOL&gt;</p></td>
+<td><p>Client SSL: connections protocol to use (default: TLS)</p></td>
 </tr>
-<tr class="row-even"><td>-ap, –auth-provider &lt;auth provider&gt;</td>
-<td>custom AuthProvider class name for cassandra authentication</td>
+<tr class="row-even"><td><p>-ap, –auth-provider &lt;auth provider&gt;</p></td>
+<td><p>custom AuthProvider class name for cassandra authentication</p></td>
 </tr>
-<tr class="row-odd"><td>-f, –conf-path &lt;path to config file&gt;</td>
-<td>cassandra.yaml file path for streaming throughput and client/server SSL</td>
+<tr class="row-odd"><td><p>-f, –conf-path &lt;path to config file&gt;</p></td>
+<td><p>cassandra.yaml file path for streaming throughput and client/server SSL</p></td>
 </tr>
-<tr class="row-even"><td>-v, –verbose</td>
-<td>verbose output</td>
+<tr class="row-even"><td><p>-v, –verbose</p></td>
+<td><p>verbose output</p></td>
 </tr>
-<tr class="row-odd"><td>-h, –help</td>
-<td>display this help message</td>
+<tr class="row-odd"><td><p>-h, –help</p></td>
+<td><p>display this help message</p></td>
 </tr>
 </tbody>
 </table>
@@ -458,76 +492,51 @@ initially for ring information</td>
 </div>
 
 
-
-          
-          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
-            
-            <a href="sstablemetadata.html" class="btn btn-default pull-right " role="button" title="sstablemetadata" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
-            
-            
-            <a href="sstablelevelreset.html" class="btn btn-default" role="button" title="sstablelevelreset" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
-            
+           </div>
+           
           </div>
-          
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="sstablemetadata.html" class="btn btn-neutral float-right" title="sstablemetadata" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="sstablelevelreset.html" class="btn btn-neutral float-left" title="sstablelevelreset" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, The Apache Cassandra team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
         </div>
       </div>
-    </div>
+
+    </section>
+
   </div>
-</div>
+  
 
-    <hr />
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
 
-<footer>
-  <div class="container">
-    <div class="col-md-4 social-blk">
-      <span class="social">
-        <a href="https://twitter.com/cassandra"
-           class="twitter-follow-button"
-           data-show-count="false" data-size="large">Follow @cassandra</a>
-        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
-           class="twitter-hashtag-button"
-           data-size="large"
-           data-related="ApacheCassandra">Tweet #cassandra</a>
-        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  
+  
+    
+   
 
-      </span>
-      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
-          <span><i class="fa fa-rss"></i></span>
-      </a>
-    </div>
-
-    <div class="col-md-8 trademark">
-      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
-      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
-      <p>
-    </div>
-  </div><!-- /.container -->
-</footer>
-
-<!-- Javascript. Placed here so pages load faster -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="./../../../../js/underscore-min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-
-
-<script src="./../../../../js/doctools.js"></script>
-<script src="./../../../../js/searchtools.js"></script>
-
- <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
-
-
-
-<script type="text/javascript">
-  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-
-  try {
-    var pageTracker = _gat._getTracker("UA-11583863-1");
-    pageTracker._trackPageview();
-  } catch(err) {}
-</script>
-
-
-  </body>
+</body>
 </html>

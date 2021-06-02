@@ -1,129 +1,95 @@
+
+
 <!DOCTYPE html>
-<html>
-  
-
-
-
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="The Apache Cassandra database is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data. Cassandra's support for replicating across multiple datacenters is best-in-class, providing lower latency for your users and the peace of mind of knowing that you can survive regional outages.
-">
-  <meta name="keywords" content="cassandra, apache, apache cassandra, distributed storage, key value store, scalability, bigtable, dynamo" />
-  <meta name="robots" content="index,follow" />
-  <meta name="language" content="en" />  
-
-  <title>Documentation</title>
-
-  <link rel="canonical" href="http://cassandra.apache.org/doc/latest/operating/bulk_loading.html">
-
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-  <link rel="stylesheet" href="./../../../css/style.css">
+  <meta charset="utf-8" />
   
-  <link rel="stylesheet" href="./../../../css/sphinx.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Bulk Loading &mdash; Apache Cassandra Documentation v4.0-rc2</title>
   
 
-   <link rel="top" title="Apache Cassandra Documentation v4.0-rc1" href="../index.html"/> <link rel="up" title="Operating Cassandra" href="index.html"/> <link rel="next" title="Monitoring" href="metrics.html"/> <link rel="prev" title="Backups" href="backups.html"/> 
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
   
-  <link type="application/atom+xml" rel="alternate" href="http://cassandra.apache.org/feed.xml" title="Apache Cassandra Website" />
-<script async defer data-domain="cassandra.apache.org" src="https://plausible.cassandra.apache.org/js/plausible.js"></script></head>
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/extra.css" type="text/css" />
 
-  <body>
-    <!-- breadcrumbs -->
-<div class="topnav">
-  <div class="container breadcrumb-container">
-    <ul class="breadcrumb">
-      <li>
-        <div class="dropdown">
-          <img class="asf-logo" src="./../../../img/asf_feather.png" />
-          <a data-toggle="dropdown" href="#">Apache Software Foundation <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-            <li><a href="http://www.apache.org">Apache Homepage</a></li>
-            <li><a href="http://www.apache.org/licenses/">License</a></li>
-            <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
-            <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
-            <li><a href="http://www.apache.org/security/">Security</a></li>
-          </ul>
-        </div>
-      </li>
+  
+  
 
-      
-      <li><a href="./../../../">Apache Cassandra</a></li>
-      
+  
+  
 
-      
-        
-        <li><a href="./../../../doc/latest/">Documentation</a></li>
-        
-      
+  
 
-      
-      <li><a href="./">Operating Cassandra</a></li>
-      
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-      
-      <li>Bulk Loading</li>
-      
-    </ul>
-  </div>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Monitoring" href="metrics.html" />
+    <link rel="prev" title="Backups" href="backups.html" /> 
+</head>
 
-  <!-- navbar -->
-  <nav class="navbar navbar-default navbar-static-top" role="navigation">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cassandra-menu" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="./../../../"><img src="./../../../img/cassandra_logo.png" alt="Apache Cassandra logo" /></a>
-      </div><!-- /.navbar-header -->
+<body class="wy-body-for-nav">
 
-      <div id="cassandra-menu" class="collapse navbar-collapse">
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="./../../../">Home</a></li>
-          <li><a href="./../../../download/">Download</a></li>
-          <li><a href="./../../../doc/latest/">Documentation</a></li>
-          <li><a href="./../../../community/">Community</a></li>
-          <li>
-            <a href="./../../../blog/">Blog</a>
-        </li>
-        </ul>
-      </div><!-- /#cassandra-menu -->
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
 
-      
-    </div>
-  </nav><!-- /.navbar -->
-</div><!-- /.topnav -->
+          
+            <a href="../index.html" class="icon icon-home"> Apache Cassandra
+          
 
-    <div class="container-fluid">
-  <div class="row">
-    <div class="col-md-3">
-      <div class="doc-navigation">
-        <div class="doc-menu" role="navigation">
-          <div class="navbar-header">
-            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-          </div>
-          <div class="navbar-collapse collapse sidebar-navbar-collapse">
-            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
-              <div class="form-group">
-                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0-rc2
               </div>
-            </form>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
             
             
+              
             
-            <ul class="current">
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
@@ -143,9 +109,20 @@
 <li class="toctree-l2"><a class="reference internal" href="backups.html">Backups</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Bulk Loading</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#tools-for-bulk-loading">Tools for Bulk Loading</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#using-sstableloader">Using sstableloader</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#using-nodetool-import">Using nodetool import</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#bulk-loading-external-data">Bulk Loading External Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-sstableloader">Using sstableloader</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sstableloader-option-to-accept-target-keyspace-name">Sstableloader Option to accept Target keyspace name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#a-sstableloader-demo">A sstableloader Demo</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#using-nodetool-import">Using nodetool import</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#importing-data-from-an-incremental-backup">Importing Data from an Incremental Backup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#importing-data-from-a-snapshot">Importing Data from a Snapshot</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#bulk-loading-external-data">Bulk Loading External Data</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#generating-sstables-with-cqlsstablewriter-java-api">Generating SSTables with CQLSSTableWriter Java API</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="metrics.html">Monitoring</a></li>
@@ -163,30 +140,87 @@
 </ul>
 
             
-            
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
-    <div class="col-md-8">
-      <div class="content doc-content">
-        <div class="content-container">
           
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Operating Cassandra</a> &raquo;</li>
+        
+      <li>Bulk Loading</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/operating/bulk_loading.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
   <div class="section" id="bulk-loading">
 <span id="id1"></span><h1>Bulk Loading<a class="headerlink" href="#bulk-loading" title="Permalink to this headline">¶</a></h1>
 <p>Bulk loading of data in Apache Cassandra is supported by different tools. The data to be bulk loaded must be in the form of SSTables. Cassandra does not support loading data in any other format such as CSV, JSON, and XML directly. Bulk loading could be used to:</p>
 <ul class="simple">
-<li>Restore incremental backups and snapshots. Backups and snapshots are already in the form of SSTables.</li>
-<li>Load existing SSTables into another cluster, which could have a different number of nodes or replication strategy.</li>
-<li>Load external data into a cluster</li>
+<li><p>Restore incremental backups and snapshots. Backups and snapshots are already in the form of SSTables.</p></li>
+<li><p>Load existing SSTables into another cluster, which could have a different number of nodes or replication strategy.</p></li>
+<li><p>Load external data into a cluster</p></li>
 </ul>
 <p><a href="#id2"><span class="problematic" id="id3">**</span></a>Note*: CSV Data can be loaded via the cqlsh COPY command but we do not recommend this for bulk loading, which typically requires many GB or TB of data.</p>
 <div class="section" id="tools-for-bulk-loading">
 <h2>Tools for Bulk Loading<a class="headerlink" href="#tools-for-bulk-loading" title="Permalink to this headline">¶</a></h2>
 <p>Cassandra provides two commands or tools for bulk loading data. These are:</p>
 <ul class="simple">
-<li>Cassandra Bulk loader, also called <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code></li>
-<li>The <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">import</span></code> command</li>
+<li><p>Cassandra Bulk loader, also called <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code></p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">import</span></code> command</p></li>
 </ul>
 <p>The <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> and <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">import</span></code> are accessible if the Cassandra installation <code class="docutils literal notranslate"><span class="pre">bin</span></code> directory is in the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> environment variable.  Or these may be accessed directly from the <code class="docutils literal notranslate"><span class="pre">bin</span></code> directory. We shall discuss each of these next. We shall use the example or sample keyspaces and tables created in the Backups section.</p>
 </div>
@@ -195,8 +229,8 @@
 <p>The <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> is the main tool for bulk uploading data. The <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> streams SSTable data files to a running cluster. The <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> loads data conforming to the replication strategy and replication factor. The table to upload data to does need not to be empty.</p>
 <p>The only requirements to run <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> are:</p>
 <ol class="arabic simple">
-<li>One or more comma separated initial hosts to connect to and get ring information.</li>
-<li>A directory path for the SSTables to load.</li>
+<li><p>One or more comma separated initial hosts to connect to and get ring information.</p></li>
+<li><p>A directory path for the SSTables to load.</p></li>
 </ol>
 <p>Its usage is as follows.</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sstableloader [options] &lt;dir_path&gt;
@@ -406,10 +440,10 @@ progress: [35.173.233.153:7000]0:1/1 176% [10.0.2.238:7000]0:1/1 78 %
 </div>
 <p>Some other requirements of <code class="docutils literal notranslate"><span class="pre">sstableloader</span></code> that should be kept into consideration are:</p>
 <ul class="simple">
-<li>The SSTables to be loaded must be compatible with  the Cassandra version being loaded into.</li>
-<li>Repairing tables that have been loaded into a different cluster does not repair the source tables.</li>
-<li>Sstableloader makes use of port 7000 for internode communication.</li>
-<li>Before restoring incremental backups run <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">flush</span></code> to backup any data in memtables</li>
+<li><p>The SSTables to be loaded must be compatible with  the Cassandra version being loaded into.</p></li>
+<li><p>Repairing tables that have been loaded into a different cluster does not repair the source tables.</p></li>
+<li><p>Sstableloader makes use of port 7000 for internode communication.</p></li>
+<li><p>Before restoring incremental backups run <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">flush</span></code> to backup any data in memtables</p></li>
 </ul>
 </div>
 </div>
@@ -610,10 +644,10 @@ cqlsh:catalogkeyspace&gt;
 <h3>Generating SSTables with CQLSSTableWriter Java API<a class="headerlink" href="#generating-sstables-with-cqlsstablewriter-java-api" title="Permalink to this headline">¶</a></h3>
 <p>To generate SSTables using the <code class="docutils literal notranslate"><span class="pre">CQLSSTableWriter</span></code> class the following need to be supplied at the least.</p>
 <ul class="simple">
-<li>An output directory to generate the SSTable in</li>
-<li>The schema for the SSTable</li>
-<li>A prepared insert statement</li>
-<li>A partitioner</li>
+<li><p>An output directory to generate the SSTable in</p></li>
+<li><p>The schema for the SSTable</p></li>
+<li><p>A prepared insert statement</p></li>
+<li><p>A partitioner</p></li>
 </ul>
 <p>The output directory must already have been created. Create a directory (<code class="docutils literal notranslate"><span class="pre">/sstables</span></code> as an example) and set its permissions.</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sudo mkdir /sstables
@@ -671,57 +705,57 @@ directory <code class="docutils literal notranslate"><span class="pre">File</spa
 </div>
 <p>All the public methods the <code class="docutils literal notranslate"><span class="pre">CQLSSTableWriter</span></code> class provides including some other methods that are not discussed in the preceding example are as follows.</p>
 <p>All the public  methods the  <code class="docutils literal notranslate"><span class="pre">CQLSSTableWriter.Builder</span></code> class provides including some other methods that are not discussed in the preceding example are as follows.</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="25%" />
-<col width="75%" />
+<col style="width: 25%" />
+<col style="width: 75%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Method</th>
-<th class="head">Description</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>inDirectory(String directory)</td>
-<td>The directory where to write the SSTables.  This is a mandatory option.  The directory to use should already exist and be writable.</td>
+<tbody>
+<tr class="row-even"><td><p>inDirectory(String directory)</p></td>
+<td><p>The directory where to write the SSTables.  This is a mandatory option.  The directory to use should already exist and be writable.</p></td>
 </tr>
-<tr class="row-odd"><td>inDirectory(File directory)</td>
-<td>The directory where to write the SSTables.  This is a mandatory option.  The directory to use should already exist and be writable.</td>
+<tr class="row-odd"><td><p>inDirectory(File directory)</p></td>
+<td><p>The directory where to write the SSTables.  This is a mandatory option.  The directory to use should already exist and be writable.</p></td>
 </tr>
-<tr class="row-even"><td>forTable(String schema)</td>
-<td>The schema (CREATE TABLE statement) for the table for which SSTable is to be created.  The
+<tr class="row-even"><td><p>forTable(String schema)</p></td>
+<td><p>The schema (CREATE TABLE statement) for the table for which SSTable is to be created.  The
 provided CREATE TABLE statement must use a fully-qualified table name, one that includes the
-keyspace name. This is a mandatory option.</td>
+keyspace name. This is a mandatory option.</p></td>
 </tr>
-<tr class="row-odd"><td>withPartitioner(IPartitioner partitioner)</td>
-<td>The partitioner to use. By default,  Murmur3Partitioner will be used. If this is not the
+<tr class="row-odd"><td><p>withPartitioner(IPartitioner partitioner)</p></td>
+<td><p>The partitioner to use. By default,  Murmur3Partitioner will be used. If this is not the
 partitioner used by the cluster for which the SSTables are created, the correct partitioner
-needs to be provided.</td>
+needs to be provided.</p></td>
 </tr>
-<tr class="row-even"><td>using(String insert)</td>
-<td>The INSERT or UPDATE statement defining the order of the values to add for a given CQL row.
+<tr class="row-even"><td><p>using(String insert)</p></td>
+<td><p>The INSERT or UPDATE statement defining the order of the values to add for a given CQL row.
 The provided INSERT statement must use a fully-qualified table name, one that includes the
 keyspace name. Moreover, said statement must use bind variables since these variables will
-be bound to values by the resulting SSTable writer. This is a mandatory option.</td>
+be bound to values by the resulting SSTable writer. This is a mandatory option.</p></td>
 </tr>
-<tr class="row-odd"><td>withBufferSizeInMB(int size)</td>
-<td>The size of the buffer to use. This defines how much data will be buffered before being
+<tr class="row-odd"><td><p>withBufferSizeInMB(int size)</p></td>
+<td><p>The size of the buffer to use. This defines how much data will be buffered before being
 written as a new SSTable. This corresponds roughly to the data size that will have the
 created SSTable. The default is 128MB, which should be reasonable for a 1GB heap. If
 OutOfMemory exception gets generated while using the SSTable writer, should lower this
-value.</td>
+value.</p></td>
 </tr>
-<tr class="row-even"><td>sorted()</td>
-<td>Creates a CQLSSTableWriter that expects sorted inputs. If this option is used, the resulting
+<tr class="row-even"><td><p>sorted()</p></td>
+<td><p>Creates a CQLSSTableWriter that expects sorted inputs. If this option is used, the resulting
 SSTable writer will expect rows to be added in SSTable sorted order (and an exception will
 be thrown if that is not the case during row insertion). The SSTable sorted order means that
 rows are added such that their partition keys respect the partitioner order. This option
 should only be used if the rows can be provided in order, which is rarely the case. If the
 rows can be provided in order however, using this sorted might be more efficient. If this
-option is used, some option like withBufferSizeInMB will be ignored.</td>
+option is used, some option like withBufferSizeInMB will be ignored.</p></td>
 </tr>
-<tr class="row-odd"><td>build()</td>
-<td>Builds a CQLSSTableWriter object.</td>
+<tr class="row-odd"><td><p>build()</p></td>
+<td><p>Builds a CQLSSTableWriter object.</p></td>
 </tr>
 </tbody>
 </table>
@@ -730,76 +764,51 @@ option is used, some option like withBufferSizeInMB will be ignored.</td>
 </div>
 
 
-
-          
-          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
-            
-            <a href="metrics.html" class="btn btn-default pull-right " role="button" title="Monitoring" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
-            
-            
-            <a href="backups.html" class="btn btn-default" role="button" title="Backups" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
-            
+           </div>
+           
           </div>
-          
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="metrics.html" class="btn btn-neutral float-right" title="Monitoring" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="backups.html" class="btn btn-neutral float-left" title="Backups" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, The Apache Cassandra team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
         </div>
       </div>
-    </div>
+
+    </section>
+
   </div>
-</div>
+  
 
-    <hr />
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
 
-<footer>
-  <div class="container">
-    <div class="col-md-4 social-blk">
-      <span class="social">
-        <a href="https://twitter.com/cassandra"
-           class="twitter-follow-button"
-           data-show-count="false" data-size="large">Follow @cassandra</a>
-        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-        <a href="https://twitter.com/intent/tweet?button_hashtag=cassandra"
-           class="twitter-hashtag-button"
-           data-size="large"
-           data-related="ApacheCassandra">Tweet #cassandra</a>
-        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  
+  
+    
+   
 
-      </span>
-      <a class="subscribe-rss icon-link" href="/feed.xml" title="Subscribe to Blog via RSS">
-          <span><i class="fa fa-rss"></i></span>
-      </a>
-    </div>
-
-    <div class="col-md-8 trademark">
-      <p>&copy; 2016 <a href="http://apache.org">The Apache Software Foundation</a>.
-      Apache, the Apache feather logo, and Apache Cassandra are trademarks of The Apache Software Foundation.
-      <p>
-    </div>
-  </div><!-- /.container -->
-</footer>
-
-<!-- Javascript. Placed here so pages load faster -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="./../../../js/underscore-min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-
-
-<script src="./../../../js/doctools.js"></script>
-<script src="./../../../js/searchtools.js"></script>
-
- <script type="text/javascript"> var DOCUMENTATION_OPTIONS = { URL_ROOT:    "", VERSION:     "", COLLAPSE_INDEX: false, FILE_SUFFIX: ".html", HAS_SOURCE:  false, SOURCELINK_SUFFIX: ".txt" }; </script> 
-
-
-
-<script type="text/javascript">
-  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-
-  try {
-    var pageTracker = _gat._getTracker("UA-11583863-1");
-    pageTracker._trackPageview();
-  } catch(err) {}
-</script>
-
-
-  </body>
+</body>
 </html>

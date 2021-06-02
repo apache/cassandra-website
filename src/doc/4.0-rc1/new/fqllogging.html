@@ -1,61 +1,95 @@
----
-layout: docpage
 
-title: "Documentation"
 
-is_homepage: false
-is_sphinx_doc: true
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Full Query Logging (FQL) &mdash; Apache Cassandra Documentation v4.0-rc2</title>
+  
 
-doc-parent: "New Features in Apache Cassandra 4.0"
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/extra.css" type="text/css" />
 
-doc-title: "Full Query Logging (FQL)"
-doc-header-links: '
-  <link rel="top" title="Apache Cassandra Documentation v4.0-rc1" href="../index.html"/>
-      <link rel="up" title="New Features in Apache Cassandra 4.0" href="index.html"/>
-      <link rel="next" title="Improved Internode Messaging" href="messaging.html"/>
-      <link rel="prev" title="Audit Logging" href="auditlogging.html"/>
-'
-doc-search-path: "../search.html"
+  
+  
 
-extra-footer: '
-<script type="text/javascript">
-    var DOCUMENTATION_OPTIONS = {
-      URL_ROOT:    "",
-      VERSION:     "",
-      COLLAPSE_INDEX: false,
-      FILE_SUFFIX: ".html",
-      HAS_SOURCE:  false,
-      SOURCELINK_SUFFIX: ".txt"
-    };
-</script>
-'
+  
+  
 
----
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-3">
-      <div class="doc-navigation">
-        <div class="doc-menu" role="navigation">
-          <div class="navbar-header">
-            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-          </div>
-          <div class="navbar-collapse collapse sidebar-navbar-collapse">
-            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
-              <div class="form-group">
-                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Improved Internode Messaging" href="messaging.html" />
+    <link rel="prev" title="Audit Logging" href="auditlogging.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apache Cassandra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0-rc2
               </div>
-            </form>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
             
             
+              
             
-            <ul class="current">
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">New Features in Apache Cassandra 4.0</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="java11.html">Support for Java 11</a></li>
@@ -66,7 +100,16 @@ extra-footer: '
 <li class="toctree-l3"><a class="reference internal" href="#logging-information-logged">Logging information logged</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#logging-sequence">Logging sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#using-fql">Using FQL</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#configuring-fql-in-cassandra-yaml">Configuring FQL in cassandra.yaml</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-fql-in-cassandra-yaml">Configuring FQL in cassandra.yaml</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#log-dir">log_dir</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#roll-cycle">roll_cycle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#block">block</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max-queue-weight">max_queue_weight</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max-log-size">max_log_size</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#archive-command">archive_command</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max-archive-retries">max_archive_retries</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#querying-the-state-of-fql">Querying the state of FQL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#enabling-fql">Enabling FQL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#disabling-or-resetting-fql">Disabling or resetting FQL</a></li>
@@ -94,15 +137,72 @@ extra-footer: '
 </ul>
 
             
-            
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
-    <div class="col-md-8">
-      <div class="content doc-content">
-        <div class="content-container">
           
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">New Features in Apache Cassandra 4.0</a> &raquo;</li>
+        
+      <li>Full Query Logging (FQL)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/new/fqllogging.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
   <div class="section" id="full-query-logging-fql">
 <h1>Full Query Logging (FQL)<a class="headerlink" href="#full-query-logging-fql" title="Permalink to this headline">¶</a></h1>
 <p>Apache Cassandra 4.0 adds a new highly performant feature that supports live query logging (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-13983">CASSANDRA-13983</a>).
@@ -113,14 +213,14 @@ The full query logging (FQL) capability uses <a class="reference external" href=
 Full query logs will be referred to as <em>logs</em> for the remainder of the page.</p>
 <p>Some of the features of FQL are:</p>
 <ul class="simple">
-<li>The impact on query latency is reduced by asynchronous single-thread log entry writes to disk.</li>
-<li>Heap memory usage is bounded by a weighted queue, with configurable maximum weight sitting in front of logging thread.</li>
-<li>If the weighted queue is full, producers can be blocked or samples can be dropped.</li>
-<li>Disk utilization is bounded by a configurable size, deleting old log segments once the limit is reached.</li>
-<li>A flexible schema binary format, <a class="reference external" href="http://github.com/OpenHFT/Chronicle-Wire">Chronicle-Wire</a>, for on-disk serialization that can skip unrecognized fields, add new ones, and omit old ones.</li>
-<li>Can be enabled, disabled, or reset (to delete on-disk data) using the JMX tool, <code class="docutils literal notranslate"><span class="pre">nodetool</span></code>.</li>
-<li>Can configure the settings in either the <cite>cassandra.yaml</cite> file or by using <code class="docutils literal notranslate"><span class="pre">nodetool</span></code>.</li>
-<li>Introduces new <code class="docutils literal notranslate"><span class="pre">fqltool</span></code> that currently can <code class="docutils literal notranslate"><span class="pre">Dump</span></code> the binary logs to a readable format. Other options are <code class="docutils literal notranslate"><span class="pre">Replay</span></code> and <code class="docutils literal notranslate"><span class="pre">Compare</span></code>.</li>
+<li><p>The impact on query latency is reduced by asynchronous single-thread log entry writes to disk.</p></li>
+<li><p>Heap memory usage is bounded by a weighted queue, with configurable maximum weight sitting in front of logging thread.</p></li>
+<li><p>If the weighted queue is full, producers can be blocked or samples can be dropped.</p></li>
+<li><p>Disk utilization is bounded by a configurable size, deleting old log segments once the limit is reached.</p></li>
+<li><p>A flexible schema binary format, <a class="reference external" href="http://github.com/OpenHFT/Chronicle-Wire">Chronicle-Wire</a>, for on-disk serialization that can skip unrecognized fields, add new ones, and omit old ones.</p></li>
+<li><p>Can be enabled, disabled, or reset (to delete on-disk data) using the JMX tool, <code class="docutils literal notranslate"><span class="pre">nodetool</span></code>.</p></li>
+<li><p>Can configure the settings in either the <cite>cassandra.yaml</cite> file or by using <code class="docutils literal notranslate"><span class="pre">nodetool</span></code>.</p></li>
+<li><p>Introduces new <code class="docutils literal notranslate"><span class="pre">fqltool</span></code> that currently can <code class="docutils literal notranslate"><span class="pre">Dump</span></code> the binary logs to a readable format. Other options are <code class="docutils literal notranslate"><span class="pre">Replay</span></code> and <code class="docutils literal notranslate"><span class="pre">Compare</span></code>.</p></li>
 </ul>
 <p>FQL logs all successful Cassandra Query Language (CQL) requests, both events that modify the data and those that query.
 While audit logs also include CQL requests, FQL logs only the CQL request. This difference means that FQL can be used to replay or compare logs, which audit logging cannot. FQL is useful for debugging, performance benchmarking, testing and auditing CQL queries, while audit logs are useful for compliance.</p>
@@ -129,27 +229,27 @@ While audit logs also include CQL requests, FQL logs only the CQL request. This 
 <h2>Query information logged<a class="headerlink" href="#query-information-logged" title="Permalink to this headline">¶</a></h2>
 <p>The query log contains:</p>
 <ul class="simple">
-<li>all queries invoked</li>
-<li>approximate time they were invoked</li>
-<li>any parameters necessary to bind wildcard values</li>
-<li>all query options</li>
+<li><p>all queries invoked</p></li>
+<li><p>approximate time they were invoked</p></li>
+<li><p>any parameters necessary to bind wildcard values</p></li>
+<li><p>all query options</p></li>
 </ul>
 <p>The logger writes single or batched CQL queries after they finish, so only successfully completed queries are logged. Failed or timed-out queries are not logged. Different data is logged, depending on the type of query.</p>
 <p>A single CQL query log entry contains:</p>
 <ul class="simple">
-<li>query - CQL query text</li>
-<li>queryOptions - Options associated with the query invocation</li>
-<li>queryState - Timestamp state associated with the query invocation</li>
-<li>queryTimeMillis - Approximate time in milliseconds since the epoch since the query was invoked</li>
+<li><p>query - CQL query text</p></li>
+<li><p>queryOptions - Options associated with the query invocation</p></li>
+<li><p>queryState - Timestamp state associated with the query invocation</p></li>
+<li><p>queryTimeMillis - Approximate time in milliseconds since the epoch since the query was invoked</p></li>
 </ul>
 <p>A batch CQL query log entry contains:</p>
 <ul class="simple">
-<li>queries - CQL text of the queries</li>
-<li>queryOptions - Options associated with the query invocation</li>
-<li>queryState - Timestamp state associated with the query invocation</li>
-<li>batchTimeMillis - Approximate time in milliseconds since the epoch since the batch was invoked</li>
-<li>type - The type of the batch</li>
-<li>values - Values to bind to as parameters for the queries</li>
+<li><p>queries - CQL text of the queries</p></li>
+<li><p>queryOptions - Options associated with the query invocation</p></li>
+<li><p>queryState - Timestamp state associated with the query invocation</p></li>
+<li><p>batchTimeMillis - Approximate time in milliseconds since the epoch since the batch was invoked</p></li>
+<li><p>type - The type of the batch</p></li>
+<li><p>values - Values to bind to as parameters for the queries</p></li>
 </ul>
 <p>Because FQL is backed by <cite>Binlog</cite>, the performance and footprint are predictable, with minimal impact on log record producers.
 Performance safety prevents the producers from overloading the log, using a weighted queue to drop records if the logging falls behind.
@@ -159,20 +259,20 @@ Single-thread asynchronous writing produces the logs. Chronicle-Queue provides a
 <h2>Logging information logged<a class="headerlink" href="#logging-information-logged" title="Permalink to this headline">¶</a></h2>
 <p>FQL also tracks information about the stored log files:</p>
 <ul class="simple">
-<li>Stored log files that are added and their storage impact. Deletes them if over storage limit.</li>
-<li>The log files in Chronicle-Queue that have already rolled</li>
-<li>The number of bytes in the log files that have already rolled</li>
+<li><p>Stored log files that are added and their storage impact. Deletes them if over storage limit.</p></li>
+<li><p>The log files in Chronicle-Queue that have already rolled</p></li>
+<li><p>The number of bytes in the log files that have already rolled</p></li>
 </ul>
 </div>
 <div class="section" id="logging-sequence">
 <h2>Logging sequence<a class="headerlink" href="#logging-sequence" title="Permalink to this headline">¶</a></h2>
 <p>The logger follows a well-defined sequence of events:</p>
 <ol class="arabic simple">
-<li>The consumer thread that writes log records is started. This action can occur only once.</li>
-<li>The consumer thread offers a record to the log. If the in-memory queue is full, the record will be dropped and offer returns a <cite>false</cite> value.</li>
-<li>If accepted, the record is entered into the log. If the in-memory queue is full, the putting thread will be blocked until there is space or it is interrupted.</li>
-<li>The buffers are cleaned up at thread exit. Finalization will check again, to ensure there are no stragglers in the queue.</li>
-<li>The consumer thread is stopped. It can be called multiple times.</li>
+<li><p>The consumer thread that writes log records is started. This action can occur only once.</p></li>
+<li><p>The consumer thread offers a record to the log. If the in-memory queue is full, the record will be dropped and offer returns a <cite>false</cite> value.</p></li>
+<li><p>If accepted, the record is entered into the log. If the in-memory queue is full, the putting thread will be blocked until there is space or it is interrupted.</p></li>
+<li><p>The buffers are cleaned up at thread exit. Finalization will check again, to ensure there are no stragglers in the queue.</p></li>
+<li><p>The consumer thread is stopped. It can be called multiple times.</p></li>
 </ol>
 </div>
 <div class="section" id="using-fql">
@@ -382,30 +482,32 @@ It also stores each row as a separate chronicle document to avoid reading the en
 </pre></div>
 </div>
 <blockquote>
-<div><dl class="docutils">
-<dt>NAME</dt>
-<dd>fqltool compare - Compare result files generated by fqltool replay</dd>
-<dt>SYNOPSIS</dt>
-<dd>fqltool compare –queries &lt;queries&gt; [–] &lt;path1&gt; [&lt;path2&gt;…&lt;pathN&gt;]</dd>
-<dt>OPTIONS</dt>
-<dd><blockquote class="first">
-<div>–queries &lt;queries&gt;</div></blockquote>
+<div><dl>
+<dt>NAME</dt><dd><p>fqltool compare - Compare result files generated by fqltool replay</p>
+</dd>
+<dt>SYNOPSIS</dt><dd><p>fqltool compare –queries &lt;queries&gt; [–] &lt;path1&gt; [&lt;path2&gt;…&lt;pathN&gt;]</p>
+</dd>
+<dt>OPTIONS</dt><dd><blockquote>
+<div><p>–queries &lt;queries&gt;</p>
+</div></blockquote>
 <p>Directory to read the queries from. It is produced by the fqltool
 replay –store-queries option.</p>
 <blockquote>
-<div>–</div></blockquote>
+<div><p>–</p>
+</div></blockquote>
 <p>This option can be used to separate command-line options from the
 list of argument, (useful when arguments might be mistaken for
 command-line options</p>
 <blockquote>
-<div>&lt;path1&gt; [&lt;path2&gt;…&lt;pathN&gt;]</div></blockquote>
-<p class="last">Directories containing result files to compare.</p>
+<div><p>&lt;path1&gt; [&lt;path2&gt;…&lt;pathN&gt;]</p>
+</div></blockquote>
+<p>Directories containing result files to compare.</p>
 </dd>
 </dl>
 </div></blockquote>
 <p>The comparison sets the following marks:</p>
 <ul class="simple">
-<li>Mark the beginning of a query set:</li>
+<li><p>Mark the beginning of a query set:</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-------------------</span>
 <span class="n">version</span><span class="p">:</span> <span class="n">int16</span>
@@ -418,7 +520,7 @@ command-line options</p>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Mark a failed query set:</li>
+<li><p>Mark a failed query set:</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---------------------</span>
 <span class="n">version</span><span class="p">:</span> <span class="n">int16</span>
@@ -428,7 +530,7 @@ command-line options</p>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Mark a row set:</li>
+<li><p>Mark a row set:</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--------------------</span>
 <span class="n">version</span><span class="p">:</span> <span class="n">int16</span>
@@ -439,7 +541,7 @@ command-line options</p>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Mark the end of a result set:</li>
+<li><p>Mark the end of a result set:</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-------------------</span>
 <span class="n">version</span><span class="p">:</span> <span class="n">int16</span>
@@ -451,13 +553,13 @@ command-line options</p>
 <div class="section" id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>To demonstrate FQL, first configure and enable FQL on a node in your cluster:</li>
+<li><p>To demonstrate FQL, first configure and enable FQL on a node in your cluster:</p></li>
 </ol>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nodetool</span> <span class="n">enablefullquerylog</span> <span class="o">--</span><span class="n">path</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">cassandrafullquerylog</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li>Now create a demo keyspace and table and insert some data using <code class="docutils literal notranslate"><span class="pre">cqlsh</span></code>:</li>
+<li><p>Now create a demo keyspace and table and insert some data using <code class="docutils literal notranslate"><span class="pre">cqlsh</span></code>:</p></li>
 </ol>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cqlsh</span><span class="o">&gt;</span> <span class="n">CREATE</span> <span class="n">KEYSPACE</span> <span class="n">querylogkeyspace</span>
   <span class="o">...</span> <span class="n">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;SimpleStrategy&#39;</span><span class="p">,</span> <span class="s1">&#39;replication_factor&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">};</span>
@@ -473,7 +575,7 @@ command-line options</p>
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
-<li>Then check that the data is inserted:</li>
+<li><p>Then check that the data is inserted:</p></li>
 </ol>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cqlsh</span><span class="p">:</span><span class="n">querylogkeyspace</span><span class="o">&gt;</span> <span class="n">SELECT</span> <span class="o">*</span> <span class="n">FROM</span> <span class="n">t</span><span class="p">;</span>
 
@@ -485,7 +587,7 @@ command-line options</p>
 </pre></div>
 </div>
 <ol class="arabic simple" start="4">
-<li>Use the <code class="docutils literal notranslate"><span class="pre">fqltool</span> <span class="pre">dump</span></code> command to view the logs.</li>
+<li><p>Use the <code class="docutils literal notranslate"><span class="pre">fqltool</span> <span class="pre">dump</span></code> command to view the logs.</p></li>
 </ol>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ fqltool dump /tmp/cassandrafullquerylog
 </pre></div>
@@ -653,7 +755,7 @@ the list of queries run, respectively, in <cite>–results</cite> and <cite>–s
 The <code class="docutils literal notranslate"><span class="pre">--target</span></code> specifies the node on which to replay to logs.
 If <code class="docutils literal notranslate"><span class="pre">--replay-ddl-statements</span></code> is not specified, the keyspace and any tables must be created prior to the <code class="docutils literal notranslate"><span class="pre">replay</span></code>.</p>
 <ol class="arabic simple" start="7">
-<li>Check that the keyspace was replayed and exists again using the <code class="docutils literal notranslate"><span class="pre">DESCRIBE</span> <span class="pre">KEYSPACES</span></code> command:</li>
+<li><p>Check that the keyspace was replayed and exists again using the <code class="docutils literal notranslate"><span class="pre">DESCRIBE</span> <span class="pre">KEYSPACES</span></code> command:</p></li>
 </ol>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cqlsh</span><span class="p">:</span><span class="n">querylogkeyspace</span><span class="o">&gt;</span> <span class="n">DESC</span> <span class="n">KEYSPACES</span><span class="p">;</span>
 
@@ -665,19 +767,51 @@ If <code class="docutils literal notranslate"><span class="pre">--replay-ddl-sta
 </div>
 
 
-
-          
-          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
-            
-            <a href="messaging.html" class="btn btn-default pull-right " role="button" title="Improved Internode Messaging" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
-            
-            
-            <a href="auditlogging.html" class="btn btn-default" role="button" title="Audit Logging" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
-            
+           </div>
+           
           </div>
-          
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="messaging.html" class="btn btn-neutral float-right" title="Improved Internode Messaging" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="auditlogging.html" class="btn btn-neutral float-left" title="Audit Logging" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, The Apache Cassandra team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
         </div>
       </div>
-    </div>
+
+    </section>
+
   </div>
-</div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

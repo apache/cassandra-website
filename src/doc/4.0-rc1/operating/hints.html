@@ -1,61 +1,95 @@
----
-layout: docpage
 
-title: "Documentation"
 
-is_homepage: false
-is_sphinx_doc: true
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Hints &mdash; Apache Cassandra Documentation v4.0-rc2</title>
+  
 
-doc-parent: "Operating Cassandra"
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/extra.css" type="text/css" />
 
-doc-title: "Hints"
-doc-header-links: '
-  <link rel="top" title="Apache Cassandra Documentation v4.0-rc1" href="../index.html"/>
-      <link rel="up" title="Operating Cassandra" href="index.html"/>
-      <link rel="next" title="Compaction" href="compaction/index.html"/>
-      <link rel="prev" title="Read repair" href="read_repair.html"/>
-'
-doc-search-path: "../search.html"
+  
+  
 
-extra-footer: '
-<script type="text/javascript">
-    var DOCUMENTATION_OPTIONS = {
-      URL_ROOT:    "",
-      VERSION:     "",
-      COLLAPSE_INDEX: false,
-      FILE_SUFFIX: ".html",
-      HAS_SOURCE:  false,
-      SOURCELINK_SUFFIX: ".txt"
-    };
-</script>
-'
+  
+  
 
----
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-3">
-      <div class="doc-navigation">
-        <div class="doc-menu" role="navigation">
-          <div class="navbar-header">
-            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-          </div>
-          <div class="navbar-collapse collapse sidebar-navbar-collapse">
-            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
-              <div class="form-group">
-                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Compaction" href="compaction/index.html" />
+    <link rel="prev" title="Read repair" href="read_repair.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apache Cassandra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0-rc2
               </div>
-            </form>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
             
             
+              
             
-            <ul class="current">
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
@@ -68,9 +102,18 @@ extra-footer: '
 <li class="toctree-l2"><a class="reference internal" href="repair.html">Repair</a></li>
 <li class="toctree-l2"><a class="reference internal" href="read_repair.html">Read repair</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Hints</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#hinted-handoff">Hinted Handoff</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hinted-handoff">Hinted Handoff</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#application-of-hints">Application of Hints</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#storage-of-hints-on-disk">Storage of Hints on Disk</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hints-for-timed-out-write-requests">Hints for Timed Out Write Requests</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#configuring-hints">Configuring Hints</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#configuring-hints-at-runtime-with-nodetool">Configuring Hints at Runtime with <code class="docutils literal notranslate"><span class="pre">nodetool</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-hints-at-runtime-with-nodetool">Configuring Hints at Runtime with <code class="docutils literal notranslate"><span class="pre">nodetool</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#make-hints-play-faster-at-runtime">Make Hints Play Faster at Runtime</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#allow-a-node-to-be-down-longer-at-runtime">Allow a Node to be Down Longer at Runtime</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#monitoring-hint-delivery">Monitoring Hint Delivery</a></li>
 </ul>
 </li>
@@ -95,15 +138,72 @@ extra-footer: '
 </ul>
 
             
-            
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
-    <div class="col-md-8">
-      <div class="content doc-content">
-        <div class="content-container">
           
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Operating Cassandra</a> &raquo;</li>
+        
+      <li>Hints</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/operating/hints.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
   <div class="section" id="hints">
 <span id="id1"></span><h1>Hints<a class="headerlink" href="#hints" title="Permalink to this headline">¶</a></h1>
 <p>Hinting is a data repair technique applied during write operations. When
@@ -142,22 +242,22 @@ up to <code class="docutils literal notranslate"><span class="pre">max_hint_wind
 unavailable replica does return to the cluster before the window expires, the
 coordinator applies any pending hinted mutations against the replica to ensure
 that eventual consistency is maintained.</p>
-<div class="figure" id="id2">
-<img alt="Hinted Handoff Example" src="../_images/hints.svg" /><p class="caption"><span class="caption-text">Hinted Handoff in Action</span></p>
+<div class="figure align-default" id="id2">
+<img alt="Hinted Handoff Example" src="../_images/hints.svg" /><p class="caption"><span class="caption-text">Hinted Handoff in Action</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
 <ul class="simple">
-<li>(<code class="docutils literal notranslate"><span class="pre">t0</span></code>): The write is sent by the client, and the coordinator sends it
+<li><p>(<code class="docutils literal notranslate"><span class="pre">t0</span></code>): The write is sent by the client, and the coordinator sends it
 to the three replicas. Unfortunately <code class="docutils literal notranslate"><span class="pre">replica_2</span></code> is restarting and cannot
-receive the mutation.</li>
-<li>(<code class="docutils literal notranslate"><span class="pre">t1</span></code>): The client receives a quorum acknowledgement from the coordinator.
+receive the mutation.</p></li>
+<li><p>(<code class="docutils literal notranslate"><span class="pre">t1</span></code>): The client receives a quorum acknowledgement from the coordinator.
 At this point the client believe the write to be durable and visible to reads
-(which it is).</li>
-<li>(<code class="docutils literal notranslate"><span class="pre">t2</span></code>): After the write timeout (default <code class="docutils literal notranslate"><span class="pre">2s</span></code>), the coordinator decides
-that <code class="docutils literal notranslate"><span class="pre">replica_2</span></code> is unavailable and stores a hint to its local disk.</li>
-<li>(<code class="docutils literal notranslate"><span class="pre">t3</span></code>): Later, when <code class="docutils literal notranslate"><span class="pre">replica_2</span></code> starts back up it sends a gossip message
-to all nodes, including the coordinator.</li>
-<li>(<code class="docutils literal notranslate"><span class="pre">t4</span></code>): The coordinator replays hints including the missed mutation
-against <code class="docutils literal notranslate"><span class="pre">replica_2</span></code>.</li>
+(which it is).</p></li>
+<li><p>(<code class="docutils literal notranslate"><span class="pre">t2</span></code>): After the write timeout (default <code class="docutils literal notranslate"><span class="pre">2s</span></code>), the coordinator decides
+that <code class="docutils literal notranslate"><span class="pre">replica_2</span></code> is unavailable and stores a hint to its local disk.</p></li>
+<li><p>(<code class="docutils literal notranslate"><span class="pre">t3</span></code>): Later, when <code class="docutils literal notranslate"><span class="pre">replica_2</span></code> starts back up it sends a gossip message
+to all nodes, including the coordinator.</p></li>
+<li><p>(<code class="docutils literal notranslate"><span class="pre">t4</span></code>): The coordinator replays hints including the missed mutation
+against <code class="docutils literal notranslate"><span class="pre">replica_2</span></code>.</p></li>
 </ul>
 <p>If the node does not return in time, the destination replica will be
 permanently out of sync until either read-repair or full/incremental
@@ -200,27 +300,27 @@ request. The lowest acceptable value for <code class="docutils literal notransla
 <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> configuration file provides several settings for configuring
 hints:</p>
 <p>Table 1. Settings for Hints</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="37%" />
-<col width="36%" />
-<col width="26%" />
+<col style="width: 37%" />
+<col style="width: 36%" />
+<col style="width: 26%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>Setting</td>
-<td>Description</td>
-<td>Default Value</td>
+<tbody>
+<tr class="row-odd"><td><p>Setting</p></td>
+<td><p>Description</p></td>
+<td><p>Default Value</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">hinted_handoff_enabled</span></code></td>
-<td>Enables/Disables hinted handoffs</td>
-<td><code class="docutils literal notranslate"><span class="pre">true</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hinted_handoff_enabled</span></code></p></td>
+<td><p>Enables/Disables hinted handoffs</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">hinted_handoff_disabled_datacenters</span></code></td>
-<td><p class="first">A list of data centers that do not perform
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">hinted_handoff_disabled_datacenters</span></code></p></td>
+<td><p>A list of data centers that do not perform
 hinted handoffs even when handoff is
 otherwise enabled.
 Example:</p>
-<blockquote class="last">
+<blockquote>
 <div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hinted_handoff_disabled_datacenters</span><span class="p">:</span>
   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DC1</span>
   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DC2</span>
@@ -228,16 +328,16 @@ Example:</p>
 </div>
 </div></blockquote>
 </td>
-<td><code class="docutils literal notranslate"><span class="pre">unset</span></code></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">unset</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">max_hint_window_in_ms</span></code></td>
-<td>Defines the maximum amount of time (ms)
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">max_hint_window_in_ms</span></code></p></td>
+<td><p>Defines the maximum amount of time (ms)
 a node shall have hints generated after it
-has failed.</td>
-<td><code class="docutils literal notranslate"><span class="pre">10800000</span></code> # 3 hours</td>
+has failed.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10800000</span></code> # 3 hours</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">hinted_handoff_throttle_in_kb</span></code></td>
-<td>Maximum throttle in KBs per second, per
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">hinted_handoff_throttle_in_kb</span></code></p></td>
+<td><p>Maximum throttle in KBs per second, per
 delivery thread. This will be reduced
 proportionally to the number of nodes in
 the cluster.
@@ -246,37 +346,37 @@ each delivery thread will use the maximum
 rate; if there are 3, each will throttle
 to half of the maximum,since it is expected
 for two nodes to be delivering hints
-simultaneously.)</td>
-<td><code class="docutils literal notranslate"><span class="pre">1024</span></code></td>
+simultaneously.)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1024</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">max_hints_delivery_threads</span></code></td>
-<td>Number of threads with which to deliver
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">max_hints_delivery_threads</span></code></p></td>
+<td><p>Number of threads with which to deliver
 hints; Consider increasing this number when
 you have multi-dc deployments, since
-cross-dc handoff tends to be slower</td>
-<td><code class="docutils literal notranslate"><span class="pre">2</span></code></td>
+cross-dc handoff tends to be slower</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">hints_directory</span></code></td>
-<td>Directory where Cassandra stores hints.</td>
-<td><code class="docutils literal notranslate"><span class="pre">$CASSANDRA_HOME/data/hints</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">hints_directory</span></code></p></td>
+<td><p>Directory where Cassandra stores hints.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">$CASSANDRA_HOME/data/hints</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">hints_flush_period_in_ms</span></code></td>
-<td>How often hints should be flushed from the
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hints_flush_period_in_ms</span></code></p></td>
+<td><p>How often hints should be flushed from the
 internal buffers to disk. Will <em>not</em>
-trigger fsync.</td>
-<td><code class="docutils literal notranslate"><span class="pre">10000</span></code></td>
+trigger fsync.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10000</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">max_hints_file_size_in_mb</span></code></td>
-<td>Maximum size for a single hints file, in
-megabytes.</td>
-<td><code class="docutils literal notranslate"><span class="pre">128</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">max_hints_file_size_in_mb</span></code></p></td>
+<td><p>Maximum size for a single hints file, in
+megabytes.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">128</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">hints_compression</span></code></td>
-<td>Compression to apply to the hint files.
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hints_compression</span></code></p></td>
+<td><p>Compression to apply to the hint files.
 If omitted, hints files will be written
 uncompressed. LZ4, Snappy, and Deflate
-compressors are supported.</td>
-<td><code class="docutils literal notranslate"><span class="pre">LZ4Compressor</span></code></td>
+compressors are supported.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">LZ4Compressor</span></code></p></td>
 </tr>
 </tbody>
 </table>
@@ -287,59 +387,59 @@ compressors are supported.</td>
 related information. The nodetool commands override the corresponding
 settings if any in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> for the node running the command.</p>
 <p>Table 2. Nodetool Commands for Hints</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="43%" />
-<col width="57%" />
+<col style="width: 43%" />
+<col style="width: 57%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>Command</td>
-<td>Description</td>
+<tbody>
+<tr class="row-odd"><td><p>Command</p></td>
+<td><p>Description</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">disablehandoff</span></code></td>
-<td>Disables storing and delivering hints</td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">disablehandoff</span></code></p></td>
+<td><p>Disables storing and delivering hints</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">disablehintsfordc</span></code></td>
-<td>Disables storing and delivering hints to a
-data center</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">disablehintsfordc</span></code></p></td>
+<td><p>Disables storing and delivering hints to a
+data center</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">enablehandoff</span></code></td>
-<td>Re-enables future hints storing and
-delivery on the current node</td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">enablehandoff</span></code></p></td>
+<td><p>Re-enables future hints storing and
+delivery on the current node</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">enablehintsfordc</span></code></td>
-<td>Enables hints for a data center that was
-previously disabled</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">enablehintsfordc</span></code></p></td>
+<td><p>Enables hints for a data center that was
+previously disabled</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">getmaxhintwindow</span></code></td>
-<td>Prints the max hint window in ms. New in
-Cassandra 4.0.</td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">getmaxhintwindow</span></code></p></td>
+<td><p>Prints the max hint window in ms. New in
+Cassandra 4.0.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">handoffwindow</span></code></td>
-<td>Prints current hinted handoff window</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">handoffwindow</span></code></p></td>
+<td><p>Prints current hinted handoff window</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">pausehandoff</span></code></td>
-<td>Pauses hints delivery process</td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">pausehandoff</span></code></p></td>
+<td><p>Pauses hints delivery process</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">resumehandoff</span></code></td>
-<td>Resumes hints delivery process</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">resumehandoff</span></code></p></td>
+<td><p>Resumes hints delivery process</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span>
-<span class="pre">sethintedhandoffthrottlekb</span></code></td>
-<td>Sets hinted handoff throttle in kb
-per second, per delivery thread</td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nodetool</span>
+<span class="pre">sethintedhandoffthrottlekb</span></code></p></td>
+<td><p>Sets hinted handoff throttle in kb
+per second, per delivery thread</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">setmaxhintwindow</span></code></td>
-<td>Sets the specified max hint window in ms</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">setmaxhintwindow</span></code></p></td>
+<td><p>Sets the specified max hint window in ms</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">statushandoff</span></code></td>
-<td>Status of storing future hints on the
-current node</td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">statushandoff</span></code></p></td>
+<td><p>Status of storing future hints on the
+current node</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">truncatehints</span></code></td>
-<td>Truncates all hints on the local node, or
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">truncatehints</span></code></p></td>
+<td><p>Truncates all hints on the local node, or
 truncates hints for the endpoint(s)
-specified.</td>
+specified.</p></td>
 </tr>
 </tbody>
 </table>
@@ -384,19 +484,51 @@ and <a class="reference internal" href="metrics.html#hintsservice-metrics"><span
 </div>
 
 
-
-          
-          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
-            
-            <a href="compaction/index.html" class="btn btn-default pull-right " role="button" title="Compaction" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
-            
-            
-            <a href="read_repair.html" class="btn btn-default" role="button" title="Read repair" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
-            
+           </div>
+           
           </div>
-          
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="compaction/index.html" class="btn btn-neutral float-right" title="Compaction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="read_repair.html" class="btn btn-neutral float-left" title="Read repair" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, The Apache Cassandra team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
         </div>
       </div>
-    </div>
+
+    </section>
+
   </div>
-</div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

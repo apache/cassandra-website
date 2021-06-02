@@ -1,61 +1,95 @@
----
-layout: docpage
 
-title: "Documentation"
 
-is_homepage: false
-is_sphinx_doc: true
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Audit Logging &mdash; Apache Cassandra Documentation v4.0-rc2</title>
+  
 
-doc-parent: "New Features in Apache Cassandra 4.0"
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/extra.css" type="text/css" />
 
-doc-title: "Audit Logging"
-doc-header-links: '
-  <link rel="top" title="Apache Cassandra Documentation v4.0-rc1" href="../index.html"/>
-      <link rel="up" title="New Features in Apache Cassandra 4.0" href="index.html"/>
-      <link rel="next" title="Full Query Logging (FQL)" href="fqllogging.html"/>
-      <link rel="prev" title="Virtual Tables" href="virtualtables.html"/>
-'
-doc-search-path: "../search.html"
+  
+  
 
-extra-footer: '
-<script type="text/javascript">
-    var DOCUMENTATION_OPTIONS = {
-      URL_ROOT:    "",
-      VERSION:     "",
-      COLLAPSE_INDEX: false,
-      FILE_SUFFIX: ".html",
-      HAS_SOURCE:  false,
-      SOURCELINK_SUFFIX: ".txt"
-    };
-</script>
-'
+  
+  
 
----
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-3">
-      <div class="doc-navigation">
-        <div class="doc-menu" role="navigation">
-          <div class="navbar-header">
-            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-          </div>
-          <div class="navbar-collapse collapse sidebar-navbar-collapse">
-            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
-              <div class="form-group">
-                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Full Query Logging (FQL)" href="fqllogging.html" />
+    <link rel="prev" title="Virtual Tables" href="virtualtables.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apache Cassandra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0-rc2
               </div>
-            </form>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
             
             
+              
             
-            <ul class="current">
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">New Features in Apache Cassandra 4.0</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="java11.html">Support for Java 11</a></li>
@@ -63,8 +97,21 @@ extra-footer: '
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Audit Logging</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#what-does-audit-logging-log">What does Audit Logging Log?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#what-audit-logging-does-not-log">What Audit Logging does not Log?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#limitations">Limitations</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#audit-logging-is-flexible-and-configurable">Audit Logging is Flexible and Configurable</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#configuring-audit-logging">Configuring Audit Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-audit-logging">Configuring Audit Logging</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#enabling-audit-logging">Enabling Audit Logging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setting-the-logger">Setting the Logger</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setting-the-audit-logs-directory">Setting the Audit Logs Directory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setting-keyspaces-to-audit">Setting Keyspaces to Audit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setting-categories-to-audit">Setting Categories to Audit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setting-users-to-audit">Setting Users to Audit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setting-the-roll-frequency">Setting the Roll Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setting-archiving-options">Setting Archiving Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#other-settings">Other Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-fileauditlogger">Configuring FileAuditLogger</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#using-nodetool-to-enable-audit-logging">Using Nodetool to Enable Audit Logging</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#viewing-the-audit-logs">Viewing the Audit Logs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#an-audit-logging-demo">An Audit Logging Demo</a></li>
@@ -92,98 +139,161 @@ extra-footer: '
 </ul>
 
             
-            
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
-    <div class="col-md-8">
-      <div class="content doc-content">
-        <div class="content-container">
           
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">New Features in Apache Cassandra 4.0</a> &raquo;</li>
+        
+      <li>Audit Logging</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/new/auditlogging.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
   <div class="section" id="audit-logging">
 <h1>Audit Logging<a class="headerlink" href="#audit-logging" title="Permalink to this headline">¶</a></h1>
 <p>Audit Logging is a new feature in Apache Cassandra 4.0 (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-12151">CASSANDRA-12151</a>). All database activity is logged to a directory in the local filesystem and the audit log files are rolled periodically. All database operations are monitored and recorded.  Audit logs are stored in local directory files instead of the database itself as it provides several benefits, some of which are:</p>
 <ul class="simple">
-<li>No additional database capacity is needed to store audit logs</li>
-<li>No query tool is required while storing the audit logs in the database would require a query tool</li>
-<li>Latency of database operations is not affected; no performance impact</li>
-<li>It is easier to implement file based logging than database based logging</li>
+<li><p>No additional database capacity is needed to store audit logs</p></li>
+<li><p>No query tool is required while storing the audit logs in the database would require a query tool</p></li>
+<li><p>Latency of database operations is not affected; no performance impact</p></li>
+<li><p>It is easier to implement file based logging than database based logging</p></li>
 </ul>
 <div class="section" id="what-does-audit-logging-log">
 <h2>What does Audit Logging Log?<a class="headerlink" href="#what-does-audit-logging-log" title="Permalink to this headline">¶</a></h2>
 <p>Audit logging logs:</p>
 <ol class="arabic simple">
-<li>All authentication which includes successful and failed login attempts</li>
-<li>All database command requests to CQL. Both failed and successful CQL is logged</li>
+<li><p>All authentication which includes successful and failed login attempts</p></li>
+<li><p>All database command requests to CQL. Both failed and successful CQL is logged</p></li>
 </ol>
 <p>More specifically an audit log entry could be one of two types:</p>
 <ol class="loweralpha simple">
-<li>CQL Audit Log Entry Type or</li>
-<li>Common Audit Log Entry Type</li>
+<li><p>CQL Audit Log Entry Type or</p></li>
+<li><p>Common Audit Log Entry Type</p></li>
 </ol>
 <p>Each of these types comprises of several database operations. The CQL Audit Log Entry Type could be one of the following; the category of the CQL audit log entry type is listed in parentheses.</p>
 <ol class="arabic simple">
-<li>SELECT(QUERY),</li>
-<li>UPDATE(DML),</li>
-<li>DELETE(DML),</li>
-<li>TRUNCATE(DDL),</li>
-<li>CREATE_KEYSPACE(DDL),</li>
-<li>ALTER_KEYSPACE(DDL),</li>
-<li>DROP_KEYSPACE(DDL),</li>
-<li>CREATE_TABLE(DDL),</li>
-<li>DROP_TABLE(DDL),</li>
-<li>PREPARE_STATEMENT(PREPARE),</li>
-<li>DROP_TRIGGER(DDL),</li>
-<li>LIST_USERS(DCL),</li>
-<li>CREATE_INDEX(DDL),</li>
-<li>DROP_INDEX(DDL),</li>
-<li>GRANT(DCL),</li>
-<li>REVOKE(DCL),</li>
-<li>CREATE_TYPE(DDL),</li>
-<li>DROP_AGGREGATE(DDL),</li>
-<li>ALTER_VIEW(DDL),</li>
-<li>CREATE_VIEW(DDL),</li>
-<li>DROP_ROLE(DCL),</li>
-<li>CREATE_FUNCTION(DDL),</li>
-<li>ALTER_TABLE(DDL),</li>
-<li>BATCH(DML),</li>
-<li>CREATE_AGGREGATE(DDL),</li>
-<li>DROP_VIEW(DDL),</li>
-<li>DROP_TYPE(DDL),</li>
-<li>DROP_FUNCTION(DDL),</li>
-<li>ALTER_ROLE(DCL),</li>
-<li>CREATE_TRIGGER(DDL),</li>
-<li>LIST_ROLES(DCL),</li>
-<li>LIST_PERMISSIONS(DCL),</li>
-<li>ALTER_TYPE(DDL),</li>
-<li>CREATE_ROLE(DCL),</li>
-<li>USE_KEYSPACE (OTHER).</li>
+<li><p>SELECT(QUERY),</p></li>
+<li><p>UPDATE(DML),</p></li>
+<li><p>DELETE(DML),</p></li>
+<li><p>TRUNCATE(DDL),</p></li>
+<li><p>CREATE_KEYSPACE(DDL),</p></li>
+<li><p>ALTER_KEYSPACE(DDL),</p></li>
+<li><p>DROP_KEYSPACE(DDL),</p></li>
+<li><p>CREATE_TABLE(DDL),</p></li>
+<li><p>DROP_TABLE(DDL),</p></li>
+<li><p>PREPARE_STATEMENT(PREPARE),</p></li>
+<li><p>DROP_TRIGGER(DDL),</p></li>
+<li><p>LIST_USERS(DCL),</p></li>
+<li><p>CREATE_INDEX(DDL),</p></li>
+<li><p>DROP_INDEX(DDL),</p></li>
+<li><p>GRANT(DCL),</p></li>
+<li><p>REVOKE(DCL),</p></li>
+<li><p>CREATE_TYPE(DDL),</p></li>
+<li><p>DROP_AGGREGATE(DDL),</p></li>
+<li><p>ALTER_VIEW(DDL),</p></li>
+<li><p>CREATE_VIEW(DDL),</p></li>
+<li><p>DROP_ROLE(DCL),</p></li>
+<li><p>CREATE_FUNCTION(DDL),</p></li>
+<li><p>ALTER_TABLE(DDL),</p></li>
+<li><p>BATCH(DML),</p></li>
+<li><p>CREATE_AGGREGATE(DDL),</p></li>
+<li><p>DROP_VIEW(DDL),</p></li>
+<li><p>DROP_TYPE(DDL),</p></li>
+<li><p>DROP_FUNCTION(DDL),</p></li>
+<li><p>ALTER_ROLE(DCL),</p></li>
+<li><p>CREATE_TRIGGER(DDL),</p></li>
+<li><p>LIST_ROLES(DCL),</p></li>
+<li><p>LIST_PERMISSIONS(DCL),</p></li>
+<li><p>ALTER_TYPE(DDL),</p></li>
+<li><p>CREATE_ROLE(DCL),</p></li>
+<li><p>USE_KEYSPACE (OTHER).</p></li>
 </ol>
 <p>The Common Audit Log Entry Type could be one of the following; the category of the Common audit log entry type is listed in parentheses.</p>
 <ol class="arabic simple">
-<li>REQUEST_FAILURE(ERROR),</li>
-<li>LOGIN_ERROR(AUTH),</li>
-<li>UNAUTHORIZED_ATTEMPT(AUTH),</li>
-<li>LOGIN_SUCCESS (AUTH).</li>
+<li><p>REQUEST_FAILURE(ERROR),</p></li>
+<li><p>LOGIN_ERROR(AUTH),</p></li>
+<li><p>UNAUTHORIZED_ATTEMPT(AUTH),</p></li>
+<li><p>LOGIN_SUCCESS (AUTH).</p></li>
 </ol>
 </div>
 <div class="section" id="what-audit-logging-does-not-log">
 <h2>What Audit Logging does not Log?<a class="headerlink" href="#what-audit-logging-does-not-log" title="Permalink to this headline">¶</a></h2>
 <p>Audit logging does not log:</p>
 <ol class="arabic simple">
-<li>Configuration changes made in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code></li>
-<li>Nodetool Commands</li>
+<li><p>Configuration changes made in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code></p></li>
+<li><p>Nodetool Commands</p></li>
 </ol>
+</div>
+<div class="section" id="limitations">
+<h2>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h2>
+<p>Executing prepared statements will log the query as provided by the client in the prepare call, along with the execution
+timestamp and all other attributes (see below). Actual values bound for prepared statement execution will not show up
+in the audit log.</p>
 </div>
 <div class="section" id="audit-logging-is-flexible-and-configurable">
 <h2>Audit Logging is Flexible and Configurable<a class="headerlink" href="#audit-logging-is-flexible-and-configurable" title="Permalink to this headline">¶</a></h2>
 <p>Audit logging is flexible and configurable in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> as follows:</p>
 <ul class="simple">
-<li>Keyspaces and tables to be monitored and audited may be specified.</li>
-<li>Users to be included/excluded may be specified. By default all users are audit logged.</li>
-<li>Categories of operations to audit or exclude may be specified.</li>
-<li>The frequency at which to roll the log files may be specified. Default frequency is hourly.</li>
+<li><p>Keyspaces and tables to be monitored and audited may be specified.</p></li>
+<li><p>Users to be included/excluded may be specified. By default all users are audit logged.</p></li>
+<li><p>Categories of operations to audit or exclude may be specified.</p></li>
+<li><p>The frequency at which to roll the log files may be specified. Default frequency is hourly.</p></li>
 </ul>
 </div>
 <div class="section" id="configuring-audit-logging">
@@ -209,6 +319,7 @@ The settings may be same/different on each node.</p>
 <code class="docutils literal notranslate"><span class="pre">BinAuditLogger</span></code> is the default setting.  The <code class="docutils literal notranslate"><span class="pre">BinAuditLogger</span></code> is an efficient way to log events to file in a binary format.</p>
 <p><code class="docutils literal notranslate"><span class="pre">FileAuditLogger</span></code> is synchronous, file-based audit logger; just uses the standard logging mechanism. <code class="docutils literal notranslate"><span class="pre">FileAuditLogger</span></code> logs events to <code class="docutils literal notranslate"><span class="pre">audit/audit.log</span></code> file using <code class="docutils literal notranslate"><span class="pre">slf4j</span></code> logger.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">NoOpAuditLogger</span></code> is a No-Op implementation of the audit logger to be used as a default audit logger when audit logging is disabled.</p>
+<p><em>Recommendation</em> <code class="docutils literal notranslate"><span class="pre">BinAuditLogger</span></code> is a community recommended logger considering the performance.</p>
 <p>It is possible to configure your custom logger implementation by injecting a map of property keys and their respective values. Default <cite>IAuditLogger</cite>
 implementations shipped with Cassandra do not react on these properties but your custom logger might. They would be present as
 a parameter of logger constructor (as <cite>Map&lt;String, String&gt;</cite>). In <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> file, you may configure it like this:</p>
@@ -255,14 +366,14 @@ sudo chmod -R 777 /cassandra/audit/logs/hourly
 </div>
 <p>The supported categories for audit log are:</p>
 <ol class="arabic simple">
-<li>QUERY</li>
-<li>DML</li>
-<li>DDL</li>
-<li>DCL</li>
-<li>OTHER</li>
-<li>AUTH</li>
-<li>ERROR</li>
-<li>PREPARE</li>
+<li><p>QUERY</p></li>
+<li><p>DML</p></li>
+<li><p>DDL</p></li>
+<li><p>DCL</p></li>
+<li><p>OTHER</p></li>
+<li><p>AUTH</p></li>
+<li><p>ERROR</p></li>
+<li><p>PREPARE</p></li>
 </ol>
 </div>
 <div class="section" id="setting-users-to-audit">
@@ -303,6 +414,34 @@ sudo chmod -R 777 /cassandra/audit/logs/hourly
 <p>The  <code class="docutils literal notranslate"><span class="pre">max_log_size</span></code> option sets the maximum size of the rolled files to retain on disk before deleting the oldest.</p>
 </div>
 </div>
+<div class="section" id="configuring-fileauditlogger">
+<h2>Configuring FileAuditLogger<a class="headerlink" href="#configuring-fileauditlogger" title="Permalink to this headline">¶</a></h2>
+<p>To use <code class="docutils literal notranslate"><span class="pre">FileAuditLogger</span></code> as a logger in AuditLogging, apart from setting the class name in cassandra.yaml, below
+configuration is needed (the code is already provided for your convenience in a comment in logback.xml) to have the audit
+log events to flow through separate audit log file instead of system.log.</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!-- Audit Logging (FileAuditLogger) rolling file appender to audit.log --&gt;</span>
+<span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;AUDIT&quot;</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;file&gt;</span>${cassandra.logdir}/audit/audit.log<span class="nt">&lt;/file&gt;</span>
+  <span class="nt">&lt;rollingPolicy</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy&quot;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- rollover daily --&gt;</span>
+    <span class="nt">&lt;fileNamePattern&gt;</span>${cassandra.logdir}/audit/audit.log.%d{yyyy-MM-dd}.%i.zip<span class="nt">&lt;/fileNamePattern&gt;</span>
+    <span class="c">&lt;!-- each file should be at most 50MB, keep 30 days worth of history, but at most 5GB --&gt;</span>
+    <span class="nt">&lt;maxFileSize&gt;</span>50MB<span class="nt">&lt;/maxFileSize&gt;</span>
+    <span class="nt">&lt;maxHistory&gt;</span>30<span class="nt">&lt;/maxHistory&gt;</span>
+    <span class="nt">&lt;totalSizeCap&gt;</span>5GB<span class="nt">&lt;/totalSizeCap&gt;</span>
+  <span class="nt">&lt;/rollingPolicy&gt;</span>
+  <span class="nt">&lt;encoder&gt;</span>
+    <span class="nt">&lt;pattern&gt;</span>%-5level [%thread] %date{ISO8601} %F:%L - %msg%n<span class="nt">&lt;/pattern&gt;</span>
+  <span class="nt">&lt;/encoder&gt;</span>
+<span class="nt">&lt;/appender&gt;</span>
+
+<span class="c">&lt;!-- Audit Logging additivity to redirect audt logging events to audit/audit.log --&gt;</span>
+<span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">&quot;org.apache.cassandra.audit&quot;</span> <span class="na">additivity=</span><span class="s">&quot;false&quot;</span> <span class="na">level=</span><span class="s">&quot;INFO&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">&quot;AUDIT&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/logger&gt;</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="using-nodetool-to-enable-audit-logging">
 <h2>Using Nodetool to Enable Audit Logging<a class="headerlink" href="#using-nodetool-to-enable-audit-logging" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">nodetool</span>&#160; <span class="pre">enableauditlog</span></code>  command may be used to enable audit logs and it overrides the settings in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code>.  The <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">enableauditlog</span></code> command syntax is as follows.</p>
@@ -318,79 +457,65 @@ sudo chmod -R 777 /cassandra/audit/logs/hourly
         <span class="p">[</span><span class="o">--</span><span class="n">included</span><span class="o">-</span><span class="n">users</span> <span class="o">&lt;</span><span class="n">included_users</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">logger</span> <span class="o">&lt;</span><span class="n">logger</span><span class="o">&gt;</span><span class="p">]</span>
 </pre></div>
 </div>
-<dl class="docutils">
-<dt>OPTIONS</dt>
-<dd><table class="first docutils option-list" frame="void" rules="none">
-<col class="option" />
-<col class="description" />
-<tbody valign="top">
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">--excluded-categories <var>&lt;excluded_categories&gt;</var></span></kbd></td>
-</tr>
-<tr><td>&#160;</td><td>Comma separated list of Audit Log Categories to be excluded for
-audit log. If not set the value from cassandra.yaml will be used</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">--excluded-keyspaces <var>&lt;excluded_keyspaces&gt;</var></span></kbd></td>
-</tr>
-<tr><td>&#160;</td><td>Comma separated list of keyspaces to be excluded for audit log. If
-not set the value from cassandra.yaml will be used</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">--excluded-users <var>&lt;excluded_users&gt;</var></span></kbd></td>
-</tr>
-<tr><td>&#160;</td><td>Comma separated list of users to be excluded for audit log. If not
-set the value from cassandra.yaml will be used</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">-h <var>&lt;host&gt;</var></span>, <span class="option">--host <var>&lt;host&gt;</var></span></kbd></td>
-</tr>
-<tr><td>&#160;</td><td>Node hostname or ip address</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">--included-categories <var>&lt;included_categories&gt;</var></span></kbd></td>
-</tr>
-<tr><td>&#160;</td><td>Comma separated list of Audit Log Categories to be included for
-audit log. If not set the value from cassandra.yaml will be used</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">--included-keyspaces <var>&lt;included_keyspaces&gt;</var></span></kbd></td>
-</tr>
-<tr><td>&#160;</td><td>Comma separated list of keyspaces to be included for audit log. If
-not set the value from cassandra.yaml will be used</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">--included-users <var>&lt;included_users&gt;</var></span></kbd></td>
-</tr>
-<tr><td>&#160;</td><td>Comma separated list of users to be included for audit log. If not
-set the value from cassandra.yaml will be used</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">--logger <var>&lt;logger&gt;</var></span></kbd></td>
-</tr>
-<tr><td>&#160;</td><td>Logger name to be used for AuditLogging. Default BinAuditLogger. If
-not set the value from cassandra.yaml will be used</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">-p <var>&lt;port&gt;</var></span>, <span class="option">--port <var>&lt;port&gt;</var></span></kbd></td>
-</tr>
-<tr><td>&#160;</td><td>Remote jmx agent port number</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">-p<var>p</var></span>, <span class="option">--print-port</span></kbd></td>
-</tr>
-<tr><td>&#160;</td><td>Operate in 4.0 mode with hosts disambiguated by port number</td></tr>
-</tbody>
-</table>
-<dl class="docutils">
-<dt>-pw &lt;password&gt;, –password &lt;password&gt;</dt>
-<dd>Remote jmx agent password</dd>
-<dt>-pwf &lt;passwordFilePath&gt;, –password-file &lt;passwordFilePath&gt;</dt>
-<dd>Path to the JMX password file</dd>
-</dl>
-<table class="last docutils option-list" frame="void" rules="none">
-<col class="option" />
-<col class="description" />
-<tbody valign="top">
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">-u <var>&lt;username&gt;</var></span>, <span class="option">--username <var>&lt;username&gt;</var></span></kbd></td>
-</tr>
-<tr><td>&#160;</td><td>Remote jmx agent username</td></tr>
-</tbody>
-</table>
+<dl>
+<dt>OPTIONS</dt><dd><dl class="option-list">
+<dt><kbd><span class="option">--excluded-categories <var>&lt;excluded_categories&gt;</var></span></kbd></dt>
+<dd><p>Comma separated list of Audit Log Categories to be excluded for
+audit log. If not set the value from cassandra.yaml will be used</p>
+</dd>
+<dt><kbd><span class="option">--excluded-keyspaces <var>&lt;excluded_keyspaces&gt;</var></span></kbd></dt>
+<dd><p>Comma separated list of keyspaces to be excluded for audit log. If
+not set the value from cassandra.yaml will be used</p>
+</dd>
+<dt><kbd><span class="option">--excluded-users <var>&lt;excluded_users&gt;</var></span></kbd></dt>
+<dd><p>Comma separated list of users to be excluded for audit log. If not
+set the value from cassandra.yaml will be used</p>
+</dd>
+<dt><kbd><span class="option">-h <var>&lt;host&gt;</var></span>, <span class="option">--host <var>&lt;host&gt;</var></span></kbd></dt>
+<dd><p>Node hostname or ip address</p>
+</dd>
+<dt><kbd><span class="option">--included-categories <var>&lt;included_categories&gt;</var></span></kbd></dt>
+<dd><p>Comma separated list of Audit Log Categories to be included for
+audit log. If not set the value from cassandra.yaml will be used</p>
+</dd>
+<dt><kbd><span class="option">--included-keyspaces <var>&lt;included_keyspaces&gt;</var></span></kbd></dt>
+<dd><p>Comma separated list of keyspaces to be included for audit log. If
+not set the value from cassandra.yaml will be used</p>
+</dd>
+<dt><kbd><span class="option">--included-users <var>&lt;included_users&gt;</var></span></kbd></dt>
+<dd><p>Comma separated list of users to be included for audit log. If not
+set the value from cassandra.yaml will be used</p>
+</dd>
+<dt><kbd><span class="option">--logger <var>&lt;logger&gt;</var></span></kbd></dt>
+<dd><p>Logger name to be used for AuditLogging. Default BinAuditLogger. If
+not set the value from cassandra.yaml will be used</p>
+</dd>
+<dt><kbd><span class="option">-p <var>&lt;port&gt;</var></span>, <span class="option">--port <var>&lt;port&gt;</var></span></kbd></dt>
+<dd><p>Remote jmx agent port number</p>
+</dd>
+<dt><kbd><span class="option">-p<var>p</var></span>, <span class="option">--print-port</span></kbd></dt>
+<dd><p>Operate in 4.0 mode with hosts disambiguated by port number</p>
 </dd>
 </dl>
+<dl class="simple">
+<dt>-pw &lt;password&gt;, –password &lt;password&gt;</dt><dd><p>Remote jmx agent password</p>
+</dd>
+<dt>-pwf &lt;passwordFilePath&gt;, –password-file &lt;passwordFilePath&gt;</dt><dd><p>Path to the JMX password file</p>
+</dd>
+</dl>
+<dl class="option-list">
+<dt><kbd><span class="option">-u <var>&lt;username&gt;</var></span>, <span class="option">--username <var>&lt;username&gt;</var></span></kbd></dt>
+<dd><p>Remote jmx agent username</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>The <code class="docutils literal notranslate"><span class="pre">nodetool</span>&#160; <span class="pre">enableauditlog</span></code>  command can be used to reload auditlog filters when called with default or
+previous <code class="docutils literal notranslate"><span class="pre">loggername</span></code> and updated filters</p>
+<p>E.g.,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nodetool</span> <span class="n">enableauditlog</span> <span class="o">--</span><span class="n">loggername</span> <span class="o">&lt;</span><span class="n">Default</span><span class="o">/</span> <span class="n">existing</span> <span class="n">loggerName</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">included</span><span class="o">-</span><span class="n">keyspaces</span> <span class="o">&lt;</span><span class="n">New</span> <span class="n">Filter</span> <span class="n">values</span><span class="o">&gt;</span>
+</pre></div>
+</div>
 <p>The <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">disableauditlog</span></code> command disables audit log. The command syntax is as follows.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nodetool</span> <span class="p">[(</span><span class="o">-</span><span class="n">h</span> <span class="o">&lt;</span><span class="n">host</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">host</span> <span class="o">&lt;</span><span class="n">host</span><span class="o">&gt;</span><span class="p">)]</span> <span class="p">[(</span><span class="o">-</span><span class="n">p</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">port</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;</span><span class="p">)]</span>
         <span class="p">[(</span><span class="o">-</span><span class="n">pp</span> <span class="o">|</span> <span class="o">--</span><span class="nb">print</span><span class="o">-</span><span class="n">port</span><span class="p">)]</span> <span class="p">[(</span><span class="o">-</span><span class="n">pw</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">password</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span><span class="p">)]</span>
@@ -398,42 +523,29 @@ not set the value from cassandra.yaml will be used</td></tr>
         <span class="p">[(</span><span class="o">-</span><span class="n">u</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">username</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span><span class="p">)]</span> <span class="n">disableauditlog</span>
 </pre></div>
 </div>
-<dl class="docutils">
-<dt>OPTIONS</dt>
-<dd><table class="first docutils option-list" frame="void" rules="none">
-<col class="option" />
-<col class="description" />
-<tbody valign="top">
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">-h <var>&lt;host&gt;</var></span>, <span class="option">--host <var>&lt;host&gt;</var></span></kbd></td>
-</tr>
-<tr><td>&#160;</td><td>Node hostname or ip address</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">-p <var>&lt;port&gt;</var></span>, <span class="option">--port <var>&lt;port&gt;</var></span></kbd></td>
-</tr>
-<tr><td>&#160;</td><td>Remote jmx agent port number</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">-p<var>p</var></span>, <span class="option">--print-port</span></kbd></td>
-</tr>
-<tr><td>&#160;</td><td>Operate in 4.0 mode with hosts disambiguated by port number</td></tr>
-</tbody>
-</table>
-<dl class="docutils">
-<dt>-pw &lt;password&gt;, –password &lt;password&gt;</dt>
-<dd>Remote jmx agent password</dd>
-<dt>-pwf &lt;passwordFilePath&gt;, –password-file &lt;passwordFilePath&gt;</dt>
-<dd>Path to the JMX password file</dd>
+<dl>
+<dt>OPTIONS</dt><dd><dl class="option-list">
+<dt><kbd><span class="option">-h <var>&lt;host&gt;</var></span>, <span class="option">--host <var>&lt;host&gt;</var></span></kbd></dt>
+<dd><p>Node hostname or ip address</p>
+</dd>
+<dt><kbd><span class="option">-p <var>&lt;port&gt;</var></span>, <span class="option">--port <var>&lt;port&gt;</var></span></kbd></dt>
+<dd><p>Remote jmx agent port number</p>
+</dd>
+<dt><kbd><span class="option">-p<var>p</var></span>, <span class="option">--print-port</span></kbd></dt>
+<dd><p>Operate in 4.0 mode with hosts disambiguated by port number</p>
+</dd>
 </dl>
-<table class="last docutils option-list" frame="void" rules="none">
-<col class="option" />
-<col class="description" />
-<tbody valign="top">
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">-u <var>&lt;username&gt;</var></span>, <span class="option">--username <var>&lt;username&gt;</var></span></kbd></td>
-</tr>
-<tr><td>&#160;</td><td>Remote jmx agent username</td></tr>
-</tbody>
-</table>
+<dl class="simple">
+<dt>-pw &lt;password&gt;, –password &lt;password&gt;</dt><dd><p>Remote jmx agent password</p>
+</dd>
+<dt>-pwf &lt;passwordFilePath&gt;, –password-file &lt;passwordFilePath&gt;</dt><dd><p>Path to the JMX password file</p>
+</dd>
+</dl>
+<dl class="option-list">
+<dt><kbd><span class="option">-u <var>&lt;username&gt;</var></span>, <span class="option">--username <var>&lt;username&gt;</var></span></kbd></dt>
+<dd><p>Remote jmx agent username</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </div>
@@ -549,19 +661,51 @@ user:anonymous|host:10.0.2.238:7000|source:/127.0.0.1|port:46264|timestamp:15647
 </div>
 
 
-
-          
-          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
-            
-            <a href="fqllogging.html" class="btn btn-default pull-right " role="button" title="Full Query Logging (FQL)" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
-            
-            
-            <a href="virtualtables.html" class="btn btn-default" role="button" title="Virtual Tables" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
-            
+           </div>
+           
           </div>
-          
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="fqllogging.html" class="btn btn-neutral float-right" title="Full Query Logging (FQL)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="virtualtables.html" class="btn btn-neutral float-left" title="Virtual Tables" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, The Apache Cassandra team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
         </div>
       </div>
-    </div>
+
+    </section>
+
   </div>
-</div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
