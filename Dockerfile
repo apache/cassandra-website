@@ -52,7 +52,7 @@ RUN wget https://nodejs.org/download/release/${NODE_VERSION_ARG}/${NODE_PACKAGE}
     rm ${NODE_PACKAGE}
 
 # Use npm to install Antora globally, and antora-lunr for site search, and js-yaml to load YAML files
-RUN npm i -g @antora/cli@2.3 @antora/site-generator-default@2.3
+RUN npm i -g @antora/cli@2.3 @antora/site-generator-default@2.3 @djencks/asciidoctor-openblock
 RUN npm i -g antora-lunr antora-site-generator-lunr
 RUN npm i -g live-server
 
