@@ -1,0 +1,222 @@
+---
+layout: docpage
+
+title: "Documentation"
+
+is_homepage: false
+is_sphinx_doc: true
+
+doc-parent: "Operating Cassandra"
+
+doc-title: "Adding, replacing, moving and removing nodes"
+doc-header-links: '
+  <link rel="top" title="Apache Cassandra Documentation v4.0-rc1" href="../index.html"/>
+      <link rel="up" title="Operating Cassandra" href="index.html"/>
+      <link rel="next" title="Repair" href="repair.html"/>
+      <link rel="prev" title="Snitch" href="snitch.html"/>
+'
+doc-search-path: "../search.html"
+
+extra-footer: '
+<script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+      URL_ROOT:    "",
+      VERSION:     "",
+      COLLAPSE_INDEX: false,
+      FILE_SUFFIX: ".html",
+      HAS_SOURCE:  false,
+      SOURCELINK_SUFFIX: ".txt"
+    };
+</script>
+'
+
+---
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Operating Cassandra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="snitch.html">Snitch</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Adding, replacing, moving and removing nodes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#bootstrap">Bootstrap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#removing-nodes">Removing nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#moving-nodes">Moving nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#replacing-a-dead-node">Replacing a dead node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#monitoring-progress">Monitoring progress</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cleanup-data-after-range-movements">Cleanup data after range movements</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="repair.html">Repair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_repair.html">Read repair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hints.html">Hints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html">Compaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bloom_filters.html">Bloom Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compression.html">Compression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cdc.html">Change Data Capture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backups.html">Backups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bulk_loading.html">Bulk Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html">Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html">Hardware Choices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="adding-replacing-moving-and-removing-nodes">
+<span id="topology-changes"></span><h1>Adding, replacing, moving and removing nodes<a class="headerlink" href="#adding-replacing-moving-and-removing-nodes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="bootstrap">
+<h2>Bootstrap<a class="headerlink" href="#bootstrap" title="Permalink to this headline">¶</a></h2>
+<p>Adding new nodes is called “bootstrapping”. The <code class="docutils literal notranslate"><span class="pre">num_tokens</span></code> parameter will define the amount of virtual nodes
+(tokens) the joining node will be assigned during bootstrap. The tokens define the sections of the ring (token ranges)
+the node will become responsible for.</p>
+<div class="section" id="token-allocation">
+<h3>Token allocation<a class="headerlink" href="#token-allocation" title="Permalink to this headline">¶</a></h3>
+<p>With the default token allocation algorithm the new node will pick <code class="docutils literal notranslate"><span class="pre">num_tokens</span></code> random tokens to become responsible
+for. Since tokens are distributed randomly, load distribution improves with a higher amount of virtual nodes, but it
+also increases token management overhead. The default of 256 virtual nodes should provide a reasonable load balance with
+acceptable overhead.</p>
+<p>On 3.0+ a new token allocation algorithm was introduced to allocate tokens based on the load of existing virtual nodes
+for a given keyspace, and thus yield an improved load distribution with a lower number of tokens. To use this approach,
+the new node must be started with the JVM option <code class="docutils literal notranslate"><span class="pre">-Dcassandra.allocate_tokens_for_keyspace=&lt;keyspace&gt;</span></code>, where
+<code class="docutils literal notranslate"><span class="pre">&lt;keyspace&gt;</span></code> is the keyspace from which the algorithm can find the load information to optimize token assignment for.</p>
+<div class="section" id="manual-token-assignment">
+<h4>Manual token assignment<a class="headerlink" href="#manual-token-assignment" title="Permalink to this headline">¶</a></h4>
+<p>You may specify a comma-separated list of tokens manually with the <code class="docutils literal notranslate"><span class="pre">initial_token</span></code> <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> parameter, and
+if that is specified Cassandra will skip the token allocation process. This may be useful when doing token assignment
+with an external tool or when restoring a node with its previous tokens.</p>
+</div>
+</div>
+<div class="section" id="range-streaming">
+<h3>Range streaming<a class="headerlink" href="#range-streaming" title="Permalink to this headline">¶</a></h3>
+<p>After the tokens are allocated, the joining node will pick current replicas of the token ranges it will become
+responsible for to stream data from. By default it will stream from the primary replica of each token range in order to
+guarantee data in the new node will be consistent with the current state.</p>
+<p>In the case of any unavailable replica, the consistent bootstrap process will fail. To override this behavior and
+potentially miss data from an unavailable replica, set the JVM flag <code class="docutils literal notranslate"><span class="pre">-Dcassandra.consistent.rangemovement=false</span></code>.</p>
+</div>
+<div class="section" id="resuming-failed-hanged-bootstrap">
+<h3>Resuming failed/hanged bootstrap<a class="headerlink" href="#resuming-failed-hanged-bootstrap" title="Permalink to this headline">¶</a></h3>
+<p>On 2.2+, if the bootstrap process fails, it’s possible to resume bootstrap from the previous saved state by calling
+<code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">bootstrap</span> <span class="pre">resume</span></code>. If for some reason the bootstrap hangs or stalls, it may also be resumed by simply
+restarting the node. In order to cleanup bootstrap state and start fresh, you may set the JVM startup flag
+<code class="docutils literal notranslate"><span class="pre">-Dcassandra.reset_bootstrap_progress=true</span></code>.</p>
+<p>On lower versions, when the bootstrap proces fails it is recommended to wipe the node (remove all the data), and restart
+the bootstrap process again.</p>
+</div>
+<div class="section" id="manual-bootstrapping">
+<h3>Manual bootstrapping<a class="headerlink" href="#manual-bootstrapping" title="Permalink to this headline">¶</a></h3>
+<p>It’s possible to skip the bootstrapping process entirely and join the ring straight away by setting the hidden parameter
+<code class="docutils literal notranslate"><span class="pre">auto_bootstrap:</span> <span class="pre">false</span></code>. This may be useful when restoring a node from a backup or creating a new data-center.</p>
+</div>
+</div>
+<div class="section" id="removing-nodes">
+<h2>Removing nodes<a class="headerlink" href="#removing-nodes" title="Permalink to this headline">¶</a></h2>
+<p>You can take a node out of the cluster with <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">decommission</span></code> to a live node, or <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">removenode</span></code> (to any
+other machine) to remove a dead one. This will assign the ranges the old node was responsible for to other nodes, and
+replicate the appropriate data there. If decommission is used, the data will stream from the decommissioned node. If
+removenode is used, the data will stream from the remaining replicas.</p>
+<p>No data is removed automatically from the node being decommissioned, so if you want to put the node back into service at
+a different token on the ring, it should be removed manually.</p>
+</div>
+<div class="section" id="moving-nodes">
+<h2>Moving nodes<a class="headerlink" href="#moving-nodes" title="Permalink to this headline">¶</a></h2>
+<p>When <code class="docutils literal notranslate"><span class="pre">num_tokens:</span> <span class="pre">1</span></code> it’s possible to move the node position in the ring with <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">move</span></code>. Moving is both a
+convenience over and more efficient than decommission + bootstrap. After moving a node, <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">cleanup</span></code> should be
+run to remove any unnecessary data.</p>
+</div>
+<div class="section" id="replacing-a-dead-node">
+<h2>Replacing a dead node<a class="headerlink" href="#replacing-a-dead-node" title="Permalink to this headline">¶</a></h2>
+<p>In order to replace a dead node, start cassandra with the JVM startup flag
+<code class="docutils literal notranslate"><span class="pre">-Dcassandra.replace_address_first_boot=&lt;dead_node_ip&gt;</span></code>. Once this property is enabled the node starts in a hibernate
+state, during which all the other nodes will see this node to be DOWN (DN), however this node will see itself as UP
+(UN). Accurate replacement state can be found in <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">netstats</span></code>.</p>
+<p>The replacing node will now start to bootstrap the data from the rest of the nodes in the cluster. A replacing node will
+only receive writes during the bootstrapping phase if it has a different ip address to the node that is being replaced.
+(See CASSANDRA-8523 and CASSANDRA-12344)</p>
+<p>Once the bootstrapping is complete the node will be marked “UP”.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>If any of the following cases apply, you <strong>MUST</strong> run repair to make the replaced node consistent again, since
+it missed ongoing writes during/prior to bootstrapping. The <em>replacement</em> timeframe refers to the period from when the
+node initially dies to when a new node completes the replacement process.</p>
+<ol class="last arabic simple">
+<li>The node is down for longer than <code class="docutils literal notranslate"><span class="pre">max_hint_window_in_ms</span></code> before being replaced.</li>
+<li>You are replacing using the same IP address as the dead node <strong>and</strong> replacement takes longer than <code class="docutils literal notranslate"><span class="pre">max_hint_window_in_ms</span></code>.</li>
+</ol>
+</div>
+</div>
+<div class="section" id="monitoring-progress">
+<h2>Monitoring progress<a class="headerlink" href="#monitoring-progress" title="Permalink to this headline">¶</a></h2>
+<p>Bootstrap, replace, move and remove progress can be monitored using <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">netstats</span></code> which will show the progress
+of the streaming operations.</p>
+</div>
+<div class="section" id="cleanup-data-after-range-movements">
+<h2>Cleanup data after range movements<a class="headerlink" href="#cleanup-data-after-range-movements" title="Permalink to this headline">¶</a></h2>
+<p>As a safety measure, Cassandra does not automatically remove data from nodes that “lose” part of their token range due
+to a range movement operation (bootstrap, move, replace). Run <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">cleanup</span></code> on the nodes that lost ranges to the
+joining node when you are satisfied the new node is up and working. If you do not do this the old data will still be
+counted against the load on that node.</p>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="repair.html" class="btn btn-default pull-right " role="button" title="Repair" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="snitch.html" class="btn btn-default" role="button" title="Snitch" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,182 @@
+---
+layout: docpage
+
+title: "Documentation"
+
+is_homepage: false
+is_sphinx_doc: true
+
+doc-title: "repair"
+doc-header-links: '
+  <link rel="top" title="Apache Cassandra Documentation v3.11.11" href="../../index.html"/>
+'
+doc-search-path: "../../search.html"
+
+extra-footer: '
+<script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+      URL_ROOT:    "",
+      VERSION:     "",
+      COLLAPSE_INDEX: false,
+      FILE_SUFFIX: ".html",
+      HAS_SOURCE:  false,
+      SOURCELINK_SUFFIX: ".txt"
+    };
+</script>
+'
+
+---
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="repair">
+<span id="nodetool-repair"></span><h1>repair<a class="headerlink" href="#repair" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NAME</span>
+        <span class="n">nodetool</span> <span class="n">repair</span> <span class="o">-</span> <span class="n">Repair</span> <span class="n">one</span> <span class="ow">or</span> <span class="n">more</span> <span class="n">tables</span>
+
+<span class="n">SYNOPSIS</span>
+        <span class="n">nodetool</span> <span class="p">[(</span><span class="o">-</span><span class="n">h</span> <span class="o">&lt;</span><span class="n">host</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">host</span> <span class="o">&lt;</span><span class="n">host</span><span class="o">&gt;</span><span class="p">)]</span> <span class="p">[(</span><span class="o">-</span><span class="n">p</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">port</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;</span><span class="p">)]</span>
+                <span class="p">[(</span><span class="o">-</span><span class="n">pw</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">password</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span><span class="p">)]</span>
+                <span class="p">[(</span><span class="o">-</span><span class="n">pwf</span> <span class="o">&lt;</span><span class="n">passwordFilePath</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">password</span><span class="o">-</span><span class="n">file</span> <span class="o">&lt;</span><span class="n">passwordFilePath</span><span class="o">&gt;</span><span class="p">)]</span>
+                <span class="p">[(</span><span class="o">-</span><span class="n">u</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">username</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span><span class="p">)]</span> <span class="n">repair</span>
+                <span class="p">[(</span><span class="o">-</span><span class="n">dc</span> <span class="o">&lt;</span><span class="n">specific_dc</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="ow">in</span><span class="o">-</span><span class="n">dc</span> <span class="o">&lt;</span><span class="n">specific_dc</span><span class="o">&gt;</span><span class="p">)</span><span class="o">...</span><span class="p">]</span>
+                <span class="p">[(</span><span class="o">-</span><span class="n">dcpar</span> <span class="o">|</span> <span class="o">--</span><span class="n">dc</span><span class="o">-</span><span class="n">parallel</span><span class="p">)]</span> <span class="p">[(</span><span class="o">-</span><span class="n">et</span> <span class="o">&lt;</span><span class="n">end_token</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">end</span><span class="o">-</span><span class="n">token</span> <span class="o">&lt;</span><span class="n">end_token</span><span class="o">&gt;</span><span class="p">)]</span>
+                <span class="p">[(</span><span class="o">-</span><span class="n">full</span> <span class="o">|</span> <span class="o">--</span><span class="n">full</span><span class="p">)]</span>
+                <span class="p">[(</span><span class="o">-</span><span class="n">hosts</span> <span class="o">&lt;</span><span class="n">specific_host</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="ow">in</span><span class="o">-</span><span class="n">hosts</span> <span class="o">&lt;</span><span class="n">specific_host</span><span class="o">&gt;</span><span class="p">)</span><span class="o">...</span><span class="p">]</span>
+                <span class="p">[(</span><span class="o">-</span><span class="n">iuk</span> <span class="o">|</span> <span class="o">--</span><span class="n">ignore</span><span class="o">-</span><span class="n">unreplicated</span><span class="o">-</span><span class="n">keyspaces</span><span class="p">)]</span>
+                <span class="p">[(</span><span class="o">-</span><span class="n">j</span> <span class="o">&lt;</span><span class="n">job_threads</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">job</span><span class="o">-</span><span class="n">threads</span> <span class="o">&lt;</span><span class="n">job_threads</span><span class="o">&gt;</span><span class="p">)]</span>
+                <span class="p">[(</span><span class="o">-</span><span class="n">local</span> <span class="o">|</span> <span class="o">--</span><span class="ow">in</span><span class="o">-</span><span class="n">local</span><span class="o">-</span><span class="n">dc</span><span class="p">)]</span> <span class="p">[(</span><span class="o">-</span><span class="n">pl</span> <span class="o">|</span> <span class="o">--</span><span class="n">pull</span><span class="p">)]</span>
+                <span class="p">[(</span><span class="o">-</span><span class="n">pr</span> <span class="o">|</span> <span class="o">--</span><span class="n">partitioner</span><span class="o">-</span><span class="nb">range</span><span class="p">)]</span> <span class="p">[(</span><span class="o">-</span><span class="n">seq</span> <span class="o">|</span> <span class="o">--</span><span class="n">sequential</span><span class="p">)]</span>
+                <span class="p">[(</span><span class="o">-</span><span class="n">st</span> <span class="o">&lt;</span><span class="n">start_token</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">start</span><span class="o">-</span><span class="n">token</span> <span class="o">&lt;</span><span class="n">start_token</span><span class="o">&gt;</span><span class="p">)]</span> <span class="p">[(</span><span class="o">-</span><span class="n">tr</span> <span class="o">|</span> <span class="o">--</span><span class="n">trace</span><span class="p">)]</span>
+                <span class="p">[</span><span class="o">--</span><span class="p">]</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">keyspace</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">tables</span><span class="o">&gt;...</span><span class="p">]</span>
+
+<span class="n">OPTIONS</span>
+        <span class="o">-</span><span class="n">dc</span> <span class="o">&lt;</span><span class="n">specific_dc</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">--</span><span class="ow">in</span><span class="o">-</span><span class="n">dc</span> <span class="o">&lt;</span><span class="n">specific_dc</span><span class="o">&gt;</span>
+            <span class="n">Use</span> <span class="o">-</span><span class="n">dc</span> <span class="n">to</span> <span class="n">repair</span> <span class="n">specific</span> <span class="n">datacenters</span>
+
+        <span class="o">-</span><span class="n">dcpar</span><span class="p">,</span> <span class="o">--</span><span class="n">dc</span><span class="o">-</span><span class="n">parallel</span>
+            <span class="n">Use</span> <span class="o">-</span><span class="n">dcpar</span> <span class="n">to</span> <span class="n">repair</span> <span class="n">data</span> <span class="n">centers</span> <span class="ow">in</span> <span class="n">parallel</span><span class="o">.</span>
+
+        <span class="o">-</span><span class="n">et</span> <span class="o">&lt;</span><span class="n">end_token</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">--</span><span class="n">end</span><span class="o">-</span><span class="n">token</span> <span class="o">&lt;</span><span class="n">end_token</span><span class="o">&gt;</span>
+            <span class="n">Use</span> <span class="o">-</span><span class="n">et</span> <span class="n">to</span> <span class="n">specify</span> <span class="n">a</span> <span class="n">token</span> <span class="n">at</span> <span class="n">which</span> <span class="n">repair</span> <span class="nb">range</span> <span class="n">ends</span>
+
+        <span class="o">-</span><span class="n">full</span><span class="p">,</span> <span class="o">--</span><span class="n">full</span>
+            <span class="n">Use</span> <span class="o">-</span><span class="n">full</span> <span class="n">to</span> <span class="n">issue</span> <span class="n">a</span> <span class="n">full</span> <span class="n">repair</span><span class="o">.</span>
+
+        <span class="o">-</span><span class="n">h</span> <span class="o">&lt;</span><span class="n">host</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">--</span><span class="n">host</span> <span class="o">&lt;</span><span class="n">host</span><span class="o">&gt;</span>
+            <span class="n">Node</span> <span class="n">hostname</span> <span class="ow">or</span> <span class="n">ip</span> <span class="n">address</span>
+
+        <span class="o">-</span><span class="n">hosts</span> <span class="o">&lt;</span><span class="n">specific_host</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">--</span><span class="ow">in</span><span class="o">-</span><span class="n">hosts</span> <span class="o">&lt;</span><span class="n">specific_host</span><span class="o">&gt;</span>
+            <span class="n">Use</span> <span class="o">-</span><span class="n">hosts</span> <span class="n">to</span> <span class="n">repair</span> <span class="n">specific</span> <span class="n">hosts</span>
+
+        <span class="o">-</span><span class="n">iuk</span><span class="p">,</span> <span class="o">--</span><span class="n">ignore</span><span class="o">-</span><span class="n">unreplicated</span><span class="o">-</span><span class="n">keyspaces</span>
+            <span class="n">Use</span> <span class="o">--</span><span class="n">ignore</span><span class="o">-</span><span class="n">unreplicated</span><span class="o">-</span><span class="n">keyspaces</span> <span class="n">to</span> <span class="n">ignore</span> <span class="n">keyspaces</span> <span class="n">which</span> <span class="n">are</span>
+            <span class="ow">not</span> <span class="n">replicated</span><span class="p">,</span> <span class="n">otherwise</span> <span class="n">the</span> <span class="n">repair</span> <span class="n">will</span> <span class="n">fail</span>
+
+        <span class="o">-</span><span class="n">j</span> <span class="o">&lt;</span><span class="n">job_threads</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">--</span><span class="n">job</span><span class="o">-</span><span class="n">threads</span> <span class="o">&lt;</span><span class="n">job_threads</span><span class="o">&gt;</span>
+            <span class="n">Number</span> <span class="n">of</span> <span class="n">threads</span> <span class="n">to</span> <span class="n">run</span> <span class="n">repair</span> <span class="n">jobs</span><span class="o">.</span> <span class="n">Usually</span> <span class="n">this</span> <span class="n">means</span> <span class="n">number</span> <span class="n">of</span>
+            <span class="n">CFs</span> <span class="n">to</span> <span class="n">repair</span> <span class="n">concurrently</span><span class="o">.</span> <span class="n">WARNING</span><span class="p">:</span> <span class="n">increasing</span> <span class="n">this</span> <span class="n">puts</span> <span class="n">more</span> <span class="n">load</span>
+            <span class="n">on</span> <span class="n">repairing</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">so</span> <span class="n">be</span> <span class="n">careful</span><span class="o">.</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">max</span><span class="p">:</span> <span class="mi">4</span><span class="p">)</span>
+
+        <span class="o">-</span><span class="n">local</span><span class="p">,</span> <span class="o">--</span><span class="ow">in</span><span class="o">-</span><span class="n">local</span><span class="o">-</span><span class="n">dc</span>
+            <span class="n">Use</span> <span class="o">-</span><span class="n">local</span> <span class="n">to</span> <span class="n">only</span> <span class="n">repair</span> <span class="n">against</span> <span class="n">nodes</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">same</span> <span class="n">datacenter</span>
+
+        <span class="o">-</span><span class="n">p</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">--</span><span class="n">port</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;</span>
+            <span class="n">Remote</span> <span class="n">jmx</span> <span class="n">agent</span> <span class="n">port</span> <span class="n">number</span>
+
+        <span class="o">-</span><span class="n">pl</span><span class="p">,</span> <span class="o">--</span><span class="n">pull</span>
+            <span class="n">Use</span> <span class="o">--</span><span class="n">pull</span> <span class="n">to</span> <span class="n">perform</span> <span class="n">a</span> <span class="n">one</span> <span class="n">way</span> <span class="n">repair</span> <span class="n">where</span> <span class="n">data</span> <span class="ow">is</span> <span class="n">only</span> <span class="n">streamed</span>
+            <span class="kn">from</span> <span class="nn">a</span> <span class="n">remote</span> <span class="n">node</span> <span class="n">to</span> <span class="n">this</span> <span class="n">node</span><span class="o">.</span>
+
+        <span class="o">-</span><span class="n">pr</span><span class="p">,</span> <span class="o">--</span><span class="n">partitioner</span><span class="o">-</span><span class="nb">range</span>
+            <span class="n">Use</span> <span class="o">-</span><span class="n">pr</span> <span class="n">to</span> <span class="n">repair</span> <span class="n">only</span> <span class="n">the</span> <span class="n">first</span> <span class="nb">range</span> <span class="n">returned</span> <span class="n">by</span> <span class="n">the</span> <span class="n">partitioner</span>
+
+        <span class="o">-</span><span class="n">pw</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">--</span><span class="n">password</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
+            <span class="n">Remote</span> <span class="n">jmx</span> <span class="n">agent</span> <span class="n">password</span>
+
+        <span class="o">-</span><span class="n">pwf</span> <span class="o">&lt;</span><span class="n">passwordFilePath</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">--</span><span class="n">password</span><span class="o">-</span><span class="n">file</span> <span class="o">&lt;</span><span class="n">passwordFilePath</span><span class="o">&gt;</span>
+            <span class="n">Path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">JMX</span> <span class="n">password</span> <span class="n">file</span>
+
+        <span class="o">-</span><span class="n">seq</span><span class="p">,</span> <span class="o">--</span><span class="n">sequential</span>
+            <span class="n">Use</span> <span class="o">-</span><span class="n">seq</span> <span class="n">to</span> <span class="n">carry</span> <span class="n">out</span> <span class="n">a</span> <span class="n">sequential</span> <span class="n">repair</span>
+
+        <span class="o">-</span><span class="n">st</span> <span class="o">&lt;</span><span class="n">start_token</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">--</span><span class="n">start</span><span class="o">-</span><span class="n">token</span> <span class="o">&lt;</span><span class="n">start_token</span><span class="o">&gt;</span>
+            <span class="n">Use</span> <span class="o">-</span><span class="n">st</span> <span class="n">to</span> <span class="n">specify</span> <span class="n">a</span> <span class="n">token</span> <span class="n">at</span> <span class="n">which</span> <span class="n">the</span> <span class="n">repair</span> <span class="nb">range</span> <span class="n">starts</span>
+
+        <span class="o">-</span><span class="n">tr</span><span class="p">,</span> <span class="o">--</span><span class="n">trace</span>
+            <span class="n">Use</span> <span class="o">-</span><span class="n">tr</span> <span class="n">to</span> <span class="n">trace</span> <span class="n">the</span> <span class="n">repair</span><span class="o">.</span> <span class="n">Traces</span> <span class="n">are</span> <span class="n">logged</span> <span class="n">to</span>
+            <span class="n">system_traces</span><span class="o">.</span><span class="n">events</span><span class="o">.</span>
+
+        <span class="o">-</span><span class="n">u</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">--</span><span class="n">username</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span>
+            <span class="n">Remote</span> <span class="n">jmx</span> <span class="n">agent</span> <span class="n">username</span>
+
+        <span class="o">--</span>
+            <span class="n">This</span> <span class="n">option</span> <span class="n">can</span> <span class="n">be</span> <span class="n">used</span> <span class="n">to</span> <span class="n">separate</span> <span class="n">command</span><span class="o">-</span><span class="n">line</span> <span class="n">options</span> <span class="kn">from</span> <span class="nn">the</span>
+            <span class="nb">list</span> <span class="n">of</span> <span class="n">argument</span><span class="p">,</span> <span class="p">(</span><span class="n">useful</span> <span class="n">when</span> <span class="n">arguments</span> <span class="n">might</span> <span class="n">be</span> <span class="n">mistaken</span> <span class="k">for</span>
+            <span class="n">command</span><span class="o">-</span><span class="n">line</span> <span class="n">options</span>
+
+        <span class="p">[</span><span class="o">&lt;</span><span class="n">keyspace</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">tables</span><span class="o">&gt;...</span><span class="p">]</span>
+            <span class="n">The</span> <span class="n">keyspace</span> <span class="n">followed</span> <span class="n">by</span> <span class="n">one</span> <span class="ow">or</span> <span class="n">many</span> <span class="n">tables</span>
+
+
+</pre></div>
+</div>
+</div>
+
+
+
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

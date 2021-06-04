@@ -1,0 +1,241 @@
+---
+layout: docpage
+
+title: "Documentation"
+
+is_homepage: false
+is_sphinx_doc: true
+
+doc-parent: "The Cassandra Query Language (CQL)"
+
+doc-title: "Materialized Views"
+doc-header-links: '
+  <link rel="top" title="Apache Cassandra Documentation v3.11.11" href="../index.html"/>
+      <link rel="up" title="The Cassandra Query Language (CQL)" href="index.html"/>
+      <link rel="next" title="Security" href="security.html"/>
+      <link rel="prev" title="Secondary Indexes" href="indexes.html"/>
+'
+doc-search-path: "../search.html"
+
+extra-footer: '
+<script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+      URL_ROOT:    "",
+      VERSION:     "",
+      COLLAPSE_INDEX: false,
+      FILE_SUFFIX: ".html",
+      HAS_SOURCE:  false,
+      SOURCELINK_SUFFIX: ".txt"
+    };
+</script>
+'
+
+---
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="doc-navigation">
+        <div class="doc-menu" role="navigation">
+          <div class="navbar-header">
+            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
+              <div class="form-group">
+                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </div>
+            </form>
+            
+            
+            
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">The Cassandra Query Language (CQL)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="definitions.html">Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ddl.html">Data Definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dml.html">Data Manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indexes.html">Secondary Indexes</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Materialized Views</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#create-materialized-view">CREATE MATERIALIZED VIEW</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#alter-materialized-view">ALTER MATERIALIZED VIEW</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#drop-materialized-view">DROP MATERIALIZED VIEW</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json.html">JSON Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triggers.html">Triggers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendices.html">Appendices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html">Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="content doc-content">
+        <div class="content-container">
+          
+  <div class="section" id="materialized-views">
+<span id="id1"></span><h1>Materialized Views<a class="headerlink" href="#materialized-views" title="Permalink to this headline">¶</a></h1>
+<p>Materialized views names are defined by:</p>
+<pre>
+<strong id="grammar-token-view-name">view_name</strong> ::=  re('[a-zA-Z_0-9]+')
+</pre>
+<div class="section" id="create-materialized-view">
+<span id="create-materialized-view-statement"></span><h2>CREATE MATERIALIZED VIEW<a class="headerlink" href="#create-materialized-view" title="Permalink to this headline">¶</a></h2>
+<p>You can create a materialized view on a table using a <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">MATERIALIZED</span> <span class="pre">VIEW</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-create-materialized-view-statement">create_materialized_view_statement</strong> ::=  CREATE MATERIALIZED VIEW [ IF NOT EXISTS ] <a class="reference internal" href="#grammar-token-view-name"><code class="xref docutils literal notranslate"><span class="pre">view_name</span></code></a> AS
+                                            <a class="reference internal" href="dml.html#grammar-token-select-statement"><code class="xref docutils literal notranslate"><span class="pre">select_statement</span></code></a>
+                                            PRIMARY KEY '(' <a class="reference internal" href="ddl.html#grammar-token-primary-key"><code class="xref docutils literal notranslate"><span class="pre">primary_key</span></code></a> ')'
+                                            WITH <a class="reference internal" href="ddl.html#grammar-token-table-options"><code class="xref docutils literal notranslate"><span class="pre">table_options</span></code></a>
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">MATERIALIZED</span> <span class="k">VIEW</span> <span class="n">monkeySpecies_by_population</span> <span class="k">AS</span>
+    <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">monkeySpecies</span>
+    <span class="k">WHERE</span> <span class="n">population</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">species</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">species</span><span class="p">)</span>
+    <span class="k">WITH</span> <span class="n">comment</span><span class="o">=</span><span class="s1">&#39;Allow query by population instead of species&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">MATERIALIZED</span> <span class="pre">VIEW</span></code> statement creates a new materialized view. Each such view is a set of <em>rows</em> which
+corresponds to rows which are present in the underlying, or base, table specified in the <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> statement. A
+materialized view cannot be directly updated, but updates to the base table will cause corresponding updates in the
+view.</p>
+<p>Creating a materialized view has 3 main parts:</p>
+<ul class="simple">
+<li>The <a class="reference internal" href="#mv-select"><span class="std std-ref">select statement</span></a> that restrict the data included in the view.</li>
+<li>The <a class="reference internal" href="#mv-primary-key"><span class="std std-ref">primary key</span></a> definition for the view.</li>
+<li>The <a class="reference internal" href="#mv-options"><span class="std std-ref">options</span></a> for the view.</li>
+</ul>
+<p>Attempting to create an already existing materialized view will return an error unless the <code class="docutils literal notranslate"><span class="pre">IF</span> <span class="pre">NOT</span> <span class="pre">EXISTS</span></code> option is
+used. If it is used, the statement will be a no-op if the materialized view already exists.</p>
+<div class="section" id="mv-select-statement">
+<span id="mv-select"></span><h3>MV select statement<a class="headerlink" href="#mv-select-statement" title="Permalink to this headline">¶</a></h3>
+<p>The select statement of a materialized view creation defines which of the base table is included in the view. That
+statement is limited in a number of ways:</p>
+<ul class="simple">
+<li>the <a class="reference internal" href="dml.html#selection-clause"><span class="std std-ref">selection</span></a> is limited to those that only select columns of the base table. In other
+words, you can’t use any function (aggregate or not), casting, term, etc. Aliases are also not supported. You can
+however use <cite>*</cite> as a shortcut of selecting all columns. Further, <a class="reference internal" href="ddl.html#static-columns"><span class="std std-ref">static columns</span></a> cannot be
+included in a materialized view (which means <code class="docutils literal notranslate"><span class="pre">SELECT</span> <span class="pre">*</span></code> isn’t allowed if the base table has static columns).</li>
+<li>the <code class="docutils literal notranslate"><span class="pre">WHERE</span></code> clause have the following restrictions:<ul>
+<li>it cannot include any <a class="reference internal" href="definitions.html#grammar-token-bind-marker"><code class="xref std std-token docutils literal notranslate"><span class="pre">bind_marker</span></code></a>.</li>
+<li>the columns that are not part of the <em>base table</em> primary key can only be restricted by an <code class="docutils literal notranslate"><span class="pre">IS</span> <span class="pre">NOT</span> <span class="pre">NULL</span></code>
+restriction. No other restriction is allowed.</li>
+<li>as the columns that are part of the <em>view</em> primary key cannot be null, they must always be at least restricted by a
+<code class="docutils literal notranslate"><span class="pre">IS</span> <span class="pre">NOT</span> <span class="pre">NULL</span></code> restriction (or any other restriction, but they must have one).</li>
+</ul>
+</li>
+<li>it cannot have neither an <a class="reference internal" href="dml.html#ordering-clause"><span class="std std-ref">ordering clause</span></a>, nor a <a class="reference internal" href="dml.html#limit-clause"><span class="std std-ref">limit</span></a>, nor <a class="reference internal" href="dml.html#allow-filtering"><span class="std std-ref">ALLOW
+FILTERING</span></a>.</li>
+</ul>
+</div>
+<div class="section" id="mv-primary-key">
+<span id="id2"></span><h3>MV primary key<a class="headerlink" href="#mv-primary-key" title="Permalink to this headline">¶</a></h3>
+<p>A view must have a primary key and that primary key must conform to the following restrictions:</p>
+<ul class="simple">
+<li>it must contain all the primary key columns of the base table. This ensures that every row of the view correspond to
+exactly one row of the base table.</li>
+<li>it can only contain a single column that is not a primary key column in the base table.</li>
+</ul>
+<p>So for instance, give the following base table definition:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t</span> <span class="p">(</span>
+    <span class="n">k</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">c1</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">c2</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">v1</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">v2</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>then the following view definitions are allowed:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">MATERIALIZED</span> <span class="k">VIEW</span> <span class="n">mv1</span> <span class="k">AS</span>
+    <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">t</span> <span class="k">WHERE</span> <span class="n">k</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">c1</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">c2</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">c2</span><span class="p">)</span>
+
+<span class="k">CREATE</span> <span class="k">MATERIALIZED</span> <span class="k">VIEW</span> <span class="n">mv1</span> <span class="k">AS</span>
+    <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">t</span> <span class="k">WHERE</span> <span class="n">k</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">c1</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">c2</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>but the following ones are <strong>not</strong> allowed:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="c1">// Error: cannot include both v1 and v2 in the primary key as both are not in the base table primary key</span>
+<span class="k">CREATE</span> <span class="k">MATERIALIZED</span> <span class="k">VIEW</span> <span class="n">mv1</span> <span class="k">AS</span>
+    <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">t</span> <span class="k">WHERE</span> <span class="n">k</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">c1</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">c2</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">v1</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">)</span>
+
+<span class="c1">// Error: must include k in the primary as it&#39;s a base table primary key column</span>
+<span class="k">CREATE</span> <span class="k">MATERIALIZED</span> <span class="k">VIEW</span> <span class="n">mv1</span> <span class="k">AS</span>
+    <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">t</span> <span class="k">WHERE</span> <span class="n">c1</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">c2</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="mv-options">
+<span id="id3"></span><h3>MV options<a class="headerlink" href="#mv-options" title="Permalink to this headline">¶</a></h3>
+<p>A materialized view is internally implemented by a table and as such, creating a MV allows the <a class="reference internal" href="ddl.html#create-table-options"><span class="std std-ref">same options than
+creating a table</span></a>.</p>
+</div>
+</div>
+<div class="section" id="alter-materialized-view">
+<span id="alter-materialized-view-statement"></span><h2>ALTER MATERIALIZED VIEW<a class="headerlink" href="#alter-materialized-view" title="Permalink to this headline">¶</a></h2>
+<p>After creation, you can alter the options of a materialized view using the <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">MATERIALIZED</span> <span class="pre">VIEW</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-alter-materialized-view-statement">alter_materialized_view_statement</strong> ::=  ALTER MATERIALIZED VIEW <a class="reference internal" href="#grammar-token-view-name"><code class="xref docutils literal notranslate"><span class="pre">view_name</span></code></a> WITH <a class="reference internal" href="ddl.html#grammar-token-table-options"><code class="xref docutils literal notranslate"><span class="pre">table_options</span></code></a>
+</pre>
+<p>The options that can be updated are the same than at creation time and thus the <a class="reference internal" href="ddl.html#create-table-options"><span class="std std-ref">same than for tables</span></a>.</p>
+</div>
+<div class="section" id="drop-materialized-view">
+<span id="drop-materialized-view-statement"></span><h2>DROP MATERIALIZED VIEW<a class="headerlink" href="#drop-materialized-view" title="Permalink to this headline">¶</a></h2>
+<p>Dropping a materialized view users the <code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">MATERIALIZED</span> <span class="pre">VIEW</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-drop-materialized-view-statement">drop_materialized_view_statement</strong> ::=  DROP MATERIALIZED VIEW [ IF EXISTS ] <a class="reference internal" href="#grammar-token-view-name"><code class="xref docutils literal notranslate"><span class="pre">view_name</span></code></a>;
+</pre>
+<p>If the materialized view does not exists, the statement will return an error, unless <code class="docutils literal notranslate"><span class="pre">IF</span> <span class="pre">EXISTS</span></code> is used in which case
+the operation is a no-op.</p>
+</div>
+</div>
+
+
+
+          
+          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
+            
+            <a href="security.html" class="btn btn-default pull-right " role="button" title="Security" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
+            
+            
+            <a href="indexes.html" class="btn btn-default" role="button" title="Secondary Indexes" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
