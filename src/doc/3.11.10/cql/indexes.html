@@ -1,0 +1,294 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Secondary Indexes &mdash; Apache Cassandra Documentation v3.11.10</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/extra.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Materialized Views" href="mvs.html" />
+    <link rel="prev" title="Data Manipulation" href="dml.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apache Cassandra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.11.10
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">The Cassandra Query Language (CQL)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="definitions.html">Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ddl.html">Data Definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dml.html">Data Manipulation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Secondary Indexes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#create-index">CREATE INDEX</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#indexes-on-map-keys">Indexes on Map Keys</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#drop-index">DROP INDEX</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mvs.html">Materialized Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json.html">JSON Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triggers.html">Triggers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendices.html">Appendices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html">Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">The Cassandra Query Language (CQL)</a> &raquo;</li>
+        
+      <li>Secondary Indexes</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/cql/indexes.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="secondary-indexes">
+<span id="id1"></span><h1>Secondary Indexes<a class="headerlink" href="#secondary-indexes" title="Permalink to this headline">¶</a></h1>
+<p>CQL supports creating secondary indexes on tables, allowing queries on the table to use those indexes. A secondary index
+is identified by a name defined by:</p>
+<pre>
+<strong id="grammar-token-index_name"><span id="grammar-token-index-name"></span>index_name</strong> ::=  re('[a-zA-Z_0-9]+')
+</pre>
+<div class="section" id="create-index">
+<span id="create-index-statement"></span><h2>CREATE INDEX<a class="headerlink" href="#create-index" title="Permalink to this headline">¶</a></h2>
+<p>Creating a secondary index on a table uses the <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">INDEX</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-create_index_statement"><span id="grammar-token-create-index-statement"></span>create_index_statement</strong> ::=  CREATE [ CUSTOM ] INDEX [ IF NOT EXISTS ] [ <a class="reference internal" href="#grammar-token-index_name"><code class="xref docutils literal notranslate"><span class="pre">index_name</span></code></a> ]
+                                ON <a class="reference internal" href="ddl.html#grammar-token-table_name"><code class="xref docutils literal notranslate"><span class="pre">table_name</span></code></a> '(' <a class="reference internal" href="#grammar-token-index_identifier"><code class="xref docutils literal notranslate"><span class="pre">index_identifier</span></code></a> ')'
+                                [ USING <a class="reference internal" href="definitions.html#grammar-token-string"><code class="xref docutils literal notranslate"><span class="pre">string</span></code></a> [ WITH OPTIONS = <a class="reference internal" href="types.html#grammar-token-map_literal"><code class="xref docutils literal notranslate"><span class="pre">map_literal</span></code></a> ] ]
+<strong id="grammar-token-index_identifier"><span id="grammar-token-index-identifier"></span>index_identifier      </strong> ::=  <a class="reference internal" href="ddl.html#grammar-token-column_name"><code class="xref docutils literal notranslate"><span class="pre">column_name</span></code></a>
+                           | ( KEYS | VALUES | ENTRIES | FULL ) '(' <a class="reference internal" href="ddl.html#grammar-token-column_name"><code class="xref docutils literal notranslate"><span class="pre">column_name</span></code></a> ')'
+</pre>
+<p>For instance:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">userIndex</span> <span class="k">ON</span> <span class="n">NerdMovies</span> <span class="p">(</span><span class="k">user</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">INDEX</span> <span class="k">ON</span> <span class="n">Mutants</span> <span class="p">(</span><span class="n">abilityId</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">INDEX</span> <span class="k">ON</span> <span class="k">users</span> <span class="p">(</span><span class="k">keys</span><span class="p">(</span><span class="n">favs</span><span class="p">));</span>
+<span class="k">CREATE</span> <span class="k">CUSTOM</span> <span class="k">INDEX</span> <span class="k">ON</span> <span class="k">users</span> <span class="p">(</span><span class="n">email</span><span class="p">)</span> <span class="k">USING</span> <span class="s1">&#39;path.to.the.IndexClass&#39;</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">CUSTOM</span> <span class="k">INDEX</span> <span class="k">ON</span> <span class="k">users</span> <span class="p">(</span><span class="n">email</span><span class="p">)</span> <span class="k">USING</span> <span class="s1">&#39;path.to.the.IndexClass&#39;</span> <span class="k">WITH</span> <span class="k">OPTIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;storage&#39;</span><span class="p">:</span> <span class="s1">&#39;/mnt/ssd/indexes/&#39;</span><span class="p">};</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">INDEX</span></code> statement is used to create a new (automatic) secondary index for a given (existing) column in a
+given table. A name for the index itself can be specified before the <code class="docutils literal notranslate"><span class="pre">ON</span></code> keyword, if desired. If data already exists
+for the column, it will be indexed asynchronously. After the index is created, new data for the column is indexed
+automatically at insertion time.</p>
+<p>Attempting to create an already existing index will return an error unless the <code class="docutils literal notranslate"><span class="pre">IF</span> <span class="pre">NOT</span> <span class="pre">EXISTS</span></code> option is used. If it
+is used, the statement will be a no-op if the index already exists.</p>
+<div class="section" id="indexes-on-map-keys">
+<h3>Indexes on Map Keys<a class="headerlink" href="#indexes-on-map-keys" title="Permalink to this headline">¶</a></h3>
+<p>When creating an index on a <a class="reference internal" href="types.html#maps"><span class="std std-ref">maps</span></a>, you may index either the keys or the values. If the column identifier is
+placed within the <code class="docutils literal notranslate"><span class="pre">keys()</span></code> function, the index will be on the map keys, allowing you to use <code class="docutils literal notranslate"><span class="pre">CONTAINS</span> <span class="pre">KEY</span></code> in
+<code class="docutils literal notranslate"><span class="pre">WHERE</span></code> clauses. Otherwise, the index will be on the map values.</p>
+</div>
+</div>
+<div class="section" id="drop-index">
+<span id="drop-index-statement"></span><h2>DROP INDEX<a class="headerlink" href="#drop-index" title="Permalink to this headline">¶</a></h2>
+<p>Dropping a secondary index uses the <code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">INDEX</span></code> statement:</p>
+<pre>
+<strong id="grammar-token-drop_index_statement"><span id="grammar-token-drop-index-statement"></span>drop_index_statement</strong> ::=  DROP INDEX [ IF EXISTS ] <a class="reference internal" href="#grammar-token-index_name"><code class="xref docutils literal notranslate"><span class="pre">index_name</span></code></a>
+</pre>
+<p>The <code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">INDEX</span></code> statement is used to drop an existing secondary index. The argument of the statement is the index
+name, which may optionally specify the keyspace of the index.</p>
+<p>If the index does not exists, the statement will return an error, unless <code class="docutils literal notranslate"><span class="pre">IF</span> <span class="pre">EXISTS</span></code> is used in which case the
+operation is a no-op.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="mvs.html" class="btn btn-neutral float-right" title="Materialized Views" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="dml.html" class="btn btn-neutral float-left" title="Data Manipulation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2016, The Apache Cassandra team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

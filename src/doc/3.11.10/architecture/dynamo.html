@@ -1,0 +1,348 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Dynamo &mdash; Apache Cassandra Documentation v3.11.10</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/extra.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Storage Engine" href="storage_engine.html" />
+    <link rel="prev" title="Overview" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apache Cassandra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.11.10
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Architecture</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Dynamo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gossip">Gossip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#failure-detection">Failure Detection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#token-ring-ranges">Token Ring/Ranges</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#replication">Replication</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#simplestrategy">SimpleStrategy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#networktopologystrategy">NetworkTopologyStrategy</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#tunable-consistency">Tunable Consistency</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#picking-consistency-levels">Picking Consistency Levels</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="storage_engine.html">Storage Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guarantees.html">Guarantees</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Cassandra Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Architecture</a> &raquo;</li>
+        
+      <li>Dynamo</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/architecture/dynamo.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="dynamo">
+<h1>Dynamo<a class="headerlink" href="#dynamo" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="gossip">
+<span id="id1"></span><h2>Gossip<a class="headerlink" href="#gossip" title="Permalink to this headline">¶</a></h2>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>todo</p>
+</div>
+</div>
+<div class="section" id="failure-detection">
+<h2>Failure Detection<a class="headerlink" href="#failure-detection" title="Permalink to this headline">¶</a></h2>
+<div class="admonition-todo admonition" id="id3">
+<p class="admonition-title">Todo</p>
+<p>todo</p>
+</div>
+</div>
+<div class="section" id="token-ring-ranges">
+<h2>Token Ring/Ranges<a class="headerlink" href="#token-ring-ranges" title="Permalink to this headline">¶</a></h2>
+<div class="admonition-todo admonition" id="id4">
+<p class="admonition-title">Todo</p>
+<p>todo</p>
+</div>
+</div>
+<div class="section" id="replication">
+<span id="replication-strategy"></span><h2>Replication<a class="headerlink" href="#replication" title="Permalink to this headline">¶</a></h2>
+<p>The replication strategy of a keyspace determines which nodes are replicas for a given token range. The two main
+replication strategies are <a class="reference internal" href="#simple-strategy"><span class="std std-ref">SimpleStrategy</span></a> and <a class="reference internal" href="#network-topology-strategy"><span class="std std-ref">NetworkTopologyStrategy</span></a>.</p>
+<div class="section" id="simplestrategy">
+<span id="simple-strategy"></span><h3>SimpleStrategy<a class="headerlink" href="#simplestrategy" title="Permalink to this headline">¶</a></h3>
+<p>SimpleStrategy allows a single integer <code class="docutils literal notranslate"><span class="pre">replication_factor</span></code> to be defined. This determines the number of nodes that
+should contain a copy of each row.  For example, if <code class="docutils literal notranslate"><span class="pre">replication_factor</span></code> is 3, then three different nodes should store
+a copy of each row.</p>
+<p>SimpleStrategy treats all nodes identically, ignoring any configured datacenters or racks.  To determine the replicas
+for a token range, Cassandra iterates through the tokens in the ring, starting with the token range of interest.  For
+each token, it checks whether the owning node has been added to the set of replicas, and if it has not, it is added to
+the set.  This process continues until <code class="docutils literal notranslate"><span class="pre">replication_factor</span></code> distinct nodes have been added to the set of replicas.</p>
+</div>
+<div class="section" id="networktopologystrategy">
+<span id="network-topology-strategy"></span><h3>NetworkTopologyStrategy<a class="headerlink" href="#networktopologystrategy" title="Permalink to this headline">¶</a></h3>
+<p>NetworkTopologyStrategy allows a replication factor to be specified for each datacenter in the cluster.  Even if your
+cluster only uses a single datacenter, NetworkTopologyStrategy should be prefered over SimpleStrategy to make it easier
+to add new physical or virtual datacenters to the cluster later.</p>
+<p>In addition to allowing the replication factor to be specified per-DC, NetworkTopologyStrategy also attempts to choose
+replicas within a datacenter from different racks.  If the number of racks is greater than or equal to the replication
+factor for the DC, each replica will be chosen from a different rack.  Otherwise, each rack will hold at least one
+replica, but some racks may hold more than one. Note that this rack-aware behavior has some potentially <a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-3810">surprising
+implications</a>.  For example, if there are not an even number of
+nodes in each rack, the data load on the smallest rack may be much higher.  Similarly, if a single node is bootstrapped
+into a new rack, it will be considered a replica for the entire ring.  For this reason, many operators choose to
+configure all nodes on a single “rack”.</p>
+</div>
+</div>
+<div class="section" id="tunable-consistency">
+<h2>Tunable Consistency<a class="headerlink" href="#tunable-consistency" title="Permalink to this headline">¶</a></h2>
+<p>Cassandra supports a per-operation tradeoff between consistency and availability through <em>Consistency Levels</em>.
+Essentially, an operation’s consistency level specifies how many of the replicas need to respond to the coordinator in
+order to consider the operation a success.</p>
+<p>The following consistency levels are available:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">ONE</span></code></dt><dd><p>Only a single replica must respond.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">TWO</span></code></dt><dd><p>Two replicas must respond.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">THREE</span></code></dt><dd><p>Three replicas must respond.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">QUORUM</span></code></dt><dd><p>A majority (n/2 + 1) of the replicas must respond.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ALL</span></code></dt><dd><p>All of the replicas must respond.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LOCAL_QUORUM</span></code></dt><dd><p>A majority of the replicas in the local datacenter (whichever datacenter the coordinator is in) must respond.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">EACH_QUORUM</span></code></dt><dd><p>A majority of the replicas in each datacenter must respond.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LOCAL_ONE</span></code></dt><dd><p>Only a single replica must respond.  In a multi-datacenter cluster, this also gaurantees that read requests are not
+sent to replicas in a remote datacenter.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ANY</span></code></dt><dd><p>A single replica may respond, or the coordinator may store a hint. If a hint is stored, the coordinator will later
+attempt to replay the hint and deliver the mutation to the replicas.  This consistency level is only accepted for
+write operations.</p>
+</dd>
+</dl>
+<p>Write operations are always sent to all replicas, regardless of consistency level. The consistency level simply
+controls how many responses the coordinator waits for before responding to the client.</p>
+<p>For read operations, the coordinator generally only issues read commands to enough replicas to satisfy the consistency
+level. There are a couple of exceptions to this:</p>
+<ul class="simple">
+<li><p>Speculative retry may issue a redundant read request to an extra replica if the other replicas have not responded
+within a specified time window.</p></li>
+<li><p>Based on <code class="docutils literal notranslate"><span class="pre">read_repair_chance</span></code> and <code class="docutils literal notranslate"><span class="pre">dclocal_read_repair_chance</span></code> (part of a table’s schema), read requests may be
+randomly sent to all replicas in order to repair potentially inconsistent data.</p></li>
+</ul>
+<div class="section" id="picking-consistency-levels">
+<h3>Picking Consistency Levels<a class="headerlink" href="#picking-consistency-levels" title="Permalink to this headline">¶</a></h3>
+<p>It is common to pick read and write consistency levels that are high enough to overlap, resulting in “strong”
+consistency.  This is typically expressed as <code class="docutils literal notranslate"><span class="pre">W</span> <span class="pre">+</span> <span class="pre">R</span> <span class="pre">&gt;</span> <span class="pre">RF</span></code>, where <code class="docutils literal notranslate"><span class="pre">W</span></code> is the write consistency level, <code class="docutils literal notranslate"><span class="pre">R</span></code> is the
+read consistency level, and <code class="docutils literal notranslate"><span class="pre">RF</span></code> is the replication factor.  For example, if <code class="docutils literal notranslate"><span class="pre">RF</span> <span class="pre">=</span> <span class="pre">3</span></code>, a <code class="docutils literal notranslate"><span class="pre">QUORUM</span></code> request will
+require responses from at least two of the three replicas.  If <code class="docutils literal notranslate"><span class="pre">QUORUM</span></code> is used for both writes and reads, at least
+one of the replicas is guaranteed to participate in <em>both</em> the write and the read request, which in turn guarantees that
+the latest write will be read. In a multi-datacenter environment, <code class="docutils literal notranslate"><span class="pre">LOCAL_QUORUM</span></code> can be used to provide a weaker but
+still useful guarantee: reads are guaranteed to see the latest write from within the same datacenter.</p>
+<p>If this type of strong consistency isn’t required, lower consistency levels like <code class="docutils literal notranslate"><span class="pre">ONE</span></code> may be used to improve
+throughput, latency, and availability.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="storage_engine.html" class="btn btn-neutral float-right" title="Storage Engine" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="overview.html" class="btn btn-neutral float-left" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2016, The Apache Cassandra team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
