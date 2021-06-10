@@ -1,0 +1,101 @@
+= Apache Cassandra Changelog #8
+:page-layout: single-post
+:page-role: blog-post
+:page-post-date: June 28, 2021
+:page-post-author: The Apache Cassandra Community
+:description: The Apache Cassandra Community
+:keywords: 
+
+image::blog/changelog_header.jpg[Apache Cassandra Changelog]
+Our monthly roundup of key activities and knowledge to keep the community informed.
+
+== Release Notes
+=== Released
+
+The Apache Cassandra team is pleased to announce the release of Apache Cassandra https://lists.apache.org/thread.html/r94208aa15921ba095f6f2a776533c06d1e557b0c7fd25f9547070764%40%3Cdev.cassandra.apache.org%3E[4.0-rc2,window=_blank] (https://downloads.apache.org/cassandra/4.0-rc2/apache-cassandra-4.0-rc2-bin.tar.gz.asc[pgp,window=_blank], https://downloads.apache.org/cassandra/4.0-rc2/apache-cassandra-4.0-rc2-bin.tar.gz.sha256[sha256,window=_blank], and https://downloads.apache.org/cassandra/4.0-rc2/apache-cassandra-4.0-rc2-bin.tar.gz.sha512[sha512,window=_blank]). Please read the https://gitbox.apache.org/repos/asf?p=cassandra.git;a=blob_plain;f=NEWS.txt;hb=refs/tags/cassandra-4.0-rc2[release notes,window=_blank] and let us https://issues.apache.org/jira/browse/CASSANDRA[know,window=_blank] if you encounter any problems.
+
+This version is a release candidate on the 4.0 series.
+
+Note: The bintray location is now replaced with the https://apache.jfrog.io/artifactory/cassandra/[ASF's JFrog Artifactory location,window=_blank].
+
+Downloads of source and binary distributions for the latest stable and older supported version are listed in our download section:
+For the latest status of Apache Cassandra 4.0 GA, check the Cassandra 4.0GAScope board https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=355&quickFilter=1661[here,window=_blank].
+
+Join the Cassandra mailing list to stay up-to-date.
+
+== Community Notes
+
+_Updates on Cassandra Enhancement Proposals (CEPs), how to contribute, and other community activities._
+
+=== Added
+
+Netflix’s internal teams create easy-to-use tooling that helps streamline user experience and incorporates best practices. It has open-sourced one of the tools, https://github.com/Netflix/nf-data-explorer[Data Explorer,window=_blank], which provides fast, safe access to data stored in popular databases, including Apache Cassandra. Gim Mahasintunan has written an explanation https://netflixtechblog.com/exploring-data-netflix-9d87e20072e3[here]. The tool includes a drag and drop Schema Designer for writing CREATE TABLE statements, support for binary data, and multiple cluster access, along with a powerful CQL IDE in Query mode.
+
+=== Added
+
+https://cwiki.apache.org/confluence/display/CASSANDRA/CEP-10%3A+Cluster+and+Code+Simulations[CEP-10] is under discussion. This is a proposal for a mechanism to evaluate whole clusters, or individual classes, with a deterministically pseudo-random ordering of all thread and message events. The goal will be to simulate a cluster and actions on it (or simpler unit tests) so that the behavior is deterministic, repeatable but pseudo-random.
+
+=== Added
+
+Yifan Cai has noted that JMXTimer exposes its attributes in inconsistent time units: nanos and micros. By correcting this inconsistency and using micros, we can reduce the timer memory footprint by 50%. You can read about the details https://lists.apache.org/thread.html/rb0b5c2920ae7a3efb52c8a36b09a3c5e1547f8786790c5b1f4eb0f96%40%3Cdev.cassandra.apache.org%3E[here].
+
+=== Added
+
+We are pleased to welcome Abuli Palagashvili, who was selected to participate in Google Summer of Code (GSoC) on Apache Cassandra this year. He will be working primarily on https://issues.apache.org/jira/browse/CASSANDRA-16451[CASSANDRA-16451].
+
+=== Added
+
+As the project looks to the future, we are adding a roadmap page to the new {site-url}[Apache Cassandra project website]. The community is also looking towards new features, and you can take a look at the features that developers plan to work on https://lists.apache.org/thread.html/r8e6eb9c855484d584d0dd2a74d60d9893c08bfc453c0321a901793b2%40%3Cdev.cassandra.apache.org%3E[here].
+
+=== Added
+
+We’ve released new Apache Cassandra community videos: What is https://www.youtube.com/watch?v=CKdT6f6wQyo[Apache Cassandra]? and https://www.youtube.com/watch?v=kOf29M8qFts[What's New in Apache Cassandra 4.0]?. A big thank you goes to Ben Bromhead, Ekaterina Dimitrova, and Patrick McFadin for presenting and helping put these together! &#128079; Remember, if you weren’t able to attend Cassandra World Party, we’ve also uploaded all the recorded lightning talks to this https://www.youtube.com/watch?v=TZNrTlIazA0&list=PLqcm6qE9lgKLi4TD3azt3soaCjfXte32m[playlist].
+
+image::blog/youtube-whats_new_in_4.0.png[link="{site-url}img/youtube-whats_new_in_4.0.png"]
+
+=== Added
+
+The DROP COMPACT STORAGE feature will be marked as https://lists.apache.org/thread.html/r1be238ab0d92f1526efbd4bbf8ae47009608a33ad249c8a833d6f793%40%3Cdev.cassandra.apache.org%3E[‘experimental’], but this will be until the following points are solved:
+
+* We have a similar set of unit tests to the one we have for COMPACT storage for after DROP COMPACT and another set where we mix writes performed before and after DROP COMPACT.
+* We solve the issues linked to the lack of primary key liveness https://issues.apache.org/jira/browse/CASSANDRA-16675[(CASSANDRA-16675)].
+* We have a way to prevent users from having issues with their tables by using ALTER DROP statements.
+* We find a solution for https://issues.apache.org/jira/browse/CASSANDRA-1606[CASSANDRA-1606].
+
+The project has generated an umbrella ticket to have DROP COMPACT STORAGE out of experimental as soon as possible and allow users to be able to use it without taking any risk.
+
+== User Space
+
+=== Paidy
+
+Paidy is a financial services company that provides a cardless payment method using only your email address and a phone number and is currently one of the largest online payment businesses in Japan. To realize the company’s mission of creating a world to removes barriers and embraces simplicity for conducting online payments, the company needed a robust and scalable infrastructure for the technology platform:
+
+"Our platform is designed with an event sourcing and reactive architecture, and we need to be capable of storing the data in multiple data centers with redundancy and high availability being critical to our services. Early on, we identified Apache Cassandra as being the right database technology for Paidy's payment services. We also understand the complexity of managing this type of databases to maintain the highest level of availability and the dedication and expertise required to tune our environment for continued low latency and high performance." - https://www.youtube.com/watch?v=wMpZifOQlrQ&t=66s[Saravanan Karuppia]
+
+=== Hornet
+
+Hornet is a social networking community and app for the gay community with 30 million members worldwide. As the company is focused on community development, the Hornet team knew they would have to scale up the existing messaging clusters. Hornet had implemented Apache Cassandra previously, but its current version required an update and Hornet has found the benefits have been significant. For example, it has been able to reduce the messaging cluster volumes by 50% and improved the content service archive from two weeks to one month of messages:
+
+"This is probably going to be the most engineering non-answer ever, which is simply that I haven't really had to care about Cassandra since we made the changes and upgrades. Usually, if I was getting paged in the middle of the night, it probably had something to do with a brief Cassandra blip that was causing an increased response time. That has just gone away completely. We are also able to accept far more users at this point, before we had to look into doing any sort of infrastructure upgrades - infrastructure meaning disk size, CPU, memory etc." - https://diginomica.com/gay-social-networking-app-hornet-upgrades-cassandra-improve-community-experience[Nate Mitchell]
+
+_Do you have a Cassandra case study to share? Email mailto:cassandra@constantia.io[cassandra@constantia.io]_.
+
+== In the News
+
+JAXEnter: https://jaxenter.com/apache-cassandra-java-174575.html[Apache Cassandra 4.0: Taming Tail Latencies with Java 16 ZGC]
+
+TechRepublic: https://www.techrepublic.com/article/you-dont-have-to-love-facebook-to-love-the-code-it-open-sources/[You Don't Have to Love Facebook to Love the Code it Open Sources]
+
+Container Journal: https://containerjournal.com/kubeconcnc/why-a-cloud-native-database-must-run-on-k8s/[Why a Cloud-Native Database Must Run on K8s]
+
+== Cassandra Tutorials & More
+
+https://www.infoq.com/presentations/netflix-cdc-events-cassandra/[Change Data Capture for Distributed Databases @Netflix] - Raghuram Onti Srinivasan
+
+https://thelastpickle.com/blog/2021/06/09/cassandra-openshift-intro.html[Running your Database on OpenShift and CodeReady Containers] - Mick Semb Weaver
+
+https://www.youtube.com/watch?v=myIX0kkpL9U[Apache Cassandra Lunch #50: Machine Learning with Spark + Cassandra] - Rahul Singh
+
+https://www.simplilearn.com/tutorials/big-data-tutorial/cassandra-data-model[Apache Cassandra Data Model: Components And Statements] - SimpliLearn
+
+image::blog/changelog_footer.jpg[link="{site-url}_/community.html"]

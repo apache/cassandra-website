@@ -1,0 +1,131 @@
+= Audit Logging in Apache Cassandra 4.0
+:page-layout: single-post
+:page-role: blog-post
+:page-post-date: October 29, 2018
+:page-post-author: The Apache Cassandra Community
+:description: The Apache Cassandra Community
+:keywords: 
+
+Database audit logging is an industry standard tool for enterprises to capture critical data change events including what data changed and who triggered the event. These captured records can then be reviewed later to ensure compliance with regulatory, security and operational policies.
+
+Prior to Apache Cassandra 4.0, the open source community did not have a good way of tracking such critical database activity. With this goal in mind, Netflix implemented https://issues.apache.org/jira/browse/CASSANDRA-12151[CASSANDRA-12151,window=_blank] so that users of Cassandra would have a simple yet powerful audit logging tool built into their database out of the box.
+
+== Why are Audit Logs Important?
+
+Audit logging database activity is one of the key components for making a database truly ready for the enterprise. Audit logging is generally useful but enterprises frequently use it for:
+
+* Regulatory compliance with laws such as https://en.wikipedia.org/wiki/Sarbanes%E2%80%93Oxley_Act[SOX,window=_blank], https://en.wikipedia.org/wiki/Payment_Card_Industry_Data_Security_Standard[PCI,window=_blank] and https://en.wikipedia.org/wiki/General_Data_Protection_Regulation[GDPR,window=_blank] et al. These types of compliance are crucial for companies that are traded on public stock exchanges, hold payment information such as credit cards, or retain private user information.
+* Security compliance. Companies often have strict rules for what data can be accessed by which employees, both to protect the privacy of users but also to limit the probability of a data breach.
+* Debugging complex data corruption bugs such as those found in massively distributed microservice architectures like Netflix’s.
+
+== Why is Audit Logging Difficult?
+
+Implementing a simple logger in the request (inbound/outbound) path sounds easy, but the devil is in the details. In particular, the “fast path” of a database, where audit logging must operate, strives to do as little as humanly possible so that users get the fastest and most scalable database system possible. While implementing Cassandra audit logging, we had to ensure that the audit log infrastructure does not take up excessive CPU or IO resources from the actual database execution itself. However, one cannot simply optimize only for performance because that may compromise the guarantees of the audit logging.
+
+For example, if producing an audit record would block a thread, it should be dropped to maintain maximum performance. However, most compliance requirements prohibit dropping records. Therefore, the key to implementing audit logging correctly lies in allowing users to achieve both performance and reliability, or absent being able to achieve both allow users to make an explicit trade-off through configuration.
+
+== Audit Logging Design Goals
+
+The design goal of the Audit log are broadly categorized into 3 different areas:
+
+*Performance*: Considering the Audit Log injection points are live in the request path, performance is an important goal in every design decision.
+
+*Accuracy*: Accuracy is required by compliance and is thus a critical goal. Audit Logging must be able to answer crucial auditor questions like “Is every write request to the database being audited?”. As such, accuracy cannot be compromised.
+
+*Usability & Extensibility*: The diverse Cassandra ecosystem demands that any frequently used feature must be easily usable and pluggable (e.g., Compaction, Compression, SeedProvider etc...), so the Audit Log interface was designed with this context in mind from the start.
+
+== Implementation
+
+With these three design goals in mind, the https://github.com/OpenHFT[OpenHFT,window=_blank] libraries were an obvious choice due to their reliability and high performance. Earlier in https://issues.apache.org/jira/browse/CASSANDRA-13983[CASSANDRA-13983,window=_blank] the https://github.com/OpenHFT/Chronicle-Queue[chronical queue library,window=_blank] of OpenHFT was introduced as a BinLog utility to the Apache Cassandra code base. The performance of Full Query Logging (FQL) was excellent, but it only instrumented mutation and read query paths. It was missing a lot of critical data such as when queries failed, where they came from, and which user issued the query. The FQL was also single purpose: preferring to drop messages rather than delay the process (which makes sense for FQL but not for Audit Logging). Lastly, the FQL didn’t allow for pluggability, which would make it harder to adopt in the codebase for this feature.
+
+As shown in the architecture figure below, we were able to unify the FQL feature with the AuditLog functionality through the AuditLogManager and IAuditLogger abstractions. Using this architecture, we can support any output format: logs, files, databases, etc. By default, the BinAuditLogger implementation comes out of the box to maintain performance. Users can choose the custom audit logger implementation by dropping the jar file on Cassandra classpath and customizing with configuration options in https://github.com/apache/cassandra/blob/trunk/conf/cassandra.yaml#L1216-L1234[cassandra.yaml,window=_blank] file.
+
+== Architecture
+
+image:blog/audit-logging-1.png[audit logging architecture]
+
+== What does it log
+Each audit log implementation has access to the following attributes. For the default text-based logger, these fields are concatenated with `|` to yield the final message.
+
+* `user`: User name(if available)
+* `host`: Host IP, where the command is being executed
+* `source ip address`: Source IP address from where the request initiated
+* `source port`: Source port number from where the request initiated
+* `timestamp`: unix time stamp
+* `type`: Type of the request (SELECT, INSERT, etc.,)
+* `category`: Category of the request (DDL, DML, etc.,)
+* `keyspace`: Keyspace(If applicable) on which request is targeted to be executed
+* `scope`: Table/Aggregate name/ function name/ trigger name etc., as applicable
+* `operation`: CQL command being executed
+
+=== Example of Audit log messages
+
+----
+Type: AuditLog
+LogMessage: user:anonymous|host:127.0.0.1:7000|source:/127.0.0.1|port:53418|timestamp:1539978679457|type:SELECT|category:QUERY|ks:k1|scope:t1|operation:SELECT * from k1.t1 ;
+
+Type: AuditLog
+LogMessage: user:anonymous|host:127.0.0.1:7000|source:/127.0.0.1|port:53418|timestamp:1539978692456|type:SELECT|category:QUERY|ks:system|scope:peers|operation:SELECT * from system.peers limit 1;
+
+Type: AuditLog
+LogMessage: user:anonymous|host:127.0.0.1:7000|source:/127.0.0.1|port:53418|timestamp:1539980764310|type:SELECT|category:QUERY|ks:system_virtual_schema|scope:columns|operation:SELECT * from system_virtual_schema.columns ;
+----
+
+== How to configure
+
+Auditlog can be configured using https://github.com/apache/cassandra/blob/trunk/conf/cassandra.yaml#L1216-L1234[cassandra.yaml,window=_blank]. If you want to try Auditlog on one node, it can also be enabled and configured using `nodetool`.
+
+==== cassandra.yaml configurations for AuditLog
+* `enabled`: This option enables/ disables audit log
+* `logger`: Class name of the logger/ custom logger.
+* `audit_logs_dir`: Auditlogs directory location, if not set, default to cassandra.logdir.audit or cassandra.logdir + /audit/
+* `included_keyspaces`: Comma separated list of keyspaces to be included in audit log, default - includes all keyspaces
+* `excluded_keyspaces`: Comma separated list of keyspaces to be excluded from audit log, default - excludes no keyspace
+* `included_categories`: Comma separated list of Audit Log Categories to be included in audit log, default - includes all categories
+* `excluded_categories`: Comma separated list of Audit Log Categories to be excluded from audit log, default - excludes no category
+* `included_users`: Comma separated list of users to be included in audit log, default - includes all users
+* `excluded_users`: Comma separated list of users to be excluded from audit log, default - excludes no user
+Note: BinAuditLogger configurations can be tuned using cassandra.yaml properties as well.
+
+List of available categories are: QUERY, DML, DDL, DCL, OTHER, AUTH, ERROR, PREPARE
+
+==== NodeTool command to enable AuditLog
+`enableauditlog`: Enables AuditLog with yaml defaults. yaml configurations can be overridden using options via nodetool command.
+
+----
+nodetool enableauditlog
+----
+
+*Options*:
+
+`--excluded-categories` Comma separated list of Audit Log Categories to be excluded for audit log. If not set the value from cassandra.yaml will be used
+
+`--excluded-keyspaces` Comma separated list of keyspaces to be excluded for audit log. If not set the value from cassandra.yaml will be used
+
+`--excluded-users` Comma separated list of users to be excluded for audit log. If not set the value from cassandra.yaml will be used
+
+`--included-categories` Comma separated list of Audit Log Categories to be included for audit log. If not set the value from cassandra.yaml will be used
+
+`--included-keyspaces` Comma separated list of keyspaces to be included for audit log. If not set the value from cassandra.yaml will be used
+
+`--included-users` Comma separated list of users to be included for audit log. If not set the value from cassandra.yaml will be used
+
+`--logger` Logger name to be used for AuditLogging. Default BinAuditLogger. If not set the value from cassandra.yaml will be used
+
+==== NodeTool command to disable AuditLog
+`disableauditlog`: Disables AuditLog.
+
+----
+nodetool disableuditlog
+----
+               
+==== NodeTool command to reload AuditLog filters
+`enableauditlog`: NodeTool enableauditlog command can be used to reload auditlog filters when called with default or previous `loggername` and updated filters
+
+----
+nodetool enableauditlog --loggername <Default/ existing loggerName> --included-keyspaces <New Filter values>
+---- 
+
+== Conclusion
+
+Now that Apache Cassandra ships with audit logging out of the box, users can easily capture data change events to a persistent record indicating what happened, when it happened, and where the event originated. This type of information remains critical to modern enterprises operating in a diverse regulatory environment. While audit logging represents one of many steps forward in the 4.0 release, we believe that it will uniquely enable enterprises to use the database in ways they could not previously.

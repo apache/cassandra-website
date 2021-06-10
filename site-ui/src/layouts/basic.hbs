@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+{{> head-first}}
+    <title>Apache Cassandra{{#with site.title}} | {{this}}{{/with}}</title>
+    {{#with (canonical-url)}}
+    <link rel="canonical" href="{{this}}">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400&amp;family=Red+Hat+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&amp;display=swap" rel="stylesheet">
+    {{/with}}
+{{> head-last}}
+  </head>
+  <body class="{{ page.layout }} {{ page.role }}">
+      <div class="container mx-auto relative">
+        {{> header }}
+        <div class="hero hero--home grad">
+            <div class="eye"></div>
+            <div id="home-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                <h1>{{ page.title }}</h1>
+            </div>
+        </div>
+        <div class="flex-center py-large arrow">
+            <div class="inner inner--narrow">
+                {{{ page.contents }}}
+            </div>
+        </div>
+        {{> footer}}
+      </div>
+  </body>
+<script>
+jQuery(function(){
+    jQuery(document)
+    .on('click','.cassandra-cloud h3',function(){
+        var el = jQuery(this);
+        el.toggleClass('active');
+        el.next().slideToggle();
+    })
+    .on('click','.image-expand img', function(){
+      $(this).clone().appendTo('#mod-content');
+      $('#fade,#modal,#close-modal').fadeIn();
+      $('body,html').addClass('no-scroll');
+    })
+    .on('click','#fade,#close-modal', function(){
+      $('#fade,#modal,#close-modal').fadeOut();
+      $('body,html').removeClass('no-scroll');
+      $('#mod-content').html('');
+    });
+});
+</script>
+</html>

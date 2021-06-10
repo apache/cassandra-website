@@ -1,0 +1,26 @@
+<div class="versions-wrapper">
+  <h4>Version:</h4>
+  <div class="nav-panel-explore{{#unless page.navigation}} is-active{{/unless}}" data-panel="explore">
+    {{#if page.component}}
+
+    <div id="version-toggle" class="context">
+      <span class="version">{{page.componentVersion.displayVersion}}</span>
+    </div>
+    {{/if}}
+    <ul id="versions-list" class="components">
+      {{#each site.components}}
+      <li class="component{{#if (eq this @root.page.component)}} is-current{{/if}}">
+        <ul class="versions">
+          {{#each ./versions}}
+          <li class="version
+            {{~#if (and (eq .. @root.page.component) (eq this @root.page.componentVersion))}} is-current{{/if~}}
+            {{~#if (eq this ../latestVersion)}} is-latest{{/if}}">
+            <a href="{{{relativize ./url}}}">{{./displayVersion}}</a>
+          </li>
+          {{/each}}
+        </ul>
+      </li>
+      {{/each}}
+    </ul>
+  </div>
+</div>

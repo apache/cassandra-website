@@ -1,8 +1,44 @@
-<script src="{{{uiRootPath}}}/js/site.js"></script>
-{{#with page.attributes.content-scripts}}
-{{{this}}}
-{{/with}}
-<script async src="{{{uiRootPath}}}/js/vendor/highlight.js"></script>
-{{#if (eq page.layout 'tutorials')}}
-<script async src="{{{uiRootPath}}}/js/vendor/mark.js"></script>
+{{#if (eq page.layout 'default')}}
+    <script src="{{{uiRootPath}}}/js/site.js"></script>
+    {{#with page.attributes.content-scripts}}
+    {{{this}}}
+    {{/with}}
+    <script async src="{{{uiRootPath}}}/js/vendor/highlight.js"></script>
+    {{#if (eq page.layout 'tutorials')}}
+    <script async src="{{{uiRootPath}}}/js/vendor/mark.js"></script>
+    {{/if}}
+    {{#if (eq env.DOCSEARCH_ENGINE 'lunr')}}
+    <script src="{{uiRootPath}}/js/vendor/lunr.js"></script>
+    <script src="{{uiRootPath}}/js/vendor/search.js" id="search-script" data-base-path="{{or siteRootPath (or site.url siteRootUrl)}}" data-page-path="{{@root.page.url}}"></script>
+    <script async src="{{uiRootPath}}/../search-index.js"></script>
+    {{/if}}
 {{/if}}
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>

@@ -1,0 +1,69 @@
+= Cassandra and Kubernetes: SIG Update #2
+:page-layout: single-post
+:page-role: blog-post
+:page-post-date: June 9, 2021
+:page-post-author: Rahul Singh, John Sanda
+:description: The Apache Cassandra Community
+:keywords: 
+
+The Cassandra Kubernetes SIG is excited to share that there has been coalescence around the https://github.com/datastax/cass-operator[Cass Operator,window=_blank] project as the community-based operator.
+
+It is no understatement to say that moving towards a single operator for the Apache Cassandra community has been a technical challenge. There are several xref:blog/cassandra-and-kubernetes-sig-update.adoc[Kubernetes operator projects for Cassandra,window=_blank], and there were at least five different ways to go about this. Initially, it seemed we were going to create a standard and build a fresh operator from scratch, adopting the others’ ideas. For more details on this discussion, check out this lengthy dev mailing list https://lists.apache.org/thread.html/r473275258f3203121935c2412fbe94c0fc368fe17b72141957afef62%40%3Cdev.cassandra.apache.org%3E[thread,window=_blank].
+
+For the next stage, the SIG is focused on increasing Cass Operator’s community adoption with the ultimate goal of bringing the project into the ASF.
+
+=== Why Cass-Operator?
+
+Several features of the Cass-Operator project, open-sourced by DataStax, made it the prime candidate for the other projects to rally around. (You can read about the five major Kubernetes Operators for Cassandra in the last xref:blog/cassandra-and-kubernetes-sig-update.adoc[Cassandra SIG update].)
+
+image::blog/cass-operator-diagram.png[High Level Architecture of the Cass Operator in Kubernetes]
+*High Level Architecture of the Cass Operator in Kubernetes*
+
+Cass-Operator has major features for datacenter provisioning and operations and has Apache Cassandra’s best practices baked into the automations:
+
+* *Bootstraps nodes appropriately* - this feature is important because when Cassandra starts up it needs to start the initial seeds first, in each rack, in a uniform manner.
+* *Scales up and scales down clusters gracefully* - nodes are intelligently scaled up and down one at a time across racks so that replicas of data are uniformly distributed.
+* *Automated node recovery processes* - basic operations such as restart, replace node, or replace an instance are all automated.
+* *Basic topology* - this feature makes multi-DC / multi-rack clusters fairly easy to create.
+* *Advanced topology* - Advanced networking at the Kubernetes layer makes multi-region / multi-K8s clusters possible with CNIs such as Cilium or externally via traditional networking tools.
+* *Customizable containers* - applying containerization best practice, this enables human operators to merge containers they have built with what’s offered in the cass-operator so that they don’t have to deal with secrets/volumes.
+
+.An Apache Cassandra Cluster managed by Cass Operator in Kubernetes across different workers with StatefulSets managing the pods running Cassandra
+image::blog/apache-cassandra-cluster-on-kubernetes.png[Apache Cassandra Cluster on Kubernetes]
+
+=== Cass-Operator Differentiators
+
+Cass-Operator has many general features that distinguish it even before it is merged with the powerful features that CassKop will supply:
+
+* The operator leverages a number of existing open source tools in the OSS ecosystem and commercial components that have been open-sourced to avoid issues with vendor lock-in:
+* Open-sourced Cass Config Builder extracted from DataStax OpsCenter Life Cycle Manager.
+* Open-sourced Management API for Apache Cassandra (MAAC).
+* Open-sourced Metrics Collector for Apache Cassandra (MCAC).
+* Open-sourced SRE tools such as Prometheus and Grafana Operator.
+* PodTemplateSpec enables operators to super-customize existing pods.
+* Cass-Operator implements advanced networking and manages the node ports and host networks.
+* Management API mTLS support provides simple security.
+* Automated generation of keystore and truststore for internode and client to node TLS.
+* Automated superuser account configuration according to best practices.
+* NetworkTopologyStrategy is automatically applied with appropriate replication factor (RF) for system keyspaces.
+* Webhook validation ensures that invalid changes are rejected with a helpful message.
+* Rolling cluster updates which allow for changes related to a change in binary (C* upgrade), a change in configuration, and canary deployments - single rack application of changes for validation before broader deployment.
+* Operator certification and thorough testing on several platforms, including Azure AKS, Amazon EKS, Google GKE, Red Hat OpenShift, and VMWare Tanzu Kubernetes.
+* Well documented cloud storage classes, ingress solutions and reference Implementations with an example application using the Java driver.
+* Super-useful cluster-level stop / resume, which stops all running instances while keeping persistent storage. This feature allows for scaling compute down to zero, and bringing the cluster back up follows the expected Cassandra startup processes.
+
+=== CassKop operator features that are being merged
+
+There are features in the CassKop operator, open-sourced by Orange Telecom, which are being merged/committed into the CassOperator project:
+
+* Node labeling to map any internal architecture, including network-specific labels to help with multi-datacenter setup.
+* Volumes and sidecar management (which could be linked to PodTemplateSpec).
+* Backup & Restore (Note: the CassKop project ruled out using https://velero.io/[Velero,window=_blank], and used https://github.com/instaclustr/esop[Instaclustr esop,window=_blank] but https://github.com/thelastpickle/cassandra-medusa[Medusa,window=_blank] could work too).
+* Kubectl plugin integration, which is useful on the ops side without an admin UI.
+* MultiCassKop evolution to drive multiple Cass-Operators clusters instead of multiple CassKops clusters (Note: This may remain Orange internal if too specific)
+
+As you can see, there’s a lot of great things being developed for the Apache Cassandra project so that relates well with the Kubernetes world. We’ll also have a roadmap post soon. Join us for the next Cassandra Kubernetes SIG meeting or say hi on the https://the-asf.slack.com/[Apache Software Foundation’s Slack team,window=_blank] by joining the https://app.slack.com/client/T4S1WH2J3/C014SSUAL9E[#cassandra-kubernetes,window=_blank] channel.
+
+Join the https://cwiki.apache.org/confluence/display/CASSANDRA/Cassandra+Kubernetes+SIG[biweekly meetings,window=_blank] to stay informed.
+
+This article originally was posted to Container Journal in April 2021. Reposted with permission. Please see the original article here: https://containerjournal.com/topics/cassandra-kubernetes-sig-picks-cass-operator-for-k8s/[https://containerjournal.com/topics/cassandra-kubernetes-sig-picks-cass-operator-for-k8s/,window=_blank]

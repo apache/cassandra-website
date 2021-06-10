@@ -1,0 +1,23 @@
+= Upgrade Advisory: 3.0.23, 3.0.24, 3.11.9, 3.11.10 Can Potentially Corrupt Data During Schema Changes
+:page-layout: single-post
+:page-role: blog-post
+:page-post-date: August 18, 2021
+:page-post-author: Jordan West
+:description: The Apache Cassandra Community
+:keywords: 
+
+We are advising users of Apache Cassandra 3.023, 3.0.24, 3.11.9 and 3.11.10 to upgrade, because of the potential for data corruption during schema changes, details are below:
+
+The bug reported in https://issues.apache.org/jira/browse/CASSANDRA-16735[CASSANDRA-16735,window=_blank] was known to cause corruption thought to be recoverable but can, in fact, induce *non-recoverable* corruption in some partitions. If you are not yet on 3.0.23, 3.0.24, 3.11.9, or 3.11.10, it is recommended, now that the Cassandra community has released 3.0.25 and 3.11.11, to skip directly from 3.0.22 to 3.0.25 or from 3.11.8 to 3.11.11. For those already on the affected versions, an immediate upgrade to 3.0.25 or 3.11.11 is recommended and all schema changes should be stopped until the upgrade is complete.
+
+While the issue has been known for some time, the severity of the issue was not well understood. This understanding has improved and with that we are suggesting the above actions for all users.
+
+The issue was introduced by a fix for https://issues.apache.org/jira/browse/CASSANDRA-15899[CASSANDRA-15899,window=_blank] which affected all versions up to and including 3.0.22 and 3.11.8. The fix for CASSANDRA-16735 was to revert the patch made in CASSANDRA-15899 meaning clusters will continue to be susceptible to this transient issue.
+
+In summary:
+
+* 3.0.22 and before/3.11.8 and before - susceptible to CASSANDRA-15899 which carries considerably less risk relative to CASSANDRA-16735.
+
+* 3.0.23, 3.0.24, 3.11.9, 3.11.10 - has the CASSANDRA-15899 patch that introduces the bug reported in CASSANDRA-16735. This makes Cassandra susceptible to non-recoverable corruption and should be upgraded immediately.
+
+* 3.0.25, 3.11.11 - has CASSANDRA-15899 patch reverted by patch in CASSANDRA-16735 -- no longer susceptible to unrecoverable corruption but continues to be susceptible to CASSANDRA-15899.
