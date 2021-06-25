@@ -1,0 +1,708 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Audit Logging &mdash; Apache Cassandra Documentation v4.1</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/extra.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Full Query Logging (FQL)" href="fqllogging.html" />
+    <link rel="prev" title="Virtual Tables" href="virtualtables.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apache Cassandra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">New Features in Apache Cassandra 4.0</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="java11.html">Support for Java 11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="virtualtables.html">Virtual Tables</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Audit Logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-does-audit-logging-log">What does Audit Logging Log?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-audit-logging-does-not-log">What Audit Logging does not Log?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#limitations">Limitations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#audit-logging-is-flexible-and-configurable">Audit Logging is Flexible and Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-audit-logging">Configuring Audit Logging</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#enabling-audit-logging">Enabling Audit Logging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setting-the-logger">Setting the Logger</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setting-the-audit-logs-directory">Setting the Audit Logs Directory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setting-keyspaces-to-audit">Setting Keyspaces to Audit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setting-categories-to-audit">Setting Categories to Audit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setting-users-to-audit">Setting Users to Audit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setting-the-roll-frequency">Setting the Roll Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setting-archiving-options">Setting Archiving Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#other-settings">Other Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-fileauditlogger">Configuring FileAuditLogger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-nodetool-to-enable-audit-logging">Using Nodetool to Enable Audit Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#viewing-the-audit-logs">Viewing the Audit Logs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#an-audit-logging-demo">An Audit Logging Demo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#diagnostic-events-for-user-audit-logging">Diagnostic events for user audit logging</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fqllogging.html">Full Query Logging (FQL)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="messaging.html">Improved Internode Messaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streaming.html">Improved Streaming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transientreplication.html">Transient Replication</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">New Features in Apache Cassandra 4.0</a> &raquo;</li>
+        
+      <li>Audit Logging</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/new/auditlogging.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="audit-logging">
+<h1>Audit Logging<a class="headerlink" href="#audit-logging" title="Permalink to this headline">¶</a></h1>
+<p>Audit Logging is a new feature in Apache Cassandra 4.0 (<a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-12151">CASSANDRA-12151</a>). All database activity is logged to a directory in the local filesystem and the audit log files are rolled periodically. All database operations are monitored and recorded.  Audit logs are stored in local directory files instead of the database itself as it provides several benefits, some of which are:</p>
+<ul class="simple">
+<li><p>No additional database capacity is needed to store audit logs</p></li>
+<li><p>No query tool is required while storing the audit logs in the database would require a query tool</p></li>
+<li><p>Latency of database operations is not affected; no performance impact</p></li>
+<li><p>It is easier to implement file based logging than database based logging</p></li>
+</ul>
+<div class="section" id="what-does-audit-logging-log">
+<h2>What does Audit Logging Log?<a class="headerlink" href="#what-does-audit-logging-log" title="Permalink to this headline">¶</a></h2>
+<p>Audit logging logs:</p>
+<ol class="arabic simple">
+<li><p>All authentication which includes successful and failed login attempts</p></li>
+<li><p>All database command requests to CQL. Both failed and successful CQL is logged</p></li>
+</ol>
+<p>More specifically an audit log entry could be one of two types:</p>
+<ol class="loweralpha simple">
+<li><p>CQL Audit Log Entry Type or</p></li>
+<li><p>Common Audit Log Entry Type</p></li>
+</ol>
+<p>Each of these types comprises of several database operations. The CQL Audit Log Entry Type could be one of the following; the category of the CQL audit log entry type is listed in parentheses.</p>
+<ol class="arabic simple">
+<li><p>SELECT(QUERY),</p></li>
+<li><p>UPDATE(DML),</p></li>
+<li><p>DELETE(DML),</p></li>
+<li><p>TRUNCATE(DDL),</p></li>
+<li><p>CREATE_KEYSPACE(DDL),</p></li>
+<li><p>ALTER_KEYSPACE(DDL),</p></li>
+<li><p>DROP_KEYSPACE(DDL),</p></li>
+<li><p>CREATE_TABLE(DDL),</p></li>
+<li><p>DROP_TABLE(DDL),</p></li>
+<li><p>PREPARE_STATEMENT(PREPARE),</p></li>
+<li><p>DROP_TRIGGER(DDL),</p></li>
+<li><p>LIST_USERS(DCL),</p></li>
+<li><p>CREATE_INDEX(DDL),</p></li>
+<li><p>DROP_INDEX(DDL),</p></li>
+<li><p>GRANT(DCL),</p></li>
+<li><p>REVOKE(DCL),</p></li>
+<li><p>CREATE_TYPE(DDL),</p></li>
+<li><p>DROP_AGGREGATE(DDL),</p></li>
+<li><p>ALTER_VIEW(DDL),</p></li>
+<li><p>CREATE_VIEW(DDL),</p></li>
+<li><p>DROP_ROLE(DCL),</p></li>
+<li><p>CREATE_FUNCTION(DDL),</p></li>
+<li><p>ALTER_TABLE(DDL),</p></li>
+<li><p>BATCH(DML),</p></li>
+<li><p>CREATE_AGGREGATE(DDL),</p></li>
+<li><p>DROP_VIEW(DDL),</p></li>
+<li><p>DROP_TYPE(DDL),</p></li>
+<li><p>DROP_FUNCTION(DDL),</p></li>
+<li><p>ALTER_ROLE(DCL),</p></li>
+<li><p>CREATE_TRIGGER(DDL),</p></li>
+<li><p>LIST_ROLES(DCL),</p></li>
+<li><p>LIST_PERMISSIONS(DCL),</p></li>
+<li><p>ALTER_TYPE(DDL),</p></li>
+<li><p>CREATE_ROLE(DCL),</p></li>
+<li><p>USE_KEYSPACE (OTHER).</p></li>
+</ol>
+<p>The Common Audit Log Entry Type could be one of the following; the category of the Common audit log entry type is listed in parentheses.</p>
+<ol class="arabic simple">
+<li><p>REQUEST_FAILURE(ERROR),</p></li>
+<li><p>LOGIN_ERROR(AUTH),</p></li>
+<li><p>UNAUTHORIZED_ATTEMPT(AUTH),</p></li>
+<li><p>LOGIN_SUCCESS (AUTH).</p></li>
+</ol>
+</div>
+<div class="section" id="what-audit-logging-does-not-log">
+<h2>What Audit Logging does not Log?<a class="headerlink" href="#what-audit-logging-does-not-log" title="Permalink to this headline">¶</a></h2>
+<p>Audit logging does not log:</p>
+<ol class="arabic simple">
+<li><p>Configuration changes made in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code></p></li>
+<li><p>Nodetool Commands</p></li>
+</ol>
+<p>3. Passwords mentioned as part of DCL statements. Instead everything after the appearance of the word password in DCL
+statements is obfuscated as <strong>***</strong> as well as in failed to parse statements.</p>
+</div>
+<div class="section" id="limitations">
+<h2>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h2>
+<p>Executing prepared statements will log the query as provided by the client in the prepare call, along with the execution
+timestamp and all other attributes (see below). Actual values bound for prepared statement execution will not show up
+in the audit log.</p>
+</div>
+<div class="section" id="audit-logging-is-flexible-and-configurable">
+<h2>Audit Logging is Flexible and Configurable<a class="headerlink" href="#audit-logging-is-flexible-and-configurable" title="Permalink to this headline">¶</a></h2>
+<p>Audit logging is flexible and configurable in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> as follows:</p>
+<ul class="simple">
+<li><p>Keyspaces and tables to be monitored and audited may be specified.</p></li>
+<li><p>Users to be included/excluded may be specified. By default all users are audit logged.</p></li>
+<li><p>Categories of operations to audit or exclude may be specified.</p></li>
+<li><p>The frequency at which to roll the log files may be specified. Default frequency is hourly.</p></li>
+</ul>
+</div>
+<div class="section" id="configuring-audit-logging">
+<h2>Configuring Audit Logging<a class="headerlink" href="#configuring-audit-logging" title="Permalink to this headline">¶</a></h2>
+<p>Audit Logging is configured on each node separately. Audit Logging is configured in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> in the <code class="docutils literal notranslate"><span class="pre">audit_logging_options</span></code> setting.
+The settings may be same/different on each node.</p>
+<div class="section" id="enabling-audit-logging">
+<h3>Enabling Audit Logging<a class="headerlink" href="#enabling-audit-logging" title="Permalink to this headline">¶</a></h3>
+<p>Audit logging is enabled by setting the <code class="docutils literal notranslate"><span class="pre">enabled</span></code>  option to <code class="docutils literal notranslate"><span class="pre">true</span></code> in the <code class="docutils literal notranslate"><span class="pre">audit_logging_options</span></code> setting.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">audit_logging_options</span><span class="p">:</span>
+   <span class="n">enabled</span><span class="p">:</span> <span class="n">true</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-the-logger">
+<h3>Setting the Logger<a class="headerlink" href="#setting-the-logger" title="Permalink to this headline">¶</a></h3>
+<p>The audit logger is set with the <code class="docutils literal notranslate"><span class="pre">logger</span></code> option.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">logger</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">class_name</span><span class="p">:</span> <span class="n">BinAuditLogger</span>
+</pre></div>
+</div>
+<p>Two types of audit loggers are supported: <code class="docutils literal notranslate"><span class="pre">FileAuditLogger</span></code> and <code class="docutils literal notranslate"><span class="pre">BinAuditLogger</span></code>.
+<code class="docutils literal notranslate"><span class="pre">BinAuditLogger</span></code> is the default setting.  The <code class="docutils literal notranslate"><span class="pre">BinAuditLogger</span></code> is an efficient way to log events to file in a binary format.</p>
+<p><code class="docutils literal notranslate"><span class="pre">FileAuditLogger</span></code> is synchronous, file-based audit logger; just uses the standard logging mechanism. <code class="docutils literal notranslate"><span class="pre">FileAuditLogger</span></code> logs events to <code class="docutils literal notranslate"><span class="pre">audit/audit.log</span></code> file using <code class="docutils literal notranslate"><span class="pre">slf4j</span></code> logger.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">NoOpAuditLogger</span></code> is a No-Op implementation of the audit logger to be used as a default audit logger when audit logging is disabled.</p>
+<p><em>Recommendation</em> <code class="docutils literal notranslate"><span class="pre">BinAuditLogger</span></code> is a community recommended logger considering the performance.</p>
+<p>It is possible to configure your custom logger implementation by injecting a map of property keys and their respective values. Default <cite>IAuditLogger</cite>
+implementations shipped with Cassandra do not react on these properties but your custom logger might. They would be present as
+a parameter of logger constructor (as <cite>Map&lt;String, String&gt;</cite>). In <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> file, you may configure it like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">logger</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">class_name</span><span class="p">:</span> <span class="n">MyCustomAuditLogger</span>
+  <span class="n">parameters</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">key1</span><span class="p">:</span> <span class="n">value1</span>
+    <span class="n">key2</span><span class="p">:</span> <span class="n">value2</span>
+</pre></div>
+</div>
+<p>When it comes to configuring these parameters, you can use respective <code class="docutils literal notranslate"><span class="pre">enableAuditLog</span></code> method in <code class="docutils literal notranslate"><span class="pre">StorageServiceMBean</span></code>.
+There are two methods of same name with different signatures. The first one does not accept a map where your parameters would be. This method
+is used primarily e.g. from JConsole or similar tooling. JConsole can not accept a map to be sent over JMX so in order to be able to enable it
+from there, even without any parameters, use this method. <code class="docutils literal notranslate"><span class="pre">BinAuditLogger</span></code> does not need any parameters to run with so invoking this method is fine.
+The second one does accept a map with your custom parameters so you can pass them programmatically. <code class="docutils literal notranslate"><span class="pre">enableauditlog</span></code> command of <code class="docutils literal notranslate"><span class="pre">nodetool</span></code> uses
+the first <code class="docutils literal notranslate"><span class="pre">enableAuditLog</span></code> method mentioned. Hence, currently, there is not a way how to pass parameters to your custom audit logger from <code class="docutils literal notranslate"><span class="pre">nodetool</span></code>.</p>
+</div>
+<div class="section" id="setting-the-audit-logs-directory">
+<h3>Setting the Audit Logs Directory<a class="headerlink" href="#setting-the-audit-logs-directory" title="Permalink to this headline">¶</a></h3>
+<p>The audit logs directory is set with the <code class="docutils literal notranslate"><span class="pre">audit_logs_dir</span></code> option. A new directory is not created automatically and an existing directory must be set. Audit Logs directory can be configured using <code class="docutils literal notranslate"><span class="pre">cassandra.logdir.audit</span></code> system property or default is set to <code class="docutils literal notranslate"><span class="pre">cassandra.logdir</span> <span class="pre">+</span> <span class="pre">/audit/</span></code>. A user created directory may be set. As an example, create a directory for the audit logs and set its permissions.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo mkdir –p  /cassandra/audit/logs/hourly
+sudo chmod -R 777 /cassandra/audit/logs/hourly
+</pre></div>
+</div>
+<p>Set the directory for the audit logs directory using the <code class="docutils literal notranslate"><span class="pre">audit_logs_dir</span></code> option.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">audit_logs_dir</span><span class="p">:</span> <span class="s2">&quot;/cassandra/audit/logs/hourly&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-keyspaces-to-audit">
+<h3>Setting Keyspaces to Audit<a class="headerlink" href="#setting-keyspaces-to-audit" title="Permalink to this headline">¶</a></h3>
+<p>Set  the keyspaces to include with the <code class="docutils literal notranslate"><span class="pre">included_keyspaces</span></code> option and the keyspaces to exclude with the <code class="docutils literal notranslate"><span class="pre">excluded_keyspaces</span></code> option.  By default all keyspaces are included. By default, <code class="docutils literal notranslate"><span class="pre">system</span></code>, <code class="docutils literal notranslate"><span class="pre">system_schema</span></code> and <code class="docutils literal notranslate"><span class="pre">system_virtual_schema</span></code> are excluded.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># included_keyspaces:</span>
+<span class="c1"># excluded_keyspaces: system, system_schema, system_virtual_schema</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-categories-to-audit">
+<h3>Setting Categories to Audit<a class="headerlink" href="#setting-categories-to-audit" title="Permalink to this headline">¶</a></h3>
+<p>The categories of database operations to be included are specified with the <code class="docutils literal notranslate"><span class="pre">included_categories</span></code>  option as a comma separated list.  By default all supported categories are included. The categories of database operations to be excluded are specified with <code class="docutils literal notranslate"><span class="pre">excluded_categories</span></code>  option as a comma separated list.  By default no category is excluded.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># included_categories:</span>
+<span class="c1"># excluded_categories:</span>
+</pre></div>
+</div>
+<p>The supported categories for audit log are:</p>
+<ol class="arabic simple">
+<li><p>QUERY</p></li>
+<li><p>DML</p></li>
+<li><p>DDL</p></li>
+<li><p>DCL</p></li>
+<li><p>OTHER</p></li>
+<li><p>AUTH</p></li>
+<li><p>ERROR</p></li>
+<li><p>PREPARE</p></li>
+</ol>
+</div>
+<div class="section" id="setting-users-to-audit">
+<h3>Setting Users to Audit<a class="headerlink" href="#setting-users-to-audit" title="Permalink to this headline">¶</a></h3>
+<p>Users to audit log are set with the <code class="docutils literal notranslate"><span class="pre">included_users</span></code> and  <code class="docutils literal notranslate"><span class="pre">excluded_users</span></code>  options.  The <code class="docutils literal notranslate"><span class="pre">included_users</span></code> option specifies a comma separated list of users to include explicitly and by default all users are included. The <code class="docutils literal notranslate"><span class="pre">excluded_users</span></code> option specifies a comma separated list of  users to exclude explicitly and by default no user is excluded.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># included_users:</span>
+<span class="c1"># excluded_users:</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-the-roll-frequency">
+<h3>Setting the Roll Frequency<a class="headerlink" href="#setting-the-roll-frequency" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">roll_cycle</span></code> option sets the frequency at which the audit log file is rolled. Supported values are <code class="docutils literal notranslate"><span class="pre">MINUTELY</span></code>, <code class="docutils literal notranslate"><span class="pre">HOURLY</span></code>, and <code class="docutils literal notranslate"><span class="pre">DAILY</span></code>. Default value is <code class="docutils literal notranslate"><span class="pre">HOURLY</span></code>, which implies that after every hour a new audit log file is created.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">roll_cycle</span><span class="p">:</span> <span class="n">HOURLY</span>
+</pre></div>
+</div>
+<p>An audit log file could get rolled for other reasons as well such as a log file reaches the configured size threshold.</p>
+</div>
+<div class="section" id="setting-archiving-options">
+<h3>Setting Archiving Options<a class="headerlink" href="#setting-archiving-options" title="Permalink to this headline">¶</a></h3>
+<p>The archiving options are for archiving the rolled audit logs. The <code class="docutils literal notranslate"><span class="pre">archive</span></code> command to use is set with the <code class="docutils literal notranslate"><span class="pre">archive_command</span></code> option and the <code class="docutils literal notranslate"><span class="pre">max_archive_retries</span></code> sets the maximum # of tries of failed archive commands.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># archive_command:</span>
+<span class="c1"># max_archive_retries: 10</span>
+</pre></div>
+</div>
+<p>Default archive command is <code class="docutils literal notranslate"><span class="pre">&quot;/path/to/script.sh</span> <span class="pre">%path&quot;</span></code> where <code class="docutils literal notranslate"><span class="pre">%path</span></code> is replaced with the file being rolled:</p>
+</div>
+<div class="section" id="other-settings">
+<h3>Other Settings<a class="headerlink" href="#other-settings" title="Permalink to this headline">¶</a></h3>
+<p>The other audit logs settings are as follows.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># block: true</span>
+<span class="c1"># max_queue_weight: 268435456 # 256 MiB</span>
+<span class="c1"># max_log_size: 17179869184 # 16 GiB</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">block</span></code> option specifies whether the audit logging should block if the logging falls behind or should drop log records.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">max_queue_weight</span></code> option sets the maximum weight of in memory queue for records waiting to be written to the file before blocking or dropping.</p>
+<p>The  <code class="docutils literal notranslate"><span class="pre">max_log_size</span></code> option sets the maximum size of the rolled files to retain on disk before deleting the oldest.</p>
+</div>
+</div>
+<div class="section" id="configuring-fileauditlogger">
+<h2>Configuring FileAuditLogger<a class="headerlink" href="#configuring-fileauditlogger" title="Permalink to this headline">¶</a></h2>
+<p>To use <code class="docutils literal notranslate"><span class="pre">FileAuditLogger</span></code> as a logger in AuditLogging, apart from setting the class name in cassandra.yaml, below
+configuration is needed (the code is already provided for your convenience in a comment in logback.xml) to have the audit
+log events to flow through separate audit log file instead of system.log.</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!-- Audit Logging (FileAuditLogger) rolling file appender to audit.log --&gt;</span>
+<span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;AUDIT&quot;</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;file&gt;</span>${cassandra.logdir}/audit/audit.log<span class="nt">&lt;/file&gt;</span>
+  <span class="nt">&lt;rollingPolicy</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy&quot;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- rollover daily --&gt;</span>
+    <span class="nt">&lt;fileNamePattern&gt;</span>${cassandra.logdir}/audit/audit.log.%d{yyyy-MM-dd}.%i.zip<span class="nt">&lt;/fileNamePattern&gt;</span>
+    <span class="c">&lt;!-- each file should be at most 50MB, keep 30 days worth of history, but at most 5GB --&gt;</span>
+    <span class="nt">&lt;maxFileSize&gt;</span>50MB<span class="nt">&lt;/maxFileSize&gt;</span>
+    <span class="nt">&lt;maxHistory&gt;</span>30<span class="nt">&lt;/maxHistory&gt;</span>
+    <span class="nt">&lt;totalSizeCap&gt;</span>5GB<span class="nt">&lt;/totalSizeCap&gt;</span>
+  <span class="nt">&lt;/rollingPolicy&gt;</span>
+  <span class="nt">&lt;encoder&gt;</span>
+    <span class="nt">&lt;pattern&gt;</span>%-5level [%thread] %date{ISO8601} %F:%L - %msg%n<span class="nt">&lt;/pattern&gt;</span>
+  <span class="nt">&lt;/encoder&gt;</span>
+<span class="nt">&lt;/appender&gt;</span>
+
+<span class="c">&lt;!-- Audit Logging additivity to redirect audt logging events to audit/audit.log --&gt;</span>
+<span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">&quot;org.apache.cassandra.audit&quot;</span> <span class="na">additivity=</span><span class="s">&quot;false&quot;</span> <span class="na">level=</span><span class="s">&quot;INFO&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">&quot;AUDIT&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/logger&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-nodetool-to-enable-audit-logging">
+<h2>Using Nodetool to Enable Audit Logging<a class="headerlink" href="#using-nodetool-to-enable-audit-logging" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">nodetool</span>&#160; <span class="pre">enableauditlog</span></code>  command may be used to enable audit logs and it overrides the settings in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code>.  The <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">enableauditlog</span></code> command syntax is as follows.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nodetool</span> <span class="p">[(</span><span class="o">-</span><span class="n">h</span> <span class="o">&lt;</span><span class="n">host</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">host</span> <span class="o">&lt;</span><span class="n">host</span><span class="o">&gt;</span><span class="p">)]</span> <span class="p">[(</span><span class="o">-</span><span class="n">p</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">port</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;</span><span class="p">)]</span>
+        <span class="p">[(</span><span class="o">-</span><span class="n">pp</span> <span class="o">|</span> <span class="o">--</span><span class="nb">print</span><span class="o">-</span><span class="n">port</span><span class="p">)]</span> <span class="p">[(</span><span class="o">-</span><span class="n">pw</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">password</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span><span class="p">)]</span>
+        <span class="p">[(</span><span class="o">-</span><span class="n">pwf</span> <span class="o">&lt;</span><span class="n">passwordFilePath</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">password</span><span class="o">-</span><span class="n">file</span> <span class="o">&lt;</span><span class="n">passwordFilePath</span><span class="o">&gt;</span><span class="p">)]</span>
+        <span class="p">[(</span><span class="o">-</span><span class="n">u</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">username</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span><span class="p">)]</span> <span class="n">enableauditlog</span>
+        <span class="p">[</span><span class="o">--</span><span class="n">excluded</span><span class="o">-</span><span class="n">categories</span> <span class="o">&lt;</span><span class="n">excluded_categories</span><span class="o">&gt;</span><span class="p">]</span>
+        <span class="p">[</span><span class="o">--</span><span class="n">excluded</span><span class="o">-</span><span class="n">keyspaces</span> <span class="o">&lt;</span><span class="n">excluded_keyspaces</span><span class="o">&gt;</span><span class="p">]</span>
+        <span class="p">[</span><span class="o">--</span><span class="n">excluded</span><span class="o">-</span><span class="n">users</span> <span class="o">&lt;</span><span class="n">excluded_users</span><span class="o">&gt;</span><span class="p">]</span>
+        <span class="p">[</span><span class="o">--</span><span class="n">included</span><span class="o">-</span><span class="n">categories</span> <span class="o">&lt;</span><span class="n">included_categories</span><span class="o">&gt;</span><span class="p">]</span>
+        <span class="p">[</span><span class="o">--</span><span class="n">included</span><span class="o">-</span><span class="n">keyspaces</span> <span class="o">&lt;</span><span class="n">included_keyspaces</span><span class="o">&gt;</span><span class="p">]</span>
+        <span class="p">[</span><span class="o">--</span><span class="n">included</span><span class="o">-</span><span class="n">users</span> <span class="o">&lt;</span><span class="n">included_users</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">logger</span> <span class="o">&lt;</span><span class="n">logger</span><span class="o">&gt;</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl>
+<dt>OPTIONS</dt><dd><dl class="option-list">
+<dt><kbd><span class="option">--excluded-categories <var>&lt;excluded_categories&gt;</var></span></kbd></dt>
+<dd><p>Comma separated list of Audit Log Categories to be excluded for
+audit log. If not set the value from cassandra.yaml will be used</p>
+</dd>
+<dt><kbd><span class="option">--excluded-keyspaces <var>&lt;excluded_keyspaces&gt;</var></span></kbd></dt>
+<dd><p>Comma separated list of keyspaces to be excluded for audit log. If
+not set the value from cassandra.yaml will be used</p>
+</dd>
+<dt><kbd><span class="option">--excluded-users <var>&lt;excluded_users&gt;</var></span></kbd></dt>
+<dd><p>Comma separated list of users to be excluded for audit log. If not
+set the value from cassandra.yaml will be used</p>
+</dd>
+<dt><kbd><span class="option">-h <var>&lt;host&gt;</var></span>, <span class="option">--host <var>&lt;host&gt;</var></span></kbd></dt>
+<dd><p>Node hostname or ip address</p>
+</dd>
+<dt><kbd><span class="option">--included-categories <var>&lt;included_categories&gt;</var></span></kbd></dt>
+<dd><p>Comma separated list of Audit Log Categories to be included for
+audit log. If not set the value from cassandra.yaml will be used</p>
+</dd>
+<dt><kbd><span class="option">--included-keyspaces <var>&lt;included_keyspaces&gt;</var></span></kbd></dt>
+<dd><p>Comma separated list of keyspaces to be included for audit log. If
+not set the value from cassandra.yaml will be used</p>
+</dd>
+<dt><kbd><span class="option">--included-users <var>&lt;included_users&gt;</var></span></kbd></dt>
+<dd><p>Comma separated list of users to be included for audit log. If not
+set the value from cassandra.yaml will be used</p>
+</dd>
+<dt><kbd><span class="option">--logger <var>&lt;logger&gt;</var></span></kbd></dt>
+<dd><p>Logger name to be used for AuditLogging. Default BinAuditLogger. If
+not set the value from cassandra.yaml will be used</p>
+</dd>
+<dt><kbd><span class="option">-p <var>&lt;port&gt;</var></span>, <span class="option">--port <var>&lt;port&gt;</var></span></kbd></dt>
+<dd><p>Remote jmx agent port number</p>
+</dd>
+<dt><kbd><span class="option">-p<var>p</var></span>, <span class="option">--print-port</span></kbd></dt>
+<dd><p>Operate in 4.0 mode with hosts disambiguated by port number</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>-pw &lt;password&gt;, –password &lt;password&gt;</dt><dd><p>Remote jmx agent password</p>
+</dd>
+<dt>-pwf &lt;passwordFilePath&gt;, –password-file &lt;passwordFilePath&gt;</dt><dd><p>Path to the JMX password file</p>
+</dd>
+</dl>
+<dl class="option-list">
+<dt><kbd><span class="option">-u <var>&lt;username&gt;</var></span>, <span class="option">--username <var>&lt;username&gt;</var></span></kbd></dt>
+<dd><p>Remote jmx agent username</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>The <code class="docutils literal notranslate"><span class="pre">nodetool</span>&#160; <span class="pre">enableauditlog</span></code>  command can be used to reload auditlog filters when called with default or
+previous <code class="docutils literal notranslate"><span class="pre">loggername</span></code> and updated filters</p>
+<p>E.g.,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nodetool</span> <span class="n">enableauditlog</span> <span class="o">--</span><span class="n">loggername</span> <span class="o">&lt;</span><span class="n">Default</span><span class="o">/</span> <span class="n">existing</span> <span class="n">loggerName</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">included</span><span class="o">-</span><span class="n">keyspaces</span> <span class="o">&lt;</span><span class="n">New</span> <span class="n">Filter</span> <span class="n">values</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">disableauditlog</span></code> command disables audit log. The command syntax is as follows.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nodetool</span> <span class="p">[(</span><span class="o">-</span><span class="n">h</span> <span class="o">&lt;</span><span class="n">host</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">host</span> <span class="o">&lt;</span><span class="n">host</span><span class="o">&gt;</span><span class="p">)]</span> <span class="p">[(</span><span class="o">-</span><span class="n">p</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">port</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;</span><span class="p">)]</span>
+        <span class="p">[(</span><span class="o">-</span><span class="n">pp</span> <span class="o">|</span> <span class="o">--</span><span class="nb">print</span><span class="o">-</span><span class="n">port</span><span class="p">)]</span> <span class="p">[(</span><span class="o">-</span><span class="n">pw</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">password</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span><span class="p">)]</span>
+        <span class="p">[(</span><span class="o">-</span><span class="n">pwf</span> <span class="o">&lt;</span><span class="n">passwordFilePath</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">password</span><span class="o">-</span><span class="n">file</span> <span class="o">&lt;</span><span class="n">passwordFilePath</span><span class="o">&gt;</span><span class="p">)]</span>
+        <span class="p">[(</span><span class="o">-</span><span class="n">u</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">--</span><span class="n">username</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span><span class="p">)]</span> <span class="n">disableauditlog</span>
+</pre></div>
+</div>
+<dl>
+<dt>OPTIONS</dt><dd><dl class="option-list">
+<dt><kbd><span class="option">-h <var>&lt;host&gt;</var></span>, <span class="option">--host <var>&lt;host&gt;</var></span></kbd></dt>
+<dd><p>Node hostname or ip address</p>
+</dd>
+<dt><kbd><span class="option">-p <var>&lt;port&gt;</var></span>, <span class="option">--port <var>&lt;port&gt;</var></span></kbd></dt>
+<dd><p>Remote jmx agent port number</p>
+</dd>
+<dt><kbd><span class="option">-p<var>p</var></span>, <span class="option">--print-port</span></kbd></dt>
+<dd><p>Operate in 4.0 mode with hosts disambiguated by port number</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>-pw &lt;password&gt;, –password &lt;password&gt;</dt><dd><p>Remote jmx agent password</p>
+</dd>
+<dt>-pwf &lt;passwordFilePath&gt;, –password-file &lt;passwordFilePath&gt;</dt><dd><p>Path to the JMX password file</p>
+</dd>
+</dl>
+<dl class="option-list">
+<dt><kbd><span class="option">-u <var>&lt;username&gt;</var></span>, <span class="option">--username <var>&lt;username&gt;</var></span></kbd></dt>
+<dd><p>Remote jmx agent username</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="viewing-the-audit-logs">
+<h2>Viewing the Audit Logs<a class="headerlink" href="#viewing-the-audit-logs" title="Permalink to this headline">¶</a></h2>
+<p>An audit log event comprises of a keyspace that is being audited, the operation that is being logged, the scope and the user. An audit log entry comprises of the following attributes concatenated with a “|”.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span> <span class="p">(</span><span class="n">AuditLogEntryType</span><span class="p">):</span> <span class="n">Type</span> <span class="n">of</span> <span class="n">request</span>
+<span class="n">source</span> <span class="p">(</span><span class="n">InetAddressAndPort</span><span class="p">):</span> <span class="n">Source</span> <span class="n">IP</span> <span class="n">Address</span> <span class="kn">from</span> <span class="nn">which</span> <span class="n">request</span> <span class="n">originated</span>
+<span class="n">user</span> <span class="p">(</span><span class="n">String</span><span class="p">):</span> <span class="n">User</span> <span class="n">name</span>
+<span class="n">timestamp</span> <span class="p">(</span><span class="n">long</span> <span class="p">):</span> <span class="n">Timestamp</span> <span class="n">of</span> <span class="n">the</span> <span class="n">request</span>
+<span class="n">batch</span> <span class="p">(</span><span class="n">UUID</span><span class="p">):</span> <span class="n">Batch</span> <span class="n">of</span> <span class="n">request</span>
+<span class="n">keyspace</span> <span class="p">(</span><span class="n">String</span><span class="p">):</span> <span class="n">Keyspace</span> <span class="n">on</span> <span class="n">which</span> <span class="n">request</span> <span class="ow">is</span> <span class="n">made</span>
+<span class="n">scope</span> <span class="p">(</span><span class="n">String</span><span class="p">):</span> <span class="n">Scope</span> <span class="n">of</span> <span class="n">request</span> <span class="n">such</span> <span class="k">as</span> <span class="n">Table</span><span class="o">/</span><span class="n">Function</span><span class="o">/</span><span class="n">Aggregate</span> <span class="n">name</span>
+<span class="n">operation</span> <span class="p">(</span><span class="n">String</span><span class="p">):</span> <span class="n">Database</span> <span class="n">operation</span> <span class="n">such</span> <span class="k">as</span> <span class="n">CQL</span> <span class="n">command</span>
+<span class="n">options</span> <span class="p">(</span><span class="n">QueryOptions</span><span class="p">):</span> <span class="n">CQL</span> <span class="n">Query</span> <span class="n">options</span>
+<span class="n">state</span> <span class="p">(</span><span class="n">QueryState</span><span class="p">):</span> <span class="n">State</span> <span class="n">related</span> <span class="n">to</span> <span class="n">a</span> <span class="n">given</span> <span class="n">query</span>
+</pre></div>
+</div>
+<p>Some of these attributes may not be applicable to a given request and not all of these options must be set.</p>
+</div>
+<div class="section" id="an-audit-logging-demo">
+<h2>An Audit Logging Demo<a class="headerlink" href="#an-audit-logging-demo" title="Permalink to this headline">¶</a></h2>
+<p>To demonstrate audit logging enable and configure audit logs with following settings.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">audit_logging_options</span><span class="p">:</span>
+   <span class="n">enabled</span><span class="p">:</span> <span class="n">true</span>
+   <span class="n">logger</span><span class="p">:</span>
+   <span class="o">-</span> <span class="n">class_name</span><span class="p">:</span> <span class="n">BinAuditLogger</span>
+   <span class="n">audit_logs_dir</span><span class="p">:</span> <span class="s2">&quot;/cassandra/audit/logs/hourly&quot;</span>
+   <span class="c1"># included_keyspaces:</span>
+   <span class="c1"># excluded_keyspaces: system, system_schema, system_virtual_schema</span>
+   <span class="c1"># included_categories:</span>
+   <span class="c1"># excluded_categories:</span>
+   <span class="c1"># included_users:</span>
+   <span class="c1"># excluded_users:</span>
+   <span class="n">roll_cycle</span><span class="p">:</span> <span class="n">HOURLY</span>
+   <span class="c1"># block: true</span>
+   <span class="c1"># max_queue_weight: 268435456 # 256 MiB</span>
+   <span class="c1"># max_log_size: 17179869184 # 16 GiB</span>
+   <span class="c1">## archive command is &quot;/path/to/script.sh %path&quot; where %path is replaced with the file being rolled:</span>
+   <span class="c1"># archive_command:</span>
+   <span class="c1"># max_archive_retries: 10</span>
+</pre></div>
+</div>
+<p>Create the audit log directory <code class="docutils literal notranslate"><span class="pre">/cassandra/audit/logs/hourly</span></code> and set its permissions as discussed earlier. Run some CQL commands such as create a keyspace, create a table and query a table. Any supported CQL commands may be run as discussed in section <strong>What does Audit Logging Log?</strong>.  Change directory (with <code class="docutils literal notranslate"><span class="pre">cd</span></code> command) to the audit logs directory.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">audit</span><span class="o">/</span><span class="n">logs</span><span class="o">/</span><span class="n">hourly</span>
+</pre></div>
+</div>
+<p>List the files/directories and some <code class="docutils literal notranslate"><span class="pre">.cq4</span></code> files should get listed. These are the audit logs files.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 hourly]$ ls -l
+total 28
+-rw-rw-r--. 1 ec2-user ec2-user 83886080 Aug  2 03:01 20190802-02.cq4
+-rw-rw-r--. 1 ec2-user ec2-user 83886080 Aug  2 03:01 20190802-03.cq4
+-rw-rw-r--. 1 ec2-user ec2-user    65536 Aug  2 03:01 metadata.cq4t
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">auditlogviewer</span></code> tool is used to dump audit logs. Run the <code class="docutils literal notranslate"><span class="pre">auditlogviewer</span></code> tool. Audit log files directory path is a required argument. The output should be similar to the following output.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[ec2-user@ip-10-0-2-238 hourly]$ auditlogviewer /cassandra/audit/logs/hourly
+Type: audit
+ LogMessage:
+ user:anonymous|host:10.0.2.238:7000|source:/127.0.0.1|port:46264|timestamp:1564711427328|type:USE_KEYSPACE|category:OTHER|ks:auditlogkeyspace|operation:USE AuditLogKeyspace;
+ Type: audit
+ LogMessage:
+ user:anonymous|host:10.0.2.238:7000|source:/127.0.0.1|port:46264|timestamp:1564711427329|type:USE_KEYSPACE|category:OTHER|ks:auditlogkeyspace|operation:USE &quot;auditlogkeyspace&quot;
+ Type: audit
+ LogMessage:
+ user:anonymous|host:10.0.2.238:7000|source:/127.0.0.1|port:46264|timestamp:1564711446279|type:SELECT|category:QUERY|ks:auditlogkeyspace|scope:t|operation:SELECT * FROM t;
+ Type: audit
+ LogMessage:
+ user:anonymous|host:10.0.2.238:7000|source:/127.0.0.1|port:46264|timestamp:1564713878834|type:DROP_TABLE|category:DDL|ks:auditlogkeyspace|scope:t|operation:DROP TABLE IF EXISTS
+ AuditLogKeyspace.t;
+ Type: audit
+ LogMessage: user:anonymous|host:10.0.2.238:7000|source:/3.91.56.164|port:42382|timestamp:1564714618360|type:REQUEST_FAILURE|category:ERROR|operation:CREATE KEYSPACE AuditLogKeyspace WITH replication = {&#39;class&#39;: &#39;SimpleStrategy&#39;, &#39;replication_factor&#39; : 1};; Cannot add existing keyspace &quot;auditlogkeyspace&quot;
+ Type: audit
+ LogMessage:
+ user:anonymous|host:10.0.2.238:7000|source:/127.0.0.1|port:46264|timestamp:1564714690968|type:DROP_KEYSPACE|category:DDL|ks:auditlogkeyspace|operation:DROP KEYSPACE AuditLogKeyspace;
+ Type: audit
+ LogMessage:
+ user:anonymous|host:10.0.2.238:7000|source:/3.91.56.164|port:42406|timestamp:1564714708329|type:CREATE_KEYSPACE|category:DDL|ks:auditlogkeyspace|operation:CREATE KEYSPACE AuditLogKeyspace WITH replication = {&#39;class&#39;: &#39;SimpleStrategy&#39;, &#39;replication_factor&#39; : 1};
+ Type: audit
+ LogMessage:
+ user:anonymous|host:10.0.2.238:7000|source:/127.0.0.1|port:46264|timestamp:1564714870678|type:USE_KEYSPACE|category:OTHER|ks:auditlogkeyspace|operation:USE auditlogkeyspace;
+ Type: audit
+ LogMessage: user:cassandra|host:localhost/127.0.0.1:7000|source:/127.0.0.1|port:65282|timestamp:1622630496708|type:CREATE_ROLE|category:DCL|operation:CREATE ROLE role1 WITH PASSWORD*******;
+ Type: audit
+ LogMessage: user:cassandra|host:localhost/127.0.0.1:7000|source:/127.0.0.1|port:65282|timestamp:1622630634552|type:ALTER_ROLE|category:DCL|operation:ATLER ROLE role1 WITH PASSWORD*******;
+ Type: audit
+ LogMessage: user:cassandra|host:localhost/127.0.0.1:7000|source:/127.0.0.1|port:65282|timestamp:1622630698686|type:CREATE_ROLE|category:DCL|operation:CREATE USER user1 WITH PASSWORD*******;
+ Type: audit
+ LogMessage: user:cassandra|host:localhost/127.0.0.1:7000|source:/127.0.0.1|port:65282|timestamp:1622630747344|type:ALTER_ROLE|category:DCL|operation:ALTER USER user1 WITH PASSWORD*******;
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">auditlogviewer</span></code> tool usage syntax is as follows.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">auditlogviewer</span>
+<span class="n">Audit</span> <span class="n">log</span> <span class="n">files</span> <span class="n">directory</span> <span class="n">path</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">required</span> <span class="n">argument</span><span class="o">.</span>
+<span class="n">usage</span><span class="p">:</span> <span class="n">auditlogviewer</span> <span class="o">&lt;</span><span class="n">path1</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">path2</span><span class="o">&gt;...&lt;</span><span class="n">pathN</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="n">options</span><span class="p">]</span>
+<span class="o">--</span>
+<span class="n">View</span> <span class="n">the</span> <span class="n">audit</span> <span class="n">log</span> <span class="n">contents</span> <span class="ow">in</span> <span class="n">human</span> <span class="n">readable</span> <span class="nb">format</span>
+<span class="o">--</span>
+<span class="n">Options</span> <span class="n">are</span><span class="p">:</span>
+<span class="o">-</span><span class="n">f</span><span class="p">,</span><span class="o">--</span><span class="n">follow</span>       <span class="n">Upon</span> <span class="n">reaching</span> <span class="n">the</span> <span class="n">end</span> <span class="n">of</span> <span class="n">the</span> <span class="n">log</span> <span class="k">continue</span> <span class="n">indefinitely</span>
+                  <span class="n">waiting</span> <span class="k">for</span> <span class="n">more</span> <span class="n">records</span>
+<span class="o">-</span><span class="n">h</span><span class="p">,</span><span class="o">--</span><span class="n">help</span>         <span class="n">display</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span>
+<span class="o">-</span><span class="n">r</span><span class="p">,</span><span class="o">--</span><span class="n">roll_cycle</span>   <span class="n">How</span> <span class="n">often</span> <span class="n">to</span> <span class="n">roll</span> <span class="n">the</span> <span class="n">log</span> <span class="n">file</span> <span class="n">was</span> <span class="n">rolled</span><span class="o">.</span> <span class="n">May</span> <span class="n">be</span>
+                  <span class="n">necessary</span> <span class="k">for</span> <span class="n">Chronicle</span> <span class="n">to</span> <span class="n">correctly</span> <span class="n">parse</span> <span class="n">file</span> <span class="n">names</span><span class="o">.</span> <span class="p">(</span><span class="n">MINUTELY</span><span class="p">,</span> <span class="n">HOURLY</span><span class="p">,</span>
+                  <span class="n">DAILY</span><span class="p">)</span><span class="o">.</span> <span class="n">Default</span> <span class="n">HOURLY</span><span class="o">.</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="diagnostic-events-for-user-audit-logging">
+<h2>Diagnostic events for user audit logging<a class="headerlink" href="#diagnostic-events-for-user-audit-logging" title="Permalink to this headline">¶</a></h2>
+<p>Any native transport enabled client is able to subscribe to diagnostic events that are raised around authentication and CQL operations. These events can then be consumed and used by external tools to implement a Cassandra user auditing solution.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="fqllogging.html" class="btn btn-neutral float-right" title="Full Query Logging (FQL)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="virtualtables.html" class="btn btn-neutral float-left" title="Virtual Tables" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, The Apache Cassandra team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

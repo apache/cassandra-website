@@ -1,0 +1,294 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Configuring Cassandra &mdash; Apache Cassandra Documentation v4.1</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/extra.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Inserting and querying" href="querying.html" />
+    <link rel="prev" title="Installing Cassandra" href="installing.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apache Cassandra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Getting Started</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="installing.html">Installing Cassandra</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Configuring Cassandra</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#main-runtime-properties">Main runtime properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#changing-the-location-of-directories">Changing the location of directories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#environment-variables">Environment variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#logging">Logging</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="querying.html">Inserting and querying</a></li>
+<li class="toctree-l2"><a class="reference internal" href="drivers.html">Client drivers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="production.html">Production Recommendations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Getting Started</a> &raquo;</li>
+        
+      <li>Configuring Cassandra</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/getting_started/configuring.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="configuring-cassandra">
+<h1>Configuring Cassandra<a class="headerlink" href="#configuring-cassandra" title="Permalink to this headline">¶</a></h1>
+<p>The <span class="xref std std-term">Cassandra</span> configuration files location varies, depending on the type of installation:</p>
+<ul class="simple">
+<li><p>tarball: <code class="docutils literal notranslate"><span class="pre">conf</span></code> directory within the tarball install location</p></li>
+<li><p>package: <code class="docutils literal notranslate"><span class="pre">/etc/cassandra</span></code> directory</p></li>
+</ul>
+<p>Cassandra’s default configuration file, <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code>, is sufficient to explore a simple single-node <span class="xref std std-term">cluster</span>.
+However, anything beyond running a single-node cluster locally requires additional configuration to various Cassandra configuration files.
+Some examples that require non-default configuration are deploying a multi-node cluster or using clients that are not running on a cluster node.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code>: the main configuration file for Cassandra</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cassandra-env.sh</span></code>:  environment variables can be set</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cassandra-rackdc.properties</span></code> OR <code class="docutils literal notranslate"><span class="pre">cassandra-topology.properties</span></code>: set rack and datacenter information for a cluster</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">logback.xml</span></code>: logging configuration including logging levels</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">jvm-*</span></code>: a number of JVM configuration files for both the server and clients</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">commitlog_archiving.properties</span></code>: set archiving parameters for the <span class="xref std std-term">commitlog</span></p></li>
+</ul>
+<p>Two sample configuration files can also be found in <code class="docutils literal notranslate"><span class="pre">./conf</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">metrics-reporter-config-sample.yaml</span></code>: configuring what the metrics-report will collect</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cqlshrc.sample</span></code>: how the CQL shell, cqlsh, can be configured</p></li>
+</ul>
+<div class="section" id="main-runtime-properties">
+<h2>Main runtime properties<a class="headerlink" href="#main-runtime-properties" title="Permalink to this headline">¶</a></h2>
+<p>Configuring Cassandra is done by setting yaml properties in the <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> file. At a minimum you
+should consider setting the following properties:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cluster_name</span></code>: Set the name of your cluster.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seeds</span></code>: A comma separated list of the IP addresses of your cluster <span class="xref std std-term">seed nodes</span>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">storage_port</span></code>: Check that you don’t have the default port of 7000 blocked by a firewall.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">listen_address</span></code>: The <span class="xref std std-term">listen address</span> is the IP address of a node that allows it to communicate with other nodes in the cluster. Set to <cite>localhost</cite> by default. Alternatively, you can set <code class="docutils literal notranslate"><span class="pre">listen_interface</span></code> to tell Cassandra which interface to use, and consecutively which address to use. Set one property, not both.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">native_transport_port</span></code>: Check that you don’t have the default port of 9042 blocked by a firewall, so that clients like cqlsh can communicate with Cassandra on this port.</p></li>
+</ul>
+</div>
+<div class="section" id="changing-the-location-of-directories">
+<h2>Changing the location of directories<a class="headerlink" href="#changing-the-location-of-directories" title="Permalink to this headline">¶</a></h2>
+<p>The following yaml properties control the location of directories:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">data_file_directories</span></code>: One or more directories where data files, like <span class="xref std std-term">SSTables</span> are located.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">commitlog_directory</span></code>: The directory where commitlog files are located.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">saved_caches_directory</span></code>: The directory where saved caches are located.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hints_directory</span></code>: The directory where <span class="xref std std-term">hints</span> are located.</p></li>
+</ul>
+<p>For performance reasons, if you have multiple disks, consider putting commitlog and data files on different disks.</p>
+</div>
+<div class="section" id="environment-variables">
+<h2>Environment variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h2>
+<p>JVM-level settings such as heap size can be set in <code class="docutils literal notranslate"><span class="pre">cassandra-env.sh</span></code>.  You can add any additional JVM command line
+argument to the <code class="docutils literal notranslate"><span class="pre">JVM_OPTS</span></code> environment variable; when Cassandra starts, these arguments will be passed to the JVM.</p>
+</div>
+<div class="section" id="logging">
+<h2>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h2>
+<p>The default logger is <cite>logback</cite>. By default it will log:</p>
+<ul class="simple">
+<li><p><strong>INFO</strong> level in <code class="docutils literal notranslate"><span class="pre">system.log</span></code></p></li>
+<li><p><strong>DEBUG</strong> level in <code class="docutils literal notranslate"><span class="pre">debug.log</span></code></p></li>
+</ul>
+<p>When running in the foreground, it will also log at INFO level to the console. You can change logging properties by editing <code class="docutils literal notranslate"><span class="pre">logback.xml</span></code> or by running the <cite>nodetool setlogginglevel</cite> command.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="querying.html" class="btn btn-neutral float-right" title="Inserting and querying" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installing.html" class="btn btn-neutral float-left" title="Installing Cassandra" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, The Apache Cassandra team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

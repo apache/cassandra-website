@@ -1,0 +1,424 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Storage Engine &mdash; Apache Cassandra Documentation v4.1</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/extra.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Guarantees" href="guarantees.html" />
+    <link rel="prev" title="Dynamo" href="dynamo.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apache Cassandra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Architecture</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dynamo.html">Dynamo</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Storage Engine</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#commitlog">CommitLog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#memtables">Memtables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sstables">SSTables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sstable-versions">SSTable Versions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#version-0">Version 0</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#version-1">Version 1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#version-2">Version 2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#version-3">Version 3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-code">Example Code</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="guarantees.html">Guarantees</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Architecture</a> &raquo;</li>
+        
+      <li>Storage Engine</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/architecture/storage_engine.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="storage-engine">
+<h1>Storage Engine<a class="headerlink" href="#storage-engine" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="commitlog">
+<span id="commit-log"></span><h2>CommitLog<a class="headerlink" href="#commitlog" title="Permalink to this headline">¶</a></h2>
+<p>Commitlogs are an append only log of all mutations local to a Cassandra node. Any data written to Cassandra will first be written to a commit log before being written to a memtable. This provides durability in the case of unexpected shutdown. On startup, any mutations in the commit log will be applied to memtables.</p>
+<p>All mutations write optimized by storing in commitlog segments, reducing the number of seeks needed to write to disk. Commitlog Segments are limited by the “commitlog_segment_size_in_mb” option, once the size is reached, a new commitlog segment is created. Commitlog segments can be archived, deleted, or recycled once all its data has been flushed to SSTables.  Commitlog segments are truncated when Cassandra has written data older than a certain point to the SSTables. Running “nodetool drain” before stopping Cassandra will write everything in the memtables to SSTables and remove the need to sync with the commitlogs on startup.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">commitlog_segment_size_in_mb</span></code>: The default size is 32, which is almost always fine, but if you are archiving commitlog segments (see commitlog_archiving.properties), then you probably want a finer granularity of archiving; 8 or 16 MB is reasonable. Max mutation size is also configurable via max_mutation_size_in_kb setting in cassandra.yaml. The default is half the size commitlog_segment_size_in_mb * 1024.</p></li>
+</ul>
+<p><strong>*NOTE: If max_mutation_size_in_kb is set explicitly then commitlog_segment_size_in_mb must be set to at least twice the size of max_mutation_size_in_kb / 1024*</strong></p>
+<p><em>Default Value:</em> 32</p>
+<p>Commitlogs are an append only log of all mutations local to a Cassandra node. Any data written to Cassandra will first be written to a commit log before being written to a memtable. This provides durability in the case of unexpected shutdown. On startup, any mutations in the commit log will be applied.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">commitlog_sync</span></code>: may be either “periodic” or “batch.”</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">batch</span></code>: In batch mode, Cassandra won’t ack writes until the commit log has been fsynced to disk. It will wait “commitlog_sync_batch_window_in_ms” milliseconds between fsyncs. This window should be kept short because the writer threads will be unable to do extra work while waiting. You may need to increase concurrent_writes for the same reason.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">commitlog_sync_batch_window_in_ms</span></code>: Time to wait between “batch” fsyncs</p></li>
+</ul>
+<p><em>Default Value:</em> 2</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">periodic</span></code>: In periodic mode, writes are immediately ack’ed, and the CommitLog is simply synced every “commitlog_sync_period_in_ms” milliseconds.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">commitlog_sync_period_in_ms</span></code>: Time to wait between “periodic” fsyncs</p></li>
+</ul>
+<p><em>Default Value:</em> 10000</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><em>Default Value:</em> periodic</p>
+<p><strong>* NOTE: In the event of an unexpected shutdown, Cassandra can lose up to the sync period or more if the sync is delayed. If using “batch” mode, it is recommended to store commitlogs in a separate, dedicated device.</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">commitlog_directory</span></code>: This option is commented out by default When running on magnetic HDD, this should be a separate spindle than the data directories. If not set, the default directory is $CASSANDRA_HOME/data/commitlog.</p></li>
+</ul>
+<p><em>Default Value:</em> /var/lib/cassandra/commitlog</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">commitlog_compression</span></code>: Compression to apply to the commitlog. If omitted, the commit log will be written uncompressed. LZ4, Snappy, Deflate and Zstd compressors are supported.</p></li>
+</ul>
+<p>(Default Value: (complex option):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#   - class_name: LZ4Compressor</span>
+<span class="c1">#     parameters:</span>
+<span class="c1">#         -</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">commitlog_total_space_in_mb</span></code>: Total space to use for commit logs on disk.</p></li>
+</ul>
+<p>If space gets above this value, Cassandra will flush every dirty CF in the oldest segment and remove it. So a small total commitlog space will tend to cause more flush activity on less-active columnfamilies.</p>
+<p>The default value is the smaller of 8192, and 1/4 of the total space of the commitlog volume.</p>
+<p><em>Default Value:</em> 8192</p>
+</div>
+<div class="section" id="memtables">
+<span id="id1"></span><h2>Memtables<a class="headerlink" href="#memtables" title="Permalink to this headline">¶</a></h2>
+<p>Memtables are in-memory structures where Cassandra buffers writes.  In general, there is one active memtable per table.
+Eventually, memtables are flushed onto disk and become immutable <a class="reference internal" href="#sstables">SSTables</a>.  This can be triggered in several
+ways:</p>
+<ul class="simple">
+<li><p>The memory usage of the memtables exceeds the configured threshold  (see <code class="docutils literal notranslate"><span class="pre">memtable_cleanup_threshold</span></code>)</p></li>
+<li><p>The <a class="reference internal" href="#commit-log"><span class="std std-ref">CommitLog</span></a> approaches its maximum size, and forces memtable flushes in order to allow commitlog segments to
+be freed</p></li>
+</ul>
+<p>Memtables may be stored entirely on-heap or partially off-heap, depending on <code class="docutils literal notranslate"><span class="pre">memtable_allocation_type</span></code>.</p>
+</div>
+<div class="section" id="sstables">
+<h2>SSTables<a class="headerlink" href="#sstables" title="Permalink to this headline">¶</a></h2>
+<p>SSTables are the immutable data files that Cassandra uses for persisting data on disk.</p>
+<p>As SSTables are flushed to disk from <a class="reference internal" href="#memtables"><span class="std std-ref">Memtables</span></a> or are streamed from other nodes, Cassandra triggers compactions
+which combine multiple SSTables into one.  Once the new SSTable has been written, the old SSTables can be removed.</p>
+<p>Each SSTable is comprised of multiple components stored in separate files:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Data.db</span></code></dt><dd><p>The actual data, i.e. the contents of rows.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Index.db</span></code></dt><dd><p>An index from partition keys to positions in the <code class="docutils literal notranslate"><span class="pre">Data.db</span></code> file.  For wide partitions, this may also include an
+index to rows within a partition.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Summary.db</span></code></dt><dd><p>A sampling of (by default) every 128th entry in the <code class="docutils literal notranslate"><span class="pre">Index.db</span></code> file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Filter.db</span></code></dt><dd><p>A Bloom Filter of the partition keys in the SSTable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CompressionInfo.db</span></code></dt><dd><p>Metadata about the offsets and lengths of compression chunks in the <code class="docutils literal notranslate"><span class="pre">Data.db</span></code> file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Statistics.db</span></code></dt><dd><p>Stores metadata about the SSTable, including information about timestamps, tombstones, clustering keys, compaction,
+repair, compression, TTLs, and more.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Digest.crc32</span></code></dt><dd><p>A CRC-32 digest of the <code class="docutils literal notranslate"><span class="pre">Data.db</span></code> file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">TOC.txt</span></code></dt><dd><p>A plain text list of the component files for the SSTable.</p>
+</dd>
+</dl>
+<p>Within the <code class="docutils literal notranslate"><span class="pre">Data.db</span></code> file, rows are organized by partition.  These partitions are sorted in token order (i.e. by a
+hash of the partition key when the default partitioner, <code class="docutils literal notranslate"><span class="pre">Murmur3Partition</span></code>, is used).  Within a partition, rows are
+stored in the order of their clustering keys.</p>
+<p>SSTables can be optionally compressed using block-based compression.</p>
+</div>
+<div class="section" id="sstable-versions">
+<h2>SSTable Versions<a class="headerlink" href="#sstable-versions" title="Permalink to this headline">¶</a></h2>
+<p>This section was created using the following
+<a class="reference external" href="https://gist.github.com/shyamsalimkumar/49a61e5bc6f403d20c55">gist</a>
+which utilized this original
+<a class="reference external" href="http://www.bajb.net/2013/03/cassandra-sstable-format-version-numbers/">source</a>.</p>
+<p>The version numbers, to date are:</p>
+<div class="section" id="version-0">
+<h3>Version 0<a class="headerlink" href="#version-0" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>b (0.7.0): added version to sstable filenames</p></li>
+<li><p>c (0.7.0): bloom filter component computes hashes over raw key bytes instead of strings</p></li>
+<li><p>d (0.7.0): row size in data component becomes a long instead of int</p></li>
+<li><p>e (0.7.0): stores undecorated keys in data and index components</p></li>
+<li><p>f (0.7.0): switched bloom filter implementations in data component</p></li>
+<li><p>g (0.8): tracks flushed-at context in metadata component</p></li>
+</ul>
+</div>
+<div class="section" id="version-1">
+<h3>Version 1<a class="headerlink" href="#version-1" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>h (1.0): tracks max client timestamp in metadata component</p></li>
+<li><p>hb (1.0.3): records compression ration in metadata component</p></li>
+<li><p>hc (1.0.4): records partitioner in metadata component</p></li>
+<li><p>hd (1.0.10): includes row tombstones in maxtimestamp</p></li>
+<li><p>he (1.1.3): includes ancestors generation in metadata component</p></li>
+<li><p>hf (1.1.6): marker that replay position corresponds to 1.1.5+ millis-based id (see CASSANDRA-4782)</p></li>
+<li><p>ia (1.2.0):</p>
+<ul>
+<li><p>column indexes are promoted to the index file</p></li>
+<li><p>records estimated histogram of deletion times in tombstones</p></li>
+<li><p>bloom filter (keys and columns) upgraded to Murmur3</p></li>
+</ul>
+</li>
+<li><p>ib (1.2.1): tracks min client timestamp in metadata component</p></li>
+<li><p>ic (1.2.5): omits per-row bloom filter of column names</p></li>
+</ul>
+</div>
+<div class="section" id="version-2">
+<h3>Version 2<a class="headerlink" href="#version-2" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>ja (2.0.0):</p>
+<ul>
+<li><p>super columns are serialized as composites (note that there is no real format change, this is mostly a marker to know if we should expect super columns or not. We do need a major version bump however, because we should not allow streaming of super columns into this new format)</p></li>
+<li><p>tracks max local deletiontime in sstable metadata</p></li>
+<li><p>records bloom_filter_fp_chance in metadata component</p></li>
+<li><p>remove data size and column count from data file (CASSANDRA-4180)</p></li>
+<li><p>tracks max/min column values (according to comparator)</p></li>
+</ul>
+</li>
+<li><p>jb (2.0.1):</p>
+<ul>
+<li><p>switch from crc32 to adler32 for compression checksums</p></li>
+<li><p>checksum the compressed data</p></li>
+</ul>
+</li>
+<li><p>ka (2.1.0):</p>
+<ul>
+<li><p>new Statistics.db file format</p></li>
+<li><p>index summaries can be downsampled and the sampling level is persisted</p></li>
+<li><p>switch uncompressed checksums to adler32</p></li>
+<li><p>tracks presense of legacy (local and remote) counter shards</p></li>
+</ul>
+</li>
+<li><p>la (2.2.0): new file name format</p></li>
+<li><p>lb (2.2.7): commit log lower bound included</p></li>
+</ul>
+</div>
+<div class="section" id="version-3">
+<h3>Version 3<a class="headerlink" href="#version-3" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>ma (3.0.0):</p>
+<ul>
+<li><p>swap bf hash order</p></li>
+<li><p>store rows natively</p></li>
+</ul>
+</li>
+<li><p>mb (3.0.7, 3.7): commit log lower bound included</p></li>
+<li><p>mc (3.0.8, 3.9): commit log intervals included</p></li>
+</ul>
+</div>
+<div class="section" id="example-code">
+<h3>Example Code<a class="headerlink" href="#example-code" title="Permalink to this headline">¶</a></h3>
+<p>The following example is useful for finding all sstables that do not match the “ib” SSTable version</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>find /var/lib/cassandra/data/ -type f <span class="p">|</span> grep -v -- -ib- <span class="p">|</span> grep -v <span class="s2">&quot;/snapshots&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="guarantees.html" class="btn btn-neutral float-right" title="Guarantees" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="dynamo.html" class="btn btn-neutral float-left" title="Dynamo" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, The Apache Cassandra team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

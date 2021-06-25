@@ -1,42 +1,40 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8">
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>Materialized Views &mdash; Apache Cassandra Documentation v4.0-rc2</title>
   
 
   
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/extra.css" type="text/css" />
-
+  
   
   
 
   
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/extra.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Security" href="security.html" />
@@ -81,7 +79,6 @@
           
         </div>
 
-        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -137,7 +134,6 @@
             
           
         </div>
-        
       </div>
     </nav>
 
@@ -172,13 +168,11 @@
 
 
 
-
-
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><a href="../index.html">Docs</a> &raquo;</li>
         
           <li><a href="index.html">The Cassandra Query Language (CQL)</a> &raquo;</li>
         
@@ -187,7 +181,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/cql/mvs.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -205,16 +199,16 @@
 <span id="id1"></span><h1>Materialized Views<a class="headerlink" href="#materialized-views" title="Permalink to this headline">¶</a></h1>
 <p>Materialized views names are defined by:</p>
 <pre>
-<strong id="grammar-token-view_name"><span id="grammar-token-view-name"></span>view_name</strong> ::=  re('[a-zA-Z_0-9]+')
+<strong id="grammar-token-view-name">view_name</strong> ::=  re('[a-zA-Z_0-9]+')
 </pre>
 <div class="section" id="create-materialized-view">
 <span id="create-materialized-view-statement"></span><h2>CREATE MATERIALIZED VIEW<a class="headerlink" href="#create-materialized-view" title="Permalink to this headline">¶</a></h2>
 <p>You can create a materialized view on a table using a <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">MATERIALIZED</span> <span class="pre">VIEW</span></code> statement:</p>
 <pre>
-<strong id="grammar-token-create_materialized_view_statement"><span id="grammar-token-create-materialized-view-statement"></span>create_materialized_view_statement</strong> ::=  CREATE MATERIALIZED VIEW [ IF NOT EXISTS ] <a class="reference internal" href="#grammar-token-view_name"><code class="xref docutils literal notranslate"><span class="pre">view_name</span></code></a> AS
-                                            <a class="reference internal" href="dml.html#grammar-token-select_statement"><code class="xref docutils literal notranslate"><span class="pre">select_statement</span></code></a>
-                                            PRIMARY KEY '(' <a class="reference internal" href="ddl.html#grammar-token-primary_key"><code class="xref docutils literal notranslate"><span class="pre">primary_key</span></code></a> ')'
-                                            WITH <a class="reference internal" href="ddl.html#grammar-token-table_options"><code class="xref docutils literal notranslate"><span class="pre">table_options</span></code></a>
+<strong id="grammar-token-create-materialized-view-statement">create_materialized_view_statement</strong> ::=  CREATE MATERIALIZED VIEW [ IF NOT EXISTS ] <a class="reference internal" href="#grammar-token-view-name"><code class="xref docutils literal notranslate"><span class="pre">view_name</span></code></a> AS
+                                            <a class="reference internal" href="dml.html#grammar-token-select-statement"><code class="xref docutils literal notranslate"><span class="pre">select_statement</span></code></a>
+                                            PRIMARY KEY '(' <a class="reference internal" href="ddl.html#grammar-token-primary-key"><code class="xref docutils literal notranslate"><span class="pre">primary_key</span></code></a> ')'
+                                            WITH <a class="reference internal" href="ddl.html#grammar-token-table-options"><code class="xref docutils literal notranslate"><span class="pre">table_options</span></code></a>
 </pre>
 <p>For instance:</p>
 <div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">MATERIALIZED</span> <span class="k">VIEW</span> <span class="n">monkeySpecies_by_population</span> <span class="k">AS</span>
@@ -254,7 +248,7 @@ however use <cite>*</cite> as a shortcut of selecting all columns. Further, <a c
 included in a materialized view (which means <code class="docutils literal notranslate"><span class="pre">SELECT</span> <span class="pre">*</span></code> isn’t allowed if the base table has static columns).</p></li>
 <li><p>the <code class="docutils literal notranslate"><span class="pre">WHERE</span></code> clause have the following restrictions:</p>
 <ul>
-<li><p>it cannot include any <a class="reference internal" href="definitions.html#grammar-token-bind_marker"><code class="xref std std-token docutils literal notranslate"><span class="pre">bind_marker</span></code></a>.</p></li>
+<li><p>it cannot include any <a class="reference internal" href="definitions.html#grammar-token-bind-marker"><code class="xref std std-token docutils literal notranslate"><span class="pre">bind_marker</span></code></a>.</p></li>
 <li><p>the columns that are not part of the <em>base table</em> primary key can only be restricted by an <code class="docutils literal notranslate"><span class="pre">IS</span> <span class="pre">NOT</span> <span class="pre">NULL</span></code>
 restriction. No other restriction is allowed.</p></li>
 <li><p>as the columns that are part of the <em>view</em> primary key cannot be null, they must always be at least restricted by a
@@ -317,7 +311,7 @@ creating a table</span></a>.</p>
 <span id="alter-materialized-view-statement"></span><h2>ALTER MATERIALIZED VIEW<a class="headerlink" href="#alter-materialized-view" title="Permalink to this headline">¶</a></h2>
 <p>After creation, you can alter the options of a materialized view using the <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">MATERIALIZED</span> <span class="pre">VIEW</span></code> statement:</p>
 <pre>
-<strong id="grammar-token-alter_materialized_view_statement"><span id="grammar-token-alter-materialized-view-statement"></span>alter_materialized_view_statement</strong> ::=  ALTER MATERIALIZED VIEW <a class="reference internal" href="#grammar-token-view_name"><code class="xref docutils literal notranslate"><span class="pre">view_name</span></code></a> WITH <a class="reference internal" href="ddl.html#grammar-token-table_options"><code class="xref docutils literal notranslate"><span class="pre">table_options</span></code></a>
+<strong id="grammar-token-alter-materialized-view-statement">alter_materialized_view_statement</strong> ::=  ALTER MATERIALIZED VIEW <a class="reference internal" href="#grammar-token-view-name"><code class="xref docutils literal notranslate"><span class="pre">view_name</span></code></a> WITH <a class="reference internal" href="ddl.html#grammar-token-table-options"><code class="xref docutils literal notranslate"><span class="pre">table_options</span></code></a>
 </pre>
 <p>The options that can be updated are the same than at creation time and thus the <a class="reference internal" href="ddl.html#create-table-options"><span class="std std-ref">same than for tables</span></a>.</p>
 </div>
@@ -325,7 +319,7 @@ creating a table</span></a>.</p>
 <span id="drop-materialized-view-statement"></span><h2>DROP MATERIALIZED VIEW<a class="headerlink" href="#drop-materialized-view" title="Permalink to this headline">¶</a></h2>
 <p>Dropping a materialized view users the <code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">MATERIALIZED</span> <span class="pre">VIEW</span></code> statement:</p>
 <pre>
-<strong id="grammar-token-drop_materialized_view_statement"><span id="grammar-token-drop-materialized-view-statement"></span>drop_materialized_view_statement</strong> ::=  DROP MATERIALIZED VIEW [ IF EXISTS ] <a class="reference internal" href="#grammar-token-view_name"><code class="xref docutils literal notranslate"><span class="pre">view_name</span></code></a>;
+<strong id="grammar-token-drop-materialized-view-statement">drop_materialized_view_statement</strong> ::=  DROP MATERIALIZED VIEW [ IF EXISTS ] <a class="reference internal" href="#grammar-token-view-name"><code class="xref docutils literal notranslate"><span class="pre">view_name</span></code></a>;
 </pre>
 <p>If the materialized view does not exists, the statement will return an error, unless <code class="docutils literal notranslate"><span class="pre">IF</span> <span class="pre">EXISTS</span></code> is used in which case
 the operation is a no-op.</p>
@@ -347,29 +341,29 @@ fixed on CASSANDRA-13826.</p>
            
           </div>
           <footer>
+  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="security.html" class="btn btn-neutral float-right" title="Security" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="indexes.html" class="btn btn-neutral float-left" title="Secondary Indexes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+      
+        <a href="security.html" class="btn btn-neutral float-right" title="Security" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="indexes.html" class="btn btn-neutral float-left" title="Secondary Indexes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
     </div>
+  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2020, The Apache Cassandra team.
+        &copy; Copyright 2020, The Apache Cassandra team
 
     </p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
+
         </div>
       </div>
 
@@ -377,6 +371,7 @@ fixed on CASSANDRA-13826.</p>
 
   </div>
   
+
 
   <script type="text/javascript">
       jQuery(function () {

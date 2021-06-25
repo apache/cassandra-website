@@ -1,0 +1,374 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Operating Cassandra &mdash; Apache Cassandra Documentation v4.1</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/extra.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Snitch" href="snitch.html" />
+    <link rel="prev" title="jvm-* files" href="../configuration/cass_jvm_options_file.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apache Cassandra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Operating Cassandra</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="snitch.html">Snitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topo_changes.html">Adding, replacing, moving and removing nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="repair.html">Repair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_repair.html">Read repair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hints.html">Hints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html">Compaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bloom_filters.html">Bloom Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compression.html">Compression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cdc.html">Change Data Capture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backups.html">Backups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bulk_loading.html">Bulk Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html">Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html">Hardware Choices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Operating Cassandra</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/operating/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="operating-cassandra">
+<h1>Operating Cassandra<a class="headerlink" href="#operating-cassandra" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="snitch.html">Snitch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="snitch.html#dynamic-snitching">Dynamic snitching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="snitch.html#snitch-classes">Snitch classes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="topo_changes.html">Adding, replacing, moving and removing nodes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="topo_changes.html#bootstrap">Bootstrap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topo_changes.html#removing-nodes">Removing nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topo_changes.html#moving-nodes">Moving nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topo_changes.html#replacing-a-dead-node">Replacing a dead node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topo_changes.html#monitoring-progress">Monitoring progress</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topo_changes.html#cleanup-data-after-range-movements">Cleanup data after range movements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="repair.html">Repair</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="repair.html#incremental-and-full-repairs">Incremental and Full Repairs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="repair.html#usage-and-best-practices">Usage and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="repair.html#other-options">Other Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="repair.html#full-repair-example">Full Repair Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="read_repair.html">Read repair</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="read_repair.html#expectation-of-monotonic-quorum-reads">Expectation of Monotonic Quorum Reads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_repair.html#table-level-configuration-of-monotonic-reads">Table level configuration of monotonic reads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_repair.html#read-repair-example">Read Repair Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_repair.html#read-consistency-level-and-read-repair">Read Consistency Level and Read Repair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_repair.html#improved-read-repair-blocking-behavior-in-cassandra-4-0">Improved Read Repair Blocking Behavior in Cassandra 4.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_repair.html#diagnostic-events-for-read-repairs">Diagnostic Events for Read Repairs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_repair.html#background-read-repair">Background Read Repair</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hints.html">Hints</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hints.html#hinted-handoff">Hinted Handoff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hints.html#configuring-hints">Configuring Hints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hints.html#configuring-hints-at-runtime-with-nodetool">Configuring Hints at Runtime with <code class="docutils literal notranslate"><span class="pre">nodetool</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hints.html#monitoring-hint-delivery">Monitoring Hint Delivery</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="compaction/index.html">Compaction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html#strategies">Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html#types-of-compaction">Types of compaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html#when-is-a-minor-compaction-triggered">When is a minor compaction triggered?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html#merging-sstables">Merging sstables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html#tombstones-and-garbage-collection-gc-grace">Tombstones and Garbage Collection (GC) Grace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html#ttl">TTL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html#fully-expired-sstables">Fully expired sstables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html#repaired-unrepaired-data">Repaired/unrepaired data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html#data-directories">Data directories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html#single-sstable-tombstone-compaction">Single sstable tombstone compaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html#common-options">Common options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html#compaction-nodetool-commands">Compaction nodetool commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html#switching-the-compaction-strategy-and-options-using-jmx">Switching the compaction strategy and options using JMX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html#more-detailed-compaction-logging">More detailed compaction logging</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bloom_filters.html">Bloom Filters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bloom_filters.html#changing">Changing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="compression.html">Compression</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="compression.html#configuring-compression">Configuring Compression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compression.html#benefits-and-uses">Benefits and Uses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compression.html#operational-impact">Operational Impact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compression.html#advanced-use">Advanced Use</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cdc.html">Change Data Capture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cdc.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cdc.html#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cdc.html#reading-commitlogsegments">Reading CommitLogSegments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cdc.html#warnings">Warnings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cdc.html#further-reading">Further Reading</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="backups.html">Backups</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="backups.html#types-of-backups">Types of Backups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backups.html#data-directory-structure">Data Directory Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backups.html#snapshots">Snapshots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backups.html#incremental-backups">Incremental Backups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backups.html#restoring-from-incremental-backups-and-snapshots">Restoring from  Incremental Backups and Snapshots</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bulk_loading.html">Bulk Loading</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bulk_loading.html#tools-for-bulk-loading">Tools for Bulk Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bulk_loading.html#using-sstableloader">Using sstableloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bulk_loading.html#using-nodetool-import">Using nodetool import</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bulk_loading.html#bulk-loading-external-data">Bulk Loading External Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">Monitoring</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#metric-types">Metric Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#table-metrics">Table Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#keyspace-metrics">Keyspace Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#threadpool-metrics">ThreadPool Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#client-request-metrics">Client Request Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#cache-metrics">Cache Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#cql-metrics">CQL Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#droppedmessage-metrics">DroppedMessage Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#streaming-metrics">Streaming Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#compaction-metrics">Compaction Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#commitlog-metrics">CommitLog Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#storage-metrics">Storage Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#hintsservice-metrics">HintsService Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#sstable-index-metrics">SSTable Index Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#bufferpool-metrics">BufferPool Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#client-metrics">Client Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#batch-metrics">Batch Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#read-repair-metrics">Read Repair Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#messaging-metrics">Messaging Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#internode-inbound-connection-metrics">Internode Inbound Connection Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#internode-outbound-connection-metrics">Internode Outbound Connection Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#jvm-metrics">JVM Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#jmx">JMX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#metric-reporters">Metric Reporters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="security.html#tls-ssl-encryption">TLS/SSL Encryption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#ssl-certificate-hot-reloading">SSL Certificate Hot Reloading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#roles">Roles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#authentication">Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#authorization">Authorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#caching">Caching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#jmx-access">JMX access</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware Choices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#cpu">CPU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#memory">Memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#disks">Disks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#common-cloud-choices">Common Cloud Choices</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="snitch.html" class="btn btn-neutral float-right" title="Snitch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../configuration/cass_jvm_options_file.html" class="btn btn-neutral float-left" title="jvm-* files" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, The Apache Cassandra team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

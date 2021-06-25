@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>commitlog_archiving.properties file &mdash; Apache Cassandra Documentation v4.1</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/extra.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="logback.xml file" href="cass_logback_xml_file.html" />
+    <link rel="prev" title="cassandra-topologies.properties file" href="cass_topo_file.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apache Cassandra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Configuring Cassandra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cass_yaml_file.html">cassandra.yaml file configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cass_rackdc_file.html">cassandra-rackdc.properties file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cass_env_sh_file.html">cassandra-env.sh file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cass_topo_file.html">cassandra-topologies.properties file</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">commitlog_archiving.properties file</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#options">Options</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#archive-command-command"><code class="docutils literal notranslate"><span class="pre">archive_command=&lt;command&gt;</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#restore-command-command"><code class="docutils literal notranslate"><span class="pre">restore_command=&lt;command&gt;</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#restore-directories-directory"><code class="docutils literal notranslate"><span class="pre">restore_directories=&lt;directory&gt;</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#restore-point-in-time-timestamp"><code class="docutils literal notranslate"><span class="pre">restore_point_in_time=&lt;timestamp&gt;</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#precision-timestamp-precision"><code class="docutils literal notranslate"><span class="pre">precision=&lt;timestamp_precision&gt;</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cass_logback_xml_file.html">logback.xml file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cass_jvm_options_file.html">jvm-* files</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Configuring Cassandra</a> &raquo;</li>
+        
+      <li>commitlog_archiving.properties file</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/configuration/cass_cl_archive_file.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="commitlog-archiving-properties-file">
+<span id="cassandra-cl-archive"></span><h1>commitlog_archiving.properties file<a class="headerlink" href="#commitlog-archiving-properties-file" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">commitlog_archiving.properties</span></code> configuration file can optionally set commands that are executed when archiving or restoring a commitlog segment.</p>
+<div class="section" id="options">
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="archive-command-command">
+<h3><code class="docutils literal notranslate"><span class="pre">archive_command=&lt;command&gt;</span></code><a class="headerlink" href="#archive-command-command" title="Permalink to this headline">¶</a></h3>
+<p>One command can be inserted with %path and %name arguments. %path is the fully qualified path of the commitlog segment to archive. %name is the filename of the commitlog. STDOUT, STDIN, or multiple commands cannot be executed. If multiple commands are required, add a pointer to a script in this option.</p>
+<p><strong>Example:</strong> archive_command=/bin/ln %path /backup/%name</p>
+<p><strong>Default value:</strong> blank</p>
+</div>
+<div class="section" id="restore-command-command">
+<h3><code class="docutils literal notranslate"><span class="pre">restore_command=&lt;command&gt;</span></code><a class="headerlink" href="#restore-command-command" title="Permalink to this headline">¶</a></h3>
+<p>One command can be inserted with %from and %to arguments. %from is the fully qualified path to an archived commitlog segment using the specified restore directories. %to defines the directory to the live commitlog location.</p>
+<p><strong>Example:</strong> restore_command=/bin/cp -f %from %to</p>
+<p><strong>Default value:</strong> blank</p>
+</div>
+<div class="section" id="restore-directories-directory">
+<h3><code class="docutils literal notranslate"><span class="pre">restore_directories=&lt;directory&gt;</span></code><a class="headerlink" href="#restore-directories-directory" title="Permalink to this headline">¶</a></h3>
+<p>Defines the directory to scan the recovery files into.</p>
+<p><strong>Default value:</strong> blank</p>
+</div>
+<div class="section" id="restore-point-in-time-timestamp">
+<h3><code class="docutils literal notranslate"><span class="pre">restore_point_in_time=&lt;timestamp&gt;</span></code><a class="headerlink" href="#restore-point-in-time-timestamp" title="Permalink to this headline">¶</a></h3>
+<p>Restore mutations created up to and including this timestamp in GMT in the format <code class="docutils literal notranslate"><span class="pre">yyyy:MM:dd</span> <span class="pre">HH:mm:ss</span></code>.  Recovery will continue through the segment when the first client-supplied timestamp greater than this time is encountered, but only mutations less than or equal to this timestamp will be applied.</p>
+<p><strong>Example:</strong> 2020:04:31 20:43:12</p>
+<p><strong>Default value:</strong> blank</p>
+</div>
+<div class="section" id="precision-timestamp-precision">
+<h3><code class="docutils literal notranslate"><span class="pre">precision=&lt;timestamp_precision&gt;</span></code><a class="headerlink" href="#precision-timestamp-precision" title="Permalink to this headline">¶</a></h3>
+<p>Precision of the timestamp used in the inserts. Choice is generally MILLISECONDS or MICROSECONDS</p>
+<p><strong>Default value:</strong> MICROSECONDS</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="cass_logback_xml_file.html" class="btn btn-neutral float-right" title="logback.xml file" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cass_topo_file.html" class="btn btn-neutral float-left" title="cassandra-topologies.properties file" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, The Apache Cassandra team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

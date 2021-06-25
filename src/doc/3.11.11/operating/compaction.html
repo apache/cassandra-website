@@ -1,61 +1,91 @@
----
-layout: docpage
 
-title: "Documentation"
 
-is_homepage: false
-is_sphinx_doc: true
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Compaction &mdash; Apache Cassandra Documentation v3.11.11</title>
+  
 
-doc-parent: "Operating Cassandra"
+  
+  
+  
+  
 
-doc-title: "Compaction"
-doc-header-links: '
-  <link rel="top" title="Apache Cassandra Documentation v3.11.11" href="../index.html"/>
-      <link rel="up" title="Operating Cassandra" href="index.html"/>
-      <link rel="next" title="Bloom Filters" href="bloom_filters.html"/>
-      <link rel="prev" title="Hints" href="hints.html"/>
-'
-doc-search-path: "../search.html"
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-extra-footer: '
-<script type="text/javascript">
-    var DOCUMENTATION_OPTIONS = {
-      URL_ROOT:    "",
-      VERSION:     "",
-      COLLAPSE_INDEX: false,
-      FILE_SUFFIX: ".html",
-      HAS_SOURCE:  false,
-      SOURCELINK_SUFFIX: ".txt"
-    };
-</script>
-'
+    
 
----
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-3">
-      <div class="doc-navigation">
-        <div class="doc-menu" role="navigation">
-          <div class="navbar-header">
-            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-          </div>
-          <div class="navbar-collapse collapse sidebar-navbar-collapse">
-            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
-              <div class="form-group">
-                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/extra.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Bloom Filters" href="bloom_filters.html" />
+    <link rel="prev" title="Hints" href="hints.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apache Cassandra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.11.11
               </div>
-            </form>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
             
             
+              
             
-            <ul class="current">
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
@@ -71,7 +101,13 @@ extra-footer: '
 <li class="toctree-l3"><a class="reference internal" href="#types-of-compaction">Types of compaction</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#when-is-a-minor-compaction-triggered">When is a minor compaction triggered?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#merging-sstables">Merging sstables</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#tombstones-and-garbage-collection-gc-grace">Tombstones and Garbage Collection (GC) Grace</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tombstones-and-garbage-collection-gc-grace">Tombstones and Garbage Collection (GC) Grace</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#why-tombstones">Why Tombstones</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#deletes-without-tombstones">Deletes without tombstones</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#deletes-with-tombstones">Deletes with Tombstones</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-gc-grace-seconds-parameter-and-tombstone-removal">The gc_grace_seconds parameter and Tombstone Removal</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#ttl">TTL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fully-expired-sstables">Fully expired sstables</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#repaired-unrepaired-data">Repaired/unrepaired data</a></li>
@@ -81,9 +117,25 @@ extra-footer: '
 <li class="toctree-l3"><a class="reference internal" href="#compaction-nodetool-commands">Compaction nodetool commands</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#switching-the-compaction-strategy-and-options-using-jmx">Switching the compaction strategy and options using JMX</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#more-detailed-compaction-logging">More detailed compaction logging</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#size-tiered-compaction-strategy">Size Tiered Compaction Strategy</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#leveled-compaction-strategy">Leveled Compaction Strategy</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#time-window-compactionstrategy">Time Window CompactionStrategy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#size-tiered-compaction-strategy">Size Tiered Compaction Strategy</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#major-compaction">Major compaction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stcs-options">STCS options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#defragmentation">Defragmentation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#leveled-compaction-strategy">Leveled Compaction Strategy</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">Major compaction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bootstrapping">Bootstrapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stcs-in-l0">STCS in L0</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#starved-sstables">Starved sstables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lcs-options">LCS options</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#time-window-compactionstrategy">Time Window CompactionStrategy</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#timewindowcompactionstrategy-operational-concerns">TimeWindowCompactionStrategy Operational Concerns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#changing-timewindowcompactionstrategy-options">Changing TimeWindowCompactionStrategy Options</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="bloom_filters.html">Bloom Filters</a></li>
@@ -105,46 +157,100 @@ extra-footer: '
 </ul>
 
             
-            
-          </div><!--/.nav-collapse -->
+          
         </div>
       </div>
-    </div>
-    <div class="col-md-8">
-      <div class="content doc-content">
-        <div class="content-container">
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Operating Cassandra</a> &raquo;</li>
+        
+      <li>Compaction</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/operating/compaction.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
   <div class="section" id="compaction">
 <span id="id1"></span><h1>Compaction<a class="headerlink" href="#compaction" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="types-of-compaction">
 <h2>Types of compaction<a class="headerlink" href="#types-of-compaction" title="Permalink to this headline">¶</a></h2>
 <p>The concept of compaction is used for different kinds of operations in Cassandra, the common thing about these
 operations is that it takes one or more sstables and output new sstables. The types of compactions are;</p>
-<dl class="docutils">
-<dt>Minor compaction</dt>
-<dd>triggered automatically in Cassandra.</dd>
-<dt>Major compaction</dt>
-<dd>a user executes a compaction over all sstables on the node.</dd>
-<dt>User defined compaction</dt>
-<dd>a user triggers a compaction on a given set of sstables.</dd>
-<dt>Scrub</dt>
-<dd>try to fix any broken sstables. This can actually remove valid data if that data is corrupted, if that happens you
-will need to run a full repair on the node.</dd>
-<dt>Upgradesstables</dt>
-<dd>upgrade sstables to the latest version. Run this after upgrading to a new major version.</dd>
-<dt>Cleanup</dt>
-<dd>remove any ranges this node does not own anymore, typically triggered on neighbouring nodes after a node has been
-bootstrapped since that node will take ownership of some ranges from those nodes.</dd>
-<dt>Secondary index rebuild</dt>
-<dd>rebuild the secondary indexes on the node.</dd>
-<dt>Anticompaction</dt>
-<dd>after repair the ranges that were actually repaired are split out of the sstables that existed when repair started.</dd>
-<dt>Sub range compaction</dt>
-<dd>It is possible to only compact a given sub range - this could be useful if you know a token that has been
+<dl class="simple">
+<dt>Minor compaction</dt><dd><p>triggered automatically in Cassandra.</p>
+</dd>
+<dt>Major compaction</dt><dd><p>a user executes a compaction over all sstables on the node.</p>
+</dd>
+<dt>User defined compaction</dt><dd><p>a user triggers a compaction on a given set of sstables.</p>
+</dd>
+<dt>Scrub</dt><dd><p>try to fix any broken sstables. This can actually remove valid data if that data is corrupted, if that happens you
+will need to run a full repair on the node.</p>
+</dd>
+<dt>Upgradesstables</dt><dd><p>upgrade sstables to the latest version. Run this after upgrading to a new major version.</p>
+</dd>
+<dt>Cleanup</dt><dd><p>remove any ranges this node does not own anymore, typically triggered on neighbouring nodes after a node has been
+bootstrapped since that node will take ownership of some ranges from those nodes.</p>
+</dd>
+<dt>Secondary index rebuild</dt><dd><p>rebuild the secondary indexes on the node.</p>
+</dd>
+<dt>Anticompaction</dt><dd><p>after repair the ranges that were actually repaired are split out of the sstables that existed when repair started.</p>
+</dd>
+<dt>Sub range compaction</dt><dd><p>It is possible to only compact a given sub range - this could be useful if you know a token that has been
 misbehaving - either gathering many updates or many deletes. (<code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">compact</span> <span class="pre">-st</span> <span class="pre">x</span> <span class="pre">-et</span> <span class="pre">y</span></code>) will pick
 all sstables containing the range between x and y and issue a compaction for those sstables. For STCS this will
 most likely include all sstables but with LCS it can issue the compaction for a subset of the sstables. With LCS
-the resulting sstable will end up in L0.</dd>
+the resulting sstable will end up in L0.</p>
+</dd>
 </dl>
 </div>
 <div class="section" id="when-is-a-minor-compaction-triggered">
@@ -216,13 +322,13 @@ no longer be any record that a certain piece of data was deleted), but as a tomb
 data it covers in another, a compaction must also include both sstable for a tombstone to be removed. More precisely, to
 be able to drop an actual tombstone the following needs to be true;</p>
 <ul class="simple">
-<li>The tombstone must be older than <code class="docutils literal notranslate"><span class="pre">gc_grace_seconds</span></code></li>
-<li>If partition X contains the tombstone, the sstable containing the partition plus all sstables containing data older
+<li><p>The tombstone must be older than <code class="docutils literal notranslate"><span class="pre">gc_grace_seconds</span></code></p></li>
+<li><p>If partition X contains the tombstone, the sstable containing the partition plus all sstables containing data older
 than the tombstone containing X must be included in the same compaction. We don’t need to care if the partition is in
 an sstable if we can guarantee that all data in that sstable is newer than the tombstone. If the tombstone is older
-than the data it cannot shadow that data.</li>
-<li>If the option <code class="docutils literal notranslate"><span class="pre">only_purge_repaired_tombstones</span></code> is enabled, tombstones are only removed if the data has also been
-repaired.</li>
+than the data it cannot shadow that data.</p></li>
+<li><p>If the option <code class="docutils literal notranslate"><span class="pre">only_purge_repaired_tombstones</span></code> is enabled, tombstones are only removed if the data has also been
+repaired.</p></li>
 </ul>
 <p>If a node remains down or disconnected for longer than <code class="docutils literal notranslate"><span class="pre">gc_grace_seconds</span></code> it’s deleted data will be repaired back to
 the other nodes and re-appear in the cluster. This is basically the same as in the “Deletes without Tombstones” section.
@@ -267,12 +373,12 @@ run in addition to the compaction strategy instances containing repaired/unrepai
 data directories there will be 8 compaction strategy instances running. This has a few more benefits than just avoiding
 data getting undeleted:</p>
 <ul class="simple">
-<li>It is possible to run more compactions in parallel - leveled compaction will have several totally separate levelings
-and each one can run compactions independently from the others.</li>
-<li>Users can backup and restore a single data directory.</li>
-<li>Note though that currently all data directories are considered equal, so if you have a tiny disk and a big disk
+<li><p>It is possible to run more compactions in parallel - leveled compaction will have several totally separate levelings
+and each one can run compactions independently from the others.</p></li>
+<li><p>Users can backup and restore a single data directory.</p></li>
+<li><p>Note though that currently all data directories are considered equal, so if you have a tiny disk and a big disk
 backing two data directories, the big one will be limited the by the small one. One work around to this is to create
-more data directories backed by the big disk.</li>
+more data directories backed by the big disk.</p></li>
 </ul>
 </div>
 <div class="section" id="single-sstable-tombstone-compaction">
@@ -286,49 +392,49 @@ compaction option <code class="docutils literal notranslate"><span class="pre">u
 <div class="section" id="common-options">
 <span id="compaction-options"></span><h2>Common options<a class="headerlink" href="#common-options" title="Permalink to this headline">¶</a></h2>
 <p>There is a number of common options for all the compaction strategies;</p>
-<dl class="docutils">
-<dt><code class="docutils literal notranslate"><span class="pre">enabled</span></code> (default: true)</dt>
-<dd>Whether minor compactions should run. Note that you can have ‘enabled’: true as a compaction option and then do
-‘nodetool enableautocompaction’ to start running compactions.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">tombstone_threshold</span></code> (default: 0.2)</dt>
-<dd>How much of the sstable should be tombstones for us to consider doing a single sstable compaction of that sstable.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">tombstone_compaction_interval</span></code> (default: 86400s (1 day))</dt>
-<dd>Since it might not be possible to drop any tombstones when doing a single sstable compaction we need to make sure
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">enabled</span></code> (default: true)</dt><dd><p>Whether minor compactions should run. Note that you can have ‘enabled’: true as a compaction option and then do
+‘nodetool enableautocompaction’ to start running compactions.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">tombstone_threshold</span></code> (default: 0.2)</dt><dd><p>How much of the sstable should be tombstones for us to consider doing a single sstable compaction of that sstable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">tombstone_compaction_interval</span></code> (default: 86400s (1 day))</dt><dd><p>Since it might not be possible to drop any tombstones when doing a single sstable compaction we need to make sure
 that one sstable is not constantly getting recompacted - this option states how often we should try for a given
-sstable.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">log_all</span></code> (default: false)</dt>
-<dd>New detailed compaction logging, see <a class="reference internal" href="#detailed-compaction-logging"><span class="std std-ref">below</span></a>.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">unchecked_tombstone_compaction</span></code> (default: false)</dt>
-<dd>The single sstable compaction has quite strict checks for whether it should be started, this option disables those
+sstable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">log_all</span></code> (default: false)</dt><dd><p>New detailed compaction logging, see <a class="reference internal" href="#detailed-compaction-logging"><span class="std std-ref">below</span></a>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">unchecked_tombstone_compaction</span></code> (default: false)</dt><dd><p>The single sstable compaction has quite strict checks for whether it should be started, this option disables those
 checks and for some usecases this might be needed.  Note that this does not change anything for the actual
 compaction, tombstones are only dropped if it is safe to do so - it might just rewrite an sstable without being able
-to drop any tombstones.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">only_purge_repaired_tombstone</span></code> (default: false)</dt>
-<dd>Option to enable the extra safety of making sure that tombstones are only dropped if the data has been repaired.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">min_threshold</span></code> (default: 4)</dt>
-<dd>Lower limit of number of sstables before a compaction is triggered. Not used for <code class="docutils literal notranslate"><span class="pre">LeveledCompactionStrategy</span></code>.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">max_threshold</span></code> (default: 32)</dt>
-<dd>Upper limit of number of sstables before a compaction is triggered. Not used for <code class="docutils literal notranslate"><span class="pre">LeveledCompactionStrategy</span></code>.</dd>
+to drop any tombstones.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">only_purge_repaired_tombstone</span></code> (default: false)</dt><dd><p>Option to enable the extra safety of making sure that tombstones are only dropped if the data has been repaired.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">min_threshold</span></code> (default: 4)</dt><dd><p>Lower limit of number of sstables before a compaction is triggered. Not used for <code class="docutils literal notranslate"><span class="pre">LeveledCompactionStrategy</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">max_threshold</span></code> (default: 32)</dt><dd><p>Upper limit of number of sstables before a compaction is triggered. Not used for <code class="docutils literal notranslate"><span class="pre">LeveledCompactionStrategy</span></code>.</p>
+</dd>
 </dl>
 <p>Further, see the section on each strategy for specific additional options.</p>
 </div>
 <div class="section" id="compaction-nodetool-commands">
 <h2>Compaction nodetool commands<a class="headerlink" href="#compaction-nodetool-commands" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference internal" href="../tools/nodetool.html#nodetool"><span class="std std-ref">nodetool</span></a> utility provides a number of commands related to compaction:</p>
-<dl class="docutils">
-<dt><code class="docutils literal notranslate"><span class="pre">enableautocompaction</span></code></dt>
-<dd>Enable compaction.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">disableautocompaction</span></code></dt>
-<dd>Disable compaction.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">setcompactionthroughput</span></code></dt>
-<dd>How fast compaction should run at most - defaults to 16MB/s, but note that it is likely not possible to reach this
-throughput.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">compactionstats</span></code></dt>
-<dd>Statistics about current and pending compactions.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">compactionhistory</span></code></dt>
-<dd>List details about the last compactions.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">setcompactionthreshold</span></code></dt>
-<dd>Set the min/max sstable count for when to trigger compaction, defaults to 4/32.</dd>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">enableautocompaction</span></code></dt><dd><p>Enable compaction.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">disableautocompaction</span></code></dt><dd><p>Disable compaction.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">setcompactionthroughput</span></code></dt><dd><p>How fast compaction should run at most - defaults to 16MB/s, but note that it is likely not possible to reach this
+throughput.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">compactionstats</span></code></dt><dd><p>Statistics about current and pending compactions.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">compactionhistory</span></code></dt><dd><p>List details about the last compactions.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">setcompactionthreshold</span></code></dt><dd><p>Set the min/max sstable count for when to trigger compaction, defaults to 4/32.</p>
+</dd>
 </dl>
 </div>
 <div class="section" id="switching-the-compaction-strategy-and-options-using-jmx">
@@ -367,17 +473,17 @@ sstables. The sizes of the sstables are approximately 50%, 25%, 12.5%… of the 
 </div>
 <div class="section" id="stcs-options">
 <span id="id2"></span><h3>STCS options<a class="headerlink" href="#stcs-options" title="Permalink to this headline">¶</a></h3>
-<dl class="docutils">
-<dt><code class="docutils literal notranslate"><span class="pre">min_sstable_size</span></code> (default: 50MB)</dt>
-<dd>Sstables smaller than this are put in the same bucket.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">bucket_low</span></code> (default: 0.5)</dt>
-<dd>How much smaller than the average size of a bucket a sstable should be before not being included in the bucket. That
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">min_sstable_size</span></code> (default: 50MB)</dt><dd><p>Sstables smaller than this are put in the same bucket.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">bucket_low</span></code> (default: 0.5)</dt><dd><p>How much smaller than the average size of a bucket a sstable should be before not being included in the bucket. That
 is, if <code class="docutils literal notranslate"><span class="pre">bucket_low</span> <span class="pre">*</span> <span class="pre">avg_bucket_size</span> <span class="pre">&lt;</span> <span class="pre">sstable_size</span></code> (and the <code class="docutils literal notranslate"><span class="pre">bucket_high</span></code> condition holds, see below), then
-the sstable is added to the bucket.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">bucket_high</span></code> (default: 1.5)</dt>
-<dd>How much bigger than the average size of a bucket a sstable should be before not being included in the bucket. That
+the sstable is added to the bucket.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">bucket_high</span></code> (default: 1.5)</dt><dd><p>How much bigger than the average size of a bucket a sstable should be before not being included in the bucket. That
 is, if <code class="docutils literal notranslate"><span class="pre">sstable_size</span> <span class="pre">&lt;</span> <span class="pre">bucket_high</span> <span class="pre">*</span> <span class="pre">avg_bucket_size</span></code> (and the <code class="docutils literal notranslate"><span class="pre">bucket_low</span></code> condition holds, see above), then
-the sstable is added to the bucket.</dd>
+the sstable is added to the bucket.</p>
+</dd>
 </dl>
 </div>
 <div class="section" id="defragmentation">
@@ -401,7 +507,8 @@ we wont create overlap. For L0 -&gt; L1 compactions we almost always need to inc
 cover the full range. We also can’t compact all L0 sstables with all L1 sstables in a single compaction since that can
 use too much memory.</p>
 <p>When deciding which level to compact LCS checks the higher levels first (with LCS, a “higher” level is one with a higher
-number, L0 being the lowest one) and if the level is behind a compaction will be started in that level.</p>
+number: L0 is the lowest one, L8 is the highest one) and if the level is behind a compaction will be started
+in that level.</p>
 <div class="section" id="id3">
 <h3>Major compaction<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <p>It is possible to do a major compaction with LCS - it will currently start by filling out L1 and then once L1 is full,
@@ -433,13 +540,13 @@ has not been involved.</p>
 </div>
 <div class="section" id="lcs-options">
 <span id="id4"></span><h3>LCS options<a class="headerlink" href="#lcs-options" title="Permalink to this headline">¶</a></h3>
-<dl class="docutils">
-<dt><code class="docutils literal notranslate"><span class="pre">sstable_size_in_mb</span></code> (default: 160MB)</dt>
-<dd>The target compressed (if using compression) sstable size - the sstables can end up being larger if there are very
-large partitions on the node.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">fanout_size</span></code> (default: 10)</dt>
-<dd>The target size of levels increases by this fanout_size multiplier. You can reduce the space amplification by tuning
-this option.</dd>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">sstable_size_in_mb</span></code> (default: 160MB)</dt><dd><p>The target compressed (if using compression) sstable size - the sstables can end up being larger if there are very
+large partitions on the node.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">fanout_size</span></code> (default: 10)</dt><dd><p>The target size of levels increases by this fanout_size multiplier. You can reduce the space amplification by tuning
+this option.</p>
+</dd>
 </dl>
 <p>LCS also support the <code class="docutils literal notranslate"><span class="pre">cassandra.disable_stcs_in_l0</span></code> startup option (<code class="docutils literal notranslate"><span class="pre">-Dcassandra.disable_stcs_in_l0=true</span></code>) to avoid
 doing STCS in L0.</p>
@@ -454,11 +561,11 @@ same time, allowing them to be dropped completely, and space reclaimed much more
 <code class="docutils literal notranslate"><span class="pre">SizeTieredCompactionStrategy</span></code> or <code class="docutils literal notranslate"><span class="pre">LeveledCompactionStrategy</span></code>. The basic concept is that
 <code class="docutils literal notranslate"><span class="pre">TimeWindowCompactionStrategy</span></code> will create 1 sstable per file for a given window, where a window is simply calculated
 as the combination of two primary options:</p>
-<dl class="docutils">
-<dt><code class="docutils literal notranslate"><span class="pre">compaction_window_unit</span></code> (default: DAYS)</dt>
-<dd>A Java TimeUnit (MINUTES, HOURS, or DAYS).</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">compaction_window_size</span></code> (default: 1)</dt>
-<dd>The number of units that make up a window.</dd>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">compaction_window_unit</span></code> (default: DAYS)</dt><dd><p>A Java TimeUnit (MINUTES, HOURS, or DAYS).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">compaction_window_size</span></code> (default: 1)</dt><dd><p>The number of units that make up a window.</p>
+</dd>
 </dl>
 <p>Taken together, the operator can specify windows of virtually any size, and <cite>TimeWindowCompactionStrategy</cite> will work to
 create a single sstable for writes within that window. For efficiency during writing, the newest window will be
@@ -472,10 +579,10 @@ approximately 20-30 windows - if writing with a 90 day TTL, for example, a 3 Day
 more efficiently. One potential way this optimal behavior can be subverted is if data is written to SSTables out of
 order, with new data and old data in the same SSTable. Out of order data can appear in two ways:</p>
 <ul class="simple">
-<li>If the user mixes old data and new data in the traditional write path, the data will be comingled in the memtables
-and flushed into the same SSTable, where it will remain comingled.</li>
-<li>If the user’s read requests for old data cause read repairs that pull old data into the current memtable, that data
-will be comingled and flushed into the same SSTable.</li>
+<li><p>If the user mixes old data and new data in the traditional write path, the data will be comingled in the memtables
+and flushed into the same SSTable, where it will remain comingled.</p></li>
+<li><p>If the user’s read requests for old data cause read repairs that pull old data into the current memtable, that data
+will be comingled and flushed into the same SSTable.</p></li>
 </ul>
 <p>While TWCS tries to minimize the impact of comingled data, users should attempt to avoid this behavior.  Specifically,
 users should avoid queries that explicitly set the timestamp via CQL <code class="docutils literal notranslate"><span class="pre">USING</span> <span class="pre">TIMESTAMP</span></code>. Additionally, users should run
@@ -496,19 +603,52 @@ windows.</p>
 </div>
 
 
-
-          
-          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
-            
-            <a href="bloom_filters.html" class="btn btn-default pull-right " role="button" title="Bloom Filters" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
-            
-            
-            <a href="hints.html" class="btn btn-default" role="button" title="Hints" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
-            
+           </div>
+           
           </div>
-          
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="bloom_filters.html" class="btn btn-neutral float-right" title="Bloom Filters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="hints.html" class="btn btn-neutral float-left" title="Hints" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, The Apache Cassandra team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
         </div>
       </div>
-    </div>
+
+    </section>
+
   </div>
-</div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

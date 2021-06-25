@@ -1,61 +1,91 @@
----
-layout: docpage
 
-title: "Documentation"
 
-is_homepage: false
-is_sphinx_doc: true
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Materialized Views &mdash; Apache Cassandra Documentation v3.11.11</title>
+  
 
-doc-parent: "The Cassandra Query Language (CQL)"
+  
+  
+  
+  
 
-doc-title: "Materialized Views"
-doc-header-links: '
-  <link rel="top" title="Apache Cassandra Documentation v3.11.11" href="../index.html"/>
-      <link rel="up" title="The Cassandra Query Language (CQL)" href="index.html"/>
-      <link rel="next" title="Security" href="security.html"/>
-      <link rel="prev" title="Secondary Indexes" href="indexes.html"/>
-'
-doc-search-path: "../search.html"
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-extra-footer: '
-<script type="text/javascript">
-    var DOCUMENTATION_OPTIONS = {
-      URL_ROOT:    "",
-      VERSION:     "",
-      COLLAPSE_INDEX: false,
-      FILE_SUFFIX: ".html",
-      HAS_SOURCE:  false,
-      SOURCELINK_SUFFIX: ".txt"
-    };
-</script>
-'
+    
 
----
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-3">
-      <div class="doc-navigation">
-        <div class="doc-menu" role="navigation">
-          <div class="navbar-header">
-            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-          </div>
-          <div class="navbar-collapse collapse sidebar-navbar-collapse">
-            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
-              <div class="form-group">
-                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/extra.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Security" href="security.html" />
+    <link rel="prev" title="Secondary Indexes" href="indexes.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apache Cassandra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.11.11
               </div>
-            </form>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
             
             
+              
             
-            <ul class="current">
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
@@ -66,7 +96,12 @@ extra-footer: '
 <li class="toctree-l2"><a class="reference internal" href="dml.html">Data Manipulation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="indexes.html">Secondary Indexes</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Materialized Views</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#create-materialized-view">CREATE MATERIALIZED VIEW</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-materialized-view">CREATE MATERIALIZED VIEW</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mv-select-statement">MV select statement</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mv-primary-key">MV primary key</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mv-options">MV options</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#alter-materialized-view">ALTER MATERIALIZED VIEW</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#drop-materialized-view">DROP MATERIALIZED VIEW</a></li>
 </ul>
@@ -90,15 +125,69 @@ extra-footer: '
 </ul>
 
             
-            
-          </div><!--/.nav-collapse -->
+          
         </div>
       </div>
-    </div>
-    <div class="col-md-8">
-      <div class="content doc-content">
-        <div class="content-container">
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">The Cassandra Query Language (CQL)</a> &raquo;</li>
+        
+      <li>Materialized Views</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/cql/mvs.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
   <div class="section" id="materialized-views">
 <span id="id1"></span><h1>Materialized Views<a class="headerlink" href="#materialized-views" title="Permalink to this headline">¶</a></h1>
 <p>Materialized views names are defined by:</p>
@@ -128,9 +217,9 @@ materialized view cannot be directly updated, but updates to the base table will
 view.</p>
 <p>Creating a materialized view has 3 main parts:</p>
 <ul class="simple">
-<li>The <a class="reference internal" href="#mv-select"><span class="std std-ref">select statement</span></a> that restrict the data included in the view.</li>
-<li>The <a class="reference internal" href="#mv-primary-key"><span class="std std-ref">primary key</span></a> definition for the view.</li>
-<li>The <a class="reference internal" href="#mv-options"><span class="std std-ref">options</span></a> for the view.</li>
+<li><p>The <a class="reference internal" href="#mv-select"><span class="std std-ref">select statement</span></a> that restrict the data included in the view.</p></li>
+<li><p>The <a class="reference internal" href="#mv-primary-key"><span class="std std-ref">primary key</span></a> definition for the view.</p></li>
+<li><p>The <a class="reference internal" href="#mv-options"><span class="std std-ref">options</span></a> for the view.</p></li>
 </ul>
 <p>Attempting to create an already existing materialized view will return an error unless the <code class="docutils literal notranslate"><span class="pre">IF</span> <span class="pre">NOT</span> <span class="pre">EXISTS</span></code> option is
 used. If it is used, the statement will be a no-op if the materialized view already exists.</p>
@@ -139,29 +228,30 @@ used. If it is used, the statement will be a no-op if the materialized view alre
 <p>The select statement of a materialized view creation defines which of the base table is included in the view. That
 statement is limited in a number of ways:</p>
 <ul class="simple">
-<li>the <a class="reference internal" href="dml.html#selection-clause"><span class="std std-ref">selection</span></a> is limited to those that only select columns of the base table. In other
+<li><p>the <a class="reference internal" href="dml.html#selection-clause"><span class="std std-ref">selection</span></a> is limited to those that only select columns of the base table. In other
 words, you can’t use any function (aggregate or not), casting, term, etc. Aliases are also not supported. You can
 however use <cite>*</cite> as a shortcut of selecting all columns. Further, <a class="reference internal" href="ddl.html#static-columns"><span class="std std-ref">static columns</span></a> cannot be
-included in a materialized view (which means <code class="docutils literal notranslate"><span class="pre">SELECT</span> <span class="pre">*</span></code> isn’t allowed if the base table has static columns).</li>
-<li>the <code class="docutils literal notranslate"><span class="pre">WHERE</span></code> clause have the following restrictions:<ul>
-<li>it cannot include any <a class="reference internal" href="definitions.html#grammar-token-bind-marker"><code class="xref std std-token docutils literal notranslate"><span class="pre">bind_marker</span></code></a>.</li>
-<li>the columns that are not part of the <em>base table</em> primary key can only be restricted by an <code class="docutils literal notranslate"><span class="pre">IS</span> <span class="pre">NOT</span> <span class="pre">NULL</span></code>
-restriction. No other restriction is allowed.</li>
-<li>as the columns that are part of the <em>view</em> primary key cannot be null, they must always be at least restricted by a
-<code class="docutils literal notranslate"><span class="pre">IS</span> <span class="pre">NOT</span> <span class="pre">NULL</span></code> restriction (or any other restriction, but they must have one).</li>
+included in a materialized view (which means <code class="docutils literal notranslate"><span class="pre">SELECT</span> <span class="pre">*</span></code> isn’t allowed if the base table has static columns).</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">WHERE</span></code> clause have the following restrictions:</p>
+<ul>
+<li><p>it cannot include any <a class="reference internal" href="definitions.html#grammar-token-bind-marker"><code class="xref std std-token docutils literal notranslate"><span class="pre">bind_marker</span></code></a>.</p></li>
+<li><p>the columns that are not part of the <em>base table</em> primary key can only be restricted by an <code class="docutils literal notranslate"><span class="pre">IS</span> <span class="pre">NOT</span> <span class="pre">NULL</span></code>
+restriction. No other restriction is allowed.</p></li>
+<li><p>as the columns that are part of the <em>view</em> primary key cannot be null, they must always be at least restricted by a
+<code class="docutils literal notranslate"><span class="pre">IS</span> <span class="pre">NOT</span> <span class="pre">NULL</span></code> restriction (or any other restriction, but they must have one).</p></li>
 </ul>
 </li>
-<li>it cannot have neither an <a class="reference internal" href="dml.html#ordering-clause"><span class="std std-ref">ordering clause</span></a>, nor a <a class="reference internal" href="dml.html#limit-clause"><span class="std std-ref">limit</span></a>, nor <a class="reference internal" href="dml.html#allow-filtering"><span class="std std-ref">ALLOW
-FILTERING</span></a>.</li>
+<li><p>it cannot have neither an <a class="reference internal" href="dml.html#ordering-clause"><span class="std std-ref">ordering clause</span></a>, nor a <a class="reference internal" href="dml.html#limit-clause"><span class="std std-ref">limit</span></a>, nor <a class="reference internal" href="dml.html#allow-filtering"><span class="std std-ref">ALLOW
+FILTERING</span></a>.</p></li>
 </ul>
 </div>
 <div class="section" id="mv-primary-key">
 <span id="id2"></span><h3>MV primary key<a class="headerlink" href="#mv-primary-key" title="Permalink to this headline">¶</a></h3>
 <p>A view must have a primary key and that primary key must conform to the following restrictions:</p>
 <ul class="simple">
-<li>it must contain all the primary key columns of the base table. This ensures that every row of the view correspond to
-exactly one row of the base table.</li>
-<li>it can only contain a single column that is not a primary key column in the base table.</li>
+<li><p>it must contain all the primary key columns of the base table. This ensures that every row of the view correspond to
+exactly one row of the base table.</p></li>
+<li><p>it can only contain a single column that is not a primary key column in the base table.</p></li>
 </ul>
 <p>So for instance, give the following base table definition:</p>
 <div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t</span> <span class="p">(</span>
@@ -223,19 +313,52 @@ the operation is a no-op.</p>
 </div>
 
 
-
-          
-          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
-            
-            <a href="security.html" class="btn btn-default pull-right " role="button" title="Security" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
-            
-            
-            <a href="indexes.html" class="btn btn-default" role="button" title="Secondary Indexes" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
-            
+           </div>
+           
           </div>
-          
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="security.html" class="btn btn-neutral float-right" title="Security" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="indexes.html" class="btn btn-neutral float-left" title="Secondary Indexes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, The Apache Cassandra team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
         </div>
       </div>
-    </div>
+
+    </section>
+
   </div>
-</div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

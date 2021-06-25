@@ -1,0 +1,354 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Defining Database Schema &mdash; Apache Cassandra Documentation v4.1</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/extra.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Cassandra Data Modeling Tools" href="data_modeling_tools.html" />
+    <link rel="prev" title="Evaluating and Refining Data Models" href="data_modeling_refining.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apache Cassandra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Data Modeling</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_conceptual.html">Conceptual Data Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_rdbms.html">RDBMS Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_queries.html">Defining Application Queries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_logical.html">Logical Data Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_physical.html">Physical Data Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_refining.html">Evaluating and Refining Data Models</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Defining Database Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_modeling_tools.html">Cassandra Data Modeling Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Data Modeling</a> &raquo;</li>
+        
+      <li>Defining Database Schema</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/data_modeling/data_modeling_schema.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="defining-database-schema">
+<h1>Defining Database Schema<a class="headerlink" href="#defining-database-schema" title="Permalink to this headline">¶</a></h1>
+<p>Once you have finished evaluating and refining the physical model, you’re
+ready to implement the schema in CQL. Here is the schema for the
+<code class="docutils literal notranslate"><span class="pre">hotel</span></code> keyspace, using CQL’s comment feature to document the query
+pattern supported by each table:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">KEYSPACE</span> <span class="n">hotel</span> <span class="k">WITH</span> <span class="n">replication</span> <span class="o">=</span>
+  <span class="p">{</span><span class="err">‘</span><span class="n">class</span><span class="err">’</span><span class="p">:</span> <span class="err">‘</span><span class="n">SimpleStrategy</span><span class="err">’</span><span class="p">,</span> <span class="err">‘</span><span class="n">replication_factor</span><span class="err">’</span> <span class="p">:</span> <span class="mf">3</span><span class="p">};</span>
+
+<span class="k">CREATE</span> <span class="k">TYPE</span> <span class="n">hotel</span><span class="mf">.</span><span class="n">address</span> <span class="p">(</span>
+  <span class="n">street</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">city</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">state_or_province</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">postal_code</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">country</span> <span class="nb">text</span> <span class="p">);</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">hotel</span><span class="mf">.</span><span class="n">hotels_by_poi</span> <span class="p">(</span>
+  <span class="n">poi_name</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">hotel_id</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">name</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">phone</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">address</span> <span class="k">frozen</span><span class="o">&lt;</span><span class="n">address</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">((</span><span class="n">poi_name</span><span class="p">),</span> <span class="n">hotel_id</span><span class="p">)</span> <span class="p">)</span>
+  <span class="k">WITH</span> <span class="n">comment</span> <span class="o">=</span> <span class="err">‘</span><span class="n">Q1</span><span class="mf">.</span> <span class="n">Find</span> <span class="n">hotels</span> <span class="n">near</span> <span class="n">given</span> <span class="n">poi</span><span class="err">’</span>
+  <span class="k">AND</span> <span class="k">CLUSTERING</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="p">(</span><span class="n">hotel_id</span> <span class="k">ASC</span><span class="p">)</span> <span class="p">;</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">hotel</span><span class="mf">.</span><span class="n">hotels</span> <span class="p">(</span>
+  <span class="n">id</span> <span class="nb">text</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+  <span class="n">name</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">phone</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">address</span> <span class="k">frozen</span><span class="o">&lt;</span><span class="n">address</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="n">pois</span> <span class="k">set</span> <span class="p">)</span>
+  <span class="k">WITH</span> <span class="n">comment</span> <span class="o">=</span> <span class="err">‘</span><span class="n">Q2</span><span class="mf">.</span> <span class="n">Find</span> <span class="n">information</span> <span class="n">about</span> <span class="n">a</span> <span class="n">hotel</span><span class="err">’</span><span class="p">;</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">hotel</span><span class="mf">.</span><span class="n">pois_by_hotel</span> <span class="p">(</span>
+  <span class="n">poi_name</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">hotel_id</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">description</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">((</span><span class="n">hotel_id</span><span class="p">),</span> <span class="n">poi_name</span><span class="p">)</span> <span class="p">)</span>
+  <span class="k">WITH</span> <span class="n">comment</span> <span class="o">=</span> <span class="n">Q3</span><span class="mf">.</span> <span class="n">Find</span> <span class="n">pois</span> <span class="n">near</span> <span class="n">a</span> <span class="n">hotel</span><span class="err">’</span><span class="p">;</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">hotel</span><span class="mf">.</span><span class="n">available_rooms_by_hotel_date</span> <span class="p">(</span>
+  <span class="n">hotel_id</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="nb">date</span> <span class="nb">date</span><span class="p">,</span>
+  <span class="n">room_number</span> <span class="nb">smallint</span><span class="p">,</span>
+  <span class="n">is_available</span> <span class="nb">boolean</span><span class="p">,</span>
+  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">((</span><span class="n">hotel_id</span><span class="p">),</span> <span class="nb">date</span><span class="p">,</span> <span class="n">room_number</span><span class="p">)</span> <span class="p">)</span>
+  <span class="k">WITH</span> <span class="n">comment</span> <span class="o">=</span> <span class="err">‘</span><span class="n">Q4</span><span class="mf">.</span> <span class="n">Find</span> <span class="n">available</span> <span class="n">rooms</span> <span class="k">by</span> <span class="n">hotel</span> <span class="nb">date</span><span class="err">’</span><span class="p">;</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">hotel</span><span class="mf">.</span><span class="n">amenities_by_room</span> <span class="p">(</span>
+  <span class="n">hotel_id</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">room_number</span> <span class="nb">smallint</span><span class="p">,</span>
+  <span class="n">amenity_name</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">description</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">((</span><span class="n">hotel_id</span><span class="p">,</span> <span class="n">room_number</span><span class="p">),</span> <span class="n">amenity_name</span><span class="p">)</span> <span class="p">)</span>
+  <span class="k">WITH</span> <span class="n">comment</span> <span class="o">=</span> <span class="err">‘</span><span class="n">Q5</span><span class="mf">.</span> <span class="n">Find</span> <span class="n">amenities</span> <span class="n">for</span> <span class="n">a</span> <span class="n">room</span><span class="err">’</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Notice that the elements of the partition key are surrounded
+with parentheses, even though the partition key consists
+of the single column <code class="docutils literal notranslate"><span class="pre">poi_name</span></code>. This is a best practice that makes
+the selection of partition key more explicit to others reading your CQL.</p>
+<p>Similarly, here is the schema for the <code class="docutils literal notranslate"><span class="pre">reservation</span></code> keyspace:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">KEYSPACE</span> <span class="n">reservation</span> <span class="k">WITH</span> <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="err">‘</span><span class="n">class</span><span class="err">’</span><span class="p">:</span>
+  <span class="err">‘</span><span class="n">SimpleStrategy</span><span class="err">’</span><span class="p">,</span> <span class="err">‘</span><span class="n">replication_factor</span><span class="err">’</span> <span class="p">:</span> <span class="mf">3</span><span class="p">};</span>
+
+<span class="k">CREATE</span> <span class="k">TYPE</span> <span class="n">reservation</span><span class="mf">.</span><span class="n">address</span> <span class="p">(</span>
+  <span class="n">street</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">city</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">state_or_province</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">postal_code</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">country</span> <span class="nb">text</span> <span class="p">);</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">reservation</span><span class="mf">.</span><span class="n">reservations_by_confirmation</span> <span class="p">(</span>
+  <span class="n">confirm_number</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">hotel_id</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">start_date</span> <span class="nb">date</span><span class="p">,</span>
+  <span class="n">end_date</span> <span class="nb">date</span><span class="p">,</span>
+  <span class="n">room_number</span> <span class="nb">smallint</span><span class="p">,</span>
+  <span class="n">guest_id</span> <span class="nb">uuid</span><span class="p">,</span>
+  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">confirm_number</span><span class="p">)</span> <span class="p">)</span>
+  <span class="k">WITH</span> <span class="n">comment</span> <span class="o">=</span> <span class="err">‘</span><span class="n">Q6</span><span class="mf">.</span> <span class="n">Find</span> <span class="n">reservations</span> <span class="k">by</span> <span class="n">confirmation</span> <span class="n">number</span><span class="err">’</span><span class="p">;</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">reservation</span><span class="mf">.</span><span class="n">reservations_by_hotel_date</span> <span class="p">(</span>
+  <span class="n">hotel_id</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">start_date</span> <span class="nb">date</span><span class="p">,</span>
+  <span class="n">end_date</span> <span class="nb">date</span><span class="p">,</span>
+  <span class="n">room_number</span> <span class="nb">smallint</span><span class="p">,</span>
+  <span class="n">confirm_number</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">guest_id</span> <span class="nb">uuid</span><span class="p">,</span>
+  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">((</span><span class="n">hotel_id</span><span class="p">,</span> <span class="n">start_date</span><span class="p">),</span> <span class="n">room_number</span><span class="p">)</span> <span class="p">)</span>
+  <span class="k">WITH</span> <span class="n">comment</span> <span class="o">=</span> <span class="err">‘</span><span class="n">Q7</span><span class="mf">.</span> <span class="n">Find</span> <span class="n">reservations</span> <span class="k">by</span> <span class="n">hotel</span> <span class="k">and</span> <span class="nb">date</span><span class="err">’</span><span class="p">;</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">reservation</span><span class="mf">.</span><span class="n">reservations_by_guest</span> <span class="p">(</span>
+  <span class="n">guest_last_name</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">hotel_id</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">start_date</span> <span class="nb">date</span><span class="p">,</span>
+  <span class="n">end_date</span> <span class="nb">date</span><span class="p">,</span>
+  <span class="n">room_number</span> <span class="nb">smallint</span><span class="p">,</span>
+  <span class="n">confirm_number</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">guest_id</span> <span class="nb">uuid</span><span class="p">,</span>
+  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">((</span><span class="n">guest_last_name</span><span class="p">),</span> <span class="n">hotel_id</span><span class="p">)</span> <span class="p">)</span>
+  <span class="k">WITH</span> <span class="n">comment</span> <span class="o">=</span> <span class="err">‘</span><span class="n">Q8</span><span class="mf">.</span> <span class="n">Find</span> <span class="n">reservations</span> <span class="k">by</span> <span class="n">guest</span> <span class="n">name</span><span class="err">’</span><span class="p">;</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">reservation</span><span class="mf">.</span><span class="n">guests</span> <span class="p">(</span>
+  <span class="n">guest_id</span> <span class="nb">uuid</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+  <span class="n">first_name</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">last_name</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">title</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">emails</span> <span class="k">set</span><span class="p">,</span>
+  <span class="n">phone_numbers</span> <span class="k">list</span><span class="p">,</span>
+  <span class="n">addresses</span> <span class="k">map</span><span class="o">&lt;</span><span class="nb">text</span><span class="p">,</span>
+  <span class="k">frozen</span><span class="o">&lt;</span><span class="n">address</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="n">confirm_number</span> <span class="nb">text</span> <span class="p">)</span>
+  <span class="k">WITH</span> <span class="n">comment</span> <span class="o">=</span> <span class="err">‘</span><span class="n">Q9</span><span class="mf">.</span> <span class="n">Find</span> <span class="n">guest</span> <span class="k">by</span> <span class="n">ID</span><span class="err">’</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>You now have a complete Cassandra schema for storing data for a hotel
+application.</p>
+<p><em>Material adapted from Cassandra, The Definitive Guide. Published by
+O’Reilly Media, Inc. Copyright © 2020 Jeff Carpenter, Eben Hewitt.
+All rights reserved. Used with permission.</em></p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="data_modeling_tools.html" class="btn btn-neutral float-right" title="Cassandra Data Modeling Tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="data_modeling_refining.html" class="btn btn-neutral float-left" title="Evaluating and Refining Data Models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, The Apache Cassandra team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

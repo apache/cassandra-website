@@ -1,61 +1,91 @@
----
-layout: docpage
 
-title: "Documentation"
 
-is_homepage: false
-is_sphinx_doc: true
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Security &mdash; Apache Cassandra Documentation v3.11.11</title>
+  
 
-doc-parent: "Operating Cassandra"
+  
+  
+  
+  
 
-doc-title: "Security"
-doc-header-links: '
-  <link rel="top" title="Apache Cassandra Documentation v3.11.11" href="../index.html"/>
-      <link rel="up" title="Operating Cassandra" href="index.html"/>
-      <link rel="next" title="Hardware Choices" href="hardware.html"/>
-      <link rel="prev" title="Monitoring" href="metrics.html"/>
-'
-doc-search-path: "../search.html"
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-extra-footer: '
-<script type="text/javascript">
-    var DOCUMENTATION_OPTIONS = {
-      URL_ROOT:    "",
-      VERSION:     "",
-      COLLAPSE_INDEX: false,
-      FILE_SUFFIX: ".html",
-      HAS_SOURCE:  false,
-      SOURCELINK_SUFFIX: ".txt"
-    };
-</script>
-'
+    
 
----
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-3">
-      <div class="doc-navigation">
-        <div class="doc-menu" role="navigation">
-          <div class="navbar-header">
-            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-          </div>
-          <div class="navbar-collapse collapse sidebar-navbar-collapse">
-            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
-              <div class="form-group">
-                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/extra.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Hardware Choices" href="hardware.html" />
+    <link rel="prev" title="Monitoring" href="metrics.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apache Cassandra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.11.11
               </div>
-            </form>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
             
             
+              
             
-            <ul class="current">
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
@@ -75,12 +105,27 @@ extra-footer: '
 <li class="toctree-l2"><a class="reference internal" href="bulk_loading.html">Bulk Loading</a></li>
 <li class="toctree-l2"><a class="reference internal" href="metrics.html">Monitoring</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Security</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#tls-ssl-encryption">TLS/SSL Encryption</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tls-ssl-encryption">TLS/SSL Encryption</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#inter-node-encryption">Inter-node Encryption</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#client-to-node-encryption">Client to Node Encryption</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#roles">Roles</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#authentication">Authentication</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#authorization">Authorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#authentication">Authentication</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#enabling-password-authentication">Enabling Password Authentication</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#authorization">Authorization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#enabling-internal-authorization">Enabling Internal Authorization</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#caching">Caching</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#jmx-access">JMX access</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jmx-access">JMX access</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#standard-jmx-auth">Standard JMX Auth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cassandra-integrated-auth">Cassandra Integrated Auth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jmx-with-ssl">JMX With SSL</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="hardware.html">Hardware Choices</a></li>
@@ -95,22 +140,76 @@ extra-footer: '
 </ul>
 
             
-            
-          </div><!--/.nav-collapse -->
+          
         </div>
       </div>
-    </div>
-    <div class="col-md-8">
-      <div class="content doc-content">
-        <div class="content-container">
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Operating Cassandra</a> &raquo;</li>
+        
+      <li>Security</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/operating/security.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
   <div class="section" id="security">
 <h1>Security<a class="headerlink" href="#security" title="Permalink to this headline">¶</a></h1>
 <p>There are three main components to the security features provided by Cassandra:</p>
 <ul class="simple">
-<li>TLS/SSL encryption for client and inter-node communication</li>
-<li>Client authentication</li>
-<li>Authorization</li>
+<li><p>TLS/SSL encryption for client and inter-node communication</p></li>
+<li><p>Client authentication</p></li>
+<li><p>Authorization</p></li>
 </ul>
 <div class="section" id="tls-ssl-encryption">
 <h2>TLS/SSL Encryption<a class="headerlink" href="#tls-ssl-encryption" title="Permalink to this headline">¶</a></h2>
@@ -137,10 +236,10 @@ to one value from: <code class="docutils literal notranslate"><span class="pre">
 <p>The settings for managing client to node encryption are found in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> in the <code class="docutils literal notranslate"><span class="pre">client_encryption_options</span></code>
 section. There are two primary toggles here for enabling encryption, <code class="docutils literal notranslate"><span class="pre">enabled</span></code> and <code class="docutils literal notranslate"><span class="pre">optional</span></code>.</p>
 <ul class="simple">
-<li>If neither is set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, client connections are entirely unencrypted.</li>
-<li>If <code class="docutils literal notranslate"><span class="pre">enabled</span></code> is set to <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">optional</span></code> is set to <code class="docutils literal notranslate"><span class="pre">false</span></code>, all client connections must be secured.</li>
-<li>If both options are set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, both encrypted and unencrypted connections are supported using the same port.
-Client connections using encryption with this configuration will be automatically detected and handled by the server.</li>
+<li><p>If neither is set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, client connections are entirely unencrypted.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">enabled</span></code> is set to <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">optional</span></code> is set to <code class="docutils literal notranslate"><span class="pre">false</span></code>, all client connections must be secured.</p></li>
+<li><p>If both options are set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, both encrypted and unencrypted connections are supported using the same port.
+Client connections using encryption with this configuration will be automatically detected and handled by the server.</p></li>
 </ul>
 <p>As an alternative to the <code class="docutils literal notranslate"><span class="pre">optional</span></code> setting, separate ports can also be configured for secure and unsecure connections
 where operational requirements demand it. To do so, set <code class="docutils literal notranslate"><span class="pre">optional</span></code> to false and use the <code class="docutils literal notranslate"><span class="pre">native_transport_port_ssl</span></code>
@@ -176,47 +275,47 @@ it on the cluster.</p>
 to this node during the setup process, so you may want to remove it from client config, block it at the network level
 or possibly add a new temporary node to the cluster for this purpose. On that node, perform the following steps:</p>
 <ol class="arabic simple">
-<li>Open a <code class="docutils literal notranslate"><span class="pre">cqlsh</span></code> session and change the replication factor of the <code class="docutils literal notranslate"><span class="pre">system_auth</span></code> keyspace. By default, this keyspace
+<li><p>Open a <code class="docutils literal notranslate"><span class="pre">cqlsh</span></code> session and change the replication factor of the <code class="docutils literal notranslate"><span class="pre">system_auth</span></code> keyspace. By default, this keyspace
 uses <code class="docutils literal notranslate"><span class="pre">SimpleReplicationStrategy</span></code> and a <code class="docutils literal notranslate"><span class="pre">replication_factor</span></code> of 1. It is recommended to change this for any
 non-trivial deployment to ensure that should nodes become unavailable, login is still possible. Best practice is to
-configure a replication factor of 3 to 5 per-DC.</li>
+configure a replication factor of 3 to 5 per-DC.</p></li>
 </ol>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ALTER KEYSPACE system_auth WITH replication = {&#39;class&#39;: &#39;NetworkTopologyStrategy&#39;, &#39;DC1&#39;: 3, &#39;DC2&#39;: 3};
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li>Edit <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> to change the <code class="docutils literal notranslate"><span class="pre">authenticator</span></code> option like so:</li>
+<li><p>Edit <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> to change the <code class="docutils literal notranslate"><span class="pre">authenticator</span></code> option like so:</p></li>
 </ol>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>authenticator: PasswordAuthenticator
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
-<li>Restart the node.</li>
-<li>Open a new <code class="docutils literal notranslate"><span class="pre">cqlsh</span></code> session using the credentials of the default superuser:</li>
+<li><p>Restart the node.</p></li>
+<li><p>Open a new <code class="docutils literal notranslate"><span class="pre">cqlsh</span></code> session using the credentials of the default superuser:</p></li>
 </ol>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh -u cassandra -p cassandra
 </pre></div>
 </div>
 <ol class="arabic simple" start="5">
-<li>During login, the credentials for the default superuser are read with a consistency level of <code class="docutils literal notranslate"><span class="pre">QUORUM</span></code>, whereas
+<li><p>During login, the credentials for the default superuser are read with a consistency level of <code class="docutils literal notranslate"><span class="pre">QUORUM</span></code>, whereas
 those for all other users (including superusers) are read at <code class="docutils literal notranslate"><span class="pre">LOCAL_ONE</span></code>. In the interests of performance and
 availability, as well as security, operators should create another superuser and disable the default one. This step
 is optional, but highly recommended. While logged in as the default superuser, create another superuser role which
-can be used to bootstrap further configuration.</li>
+can be used to bootstrap further configuration.</p></li>
 </ol>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span># create a new superuser
 CREATE ROLE dba WITH SUPERUSER = true AND LOGIN = true AND PASSWORD = &#39;super&#39;;
 </pre></div>
 </div>
 <ol class="arabic simple" start="6">
-<li>Start a new cqlsh session, this time logging in as the new_superuser and disable the default superuser.</li>
+<li><p>Start a new cqlsh session, this time logging in as the new_superuser and disable the default superuser.</p></li>
 </ol>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ALTER ROLE cassandra WITH SUPERUSER = false AND LOGIN = false;
 </pre></div>
 </div>
 <ol class="arabic simple" start="7">
-<li>Finally, set up the roles and credentials for your application users with <a class="reference internal" href="../cql/security.html#create-role-statement"><span class="std std-ref">CREATE ROLE</span></a>
-statements.</li>
+<li><p>Finally, set up the roles and credentials for your application users with <a class="reference internal" href="../cql/security.html#create-role-statement"><span class="std std-ref">CREATE ROLE</span></a>
+statements.</p></li>
 </ol>
 <p>At the end of these steps, the one node is configured to use password authentication. To roll that out across the
 cluster, repeat steps 2 and 3 on each node in the cluster. Once all nodes have been restarted, authentication will be
@@ -243,29 +342,29 @@ a node which is not processing client requests.</p>
 <p>The following assumes that authentication has already been enabled via the process outlined in
 <a class="reference internal" href="#password-authentication"><span class="std std-ref">Enabling Password Authentication</span></a>. Perform these steps to enable internal authorization across the cluster:</p>
 <ol class="arabic simple">
-<li>On the selected node, edit <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> to change the <code class="docutils literal notranslate"><span class="pre">authorizer</span></code> option like so:</li>
+<li><p>On the selected node, edit <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> to change the <code class="docutils literal notranslate"><span class="pre">authorizer</span></code> option like so:</p></li>
 </ol>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>authorizer: CassandraAuthorizer
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li>Restart the node.</li>
-<li>Open a new <code class="docutils literal notranslate"><span class="pre">cqlsh</span></code> session using the credentials of a role with superuser credentials:</li>
+<li><p>Restart the node.</p></li>
+<li><p>Open a new <code class="docutils literal notranslate"><span class="pre">cqlsh</span></code> session using the credentials of a role with superuser credentials:</p></li>
 </ol>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cqlsh -u dba -p super
 </pre></div>
 </div>
 <ol class="arabic simple" start="4">
-<li>Configure the appropriate access privileges for your clients using <a class="reference external" href="cql.html#grant-permission">GRANT PERMISSION</a>
+<li><p>Configure the appropriate access privileges for your clients using <a class="reference external" href="cql.html#grant-permission">GRANT PERMISSION</a>
 statements. On the other nodes, until configuration is updated and the node restarted, this will have no effect so
-disruption to clients is avoided.</li>
+disruption to clients is avoided.</p></li>
 </ol>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>GRANT SELECT ON ks.t1 TO db_user;
 </pre></div>
 </div>
 <ol class="arabic simple" start="5">
-<li>Once all the necessary permissions have been granted, repeat steps 1 and 2 for each node in turn. As each node
-restarts and clients reconnect, the enforcement of the granted permissions will begin.</li>
+<li><p>Once all the necessary permissions have been granted, repeat steps 1 and 2 for each node in turn. As each node
+restarts and clients reconnect, the enforcement of the granted permissions will begin.</p></li>
 </ol>
 <p>See also: <a class="reference internal" href="../cql/security.html#grant-permission-statement"><span class="std std-ref">GRANT PERMISSION</span></a>, <cite>GRANT ALL &lt;grant-all&gt;</cite> and <a class="reference internal" href="../cql/security.html#revoke-permission-statement"><span class="std std-ref">REVOKE PERMISSION</span></a></p>
 </div>
@@ -279,21 +378,21 @@ details are cached for a configurable period. The caching can be configured (and
 or using a JMX client. The JMX interface also supports invalidation of the various caches, but any changes made via JMX
 are not persistent and will be re-read from <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> when the node is restarted.</p>
 <p>Each cache has 3 options which can be set:</p>
-<dl class="docutils">
-<dt>Validity Period</dt>
-<dd>Controls the expiration of cache entries. After this period, entries are invalidated and removed from the cache.</dd>
-<dt>Refresh Rate</dt>
-<dd>Controls the rate at which background reads are performed to pick up any changes to the underlying data. While these
+<dl class="simple">
+<dt>Validity Period</dt><dd><p>Controls the expiration of cache entries. After this period, entries are invalidated and removed from the cache.</p>
+</dd>
+<dt>Refresh Rate</dt><dd><p>Controls the rate at which background reads are performed to pick up any changes to the underlying data. While these
 async refreshes are performed, caches will continue to serve (possibly) stale data. Typically, this will be set to a
-shorter time than the validity period.</dd>
-<dt>Max Entries</dt>
-<dd>Controls the upper bound on cache size.</dd>
+shorter time than the validity period.</p>
+</dd>
+<dt>Max Entries</dt><dd><p>Controls the upper bound on cache size.</p>
+</dd>
 </dl>
 <p>The naming for these options in <code class="docutils literal notranslate"><span class="pre">cassandra.yaml</span></code> follows the convention:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">&lt;type&gt;_validity_in_ms</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">&lt;type&gt;_update_interval_in_ms</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">&lt;type&gt;_cache_max_entries</span></code></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;type&gt;_validity_in_ms</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;type&gt;_update_interval_in_ms</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;type&gt;_cache_max_entries</span></code></p></li>
 </ul>
 <p>Where <code class="docutils literal notranslate"><span class="pre">&lt;type&gt;</span></code> is one of <code class="docutils literal notranslate"><span class="pre">credentials</span></code>, <code class="docutils literal notranslate"><span class="pre">permissions</span></code>, or <code class="docutils literal notranslate"><span class="pre">roles</span></code>.</p>
 <p>As mentioned, these are also exposed via JMX in the mbeans under the <code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.auth</span></code> domain.</p>
@@ -398,28 +497,28 @@ no further restarts are required if permissions are altered.</p>
 <p>JMX SSL configuration is controlled by a number of system properties, some of which are optional. To turn on SSL, edit
 the relevant lines in <code class="docutils literal notranslate"><span class="pre">cassandra-env.sh</span></code> (or <code class="docutils literal notranslate"><span class="pre">cassandra-env.ps1</span></code> on Windows) to uncomment and set the values of these
 properties as required:</p>
-<dl class="docutils">
-<dt><code class="docutils literal notranslate"><span class="pre">com.sun.management.jmxremote.ssl</span></code></dt>
-<dd>set to true to enable SSL</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">com.sun.management.jmxremote.ssl.need.client.auth</span></code></dt>
-<dd>set to true to enable validation of client certificates</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">com.sun.management.jmxremote.registry.ssl</span></code></dt>
-<dd>enables SSL sockets for the RMI registry from which clients obtain the JMX connector stub</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">com.sun.management.jmxremote.ssl.enabled.protocols</span></code></dt>
-<dd>by default, the protocols supported by the JVM will be used, override with a comma-separated list. Note that this is
-not usually necessary and using the defaults is the preferred option.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">com.sun.management.jmxremote.ssl.enabled.cipher.suites</span></code></dt>
-<dd>by default, the cipher suites supported by the JVM will be used, override with a comma-separated list. Note that
-this is not usually necessary and using the defaults is the preferred option.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">javax.net.ssl.keyStore</span></code></dt>
-<dd>set the path on the local filesystem of the keystore containing server private keys and public certificates</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">javax.net.ssl.keyStorePassword</span></code></dt>
-<dd>set the password of the keystore file</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">javax.net.ssl.trustStore</span></code></dt>
-<dd>if validation of client certificates is required, use this property to specify the path of the truststore containing
-the public certificates of trusted clients</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">javax.net.ssl.trustStorePassword</span></code></dt>
-<dd>set the password of the truststore file</dd>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">com.sun.management.jmxremote.ssl</span></code></dt><dd><p>set to true to enable SSL</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">com.sun.management.jmxremote.ssl.need.client.auth</span></code></dt><dd><p>set to true to enable validation of client certificates</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">com.sun.management.jmxremote.registry.ssl</span></code></dt><dd><p>enables SSL sockets for the RMI registry from which clients obtain the JMX connector stub</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">com.sun.management.jmxremote.ssl.enabled.protocols</span></code></dt><dd><p>by default, the protocols supported by the JVM will be used, override with a comma-separated list. Note that this is
+not usually necessary and using the defaults is the preferred option.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">com.sun.management.jmxremote.ssl.enabled.cipher.suites</span></code></dt><dd><p>by default, the cipher suites supported by the JVM will be used, override with a comma-separated list. Note that
+this is not usually necessary and using the defaults is the preferred option.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">javax.net.ssl.keyStore</span></code></dt><dd><p>set the path on the local filesystem of the keystore containing server private keys and public certificates</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">javax.net.ssl.keyStorePassword</span></code></dt><dd><p>set the password of the keystore file</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">javax.net.ssl.trustStore</span></code></dt><dd><p>if validation of client certificates is required, use this property to specify the path of the truststore containing
+the public certificates of trusted clients</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">javax.net.ssl.trustStorePassword</span></code></dt><dd><p>set the password of the truststore file</p>
+</dd>
 </dl>
 <p>See also: <a class="reference external" href="http://docs.oracle.com/javase/7/docs/technotes/guides/management/agent.html#gdemv">Oracle Java7 Docs</a>,
 <a class="reference external" href="https://www.lullabot.com/articles/monitor-java-with-jmx">Monitor Java with JMX</a></p>
@@ -428,19 +527,52 @@ the public certificates of trusted clients</dd>
 </div>
 
 
-
-          
-          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
-            
-            <a href="hardware.html" class="btn btn-default pull-right " role="button" title="Hardware Choices" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
-            
-            
-            <a href="metrics.html" class="btn btn-default" role="button" title="Monitoring" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
-            
+           </div>
+           
           </div>
-          
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="hardware.html" class="btn btn-neutral float-right" title="Hardware Choices" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="metrics.html" class="btn btn-neutral float-left" title="Monitoring" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, The Apache Cassandra team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
         </div>
       </div>
-    </div>
+
+    </section>
+
   </div>
-</div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

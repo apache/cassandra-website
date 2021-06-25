@@ -1,0 +1,332 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sstableutil &mdash; Apache Cassandra Documentation v4.1</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/extra.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="sstableverify" href="sstableverify.html" />
+    <link rel="prev" title="sstableupgrade" href="sstableupgrade.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Apache Cassandra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Cassandra Tools</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cqlsh.html">cqlsh: the CQL shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generatetokens.html">generatetokens</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodetool/nodetool.html">Nodetool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodetool/nodetool.html#usage">Usage</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">SSTable Tools</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sstabledump.html">sstabledump</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableexpiredblockers.html">sstableexpiredblockers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablelevelreset.html">sstablelevelreset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableloader.html">sstableloader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablemetadata.html">sstablemetadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableofflinerelevel.html">sstableofflinerelevel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablerepairedset.html">sstablerepairedset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablescrub.html">sstablescrub</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablesplit.html">sstablesplit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableupgrade.html">sstableupgrade</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sstableutil</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#list-all-sstables">List all sstables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#list-only-temporary-sstables">List only temporary sstables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#list-only-final-sstables">List only final sstables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#include-transaction-logs">Include transaction logs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#clean-up-sstables">Clean up sstables</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sstableverify.html">sstableverify</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cassandra_stress.html">Cassandra Stress</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contactus.html">Contact us</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Cassandra Tools</a> &raquo;</li>
+        
+          <li><a href="index.html">SSTable Tools</a> &raquo;</li>
+        
+      <li>sstableutil</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/tools/sstable/sstableutil.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="sstableutil">
+<h1>sstableutil<a class="headerlink" href="#sstableutil" title="Permalink to this headline">¶</a></h1>
+<p>List sstable files for the provided table.</p>
+<p>ref: <a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-7066">https://issues.apache.org/jira/browse/CASSANDRA-7066</a></p>
+<p>Cassandra must be stopped before this tool is executed, or unexpected results will occur. Note: the script does not verify that Cassandra is stopped.</p>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>sstableutil &lt;options&gt; &lt;keyspace&gt; &lt;table&gt;</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>-c, –cleanup</p></td>
+<td><p>clean up any outstanding transactions</p></td>
+</tr>
+<tr class="row-even"><td><p>-d, –debug</p></td>
+<td><p>display stack traces</p></td>
+</tr>
+<tr class="row-odd"><td><p>-h, –help</p></td>
+<td><p>display this help message</p></td>
+</tr>
+<tr class="row-even"><td><p>-o, –oplog</p></td>
+<td><p>include operation logs</p></td>
+</tr>
+<tr class="row-odd"><td><p>-t, –type &lt;arg&gt;</p></td>
+<td><p>all (list all files, final or temporary), tmp (list temporary files only),
+final (list final files only),</p></td>
+</tr>
+<tr class="row-even"><td><p>-v, –verbose</p></td>
+<td><p>verbose output</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="list-all-sstables">
+<h2>List all sstables<a class="headerlink" href="#list-all-sstables" title="Permalink to this headline">¶</a></h2>
+<p>The basic command lists the sstables associated with a given keyspace/table.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstableutil</span> <span class="n">keyspace</span> <span class="n">eventlog</span>
+<span class="n">Listing</span> <span class="n">files</span><span class="o">...</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">6365332094</span><span class="n">dd11e88f324f9c503e4753</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">32</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">CRC</span><span class="o">.</span><span class="n">db</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">6365332094</span><span class="n">dd11e88f324f9c503e4753</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">32</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">6365332094</span><span class="n">dd11e88f324f9c503e4753</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">32</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Digest</span><span class="o">.</span><span class="n">crc32</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">6365332094</span><span class="n">dd11e88f324f9c503e4753</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">32</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Filter</span><span class="o">.</span><span class="n">db</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">6365332094</span><span class="n">dd11e88f324f9c503e4753</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">32</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Index</span><span class="o">.</span><span class="n">db</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">6365332094</span><span class="n">dd11e88f324f9c503e4753</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">32</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Statistics</span><span class="o">.</span><span class="n">db</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">6365332094</span><span class="n">dd11e88f324f9c503e4753</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">32</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Summary</span><span class="o">.</span><span class="n">db</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">6365332094</span><span class="n">dd11e88f324f9c503e4753</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">32</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">TOC</span><span class="o">.</span><span class="n">txt</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">6365332094</span><span class="n">dd11e88f324f9c503e4753</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">37</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">CRC</span><span class="o">.</span><span class="n">db</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">6365332094</span><span class="n">dd11e88f324f9c503e4753</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">37</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">6365332094</span><span class="n">dd11e88f324f9c503e4753</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">37</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Digest</span><span class="o">.</span><span class="n">crc32</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">6365332094</span><span class="n">dd11e88f324f9c503e4753</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">37</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Filter</span><span class="o">.</span><span class="n">db</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">6365332094</span><span class="n">dd11e88f324f9c503e4753</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">37</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Index</span><span class="o">.</span><span class="n">db</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">6365332094</span><span class="n">dd11e88f324f9c503e4753</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">37</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Statistics</span><span class="o">.</span><span class="n">db</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">6365332094</span><span class="n">dd11e88f324f9c503e4753</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">37</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Summary</span><span class="o">.</span><span class="n">db</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">6365332094</span><span class="n">dd11e88f324f9c503e4753</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">37</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">TOC</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="list-only-temporary-sstables">
+<h2>List only temporary sstables<a class="headerlink" href="#list-only-temporary-sstables" title="Permalink to this headline">¶</a></h2>
+<p>Using the -t option followed by <cite>tmp</cite> will list all temporary sstables, in the format above. Temporary sstables were used in pre-3.0 versions of Cassandra.</p>
+</div>
+<div class="section" id="list-only-final-sstables">
+<h2>List only final sstables<a class="headerlink" href="#list-only-final-sstables" title="Permalink to this headline">¶</a></h2>
+<p>Using the -t option followed by <cite>final</cite> will list all final sstables, in the format above. In recent versions of Cassandra, this is the same output as not using the -t option.</p>
+</div>
+<div class="section" id="include-transaction-logs">
+<h2>Include transaction logs<a class="headerlink" href="#include-transaction-logs" title="Permalink to this headline">¶</a></h2>
+<p>Using the -o option will include transaction logs in the listing, in the format above.</p>
+</div>
+<div class="section" id="clean-up-sstables">
+<h2>Clean up sstables<a class="headerlink" href="#clean-up-sstables" title="Permalink to this headline">¶</a></h2>
+<p>Using the -c option removes any transactions left over from incomplete writes or compactions.</p>
+<p>From the 3.0 upgrade notes:</p>
+<p>New transaction log files have been introduced to replace the compactions_in_progress system table, temporary file markers (tmp and tmplink) and sstable ancestors. Therefore, compaction metadata no longer contains ancestors. Transaction log files list sstable descriptors involved in compactions and other operations such as flushing and streaming. Use the sstableutil tool to list any sstable files currently involved in operations not yet completed, which previously would have been marked as temporary. A transaction log file contains one sstable per line, with the prefix “add:” or “remove:”. They also contain a special line “commit”, only inserted at the end when the transaction is committed. On startup we use these files to cleanup any partial transactions that were in progress when the process exited. If the commit line is found, we keep new sstables (those with the “add” prefix) and delete the old sstables (those with the “remove” prefix), vice-versa if the commit line is missing. Should you lose or delete these log files, both old and new sstable files will be kept as live files, which will result in duplicated sstables. These files are protected by incremental checksums so you should not manually edit them. When restoring a full backup or moving sstable files, you should clean-up any left over transactions and their temporary files first.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="sstableverify.html" class="btn btn-neutral float-right" title="sstableverify" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sstableupgrade.html" class="btn btn-neutral float-left" title="sstableupgrade" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, The Apache Cassandra team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

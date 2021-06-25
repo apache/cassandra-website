@@ -1,61 +1,91 @@
----
-layout: docpage
 
-title: "Documentation"
 
-is_homepage: false
-is_sphinx_doc: true
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Change Data Capture &mdash; Apache Cassandra Documentation v3.11.11</title>
+  
 
-doc-parent: "Operating Cassandra"
+  
+  
+  
+  
 
-doc-title: "Change Data Capture"
-doc-header-links: '
-  <link rel="top" title="Apache Cassandra Documentation v3.11.11" href="../index.html"/>
-      <link rel="up" title="Operating Cassandra" href="index.html"/>
-      <link rel="next" title="Backups" href="backups.html"/>
-      <link rel="prev" title="Compression" href="compression.html"/>
-'
-doc-search-path: "../search.html"
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-extra-footer: '
-<script type="text/javascript">
-    var DOCUMENTATION_OPTIONS = {
-      URL_ROOT:    "",
-      VERSION:     "",
-      COLLAPSE_INDEX: false,
-      FILE_SUFFIX: ".html",
-      HAS_SOURCE:  false,
-      SOURCELINK_SUFFIX: ".txt"
-    };
-</script>
-'
+    
 
----
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-3">
-      <div class="doc-navigation">
-        <div class="doc-menu" role="navigation">
-          <div class="navbar-header">
-            <button type="button" class="pull-left navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-          </div>
-          <div class="navbar-collapse collapse sidebar-navbar-collapse">
-            <form id="doc-search-form" class="navbar-form" action="../search.html" method="get" role="search">
-              <div class="form-group">
-                <input type="text" size="30" class="form-control input-sm" name="q" placeholder="Search docs">
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/extra.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Backups" href="backups.html" />
+    <link rel="prev" title="Compression" href="compression.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apache Cassandra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.11.11
               </div>
-            </form>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
             
             
+              
             
-            <ul class="current">
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
@@ -72,7 +102,11 @@ extra-footer: '
 <li class="toctree-l2"><a class="reference internal" href="compression.html">Compression</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Change Data Capture</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#enabling-or-disable-cdc-on-a-table">Enabling or disable CDC on a table</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cassandra-yaml-parameters">cassandra.yaml parameters</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#reading-commitlogsegments">Reading CommitLogSegments</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#warnings">Warnings</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#further-reading">Further Reading</a></li>
@@ -94,15 +128,69 @@ extra-footer: '
 </ul>
 
             
-            
-          </div><!--/.nav-collapse -->
+          
         </div>
       </div>
-    </div>
-    <div class="col-md-8">
-      <div class="content doc-content">
-        <div class="content-container">
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Operating Cassandra</a> &raquo;</li>
+        
+      <li>Change Data Capture</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/operating/cdc.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
   <div class="section" id="change-data-capture">
 <h1>Change Data Capture<a class="headerlink" href="#change-data-capture" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="overview">
@@ -130,17 +218,17 @@ ALTER TABLE foo WITH cdc=false;
 <div class="section" id="cassandra-yaml-parameters">
 <h3>cassandra.yaml parameters<a class="headerlink" href="#cassandra-yaml-parameters" title="Permalink to this headline">¶</a></h3>
 <p>The following <cite>cassandra.yaml</cite> are available for CDC:</p>
-<dl class="docutils">
-<dt><code class="docutils literal notranslate"><span class="pre">cdc_enabled</span></code> (default: false)</dt>
-<dd>Enable or disable CDC operations node-wide.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">cdc_raw_directory</span></code> (default: <code class="docutils literal notranslate"><span class="pre">$CASSANDRA_HOME/data/cdc_raw</span></code>)</dt>
-<dd>Destination for CommitLogSegments to be moved after all corresponding memtables are flushed.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">cdc_free_space_in_mb</span></code>: (default: min of 4096 and 1/8th volume space)</dt>
-<dd>Calculated as sum of all active CommitLogSegments that permit CDC + all flushed CDC segments in
-<code class="docutils literal notranslate"><span class="pre">cdc_raw_directory</span></code>.</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">cdc_free_space_check_interval_ms</span></code> (default: 250)</dt>
-<dd>When at capacity, we limit the frequency with which we re-calculate the space taken up by <code class="docutils literal notranslate"><span class="pre">cdc_raw_directory</span></code> to
-prevent burning CPU cycles unnecessarily. Default is to check 4 times per second.</dd>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">cdc_enabled</span></code> (default: false)</dt><dd><p>Enable or disable CDC operations node-wide.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">cdc_raw_directory</span></code> (default: <code class="docutils literal notranslate"><span class="pre">$CASSANDRA_HOME/data/cdc_raw</span></code>)</dt><dd><p>Destination for CommitLogSegments to be moved after all corresponding memtables are flushed.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">cdc_free_space_in_mb</span></code>: (default: min of 4096 and 1/8th volume space)</dt><dd><p>Calculated as sum of all active CommitLogSegments that permit CDC + all flushed CDC segments in
+<code class="docutils literal notranslate"><span class="pre">cdc_raw_directory</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">cdc_free_space_check_interval_ms</span></code> (default: 250)</dt><dd><p>When at capacity, we limit the frequency with which we re-calculate the space taken up by <code class="docutils literal notranslate"><span class="pre">cdc_raw_directory</span></code> to
+prevent burning CPU cycles unnecessarily. Default is to check 4 times per second.</p>
+</dd>
 </dl>
 </div>
 </div>
@@ -161,26 +249,59 @@ CDC-enabled tables will be rejected unless some consumption process is in place.
 <div class="section" id="further-reading">
 <h2>Further Reading<a class="headerlink" href="#further-reading" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><a class="reference external" href="https://docs.google.com/document/d/1ZxCWYkeZTquxsvf5hdPc0fiUnUHna8POvgt6TIzML4Y/edit">Design doc</a></li>
-<li><a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-8844">JIRA ticket</a></li>
+<li><p><a class="reference external" href="https://docs.google.com/document/d/1ZxCWYkeZTquxsvf5hdPc0fiUnUHna8POvgt6TIzML4Y/edit">Design doc</a></p></li>
+<li><p><a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-8844">JIRA ticket</a></p></li>
 </ul>
 </div>
 </div>
 
 
-
-          
-          <div class="doc-prev-next-links" role="navigation" aria-label="footer navigation">
-            
-            <a href="backups.html" class="btn btn-default pull-right " role="button" title="Backups" accesskey="n">Next <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span></a>
-            
-            
-            <a href="compression.html" class="btn btn-default" role="button" title="Compression" accesskey="p"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Previous</a>
-            
+           </div>
+           
           </div>
-          
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="backups.html" class="btn btn-neutral float-right" title="Backups" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="compression.html" class="btn btn-neutral float-left" title="Compression" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, The Apache Cassandra team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
         </div>
       </div>
-    </div>
+
+    </section>
+
   </div>
-</div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

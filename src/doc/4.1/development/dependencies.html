@@ -1,0 +1,275 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Dependency Management &mdash; Apache Cassandra Documentation v4.1</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/extra.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Release Process" href="release_process.html" />
+    <link rel="prev" title="Jenkins CI Environment" href="ci.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apache Cassandra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Contributing to Cassandra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="gettingstarted.html">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ide.html">Building and IDE Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="patches.html">Contributing Code Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_style.html">Code Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="license_compliance.html">License Compliance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="how_to_review.html">Review Checklist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="how_to_commit.html">How-to Commit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html">Working on Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ci.html">Jenkins CI Environment</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Dependency Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#required-steps-to-add-or-update-libraries">Required steps to add or update libraries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pom-file-types">POM file types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#troubleshooting-and-conflict-resolution">Troubleshooting and conflict resolution</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="release_process.html">Release Process</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Contributing to Cassandra</a> &raquo;</li>
+        
+      <li>Dependency Management</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/development/dependencies.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="dependency-management">
+<h1>Dependency Management<a class="headerlink" href="#dependency-management" title="Permalink to this headline">¶</a></h1>
+<p>Managing libraries for Cassandra is a bit less straight forward compared to other projects, as the build process is based on ant, maven and manually managed jars. Make sure to follow the steps below carefully and pay attention to any emerging issues in the <a class="reference internal" href="ci.html"><span class="doc">Jenkins CI Environment</span></a> and reported related issues on Jira/ML, in case of any project dependency changes.</p>
+<p>As Cassandra is an Apache product, all included libraries must follow Apache’s <a class="reference external" href="https://www.apache.org/legal/resolved.html">software license requirements</a>.</p>
+<div class="section" id="required-steps-to-add-or-update-libraries">
+<h2>Required steps to add or update libraries<a class="headerlink" href="#required-steps-to-add-or-update-libraries" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Add or replace jar file in <code class="docutils literal notranslate"><span class="pre">lib</span></code> directory</p></li>
+<li><p>Add or update <code class="docutils literal notranslate"><span class="pre">lib/license</span></code> files</p></li>
+<li><p>Update dependencies in <code class="docutils literal notranslate"><span class="pre">build.xml</span></code></p>
+<ul>
+<li><p>Add to <code class="docutils literal notranslate"><span class="pre">parent-pom</span></code> with correct version</p></li>
+<li><p>Add to <code class="docutils literal notranslate"><span class="pre">all-pom</span></code> if simple Cassandra dependency (see below)</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="pom-file-types">
+<h2>POM file types<a class="headerlink" href="#pom-file-types" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><strong>parent-pom</strong> - contains all dependencies with the respective version. All other poms will refer to the artifacts with specified versions listed here.</p></li>
+<li><p><strong>build-deps-pom(-sources)</strong> + <strong>coverage-deps-pom</strong> - used by <code class="docutils literal notranslate"><span class="pre">ant</span> <span class="pre">build</span></code> compile target. Listed dependenices will be resolved and copied to <code class="docutils literal notranslate"><span class="pre">build/lib/{jar,sources}</span></code> by executing the <code class="docutils literal notranslate"><span class="pre">maven-ant-tasks-retrieve-build</span></code> target. This should contain libraries that are required for build tools (grammar, docs, instrumentation), but are not shipped as part of the Cassandra distribution.</p></li>
+<li><p><strong>test-deps-pom</strong> - refered by <code class="docutils literal notranslate"><span class="pre">maven-ant-tasks-retrieve-test</span></code> to retrieve and save dependencies to <code class="docutils literal notranslate"><span class="pre">build/test/lib</span></code>. Exclusively used during JUnit test execution.</p></li>
+<li><p><strong>all-pom</strong> - pom for <a class="reference external" href="https://mvnrepository.com/artifact/org.apache.cassandra/cassandra-all">cassandra-all.jar</a> that can be installed or deployed to public maven repos via <code class="docutils literal notranslate"><span class="pre">ant</span> <span class="pre">publish</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="troubleshooting-and-conflict-resolution">
+<h2>Troubleshooting and conflict resolution<a class="headerlink" href="#troubleshooting-and-conflict-resolution" title="Permalink to this headline">¶</a></h2>
+<p>Here are some useful commands that may help you out resolving conflicts.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ant</span> <span class="pre">realclean</span></code> - gets rid of the build directory, including build artifacts.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mvn</span> <span class="pre">dependency:tree</span> <span class="pre">-f</span> <span class="pre">build/apache-cassandra-*-SNAPSHOT.pom</span> <span class="pre">-Dverbose</span> <span class="pre">-Dincludes=org.slf4j</span></code> - shows transitive dependency tree for artifacts, e.g. org.slf4j. In case the command above fails due to a missing parent pom file, try running <code class="docutils literal notranslate"><span class="pre">ant</span> <span class="pre">mvn-install</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">~/.m2/repository/org/apache/cassandra/apache-cassandra/</span></code> - removes cached local Cassandra maven artifacts</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="release_process.html" class="btn btn-neutral float-right" title="Release Process" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ci.html" class="btn btn-neutral float-left" title="Jenkins CI Environment" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, The Apache Cassandra team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

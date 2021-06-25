@@ -1,0 +1,2193 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Monitoring &mdash; Apache Cassandra Documentation v4.1</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/extra.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Security" href="security.html" />
+    <link rel="prev" title="Bulk Loading" href="bulk_loading.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apache Cassandra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Operating Cassandra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="snitch.html">Snitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topo_changes.html">Adding, replacing, moving and removing nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="repair.html">Repair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_repair.html">Read repair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hints.html">Hints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction/index.html">Compaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bloom_filters.html">Bloom Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compression.html">Compression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cdc.html">Change Data Capture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backups.html">Backups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bulk_loading.html">Bulk Loading</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Monitoring</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#metric-types">Metric Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#table-metrics">Table Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#keyspace-metrics">Keyspace Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#threadpool-metrics">ThreadPool Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#client-request-metrics">Client Request Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cache-metrics">Cache Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cql-metrics">CQL Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#droppedmessage-metrics">DroppedMessage Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#streaming-metrics">Streaming Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#compaction-metrics">Compaction Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#commitlog-metrics">CommitLog Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#storage-metrics">Storage Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hintsservice-metrics">HintsService Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sstable-index-metrics">SSTable Index Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bufferpool-metrics">BufferPool Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#client-metrics">Client Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#batch-metrics">Batch Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#read-repair-metrics">Read Repair Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#messaging-metrics">Messaging Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internode-inbound-connection-metrics">Internode Inbound Connection Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internode-outbound-connection-metrics">Internode Outbound Connection Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jvm-metrics">JVM Metrics</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#bufferpool">BufferPool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#filedescriptorratio">FileDescriptorRatio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#garbagecollector">GarbageCollector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#memory">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#memorypool">MemoryPool</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#jmx">JMX</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#metric-reporters">Metric Reporters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html">Hardware Choices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Operating Cassandra</a> &raquo;</li>
+        
+      <li>Monitoring</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/operating/metrics.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="monitoring">
+<span id="monitoring-metrics"></span><h1>Monitoring<a class="headerlink" href="#monitoring" title="Permalink to this headline">¶</a></h1>
+<p>Metrics in Cassandra are managed using the <a class="reference external" href="http://metrics.dropwizard.io">Dropwizard Metrics</a> library. These metrics
+can be queried via JMX or pushed to external monitoring systems using a number of <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/getting-started/#other-reporting">built in</a> and <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/manual/third-party/">third party</a> reporter plugins.</p>
+<p>Metrics are collected for a single node. It’s up to the operator to use an external monitoring system to aggregate them.</p>
+<div class="section" id="metric-types">
+<h2>Metric Types<a class="headerlink" href="#metric-types" title="Permalink to this headline">¶</a></h2>
+<p>All metrics reported by cassandra fit into one of the following types.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">Gauge</span></code></dt><dd><p>An instantaneous measurement of a value.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Counter</span></code></dt><dd><p>A gauge for an <code class="docutils literal notranslate"><span class="pre">AtomicLong</span></code> instance. Typically this is consumed by monitoring the change since the last call to
+see if there is a large increase compared to the norm.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Histogram</span></code></dt><dd><p>Measures the statistical distribution of values in a stream of data.</p>
+<p>In addition to minimum, maximum, mean, etc., it also measures median, 75th, 90th, 95th, 98th, 99th, and 99.9th
+percentiles.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Timer</span></code></dt><dd><p>Measures both the rate that a particular piece of code is called and the histogram of its duration.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Latency</span></code></dt><dd><p>Special type that tracks latency (in microseconds) with a <code class="docutils literal notranslate"><span class="pre">Timer</span></code> plus a <code class="docutils literal notranslate"><span class="pre">Counter</span></code> that tracks the total latency
+accrued since starting. The former is useful if you track the change in total latency since the last check. Each
+metric name of this type will have ‘Latency’ and ‘TotalLatency’ appended to it.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Meter</span></code></dt><dd><p>A meter metric which measures mean throughput and one-, five-, and fifteen-minute exponentially-weighted moving
+average throughputs.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="table-metrics">
+<span id="id1"></span><h2>Table Metrics<a class="headerlink" href="#table-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Each table in Cassandra has metrics responsible for tracking its state and performance.</p>
+<p>The metric names are all appended with the specific <code class="docutils literal notranslate"><span class="pre">Keyspace</span></code> and <code class="docutils literal notranslate"><span class="pre">Table</span></code> name.</p>
+<p>Reported name format:</p>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.Table.&lt;MetricName&gt;.&lt;Keyspace&gt;.&lt;Table&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=Table,keyspace=&lt;Keyspace&gt;,scope=&lt;Table&gt;,name=&lt;MetricName&gt;</span></code></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There is a special table called ‘<code class="docutils literal notranslate"><span class="pre">all</span></code>’ without a keyspace. This represents the aggregation of metrics across
+<strong>all</strong> tables and keyspaces on the node.</p>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 6%" />
+<col style="width: 75%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AdditionalWrites</p></td>
+<td><p>Counter</p></td>
+<td><p>Total number of additional writes sent to the replicas (other than the intial contacted ones).</p></td>
+</tr>
+<tr class="row-odd"><td><p>AllMemtablesLiveDataSize</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Total amount of live data stored in the memtables (2i and pending flush memtables included) that resides off-heap, excluding any data structure overhead.</p></td>
+</tr>
+<tr class="row-even"><td><p>AllMemtablesOffHeapDataSize</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Total amount of data stored in the memtables (2i and pending flush memtables included) that resides <strong>off</strong>-heap.</p></td>
+</tr>
+<tr class="row-odd"><td><p>AllMemtablesOffHeapSize (Deprecated)</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Total amount of data stored in the memtables (2i and pending flush memtables included) that resides <strong>off</strong>-heap.</p></td>
+</tr>
+<tr class="row-even"><td><p>AllMemtablesOnHeapDataSize</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Total amount of data stored in the memtables (2i and pending flush memtables included) that resides <strong>on</strong>-heap.</p></td>
+</tr>
+<tr class="row-odd"><td><p>AllMemtablesOnHeapSize (Deprecated)</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Total amount of data stored in the memtables (2i and pending flush memtables included) that resides <strong>on</strong>-heap.</p></td>
+</tr>
+<tr class="row-even"><td><p>AnticompactionTime</p></td>
+<td><p>Timer</p></td>
+<td><p>Time spent anticompacting before a consistent repair.</p></td>
+</tr>
+<tr class="row-odd"><td><p>BloomFilterDiskSpaceUsed</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Disk space used by bloom filter (in bytes).</p></td>
+</tr>
+<tr class="row-even"><td><p>BloomFilterFalsePositives</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Number of false positives on table’s bloom filter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>BloomFilterFalseRatio</p></td>
+<td><p>Gauge&lt;Double&gt;</p></td>
+<td><p>False positive ratio of table’s bloom filter.</p></td>
+</tr>
+<tr class="row-even"><td><p>BloomFilterOffHeapMemoryUsed</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Off-heap memory used by bloom filter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>BytesAnticompacted</p></td>
+<td><p>Counter</p></td>
+<td><p>How many bytes we anticompacted.</p></td>
+</tr>
+<tr class="row-even"><td><p>BytesFlushed</p></td>
+<td><p>Counter</p></td>
+<td><p>Total number of bytes flushed since server [re]start.</p></td>
+</tr>
+<tr class="row-odd"><td><p>BytesMutatedAnticompaction</p></td>
+<td><p>Counter</p></td>
+<td><p>How many bytes we avoided anticompacting because the sstable was fully contained in the repaired range.</p></td>
+</tr>
+<tr class="row-even"><td><p>BytesPendingRepair</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Size of table data isolated for an ongoing incremental repair</p></td>
+</tr>
+<tr class="row-odd"><td><p>BytesRepaired</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Size of table data repaired on disk</p></td>
+</tr>
+<tr class="row-even"><td><p>BytesUnrepaired</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Size of table data unrepaired on disk</p></td>
+</tr>
+<tr class="row-odd"><td><p>BytesValidated</p></td>
+<td><p>Histogram</p></td>
+<td><p>Histogram over the amount of bytes read during validation.</p></td>
+</tr>
+<tr class="row-even"><td><p>CasCommit</p></td>
+<td><p>Latency</p></td>
+<td><p>Latency of paxos commit round.</p></td>
+</tr>
+<tr class="row-odd"><td><p>CasPrepare</p></td>
+<td><p>Latency</p></td>
+<td><p>Latency of paxos prepare round.</p></td>
+</tr>
+<tr class="row-even"><td><p>CasPropose</p></td>
+<td><p>Latency</p></td>
+<td><p>Latency of paxos propose round.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ColUpdateTimeDeltaHistogram</p></td>
+<td><p>Histogram</p></td>
+<td><p>Histogram of column update time delta on this table.</p></td>
+</tr>
+<tr class="row-even"><td><p>CompactionBytesWritten</p></td>
+<td><p>Counter</p></td>
+<td><p>Total number of bytes written by compaction since server [re]start.</p></td>
+</tr>
+<tr class="row-odd"><td><p>CompressionMetadataOffHeapMemoryUsed</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Off-heap memory used by compression meta data.</p></td>
+</tr>
+<tr class="row-even"><td><p>CompressionRatio</p></td>
+<td><p>Gauge&lt;Double&gt;</p></td>
+<td><p>Current compression ratio for all SSTables.</p></td>
+</tr>
+<tr class="row-odd"><td><p>CoordinatorReadLatency</p></td>
+<td><p>Timer</p></td>
+<td><p>Coordinator read latency for this table.</p></td>
+</tr>
+<tr class="row-even"><td><p>CoordinatorScanLatency</p></td>
+<td><p>Timer</p></td>
+<td><p>Coordinator range scan latency for this table.</p></td>
+</tr>
+<tr class="row-odd"><td><p>CoordinatorWriteLatency</p></td>
+<td><p>Timer</p></td>
+<td><p>Coordinator write latency for this table.</p></td>
+</tr>
+<tr class="row-even"><td><p>DroppedMutations</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of dropped mutations on this table.</p></td>
+</tr>
+<tr class="row-odd"><td><p>EstimatedColumnCountHistogram</p></td>
+<td><p>Gauge&lt;long[]&gt;</p></td>
+<td><p>Histogram of estimated number of columns.</p></td>
+</tr>
+<tr class="row-even"><td><p>EstimatedPartitionCount</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Approximate number of keys in table.</p></td>
+</tr>
+<tr class="row-odd"><td><p>EstimatedPartitionSizeHistogram</p></td>
+<td><p>Gauge&lt;long[]&gt;</p></td>
+<td><p>Histogram of estimated partition size (in bytes).</p></td>
+</tr>
+<tr class="row-even"><td><p>IndexSummaryOffHeapMemoryUsed</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Off-heap memory used by index summary.</p></td>
+</tr>
+<tr class="row-odd"><td><p>KeyCacheHitRate</p></td>
+<td><p>Gauge&lt;Double&gt;</p></td>
+<td><p>Key cache hit rate for this table.</p></td>
+</tr>
+<tr class="row-even"><td><p>LiveDiskSpaceUsed</p></td>
+<td><p>Counter</p></td>
+<td><p>Disk space used by SSTables belonging to this table (in bytes).</p></td>
+</tr>
+<tr class="row-odd"><td><p>LiveSSTableCount</p></td>
+<td><p>Gauge&lt;Integer&gt;</p></td>
+<td><p>Number of SSTables on disk for this table.</p></td>
+</tr>
+<tr class="row-even"><td><p>LiveScannedHistogram</p></td>
+<td><p>Histogram</p></td>
+<td><p>Histogram of live cells scanned in queries on this table.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MaxPartitionSize</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Size of the largest compacted partition (in bytes).</p></td>
+</tr>
+<tr class="row-even"><td><p>MeanPartitionSize</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Size of the average compacted partition (in bytes).</p></td>
+</tr>
+<tr class="row-odd"><td><p>MemtableColumnsCount</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Total number of columns present in the memtable.</p></td>
+</tr>
+<tr class="row-even"><td><p>MemtableLiveDataSize</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Total amount of live data stored in the memtable, excluding any data structure overhead.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MemtableOffHeapDataSize</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Total amount of data stored in the memtable that resides <strong>off</strong>-heap, including column related overhead and partitions overwritten.</p></td>
+</tr>
+<tr class="row-even"><td><p>MemtableOffHeapSize (Deprecated)</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Total amount of data stored in the memtable that resides <strong>off</strong>-heap, including column related overhead and partitions overwritten.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MemtableOnHeapDataSize</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Total amount of data stored in the memtable that resides <strong>on</strong>-heap, including column related overhead and partitions overwritten.</p></td>
+</tr>
+<tr class="row-even"><td><p>MemtableOnHeapSize (Deprecated)</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Total amount of data stored in the memtable that resides <strong>on</strong>-heap, including column related overhead and partitions overwritten.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MemtableSwitchCount</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of times flush has resulted in the memtable being switched out.</p></td>
+</tr>
+<tr class="row-even"><td><p>MinPartitionSize</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Size of the smallest compacted partition (in bytes).</p></td>
+</tr>
+<tr class="row-odd"><td><p>MutatedAnticompactionGauge</p></td>
+<td><p>Gauge&lt;Double&gt;</p></td>
+<td><p>Ratio of bytes mutated vs total bytes repaired.</p></td>
+</tr>
+<tr class="row-even"><td><p>PartitionsValidated</p></td>
+<td><p>Histogram</p></td>
+<td><p>Histogram over the number of partitions read during validation.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PendingCompactions</p></td>
+<td><p>Gauge&lt;Integer&gt;</p></td>
+<td><p>Estimate of number of pending compactions for this table.</p></td>
+</tr>
+<tr class="row-even"><td><p>PendingFlushes</p></td>
+<td><p>Counter</p></td>
+<td><p>Estimated number of flush tasks pending for this table.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PercentRepaired</p></td>
+<td><p>Gauge&lt;Double&gt;</p></td>
+<td><p>Percent of table data that is repaired on disk.</p></td>
+</tr>
+<tr class="row-even"><td><p>RangeLatency</p></td>
+<td><p>Latency</p></td>
+<td><p>Local range scan latency for this table.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ReadLatency</p></td>
+<td><p>Latency</p></td>
+<td><p>Local read latency for this table.</p></td>
+</tr>
+<tr class="row-even"><td><p>ReadRepairRequests</p></td>
+<td><p>Meter</p></td>
+<td><p>Throughput for mutations generated by read-repair.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RepairJobsCompleted</p></td>
+<td><p>Counter</p></td>
+<td><p>Total number of completed repairs as coordinator on this table.</p></td>
+</tr>
+<tr class="row-even"><td><p>RepairJobsStarted</p></td>
+<td><p>Counter</p></td>
+<td><p>Total number of started repairs as coordinator on this table.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RepairSyncTime</p></td>
+<td><p>Timer</p></td>
+<td><p>Time spent doing streaming during repair.</p></td>
+</tr>
+<tr class="row-even"><td><p>RepairedDataTrackingOverreadRows</p></td>
+<td><p>Histogram</p></td>
+<td><p>Histogram of the amount of the additonal rows of the repaired data read.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RepairedDataTrackingOverreadTime</p></td>
+<td><p>Timer</p></td>
+<td><p>Time spent reading the additional rows of the repaired data.</p></td>
+</tr>
+<tr class="row-even"><td><p>ReplicaFilteringProtectionRequests</p></td>
+<td><p>Meter</p></td>
+<td><p>Throughput for row completion requests during replica filtering protection.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ReplicaFilteringProtectionRowsCachedPerQuery</p></td>
+<td><p>Histogram</p></td>
+<td><p>Histogram of the number of rows cached per query when replica filtering protection is engaged.</p></td>
+</tr>
+<tr class="row-even"><td><p>RowCacheHit</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of table row cache hits.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RowCacheHitOutOfRange</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of table row cache hits that do not satisfy the query filter, thus went to disk.</p></td>
+</tr>
+<tr class="row-even"><td><p>RowCacheMiss</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of table row cache misses.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SSTablesPerReadHistogram</p></td>
+<td><p>Histogram</p></td>
+<td><p>Histogram of the number of sstable data files accessed per single partition read. SSTables skipped due to Bloom Filters, min-max key or partition index lookup are not taken into acoount.</p></td>
+</tr>
+<tr class="row-even"><td><p>ShortReadProtectionRequests</p></td>
+<td><p>Meter</p></td>
+<td><p>Throughput for requests to get extra rows during short read protection.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SpeculativeFailedRetries</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of speculative retries that failed to prevent a timeout</p></td>
+</tr>
+<tr class="row-even"><td><p>SpeculativeInsufficientReplicas</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of speculative retries that couldn’t be attempted due to lack of replicas</p></td>
+</tr>
+<tr class="row-odd"><td><p>SpeculativeRetries</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of times speculative retries were sent for this table.</p></td>
+</tr>
+<tr class="row-even"><td><p>SpeculativeSampleLatencyNanos</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Number of nanoseconds to wait before speculation is attempted. Value may be statically configured or updated periodically based on coordinator latency.</p></td>
+</tr>
+<tr class="row-odd"><td><p>TombstoneScannedHistogram</p></td>
+<td><p>Histogram</p></td>
+<td><p>Histogram of tombstones scanned in queries on this table.</p></td>
+</tr>
+<tr class="row-even"><td><p>TotalDiskSpaceUsed</p></td>
+<td><p>Counter</p></td>
+<td><p>Total disk space used by SSTables belonging to this table, including obsolete ones waiting to be GC’d.</p></td>
+</tr>
+<tr class="row-odd"><td><p>TrueSnapshotsSize</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Disk space used by snapshots of this table including all SSTable components.</p></td>
+</tr>
+<tr class="row-even"><td><p>ValidationTime</p></td>
+<td><p>Timer</p></td>
+<td><p>Time spent doing validation compaction during repair.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ViewLockAcquireTime</p></td>
+<td><p>Timer</p></td>
+<td><p>Time taken acquiring a partition lock for materialized view updates on this table.</p></td>
+</tr>
+<tr class="row-even"><td><p>ViewReadTime</p></td>
+<td><p>Timer</p></td>
+<td><p>Time taken during the local read of a materialized view update.</p></td>
+</tr>
+<tr class="row-odd"><td><p>WaitingOnFreeMemtableSpace</p></td>
+<td><p>Histogram</p></td>
+<td><p>Histogram of time spent waiting for free memtable space, either on- or off-heap.</p></td>
+</tr>
+<tr class="row-even"><td><p>WriteLatency</p></td>
+<td><p>Latency</p></td>
+<td><p>Local write latency for this table.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="keyspace-metrics">
+<h2>Keyspace Metrics<a class="headerlink" href="#keyspace-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Each keyspace in Cassandra has metrics responsible for tracking its state and performance.</p>
+<p>Most of these metrics are the same as the <code class="docutils literal notranslate"><span class="pre">Table</span> <span class="pre">Metrics</span></code> above, only they are aggregated at the Keyspace level. Only the keyspace specific metrics are specified in the table below.</p>
+<p>Reported name format:</p>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.keyspace.&lt;MetricName&gt;.&lt;Keyspace&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=Keyspace,keyspace=&lt;Keyspace&gt;,name=&lt;MetricName&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 7%" />
+<col style="width: 73%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>IdealCLWriteLatency</p></td>
+<td><p>Latency</p></td>
+<td><p>Coordinator latency of writes at the configured ideal consistency level. No values are recorded if ideal consistency level is not configured</p></td>
+</tr>
+<tr class="row-odd"><td><p>RepairPrepareTime</p></td>
+<td><p>Timer</p></td>
+<td><p>Total time spent preparing for repair.</p></td>
+</tr>
+<tr class="row-even"><td><p>RepairTime</p></td>
+<td><p>Timer</p></td>
+<td><p>Total time spent as repair coordinator.</p></td>
+</tr>
+<tr class="row-odd"><td><p>WriteFailedIdealCL</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of writes that failed to achieve the configured ideal consistency level or 0 if none is configured</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="threadpool-metrics">
+<h2>ThreadPool Metrics<a class="headerlink" href="#threadpool-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Cassandra splits work of a particular type into its own thread pool.  This provides back-pressure and asynchrony for
+requests on a node.  It’s important to monitor the state of these thread pools since they can tell you how saturated a
+node is.</p>
+<p>The metric names are all appended with the specific <code class="docutils literal notranslate"><span class="pre">ThreadPool</span></code> name.  The thread pools are also categorized under a
+specific type.</p>
+<p>Reported name format:</p>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.ThreadPools.&lt;MetricName&gt;.&lt;Path&gt;.&lt;ThreadPoolName&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=ThreadPools,path=&lt;Path&gt;,scope=&lt;ThreadPoolName&gt;,name=&lt;MetricName&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 10%" />
+<col style="width: 74%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ActiveTasks</p></td>
+<td><p>Gauge&lt;Integer&gt;</p></td>
+<td><p>Number of tasks being actively worked on by this pool.</p></td>
+</tr>
+<tr class="row-odd"><td><p>CompletedTasks</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of tasks completed.</p></td>
+</tr>
+<tr class="row-even"><td><p>CurrentlyBlockedTask</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of tasks that are currently blocked due to queue saturation but on retry will become unblocked.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MaxPoolSize</p></td>
+<td><p>Gauge&lt;Integer&gt;</p></td>
+<td><p>The maximum number of threads in this pool.</p></td>
+</tr>
+<tr class="row-even"><td><p>MaxTasksQueued</p></td>
+<td><p>Gauge&lt;Integer&gt;</p></td>
+<td><p>The maximum number of tasks queued before a task get blocked.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PendingTasks</p></td>
+<td><p>Gauge&lt;Integer&gt;</p></td>
+<td><p>Number of queued tasks queued up on this pool.</p></td>
+</tr>
+<tr class="row-even"><td><p>TotalBlockedTasks</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of tasks that were blocked due to queue saturation.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The following thread pools can be monitored.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 13%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AntiEntropyStage</p></td>
+<td><p>internal</p></td>
+<td><p>Builds merkle tree for repairs</p></td>
+</tr>
+<tr class="row-odd"><td><p>CacheCleanupExecutor</p></td>
+<td><p>internal</p></td>
+<td><p>Cache maintenance performed on this thread pool</p></td>
+</tr>
+<tr class="row-even"><td><p>CompactionExecutor</p></td>
+<td><p>internal</p></td>
+<td><p>Compactions are run on these threads</p></td>
+</tr>
+<tr class="row-odd"><td><p>CounterMutationStage</p></td>
+<td><p>request</p></td>
+<td><p>Responsible for counter writes</p></td>
+</tr>
+<tr class="row-even"><td><p>GossipStage</p></td>
+<td><p>internal</p></td>
+<td><p>Handles gossip requests</p></td>
+</tr>
+<tr class="row-odd"><td><p>HintsDispatcher</p></td>
+<td><p>internal</p></td>
+<td><p>Performs hinted handoff</p></td>
+</tr>
+<tr class="row-even"><td><p>InternalResponseStage</p></td>
+<td><p>internal</p></td>
+<td><p>Responsible for intra-cluster callbacks</p></td>
+</tr>
+<tr class="row-odd"><td><p>MemtableFlushWriter</p></td>
+<td><p>internal</p></td>
+<td><p>Writes memtables to disk</p></td>
+</tr>
+<tr class="row-even"><td><p>MemtablePostFlush</p></td>
+<td><p>internal</p></td>
+<td><p>Cleans up commit log after memtable is written to disk</p></td>
+</tr>
+<tr class="row-odd"><td><p>MemtableReclaimMemory</p></td>
+<td><p>internal</p></td>
+<td><p>Memtable recycling</p></td>
+</tr>
+<tr class="row-even"><td><p>MigrationStage</p></td>
+<td><p>internal</p></td>
+<td><p>Runs schema migrations</p></td>
+</tr>
+<tr class="row-odd"><td><p>MiscStage</p></td>
+<td><p>internal</p></td>
+<td><p>Misceleneous tasks run here</p></td>
+</tr>
+<tr class="row-even"><td><p>MutationStage</p></td>
+<td><p>request</p></td>
+<td><p>Responsible for all other writes</p></td>
+</tr>
+<tr class="row-odd"><td><p>Native-Transport-Requests</p></td>
+<td><p>transport</p></td>
+<td><p>Handles client CQL requests</p></td>
+</tr>
+<tr class="row-even"><td><p>PendingRangeCalculator</p></td>
+<td><p>internal</p></td>
+<td><p>Calculates token range</p></td>
+</tr>
+<tr class="row-odd"><td><p>PerDiskMemtableFlushWriter_0</p></td>
+<td><p>internal</p></td>
+<td><p>Responsible for writing a spec (there is one of these per disk 0-N)</p></td>
+</tr>
+<tr class="row-even"><td><p>ReadRepairStage</p></td>
+<td><p>request</p></td>
+<td><p>ReadRepair happens on this thread pool</p></td>
+</tr>
+<tr class="row-odd"><td><p>ReadStage</p></td>
+<td><p>request</p></td>
+<td><p>Local reads run on this thread pool</p></td>
+</tr>
+<tr class="row-even"><td><p>RequestResponseStage</p></td>
+<td><p>request</p></td>
+<td><p>Coordinator requests to the cluster run on this thread pool</p></td>
+</tr>
+<tr class="row-odd"><td><p>Sampler</p></td>
+<td><p>internal</p></td>
+<td><p>Responsible for re-sampling the index summaries of SStables</p></td>
+</tr>
+<tr class="row-even"><td><p>SecondaryIndexManagement</p></td>
+<td><p>internal</p></td>
+<td><p>Performs updates to secondary indexes</p></td>
+</tr>
+<tr class="row-odd"><td><p>ValidationExecutor</p></td>
+<td><p>internal</p></td>
+<td><p>Performs validation compaction or scrubbing</p></td>
+</tr>
+<tr class="row-even"><td><p>ViewBuildExecutor</p></td>
+<td><p>internal</p></td>
+<td><p>Performs materialized views initial build</p></td>
+</tr>
+<tr class="row-odd"><td><p>ViewMutationStage</p></td>
+<td><p>request</p></td>
+<td><p>Responsible for materialized view writes</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="client-request-metrics">
+<h2>Client Request Metrics<a class="headerlink" href="#client-request-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Client requests have their own set of metrics that encapsulate the work happening at coordinator level.</p>
+<p>Different types of client requests are broken down by <code class="docutils literal notranslate"><span class="pre">RequestType</span></code>.</p>
+<p>Reported name format:</p>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.ClientRequest.&lt;MetricName&gt;.&lt;RequestType&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=ClientRequest,scope=&lt;RequestType&gt;,name=&lt;MetricName&gt;</span></code></p>
+</dd>
+</dl>
+<dl class="field-list">
+<dt class="field-odd">RequestType</dt>
+<dd class="field-odd"><p>CASRead</p>
+</dd>
+<dt class="field-even">Description</dt>
+<dd class="field-even"><p>Metrics related to transactional read requests.</p>
+</dd>
+<dt class="field-odd">Metrics</dt>
+<dd class="field-odd"><table class="docutils align-default">
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 14%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ConditionNotMet</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of transaction preconditions did not match current values.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ContentionHistogram</p></td>
+<td><p>Histogram</p></td>
+<td><p>How many contended reads were encountered</p></td>
+</tr>
+<tr class="row-even"><td><p>Failures</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of transaction failures encountered.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Timeouts</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of timeouts encountered.</p></td>
+</tr>
+<tr class="row-even"><td><p>Unavailables</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of unavailable exceptions encountered.</p></td>
+</tr>
+<tr class="row-odd"><td><p>UnfinishedCommit</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of transactions that were committed on read.</p></td>
+</tr>
+<tr class="row-even"><td><p> </p></td>
+<td><p>Latency</p></td>
+<td><p>Transaction read latency.</p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt class="field-even">RequestType</dt>
+<dd class="field-even"><p>CASWrite</p>
+</dd>
+<dt class="field-odd">Description</dt>
+<dd class="field-odd"><p>Metrics related to transactional write requests.</p>
+</dd>
+<dt class="field-even">Metrics</dt>
+<dd class="field-even"><table class="docutils align-default">
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 14%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ConditionNotMet</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of transaction preconditions did not match current values.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ContentionHistogram</p></td>
+<td><p>Histogram</p></td>
+<td><p>How many contended writes were encountered</p></td>
+</tr>
+<tr class="row-even"><td><p>Failures</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of transaction failures encountered.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MutationSizeHistogram</p></td>
+<td><p>Histogram</p></td>
+<td><p>Total size in bytes of the requests mutations.</p></td>
+</tr>
+<tr class="row-even"><td><p>Timeouts</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of timeouts encountered.</p></td>
+</tr>
+<tr class="row-odd"><td><p>UnfinishedCommit</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of transactions that were committed on write.</p></td>
+</tr>
+<tr class="row-even"><td><p> </p></td>
+<td><p>Latency</p></td>
+<td><p>Transaction write latency.</p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt class="field-odd">RequestType</dt>
+<dd class="field-odd"><p>Read</p>
+</dd>
+<dt class="field-even">Description</dt>
+<dd class="field-even"><p>Metrics related to standard read requests.</p>
+</dd>
+<dt class="field-odd">Metrics</dt>
+<dd class="field-odd"><table class="docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 15%" />
+<col style="width: 64%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Failures</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of read failures encountered.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Timeouts</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of timeouts encountered.</p></td>
+</tr>
+<tr class="row-even"><td><p>Unavailables</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of unavailable exceptions encountered.</p></td>
+</tr>
+<tr class="row-odd"><td><p> </p></td>
+<td><p>Latency</p></td>
+<td><p>Read latency.</p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt class="field-even">RequestType</dt>
+<dd class="field-even"><p>RangeSlice</p>
+</dd>
+<dt class="field-odd">Description</dt>
+<dd class="field-odd"><p>Metrics related to token range read requests.</p>
+</dd>
+<dt class="field-even">Metrics</dt>
+<dd class="field-even"><table class="docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 15%" />
+<col style="width: 64%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Failures</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of range query failures encountered.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Timeouts</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of timeouts encountered.</p></td>
+</tr>
+<tr class="row-even"><td><p>Unavailables</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of unavailable exceptions encountered.</p></td>
+</tr>
+<tr class="row-odd"><td><p> </p></td>
+<td><p>Latency</p></td>
+<td><p>Range query latency.</p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt class="field-odd">RequestType</dt>
+<dd class="field-odd"><p>Write</p>
+</dd>
+<dt class="field-even">Description</dt>
+<dd class="field-even"><p>Metrics related to regular write requests.</p>
+</dd>
+<dt class="field-odd">Metrics</dt>
+<dd class="field-odd"><table class="docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 15%" />
+<col style="width: 64%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Failures</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of write failures encountered.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MutationSizeHistogram</p></td>
+<td><p>Histogram</p></td>
+<td><p>Total size in bytes of the requests mutations.</p></td>
+</tr>
+<tr class="row-even"><td><p>Timeouts</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of timeouts encountered.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Unavailables</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of unavailable exceptions encountered.</p></td>
+</tr>
+<tr class="row-even"><td><p> </p></td>
+<td><p>Latency</p></td>
+<td><p>Write latency.</p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt class="field-even">RequestType</dt>
+<dd class="field-even"><p>ViewWrite</p>
+</dd>
+<dt class="field-odd">Description</dt>
+<dd class="field-odd"><p>Metrics related to materialized view write wrtes.</p>
+</dd>
+<dt class="field-even">Metrics</dt>
+<dd class="field-even"><table class="docutils align-default">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 11%" />
+<col style="width: 72%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Failures</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of transaction failures encountered.</p></td>
+</tr>
+<tr class="row-even"><td><p>Timeouts</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of timeouts encountered.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Unavailables</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of unavailable exceptions encountered.</p></td>
+</tr>
+<tr class="row-even"><td><p>ViewPendingMutations</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>ViewReplicasAttempted - ViewReplicasSuccess.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ViewReplicasAttempted</p></td>
+<td><p>Counter</p></td>
+<td><p>Total number of attempted view replica writes.</p></td>
+</tr>
+<tr class="row-even"><td><p>ViewReplicasSuccess</p></td>
+<td><p>Counter</p></td>
+<td><p>Total number of succeded view replica writes.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ViewWriteLatency</p></td>
+<td><p>Timer</p></td>
+<td><p>Time between when mutation is applied to base table and when CL.ONE is achieved on view.</p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="cache-metrics">
+<h2>Cache Metrics<a class="headerlink" href="#cache-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Cassandra caches have metrics to track the effectivness of the caches. Though the <code class="docutils literal notranslate"><span class="pre">Table</span> <span class="pre">Metrics</span></code> might be more useful.</p>
+<p>Reported name format:</p>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.Cache.&lt;MetricName&gt;.&lt;CacheName&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=Cache,scope=&lt;CacheName&gt;,name=&lt;MetricName&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 18%" />
+<col style="width: 49%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Capacity</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Cache capacity in bytes.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Entries</p></td>
+<td><p>Gauge&lt;Integer&gt;</p></td>
+<td><p>Total number of cache entries.</p></td>
+</tr>
+<tr class="row-even"><td><p>FifteenMinuteCacheHitRate</p></td>
+<td><p>Gauge&lt;Double&gt;</p></td>
+<td><p>15m cache hit rate.</p></td>
+</tr>
+<tr class="row-odd"><td><p>FiveMinuteCacheHitRate</p></td>
+<td><p>Gauge&lt;Double&gt;</p></td>
+<td><p>5m cache hit rate.</p></td>
+</tr>
+<tr class="row-even"><td><p>HitRate</p></td>
+<td><p>Gauge&lt;Double&gt;</p></td>
+<td><p>All time cache hit rate.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Hits</p></td>
+<td><p>Meter</p></td>
+<td><p>Total number of cache hits.</p></td>
+</tr>
+<tr class="row-even"><td><p>MissLatency</p></td>
+<td><p>Timer</p></td>
+<td><p>Latency of misses.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Misses</p></td>
+<td><p>Meter</p></td>
+<td><p>Total number of cache misses.</p></td>
+</tr>
+<tr class="row-even"><td><p>OneMinuteCacheHitRate</p></td>
+<td><p>Gauge&lt;Double&gt;</p></td>
+<td><p>1m cache hit rate.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Requests</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Total number of cache requests.</p></td>
+</tr>
+<tr class="row-even"><td><p>Size</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Total size of occupied cache, in bytes.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The following caches are covered:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ChunkCache</p></td>
+<td><p>In process uncompressed page cache.</p></td>
+</tr>
+<tr class="row-odd"><td><p>CounterCache</p></td>
+<td><p>Keeps hot counters in memory for performance.</p></td>
+</tr>
+<tr class="row-even"><td><p>KeyCache</p></td>
+<td><p>Cache for partition to sstable offsets.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RowCache</p></td>
+<td><p>Cache for rows kept in memory.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Misses and MissLatency are only defined for the ChunkCache</p>
+</div>
+</div>
+<div class="section" id="cql-metrics">
+<h2>CQL Metrics<a class="headerlink" href="#cql-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Metrics specific to CQL prepared statement caching.</p>
+<p>Reported name format:</p>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.CQL.&lt;MetricName&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=CQL,name=&lt;MetricName&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 13%" />
+<col style="width: 64%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PreparedStatementsCount</p></td>
+<td><p>Gauge&lt;Integer&gt;</p></td>
+<td><p>Number of cached prepared statements.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PreparedStatementsEvicted</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of prepared statements evicted from the prepared statement cache</p></td>
+</tr>
+<tr class="row-even"><td><p>PreparedStatementsExecuted</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of prepared statements executed.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PreparedStatementsRatio</p></td>
+<td><p>Gauge&lt;Double&gt;</p></td>
+<td><p>Percentage of statements that are prepared vs unprepared.</p></td>
+</tr>
+<tr class="row-even"><td><p>RegularStatementsExecuted</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of <strong>non</strong> prepared statements executed.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="droppedmessage-metrics">
+<span id="dropped-metrics"></span><h2>DroppedMessage Metrics<a class="headerlink" href="#droppedmessage-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Metrics specific to tracking dropped messages for different types of requests.
+Dropped writes are stored and retried by <code class="docutils literal notranslate"><span class="pre">Hinted</span> <span class="pre">Handoff</span></code></p>
+<p>Reported name format:</p>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.DroppedMessage.&lt;MetricName&gt;.&lt;Type&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=DroppedMessage,scope=&lt;Type&gt;,name=&lt;MetricName&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 19%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CrossNodeDroppedLatency</p></td>
+<td><p>Timer</p></td>
+<td><p>The dropped latency across nodes.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dropped</p></td>
+<td><p>Meter</p></td>
+<td><p>Number of dropped messages.</p></td>
+</tr>
+<tr class="row-even"><td><p>InternalDroppedLatency</p></td>
+<td><p>Timer</p></td>
+<td><p>The dropped latency within node.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The different types of messages tracked are:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>BATCH_REMOVE</p></td>
+<td><p>Batchlog cleanup (after succesfully applied)</p></td>
+</tr>
+<tr class="row-odd"><td><p>BATCH_STORE</p></td>
+<td><p>Batchlog write</p></td>
+</tr>
+<tr class="row-even"><td><p>COUNTER_MUTATION</p></td>
+<td><p>Counter writes</p></td>
+</tr>
+<tr class="row-odd"><td><p>HINT</p></td>
+<td><p>Hint replay</p></td>
+</tr>
+<tr class="row-even"><td><p>MUTATION</p></td>
+<td><p>Regular writes</p></td>
+</tr>
+<tr class="row-odd"><td><p>PAGED_SLICE</p></td>
+<td><p>Paged read</p></td>
+</tr>
+<tr class="row-even"><td><p>RANGE_SLICE</p></td>
+<td><p>Token range read</p></td>
+</tr>
+<tr class="row-odd"><td><p>READ</p></td>
+<td><p>Regular reads</p></td>
+</tr>
+<tr class="row-even"><td><p>READ_REPAIR</p></td>
+<td><p>Read repair</p></td>
+</tr>
+<tr class="row-odd"><td><p>REQUEST_RESPONSE</p></td>
+<td><p>RPC Callbacks</p></td>
+</tr>
+<tr class="row-even"><td><p>_TRACE</p></td>
+<td><p>Tracing writes</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="streaming-metrics">
+<h2>Streaming Metrics<a class="headerlink" href="#streaming-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Metrics reported during <code class="docutils literal notranslate"><span class="pre">Streaming</span></code> operations, such as repair, bootstrap, rebuild.</p>
+<p>These metrics are specific to a peer endpoint, with the source node being the node you are pulling the metrics from.</p>
+<p>Reported name format:</p>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.Streaming.&lt;MetricName&gt;.&lt;PeerIP&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=Streaming,scope=&lt;PeerIP&gt;,name=&lt;MetricName&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 13%" />
+<col style="width: 64%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>IncomingBytes</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of bytes streamed to this node from the peer.</p></td>
+</tr>
+<tr class="row-odd"><td><p>IncomingProcessTime</p></td>
+<td><p>Timer</p></td>
+<td><p>The time spent on processing the incoming stream message from the peer.</p></td>
+</tr>
+<tr class="row-even"><td><p>OutgoingBytes</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of bytes streamed to the peer endpoint from this node.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="compaction-metrics">
+<h2>Compaction Metrics<a class="headerlink" href="#compaction-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Metrics specific to <code class="docutils literal notranslate"><span class="pre">Compaction</span></code> work.</p>
+<p>Reported name format:</p>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.Compaction.&lt;MetricName&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=Compaction,name=&lt;MetricName&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 20%" />
+<col style="width: 68%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>BytesCompacted</p></td>
+<td><p>Counter</p></td>
+<td><p>Total number of bytes compacted since server [re]start.</p></td>
+</tr>
+<tr class="row-odd"><td><p>CompletedTasks</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Number of completed compactions since server [re]start.</p></td>
+</tr>
+<tr class="row-even"><td><p>PendingTasks</p></td>
+<td><p>Gauge&lt;Integer&gt;</p></td>
+<td><p>Estimated number of compactions remaining to perform.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PendingTasksByTableName</p></td>
+<td><p>Gauge&lt;Map&lt;String, Map&lt;String, Integer&gt;&gt;&gt;</p></td>
+<td><p>Estimated number of compactions remaining to perform, grouped by keyspace and then table name. This info is also kept in <code class="docutils literal notranslate"><span class="pre">Table</span> <span class="pre">Metrics</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>TotalCompactionsCompleted</p></td>
+<td><p>Meter</p></td>
+<td><p>Throughput of completed compactions since server [re]start.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="commitlog-metrics">
+<h2>CommitLog Metrics<a class="headerlink" href="#commitlog-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Metrics specific to the <code class="docutils literal notranslate"><span class="pre">CommitLog</span></code></p>
+<p>Reported name format:</p>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.CommitLog.&lt;MetricName&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=CommitLog,name=&lt;MetricName&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 9%" />
+<col style="width: 73%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CompletedTasks</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Total number of commit log messages written since [re]start.</p></td>
+</tr>
+<tr class="row-odd"><td><p>OverSizedMutations</p></td>
+<td><p>Meter</p></td>
+<td><p>Throughput for mutations that exceed limit.</p></td>
+</tr>
+<tr class="row-even"><td><p>PendingTasks</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Number of commit log messages written but yet to be fsync’d.</p></td>
+</tr>
+<tr class="row-odd"><td><p>TotalCommitLogSize</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Current size, in bytes, used by all the commit log segments.</p></td>
+</tr>
+<tr class="row-even"><td><p>WaitingOnCommit</p></td>
+<td><p>Timer</p></td>
+<td><p>Time spent waiting on CL fsync; for Periodic this is only occurs when the sync is lagging its sync interval.</p></td>
+</tr>
+<tr class="row-odd"><td><p>WaitingOnSegmentAllocation</p></td>
+<td><p>Timer</p></td>
+<td><p>Time spent waiting for a CommitLogSegment to be allocated - under normal conditions this should be zero.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="storage-metrics">
+<h2>Storage Metrics<a class="headerlink" href="#storage-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Metrics specific to the storage engine.</p>
+<p>Reported name format:</p>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.Storage.&lt;MetricName&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=Storage,name=&lt;MetricName&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 9%" />
+<col style="width: 75%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Exceptions</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of internal exceptions caught. Under normal exceptions this should be zero.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Load</p></td>
+<td><p>Counter</p></td>
+<td><p>Size, in bytes, of the on disk data size this node manages.</p></td>
+</tr>
+<tr class="row-even"><td><p>TotalHints</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of hint messages written to this node since [re]start. Includes one entry for each host to be hinted per hint.</p></td>
+</tr>
+<tr class="row-odd"><td><p>TotalHintsInProgress</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of hints attemping to be sent currently.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="hintsservice-metrics">
+<span id="id2"></span><h2>HintsService Metrics<a class="headerlink" href="#hintsservice-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Metrics specific to the Hints delivery service.  There are also some metrics related to hints tracked in <code class="docutils literal notranslate"><span class="pre">Storage</span> <span class="pre">Metrics</span></code></p>
+<p>These metrics include the peer endpoint <strong>in the metric name</strong></p>
+<p>Reported name format:</p>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.HintsService.&lt;MetricName&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=HintsService,name=&lt;MetricName&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 14%" />
+<col style="width: 59%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Hint_delays</p></td>
+<td><p>Histogram</p></td>
+<td><p>Histogram of hint delivery delays (in milliseconds)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Hint_delays-&lt;PeerIP&gt;</p></td>
+<td><p>Histogram</p></td>
+<td><p>Histogram of hint delivery delays (in milliseconds) per peer</p></td>
+</tr>
+<tr class="row-even"><td><p>HintsFailed</p></td>
+<td><p>Meter</p></td>
+<td><p>A meter of the hints that failed deliver</p></td>
+</tr>
+<tr class="row-odd"><td><p>HintsSucceeded</p></td>
+<td><p>Meter</p></td>
+<td><p>A meter of the hints successfully delivered</p></td>
+</tr>
+<tr class="row-even"><td><p>HintsTimedOut</p></td>
+<td><p>Meter</p></td>
+<td><p>A meter of the hints that timed out</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="sstable-index-metrics">
+<h2>SSTable Index Metrics<a class="headerlink" href="#sstable-index-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Metrics specific to the SSTable index metadata.</p>
+<p>Reported name format:</p>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.Index.&lt;MetricName&gt;.RowIndexEntry</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=Index</span> <span class="pre">scope=RowIndexEntry,name=&lt;MetricName&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 12%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>IndexInfoCount</p></td>
+<td><p>Histogram</p></td>
+<td><p>Histogram of the number of on-heap index entries managed across all SSTables.</p></td>
+</tr>
+<tr class="row-odd"><td><p>IndexInfoGets</p></td>
+<td><p>Histogram</p></td>
+<td><p>Histogram of the number index seeks performed per SSTable.</p></td>
+</tr>
+<tr class="row-even"><td><p>IndexedEntrySize</p></td>
+<td><p>Histogram</p></td>
+<td><p>Histogram of the on-heap size, in bytes, of the index across all SSTables.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="bufferpool-metrics">
+<h2>BufferPool Metrics<a class="headerlink" href="#bufferpool-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Metrics specific to the internal recycled buffer pool Cassandra manages.  This pool is meant to keep allocations and GC
+lower by recycling on and off heap buffers.</p>
+<p>Reported name format:</p>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.BufferPool.&lt;MetricName&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=BufferPool,name=&lt;MetricName&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 11%" />
+<col style="width: 66%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Misses</p></td>
+<td><p>Meter</p></td>
+<td><p>The rate of misses in the pool. The higher this is the more allocations incurred.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Size</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Size, in bytes, of the managed buffer pool</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="client-metrics">
+<h2>Client Metrics<a class="headerlink" href="#client-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Metrics specifc to client managment.</p>
+<p>Reported name format:</p>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.Client.&lt;MetricName&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=Client,name=&lt;MetricName&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 14%" />
+<col style="width: 72%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ClientsByProtocolVersion</p></td>
+<td><p>Gauge&lt;List&lt;Map&lt;String, String&gt;&gt;&gt;</p></td>
+<td><p>List of up to last 100 connections including protocol version. Can be reset with clearConnectionHistory operation in org.apache.cassandra.db:StorageService mbean.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ConnectedNativeClients</p></td>
+<td><p>Gauge&lt;Integer&gt;</p></td>
+<td><p>Number of clients connected to this nodes native protocol server</p></td>
+</tr>
+<tr class="row-even"><td><p>ConnectedNativeClientsByUser</p></td>
+<td><p>Gauge&lt;Map&lt;String, Int&gt;</p></td>
+<td><p>Number of connnective native clients by username</p></td>
+</tr>
+<tr class="row-odd"><td><p>Connections</p></td>
+<td><p>Gauge&lt;List&lt;Map&lt;String, String&gt;&gt;</p></td>
+<td><p>List of all connections and their state information</p></td>
+</tr>
+<tr class="row-even"><td><p>RequestsSize</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>How many concurrent bytes used in currently processing requests</p></td>
+</tr>
+<tr class="row-odd"><td><p>RequestsSizeByIpDistribution</p></td>
+<td><p>Histogram</p></td>
+<td><p>How many concurrent bytes used in currently processing requests by different ips</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="batch-metrics">
+<h2>Batch Metrics<a class="headerlink" href="#batch-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Metrics specific to batch statements.</p>
+<p>Reported name format:</p>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.Batch.&lt;MetricName&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=Batch,name=&lt;MetricName&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 13%" />
+<col style="width: 63%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PartitionsPerCounterBatch</p></td>
+<td><p>Histogram</p></td>
+<td><p>Distribution of the number of partitions processed per counter batch</p></td>
+</tr>
+<tr class="row-odd"><td><p>PartitionsPerLoggedBatch</p></td>
+<td><p>Histogram</p></td>
+<td><p>Distribution of the number of partitions processed per logged batch</p></td>
+</tr>
+<tr class="row-even"><td><p>PartitionsPerUnloggedBatch</p></td>
+<td><p>Histogram</p></td>
+<td><p>Distribution of the number of partitions processed per unlogged batch</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="read-repair-metrics">
+<h2>Read Repair Metrics<a class="headerlink" href="#read-repair-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Metrics specific to read repair operations.</p>
+<p>Reported name format:</p>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.ReadRepair.&lt;MetricName&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=ReadRepair,name=&lt;MetricName&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 13%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ReconcileRead</p></td>
+<td><p>Meter</p></td>
+<td><p>The rate of read-only read repairs, which do not mutate the replicas</p></td>
+</tr>
+<tr class="row-odd"><td><p>RepairedBlocking</p></td>
+<td><p>Meter</p></td>
+<td><p>The rate of blocking read repairs</p></td>
+</tr>
+<tr class="row-even"><td><p>SpeculatedRead</p></td>
+<td><p>Meter</p></td>
+<td><p>The rate of speculated reads during read repairs</p></td>
+</tr>
+<tr class="row-odd"><td><p>SpeculatedWrite</p></td>
+<td><p>Meter</p></td>
+<td><p>The rate of speculated writes during read repairs</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="messaging-metrics">
+<h2>Messaging Metrics<a class="headerlink" href="#messaging-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Metrics for internode messaging.</p>
+<p>Reported name format:</p>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.Messaging.&lt;MetricName&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=Messaging,name=&lt;MetricName&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 12%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>&lt;DC&gt;-Latency</p></td>
+<td><p>Timer</p></td>
+<td><p>Latency of all internode messageing between this node and the datacenters.</p></td>
+</tr>
+<tr class="row-odd"><td><p>&lt;VERB&gt;-WaitLatency</p></td>
+<td><p>Timer</p></td>
+<td><p>Latency between the message creation time and the time being executed by VERB</p></td>
+</tr>
+<tr class="row-even"><td><p>CrossNodeLatency</p></td>
+<td><p>Timer</p></td>
+<td><p>Latency of all internode messaging between this node and the peers</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="internode-inbound-connection-metrics">
+<h2>Internode Inbound Connection Metrics<a class="headerlink" href="#internode-inbound-connection-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Metrics specific to inbound connections of internode messaging.</p>
+<p>Reported name format:</p>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.InboundConnection.&lt;MetricName&gt;.&lt;IP&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=InboundConnection,scope=&lt;IP&gt;,name=&lt;MetricName&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 15%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CorruptFramesRecovered</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of corrupted frames recovered</p></td>
+</tr>
+<tr class="row-odd"><td><p>CorruptFramesUnrecovered</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of corrupted frames unrecovered</p></td>
+</tr>
+<tr class="row-even"><td><p>ErrorBytes</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of error bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p>ErrorCount</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of error count</p></td>
+</tr>
+<tr class="row-even"><td><p>ExpiredBytes</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of expired bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p>ExpiredCount</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of expired count</p></td>
+</tr>
+<tr class="row-even"><td><p>ScheduledBytes</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of bytes that are pending execution</p></td>
+</tr>
+<tr class="row-odd"><td><p>ScheduledCount</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of message that are pending execution</p></td>
+</tr>
+<tr class="row-even"><td><p>ProcessedBytes</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of bytes processed</p></td>
+</tr>
+<tr class="row-odd"><td><p>ProcessedCount</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of messages processed</p></td>
+</tr>
+<tr class="row-even"><td><p>ReceivedBytes</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of bytes received</p></td>
+</tr>
+<tr class="row-odd"><td><p>ReceivedCount</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of messages received</p></td>
+</tr>
+<tr class="row-even"><td><p>ThrottledCount</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of messages throttled</p></td>
+</tr>
+<tr class="row-odd"><td><p>ThrottledNanos</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated duration of throttling in nanoseconds</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="internode-outbound-connection-metrics">
+<h2>Internode Outbound Connection Metrics<a class="headerlink" href="#internode-outbound-connection-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Metrics specific to outbound connections of internode messaging.</p>
+<p>Reported name format:</p>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics.Connection.&lt;MetricName&gt;.&lt;IP&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">org.apache.cassandra.metrics:type=Connection,scope=&lt;IP&gt;,name=&lt;MetricName&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 9%" />
+<col style="width: 54%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>[Large|Small|Urgent]MessagePendingTasks</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of pending (Large|Small|Urgent) messages queued</p></td>
+</tr>
+<tr class="row-odd"><td><p>[Large|Small|Urgent]MessagePendingBytes</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of bytes of pending (Large|Small|Urgent) messages queued</p></td>
+</tr>
+<tr class="row-even"><td><p>[Large|Small|Urgent]MessageCompletedTasks</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of (Large|Small|Urgent) messages sent</p></td>
+</tr>
+<tr class="row-odd"><td><p>[Large|Small|Urgent]MessageCompletedBytes</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of bytes of (Large|Small|Urgent) messages sent</p></td>
+</tr>
+<tr class="row-even"><td><p>[Large|Small|Urgent]MessageDroppedTasks</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of dropped (Large|Small|Urgent) messages</p></td>
+</tr>
+<tr class="row-odd"><td><p>[Large|Small|Urgent]MessageDroppedTasksDueToOverload</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of dropped (Large|Small|Urgent) messages due to overload</p></td>
+</tr>
+<tr class="row-even"><td><p>[Large|Small|Urgent]MessageDroppedBytesDueToOverload</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of bytes of dropped (Large|Small|Urgent) messages due to overload</p></td>
+</tr>
+<tr class="row-odd"><td><p>[Large|Small|Urgent]MessageDroppedTasksDueToTimeout</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of dropped (Large|Small|Urgent) messages due to timeout</p></td>
+</tr>
+<tr class="row-even"><td><p>[Large|Small|Urgent]MessageDroppedBytesDueToTimeout</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of bytes of dropped (Large|Small|Urgent) messages due to timeout</p></td>
+</tr>
+<tr class="row-odd"><td><p>[Large|Small|Urgent]MessageDroppedTasksDueToError</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of dropped (Large|Small|Urgent) messages due to error</p></td>
+</tr>
+<tr class="row-even"><td><p>[Large|Small|Urgent]MessageDroppedBytesDueToError</p></td>
+<td><p>Guage&lt;Long&gt;</p></td>
+<td><p>Estimated number of bytes of dropped (Large|Small|Urgent) messages due to error</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="jvm-metrics">
+<h2>JVM Metrics<a class="headerlink" href="#jvm-metrics" title="Permalink to this headline">¶</a></h2>
+<p>JVM metrics such as memory and garbage collection statistics can either be accessed by connecting to the JVM using JMX or can be exported using <a class="reference internal" href="#metric-reporters">Metric Reporters</a>.</p>
+<div class="section" id="bufferpool">
+<h3>BufferPool<a class="headerlink" href="#bufferpool" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">jvm.buffers.&lt;direct|mapped&gt;.&lt;MetricName&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">java.nio:type=BufferPool,name=&lt;direct|mapped&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 12%" />
+<col style="width: 66%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Capacity</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Estimated total capacity of the buffers in this pool</p></td>
+</tr>
+<tr class="row-odd"><td><p>Count</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Estimated number of buffers in the pool</p></td>
+</tr>
+<tr class="row-even"><td><p>Used</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Estimated memory that the Java virtual machine is using for this buffer pool</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="filedescriptorratio">
+<h3>FileDescriptorRatio<a class="headerlink" href="#filedescriptorratio" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">jvm.fd.&lt;MetricName&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">java.lang:type=OperatingSystem,name=&lt;OpenFileDescriptorCount|MaxFileDescriptorCount&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 18%" />
+<col style="width: 49%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Usage</p></td>
+<td><p>Ratio</p></td>
+<td><p>Ratio of used to total file descriptors</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="garbagecollector">
+<h3>GarbageCollector<a class="headerlink" href="#garbagecollector" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">jvm.gc.&lt;gc_type&gt;.&lt;MetricName&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">java.lang:type=GarbageCollector,name=&lt;gc_type&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 14%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Count</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Total number of collections that have occurred</p></td>
+</tr>
+<tr class="row-odd"><td><p>Time</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Approximate accumulated collection elapsed time in milliseconds</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="memory">
+<h3>Memory<a class="headerlink" href="#memory" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">jvm.memory.&lt;heap/non-heap/total&gt;.&lt;MetricName&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">java.lang:type=Memory</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 13%" />
+<col style="width: 64%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Committed</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Amount of memory in bytes that is committed for the JVM to use</p></td>
+</tr>
+<tr class="row-even"><td><p>Init</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Amount of memory in bytes that the JVM initially requests from the OS</p></td>
+</tr>
+<tr class="row-odd"><td><p>Max</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Maximum amount of memory in bytes that can be used for memory management</p></td>
+</tr>
+<tr class="row-even"><td><p>Usage</p></td>
+<td><p>Ratio</p></td>
+<td><p>Ratio of used to maximum memory</p></td>
+</tr>
+<tr class="row-odd"><td><p>Used</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Amount of used memory in bytes</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="memorypool">
+<h3>MemoryPool<a class="headerlink" href="#memorypool" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt><strong>Metric Name</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">jvm.memory.pools.&lt;memory_pool&gt;.&lt;MetricName&gt;</span></code></p>
+</dd>
+<dt><strong>JMX MBean</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">java.lang:type=MemoryPool,name=&lt;memory_pool&gt;</span></code></p>
+</dd>
+</dl>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 13%" />
+<col style="width: 64%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Committed</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Amount of memory in bytes that is committed for the JVM to use</p></td>
+</tr>
+<tr class="row-even"><td><p>Init</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Amount of memory in bytes that the JVM initially requests from the OS</p></td>
+</tr>
+<tr class="row-odd"><td><p>Max</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Maximum amount of memory in bytes that can be used for memory management</p></td>
+</tr>
+<tr class="row-even"><td><p>Usage</p></td>
+<td><p>Ratio</p></td>
+<td><p>Ratio of used to maximum memory</p></td>
+</tr>
+<tr class="row-odd"><td><p>Used</p></td>
+<td><p>Gauge&lt;Long&gt;</p></td>
+<td><p>Amount of used memory in bytes</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="jmx">
+<h2>JMX<a class="headerlink" href="#jmx" title="Permalink to this headline">¶</a></h2>
+<p>Any JMX based client can access metrics from cassandra.</p>
+<p>If you wish to access JMX metrics over http it’s possible to download <a class="reference external" href="http://mx4j.sourceforge.net/">Mx4jTool</a> and
+place <code class="docutils literal notranslate"><span class="pre">mx4j-tools.jar</span></code> into the classpath.  On startup you will see in the log:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>HttpAdaptor version 3.0.2 started on port 8081
+</pre></div>
+</div>
+<p>To choose a different port (8081 is the default) or a different listen address (0.0.0.0 is not the default) edit
+<code class="docutils literal notranslate"><span class="pre">conf/cassandra-env.sh</span></code> and uncomment:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#MX4J_ADDRESS=&quot;-Dmx4jaddress=0.0.0.0&quot;
+
+#MX4J_PORT=&quot;-Dmx4jport=8081&quot;
+</pre></div>
+</div>
+</div>
+<div class="section" id="metric-reporters">
+<h2>Metric Reporters<a class="headerlink" href="#metric-reporters" title="Permalink to this headline">¶</a></h2>
+<p>As mentioned at the top of this section on monitoring the Cassandra metrics can be exported to a number of monitoring
+system a number of <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/getting-started/#other-reporting">built in</a> and <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/manual/third-party/">third party</a> reporter plugins.</p>
+<p>The configuration of these plugins is managed by the <a class="reference external" href="https://github.com/addthis/metrics-reporter-config">metrics reporter config project</a>. There is a sample configuration file located at
+<code class="docutils literal notranslate"><span class="pre">conf/metrics-reporter-config-sample.yaml</span></code>.</p>
+<p>Once configured, you simply start cassandra with the flag
+<code class="docutils literal notranslate"><span class="pre">-Dcassandra.metricsReporterConfigFile=metrics-reporter-config.yaml</span></code>. The specified .yaml file plus any 3rd party
+reporter jars must all be in Cassandra’s classpath.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="security.html" class="btn btn-neutral float-right" title="Security" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="bulk_loading.html" class="btn btn-neutral float-left" title="Bulk Loading" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, The Apache Cassandra team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

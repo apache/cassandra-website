@@ -1,0 +1,436 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>JSON Support &mdash; Apache Cassandra Documentation v4.1</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/extra.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Triggers" href="triggers.html" />
+    <link rel="prev" title="Arithmetic Operators" href="operators.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apache Cassandra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">The Cassandra Query Language (CQL)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="definitions.html">Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ddl.html">Data Definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dml.html">Data Manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indexes.html">Secondary Indexes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mvs.html">Materialized Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators.html">Arithmetic Operators</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">JSON Support</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#select-json">SELECT JSON</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#insert-json">INSERT JSON</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#json-encoding-of-cassandra-data-types">JSON Encoding of Cassandra Data Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-fromjson-function">The fromJson() Function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-tojson-function">The toJson() Function</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="triggers.html">Triggers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="appendices.html">Appendices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html">Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Cassandra Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contactus.html">Contact us</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">The Cassandra Query Language (CQL)</a> &raquo;</li>
+        
+      <li>JSON Support</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/cql/json.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="json-support">
+<span id="cql-json"></span><h1>JSON Support<a class="headerlink" href="#json-support" title="Permalink to this headline">¶</a></h1>
+<p>Cassandra 2.2 introduces JSON support to <a class="reference internal" href="dml.html#select-statement"><span class="std std-ref">SELECT</span></a> and <a class="reference internal" href="dml.html#insert-statement"><span class="std std-ref">INSERT</span></a>
+statements. This support does not fundamentally alter the CQL API (for example, the schema is still enforced), it simply
+provides a convenient way to work with JSON documents.</p>
+<div class="section" id="select-json">
+<h2>SELECT JSON<a class="headerlink" href="#select-json" title="Permalink to this headline">¶</a></h2>
+<p>With <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> statements, the <code class="docutils literal notranslate"><span class="pre">JSON</span></code> keyword can be used to return each row as a single <code class="docutils literal notranslate"><span class="pre">JSON</span></code> encoded map. The
+remainder of the <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> statement behavior is the same.</p>
+<p>The result map keys are the same as the column names in a normal result set. For example, a statement like <code class="docutils literal notranslate"><span class="pre">SELECT</span> <span class="pre">JSON</span>
+<span class="pre">a,</span> <span class="pre">ttl(b)</span> <span class="pre">FROM</span> <span class="pre">...</span></code> would result in a map with keys <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;ttl(b)&quot;</span></code>. However, this is one notable exception:
+for symmetry with <code class="docutils literal notranslate"><span class="pre">INSERT</span> <span class="pre">JSON</span></code> behavior, case-sensitive column names with upper-case letters will be surrounded with
+double quotes. For example, <code class="docutils literal notranslate"><span class="pre">SELECT</span> <span class="pre">JSON</span> <span class="pre">myColumn</span> <span class="pre">FROM</span> <span class="pre">...</span></code> would result in a map key <code class="docutils literal notranslate"><span class="pre">&quot;\&quot;myColumn\&quot;&quot;</span></code> (note the
+escaped quotes).</p>
+<p>The map values will <code class="docutils literal notranslate"><span class="pre">JSON</span></code>-encoded representations (as described below) of the result set values.</p>
+</div>
+<div class="section" id="insert-json">
+<h2>INSERT JSON<a class="headerlink" href="#insert-json" title="Permalink to this headline">¶</a></h2>
+<p>With <code class="docutils literal notranslate"><span class="pre">INSERT</span></code> statements, the new <code class="docutils literal notranslate"><span class="pre">JSON</span></code> keyword can be used to enable inserting a <code class="docutils literal notranslate"><span class="pre">JSON</span></code> encoded map as a single
+row. The format of the <code class="docutils literal notranslate"><span class="pre">JSON</span></code> map should generally match that returned by a <code class="docutils literal notranslate"><span class="pre">SELECT</span> <span class="pre">JSON</span></code> statement on the same
+table. In particular, case-sensitive column names should be surrounded with double quotes. For example, to insert into a
+table with two columns named “myKey” and “value”, you would do the following:</p>
+<div class="highlight-cql notranslate"><div class="highlight"><pre><span></span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">mytable</span> <span class="k">JSON</span> <span class="s1">&#39;{ &quot;\&quot;myKey\&quot;&quot;: 0, &quot;value&quot;: 0}&#39;</span>
+</pre></div>
+</div>
+<p>By default (or if <code class="docutils literal notranslate"><span class="pre">DEFAULT</span> <span class="pre">NULL</span></code> is explicitly used), a column omitted from the <code class="docutils literal notranslate"><span class="pre">JSON</span></code> map will be set to <code class="docutils literal notranslate"><span class="pre">NULL</span></code>,
+meaning that any pre-existing value for that column will be removed (resulting in a tombstone being created).
+Alternatively, if the <code class="docutils literal notranslate"><span class="pre">DEFAULT</span> <span class="pre">UNSET</span></code> directive is used after the value, omitted column values will be left unset,
+meaning that pre-existing values for those column will be preserved.</p>
+</div>
+<div class="section" id="json-encoding-of-cassandra-data-types">
+<h2>JSON Encoding of Cassandra Data Types<a class="headerlink" href="#json-encoding-of-cassandra-data-types" title="Permalink to this headline">¶</a></h2>
+<p>Where possible, Cassandra will represent and accept data types in their native <code class="docutils literal notranslate"><span class="pre">JSON</span></code> representation. Cassandra will
+also accept string representations matching the CQL literal format for all single-field types. For example, floats,
+ints, UUIDs, and dates can be represented by CQL literal strings. However, compound types, such as collections, tuples,
+and user-defined types must be represented by native <code class="docutils literal notranslate"><span class="pre">JSON</span></code> collections (maps and lists) or a JSON-encoded string
+representation of the collection.</p>
+<p>The following table describes the encodings that Cassandra will accept in <code class="docutils literal notranslate"><span class="pre">INSERT</span> <span class="pre">JSON</span></code> values (and <code class="docutils literal notranslate"><span class="pre">fromJson()</span></code>
+arguments) as well as the format Cassandra will use when returning data for <code class="docutils literal notranslate"><span class="pre">SELECT</span> <span class="pre">JSON</span></code> statements (and
+<code class="docutils literal notranslate"><span class="pre">fromJson()</span></code>):</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 21%" />
+<col style="width: 13%" />
+<col style="width: 54%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Formats accepted</p></th>
+<th class="head"><p>Return format</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ascii</span></code></p></td>
+<td><p>string</p></td>
+<td><p>string</p></td>
+<td><p>Uses JSON’s <code class="docutils literal notranslate"><span class="pre">\u</span></code> character escape</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bigint</span></code></p></td>
+<td><p>integer, string</p></td>
+<td><p>integer</p></td>
+<td><p>String must be valid 64 bit integer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">blob</span></code></p></td>
+<td><p>string</p></td>
+<td><p>string</p></td>
+<td><p>String should be 0x followed by an even number of hex digits</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">boolean</span></code></p></td>
+<td><p>boolean, string</p></td>
+<td><p>boolean</p></td>
+<td><p>String must be “true” or “false”</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">date</span></code></p></td>
+<td><p>string</p></td>
+<td><p>string</p></td>
+<td><p>Date in format <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span></code>, timezone UTC</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">decimal</span></code></p></td>
+<td><p>integer, float, string</p></td>
+<td><p>float</p></td>
+<td><p>May exceed 32 or 64-bit IEEE-754 floating point precision in
+client-side decoder</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">double</span></code></p></td>
+<td><p>integer, float, string</p></td>
+<td><p>float</p></td>
+<td><p>String must be valid integer or float</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p></td>
+<td><p>integer, float, string</p></td>
+<td><p>float</p></td>
+<td><p>String must be valid integer or float</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">inet</span></code></p></td>
+<td><p>string</p></td>
+<td><p>string</p></td>
+<td><p>IPv4 or IPv6 address</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p>integer, string</p></td>
+<td><p>integer</p></td>
+<td><p>String must be valid 32 bit integer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">list</span></code></p></td>
+<td><p>list, string</p></td>
+<td><p>list</p></td>
+<td><p>Uses JSON’s native list representation</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">map</span></code></p></td>
+<td><p>map, string</p></td>
+<td><p>map</p></td>
+<td><p>Uses JSON’s native map representation</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">smallint</span></code></p></td>
+<td><p>integer, string</p></td>
+<td><p>integer</p></td>
+<td><p>String must be valid 16 bit integer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">set</span></code></p></td>
+<td><p>list, string</p></td>
+<td><p>list</p></td>
+<td><p>Uses JSON’s native list representation</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">text</span></code></p></td>
+<td><p>string</p></td>
+<td><p>string</p></td>
+<td><p>Uses JSON’s <code class="docutils literal notranslate"><span class="pre">\u</span></code> character escape</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">time</span></code></p></td>
+<td><p>string</p></td>
+<td><p>string</p></td>
+<td><p>Time of day in format <code class="docutils literal notranslate"><span class="pre">HH-MM-SS[.fffffffff]</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">timestamp</span></code></p></td>
+<td><p>integer, string</p></td>
+<td><p>string</p></td>
+<td><p>A timestamp. Strings constant allows to input <a class="reference internal" href="types.html#timestamps"><span class="std std-ref">timestamps
+as dates</span></a>. Datestamps with format <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span>
+<span class="pre">HH:MM:SS.SSS</span></code> are returned.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">timeuuid</span></code></p></td>
+<td><p>string</p></td>
+<td><p>string</p></td>
+<td><p>Type 1 UUID. See <a class="reference internal" href="definitions.html#grammar-token-constant"><code class="xref std std-token docutils literal notranslate"><span class="pre">constant</span></code></a> for the UUID format</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tinyint</span></code></p></td>
+<td><p>integer, string</p></td>
+<td><p>integer</p></td>
+<td><p>String must be valid 8 bit integer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tuple</span></code></p></td>
+<td><p>list, string</p></td>
+<td><p>list</p></td>
+<td><p>Uses JSON’s native list representation</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">UDT</span></code></p></td>
+<td><p>map, string</p></td>
+<td><p>map</p></td>
+<td><p>Uses JSON’s native map representation with field names as keys</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">uuid</span></code></p></td>
+<td><p>string</p></td>
+<td><p>string</p></td>
+<td><p>See <a class="reference internal" href="definitions.html#grammar-token-constant"><code class="xref std std-token docutils literal notranslate"><span class="pre">constant</span></code></a> for the UUID format</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">varchar</span></code></p></td>
+<td><p>string</p></td>
+<td><p>string</p></td>
+<td><p>Uses JSON’s <code class="docutils literal notranslate"><span class="pre">\u</span></code> character escape</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">varint</span></code></p></td>
+<td><p>integer, string</p></td>
+<td><p>integer</p></td>
+<td><p>Variable length; may overflow 32 or 64 bit integers in
+client-side decoder</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="the-fromjson-function">
+<h2>The fromJson() Function<a class="headerlink" href="#the-fromjson-function" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">fromJson()</span></code> function may be used similarly to <code class="docutils literal notranslate"><span class="pre">INSERT</span> <span class="pre">JSON</span></code>, but for a single column value. It may only be used
+in the <code class="docutils literal notranslate"><span class="pre">VALUES</span></code> clause of an <code class="docutils literal notranslate"><span class="pre">INSERT</span></code> statement or as one of the column values in an <code class="docutils literal notranslate"><span class="pre">UPDATE</span></code>, <code class="docutils literal notranslate"><span class="pre">DELETE</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">SELECT</span></code> statement. For example, it cannot be used in the selection clause of a <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> statement.</p>
+</div>
+<div class="section" id="the-tojson-function">
+<h2>The toJson() Function<a class="headerlink" href="#the-tojson-function" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">toJson()</span></code> function may be used similarly to <code class="docutils literal notranslate"><span class="pre">SELECT</span> <span class="pre">JSON</span></code>, but for a single column value. It may only be used
+in the selection clause of a <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> statement.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="triggers.html" class="btn btn-neutral float-right" title="Triggers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="operators.html" class="btn btn-neutral float-left" title="Arithmetic Operators" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, The Apache Cassandra team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

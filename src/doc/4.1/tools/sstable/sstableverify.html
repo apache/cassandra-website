@@ -1,0 +1,330 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sstableverify &mdash; Apache Cassandra Documentation v4.1</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/extra.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Cassandra Stress" href="../cassandra_stress.html" />
+    <link rel="prev" title="sstableutil" href="sstableutil.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Apache Cassandra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../new/index.html">New Features in Apache Cassandra 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture/index.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cql/index.html">The Cassandra Query Language (CQL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_modeling/index.html">Data Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration/index.html">Configuring Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../operating/index.html">Operating Cassandra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Cassandra Tools</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cqlsh.html">cqlsh: the CQL shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generatetokens.html">generatetokens</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodetool/nodetool.html">Nodetool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodetool/nodetool.html#usage">Usage</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">SSTable Tools</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sstabledump.html">sstabledump</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableexpiredblockers.html">sstableexpiredblockers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablelevelreset.html">sstablelevelreset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableloader.html">sstableloader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablemetadata.html">sstablemetadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableofflinerelevel.html">sstableofflinerelevel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablerepairedset.html">sstablerepairedset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablescrub.html">sstablescrub</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstablesplit.html">sstablesplit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableupgrade.html">sstableupgrade</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sstableutil.html">sstableutil</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sstableverify</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#basic-verification">Basic Verification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#extended-verification">Extended Verification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#corrupted-file">Corrupted File</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cassandra_stress.html">Cassandra Stress</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting/index.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Contributing to Cassandra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/index.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugins/index.html">Third-Party Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bugs.html">Reporting Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contactus.html">Contact us</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Apache Cassandra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Cassandra Tools</a> &raquo;</li>
+        
+          <li><a href="index.html">SSTable Tools</a> &raquo;</li>
+        
+      <li>sstableverify</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/tools/sstable/sstableverify.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="sstableverify">
+<h1>sstableverify<a class="headerlink" href="#sstableverify" title="Permalink to this headline">¶</a></h1>
+<p>Check sstable(s) for errors or corruption, for the provided table.</p>
+<p>ref: <a class="reference external" href="https://issues.apache.org/jira/browse/CASSANDRA-5791">https://issues.apache.org/jira/browse/CASSANDRA-5791</a></p>
+<p>Cassandra must be stopped before this tool is executed, or unexpected results will occur. Note: the script does not verify that Cassandra is stopped.</p>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>sstableverify &lt;options&gt; &lt;keyspace&gt; &lt;table&gt;</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>–debug</p></td>
+<td><p>display stack traces</p></td>
+</tr>
+<tr class="row-even"><td><p>-e, –extended</p></td>
+<td><p>extended verification</p></td>
+</tr>
+<tr class="row-odd"><td><p>-h, –help</p></td>
+<td><p>display this help message</p></td>
+</tr>
+<tr class="row-even"><td><p>-v, –verbose</p></td>
+<td><p>verbose output</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="basic-verification">
+<h2>Basic Verification<a class="headerlink" href="#basic-verification" title="Permalink to this headline">¶</a></h2>
+<p>This is the basic verification. It is not a very quick process, and uses memory. You might need to increase your memory settings if you have many sstables.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstableverify</span> <span class="n">keyspace</span> <span class="n">eventlog</span>
+<span class="n">Verifying</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace/eventlog-6365332094dd11e88f324f9c503e4753/mc-32-big-Data.db&#39;</span><span class="p">)</span> <span class="p">(</span><span class="mf">7.353</span><span class="n">MiB</span><span class="p">)</span>
+<span class="n">Deserializing</span> <span class="n">sstable</span> <span class="n">metadata</span> <span class="k">for</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace/eventlog-6365332094dd11e88f324f9c503e4753/mc-32-big-Data.db&#39;</span><span class="p">)</span>
+<span class="n">Checking</span> <span class="n">computed</span> <span class="nb">hash</span> <span class="n">of</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace/eventlog-6365332094dd11e88f324f9c503e4753/mc-32-big-Data.db&#39;</span><span class="p">)</span>
+<span class="n">Verifying</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace/eventlog-6365332094dd11e88f324f9c503e4753/mc-37-big-Data.db&#39;</span><span class="p">)</span> <span class="p">(</span><span class="mf">3.775</span><span class="n">MiB</span><span class="p">)</span>
+<span class="n">Deserializing</span> <span class="n">sstable</span> <span class="n">metadata</span> <span class="k">for</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace/eventlog-6365332094dd11e88f324f9c503e4753/mc-37-big-Data.db&#39;</span><span class="p">)</span>
+<span class="n">Checking</span> <span class="n">computed</span> <span class="nb">hash</span> <span class="n">of</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace/eventlog-6365332094dd11e88f324f9c503e4753/mc-37-big-Data.db&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="extended-verification">
+<h2>Extended Verification<a class="headerlink" href="#extended-verification" title="Permalink to this headline">¶</a></h2>
+<p>During an extended verification, the individual values will be validated for errors or corruption. This of course takes more time.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@DC1C1</span><span class="p">:</span><span class="o">/</span><span class="c1"># sstableverify -e keyspace eventlog</span>
+<span class="n">WARN</span>  <span class="mi">14</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">06</span><span class="p">,</span><span class="mi">255</span> <span class="n">Only</span> <span class="mf">33.096</span><span class="n">GiB</span> <span class="n">free</span> <span class="n">across</span> <span class="nb">all</span> <span class="n">data</span> <span class="n">volumes</span><span class="o">.</span> <span class="n">Consider</span> <span class="n">adding</span> <span class="n">more</span> <span class="n">capacity</span> <span class="n">to</span> <span class="n">your</span> <span class="n">cluster</span> <span class="ow">or</span> <span class="n">removing</span> <span class="n">obsolete</span> <span class="n">snapshots</span>
+<span class="n">Verifying</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace/eventlog-6365332094dd11e88f324f9c503e4753/mc-32-big-Data.db&#39;</span><span class="p">)</span> <span class="p">(</span><span class="mf">7.353</span><span class="n">MiB</span><span class="p">)</span>
+<span class="n">Deserializing</span> <span class="n">sstable</span> <span class="n">metadata</span> <span class="k">for</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace/eventlog-6365332094dd11e88f324f9c503e4753/mc-32-big-Data.db&#39;</span><span class="p">)</span>
+<span class="n">Checking</span> <span class="n">computed</span> <span class="nb">hash</span> <span class="n">of</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace/eventlog-6365332094dd11e88f324f9c503e4753/mc-32-big-Data.db&#39;</span><span class="p">)</span>
+<span class="n">Extended</span> <span class="n">Verify</span> <span class="n">requested</span><span class="p">,</span> <span class="n">proceeding</span> <span class="n">to</span> <span class="n">inspect</span> <span class="n">values</span>
+<span class="n">Verify</span> <span class="n">of</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace/eventlog-6365332094dd11e88f324f9c503e4753/mc-32-big-Data.db&#39;</span><span class="p">)</span> <span class="n">succeeded</span><span class="o">.</span> <span class="n">All</span> <span class="mi">33211</span> <span class="n">rows</span> <span class="n">read</span> <span class="n">successfully</span>
+<span class="n">Verifying</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace/eventlog-6365332094dd11e88f324f9c503e4753/mc-37-big-Data.db&#39;</span><span class="p">)</span> <span class="p">(</span><span class="mf">3.775</span><span class="n">MiB</span><span class="p">)</span>
+<span class="n">Deserializing</span> <span class="n">sstable</span> <span class="n">metadata</span> <span class="k">for</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace/eventlog-6365332094dd11e88f324f9c503e4753/mc-37-big-Data.db&#39;</span><span class="p">)</span>
+<span class="n">Checking</span> <span class="n">computed</span> <span class="nb">hash</span> <span class="n">of</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace/eventlog-6365332094dd11e88f324f9c503e4753/mc-37-big-Data.db&#39;</span><span class="p">)</span>
+<span class="n">Extended</span> <span class="n">Verify</span> <span class="n">requested</span><span class="p">,</span> <span class="n">proceeding</span> <span class="n">to</span> <span class="n">inspect</span> <span class="n">values</span>
+<span class="n">Verify</span> <span class="n">of</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace/eventlog-6365332094dd11e88f324f9c503e4753/mc-37-big-Data.db&#39;</span><span class="p">)</span> <span class="n">succeeded</span><span class="o">.</span> <span class="n">All</span> <span class="mi">17068</span> <span class="n">rows</span> <span class="n">read</span> <span class="n">successfully</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="corrupted-file">
+<h2>Corrupted File<a class="headerlink" href="#corrupted-file" title="Permalink to this headline">¶</a></h2>
+<p>Corrupted files are listed if they are detected by the script.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sstableverify</span> <span class="n">keyspace</span> <span class="n">eventlog</span>
+<span class="n">Verifying</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace/eventlog-6365332094dd11e88f324f9c503e4753/mc-40-big-Data.db&#39;</span><span class="p">)</span> <span class="p">(</span><span class="mf">7.416</span><span class="n">MiB</span><span class="p">)</span>
+<span class="n">Deserializing</span> <span class="n">sstable</span> <span class="n">metadata</span> <span class="k">for</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace/eventlog-6365332094dd11e88f324f9c503e4753/mc-40-big-Data.db&#39;</span><span class="p">)</span>
+<span class="n">Checking</span> <span class="n">computed</span> <span class="nb">hash</span> <span class="n">of</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace/eventlog-6365332094dd11e88f324f9c503e4753/mc-40-big-Data.db&#39;</span><span class="p">)</span>
+<span class="n">Error</span> <span class="n">verifying</span> <span class="n">BigTableReader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/var/lib/cassandra/data/keyspace/eventlog-6365332094dd11e88f324f9c503e4753/mc-40-big-Data.db&#39;</span><span class="p">):</span> <span class="n">Corrupted</span><span class="p">:</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">6365332094</span><span class="n">dd11e88f324f9c503e4753</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">40</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span>
+</pre></div>
+</div>
+<p>A similar (but less verbose) tool will show the suggested actions:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nodetool</span> <span class="n">verify</span> <span class="n">keyspace</span> <span class="n">eventlog</span>
+<span class="n">error</span><span class="p">:</span> <span class="n">Invalid</span> <span class="n">SSTable</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cassandra</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">keyspace</span><span class="o">/</span><span class="n">eventlog</span><span class="o">-</span><span class="mi">6365332094</span><span class="n">dd11e88f324f9c503e4753</span><span class="o">/</span><span class="n">mc</span><span class="o">-</span><span class="mi">40</span><span class="o">-</span><span class="n">big</span><span class="o">-</span><span class="n">Data</span><span class="o">.</span><span class="n">db</span><span class="p">,</span> <span class="n">please</span> <span class="n">force</span> <span class="n">repair</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../cassandra_stress.html" class="btn btn-neutral float-right" title="Cassandra Stress" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sstableutil.html" class="btn btn-neutral float-left" title="sstableutil" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, The Apache Cassandra team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
