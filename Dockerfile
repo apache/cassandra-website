@@ -88,9 +88,9 @@ ENV ANTORA_SITE_START_PAGE="Website"
 
 # Build from 3.11.5 as document generation for previous versions is broken.
 ENV ANTORA_CONTENT_SOURCES_CASSANDRA_URL="https://github.com/apache/cassandra.git"
-ENV ANTORA_CONTENT_SOURCES_CASSANDRA_BRANCHES="trunk cassandra-4.0 cassandra-3.11 cassandra-3.11.8 cassandra-3.11.7 cassandra-3.11.6 cassandra-3.11.5"
+ENV ANTORA_CONTENT_SOURCES_CASSANDRA_BRANCHES="trunk cassandra-4.0 cassandra-3.11"
 ENV ANTORA_CONTENT_SOURCES_CASSANDRA_TAGS=""
-ENV ANTORA_CONTENT_SOURCES_CASSANDRA_START_PATH="doc/source"
+ENV ANTORA_CONTENT_SOURCES_CASSANDRA_START_PATH="doc"
 
 ENV ANTORA_CONTENT_SOURCES_CASSANDRA_WEBSITE_URL="https://github.com/apache/cassandra-website.git"
 ENV ANTORA_CONTENT_SOURCES_CASSANDRA_WEBSITE_BRANCHES="HEAD"

@@ -79,7 +79,7 @@ generate_cassandra_versioned_docs() {
     if [ -f "${gen_nodetool_docs}" ]
     then
       YAML_INPUT="${CASSANDRA_DIR}/conf/cassandra.yaml"
-      YAML_OUTPUT="${CASSANDRA_DOC}/source/modules/cassandra/pages/configuration/cass_yaml_file.adoc"
+      YAML_OUTPUT="${CASSANDRA_DOC}/modules/cassandra/pages/configuration/cass_yaml_file.adoc"
       python3 "${convert_yaml_to_adoc}" "${YAML_INPUT}" "${YAML_OUTPUT}"
     fi
 
