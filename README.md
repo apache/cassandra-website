@@ -55,16 +55,19 @@ To build the website only, run the following command from within the `./cassandr
 $ ./run.sh website build
 ```
 
-:warning: *Tip:* In order to prevent root-owned modified files in your repository, the container user, `build`, is set up with a default UID=1000:GID=1000, which is usually the first user configured on a linux machine. If your local user is different you should set up the container user with your local host user's UID:GID, replace the above with:
-
-```bash
-$ ./run.sh -v UID_ARG=$(id -u) -v GID_ARG=$(id -g) website container
-$ ./run.sh website build
-```
-
 This will build the website content using your local copy of the cassandra-website, and the current checked-out branch. Use this command if you want to make a change to a top-level webpage without building the docs for any versions of cassandra.
 
 Once building has completed, the HTML content will be in the `./site-content/build/html/` directory ready to be reviewed and committed.
+
+:warning: *Tip:* In order to prevent root-owned modified files in your repository, the container executes operations as a non-root user. By default, the user is `build` and has the user and group permissions set to `UID=1000` and `GID=1000` respectfully. These permissions are usually the first user configured on a linux machine.
+
+If your local user has different user and group permissions you can set up the container user with your local UID:GID. In addition, you can set the build user in the container your local username. These changes can be made when building the container using the following command:
+
+```bash
+$ ./run.sh -a BUILD_USER_ARG:$(whoami) -a UID_ARG:$(id -u) -a GID_ARG:$(id -g) website container
+```
+
+If you need to customise the container user as noted above, you must do this before you build the website or run any other website command.
 
 ## Build the Website when Developing
 
