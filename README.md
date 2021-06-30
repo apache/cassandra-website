@@ -269,7 +269,7 @@ Updating the main website, after verifying the staged website, involves copying 
 The tooling is made up of the following components
 
 * Run script: `./run.sh` - Provides a single commandline interface that generates the docker commands to run the website and UI docker containers. Using the containers, it can build the Cassandra website UI components, generate the Cassandra versioned documentation, and generate the website HTML.
-* Website Docker container: `Dockerfile` and `docker-entrypoint.sh` - Contains the libraries necessary to generate the Cassandra versioned documentation, and generate the website HTML using Antora.
+* Website Docker container: `site-content/Dockerfile` and `site-content/docker-entrypoint.sh` - Contains the libraries necessary to generate the Cassandra versioned documentation, and generate the website HTML using Antora.
 * Antora Site YAML script: `bin/site_yaml_generator.py` - Used by the Website Docker container to create the YAML file that defines the sources for the website content, optionally the cassandra versioned documentation, and the UI styling bundle to apply.
 * Website UI Docker container: `site-ui/Dockerfile` and `site-ui/docker-entrypoint.sh` - Contains the libraries necessary to generate the UI bundle ZIP file the is applied by Antora to style the website and documentation.
 
