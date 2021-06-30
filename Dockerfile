@@ -1,8 +1,9 @@
 FROM ubuntu:18.04
 # Set up non-root user, 'build', with default uid:gid
-# This allows passing --build-arg to use local host user's uid:gid:
+# This allows passing --build-arg to use localhost username, and uid:gid:
 #   $ docker build \
 #       -t cassandra-website:latest \
+#       --build-arg BUILD_USER_ARG=$(whoami) \
 #       --build-arg UID_ARG=$(id -u) \
 #       --build-arg GID_ARG=$(id -g) \
 #       .
@@ -10,19 +11,20 @@ FROM ubuntu:18.04
 # Other container parameters can be overridden at build time as well:
 #  - NODE_VERSION_ARG:              Version of node to use.
 #  - ENTR_VERSION_ARG:              Version of entr to use.
-#  - CASSANDRA_REPOSITORY_URL_ARG:  Git URL to use for the Cassandra repository.
+ARG BUILD_USER_ARG="build"
 ARG UID_ARG=1000
 ARG GID_ARG=1000
 ARG NODE_VERSION_ARG="v12.16.2"
 ARG ENTR_VERSION_ARG="4.6"
 
-ENV  BUILD_USER=build
+ENV BUILD_USER=${BUILD_USER_ARG}
 
-RUN echo "Building with arguments" \
-    && echo "UID_ARG=${UID_ARG}" \
-    && echo "GID_ARG=${GID_ARG}" \
-    && echo "NODE_VERSION_ARG=${NODE_VERSION_ARG}" \
-    && echo "CASSANDRA_REPOSITORY_URL_ARG=${CASSANDRA_REPOSITORY_URL_ARG}"
+RUN echo "Building with arguments:" \
+    && echo " - BUILD_USER_ARG=${BUILD_USER_ARG}" \
+    && echo " - UID_ARG=${UID_ARG}" \
+    && echo " - GID_ARG=${GID_ARG}" \
+    && echo " - NODE_VERSION_ARG=${NODE_VERSION_ARG}" \
+    && echo " - ENTR_VERSION_ARG=${ENTR_VERSION_ARG}"
 
 RUN echo "Setting up user 'build'"
 RUN groupadd --gid ${GID_ARG} --non-unique ${BUILD_USER}
