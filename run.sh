@@ -367,7 +367,7 @@ set_antora_url_source() {
     then
       eval "$(tr -s '-' '_' <<< "${url_source_name}")"_volume_mount_set=true
     fi
-    url_source_value="/home/build/${url_source_name}"
+    url_source_value="${container_build_dir}/${url_source_name}"
     vol_args+=("-v ${location_source}:${url_source_value}")
   fi
 
@@ -379,6 +379,7 @@ set_antora_url_source() {
 
 run_docker_website_command() {
   local container_command=$1
+  local container_build_dir=""
   local port_map_option=""
 
   if [ "${container_command}" = "preview" ]
@@ -403,6 +404,8 @@ run_docker_website_command() {
   then
     build_website_container
   fi
+
+  container_build_dir=$(docker inspect "${container_tag}" | grep -m 1 "BUILD_DIR" | cut -d'=' -f2 | sed 's/\",$//g')
 
   if [ -f "${env_file}" ]
   then
@@ -499,7 +502,7 @@ EOF
     # local directory.
     if [ "${cassandra_website_volume_mount_set}" = "false" ]
     then
-      vol_args+=("-v $(pwd):/home/build/cassandra-website")
+      vol_args+=("-v $(pwd):${container_build_dir}/cassandra-website")
     fi
 
     # Check if a source for the cassandra-website repository is specified. We need to define a source if none was
@@ -508,7 +511,7 @@ EOF
     # local clone of the repository.
     if [ "${cassandra_website_source_set}" = "false" ]
     then
-      env_args+=("-e ANTORA_CONTENT_SOURCES_CASSANDRA_WEBSITE_URL=/home/build/cassandra-website")
+      env_args+=("-e ANTORA_CONTENT_SOURCES_CASSANDRA_WEBSITE_URL=${container_build_dir}/cassandra-website")
     fi
 
     env_args+=("-e INCLUDE_VERSION_DOCS_WHEN_GENERATING_WEBSITE=${include_version_docs_when_generating_website}")
@@ -643,7 +646,6 @@ fi
 
 arg_component=$1
 shift 1
-arg_command=$1
 
 case "${arg_component}" in
   website)
