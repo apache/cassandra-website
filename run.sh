@@ -340,7 +340,7 @@ build_website_container() {
     docker_build_args+=(--build-arg "$(sed '0,/:/ s/:/=/' <<< "${key_value}")")
   done
 
-  exec_docker_build_command "-f ./Dockerfile -t ${container_tag} ${docker_build_args[*]} ./"
+  exec_docker_build_command "-f ./site-content/Dockerfile -t ${container_tag} ${docker_build_args[*]} ./site-content"
 }
 
 build_website_ui_container() {
