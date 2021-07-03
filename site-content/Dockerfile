@@ -26,7 +26,7 @@ RUN echo "Building with arguments:" \
     && echo " - NODE_VERSION_ARG=${NODE_VERSION_ARG}" \
     && echo " - ENTR_VERSION_ARG=${ENTR_VERSION_ARG}"
 
-RUN echo "Setting up user 'build'"
+RUN echo "Setting up user '${BUILD_USER}'"
 RUN groupadd --gid ${GID_ARG} --non-unique ${BUILD_USER}
 RUN useradd --create-home --shell /bin/bash \
     --uid ${UID_ARG} --gid ${GID_ARG} --non-unique ${BUILD_USER}
