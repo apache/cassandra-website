@@ -49,6 +49,20 @@ $ git clone https://github.com/apache/cassandra-website.git
 $ cd ./cassandra-website
 ```
 
+A `run.sh` wrapper script has been provided to simplify generating the docs and building the site. It provides a single commandline interface that generates the docker commands to run the website and UI docker containers.
+
+The script has the following usage format
+
+```bash
+$ ./run.sh <COMPONENT> <COMMAND> [OPTIONS]
+```
+
+A complete list of components, commands and options can be found by running the following command.
+
+```bash
+$ ./run.sh -h
+```
+
 To build the website only, run the following command from within the `./cassandra-website` directory (assuming you used the above clone command).
 
 ```bash
@@ -64,7 +78,7 @@ Once building has completed, the HTML content will be in the `./site-content/bui
 If your local user has different user and group permissions you can set up the container user with your local UID:GID. In addition, you can set the build user in the container your local username. These changes can be made when building the container using the following command:
 
 ```bash
-$ ./run.sh -a BUILD_USER_ARG:$(whoami) -a UID_ARG:$(id -u) -a GID_ARG:$(id -g) website container
+$ ./run.sh website container -a BUILD_USER_ARG:$(whoami) -a UID_ARG:$(id -u) -a GID_ARG:$(id -g)
 ```
 
 If you need to customise the container user as noted above, you must do this before you build the website or run any other website command.
@@ -78,7 +92,7 @@ The website tooling is very flexible and allows for a wide range of development 
 You can tell the website builder to use a different branch to the one you are on. This can be done using the following command.
 
 ```bash
-$ ./run.sh -b cassandra-website:my_branch website build
+$ ./run.sh website build -b cassandra-website:my_branch
 ```
 
 This will build the website content using your local copy of the cassandra-website, and the branch named `my_branch`.
@@ -90,7 +104,7 @@ You can tell the website builder to use a different clone or fork of the reposit
 To build using another local copy of the cassandra-website run the following command.
 
 ```bash
-$ ./run.sh -u cassandra-website:/local/path/to/another/clone/of/cassandra-website website build
+$ ./run.sh website build -u cassandra-website:/local/path/to/another/clone/of/cassandra-website
 ```
 
 This will build the website using the contents of the local repository located in */local/path/to/another/clone/of/cassandra-website*
@@ -100,7 +114,7 @@ This will build the website using the contents of the local repository located i
 To build using a remote copy of the cassandra-website run the following command.
 
 ```bash
-$ ./run.sh -u cassandra-website:https://github.com/my_orgranisation/cassandra-website.git website build
+$ ./run.sh website build -u cassandra-website:https://github.com/my_orgranisation/cassandra-website.git
 ```
 
 This will build the website using the contents of the remote repository located at *https://github.com/my_orgranisation/cassandra-website.git*
@@ -147,7 +161,7 @@ You can use your own local copy or fork of the Cassandra repository as the sourc
 To generate the latest version of the Cassandra docs using a local copy or fork of the Cassandra repository, run the following command.
 
 ```bash
-$ ./run.sh -u cassandra:/local/path/to/cassandra/repository -b cassandra:trunk website docs
+$ ./run.sh website docs -u cassandra:/local/path/to/cassandra/repository -b cassandra:trunk
 ```
 
 The output of this command will be AsciiDoc (`.adoc`) files that `antora` can render into HTML. Note that `antora` is never executed when only the Cassandra versioned documentation is generated.
@@ -161,7 +175,7 @@ If you are generating only the Cassandra version documentation, and you specify 
 To generate multiple versions of the Cassandra documentation using a local copy or fork of the Cassandra repository, run the following command.
 
 ```bash
-$ ./run.sh -u cassandra:/local/path/to/cassandra/repository -b cassandra:trunk,cassandra-3.11,my_branch website docs
+$ ./run.sh website docs -u cassandra:/local/path/to/cassandra/repository -b cassandra:trunk,cassandra-3.11,my_branch
 ```
 
 In the above command, multiple branches separated by a comma (`,`) can be specified in the `-b` option.
@@ -178,11 +192,11 @@ To build the website using a local clone of the Cassandra repository that contai
 
 ```bash
 $ ./run.sh \
+  website \
+  build \
     -i \
     -u cassandra:/local/path/to/cassandra/repository \
-    -u cassandra-website:/local/path/to/cassandra-website/repository \
-  website \
-  build
+    -u cassandra-website:/local/path/to/cassandra-website/repository
 ```
 
 In the above command, the `-i` option is used to tell the tooling to include the Cassandra repository when `antora` is generating the HTML. This ensures the versioned documentation HTML is generated along with the website HTML. In this case, exiting AsciiDoc files in the Cassandra repository are used to generate the versioned documentation HTML. That is, no additional operations are run to pre-generate the Cassandra AsciiDoc files.
@@ -193,23 +207,43 @@ To build using a remote copy of the Cassandra repository that contains the gener
 
 ```bash
 $ ./run.sh \
+  website \
+  build \
     -i \
     -u cassandra:https://github.com/my_orgranisation/cassandra.git \
-    -u cassandra-website:https://github.com/my_orgranisation/cassandra-website.git \
-  website \
-  build
+    -u cassandra-website:https://github.com/my_orgranisation/cassandra-website.git
 ```
 
 You can have a combination of local and remote repository paths. For example, you could have a local copy of the Cassandra Website repository and want to use the remote Cassandra repository to include the current documentation when rendering the website. To do this you can run the following command.
 
 ```bash
 $ ./run.sh \
+  website \
+  build \
     -i \
     -u cassandra:https://github.com/my_orgranisation/cassandra.git \
-    -u cassandra-website:/local/path/to/cassandra-website/repository \
-  website \
-  build
+    -u cassandra-website:/local/path/to/cassandra-website/repository
 ```
+
+### Generate the website using local copy of the ui-bundle
+
+You can use your own *ui-bundle.zip* file containing the information on how to style the website when building it. The *ui-bundle.zip* file can be generated using the `./run.sh` script. See the [Building the Site UI](#building-the-site-ui) section for furher details on how to build the *ui-bundle.zip*.
+
+To supply your own *ui-bundle.zip* file when building the website, run the following command.
+
+```bash
+$ ./run.sh website build -z /local/path/to/ui-bundle.zip
+```
+
+The path to the *ui-bundle.zip* file can also be a remote URL. You can supply the URL using the following command.
+
+```bash
+$ ./run.sh website build -z https://github.com/apache/cassandra-website/archive/refs/tags/ui-bundle-1.0.zip
+```
+
+The styling contained in the *ui-bundle.zip* will be applied to docs if they are being rendered as well.
+
+By default, the Docker container used to render the site will reference a GitHub release version of the *ui-bundle.zip*.
 
 ## Building the Site UI
 
@@ -225,6 +259,12 @@ A task can be executed using the following commands:
 $ ./run.sh website-ui <task>
 ```
 
+A full list of tasks can be found by running the following command
+
+```bash
+$ ./run.sh website-ui tasks
+```
+
 ### Building Bundle
 
 Antora needs a *ui-bundle.zip* when rendering the website and documentation content. It contains CSS, Java Script, fonts, images and other assets which define the look and feel of the website.
@@ -235,7 +275,19 @@ To generate the *ui-bundle.zip* from the assets in the *site-ui* directory, run 
 $ ./run.sh website-ui bundle
 ```
 
+This will build the UI Bundle using your local copy of the styling assets located in *./site-ui/*.
+
 When packaged successfully, the *ui-bundle.zip* will be located in the *./site-ui/build/* directory of the repository.
+
+:warning: *Tip:* In order to prevent root-owned modified files in your repository, the container executes operations as a non-root user. By default, the user is `build` and has the user and group permissions set to `UID=1000` and `GID=1000` respectfully. These permissions are usually the first user configured on a linux machine.
+
+If your local user has different user and group permissions you can set up the container user with your local UID:GID. In addition, you can set the build user in the container your local username. These changes can be made when building the container using the following command:
+
+```bash
+$ ./run.sh website-ui container -a BUILD_USER_ARG:$(whoami) -a UID_ARG:$(id -u) -a GID_ARG:$(id -g)
+```
+
+If you need to customise the container user as noted above, you must do this before you build the UI Bundle or run any other website-ui command.
 
 ### Preview UI
 
