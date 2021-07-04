@@ -4,35 +4,11 @@ debug() {
   >&2 echo "[DEBUG] $*"
 }
 
-# website
-#  * tasks
-#    - intree-gendocs (generate AsciiDoc in-tree docs only from nodetool and cassandra YAML)
-#    - build (build site, including cassandra-website and in-tree versioned cassandra content. NOTE: have option to include intree-gendocs generation)
-#    - container (build container. NOTE: have option to create a specific version tag)
-#
-# * services
-#    - preview (start preview mode. NOTE: use environment variables to toggle docs generation)
-#
-# website-ui
-#  * tasks (NOTE: Generate from gulpfile.js)
-#
-#  * services
-#     - preview
-#
-# ./run website docs -e=ENV_FILE -l=LOCAL_CASSANDRA_REPO -c=CONTAINER_TAG -v=REPOSITORY:VERSION-1,...,VERSION-N -t=REPOSITORY:TAG-1,...,TAG-N -u=REPOSITORY:URL
-# ./run website build -e=ENV_FILE -l=LOCAL_CASSANDRA_REPO -g (intree-gendocs) -c=CONTAINER_TAG -v=REPOSITORY:VERSION-1,...,VERSION-N -t=REPOSITORY:TAG-1,...,TAG-N -u=REPOSITORY:URL
-# ./run website release -c=CONTAINER_TAG+
-# ./run website preview -e=ENV_FILE -l=LOCAL_CASSANDRA_REPO -g (intree-gendocs) -c=CONTAINER_TAG -v=REPOSITORY:VERSION-1,...,VERSION-N -t=REPOSITORY:TAG-1,...,TAG-N -u=REPOSITORY:URL
-
-# ./run website-ui <task>
-# ./run website-ui lint
-# ./run website-ui preview
-
 usage() {
   cat <<EOF
 This script builds the Cassandra website UI components, generates the Cassandra versioned documentation, and renders the website.
 
-usage: ./run [OPTIONS] <COMPONENT> <COMMAND>
+usage: ./run.sh <COMPONENT> <COMMAND> [OPTIONS]
 
 Components
   The following values can be supplied for the COMPONENT argument.
@@ -248,6 +224,21 @@ parse_website_command_options() {
   done
 }
 
+get_container_build_dir() {
+  docker inspect "${container_tag}" | grep -m 1 "BUILD_DIR" | cut -d'=' -f2 | sed 's/[\",]*$//g'
+}
+
+build_container() {
+  local site_component="$1"
+  local docker_build_args=()
+  for key_value in ${container_build_args[*]}
+  do
+    docker_build_args+=(--build-arg "$(sed '0,/:/ s/:/=/' <<< "${key_value}")")
+  done
+
+  exec_docker_build_command "-f ./site-${site_component}/Dockerfile -t ${container_tag} ${docker_build_args[*]} ./site-${site_component}/"
+}
+
 # This function requires the following two variables to be defined at a higher scope level
 #
 # url_source_value  - Value assigned to url_source_name.
@@ -333,20 +324,6 @@ exec_docker_command() {
   fi
 }
 
-build_website_container() {
-  local docker_build_args
-  for key_value in ${container_build_args[*]}
-  do
-    docker_build_args+=(--build-arg "$(sed '0,/:/ s/:/=/' <<< "${key_value}")")
-  done
-
-  exec_docker_build_command "-f ./site-content/Dockerfile -t ${container_tag} ${docker_build_args[*]} ./site-content"
-}
-
-build_website_ui_container() {
-  exec_docker_build_command "-f ./site-ui/Dockerfile -t ${container_tag} ./site-ui/"
-}
-
 # This function requires the following two variables to be defined at a higher scope level
 #
 # url_source_name   - Name for any of the following: file, directory, or repository.
@@ -382,10 +359,17 @@ run_docker_website_command() {
   local container_build_dir=""
   local port_map_option=""
 
+  if [ -z "$(docker images -q "${container_tag}")" ]
+  then
+    build_container "content"
+  fi
+
   if [ "${container_command}" = "preview" ]
   then
     port_map_option="-p 5151:5151/tcp"
   fi
+
+  container_build_dir=$(get_container_build_dir)
 
   local env_file_arg
   local env_args=()
@@ -399,13 +383,6 @@ run_docker_website_command() {
   local cassandra_volume_mount_set="false"
   local cassandra_website_volume_mount_set="false"
   local cassandra_website_source_set="false"
-
-  if [ -z "$(docker images -q "${container_tag}")" ]
-  then
-    build_website_container
-  fi
-
-  container_build_dir=$(docker inspect "${container_tag}" | grep -m 1 "BUILD_DIR" | cut -d'=' -f2 | sed 's/\",$//g')
 
   if [ -f "${env_file}" ]
   then
@@ -531,18 +508,6 @@ EOF
   exec_docker_run_command "${port_map_option} ${vol_args[*]} ${env_file_arg} ${env_args[*]} ${container_tag} ${command_generate_docs} ${container_command}"
 }
 
-run_website_docs() {
-  run_docker_website_command "generate-docs"
-}
-
-run_website_build() {
-  run_docker_website_command "build-site"
-}
-
-run_website_preview() {
-  run_docker_website_command "preview"
-}
-
 run_website_command() {
   local command=$1
 
@@ -553,21 +518,48 @@ run_website_command() {
 
   case "${command}" in
     container)
-      build_website_container
+      build_container "content"
     ;;
 
     docs)
-      run_website_docs
+      run_docker_website_command "generate-docs"
     ;;
 
     build)
-      run_website_build
+      run_docker_website_command "build-site"
     ;;
 
     preview)
-      run_website_preview
+      run_docker_website_command "preview"
     ;;
   esac
+}
+
+run_docker_website_ui_command() {
+  local container_command=$1
+  local container_build_dir=""
+  local port_map_option=""
+  local volume_map_option=""
+
+  if [ -z "$(docker images -q "${container_tag}")" ]
+  then
+    build_container "ui"
+  fi
+
+  if [ "${container_command}" = "preview" ]
+  then
+    port_map_option="-p 5252:5252/tcp"
+  fi
+
+  container_build_dir=$(get_container_build_dir)
+  volume_map_option="$(pwd)/site-ui/:${container_build_dir}/site-ui"
+
+  if [ "${container_command}" = "help" ]
+  then
+    exec_docker_run_command -v "${volume_map_option}" "${container_tag}"
+  else
+    exec_docker_run_command "${port_map_option}" -v "${volume_map_option}" "${container_tag}" "${container_command}"
+  fi
 }
 
 run_website_ui_command() {
@@ -580,27 +572,15 @@ run_website_ui_command() {
 
   case "${command}" in
     container)
-      build_website_ui_container
+      build_container "ui"
     ;;
 
     help | tasks)
-      docker run -i -t -v "$(pwd)"/site-ui/:/home/site-ui ${container_tag}
+      run_docker_website_ui_command "help"
     ;;
 
     *)
-      if [ -z "$(docker images -q "${container_tag}")" ]
-      then
-        build_website_ui_container
-      fi
-
-      local port_map_option=""
-
-      if [ "${command}" = "preview" ]
-      then
-        port_map_option="-p 5252:5252/tcp"
-      fi
-
-      exec_docker_run_command "${port_map_option} -v $(pwd)/site-ui/:/home/site-ui ${container_tag} $*"
+      run_docker_website_ui_command "${command}"
     ;;
   esac
 }
@@ -620,18 +600,26 @@ include_version_docs_when_generating_website="disabled"
 persist_container_after_run="disabled"
 dry_run="disabled"
 
+arg_component=""
+arg_command=""
+
 if [ "$#" -eq 0 ]
 then
   usage
 fi
+
+arg_component="$1"
+shift 1
+
+if [ "$#" -eq 0 ]
+then
+  usage
+fi
+
+arg_command="$1"
+shift 1
 
 parse_website_command_options "$@"
-shift $((OPTIND - 1))
-
-if [ "$#" -eq 0 ]
-then
-  usage
-fi
 
 docker_output=""
 
@@ -644,16 +632,13 @@ else
   grep -A 2 "Server" <<<"${docker_output}" | grep "Version" | tr -s ' ' | cut -d' ' -f3
 fi
 
-arg_component=$1
-shift 1
-
 case "${arg_component}" in
   website)
-    run_website_command "$@"
+    run_website_command "${arg_command}"
   ;;
 
   website-ui)
-    run_website_ui_command "$@"
+    run_website_ui_command "${arg_command}"
   ;;
 
   *)
