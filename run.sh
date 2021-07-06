@@ -239,6 +239,36 @@ build_container() {
   exec_docker_build_command "-f ./site-${site_component}/Dockerfile -t ${container_tag} ${docker_build_args[*]} ./site-${site_component}/"
 }
 
+parse_file_uri() {
+  local file_uri=${location_source//file\:/}
+
+  # Check if URI is file:/path (no hostname)
+  if [ "${file_uri:1:1}" != "/" ]
+  then
+    location_source="${file_uri}"
+    return
+  fi
+
+  # Strip out the "//" that come after "file:"
+  file_uri=${file_uri//\/\/}
+
+  # Check if the URI has a server name file://server/path
+  if [ "${file_uri:0:1}" != "/" ]
+  then
+    # We will only accept a URI that is on the localhost (file://localhost/path OR file:///path)
+    if [ "$(cut -d'/' -f1 <<<"${file_uri}")" = "localhost" ]
+    then
+      # Strip out the "localhost" so we are just left with the path
+      file_uri=${file_uri//localhost}
+    else
+      echo "ERROR: Path ${location_source} is for a file or directory on a remote server. Please specify a localhost path or HTTP URL"
+      exit 1
+    fi
+  fi
+
+  location_source="${file_uri}"
+}
+
 # This function requires the following two variables to be defined at a higher scope level
 #
 # url_source_value  - Value assigned to url_source_name.
@@ -254,7 +284,7 @@ get_source_location_information() {
       return
     ;;
     file)
-      location_source=${location_source//file\:\/\//}
+      parse_file_uri
     ;;
   esac
 
@@ -268,14 +298,14 @@ get_source_location_information() {
   if [ -d "${location_source}" ]
   then
     location_type="dir"
-    if [ "${location_source:0:1}" = "." ]
+    if [ "${location_source:0:1}" != "/" ]
     then
       relative_path="${location_source}"
     fi
   elif [ -f "${location_source}" ]
   then
     location_type="file"
-    if [ "${location_source:0:1}" = "." ]
+    if [ "${location_source:0:1}" != "/" ]
     then
       file_name="$(basename "${location_source}")"
       relative_path="${location_source//${file_name}/}"
@@ -284,9 +314,9 @@ get_source_location_information() {
 
   if [ -n "${relative_path}" ]
   then
-    pushd "${relative_path}" > /dev/null || { echo "Failed to change directory to '${relative_path}'."; exit 1; }
+    pushd "${relative_path}" > /dev/null || { echo "ERROR: Failed to change directory to '${relative_path}'."; exit 1; }
     location_source=$(pwd)
-    popd > /dev/null || { echo "Failed to change back to working directory after changing to '${relative_path}'."; exit 1; }
+    popd > /dev/null || { echo "ERROR: Failed to change back to working directory after changing to '${relative_path}'."; exit 1; }
   fi
 
   if [ -n "${file_name}" ]
