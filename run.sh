@@ -233,7 +233,7 @@ build_container() {
   local docker_build_args=()
   for key_value in ${container_build_args[*]}
   do
-    docker_build_args+=(--build-arg "$(sed '0,/:/ s/:/=/' <<< "${key_value}")")
+    docker_build_args+=(--build-arg "$(sed '1,/:/ s/:/=/' <<< "${key_value}")")
   done
 
   exec_docker_build_command "-f ./site-${site_component}/Dockerfile -t ${container_tag} ${docker_build_args[*]} ./site-${site_component}/"
