@@ -382,18 +382,6 @@ To take snapshots of multiple tables that are in different keyspaces the command
  name [multi-ks] and options {skipFlush=false}
  Snapshot directory: multi-ks
 
-Providing TTL for created snapshot
-++++++++++++++++++++++++++++++++++
-One can provide ttl for created snapshot using ``--ttl`` option.TTL can be set in minutes (m), seconds (s), hours (h) and other TimeUnits. As an example, create snapshots for all tables in ``catalogkeyspace`` and ``cqlkeyspace`` keyspaces and set 3 minutes ttl.
-
-::
-
- [ec2-user@ip-10-0-2-238 ~]$ nodetool snapshot
- --tag catalog-cql-ks --ttl 3m  catalogkeyspace cqlkeyspace
- Requested creating snapshot(s) for [catalogkeyspace, cqlkeyspace] with snapshot
- name [catalog-cql-ks] and options {skipFlush=false, ttl=3m}
- Snapshot directory: catalog-cql-ks
-
 Listing Snapshots
 *************************** 
 To list snapshots use the ``nodetool listsnapshots`` command. All the snapshots that we created in the preceding examples get listed:
@@ -414,6 +402,42 @@ To list snapshots use the ``nodetool listsnapshots`` command. All the snapshots 
  catalog-ks    catalogkeyspace magazine           4.9 KiB   5.73 KiB    
 
  Total TrueDiskSpaceUsed: 44.02 KiB
+
+Expiring snapshots
+++++++++++++++++++++++++++++++++++
+It's possible to set a time-to-live (TTL) for created snapshot using the ``--ttl`` option, causing the snapshot to be automatically cleaned up when the TTL expires. TTL can be specified in minutes (m), seconds (s), hours (h) and days (d).
+
+The example below shows the creation of a snapshot for all tables in the ``catalogkeyspace`` and ``cqlkeyspace`` keyspaces with a TTL of 3 minutes:
+
+::
+
+ [ec2-user@ip-10-0-2-238 ~]$ nodetool snapshot
+ --tag catalog-cql-ks --ttl 3m  catalogkeyspace cqlkeyspace
+ Requested creating snapshot(s) for [catalogkeyspace, cqlkeyspace] with snapshot
+ name [catalog-cql-ks] and options {skipFlush=false, ttl=3m}
+ Snapshot directory: catalog-cql-ks
+
+now let's display information about snapshots:
+
+::
+ [ec2-user@ip-10-0-2-238 ~]$ nodetool listsnapshots
+ Snapshot Details:
+ Snapshot name  Keyspace name   Column family name True size Size on disk Creation time            Expiration time
+ catalog-cql-ks catalogkeyspace magazine           4,94 KiB  5,9 KiB      2021-08-23T20:52:01.344Z 2021-08-23T20:55:01.344Z
+ catalog-cql-ks catalogkeyspace journal            4,94 KiB  5,9 KiB      2021-08-23T20:52:01.368Z 2021-08-23T20:55:01.368Z
+ catalog-cql-ks cqlkeyspace     t                  0 bytes   951 bytes    2021-08-23T20:52:01.370Z 2021-08-23T20:55:01.370Z
+ catalog-cql-ks cqlkeyspace     t2                 0 bytes   952 bytes    2021-08-23T20:52:01.373Z 2021-08-23T20:55:01.373Z
+
+ Total TrueDiskSpaceUsed: 9,87 KiB
+
+We see creation and expiration time.Let's wait couple of minutes and try again:
+
+::
+ [ec2-user@ip-10-0-2-238 ~]$ nodetool listsnapshots
+ Snapshot Details:
+ There are no snapshots
+
+Finally, these snapshots have expired.
 
 Finding Snapshots Directories
 ****************************** 
