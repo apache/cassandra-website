@@ -85,8 +85,8 @@ ENV GIT_EMAIL_ADDRESS="${BUILD_USER}@apache.org"
 ENV GIT_USER_NAME="${BUILD_USER}"
 
 ENV ANTORA_SITE_TITLE="Apache Cassandra Documentation"
-ENV ANTORA_SITE_URL="https://cassandra.apache.org/"
-ENV ANTORA_SITE_START_PAGE="Website"
+ENV ANTORA_SITE_URL="/"
+ENV ANTORA_SITE_START_PAGE="_"
 
 # Build from 3.11.5 as document generation for previous versions is broken.
 ENV ANTORA_CONTENT_SOURCES_CASSANDRA_URL="https://github.com/apache/cassandra.git"
