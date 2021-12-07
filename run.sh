@@ -111,7 +111,7 @@ Options
                                   specified multiple times. The valid values for REPOSITORY are only 'cassandra' and
                                   'cassandra-website'. The values for TAGS are split by comma with no spaces. The
                                   repository and list of tags are split by a colon ':'. For example:
-                                    -t cassandra:cassandra-4.0,cassandra-3.11,cassandra-3.0
+                                    -t cassandra:cassandra-4.0.1,cassandra-3.11.11
 
         -u REPOSITORY:URL         The location defined by URL of the repository defined by REPOSITORY that will be used
                                   as the source content to generate the docs and/or website. This option can be
@@ -122,17 +122,17 @@ Options
                                     -u cassandra:https://github.com/myfork/cassandra.git
 
         -z UI_BUNDLE_ZIP_URL      The UI bundle ZIP location defined by UI_BUNDLE_ZIP_URL that will be used to style the
-                                  website when it is built. The value be a HTTP url or a file location on your local
-                                  host.  For example:
+                                  website when it is built. By default, the script will use the UI bundle ZIP located in
+                                  the site-ui/build/ directory. The value for UI_BUNDLE_ZIP_URL can be a HTTP url or a
+                                  file location on your local host. For example:
                                     -z ~/local/path/to/ui-bundle.zip
 
         -a BUILD_ARG:VALUE        A container build argument defined by BUILD_ARG that overrides the default value with
-                                  the value for VALUE. This option can be specified multiple times and is only applied
-                                  when using the 'build' command. This option is ignored in all other cases. Possible
-                                  arguments for BUILD_ARG are 'UID_ARG', 'GID_ARG', 'NODE_VERSION_ARG',
-                                  'ENTR_VERSION_ARG', and 'CASSANDRA_REPOSITORY_URL_ARG'. The build argument and value
-                                  are split by a colon ':'. For example:
-                                    -v CASSANDRA_REPOSITORY_URL_ARG:https://github/user/my_cassandra_fork.git
+                                  VALUE. This option can be specified multiple times and is only applied when using the
+                                  'build' command, and is ignored in all other cases. Possible arguments for BUILD_ARG
+                                  are 'BUILD_USER_ARG', 'UID_ARG', 'GID_ARG', 'NODE_VERSION_ARG', 'ENTR_VERSION_ARG'.
+                                  The build argument and value are split by a colon ':'. For example:
+                                    -v BUILD_USER_ARG:foobar
 
         -g                        Enable generation of versioned AsciiDoc (.adoc) files from the Cassandra source
                                   repository and include them when generating the website HTML. Use this option when you
@@ -523,14 +523,19 @@ EOF
 
     env_args+=("-e INCLUDE_VERSION_DOCS_WHEN_GENERATING_WEBSITE=${include_version_docs_when_generating_website}")
 
-    if [ -n "${ui_bundle_zip_url}" ]
+    # CASSANDRA-16913:
+    # Include the local site-ui/build/ui-bundle.zip automatically, unless an alternative path has been defined via the
+    # '-z' option. If we are on a custom branch, we would expect the local site-ui/build/ui-bundle.zip to be used from
+    # that branch. It would be unintuitive if an updated version of the file is there but left unused, and requires the
+    # user to specify the '-z' option.
+    if [ -z "${ui_bundle_zip_url}" ]
     then
-      local url_source_name=""
-      url_source_name=$(rev <<< "${ui_bundle_zip_url}" | cut -d'/' -f1 | rev)
-      local url_source_value="${ui_bundle_zip_url}"
-      set_antora_url_source
-      env_args+=("-e ANTORA_UI_BUNDLE_URL=${url_source_value}")
+      ui_bundle_zip_url="$(pwd)/site-ui/build/ui-bundle.zip"
     fi
+    local url_source_name=$(rev <<< "${ui_bundle_zip_url}" | cut -d'/' -f1 | rev)
+    local url_source_value="${ui_bundle_zip_url}"
+    set_antora_url_source
+    env_args+=("-e ANTORA_UI_BUNDLE_URL=${url_source_value}")
   fi
 
   env_args+=("-e COMMIT_GENERATED_VERSION_DOCS_TO_REPOSITORY=${commit_generated_version_docs_to_repository}")
