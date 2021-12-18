@@ -2,53 +2,73 @@
 
 == Building and IDE Integration
 
-=== Building From Source
+=== Prerequisites
 
-Building Cassandra from source is the first important step in contributing
-to the Apache Cassandra project.
-You'll need to install http://www.oracle.com/technetwork/java/javase/downloads/index.html[Java 8], https://git-scm.com/[Git], and http://ant.apache.org/[Ant] first.
+Building Cassandra from source is the first important step in contributing to the Apache Cassandra project.
+You will need to install Java (JDK 8 or 11, depending on which version
+you want to build Cassandra against, best is to install both and then
+switch between them when needed), Git, and Ant (including ant-optional).
+
+=== Getting the source code
 
 The source code for Cassandra is shared on the central Apache Git
 repository and organized by branch, one branch for each major version.
-You can access the code for the current development branch using:
+You can access the code for the current development branch at
+https://gitbox.apache.org/repos/asf/cassandra.git (the primary location)
+or at https://github.com/apache/cassandra (a mirror location).
 
-// 01.15.21 - polandll - should this step be a fork rather than a clone?
+However, to develop a patch or a new feature, you should fork the Cassandra
+project first and then clone it from your own fork:
 
-[source, plaintext]
+[source,plaintext]
 ----
-git clone https://gitbox.apache.org/repos/asf/cassandra.git cassandra-trunk
-----
-
-Other branches will point to different versions of Cassandra. Switching
-to a different branch requires checking out the branch.
-For example, to checkout the latest version of Cassandra 3.0, use:
-
-[source, plaintext]
-----
-git checkout cassandra-3.0
+git clone https://github.com/<your_git_name>/cassandra.git cassandra
 ----
 
-You can get a list of available branches with `git branch`.
+=== Building Cassandra
 
-Build Cassandra using ant:
+Cassandra is a Java project which is built using Ant.
+The build file, `build.xml` located in the root of the project content,
+has various tasks defined (you can list all of them with some short
+descriptions by running `ant -p`).
 
-[source, plaintext]
-----
-ant
-----
+The build uses the Java compiler which is currently set up in your
+shell. By default, the build uses Java 8. If you want to build
+with Java 11, you need to either add a build property `-Duse.jdk11=true`
+to your Ant build command or export the environment variable
+`CASSANDRA_USE_JDK11=true`. Otherwise, if you run the build using
+Java 11, the build script complains.
 
-This may take a significant amount of time depending on artifacts that have to
-be downloaded or the number of classes that need to be compiled.
+Now you can build Cassandra with the default task - just execute
+`ant` or `ant jar`. This may take a significant amount of time depending
+on artifacts that have to be downloaded or the number of classes that
+need to be compiled. When the build completes, you can find a JAR file
+in the build directory, and the database service can be started with
+the `bin/cassandra` script.
+
+=== Building a distribution
+
+Some tasks you might be interested in are:
+
+* `build` - compile the production code without producing any JARs
+* `build-test` - compile the test code without producing any JARs
+* `artifacts` - generate Cassandra distribution in `build/dist`
+directory and package it to `tar.gz` (with and without sources)
+* `mvn-install` - generate `cassandra-all` JAR artifact along with
+sources and JavaDoc, and install it in the local Maven repository
+* `realclean` - clean the project from any build products, as well as
+from any dependencies (in fact that means removing `build` and `lib`
+directories)
 
 [TIP]
 .Hint
 ====
-You can setup multiple working trees for different Cassandra versions
-from the same repository using
-https://git-scm.com/docs/git-worktree[git-worktree].
+Remember to clean the project after switching branches as build artifacts
+are versioned.
 ====
 
-Now you can get started with Cassandra using IntelliJ IDEA or Eclipse.
+There are other tasks related to testing, and they are covered in
+link:testing.adoc[Testing] section.
 
 === Setting up Cassandra in IntelliJ IDEA
 
@@ -56,14 +76,10 @@ https://www.jetbrains.com/idea/[IntelliJ IDEA] by JetBrains is one of
 the most popular IDEs for Cassandra and Java development in general.
 The Community Edition can be freely downloaded with all features needed to get started developing Cassandra.
 
-Use the following procedure for Cassandra 2.1.5+.
-If you wish to work with older Cassandra versions, see our https://cwiki.apache.org/confluence/display/CASSANDRA2/RunningCassandraInIDEA[wiki] for instructions.
-
-First, clone and build Cassandra.
-Then execute the following steps to use IntelliJ IDEA.
+Use the following procedure for Cassandra 2.1.5+:
 
 [arabic]
-. Generate the IDEA files using ant:
+. Generate project files by executing the following target from Ant build:
 
 [source, plaintext]
 ----
@@ -76,6 +92,16 @@ ant generate-idea-files
 
 The project generated by `ant generate-idea-files` contains
 nearly everything you need to debug Cassandra and execute unit tests.
+
+[TIP]
+.Hint
+====
+Although you do not need to build the project with `ant jar` to import
+it some tests run tools as external processes and need the regular
+artifacts to be created. Such tests may require you to rebuild the
+project using Ant before each run even when you run the test in IDEA.
+====
+
 You should be able to:
 
 * Run/debug defaults for JUnit
@@ -84,9 +110,15 @@ You should be able to:
 * Study Cassandra code style
 * Inspections
 
+[TIP]
+.Hint
+====
+If you wish to work with older Cassandra versions, see our https://cwiki.apache.org/confluence/display/CASSANDRA2/RunningCassandraInIDEA[wiki] for instructions.
+====
+
 === Opening Cassandra in Apache NetBeans
 
-https://netbeans.apache.org/[Apache NetBeans] is an older open source Java IDE,
+https://netbeans.apache.org/[Apache NetBeans] is the elder of the open sourced java IDEs,
 and can be used for Cassandra development.
 There is no project setup or generation required to open Cassandra in NetBeans.
 Use the following procedure for Cassandra 4.0+.
@@ -226,3 +258,15 @@ image::eclipse_debug6.png[image]
 . Confirm `Debug` and you should see the output of Cassandra start up in the Eclipse console.
 
 You can now set breakpoints and start debugging!
+
+=== General notes
+
+You may sometimes encounter some odd build failures when running the `ant` commands above. If you do, start `ant` with the `realclean` option:
+
+[source,plaintext]
+----
+ant realclean
+----
+
+Remember that all the tasks mentioned above may depend on building source files. If there are actual compilation errors in the code, you may not be able to generate project files for IntelliJ Idea, Netbeans, or Eclipse.
+It is especially important that you have imported the project adequately into IDE before doing merges or rebases. Otherwise, if there are conflicts, the project cannot be opened in IDE, and you will be unable to use any fancy conflict resolution tools offered by those IDEs.

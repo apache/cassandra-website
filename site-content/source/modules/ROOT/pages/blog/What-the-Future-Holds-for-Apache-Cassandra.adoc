@@ -1,0 +1,34 @@
+= What the Future Holds for Apache Cassandra
+:page-layout: single-post
+:page-role: blog-post
+:page-post-date: October 26, 2021
+:page-post-author: The Apache Cassandra Community
+:description: The Apache Cassandra Community
+:keywords: 
+
+Prior to the release of Apache Cassandra 4.0, all new features were https://lists.apache.org/thread.html/18c76129a4fe6785a51dad7500e04ee13a407a7f7ac5c8f9a3d83c87%40%3Cdev.cassandra.apache.org%3E[frozen,window=_blank] to enable project committers to focus on making 4.0 the best-tested and most reliable major release right out of the gate. 
+
+The community has invested in cutting-edge methodologies that were used at scale to exercise edge cases in the largest Cassandra clusters, and after extensive testing and validation, 4.0 GA was released on 26 July 2021.
+
+With a quality baseline for releases in place for future versions, the project is again accepting proposals for new features. The Cassandra Enhancement Process (https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=95652201[CEP,window=_blank]), similar to some other Apache projects, was established last year and now makes CEPs the preferred route for broad or disruptive changes to the Cassandra codebase. This structured approach opens the door wide to exploring, discussing, and developing new and exciting major features for Cassandra (see https://lists.apache.org/list.html?\dev@cassandra.apache.org:gte=1d:CEP[recent CEP discussions here,window=_blank]).
+
+*A host of new enhancements*
+
+Already we have seen CEPs approved and in development, such as:
+
+* https://cwiki.apache.org/confluence/display/CASSANDRA/CEP-10%3A+Cluster+and+Code+Simulations[Cluster & code action simulator,window=_blank] - a facility for simulating operations on clusters that enables repeatable but pseudo-random exploration of state space and correctness testing. This will bolster the already formidable testing capabilities the Cassandra community offers and represents a true advancement in the state-of-the-art for distributed systems testing.
+* https://cwiki.apache.org/confluence/display/CASSANDRA/CEP-13%3A+Denylisting+partitions[Denylisting partitions,window=_blank] - when operating Cassandra in production, reading certain partition keys can cause undesirable effects on the entire node or within the cluster. This denylisting feature is another critical tool in the operator toolbox to reduce the impact of unexpected or unhealthy client reads and writes on specific partitions. This feature will also prevent DDOS attacks where a hacker uses partition keys maliciously.
+* https://cwiki.apache.org/confluence/display/CASSANDRA/CEP-15%3A+General+Purpose+Transactions[General-purpose transactions,window=_blank] - a popular feature in community discussion which has been quickly approved, this CEP, when implemented, will be a major feature for many users as it will deliver the first-ever database that supports general-purpose transactions without the recognized trade-offs seen in other databases, such as scalability bottlenecks or the lack of strong consistency guarantees.
+* https://cwiki.apache.org/confluence/display/CASSANDRA/CEP-11%3A+Pluggable+memtable+implementations[Memtable pluggable memtable,window=_blank] - this is a CEP with potentially the broadest impact for more advanced use cases such as persistent memory. This feature is also a crucial first step in exploring using alternative storage engines within Cassandra, optimized for specific workloads. Instagram has already shown early promise with this idea by adding RocksDB as a storage engine.
+* https://cwiki.apache.org/confluence/display/CASSANDRA/CEP-14%3A+Paxos+Improvements[Paxos improvements,window=_blank] - a feature that builds on the cluster simulation CEP and improves the performance of lightweight transactions (LWTs). This type of transaction is used to guarantee that the data most recently written is considered before a read, which, in turn, ensures a high level of consistency for any decisions you want to make on data and allows linearizable access by concurrent users. The primary benefit of the Paxos improvements will be a huge performance boost to operations in a wide area setting while also benefiting correctness of LWTs across a range of scenarios such as range movements.
+* https://cwiki.apache.org/confluence/display/CASSANDRA/CEP-16%3A+Auth+Plugin+Support+for+CQLSH[Auth Plugin Support for CQLSH,window=_blank] - CQLSH, the included CLI tool, is important and useful, but, unfortunately, lacks the same support for different authentication methods. This will allow anyone using third-party-provided plugins like LDAP, Kerberos, and Sigv4 to be able to continue to use CQSLH.
+
+Many other CEPs are being proposed and nearing a vote for approval, such as:
+
+* https://cwiki.apache.org/confluence/display/CASSANDRA/CEP-7%3A+Storage+Attached+Index[Storage Attached Indexing (SAI),window=_blank] - this is another CEP nearing a vote, which is designed to replace the original secondary indexing. This will enable users to index multiple columns on the same table without suffering scaling problems, especially at write time.
+
+While there are proposals to add some headline-grabbing features, such as JOIN support to Apache Cassandra, some features confirm work that has already been undertaken. For example, the experimental flag for Java 11 has been removed and is now officially supported, while development to support Java 17 is in full swing and Cassandra will take advantage of the rapidly evolving innovations in Java garbage collection. As we’ve already seen in https://jaxenter.com/apache-cassandra-java-174575.html[performance tests for JDK16,window=_blank], Z Garbage Collection (ZGC) is now delivering submillisecond pause times, and we expect more significant gains in the near future.
+
+The latest release of Apache Cassandra is 4.0.1, which was rapidly pushed out to deal with a https://issues.apache.org/jira/browse/CASSANDRA-16877[bug,window=_blank] in Gossip on large clusters. 
+
+Apache Cassandra is moving fast and gathering rich features for a targeted yearly release cadence. Subscribe to the xref:community.adoc#join-the-conversation[mailing list] to stay up to date with the latest developments.

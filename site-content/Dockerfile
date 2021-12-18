@@ -42,8 +42,7 @@ RUN apt-get update && \
         git \
         make \
         ant \
-        ant-optional \
-        vim
+        ant-optional
 
 RUN pip3 install jinja2 requests
 
@@ -99,7 +98,7 @@ ENV ANTORA_CONTENT_SOURCES_CASSANDRA_WEBSITE_BRANCHES="HEAD"
 ENV ANTORA_CONTENT_SOURCES_CASSANDRA_WEBSITE_TAGS=""
 ENV ANTORA_CONTENT_SOURCES_CASSANDRA_WEBSITE_START_PATH="site-content/source"
 
-ENV ANTORA_UI_BUNDLE_URL="https://github.com/ianjevans/antora-ui-datastax/releases/download/v0.1oss/ui-bundle.zip"
+ENV ANTORA_UI_BUNDLE_URL="https://github.com/apache/cassandra-website/raw/trunk/site-ui/build/ui-bundle.zip"
 
 ENV CASSANDRA_DOWNLOADS_URL="https://downloads.apache.org/cassandra/"
 

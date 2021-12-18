@@ -69,7 +69,7 @@ To build the website only, run the following command from within the `./cassandr
 $ ./run.sh website build
 ```
 
-This will build the website content using your local copy of the cassandra-website, and the current checked-out branch. Use this command if you want to make a change to a top-level webpage without building the docs for any versions of cassandra.
+This will use the current checked-out branch of your cassandra-website local copy to build the website content. In addition, the local copy of the UI bundle will be used to style the website content. Use this command if you want to make a change to a top-level webpage without building the docs for any versions of cassandra.
 
 Once building has completed, the HTML content will be in the `./site-content/build/html/` directory ready to be reviewed and committed.
 
@@ -225,9 +225,11 @@ $ ./run.sh \
     -u cassandra-website:/local/path/to/cassandra-website/repository
 ```
 
-### Generate the website using local copy of the ui-bundle
+### Generate the website using your own copy of the ui-bundle
 
-You can use your own *ui-bundle.zip* file containing the information on how to style the website when building it. The *ui-bundle.zip* file can be generated using the `./run.sh` script. See the [Building the Site UI](#building-the-site-ui) section for furher details on how to build the *ui-bundle.zip*.
+By default, the local copy of the *ui-bundle.zip* located in site-ui/build/ is used by Antora to style the website when it is built. The `./run.sh` script will pass the location of ui-bundle.zip to the Docker container that executes Antora.
+
+You can use your own *ui-bundle.zip* file containing the information on how to style the website when building it. The *ui-bundle.zip* file can be generated using the `./run.sh` script. See the [Building the Site UI](#building-the-site-ui) section for further details on how to build the *ui-bundle.zip*.
 
 To supply your own *ui-bundle.zip* file when building the website, run the following command.
 
@@ -242,8 +244,6 @@ $ ./run.sh website build -z https://github.com/apache/cassandra-website/archive/
 ```
 
 The styling contained in the *ui-bundle.zip* will be applied to docs if they are being rendered as well.
-
-By default, the Docker container used to render the site will reference a GitHub release version of the *ui-bundle.zip*.
 
 ## Building the Site UI
 
