@@ -83,11 +83,19 @@ $ ./run.sh website container -a BUILD_USER_ARG:$(whoami) -a UID_ARG:$(id -u) -a 
 
 If you need to customise the container user as noted above, you must do this before you build the website or run any other website command.
 
-## Build the Website when Developing
+## Building the Website with Versioned Documentation
+
+To build the website with versioned documentation run the following command from within the `./cassandra-website` directory.
+
+```bash
+$ ./run website build -g
+```
+
+# Build the Website when Developing
 
 The website tooling is very flexible and allows for a wide range of development scenarios.
 
-### Build the website from a different branch
+## Build the website from a different branch
 
 You can tell the website builder to use a different branch to the one you are on. This can be done using the following command.
 
@@ -97,7 +105,7 @@ $ ./run.sh website build -b cassandra-website:my_branch
 
 This will build the website content using your local copy of the cassandra-website, and the branch named `my_branch`.
 
-### Build the website using a local clone of the repository
+## Build the website using a local clone of the repository
 
 You can tell the website builder to use a different clone or fork of the repository.
 
@@ -109,7 +117,7 @@ $ ./run.sh website build -u cassandra-website:/local/path/to/another/clone/of/ca
 
 This will build the website using the contents of the local repository located in */local/path/to/another/clone/of/cassandra-website*
 
-### Build the website using a remote clone of the repository
+## Build the website using a remote clone of the repository
 
 To build using a remote copy of the cassandra-website run the following command.
 
@@ -145,7 +153,7 @@ All options that are available in the `build` command can be used by the `previe
 
 The cassandra-website tooling can also be used to perform a number of other operations:
 
-* Generate the Apache Cassandra documentation.
+* Generate the Apache Cassandra documentation alone.
 * Update the website styling and behaviour.
 
 ## Generating the Cassandra Documentation
@@ -184,24 +192,24 @@ In the above command, multiple branches separated by a comma (`,`) can be specif
 
 The website tooling can be used to run a complete end-to-end generation of the HTML website and versioned documentation. That is, it can first generate the AsciiDoc files for each Cassandra version, and then launch `antora` to generate the HTML website and versioned documentation for publication.
 
-### Generate the website and documentation using pre-generated Cassandra AsciiDoc in local repositories
+### Generate the website and documentation from a local repositories
 
-If you have already generated the Cassandra AsciiDoc (`.adoc`) files and committed them to your repository, you can skip the Cassandra AsciiDoc generation process.
+You can use a local copy of the Cassandra repository as the source for the documentation.
 
-To build the website using a local clone of the Cassandra repository that contains the generated AsciiDoc files, and the Cassandra Website run the following command.
+To build the website using a local clone of the Cassandra repository run the following command.
 
 ```bash
 $ ./run.sh \
   website \
   build \
-    -i \
+    -g \
     -u cassandra:/local/path/to/cassandra/repository \
     -u cassandra-website:/local/path/to/cassandra-website/repository
 ```
 
-In the above command, the `-i` option is used to tell the tooling to include the Cassandra repository when `antora` is generating the HTML. This ensures the versioned documentation HTML is generated along with the website HTML. In this case, exiting AsciiDoc files in the Cassandra repository are used to generate the versioned documentation HTML. That is, no additional operations are run to pre-generate the Cassandra AsciiDoc files.
+In the above command, the `-g` option is used to tell the tooling to generate the non-committed AsciiDoc files and include the Cassandra repository as a source when `antora` is generating the HTML. This ensures the complete versioned documentation HTML is generated along with the website HTML.
 
-### Generate the website and documentation using pre-generated Cassandra AsciiDoc in remote repositories
+### Generate the website and documentation from a remote repositories
 
 To build using a remote copy of the Cassandra repository that contains the generated AsciiDoc files, and the Cassandra Website run the following command.
 
@@ -209,7 +217,7 @@ To build using a remote copy of the Cassandra repository that contains the gener
 $ ./run.sh \
   website \
   build \
-    -i \
+    -g \
     -u cassandra:https://github.com/my_orgranisation/cassandra.git \
     -u cassandra-website:https://github.com/my_orgranisation/cassandra-website.git
 ```
@@ -220,7 +228,7 @@ You can have a combination of local and remote repository paths. For example, yo
 $ ./run.sh \
   website \
   build \
-    -i \
+    -g \
     -u cassandra:https://github.com/my_orgranisation/cassandra.git \
     -u cassandra-website:/local/path/to/cassandra-website/repository
 ```

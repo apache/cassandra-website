@@ -17,8 +17,6 @@ ARG GID_ARG=1000
 ARG NODE_VERSION_ARG="v12.16.2"
 ARG ENTR_VERSION_ARG="4.6"
 
-ENV BUILD_USER=${BUILD_USER_ARG}
-
 RUN echo "Building with arguments:" \
     && echo " - BUILD_USER_ARG=${BUILD_USER_ARG}" \
     && echo " - UID_ARG=${UID_ARG}" \
@@ -26,23 +24,20 @@ RUN echo "Building with arguments:" \
     && echo " - NODE_VERSION_ARG=${NODE_VERSION_ARG}" \
     && echo " - ENTR_VERSION_ARG=${ENTR_VERSION_ARG}"
 
-RUN echo "Setting up user '${BUILD_USER}'"
-RUN groupadd --gid ${GID_ARG} --non-unique ${BUILD_USER}
-RUN useradd --create-home --shell /bin/bash \
-    --uid ${UID_ARG} --gid ${GID_ARG} --non-unique ${BUILD_USER}
-
 # INSTALL wget, python3, java11, and other tools required to build the docs
-RUN apt-get update && \
-    apt-get install -y \
-        wget \
-        gpg \
+RUN apt update && \
+    apt install -y \
+        openjdk-8-jdk \
+        openjdk-11-jdk \
         python3 \
         python3-pip \
-        openjdk-11-jdk \
-        git \
-        make \
         ant \
-        ant-optional
+        ant-optional \
+        make \
+        git \
+        gpg \
+        wget \
+        sudo
 
 RUN pip3 install jinja2 requests
 
@@ -57,9 +52,15 @@ RUN npm i -g @antora/cli@2.3 @antora/site-generator-default@2.3 @djencks/asciido
 RUN npm i -g antora-lunr antora-site-generator-lunr
 RUN npm i -g live-server
 
+# Create the build user and make it part of the password-less sudo group
+ENV BUILD_USER=${BUILD_USER_ARG}
+RUN groupadd --gid ${GID_ARG} --non-unique ${BUILD_USER} && \
+    useradd --create-home --shell /bin/bash --uid ${UID_ARG} --gid ${GID_ARG} --non-unique ${BUILD_USER} && \
+    usermod -aG sudo ${BUILD_USER} && \
+    sed -i 's/\(^%sudo\tALL=(ALL:ALL)\).*/\1 NOPASSWD:ALL/g' /etc/sudoers
+
 # Setup directories for building the docs
-#  Give the build user rw access to everything in the build directory,
-#   neccessary for the ASF 'website'.
+# Give the build user rw access to everything in the build directory neccessary for the ASF 'website'.
 ENV BUILD_DIR="/home/${BUILD_USER}"
 ENV ENTR_PACKAGE="${ENTR_VERSION_ARG}.tar.gz"
 WORKDIR ${BUILD_DIR}
@@ -101,9 +102,6 @@ ENV ANTORA_CONTENT_SOURCES_CASSANDRA_WEBSITE_START_PATH="site-content/source"
 ENV ANTORA_UI_BUNDLE_URL="https://github.com/apache/cassandra-website/raw/trunk/site-ui/build/ui-bundle.zip"
 
 ENV CASSANDRA_DOWNLOADS_URL="https://downloads.apache.org/cassandra/"
-
-ENV INCLUDE_VERSION_DOCS_WHEN_GENERATING_WEBSITE="disabled"
-ENV COMMIT_GENERATED_VERSION_DOCS_TO_REPOSITORY="enabled"
 
 EXPOSE 5151/tcp
 

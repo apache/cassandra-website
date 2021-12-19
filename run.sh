@@ -4,6 +4,15 @@ debug() {
   >&2 echo "[DEBUG] $*"
 }
 
+error() {
+  echo
+  echo "ERROR: $1."
+  echo
+  echo "For help run:"
+  echo "$ ./run.sh help"
+  exit 1
+}
+
 usage() {
   cat <<EOF
 This script builds the Cassandra website UI components, generates the Cassandra versioned documentation, and renders the website.
@@ -132,28 +141,13 @@ Options
                                   'build' command, and is ignored in all other cases. Possible arguments for BUILD_ARG
                                   are 'BUILD_USER_ARG', 'UID_ARG', 'GID_ARG', 'NODE_VERSION_ARG', 'ENTR_VERSION_ARG'.
                                   The build argument and value are split by a colon ':'. For example:
-                                    -v BUILD_USER_ARG:foobar
+                                    -a BUILD_USER_ARG:foobar
 
         -g                        Enable generation of versioned AsciiDoc (.adoc) files from the Cassandra source
                                   repository and include them when generating the website HTML. Use this option when you
                                   want to generate a new version of the Cassandra AsciiDocs before generating the
                                   website and documentation HTML. This option can be used with only the website 'build',
                                   and 'preview' commands. For all other commands this option is ignored.
-
-        -i                        Enable the inclusion of the versioned AsciiDoc (.adoc) files from the Cassandra source
-                                  repository when generating the website HTML. This option is unnecessary when the '-g'
-                                  option is used. Use this option when the AsciiDoc files are already committed to the
-                                  Cassandra source repository and you want them to be used for the versioned docs in the
-                                  generated HTML website. This option can be used with only the website 'build', and
-                                  'preview' commands. For all other commands this option is ignored.
-
-        -n                        Disable committing the generated docs to the Cassandra repository. This option can be
-                                  used when only a single branch is specified as the Cassandra repository source. If
-                                  using multiple branches, the AsciiDoc files generated for each branch need to be
-                                  committed to their respective branch. This is so Antora can generate the website HTML
-                                  documentation for each branch. Use this option when you use your local checkout of the
-                                  Cassandra repository and want to commit any newly generated AsciiDoc files to the
-                                  repository yourself.
 
         -p                        Preserve containers after docker exists. By default this script will force docker to
                                   remove the container once it stops. Use this option to persist the container after it
@@ -170,11 +164,11 @@ Options
 
         -d                        Dry run. Only display the docker command that will be executed but never execute it.
 EOF
-    exit 0
+    exit $1
 }
 
 parse_website_command_options() {
-  while getopts "e:c:b:t:u:z:a:ginpdh" opt_flag
+  while getopts "e:c:b:t:u:z:a:gpd" opt_flag
   do
     case $opt_flag in
       e)
@@ -200,13 +194,6 @@ parse_website_command_options() {
       ;;
       g)
         command_generate_docs="generate-docs"
-        include_version_docs_when_generating_website="enabled"
-      ;;
-      i)
-        include_version_docs_when_generating_website="enabled"
-      ;;
-      n)
-        commit_generated_version_docs_to_repository="disabled"
       ;;
       p)
         persist_container_after_run="enabled"
@@ -214,11 +201,8 @@ parse_website_command_options() {
       d)
         dry_run="enabled"
       ;;
-      h)
-        usage
-      ;;
       *)
-        usage
+        usage 1
       ;;
     esac
   done
@@ -261,8 +245,7 @@ parse_file_uri() {
       # Strip out the "localhost" so we are just left with the path
       file_uri=${file_uri//localhost}
     else
-      echo "ERROR: Path ${location_source} is for a file or directory on a remote server. Please specify a localhost path or HTTP URL"
-      exit 1
+      error "Path ${location_source} is for a file or directory on a remote server. Please specify a localhost path or HTTP URL"
     fi
   fi
 
@@ -314,9 +297,9 @@ get_source_location_information() {
 
   if [ -n "${relative_path}" ]
   then
-    pushd "${relative_path}" > /dev/null || { echo "ERROR: Failed to change directory to '${relative_path}'."; exit 1; }
+    pushd "${relative_path}" > /dev/null || { error "Failed to change directory to '${relative_path}'."; }
     location_source=$(pwd)
-    popd > /dev/null || { echo "ERROR: Failed to change back to working directory after changing to '${relative_path}'."; exit 1; }
+    popd > /dev/null || { error "Failed to change back to working directory after changing to '${relative_path}'."; }
   fi
 
   if [ -n "${file_name}" ]
@@ -521,8 +504,6 @@ EOF
       env_args+=("-e ANTORA_CONTENT_SOURCES_CASSANDRA_WEBSITE_URL=${container_build_dir}/cassandra-website")
     fi
 
-    env_args+=("-e INCLUDE_VERSION_DOCS_WHEN_GENERATING_WEBSITE=${include_version_docs_when_generating_website}")
-
     # CASSANDRA-16913:
     # Include the local site-ui/build/ui-bundle.zip automatically, unless an alternative path has been defined via the
     # '-z' option. If we are on a custom branch, we would expect the local site-ui/build/ui-bundle.zip to be used from
@@ -538,9 +519,7 @@ EOF
     env_args+=("-e ANTORA_UI_BUNDLE_URL=${url_source_value}")
   fi
 
-  env_args+=("-e COMMIT_GENERATED_VERSION_DOCS_TO_REPOSITORY=${commit_generated_version_docs_to_repository}")
-
-  exec_docker_run_command "${port_map_option} ${vol_args[*]} ${env_file_arg} ${env_args[*]} ${container_tag} ${command_generate_docs} ${container_command}"
+  exec_docker_run_command --name "website_content" "${port_map_option} ${vol_args[*]} ${env_file_arg} ${env_args[*]} ${container_tag} ${command_generate_docs} ${container_command}"
 }
 
 run_website_command() {
@@ -567,6 +546,10 @@ run_website_command() {
     preview)
       run_docker_website_command "preview"
     ;;
+
+    *)
+      error "Unrecognised website command - ${command}"
+    ;;
   esac
 }
 
@@ -591,9 +574,9 @@ run_docker_website_ui_command() {
 
   if [ "${container_command}" = "help" ]
   then
-    exec_docker_run_command -v "${volume_map_option}" "${container_tag}"
+    exec_docker_run_command --name "website_ui" -v "${volume_map_option}" "${container_tag}"
   else
-    exec_docker_run_command "${port_map_option}" -v "${volume_map_option}" "${container_tag}" "${container_command}"
+    exec_docker_run_command --name "website_ui" "${port_map_option}" -v "${volume_map_option}" "${container_tag}" "${container_command}"
   fi
 }
 
@@ -630,8 +613,6 @@ repository_tags=()
 repository_url=()
 ui_bundle_zip_url=""
 command_generate_docs=""
-commit_generated_version_docs_to_repository="enabled"
-include_version_docs_when_generating_website="disabled"
 persist_container_after_run="disabled"
 dry_run="disabled"
 
@@ -640,15 +621,15 @@ arg_command=""
 
 if [ "$#" -eq 0 ]
 then
-  usage
+  error "Missing component argument"
 fi
 
 arg_component="$1"
 shift 1
 
-if [ "$#" -eq 0 ]
+if [ "$#" -eq 0 ] && [ "${arg_component}" != "help" ]
 then
-  usage
+  error "Missing command argument"
 fi
 
 arg_command="$1"
@@ -660,6 +641,7 @@ docker_output=""
 
 if ! docker_output=$(docker version)
 then
+  echo
   echo -n "ERROR: "
   tail -n 1 <<<"${docker_output}"
 else
@@ -676,7 +658,11 @@ case "${arg_component}" in
     run_website_ui_command "${arg_command}"
   ;;
 
+  help)
+    usage 0
+  ;;
+
   *)
-    usage
+    error "Unrecognised component - ${arg_component}"
   ;;
 esac
