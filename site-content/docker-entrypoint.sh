@@ -82,46 +82,7 @@ generate_cassandra_versioned_docs() {
 
     echo "Using Java compiler version $(javac -version) to compile Cassandra JARs"
     ant realclean
-    ant "${ant_cmd_options}" jar
-    popd > /dev/null
-
-    pushd "${CASSANDRA_WORKING_DOC}" > /dev/null
-    # CASSANDRA-16763: cassandra-3.11, cassandra-4.0, and trunk should all have the same copy of gen-nodetool-docs.py
-    # in the doc/scripts directory.
-    local gen_nodetool_docs="./scripts/gen-nodetool-docs.py"
-    if [ ! -f "${gen_nodetool_docs}" ]
-    then
-      # CASSANDRA-16093: Fallback to local search and then retrieving from a specific commit if the script is missing.
-      gen_nodetool_docs=$(find . -iname gen-nodetool-docs.py | head -n 1)
-      if [ ! -f "${gen_nodetool_docs}" ]
-      then
-        echo "Unable to find ${gen_nodetool_docs}, so I will download it from the Cassandra repository using commit a47be7e."
-        wget \
-          -nc \
-          -O ./gen-nodetool-docs.py \
-          https://raw.githubusercontent.com/apache/cassandra/a47be7eddd5855fc7723d4080ca1a63c611efdab/doc/gen-nodetool-docs.py
-      fi
-    fi
-
-    # CASSANDRA-16763: cassandra-3.11, cassandra-4.0, and trunk should all have the same copy of convert_yaml_to_adoc.py
-    # in the doc/scripts directory.
-    local convert_yaml_to_adoc="./scripts/convert_yaml_to_adoc.py"
-    if [ ! -f ${convert_yaml_to_adoc} ]
-    then
-      convert_yaml_to_adoc=$(find . -iname convert_yaml_to_adoc.py | head -n 1)
-    fi
-
-    # Prepare the output directories.
-    mkdir -p modules/cassandra/pages/tools/nodetool
-    mkdir -p modules/cassandra/examples/TEXT/NODETOOL
-
-    echo "Generating nodetool asciidoc pages for version ${doc_version}"
-    python3 "${gen_nodetool_docs}"
-
-    echo "Generating Cassandra configuration asciidoc pages for version ${doc_version}"
-    yaml_in="${CASSANDRA_WORKING_DIR}/conf/cassandra.yaml"
-    adoc_out="${CASSANDRA_WORKING_DOC}/modules/cassandra/pages/configuration/cass_yaml_file.adoc"
-    python3 "${convert_yaml_to_adoc}" "${yaml_in}" "${adoc_out}"
+    ant "${ant_cmd_options}" gen-asciidoc
     popd > /dev/null
 
     pushd "${CASSANDRA_WORKING_DIR}" > /dev/null
