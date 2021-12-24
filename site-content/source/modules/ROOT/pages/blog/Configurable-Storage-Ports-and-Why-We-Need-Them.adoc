@@ -1,0 +1,42 @@
+= Configurable Storage Ports and Why We Need Them
+:page-layout: single-post
+:page-role: blog-post
+:page-post-date: January 14, 2022
+:page-post-author: Chris Thornett
+:description: The Apache Cassandra Community
+:keywords: 
+
+= Configurable Storage Ports and Why We Need Them
+
+image::blog/configurable-storage-ports-and-why-we-need-them-unsplash-bernard-hermant.jpg[storage ports]
+
+Image credit: https://unsplash.com/@bernardhermant?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText[Bernard Hermant on Unsplash,window=_blank]
+
+As a distributed database, Cassandra relies heavily on running across multiple machines and communicating over a network. Since we take pride in keeping Cassandra lightweight, it is important that network configuration is highly adaptable. This allows Cassandra nodes to communicate over a greater variety of networks and network devices, across firewalls, and between private networks.
+Cassandra nodes talk to each other just like most internet services: over TCP/IP connections. The storage port is the TCP port number used specifically for inter-node communication. By default, this is set to port 7000; check out the `storage_port` setting in the stock https://github.com/apache/cassandra/blob/6709111ed007a54b3e42884853f89cabd38e4316/conf/cassandra.yaml#L641[*cassandra.yaml*^] file.
+
+=== Why Would I Need to Change the storage_port Setting?
+
+There are a few instances where the `storage_port` setting might commonly need to be changed. You might be trying to run multiple Cassandra instances or configurations on one server, and that server could only have one IP address. In this case, each Cassandra node will need to use its own `storage_port`.
+Network configurations can also require different `storage_port` settings. For example, firewall restrictions, port forwarding at upstream routers, and even network address translation issues all have the possibility of requiring different port settings.
+Finally, there may be a conflict on port 7000. Perhaps some other application or service needs to use that port.
+
+=== How Do My Other Cassandra Nodes Know About Different storage_port Settings?
+
+If you need to change the `storage_port` setting for one of your Cassandra nodes, you will need to change the `storage_port` setting for all of the nodes in that ring. If you have multiple rings across different data centers, then you will need to set up some kind of port-forwarding solution at the firewall or router level if those data centers use different `storage_port` settings.
+You will need to check with your firewall or router documentation to learn how to configure port forwarding. There are many variations across vendors and models.
+
+=== SSL and Inter-Node Communication
+
+Prior to Cassandra 4.0, which was released in July 2021, inter-node communication would use two different ports. One was the standard `storage_port`, which defaulted to 7000. This was used for legacy unencrypted communication. The other was `ssl_storage_port`, which defaulted to 7001 and was used for legacy encrypted inter-node communication.
+However, as of version 4.0, both encrypted and unencrypted communications are allowed on `storage_port`. This means you no longer have to specify two separate ports in your configuration file. If this looks like something significant that is changing in your Cassandra configuration, make sure to check the `server_encryption_options` section of your *cassandra.yaml* file to ensure that `enable_legacy_ssl_storage_port` is set to `false`.
+
+=== What Does Inter-Node Communication Look Like?
+
+Cassandra relies on its masterless architecture to enable each node in a ring to provide the exact same functionality. This requires every node to have information about the entire database, even though it may only store data associated with the tokens in its partition. Cassandra nodes disseminate database information to each other using a peer-to-peer 
+https://cassandra.apache.org/doc/4.0/cassandra/architecture/dynamo.html#gossip[communication protocol called gossip]
+The gossip protocol broadcasts data over the `storage_port`, which is why correctly configuring this setting is essential to getting your Cassandra ring operating properly. This protocol is used for peer discovery as well as for propagating metadata.
+
+=== Ready to try Apache Cassandra?
+
+Get up and running quickly with our https://cassandra.apache.org/_/quickstart.html[quickstart guide]!
