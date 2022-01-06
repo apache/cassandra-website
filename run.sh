@@ -316,7 +316,7 @@ exec_docker_run_command() {
     remove_container_option=""
   fi
 
-  exec_docker_command "run -i -t ${remove_container_option} $*"
+  exec_docker_command "run ${remove_container_option} $*"
 }
 
 exec_docker_build_command() {
