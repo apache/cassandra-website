@@ -1,0 +1,58 @@
+RewriteEngine On
+
+RewriteCond %{HTTPS} !=on
+RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
+
+RedirectMatch 301 "^/$" "/_/index.html"
+
+RewriteCond %{REQUEST_URI} !^/doc/.*
+RewriteCond %{REQUEST_URI} ^(.*)/$
+RewriteRule ^(.*)/$ /_/$1.html [R=301,L]
+
+# temp – while in-tree antora are building to /Cassandra/
+RewriteCond %{REQUEST_URI} !^/doc/.*
+RewriteCond %{REQUEST_URI} ^/Cassandra/(.*)$
+RewriteRule ^/?Cassandra/(.*)$ /doc/$1 [R=301,L]
+
+# development in-tree docs have been moved to cassandra-website
+RewriteCond %{REQUEST_URI} ^/doc/latest/development/(.+).html [NC]
+RewriteRule ^/?doc/latest/development/(.+).html$ /_/development/$1.html [R=301,L]
+
+# redirects to new antora in-tree docs
+RewriteCond %{REQUEST_URI} !^/doc/latest/index.html [NC]
+RewriteCond %{REQUEST_URI} !^/doc/latest/cassandra [NC]
+RewriteRule ^/?doc/latest/(.+)$ /doc/latest/cassandra/$1 [R=301,L]
+RewriteCond %{REQUEST_URI} !^/doc/stable/index.html [NC]
+RewriteCond %{REQUEST_URI} !^/doc/stable/cassandra [NC]
+RewriteRule ^/?doc/stable/(.+)$ /doc/stable/cassandra/$1 [R=301,L]
+RewriteCond %{REQUEST_URI} !^/doc/4.0/index.html [NC]
+RewriteCond %{REQUEST_URI} !^/doc/4.0/cassandra [NC]
+RewriteRule ^/?doc/4.0/(.+)$ /doc/4.0/cassandra/$1 [R=301,L]
+RewriteCond %{REQUEST_URI} !^/doc/3.11/index.html [NC]
+RewriteCond %{REQUEST_URI} !^/doc/3.11/cassandra [NC]
+RewriteRule ^/?doc/3.11/(.+)$ /doc/3.11/cassandra/$1 [R=301,L]
+
+
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    Redirect 301 /blog.html /_/blog.html
+    Redirect 301 /blog/2021/04/19/cass-world-party-speakers.html /blog/Speakers-Announced-for-April-28-Cassandra-4.0-World-Party.html
+    Redirect 301 /blog/2021/04/12/cass-changelog_6.html /blog/Apache-Cassandra-Changelog-6-April-2021.html
+    Redirect 301 /blog/2021/03/25/world_party.html /blog/World-Party.html
+    Redirect 301 /blog/2021/03/10/join_cassandra_gsoc_2021.html /blog/Join-Cassandra-GSoC-2021.html
+    Redirect 301 /blog/2021/03/08/cass_changelog_5.html /blog/Apache-Cassandra-Changelog-5-March-2021.html
+    Redirect 301 /blog/2021/02/11/cass-changelog_4.html /blog/Apache-Cassandra-Changelog-4-February-2021.html
+    Redirect 301 /blog/2021/01/19/cass-changelog_3.html /blog/Apache-Cassandra-Changelog-3-January-2021.html
+    Redirect 301 /blog/2020/12/01/cass_changelog_2.html /blog/Apache-Cassandra-Changelog-2-December-2020.html
+    Redirect 301 /blog/2020/10/28/cass_changelog_1.html /blog/Apache-Cassandra-ChanApache-Cassandra-Changelog-1-October-2020.html
+    Redirect 301 /blog/2020/09/17/cassandra-usage-report-2020.html /blog/Apache-Cassandra-Usage-Report-2020.html
+    Redirect 301 /blog/2020/09/03/improving-resiliency.html /blog/Improving-Apache-Cassandras-Front-Door-and-Backpressure.html
+    Redirect 301 /blog/2020/08/14/cassandra-and-kubernetes-sig-update.html /blog/Cassandra-and-Kubernetes-SIG-Update-and-Survey.html
+    Redirect 301 /blog/2020/07/20/apache-cassandra-4-0-beta1.html /blog/Introducing-Apache-Cassandra-4-Beta-Battle-Tested-From-Day-One.html
+    Redirect 301 /blog/2019/04/09/benchmarking_streaming.html /blog/Even-Higher-Availability-with-5x-Faster-Streaming-in-Cassandra-4.html
+    Redirect 301 /blog/2018/12/03/introducing-transient-replication.html /blog/Introducing-Transient-Replication.html
+    Redirect 301 /blog/2018/10/29/audit_logging_cassandra.html /blog/Audit-Logging-in-Apache-Cassandra-4.html
+    Redirect 301 /blog/2018/10/17/finding_bugs_with_property_based_testing.html /blog/Finding-Bugs-in-Cassandra's-Internals-with-Property-based-Testing.html
+    Redirect 301 /blog/2018/08/21/testing_apache_cassandra.html /blog/Testing-Apache-Cassandra-4.html
+    Redirect 301 /blog/2018/08/07/faster_streaming_in_cassandra.html /blog/Hardware-bound-Zero-Copy-Streaming-in-Apache-Cassandra-4.html
+</IfModule>
