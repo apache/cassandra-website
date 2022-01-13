@@ -1,5 +1,41 @@
 # Apache Cassandra website
 
+Tooling to build the Apache Cassandra website and documentation.
+
+# tl;dr
+
+```
+$ git clone https://github.com/apache/cassandra-website.git
+$ cd ./cassandra-website
+
+# make sure you have docker installed
+
+# website content edits are done in ./site-content/source/modules
+# to build the website only using your local edits
+$ ./run.sh website build
+
+# open a browser window and navigate to site-content/build/html/_/index.html
+
+# Cassandra document edits are in the Apache Cassandra project
+$ git clone https://github.com/apache/cassandra.git
+$ cd ./cassandra/
+
+# in-tree Cassandra document edits are done in ./doc/modules
+# to build the website and Cassandra documentation using your local edits
+$ cd ../cassandra-website
+$ ./run.sh website build -g -u cassandra:$(pwd)/../cassandra -b cassandra:<branch-with-your-changes>
+
+# open a browser window and navigate to site-content/build/html/Cassandra/.../index.html
+```
+
+e.g.
+
+```
+$ ./run.sh website build -g -u cassandra:/Users/example/cassandra -b cassandra:example_branch
+```
+
+# Repository Layout
+
 The website repository code is separated into two main parts. These parts are represented by the directories at the root level of the project. Specifically the structure of the repository is:
 
 ```
@@ -20,7 +56,7 @@ The 'site-content' directory contains all the raw page information e.g. where to
 
 For further details about why the directories are separated as described above and why we use `antora` please see the [Details](#details) section at the bottom of this page.
 
-## Development Cycle
+# Development Cycle
 
 Making changes to the website content can be done using the following steps.
 
@@ -88,7 +124,7 @@ If you need to customise the container user as noted above, you must do this bef
 To build the website with versioned documentation run the following command from within the `./cassandra-website` directory.
 
 ```bash
-$ ./run website build -g
+$ ./run.sh website build -g
 ```
 
 # Build the Website when Developing
