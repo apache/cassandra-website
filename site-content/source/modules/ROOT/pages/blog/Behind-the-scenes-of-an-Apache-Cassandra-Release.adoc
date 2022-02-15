@@ -1,0 +1,43 @@
+= Behind the scenes of an Apache Cassandra Release
+:page-layout: single-post
+:page-role: blog-post
+:page-post-date: February, 17 2021
+:page-post-author: Josh McKenzie
+:description: The Apache Cassandra Community
+:keywords:
+
+:!figure-caption:
+
+.Image credit: https://unsplash.com/@lou_szabo[Lajos Szabo on Unsplash^]
+image::blog/behind-the-scenes-of-an-apache-cassandra-release-unsplash-lajos-szabo.jpg[Forklift delivering a crate]
+
+== Behind the scenes of an Apache Cassandra Release
+
+When developing a mission-critical piece of infrastructure software used broadly worldwide, it’s critical to have alignment and clarity around modifications to LTS releases. Balancing the need to evolve and provide cutting-edge novel features with providing long-term stability is a challenge we’ve faced for years on the Apache Cassandra project. As the topic came up again on a specific JIRA ticket: https://issues.apache.org/jira/browse/CASSANDRA-16873[CASSANDRA-16873^], we took the opportunity to formalize our processes and update our developer documentation in Confluence https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=199530302[here^].
+
+As projects evolve, often tribal knowledge is passed down from developer to developer over the years via IRC or Slack. What we see with maturing, widely adopted software projects, like Apache Cassandra, is that the needs of our users likewise evolve, as does the level of rigor and emphasis on stability required from our releases. Human nature is to understand the rules of a system and then optimize within those bounds based on goals and incentives, so when formalizing our processes we knew we were going to need to balance having a user and developer-centric approach with making sure contributors on the project have clear, justified, understandable procedures to adhere to. As an Apache project, https://community.apache.org/committers/decisionMaking.html[building consensus^] is a core part of how we operate and one of our pillars of fostering the long-term health and sustainability of our project.
+
+We have formalized our merge heuristics on the following Simple Rules:
+. This is a widely used mission-critical database; stability and correctness are table stakes
+. For patch fix releases on a GA branch, prioritize stability (Bug Fix Only)
+. For a Minor release, prioritize introducing new, non-API changing, and non-default behavior breaking features and changes (Bug Fix, Improvements, New Features)
+. Defer disruptive changes (API changes, protocol changes, etc.) to Major releases (All ticket types)
+We use Semantic Versioning (https://semver.org/[semver^]) on the project, which leads to releases with the MAJOR.MINOR.PATCH release structure. The Cassandra development community has committed to supporting three GA releases (MAJOR and/or MINOR) at any given time; with an exception being made for 3.0 (see below), the release of a new MINOR or MAJOR will cause the oldest supported GA release to go End of Life.
+
+Here are the three currently supported releases:
+
+* Cassandra 4.0 latest (4.0.2 at this time)
+* Cassandra 3.11 latest (3.11.12 at this time)
+* Cassandra 3.0 latest (3.0.26 at this time)
+
+With the upcoming release of Cassandra 4.1, we are making a one-time exception to our new rules and continuing to support 3.0 as well for one more cycle, so there will be four supported versions for now (3.0.latest, 3.11.latest, 4.0.latest, and 4.1.latest). The reason we’re making this exception is both the longer time window of stabilization that took place on the 3.0 release due to major data structure changes, as well as the long freeze for stabilization leading up to 4.0, which culminated in an irregular release cadence for that major. In order to minimize surprise to users of the project, we’re taking on the added burden of supporting four releases for another cycle to get onto a stable cadence.
+
+For the upcoming 4.1 release, we are currently targeting a https://lists.apache.org/thread/lsr45h2n72m8fbz3xqby6lsm7lqr7vm8[freeze in May 2022 and a release in July 2022^], which will put the 4.1 release one year out from 4.0 as committed by the project.
+
+How do we as a project determine when a branch is ready for release? The Apache Foundation provides https://www.apache.org/foundation/voting.html#ReleaseVotes[guidance here^]; Apache projects have a group of contributors called a PMC, or https://www.apache.org/foundation/governance/pmcs[Project Management Committee^], with certain responsibilities to the community and to the project. One of the core responsibilities of the PMC is to verify and vote on new releases for the project. The Cassandra project has a https://projects.apache.org/committee.html?cassandra[healthy and active PMC^] with members from all over the world.
+
+This group of contributors takes into account the breadth of features added, the number of bugfixes, architectural modernization, and general needs of the userbase when deciding what is the right cadence and content of a release. On the Cassandra project we are currently targeting yearly Minor or Major releases (depending on whether they’re API breaking or not), with patch releases cut based on either volume of fixes or severity of bugfixes that get committed to the project.
+
+The Open Source model of writing software is unique, and as “software is eating the world,” so “Open Source is eating software.” This model of cross-company, cross-domain, worldwide collaboration has given rise to many of the backbone technologies in use in the world today. I’m proud to be a member of the Apache Cassandra community and look forward to connecting with faces both old and new as we keep marching into the future.
+
+Join us on https://the-asf.slack.com[https://the-asf.slack.com^] in #cassandra or #cassandra-dev, ping the @cassandra-mentors alias in the channel if you need to get situated, xref:community.adoc#discussions[subscribe to the mailing lists^], and come join us! There’s truly never been a better time to get involved with the Cassandra project, and we’re looking forward to continuing to grow into the future.
