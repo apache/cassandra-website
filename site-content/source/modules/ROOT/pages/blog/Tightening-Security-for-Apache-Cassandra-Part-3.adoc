@@ -11,11 +11,11 @@
 .Image credit: https://unsplash.com/@zenchic[Jennefer Zacarias^]
 image::blog/tightening-security-for-apache-cassandra-p3-unsplash-jennefer-zacarias.jpg[3-4]
 
-In xref:blog/Tightening-Security-for-Apache-Cassandra-Part-2.adoc[Part-2] of this series, we explored avenues for securing data in transit and described how to configure TLS/mTLS with Apache Cassandra 4.0. In Part 3, we’ll look at how you can customize TLS/mTLS for Apache Cassandra 4.0+ to overcome the challenges with a TLS configuration.
+In xref:blog/Tightening-Security-for-Apache-Cassandra-Part-2.adoc[Part-2] of this series, we explored avenues for securing data in transit and described how to configure TLS/mTLS with Apache Cassandra 4.0. In Part 3, we’ll look at how you can customize TLS/mTLS for Apache Cassandra 4.1+ to overcome the challenges with a TLS configuration.
 
-=== How We Made TLS Configuration Better With 4.0
+=== How We Made TLS Configuration Better With 4.1
 
-With Apache Cassandra 4.0, https://cwiki.apache.org/confluence/display/CASSANDRA/CEP-9%3A+Make+SSLContext+creation+pluggable[we enhanced^] the TLS/mTLS configuration to allow for specifying custom ways to build SSLContext and we provided a default implementation for backward compatibility. We introduced a new configuration, `ssl_context_factory`, where you can specify your custom class to build SSLContext objects required by Java/Netty SSL libraries. You can also add custom properties to it via simple key-value pairs. All of this has been achieved while retaining the ability to hot-reload the security credentials as you could before version 4.0.
+With Apache Cassandra 4.1, https://cwiki.apache.org/confluence/display/CASSANDRA/CEP-9%3A+Make+SSLContext+creation+pluggable[we enhanced^] the TLS/mTLS configuration to allow for specifying custom ways to build SSLContext and we provided a default implementation for backward compatibility. We introduced a new configuration, `ssl_context_factory`, where you can specify your custom class to build SSLContext objects required by Java/Netty SSL libraries. You can also add custom properties to it via simple key-value pairs. All of this has been achieved while retaining the ability to hot-reload the security credentials as you could before version 4.0.
 
 To demonstrate this customization, let’s use the example of Kubernetes, the popular cloud-native solution. Kubernetes allows configuring https://kubernetes.io/docs/concepts/configuration/secret/[Secrets^] to store sensitive data. We could potentially use K8s Secrets to store the keystore and truststore artifacts along with their respective passwords. We will assume Apache Cassandra is already running in a K8s environment.
 
@@ -67,7 +67,7 @@ apiVersion: v1
            path: truststore-last-updatedtime
 ```
 
-We will use the https://github.com/apache/cassandra/blob/trunk/examples/ssl-factory/src/org/apache/cassandra/security/KubernetesSecretsSslContextFactory.java[‘KubernetesSecretsSslContextFactory’^] class from Apache Cassandra 4.0 as an example for how to customize the TLS configuration via Kubernetes Secrets as loaded by the pod definition (above). 
+We will use the https://github.com/apache/cassandra/blob/trunk/examples/ssl-factory/src/org/apache/cassandra/security/KubernetesSecretsSslContextFactory.java[‘KubernetesSecretsSslContextFactory’^] class from Apache Cassandra 4.1 as an example for how to customize the TLS configuration via Kubernetes Secrets as loaded by the pod definition (above). 
 
 ==== Example Custom TLS Configuration for K8s Secrets
 
@@ -95,3 +95,5 @@ image::blog/Cassandra-SslContextFactory.png[A diagram of Apache Cassandra’s ex
 On top of having the ability to customize TLS configuration, the community is https://issues.apache.org/jira/browse/CASSANDRA-17031[working on^] supporting other popular formats for security credentials, such as https://www.ssl.com/guide/pem-der-crt-and-cer-x-509-encodings-and-conversions/[PEM^] (originally “**P**rivacy **E**nhanced **M**ail”).
 
 As the Apache Cassandra community, our goal is to provide best-in-class software and keep enhancing it as the use-cases and requirements grow and evolve over time. I hope this particular enhancement makes Cassandra operators’ life easier while supporting industry standards for data security.
+
+_Update: The original blog has been updated to correctly reflect Apache Cassandra version 4.1 for the SSL Context's customization feature. Apache Cassandra 4.1 changes are targeted to freeze in May 2022 and released in July 2022_
