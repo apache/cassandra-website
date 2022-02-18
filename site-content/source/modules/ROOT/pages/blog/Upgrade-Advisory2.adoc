@@ -1,0 +1,25 @@
+= Upgrade Advisory: 3.0, 3.11, 4.0 Possible for Remote Code Execution for Scripted UDFs
+:page-layout: single-post
+:page-role: blog-post
+:page-post-date: February 18, 2022
+:page-post-author: The Apache Cassandra Community
+:description: The Apache Cassandra Community
+:keywords: 
+
+If the operator has configured the cluster in a documented insecure way, it is possible for a malicious user to execute remote code using scripted UDFs. We are advising users of Apache Cassandra 3.0, 3.11 and 4.0 to upgrade or to reset enable_user_defined_functions_threads back to true.
+
+The vulnerability being tracked in CASSANDRA-17352 makes it possible for an attacker to execute arbitrary code on the host. It’s important to note that to be exposed the user would have to opt-in to a configuration option that is documented as unsafe in the configuration file. While it’s difficult to estimate exposure to this CVE, it is likely narrow due to the need for opt-in. Note that this configuration is documented as unsafe, and will continue to be considered unsafe after this CVE.
+
+Mitigation:
+
+1. When running Apache Cassandra with the following configuration:
+```
+enable_user_defined_functions: true
+enable_scripted_user_defined_functions: true
+enable_user_defined_functions_threads: false
+```
+
+Set `enable_user_defined_functions_threads: true` (this is default)
+
+[start=2]
+2. We suggest 3.0 users should upgrade to 3.0.26; 3.11 users should upgrade to 3.11.12; and 4.0 users should upgrade to 4.0.3.
