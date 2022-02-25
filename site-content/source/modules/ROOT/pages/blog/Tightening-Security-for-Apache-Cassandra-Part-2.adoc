@@ -1,0 +1,96 @@
+= Tightening security for Apache Cassandra: Part 2
+:page-layout: single-post
+:page-role: blog-post
+:page-post-date: February, 7 2022
+:page-post-author: Maulin Vasavada
+:description: The Apache Cassandra Community
+
+image::blog/tightening-security-p2-unsplash-paradoxxxx.jpg[blurred arrows of light on a highway]
+
+Image credit: Photo by https://unsplash.com/@paradoxxxx[躺着的诗人 on Unsplash^]
+
+In xref:blog/Tightening-Security-for-Apache-Cassandra-Part-1.adoc[Part 1], we discussed how the growth in e-commerce transactions globally has required more secure software and one avenue to pursue securing data in transit is TLS/mTLS. This time we will discuss the challenges of TLS/mTLS, how it's configured, and what Apache Cassandra offered before the latest release, version 4.0.
+
+=== Challenges involved in TLS/mTLS
+
+We need to consider several operational challenges when using TLS/mTLS. As a note, we will refer to private/public keys, certificates, and passwords as ‘security credentials’ in the remainder of the article.
+
+==== Storing private key and password
+
+In the same way you need to consider keeping the key safe to your bank deposit box, storing long-lived security credentials on the filesystem poses significant risks. The implications of compromised or lost credentials are severe, although you can use filesystem permissions to buy yourself time to apply a better solution. As key distribution is a challenging problem, Apache Cassandra assumes that you already have a secure way to distribute those credentials to your Cassandra machines.
+
+==== Credential rotations
+
+Even if you keep credentials safe, the best practice in the industry is to rotate them periodically. This is particularly important in the case of mTLS as you will want to introduce new trusted clients or remove old ones. Additionally, the security landscape and its standards keep evolving; and find that you will have better algorithms and standards today than a few months or years ago. To take advantage of improvements and deal with client housekeeping, you will need to generate new keys/certificates. Therefore, a robust solution requires a secure and operator-friendly way to distribute updates to the security credentials across machines.
+
+==== Operations at scale
+
+Operators who maintain and manage large distributed system deployments know the importance of easy operations and automation. It’s essential for guaranteeing faster turn-around times while ensuring security is not compromised. You may have thousands of computers (thousands of servers and possibly 10x clients for mTLS) when you operate at scale. The challenge is distributing and maintaining the security credentials on each computer without it quickly becoming an operational nightmare and creating a higher risk to the system’s security. The challenge is to rotate the older keys/certificates smoothly and reliably across thousands of VMs, with zero to minimal downtime, with possible tighter compliance deadlines to meet.
+
+==== Context specific security constraints
+
+On top of all these challenges, you may have to work within context-specific security constraints that require you to pull the security credentials in a customized format or mechanism. 
+
+Let’s see how Apache Cassandra (pre-4.0) overcomes the above challenges for configuring TLS/mTLS on the server-side.
+
+=== TLS support before Apache Cassandra 4.0
+
+Since Apache Cassandra is written in Java, it uses the https://docs.oracle.com/cd/E19830-01/819-4712/ablqw/index.html[notion of ‘keystore’^] to store asymmetric key-pair and ‘truststore’ for storing ‘trusted certificate entries,’ which are optionally required to trust the caller end of the connection. Cassandra also enables hot-reloading of those security credentials based on the filesystem's `last-updated` timestamp. Apache Cassandra achieves this by periodically querying the filesystem without restarting the server. Of course, the new security credentials are only applicable for newly established SSL connections.
+
+==== TLS configuration
+
+In the `cassandra.yaml` file on the server, you must specify the `keystore` and `keystore_password` configurations. The `keystore` configuration refers to the file path for the keystore relative to the location the server is going to run from. This configuration supports the standard https://docs.oracle.com/en/java/javase/11/docs/specs/security/standard-names.html#keystore-types[keystore types supported by Java^]. `keystore_password` refers to the password for the keystore in plain text.
+
+For the TLS between the client application and the Cassandra server, you must specify these configurations under `client_encryption_options`.
+
+For example:
+
+```
+client_encryption_options:
+    keystore: conf/.keystore
+    keystore_password: cassandra
+```
+
+For the TLS between Cassandra server nodes (e.g., for data replication), you must specify these configurations under `server_encryption_options`.
+
+For example:
+
+```
+server_encryption_options:
+    keystore: conf/.keystore
+    keystore_password: cassandra
+```
+
+==== mTLS configuration
+
+Besides the ‘keystore’ configuration, you need to add a ‘truststore’ configuration to store trusted certificates coming from either the client application or the other Cassandra server nodes to the Cassandra server. You can do this by specifying `truststore` and `truststore_password` configurations in the `cassandra.yaml` file on the server. The ‘`truststore`’ configuration refers to the file path for the truststore, relative to the location where the server will run from. It supports the standard truststore types supported by Java. ‘`truststore_password`’ refers to the password for the truststore in plain text.
+
+For the mTLS between the client application and the Cassandra server, you must specify these configurations under `client_encryption_options`.
+
+For example:
+
+```
+client_encryption_options:
+    keystore: conf/.keystore
+    keystore_password: cassandra
+    truststore: conf/.truststore
+    truststore_password: cassandra
+```
+
+For the mTLS between Cassandra server nodes (again, for example, data replication), you must specify these configurations under `server_encryption_options`.
+
+For example:
+
+```
+server_encryption_options:
+    keystore: conf/.keystore
+    keystore_password: cassandra
+    truststore: conf/.truststore
+    truststore_password: cassandra
+```
+
+As you will have noticed, we must have keystore and truststore files on the filesystem to use TLS/mTLS. While this configuration enables us to secure traffic between the client application and Cassandra server and inter-server traffic, it doesn’t address all the challenges of using TLS/mTLS. In the final article of the series, we tackle those problems head-on and discuss how Apache Cassandra 4.0+ solves them.
+
+=== Want to learn more about Apache Cassandra’s security features?
+
+Head to our link:/doc/latest/cassandra/operating/security.html[Security documentation] section for more details.

@@ -1,0 +1,39 @@
+= Apache Cassandra and Java SE 11 support
+:page-layout: single-post
+:page-role: blog-post
+:page-post-date: February, 24 2021
+:page-post-author: Chris Thornett
+:description: The Apache Cassandra Community
+:keywords: Java, Cassandra 4.0, garbage collection
+
+:!figure-caption:
+
+.Image credit: https://unsplash.com/@leunesmedia/[Michiel Leunens on Unsplash^]
+image::blog/apache-cassandra-and-java-se-11-support-unsplash-michiel-leunens.jpg[Java coffee and cake]
+
+In September 2021, https://www.oracle.com/java/technologies/java-se-support-roadmap.html[Oracle
+announced their new Java support roadmap^]. Part of this announcement included the designation of certain releases as Long-Term-Support (LTS). LTS releases are eligible for Oracle's premier and extended support, and a new LTS release will be announced approximately every two years. As of this announcement, Java SE 7, 8, 11, and 17 are designated as LTS releases.
+
+The LTS designation is excellent news for Apache Cassandra. As an open source project aiming to be enterprise-ready, LTS releases give us a target platform to develop atop. We can focus on utilizing and leveraging language features that we know will continue to be developed
+and supported, giving all of our users a feeling of stability, predictability, and confidence.
+
+While earlier versions of Apache Cassandra are built for the Java 8 platform, with the release of version 4.0.2, Cassandra's support for Java 11 will no longer be experimental. We will support Java 11 as our LTS release of choice.
+
+=== Better Performance with Better Garbage Collection
+
+Java 11 has many improvements over Java 8. One significant advantage is the choice of garbage collectors—the process Java uses to remove data that is no longer needed from memory—which can significantly impact microservice performance. Garbage collection can cause unpredictable pauses in Java applications, so any improvements are welcome. There are three promising garbage collectors in Java 11: G1GC, Shenandoah and ZGC, although we can’t expressly recommend ZGC or a LTS release as it is only "experimental" in JDK11 and https://openjdk.java.net/jeps/377[not fully supported until JDK15^].
+
+G1GC, or the
+https://docs.oracle.com/en/java/javase/11/gctuning/garbage-first-garbage-collector.html#GUID-ED3AB6D3-FD9B-4447-9EDF-983ED2F7A573[Garbage-First garbage collector^], is a generational, incremental, parallel, mostly concurrent, stop-the-world, and evacuating garbage collector. While it is not a real-time garbage collector, it aims to minimize pause times and could offer big improvements to Cassandra's performance.  New Cassandra 4.0 users should use G1 and begin with a heap between 20 and 31GB.
+
+In contrast to ZGC, the Shenandoah is a low-latency garbage collector that is fully supported in JDK 11. It was introduced in JDK 12 but nearly all functionality has been backported to JDK 11u builds, and it does a good job of maintaining approximately 10ms pause targets with Cassandra heaps of 12GB.
+
+The other low-latency garbage collector option is the https://docs.oracle.com/en/java/javase/11/gctuning/z-garbage-collector1.html#GUID-A5A42691-095E-47BA-B6DC-FB4E5FAA43D0[Z Garbage Collector^], and, as we’ve mentioned, ZGC is still experimental in Java 11 and not officially recommended. With careful testing and evaluation, it is possible to use ZGC. It is a scalable, low-latency garbage collector with sub-microsecond maximum pause times. In addition to its ability to handle much larger heaps, it could dramatically improve the performance of a microservice-based architecture https://jaxenter.com/apache-cassandra-java-174575.html[ZGC shows promise^] for those that cannot avoid heaps above 31GB.
+
+=== Other Improvements in Java 11
+
+Java 11 offers a https://medium.com/skills-matter/key-reasons-to-adopt-java-11-f281072b18d9[number
+of other improvements^], such as suites and protocol have been updated to include TLS v1.3 and associated supporting technologies, performance enhancements, and better in-memory storage for strings. Many of these enhancements are immediately utilized by the Apache Cassandra architecture. We hope that support for Java 11 will show significant performance improvements for our users. We are also working on adding Java 17 support with a future major release.
+
+To learn more about Java 11 support in Apache Cassandra, https://cassandra.apache.org/doc/4.0/cassandra/new/java11.html[check out
+our documentation].
