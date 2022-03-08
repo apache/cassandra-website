@@ -1,0 +1,111 @@
+= Apache Cassandra Changelog #13
+:page-layout: single-post
+:page-role: blog-post
+:page-post-date: March 3, 2022
+:page-post-author: The Apache Cassandra Community
+:description: The Apache Cassandra Community
+:keywords: 
+
+image::blog/changelog_header.jpg[Apache Cassandra Changelog]
+Our monthly roundup of key activities and knowledge to keep the community informed.
+
+== Release Notes
+
+=== Released
+
+The latest release of Apache Cassandra is https://www.apache.org/dyn/closer.lua/cassandra/4.0.3/apache-cassandra-4.0.3-bin.tar.gz[4.0.3^] (https://downloads.apache.org/cassandra/4.0.3/apache-cassandra-4.0.3-bin.tar.gz.asc[pgp^], https://downloads.apache.org/cassandra/4.0.3/apache-cassandra-4.0.3-bin.tar.gz.sha256[sha256^], and https://downloads.apache.org/cassandra/4.0.3/apache-cassandra-4.0.3-bin.tar.gz.sha512[sha512^]), which has been available since 17 February 2022. We released new versions of all supported versions of Cassandra (https://www.apache.org/dyn/closer.lua/cassandra/3.11.12/apache-cassandra-3.11.12-bin.tar.gz[3.11.12^], https://www.apache.org/dyn/closer.lua/cassandra/3.0.26/apache-cassandra-3.0.26-bin.tar.gz[3.0.26^]) to address a vulnerability https://lists.apache.org/thread/y4nb9s4co34j8hdfmrshyl09lokm7356[CVE-2021-44521^].
+
+Essentially, if you're running Cassandra in the following non-default configuration, below, it's possible for an attacker to execute arbitrary code on the host:
+
+```
+enable_user_defined_functions: true
+enable_scripted_user_defined_functions: true
+enable_user_defined_functions_threads: false
+```
+
+The attacker also needs permission to create user-defined functions as well as this configuration arrangement.
+
+We suggest 3.0 users should upgrade to 3.0.26; 3.11 users should upgrade to 3.11.12; and 4.0 users should upgrade to 4.0.3.
+
+Thanks to Omer Kaspi of the JFrog Security vulnerability research team for the discovery.
+ 
+Please read the https://github.com/apache/cassandra/blob/cassandra-4.0/NEWS.txt[release notes^] and https://issues.apache.org/jira/browse/CASSANDRA[let us know^] if you encounter any problems.
+
+Note: As the docs are not yet updated, the bintray location for Debian users is replaced with the https://apache.jfrog.io/artifactory/cassandra/[ASF's JFrog Artifactory location^].
+
+See the xref:download.adoc[download section] for the latest stable and older supported versions of source and binary distributions.
+
+To stay up-to-date, we recommend joining the Cassandra  xref:community.adoc#discussions[mailing lists].
+
+== Community Notes
+
+_Updates on Cassandra Enhancement Proposals (CEPs), how to contribute, and other community activities._
+
+_Are you new to the project?  We have a handy xref:development/index.adoc[‘Contributing to Cassandra’] page for how to get involved and get started. Additionally, we have established two boards you should take a look at if you are new to the project. One is a kanban board for https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=496&quickFilter=2252[“Failing Tests” tickets that are unassigned^] and the other corresponds to our https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=484&quickFilter=2162[Low Hanging Fruit or “Starter Tickets”^] for 4.0.x and 4.1.x. Feel free to self-select a ticket to work on._
+
+__Any of these tickets should be of appropriate complexity for someone new to the project to tackle. Just remember to assign yourself to the ticket and acknowledge the status, such as ‘Work in Progress’ and ‘Needs Comitter/Patch Available’ when you submit your patch. You can also reach out on the https://the-asf.slack.com/[ASF Slack^] in the #cassandra-dev Slack channel. Use @cassandra_mentors to contact our Cassandra mentors!__
+
+Read PMC member Josh McKenzie’s https://lists.apache.org/thread/dbv16qwhk0xdxot7l30ddcpj1knhc4ty[latest bi-weekly update^] for ongoing discussions and the latest on ticket progress.
+
+=== Discussed
+
+The vulnerability, detailed above, generated a discussion on the Apache Cassandra’s https://lists.apache.org/thread/dk7svwpl1bbncsbkwbf35zbqmsoxjdk2[hotfix release procedure^]. The current status of the discussion indicates that future hotfixes will likely be based on a branch off the previously released tag so the difference (diff) on any hotfix only includes the changes for that hotfix and nothing else. It is likely this will involve a lazy-consensus wiki update. Details will be confirmed soon.
+
+=== Added
+
+The PMC is pleased to announce that *Anthony Grasso*, *Lorina Poland*, and *Erick Ramirez* have accepted the invitation to become committers! This is a big milestone for the project as we branch out from only having core database code contributors as committers and start recognizing and elevating other parts of our ecosystem. Congrats to you all! 👏
+
+=== Passed
+
+The discussion on https://lists.apache.org/thread/mhknw77oyt3nc1cjxxvmckp9r0xnj8rg[Storage Attached Index (SAI)^] was closed, moved to a vote and https://lists.apache.org/thread/6h64dry8rkfg0p17oc4pl0ho4vnxgw13[passed!^]. https://cwiki.apache.org/confluence/x/7DZ4CQ[SAI^] is designed to replace the original secondary indexing. This will enable users to index multiple columns on the same table without suffering scaling problems, especially at write time.
+
+:!figure-caption:
+
+.Interested in following the SAI feature development or contributing? Join the dedicated Slack channel #cassandra-sai.
+image::blog/SAI-channel.PNG[The Cassandra SAI channel on Slack]
+
+=== Passed
+
+The discussion for https://cwiki.apache.org/confluence/x/kYuqCw[CEP-19 Trie Memtable Implementation^] has moved to a https://lists.apache.org/thread/xcz8dt9bgodono949n79951gyt1sxt31[vote^]. Memtables can become a pain point for memory management and garbage collection, *Branimir Lambov* is proposing an alternative memtable implementation based on https://github.com/blambov/cassandra/blob/CASSANDRA-17240/src/java/org/apache/cassandra/db/tries/MemtableTrie.md[tries^]. This feature builds on the https://cwiki.apache.org/confluence/x/0goBCw[CEP-11: Pluggable memtable implementations^] 
+
+=== Discussed
+
+*Chris Thornett* opened up a topic on the https://lists.apache.org/thread/7925q7qsrkch654wrq789rpvo4s0xrj5[Apache Cassandra content process^] on the wiki for discussion. Please take a look and chime in if you have some experience or interest in this area. Here's a https://cwiki.apache.org/confluence/x/-6rkCw[link^] to the post on the Confluence wiki.
+
+=== Discussed
+
+The project has been actively working on fuzz testing Apache Cassandra for the past several years and in February, *Alex Petrov* and other contributors https://lists.apache.org/thread/t51wnf58wj7wc73krtrfkvn58fnbh3g2[merged in support for property based fuzz testing^]. This approach has already surfaced a number of bugs in complex systems with subtle temporal relationships, and there is an ongoing discussion about rewriting some of our existing old tests to use this new framework. This rewrite would be a great benefit to the project in the long run albeit a significant project.
+
+Petrov also cut a 0.0.1 release of https://github.com/apache/cassandra-harry[Harry^], a fuzz testing tool for Apache Cassandra.
+
+If you’d like to learn more about Harry, you can read Petrov’s xref:blog/Harry-an-Open-Source-Fuzz-Testing-and-Verification-Tool-for-Apache-Cassandra.adoc[recent overview blog]. You can also reach out to Alex Petrov on the #cassandra-dev Slack channel if you have any questions or need assistance writing your tests, or want to help to extend Harry.
+
+=== Discussed
+
+*Caleb Rackliffe* has been continuing the https://lists.apache.org/thread/tk9rl0qw9byydbyfr25wx6chs05nm7to[discussion^] on moving cassandra.yaml toward a more nested structure, and how to restructure our config .yaml in a manner that's easier to comprehend, and maintainable for operators. This has major ramifications for anyone administering many large Cassandra clusters, so if you're one of those people please take a few minutes to ramp up on the topic and get involved in the discussion.
+
+== User Space
+
+=== Kinetic Data
+
+Kinetic Data developed a low-code system, a forms and workflow engine built on top of Apache Cassandra, where, for example, users can define a form with drag and drop fields and store the data in Cassandra.
+
+"Once it's set up and running it’s hands off. Quite frankly, it's easy from an operations perspective [...] so our customers, they're using Cassandra, but they don't really realize it [...]. But they do say, ‘it's always up. It's always fast.’ It's all these benefits that you really want the end-user to know about."
+-- John Sundberg, CEO of Kinetic Data
+
+_Do you have a Cassandra case study to share? Email cassandra@constantia.io._
+
+== In the News
+
+The New Stack: 
+https://thenewstack.io/jfrog-finds-rce-issue-in-apache-cassandra/[JFrog Finds RCE Issue in Apache Cassandra^]
+
+== Cassandra Tutorials & More
+
+xref:blog/Apache-Cassandra-and-Java-SE-11-support.adoc[Apache Cassandra and Java SE 11] - Chris Thornett
+
+xref:blog/Behind-the-scenes-of-an-Apache-Cassandra-Release.adoc[Behind the Scenes of an Apache Cassandra Release] - Josh McKenzie
+
+https://www.youtube.com/watch?v=xeQHa3Z-d-A[Fast General Purpose Transactions in Apache Cassandra^] - Benedict Elliott Smith
+
+https://medium.com/building-the-open-data-stack/leveraging-virtual-tables-in-apache-cassandra-4-0-520059bb96b7[Leveraging Virtual Tables in Apache Cassandra 4.0^] - Aaron Ploetz
