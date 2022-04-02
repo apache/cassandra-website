@@ -103,6 +103,8 @@ ENV ANTORA_UI_BUNDLE_URL="https://github.com/apache/cassandra-website/raw/trunk/
 
 ENV CASSANDRA_DOWNLOADS_URL="https://downloads.apache.org/cassandra/"
 
+ENV LOG_LEVEL="INFO"
+
 EXPOSE 5151/tcp
 
 # Run as build user from here
