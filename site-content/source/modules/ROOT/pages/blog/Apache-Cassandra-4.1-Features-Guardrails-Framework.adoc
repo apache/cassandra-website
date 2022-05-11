@@ -1,0 +1,136 @@
+= Apache Cassandra 4.1 Features: Guardrails Framework
+:page-layout: single-post
+:page-role: blog-post
+:page-post-date: May 12, 2022
+:page-post-author: Andrés de la Peña
+:description: New Guardrails Framework in Apache Cassandra 4.1
+:keywords: 4.1, features, guardrails
+
+:!figure-caption:
+
+.Image credit: https://unsplash.com/@jjying[JJ Ying on Unsplash^]
+image::blog/apache-cassandra-4.1-features-guardrails-framework-unsplash-jj-ying.jpg[New Guardrails framework]
+
+In Apache Cassandra 4.1.0, we are introducing a new framework called Guardrails. The framework helps operators avoid certain configuration and usage pitfalls that can degrade the performance and availability of an Apache Cassandra cluster when taken to scale. 
+
+For example, on the schema side, users can create too many tables or secondary indexes, leading to excessive use of resources. On the query side, users can run queries touching too many partitions that might involve all nodes in the cluster. Even worse, they can simply run a query using costly replica-side filtering, potentially reading all the table contents into memory on all nodes across the cluster. All these are well-known Cassandra anti-patterns, and administrators have to be vigilant about preventing users from incurring them. Even if one is perfectly aware of correct usage patterns, it’s easy to lose track of things like the size of non-frozen collections.
+
+The new framework allows operators to restrict how Cassandra is used by:
+
+* Disabling certain features.
+* Disallowing some specific values.
+* Defining soft and hard limits to certain database magnitudes.
+
+=== Configuring Guardrails
+
+Guardrails are defined as regular properties in the Cassandra configuration file, https://cassandra.apache.org/doc/latest/cassandra/configuration/cass_yaml_file.html[`cassandra.yaml`]. They look like:
+
+```
+tables_warn_threshold: -1
+tables_fail_threshold: -1
+secondary_indexes_per_table_warn_threshold: -1
+secondary_indexes_per_table_fail_threshold: -1
+allow_filtering_enabled: true
+partition_keys_in_select_warn_threshold: -1
+partition_keys_in_select_fail_threshold: -1
+collection_size_warn_threshold:
+collection_size_fail_threshold:
+```
+
+Note that this is not an exhaustive list of all the available guardrails. There are many more, and new ones are under development, but this does give you an idea of the potential options. Note also that all guardrails are disabled by default. When enabled, a guardrail configuration might resemble the following: 
+
+```
+tables_warn_threshold: 5
+tables_fail_threshold: 10
+secondary_indexes_per_table_warn_threshold: 5
+secondary_indexes_per_table_fail_threshold: 10
+allow_filtering_enabled: false
+partition_keys_in_select_warn_threshold: 10
+partition_keys_in_select_fail_threshold: 20
+collection_size_warn_threshold: 10MiB
+collection_size_fail_threshold: 20MiB
+```
+
+The guardrails defined in `cassandra.yaml` are applied as the node starts. It’s also possible to dynamically update the guardrails configuration through JMX at runtime. All guardrails are grouped under the MBean named `org.apache.cassandra.db.Guardrails`. There are plans to also support dynamically updating guardrails through virtual tables, although this option is not yet available.
+
+=== Guardrails in Action
+
+Most guardrails are checked at the https://cassandra.apache.org/doc/latest/cassandra/cql/index.html[CQL layer], without involving the https://cassandra.apache.org/doc/latest/cassandra/architecture/storage_engine.html[storage engine] nor https://cassandra.apache.org/doc/latest/cassandra/architecture/dynamo.html[additional replicas]. Boolean guardrails for disabling features, such as `allow_filtering_enabled`, abort the operations attempting to use the disabled feature. For example, if the boolean guardrail for queries using filtering is disabled (`allow_filtering_enabled: false`) we will see a failure every time we try to run one of those queries, and the query won’t run:
+
+```
+cqlsh> SELECT * FROM k.t1 WHERE v=0 ALLOW FILTERING;
+InvalidRequest: Error from server: code=2200 [Invalid query] message="Guardrail allow_filtering violated: Querying with ALLOW FILTERING is not allowed"
+```
+
+Some guardrails have both soft and hard limits. When the soft limit of a guardrail is triggered, it raises a CQL client warning and logs a server-side warning message, but it doesn't abort the operation. For example, if we have established a soft limit of five tables (`tables_warn_threshold: 5`) and we try to create a sixth table, we’ll see a warning but the table will still be created:
+
+```
+cqlsh> CREATE TABLE k.t6 (k int PRIMARY KEY, v int);
+Warnings :
+Guardrail tables violated: Creating table t6, current number of tables 6 exceeds warning threshold of 5.
+```
+
+However, if the hard limit is reached, the user operation will be aborted with a `GuardrailViolatedException`, preventing the potentially harmful operation from happening. Continuing with the previous example, if we have a hard limit of ten tables (`tables_warn_threshold: 10`) and we try to create an eleventh table, we will see an error and the eleventh table won’t be created:
+
+```
+cqlsh> CREATE TABLE k.t11 (k int PRIMARY KEY, v int);
+InvalidRequest: Error from server: code=2200 [Invalid query] message="Guardrail tables violated: Cannot have more than 10 tables, aborting the creation of table t11"
+```
+
+The triggering of a guardrail will always emit a diagnostic event of type `GuardrailEvent`. Thus, anyone subscribing to diagnostic events of that type will be able to monitor guardrail violations and trigger any desired actions. Some examples of actions include storing metrics and contacting the offending user, etc.
+
+=== Users and Extensibility
+
+Guardrails are only applied to the operations of regular users, so they will neither be checked for superuser queries nor internal queries. By default, all regular users are subjected to the same guardrails configuration values defined in `cassandra.yaml`. However, the configuration for guardrails is an extensible API defined by the interfaces `GuardrailsConfig` and `GuardrailsConfigProvider`. These interfaces provide the configurations of every guardrail as a function of the user running the guarded operation. Third-party alternative implementations could provide different guardrail configurations depending on the user, or on some other factors. Custom implementations can be provided through the JVM system property `cassandra.custom_guardrails_config_provider_class`. It is important to know that this API isn’t officially supported yet, and there can be changes breaking backward compatibility in any minor release.
+
+=== Background Guardrails
+
+In general, guardrails are associated with a specific CQL query. However, due to technical limitations, some guardrails are checked in the background, without being associated with any specific query. That’s the case, for example, with the guardrails for the size or number of items of a link:/doc/trunk/cassandra/cql/types.html#collections[non-frozen collection^]. Although we can do some checks when a query writes a new collection fragment, we cannot know if there are other fragments of the collection previously stored on the link:/doc/trunk/cassandra/architecture/storage_engine.adoc#sstables[SSTables^]. We could, of course, check into the SSTables, but that would involve a costly read-before-write operation. Instead, the guardrail checks the size of all collections every time an SSTable is written to disk, such as on link:/doc/trunk/cassandra/architecture/storage_engine.html#memtables[memtable^] flush or during link:/doc/trunk/cassandra/operating/compaction/index.adoc[compaction^]. If a large collection is detected the guardrail is triggered and emits the proper log messages and diagnostic events. However, in contrast to what happens with regular guardrails, we won’t abort any operation. The reason for this is that SSTable writes aren't associated with any specific CQL query. Rather, they are the result of multiple past CQL writes that have already happened long before. Future guardrails for similar things, like partition size, are likely to work in the same way.
+
+Another example of a guardrail that partially runs in the background is the one for disk usage. Its default configuration is:
+
+```
+data_disk_usage_percentage_warn_threshold: -1
+data_disk_usage_percentage_fail_threshold: -1
+data_disk_usage_max_disk_size:
+```
+
+This guardrail is checked by a background task that periodically checks the disk space usage. If the disk usage exceeds the percentage specified in the configuration, the guardrail will emit the proper log messages and diagnostic events, although these won’t be associated with any specific query. However, the disk usage status calculated by the periodic task is tracked and propagated through Gossip, so every node is aware of the disk usage of its peers. This information will be used by write queries to check the guardrail again and warn about or abort queries depending on when the disks on the targeted replicas are close to being full:
+
+```
+cqlsh> INSERT INTO k.t (k, v) VALUES (1, 10);
+InvalidRequest: Error from server: code=2200 [Invalid query] message="Guardrail replica_disk_usage violated: Write request failed because disk usage exceeds failure threshold"
+```
+
+=== Expect More Guardrails
+
+Adding new guardrails to Cassandra should be relatively easy since the framework provides base classes for several types of guardrail and utilities for parsing configuration and testing. More importantly, adding new safety checks in the form of guardrails should guarantee that they have a homogeneous, consistent behavior, and that they can benefit from new features that are added for every guardrail.
+
+At this time, there are guardrails for:
+
+* Number of user keyspaces.
+* Number of user tables.
+* Number of columns per table.
+* Number of secondary indexes per table.
+* Number of materialized tables per table.
+* Number of fields per user-defined type.
+* Number of items in a collection.
+* Number of partition keys selected by an IN restriction.
+* Number of partition keys selected by the cartesian product of multiple IN restrictions.
+* Allowed table properties.
+* Allowed read consistency levels.
+* Allowed write consistency levels.
+* Collections size.
+* Query page size.
+* Minimum replication factor.
+* Data disk usage, defined either as a percentage or as an absolute size.
+* Whether user-defined timestamps are allowed.
+* Whether GROUP BY queries are allowed.
+* Whether the creation of secondary indexes is allowed.
+* Whether the creation of uncompressed tables is allowed.
+* Whether querying with ALLOW FILTERING is allowed.
+* Whether dropping or truncating a table is allowed.
+
+It is worth mentioning that many of these guardrails were added in the last few months, some of them by newcomers to the project. That, in my opinion, indicates how easy it is to add new guardrails, and we expect to see many more guardrails in the future.
+
+If you have ideas for new guardrails, please feel free https://issues.apache.org/jira/secure/CreateIssue.jspa?pid=12310865&issuetype=4[to log a ticket^] with details of your proposal and we would be happy to look into it.
