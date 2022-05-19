@@ -15,64 +15,49 @@ As we approach the Cassandra 4.1 GA release, it’s a great time to stop and ref
 
 === The Numbers
 
-But don’t just take my word for it - let’s start with some numbers! We’re going to use “lines of code” as a loose proxy for “where we’re spending our time”. This is definitely a fraught metric, but as _one_ way of viewing things it paints a pretty interesting picture, consistent with many of our intuitions.
+But don’t just take my word for it - let’s start with some numbers! We’re going to use “lines of code” (LoC) as a loose proxy for “where we’re spending our time”. This is definitely a fraught metric, but as _one_ way of viewing things it paints a pretty interesting picture, consistent with many of our intuitions.
 
 Below is a list for our past three major releases and how much raw code exists in the following:
 
-1. src/java: raw database code
-2. test/unit: unit testing code
-3. test/distributed: distributed tests in java code
-4. The cassandra-dtest repo .py test files: python distributed tests using https://github.com/riptano/ccm[ccm^]
+1. `src/java`: raw database code
+2. `test/unit`: unit testing code
+3. `test/distributed`: distributed tests in java code
+4. The `cassandra-dtest` repo .py test files: python distributed tests using https://github.com/riptano/ccm[ccm^]
 
-[cols=3*]
+[%header,cols=3*]
 |=======
-|||*% total*
-
-|*3.0 Total:*|*316,262*|100.00%
-
+|&nbsp; |Lines |% total
 |src|181,871|57.51%
-
 |junit|100,284|31.71%
-
 |jdtest|9,225|2.92%
-
 |pdtest|24,882|7.87%
-
+|*3.0 Total*|*316,262*|100.00%
 |All tests|134,391|42.49%
 |=======
 
-[cols=4*]
+{sp} +
+
+[%header,cols=4*]
 |=====
-|||*% total*|*% change since 3.0*
-
-|*4.0 Total:*|495,566|100.00%|156.69%
-
+|&nbsp; |Lines |% total |% change since 3.0
 |src|261,825|52.83%|143.96%
-
 |junit|172,672|34.84%|172.18%
-
 |jdtest|21,769|4.39%|235.98%
-
 |pdtest|39,300|7.93%|157.95%
-
+|*4.0 Total*|*495,566*|100.00%|156.69%
 |All tests|233,741|47.17%|
 |=======
-|=====
 
-[cols=4*]
+{sp} +
+
+[%header,cols=4*]
 |=======
 |||*% total*|*% change since 4.0*
-
-|*4.1 Total:*|566,127|100.00%|114.24%
-
 |src|297,685|52.58%|113.70%
-
 |junit|197,231|34.84%|114.22%
-
 |jdtest|31,306|5.53%|143.81%
-
 |pdtest|39,905|7.05%|101.54%
-
+|*4.1 Total*|*566,127*|100.00%|114.24%
 |All tests|268,442|47.42%|
 |=======
 
@@ -84,7 +69,7 @@ So what does all this mean for us working on and depending on the project? It me
 
 === Keeping it Green
 
-We all know Cassandra is an incredibly complex piece of software. The power to scale up linearly to petabytes of data on hundreds of machines, with zero downtime, in a masterless single logical cluster, where machines can drop out and in, https://cassandra.apache.org/doc/latest/cassandra/operating/hints.html[hint], https://cassandra.apache.org/doc/latest/cassandra/operating/read_repair.html[heal], and https://cassandra.apache.org/doc/latest/cassandra/operating/repair.html[repair] simply cannot be implemented without a significant amount of code, infrastructure, and testing to ensure it works as expected. Further, as we support hot upgrades with zero downtime between versions with mixed version clusters running, we have a strong commitment to backwards compatibility in the mix.
+We all know Cassandra is an incredibly complex piece of software. The power to scale up linearly to petabytes of data on hundreds of machines, with zero downtime, in a masterless single logical cluster, where machines can drop out and in, link:/doc/latest/cassandra/operating/hints.adoc[hint], link:/doc/latest/cassandra/operating/read_repair.adoc[heal], and link:/doc/latest/cassandra/operating/repair.adoc[repair] simply cannot be implemented without a significant amount of code, infrastructure, and testing to ensure it works as expected. Further, as we support hot upgrades with zero downtime between versions with mixed version clusters running, we have a strong commitment to backwards compatibility in the mix.
 
 One of our struggles over time has been the software and hardware complexity required to keep our testing infrastructure “clean”, or green, on an ongoing basis. Balancing runtime, resourcing, and cost with a system as complex as Cassandra is a fixed challenge to begin with and is only growing over time as we’ve seen above.
 
@@ -96,7 +81,7 @@ Burning down less than 20 flaky tests to get our release out between freeze and 
 
 === Circle vs. Jenkins
 
-As https://cassandra.apache.org/_/development/testing.html[we outline in our contributor guide on testing], tests can both be run on https://ci-cassandra.apache.org/[Apache Jenkins infrastructure^] or on https://github.com/apache/cassandra/tree/cassandra-4.1/.circleci[CircleCI^]. The primary difference between these two systems are runtime, cost, and resources allocated to each individual test. While some contributors have access to paid CircleCI accounts that allow them to dedicate more resources to their test runs and shorten feedback loops, this is an open source volunteer project and our canonical CI is the Apache Jenkins infrastructure.
+As xref:/development/testing.adoc[we outline in our contributor guide on testing], tests can both be run on https://ci-cassandra.apache.org/[Apache Jenkins infrastructure^] or on https://github.com/apache/cassandra/tree/cassandra-4.1/.circleci[CircleCI^]. The primary difference between these two systems are runtime, cost, and resources allocated to each individual test. While some contributors have access to paid CircleCI accounts that allow them to dedicate more resources to their test runs and shorten feedback loops, this is an open source volunteer project and our canonical CI is the Apache Jenkins infrastructure.
 
 One challenge this introduces is tests that “flake” due to resource allocation differences. For instance, if you allocate a particularly intensive unit test to eight cores in a container with 16 gigs of RAM, you can expect a different runtime than allocating a container with two cores and eight gigs of RAM. Throw into the mix that all of us are doing development on different laptops, with different core counts, with different _architectures_, and you have a recipe for some pretty challenging non-deterministic test runtimes.
 
