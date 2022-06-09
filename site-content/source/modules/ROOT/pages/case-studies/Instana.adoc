@@ -1,0 +1,78 @@
+= Instana
+:page-layout: case-study
+:page-role: case-study
+:description: Instana queries billions of metrics with Apache Cassandra
+:keywords: instana, apache cassandra
+
+image::companies/instana_full.png[Instana,align="center"]
+
+== Instana queries billions of metrics with Apache Cassandra
+
+**Partner information**
+
+* Observability & metrics
+* 150+ employees
+* Millions of metrics per second 
+* Five production regions, each with 15 nodes
+* Running on both AWS and GCP
+
+**Benefits**
+
+* A distributed model for fixed queries
+* Complex data modeling maintainable by a small team
+* Cassandra TTL as a built-in data model
+* Ease of implementation for retention policies
+* Real-time queries of millions of metrics
+* Cassandra 3.0 time window compaction strategy for easy time window views
+
+Instana, an IBM company based in Chicago, IL, delivers application performance management software for modern applications with CI/CD pipeline visibility, enabling closed-loop DevOps automation. Instana offers rich contextual intelligence and AI-based problem-solving by collecting billions of metrics per day in real-time and uses Apache Cassandra to store and process data at scale. Its high-performance, high-scale architecture captures 100% of transactions in one-second intervals across a large distributed application in a hybrid cloud.
+
+Instana’s monitoring tool (also called Instana) gathers host-level data, such as CPU and memory usage, and maps processes running on the host. The tool monitors up to the application layer, tracing one request as it goes through the system. 
+
+=== The Challenges
+
+Instana’s customer base was growing, and new users had higher expectations. Users didn’t want to wait a minute to see results; they wanted to see results in real-time.
+
+Instana currently operates in five regions, with four clusters in each region running thousands of sensors. Each sensor can send 1,000 or more metrics per second: “We needed something that could store this amount of data and query it. We always knew which sensor we wanted data from for queries, and it was constrained to a time range. This is why we chose Cassandra for its time-series data model,” says Marcel Birkner, Staff Site Reliability Engineer at Instana.
+
+For the Instana team, Apache Cassandra covered its particular use case exceptionally well. 
+
+=== Testimonial quotes
+
+“Cassandra works well; it runs really nicely and smoothly. We’ve never lost data, and things are easy to fix. Quite frankly, without Cassandra, we couldn’t run Instana.”
+-- Marcel Birkner, Staff Site Reliability Engineer, Instana
+
+“When we started with Instana, as is normal for a startup, and especially in our case where we monitor 100 different technologies and 1,000 different libraries, using a microservice architecture with Cassandra meant we could do graceful degradation when a single component fails.”
+-- Michael Lex, Staff Software Engineer, Instana
+
+=== Intense Performance of High-Volume Queries
+
+Monitoring a complex system requires reporting metrics with one-second granularity. Instana works with sensors that gather system performance data and report different metrics, such as CPU usage or trivial GC times. Typically an environment can have several thousand sensors, and every sensor can send up to 1,000 or more metrics every second. The result is a high volume of data for a single user.
+
+On top of this massive amount of data ingestion, users must be able to query their data, generally focusing on a single sensor with a time range constraint. The Cassandra time-series data model was a solid match for this need.
+
+=== Graceful Degradation
+
+Instana faced data-modeling challenges that monolithic architecture could not solve. Most notably, the application monitored hundreds of technologies and thousands of libraries, which users mixed into millions of configurations. Only a microservice architecture, supported by Apache Cassandra, could allow for graceful degradation when a single part of the data-receiving system stopped working or was deprecated.
+
+=== Time Window Compaction
+
+Early on, a big challenge was finding the right window and other settings for compactions. Without the right strategy, this could quickly run out of control. The compaction process merges keys, combines columns, evicts tombstones, consolidates SSTables, and creates a new index in the merged SSTable. Using this approach naively can result in millions of inserts per second when writing the new rolled-up data points. At one point, a single cluster had a single table with 30,000 SSTables, and the team had to run manual compactions to reduce it to a manageable size. 
+
+The scale of single-second data resolution did not make sense for long-term storage or queries that cover significant periods (e.g., looking at memory usage over the last three months). For this use-case, Instana wanted roll-up data, which indicates how data averaged over five-second intervals, for example. The choice was made to fix time window views for users, showing one-second, one-hour, one-day, and one-week views. Roll-up data has a different retention policy, and link:/doc/latest/cassandra/operating/compaction/index.adoc#ttl[Cassandra TTL] (Time to Live) was a natural fit for the data model.
+
+Instana’s users make time-windowed requests to see their Instana data, which made Cassandra a perfect match. Cassandra 3.0’s time window compaction strategy enabled Instana to group data on disk that would be viewed in a grouping by time window.
+
+=== Tangible Rewards
+
+From day one, Instana has seen the benefits of Apache Cassandra at scale. Cassandra provided the ability to run a complex data model without an enterprise-size engineering team, and enabled the ability to monitor 100 different technologies, presenting that data so it could be queried fluidly.
+
+Instana continues to consume data from millions of sensors, running on everything from bare metal self-hosted servers to applications running serverlessly in a public cloud to mobile applications. Cassandra was part of Instana’s critical path to enabling a small team to deliver top-grade performance in the competitive observability space.
+
+=== About Instana
+
+Instana, an IBM company, provides an Enterprise Observability Platform with automated application monitoring capabilities to businesses operating complex, modern, cloud-native applications no matter where they reside – on-premises or in public and private clouds, including mobile devices or IBM Z.
+
+Control hybrid modern hybrid applications with Instana’s AI-powered discovery of deep contextual dependencies inside hybrid applications. Instana also gives visibility into development pipelines to help enable closed-loop DevOps automation.
+
+This provides actionable feedback needed for clients as they optimize application performance, enable innovation, and mitigate risk, helping Dev+Ops add value and efficiency to software delivery pipelines while meeting their service and business-level objectives.
