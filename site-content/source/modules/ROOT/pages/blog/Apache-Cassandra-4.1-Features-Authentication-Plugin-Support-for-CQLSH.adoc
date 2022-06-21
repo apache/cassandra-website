@@ -1,0 +1,115 @@
+= Apache Cassandra 4.1 Features: Authentication Plugin Support for CQLSH
+:page-layout: single-post
+:page-role: blog-post
+:page-post-date: June 23, 2022
+:page-post-author: Brian Houser
+:description: Authentication Plugin Support for CQLSH in Apache Cassandra 4.1
+:keywords: apache cassandra, 4.1, authentication, support, cqlsh
+
+:!figure-caption:
+
+.Image credit: https://unsplash.com/@purzlbaum[Claudio Schwarz on Unsplash^]
+image::blog/apache-cassandra-4.1-features-authentication-plugin-support-for-cqlsh-unsplash-claudio-schwarz.jpg[Authentication Plugin Support for CQLSH]
+
+Apache Cassandra authentication is highly extensible. Users can create plugins to add authentication methods such as Kerberos, SigV4, and SAML to connect with their servers.
+
+Unfortunately, this support was not universally applied. The CQL shell (CQLSH), the basic tool for interacting with the Cassandra system, did not tap into this mechanism. This forced users to try to create their own tool to interact with a Cassandra DB.  
+
+In Cassandra 4.1, we added support for authentication plugins in https://issues.apache.org/jira/browse/CASSANDRA-16456[CASSANDRA-16456^], letting you use any Python authentication mechanism with the CQL shell.
+
+=== How It Works
+
+Each plugin is a library installed in the Python module path. Usually, the easiest way to install it is by using pip.  For example, to install the sigv4 version:
+
+```
+$ pip install cassandra-sigv4
+```
+
+Each authentication plugin contains a Python class meant to be used in client code.  These classes have a constructor which takes in named parameters.  Here's a simple example for https://github.com/datastax/python-driver/blob/3.25.0/cassandra/auth.py#L117-L138[PlainTextAuthProvider^]:
+
+```
+class PlainTextAuthProvider(AuthProvider):
+
+    """
+    An :class:`~.AuthProvider` that works with Cassandra's PasswordAuthenticator.
+
+    Example usage::
+
+        from cassandra.cluster import Cluster
+        from cassandra.auth import PlainTextAuthProvider
+
+        auth_provider = PlainTextAuthProvider(username='cassandra', password='cassandra')
+        cluster = Cluster(auth_provider=auth_provider)
+    """
+
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
+    def new_authenticator(self, host):
+        return PlainTextAuthenticator(self.username, self.password)
+```
+
+To use this with CQLSH, we need to simply add an auth_provider section to the cqlshrc file (which defaults to `~/.cassandra/cqlshrc`).
+
+The auth_provider section details a `module` which is the path to the class and a `classname`.  So if we have `mycassandra.auth.foo.BarAuthProvider` we would tell CQLSH to use it by specifying it like this in `cqlshrc`:
+
+```
+[auth_provider]
+module = mycassandra.auth.foo
+class = BarAuthProvider
+```
+
+=== Adding Parameters
+
+To specify non-secret properties, we can simply add the names in the same section. So if `BarAuthProvider` has a constructor that is passed a parameter called `property1`, we could specify it by adding `property1` directly in cqlshrc:
+
+```
+[auth_provider]
+module = mycassandra.auth.foo
+class = BarAuthProvider
+property1 = value
+```
+
+=== Secret Parameters
+
+Authentication often involves using secret properties. To make sure these don't fall into the wrong hands, CQLSH uses a file called *credentials* (`~/.cassandra/credentials`).
+
+You can use this file to pass secret properties to an auth provider. To do this, 
+create a section in the credentials file with the classname, then add the parameters as values.
+
+Let's suppose that `BarAuthProvider` uses `secret_property2` in its constructor. We can safely specify it by using the following credentials file:
+
+```
+[BarAuthProvider]
+secret_property2 = secret1
+```
+
+=== Working Example
+For a simple working example, let’s use the plugin mechanism with *PlainTextAuthProvider*, a provider https://github.com/datastax/python-driver/blob/3.25.0/cassandra/auth.py#L117[already included with CQLSH^]. Suppose my `username` was `user1`, and my `password` was `pass1`. I could configure CQLSH to use this by creating a CQLSHRC file with:
+
+```
+[auth_provider]
+module = cassandra.auth
+classname = PlainTextAuthProvider
+```
+
+To make sure that my secret is secure, I would create a credentials file (that only the owner could read) in `~/.cassandra/credentials` and specify my two secrets:
+
+```
+[PlainTextAuthProvider]
+username = user1
+password = pass1
+```
+
+If you execute cqlsh it will automatically pick up the secret and authentication method. In my case:
+
+```
+$ cqlsh
+[cqlsh 6.1.0 | Cassandra 4.1-SNAPSHOT | CQL spec 3.4.5 | Native protocol v5]
+Use HELP for help.
+
+user1@cqlsh > 
+```
+ 
+Stay tuned for upcoming further security enhancements, such as https://issues.apache.org/jira/browse/CASSANDRA-17501[CASSANDRA-17501^].
