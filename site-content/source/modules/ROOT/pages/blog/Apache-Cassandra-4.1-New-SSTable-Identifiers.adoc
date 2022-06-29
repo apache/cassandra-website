@@ -1,0 +1,139 @@
+= Apache Cassandra 4.1: New SSTable Identifiers
+:page-layout: single-post
+:page-role: blog-post
+:page-post-date: June 16, 2022
+:page-post-author: Jacek Lewandowski
+:description: New SSTable Identifiers in Apache Cassandra 4.1
+:keywords: apache cassandra, 4.1, sstable
+
+:!figure-caption:
+
+.Image credit: https://unsplash.com/@qwitka[Maksym Kaharlytskyi on Unsplash^]
+image::blog/apache-cassandra-4.1-new-sstable-identifiers-unsplash-maksym-kaharlytskyi.jpg[SSTable Identifiers in Apache Cassandra 4.1]
+
+Apache Cassandra, like many other databases, stores data in files. These files are located in data directories and organized in SSTables. This post will discuss the directory layout and the naming pattern used for these files and explain the new naming pattern introduced in Apache Cassandra 4.1.
+
+=== SSTables
+
+SSTables are files where Cassandra stores data from tables. In a typical operation, an SSTable is created either as a result of flushing a http://distributeddatastore.blogspot.com/2020/03/cassandra-memtable.html[memtable to disk^] or a link:/doc/latest/cassandra/operating/compaction/index.html[compaction process]. Each SSTable contains data from a single table, but for a single table, there are usually many SSTables.
+A single SSTable is made of multiple files, called components. These components are generally specific to the SSTable format. BigTable is the only format supported right now, and they are the only type of component you will see being created by Apache Cassandra (at least at the time of writing). For example, a single SSTable can be a set of such files:
+
+```
+    nb-1-big-CompressionInfo.db
+    nb-1-big-Data.db
+    nb-1-big-Digest.crc32
+    nb-1-big-Filter.db
+    nb-1-big-Index.db
+    nb-1-big-Statistics.db
+    nb-1-big-Summary.db
+    nb-1-big-TOC.txt
+```
+
+You can read more about the particular SSTable components of the BigTable format in the link:/doc/latest/cassandra/architecture/storage_engine.html#sstables[documentation^].
+
+=== Directory Layout and File Names
+
+SSTable files are stored in data directories. The directory layout consists of a directory per keyspace and a directory per table under the keyspace directory. 
+
+```
+data0/
+  /ks_foo
+    /tab_bar-<id>
+   	/<version>-<generation id>-<format>-<component>.<ext>
+
+data1/
+  /ks_foo
+    /tab_bar-<id>
+   	/<version>-<generation id>-<format>-<component>.<ext>
+```
+
+The table directory name has an identifier `<id>`, which is unique for that table, and the same identifier is used for each table’s data directory on each Cassandra node.
+SSTable files have a precisely defined file name pattern, enabling Cassandra to determine the SSTable format, version, and order in which SSTables were created:
+
+*<version>* - The version identifier is made up of two lowercase letters. The letters denote the major and minor format versions (in the ancient Cassandra distributions, the version was denoted by one letter).
+
+*<generation id>* - This is the identifier that allows SSTables to be distinguished and the order of different SSTables.
+
+*<format>* - This is the SSTable format identifier. As mentioned, currently, the only existing format is BigTable, and its identifier is ‘big’.
+
+*<component>.<ext>*	- The component's name and the extension specific to that component.
+
+=== SSTable Identifiers
+
+SSTable identifiers (also known as generation identifiers) are used to distinguish and order different SSTables. Since an SSTable is created every time a table is flushed, many SSTables can exist simultaneously in the same directory. The generation identifier of a newly stored SSTable is guaranteed to be greater than any identifiers of previously-stored SSTables for a certain table on the node.
+Natural numbers are used as generation identifiers. Cassandra scans the directories on start up before any new SSTable is written, and the starting number is obtained by incrementing the largest generation identifier found across the local data directories for a certain table.
+
+*NOTE:* Cassandra includes live data directories and backup directories but ignores snapshots directories when performing its startup scan. Therefore, there may be SSTables with the same identifier among all the data directories while being different SSTables. 
+The general identifiers based on the natural numbers aim to be unique per Cassandra node and table. This means that not only two SSTables of two different tables created on the same node may have the same identifiers and, thus, the same file names, but two different SSTables of the same table created on different nodes.
+
+As you might expect, there can be some maintenance problems due to the identifier properties discussed above. For example, as we illustrate below, truncation of a table triggers snapshot creation and removal of all SSTables from data directories. If the node is restarted and there is no SSTable created before that, the sequence is restarted from the beginning because there is no existing SSTable for identifying the last generated identifier:
+
+```
+  /ks_foo
+    /tab_bar-<id>
+      /nb-1-big-Data.db
+```
+
+There is a snapshot made before the truncation - that is, Cassandra creates hard links to all the SSTables files in a snapshot directory then files are removed from the live data directory:
+
+```
+  /ks_foo
+    /tab_bar-<id>
+      /snapshots
+        /truncated-<timestamp>-tab_bar
+          /nb-1-big-Data.db
+```
+
+When the node gets restarted, Cassandra forgets about the current sequence and starts it over; when a new SSTable is stored, it gets ‘1’ as the identifier:
+
+```
+  /ks_foo
+    /tab_bar-<id>
+      /nb-1-big-Data.db
+      /snapshots
+        /truncated-<timestamp>-tab_bar
+          /nb-1-big-Data.db
+```
+
+As you can see, it is possible to have two SSTables with the same name but with potentially different content. This situation only becomes a problem when a user stores the SSTables in a different location for a backup. The backups of the SSTables will likely clash with the existing ones due to the identical file names.
+
+=== Introducing Globally Unique Identifiers
+
+To solve some of the problems with SSTable identifiers based on natural numbers, Cassandra 4.1 introduces the ability to switch to globally unique identifiers. These new identifiers are based on Time UUIDs (UUID type 1), though their string representation is different, making them lexically ordered and providing a little aid for the administrators. 
+The structure of a globally unique identifier is as follows:
+
+```
+<date part>_<time part>_<nano part><random part>
+```
+
+The identification breaks down into the following components:
+
+*<date part>* - A date encoded as 4 Base36 characters.
+
+*<time part>* - A day time in seconds encoded as 4 Base36 characters.
+
+*<nano part>* - A nano part of the second encoded as 5 Base36 characters.
+
+*<random part>* - 13 Base36 random characters, fixed for the Cassandra system process on a certain node.
+
+This structure is more compact than the native UUID representation and provides the following properties:
+
+* Identifiers are lexicographically sortable.
+* It is easy to distinguish SSTables created on the same day.
+* It is easy to distinguish SSTables created by the same process.
+* The identifiers are unique across the whole Cassandra cluster.
+* There is no need to scan the data directories to know which identifier to start with.
+
+For example, consecutive identifiers generated around the same time may look like this:
+
+image::blog/apache-cassandra-4.1-new-sstable-identifiers.svg[SSTable Identifiers]
+
+From those names, we can see that the first component of all the identifiers is `3fw2`, which means that all the SSTables were created on the same day. The second component varies, and its lexicographical order reflects the order in which the SSTables were created. The next five characters are the nano part of the creation time. The last 13 characters are identical in the first four identifiers, which means that they were created on the same node and even by the same instance of Cassandra server, i.e., the same process. The fifth identifier, which has a different 13 last characters, was created either on a different node or the node got restarted before creating that SSTable (simply, a different process).
+
+=== Migration
+
+The globally unique identifier feature is enabled by switching the `enable_uuid_sstable_identifiers` flag to `true` in cassandra.yaml. It is disabled by default because once a node starts with this feature enabled, each newly stored SSTable will have an identifier created using the new mechanism. As a result, this makes downgrading process more difficult because globally unique identifiers are not readable by Apache Cassandra before 4.1. Consequently, all the SSTable files would have to be manually renamed using the old identifier method of natural numbers.
+
+Note that setting the flag to `true` does not make Cassandra immediately rename the existing SSTables according to the new scheme. It only affects newly stored SSTables. Existing SSTables are eventually removed during the regular compaction process.
+
+Support for globally unique SSTable identifiers was implemented in https://issues.apache.org/jira/browse/CASSANDRA-17048[CASSANDRA-17048^] and is part of the Apache Cassandra 4.1 release. We expect it will eliminate some problems with manual backups as each SSTable created, for any table, on any node will have a globally unique identifier.
