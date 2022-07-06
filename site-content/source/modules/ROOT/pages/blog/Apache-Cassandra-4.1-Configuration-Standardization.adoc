@@ -1,0 +1,60 @@
+= Apache Cassandra 4.1: Configuration Standardization
+:page-layout: single-post
+:page-role: blog-post
+:page-post-date: 7 July, 2022
+:page-post-author: Ekaterina Dimitrova
+:description: Configuration standardization in Apache Cassandra 4.1
+:keywords: configuration, apache cassandra, 4.1
+
+:!figure-caption:
+
+.Image credit: https://unsplash.com/@cookiethepom[Cookie the Pom on Unsplash^]
+image::blog/apache-cassandra-4.1-configuration-standardization-unsplash-cookie-the-pom.jpg[Configuration Standardization]
+
+Apache Cassandra comes with a long list of configuration parameters in cassandra.yaml. A big part of them represent parameters of type duration, data storage, or data rate. Up until 4.1 all of them were set with different units (every parameter name had its unit identified by a suffix to its name). On the other hand our naming conventions were not always clear. For example, “abort” and “fail” were used interchangeably and there was no predefined order as we have now - `noun_verb` (`enable_user_defined_functions` but `hinted_handoff_enabled`). There were also a few properties without units added as a suffix so you needed to rely on the cassandra.yaml text to figure out the unit (such as `key_cache_save_period`, `row_cache_save_period`, and `counter_cache_save_period`). Another problem was advertising some units in mega- and kilo- when in reality they were internally mebi- and kibi-.
+
+This had the potential to create a lot of confusion for end users and Cassandra developers. To strengthen our configuration and also to provide more flexibility to the end users, we created a new configuration framework with the following goals: 
+
+. Standardize names and units while keeping backward compatibility with the old names, units and values format.
+. Create flexibility for  end users to provide units of their choice from a predefined list of units for parameters of type data storage, data rate, and duration. For example, this old property:
++
+----
+permissions_update_interval_ms: 0
+----
++
+can now be written in any of these ways:
++
+----
+permissions_update_interval: 0ms
+permissions_update_interval: 0s
+permissions_update_interval: 0d
+permissions_update_interval: 0us
+permissions_update_interval: 0µs
+----
+
+. Provide an easier and uniform way to add new parameters for Cassandra developers with the goal of reducing the chances of introducing bugs when adding new parameters.
+. The approach for backward compatibility can be reused for more parameters in different use cases in the future.
+
+For a full list of affected parameters, mapping of old to new names and supported units and how things work in general, please refer to the link:doc/trunk/cassandra/new/configuration.html[documentation^].
+ 
+=== Positive Side Effects
+
+The execution of this work led to cleaning up some old bugs and tightening the configuration boundaries to prevent operators from making mistakes, such as inputting negative durations. There are new flags in regards to parameters’ overloading, and the documentation was updated.
+Having standard naming conventions and common agreement on the units will make it easier both for operators and new Cassandra developers.
+
+=== Backward Compatibility
+
+We support backward compatibility. All properties which have changed names can still be set with the old name. Wherever the value format was also changed from numeric value to number + unit value, you can still use the old name + the old numeric value format. 
+For a full list of parameter changes/mapping of old to new parameters and what to expect, please refer to the link:doc/trunk/cassandra/new/configuration.html[documentation^].
+
+=== Upgrade Advice
+
+No matter whether you choose to use the old or the new names and values format on upgrade, please verify your configuration parameters during startup by checking loaded cassandra.yaml values in the logs as well as the link:/doc/latest/cassandra/new/virtualtables.html#virtual-tables[Settings Virtual Table^]. Some properties have default null values which are changed programmatically later on and are visible when you query the Settings Virtual Table. For backward compatibility, the Settings Virtual Table contains both the old and the new parameters with the old and the new value format. The only exception at the moment are the following three parameters: `key_cache_save_period`, `row_cache_save_period`, and `counter_cache_save_period` which appear only once with the new value format. The old names and value format can be used at least until the next major release.
+
+Any new 4.1 configuration parameters of type data rate, data storage, and duration were added in the new format only (numeric value + unit).  
+
+Stay tuned for upcoming further improvements such as allowing UPDATE on Settings Virtual Table to change running configurations: https://issues.apache.org/jira/browse/CASSANDRA-15254[CASSANDRA-15254^].
+
+---
+
+At the time of publishing this post, the community is working hard to solve an issue with the Settings Virtual Table (https://issues.apache.org/jira/browse/CASSANDRA-17734[CASSANDRA-17734^]). We expect it to be fixed pretty quickly. The Cassandra community encourages you to test your old cassandra.yaml file with the current 4.1 branch and https://issues.apache.org/jira/secure/CreateIssue.jspa?pid=12310865[report any potential issues in a Jira ticket^] to ensure a smooth upgrade when the time comes.
