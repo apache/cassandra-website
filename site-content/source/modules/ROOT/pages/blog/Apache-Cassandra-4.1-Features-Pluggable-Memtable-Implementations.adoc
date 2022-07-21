@@ -1,0 +1,49 @@
+= Apache Cassandra 4.1 Features: Pluggable Memtable Implementations
+:page-layout: single-post
+:page-role: blog-post
+:page-post-date: July 21, 2022
+:page-post-author: Branimir Lambov
+:description: Pluggable Memtable Implementations in Apache Cassandra 4.1
+:keywords: apache cassandra, world party, cassandra world party, CWP, 2022, schedule, moderator
+
+:!figure-caption:
+
+.Image credit: https://unsplash.com/@nevenkrcmarek[Neven Krcmarek^]
+image::blog/Apache-Cassandra-4.1-Features-Pluggable-Memtable-Implementations-unsplash-neven-krcmarek.jpg[Pluggable Memtable Implementations]
+
+One of the new features of Apache Cassandra 4.1, introduced with enhancement proposal #11 (https://cwiki.apache.org/confluence/x/0goBCw[CEP-11^]), is support for alternative memtable implementations. This feature enables developers to implement new memtable solutions and for users to select a memtable implementation and configuration for each individual table in the database.
+This is enabled by a new memtable option in `CREATE TABLE` and `ALTER TABLE` statements that specifies the memtable configuration out of a set of options defined in `cassandra.yaml`, for example:
+
+----
+CREATE TABLE heavy_use … WITH memtable = 'sharded';
+----
+
+where the `'sharded'` configuration is defined in `cassandra.yaml` as
+
+----
+Memtable:
+	Configurations:
+		Sharded:
+			class_name: ShardedSkipListMemtable
+			Parameters:
+				shards: 32
+				serialize_writes: false
+----
+
+Apache Cassandra 4.1 comes with only a proof-of-concept alternative memtable implementation, which is a sharded skip-list solution that splits the memtable into several shards that cover roughly the same portion of the token space served by the node. This enables writes to different shards to apply independently, without any congestion during modification of the data structure, which is known to enable higher memtable performance for typical Cassandra workloads. The example above shows how this implementation can be selected. It takes two parameters:
+
+* `shards` - the number of shards to split the memtable into.
+* `serialize_writes` - whether to lock the memtable shard during mutations.
+
+Locking is provided as an option. This avoids wasting processing time and memtable space when multiple concurrent modifications prepare conflicting mutations on the same partition during congested lock-free modification. Locking will result in lower peak write throughput, but may improve the longer-term sustained throughput because of storing slightly more information in each flushed SSTable and giving more CPU time to compaction.
+The table below shows an example of the average throughput achieved while writing 100GB of key-value data, with 10% reads, and with the given percentage of skew, i.e., accesses hitting the same individual row.
+
+:!figure-caption:
+
+.[.small]#This test of average throughput uses https://gist.github.com/blambov/00e8dbff5a97f321d30d0ef992465a08[the fallout script which you can find here^].#
+image::blog/Apache-Cassandra-4.1-Features-Pluggable-Memtable-Implementations-graph.png[skip-list graph]
+
+The project will be building on this feature and in the near future, the API will be used to enable two exciting developments:
+
+* Intel’s persistent memory memtable https://issues.apache.org/jira/browse/CASSANDRA-13981[(CASSANDRA-13981)^], a memtable-only storage system promising extremely low latencies when suitable hardware is used.
+* A Trie-based memtable (https://cwiki.apache.org/confluence/x/kYuqCw[CEP-19^], https://issues.apache.org/jira/browse/CASSANDRA-17240[CASSANDRA-17240^]), which promises significant improvements in performance and garbage collection overheads.
