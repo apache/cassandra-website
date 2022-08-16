@@ -238,7 +238,7 @@ prepare_site_html_for_publication() {
     move_intree_document_directories "3.11" "3.11.11" "3.11.12" "3.11.13"
     move_intree_document_directories "4.0" "4.0.0" "4.0.1" "4.0.2" "4.0.3" "4.0.4" "4.0.5" "stable"
     move_intree_document_directories "4.1" "latest"
-    move_intree_document_directories "trunk"
+    move_intree_document_directories "trunk" "4.2"
   fi
 
   popd > /dev/null
