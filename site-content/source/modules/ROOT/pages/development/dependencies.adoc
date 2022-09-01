@@ -15,11 +15,31 @@ requirements].
 === Changes to dependency management in Cassandra 4.2
 
 Before Cassandra 4.2, dependencies were managed in `build.xml` and managed with
-Maven Ant Tasks. In Cassandra 4.2 and onwards, dependencies are managed in POM
-templates in `.build/`. New dependencies should be added to the parent POM
-template and necessary child POMs. See
-https://issues.apache.org/jira/browse/CASSANDRA-17750[CASSANDRA-17750] for more
-information.
+Maven Ant Tasks. In Cassandra 4.2 and onwards, dependencies are managed in
+Maven POM templates in `.build/*-template.xml`. These templates are processed
+into valid Maven POMs with the `ant write-poms` task and copied to
+`build/*.pom`.
+
+The following POMs from `build.xml` have been migrated to templates:
+* `parent-pom` is now at `.build/parent-pom-template.xml`
+* `all-pom` is now at `.build/cassandra-deps-template.xml`
+* `build-deps-pom` is now at `.build/cassandra-build-deps-template.xml`
+
+To add new dependencies in Cassandra 4.2 onwards, add the dependency to
+`parent-pom-template` and `cassandra-deps-template`, and optionally
+`cassandra-build-deps-template` if the dependency is required for build only.
+See
+https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Management[the
+Maven docs] on how to reference dependencies in the parent POM from the child
+POMs.
+
+For dependency versions that need to be available in `build.xml` and
+`parent-pom-template`, specify the version as a property in `build.xml`, add it
+to the `ant write-poms` target, then add the property to `parent-pom-template`
+with the value of the template substitution.
+
+For more information on this change, see
+https://issues.apache.org/jira/browse/CASSANDRA-17750[CASSANDRA-17750].
 
 === Required steps to add or update libraries
 
