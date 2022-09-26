@@ -7,6 +7,17 @@ coding conventions] for anything not expressly outlined in this document.
 
 Note that the project has a variety of styles that have accumulated in different subsystems. Where possible a balance should be struck between these guidelines and the style of the code that is being modified as part of a patch. Patches should also limit their scope to the minimum necessary for safely addressing the concerns of the patch.
 
+== Checkstyle
+
+Cassandra uses https://checkstyle.sourceforge.io/[Checkstyle] project for enforcing various checkstyle policies the project follows. Checkstyle is part of the build from Cassandra 4.1 included. 
+You can consult the checkstyle configuration file called `checkstyle.xml` for the source code in `src` directory and `checkstyle_test.xml` for all code in `test` directory. 
+The configuration files are located in the root of the Cassandra repository. Checkstyle can be executed independently for the main source code as well as for the tests by executing `ant checkstyle` and `ant checkstyle-test` respectively.
+
+The checkstyle target is executed by default when e.g. `build` or `jar` targets are executed. There is a flag you can use for _not_ enforcing checkstyle. This is particularly handy upon development. 
+For example, by default, the checkstyle target checks that your changes in Java code do not include imports which are not used. 
+However, while you develop, you do not want this check to be enforced because you are not interested in it while you develop as your code tends to be in the in-progress state. 
+You can turn whole checkstyle off by specifying `-Dno-checkstyle=true` on the command line, for example like this: `ant build -Dno-checkstyle=true`.
+
 == Naming and Clear Semantics
 
 ==== Class, Method and Variable Naming
