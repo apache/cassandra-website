@@ -56,7 +56,7 @@ There are also some fixed rules that you need to be aware::
   * Patches will only be applied to branches by following the release
   model
   * Code must be testable
-  * Code must follow the `code_style` convention
+  * Code must follow the xref:development/code_style.adoc[code style] convention
   * Changes must not break compatibility between different Cassandra
   versions
   * Contributions must be covered by the Apache License
@@ -69,11 +69,11 @@ branches:
 [cols=",",options="header",]
 |===
 |Version |Policy
-|4.0 |Code freeze (see below)
-|3.11 |Critical bug fixes only
-|3.0 |Critical bug fixes only
-|2.2 |Critical bug fixes only
-|2.1 |Critical bug fixes only
+|4.0     |Code freeze (see below)
+|3.11    |Critical bug fixes only
+|3.0     |Critical bug fixes only
+|2.2     |Critical bug fixes only
+|2.1     |Critical bug fixes only
 |===
 
 Corresponding branches in git are easy to recognize as they are named
@@ -140,18 +140,19 @@ working trees for different Cassandra versions from the same repository
 using https://git-scm.com/docs/git-worktree[Git worktrees] feature.
 ====
 
-. Verify that you follow Cassandra's `code_style`
+. Verify that you follow Cassandra's xref:development/code_style.adoc[code style]
 . Make sure all tests (including yours) pass using ant as described in
-`testing`. If you suspect a test failure is unrelated to your change, it
-may be useful to check the test's status by searching the issue tracker
-or looking at https://builds.apache.org/[CI] results for the relevant
-upstream version. Note that the full test suites take many hours to
-complete, so it is common to only run specific relevant tests locally
-before uploading a patch. Once a patch has been uploaded, the reviewer
-or committer can help setup CI jobs to run the full test suites.
-. Consider going through the `how_to_review` for your code. This will
-help you to understand how others will consider your change for
-inclusion.
+xref:development/testing.adoc[testing]. If you suspect a test failure
+is unrelated to your change, it may be useful to check the test's
+status by searching the issue tracker or looking at
+https://builds.apache.org/[CI] results for the relevant upstream
+version. Note that the full test suites take many hours to complete,
+so it is common to only run specific relevant tests locally before
+uploading a patch. Once a patch has been uploaded, the reviewer or
+committer can help setup CI jobs to run the full test suites.
+. Consider going through the xref:development/how_to_review.adoc[how
+to review] page for your code. This will help you to understand how
+others will consider your change for inclusion.
 . Don’t make the committer squash commits for you in the root branch
 either. Multiple commits are fine - and often preferable - during review
 stage, especially for incremental review, but once +1d, do either:
@@ -177,12 +178,26 @@ is necessary.
 patch by <Authors>; reviewed by <Reviewers> for CASSANDRA-#####
 ----
 [arabic, start=7]
-. When you're happy with the result, create a patch:
+. When you're happy with the result, create a patch. We suggest that
+you use a similar format (note blank lines) for the commit log message:
+
 +
 [source,none]
 ----
+<one sentence description>
+
+<optional lengthier description>
+
+Patch by <authors>; reviewed by <Reviewers> for CASSANDRA-#####
+----
+
+If you don't know who is reviewing your change yet, you can use `TBD`
+and amend the commit later to note the people who helped you.
+
+[source,none]
+----
 git add <any new or modified file>
-git commit -m '<message>'
+git commit
 git format-patch HEAD~1
 mv <patch-file> <ticket-branchname.txt> (e.g. 12345-trunk.txt, 12345-3.0.txt)
 ----
@@ -206,12 +221,15 @@ will receive feedback on your patch regardless.
 branch and click "Submit Patch" at the top of the ticket. This will move
 the ticket into "Patch Available" status, indicating that your
 submission is ready for review.
-. Wait for other developers or committers to review it and hopefully +1
-the ticket (see `how_to_review`). If your change does not receive a +1,
-do not be discouraged. If possible, the reviewer will give suggestions
-to improve your patch or explain why it is not suitable.
+. Wait for other developers or committers to review it and hopefully
++1 the ticket (see xref:development/how_to_review.adoc[how to
+review]). If your change does not receive a +1, do not be discouraged.
+If possible, the reviewer will give suggestions to improve your patch
+or explain why it is not suitable.
 . If the reviewer has given feedback to improve the patch, make the
 necessary changes and move the ticket into "Patch Available" once again.
+. Once you've had the patch reviewed you can amend the commit to update
+the commit message `TBD` with the reviewers who helped you.
 
 Once the review process is complete, you will receive a +1. Wait for a
 committer to commit it. Do not delete your branches immediately after
