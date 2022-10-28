@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+{{> head-first}}
+    <title>Apache Cassandra{{#with site.title}} | {{this}}{{/with}}</title>
+    {{#with (canonical-url)}}
+    <link rel="canonical" href="{{this}}">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400&amp;family=Red+Hat+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&amp;display=swap" rel="stylesheet">
+    {{/with}}
+{{> head-last}}
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.0.2/list.min.js"></script>
+  </head>
+  <body class="{{page.layout}}">
+      <div class="container mx-auto relative">
+        {{> header }}
+        <div class="hero hero--home grad">
+            <div class="eye"></div>
+            <div id="home-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                <h1>{{ page.title }}</h1>
+            </div>
+        </div>
+       <section id="events-main" class="arrow py-large">
+           <div class="inner">
+               <p class="text-center"><a href="https://events.linuxfoundation.org/cassandra-summit" target="_blank"><img src="{{{uiRootPath}}}/img/summit-2023-1080x391.png" alt="Apache Cassandra Summit 2023" class="events-banner"/></a></p>
+               <p class="py-large text-center">
+                Cassandra events bring the community together. Everyone (whether they are an individual user, contributor, or company) is welcome to attend and help organize these events. They are an opportunity for users, enthusiasts, and community members to share their experiences working with Cassandra daily, hear talks and participate whether they are beginners or experts.
+               </p>
+               <p class="py-large text-center">
+                    Organizing an event or want to get involved? <a href="{{{ site.url }}}/_/community.html#discussions">Get in touch with us</a>!
+               </p>
+
+               <div id="all-tiles" class="grid-list-wide list pb-large">
+                    {{{page.contents}}}
+               </div>
+           </div>
+       </section>
+           
+        {{> footer}}
+      </div>
+  </body>
+<script>
+jQuery(function(){
+    var cards =  $('#all-tiles').find('.card');
+    var searchString = '';
+
+    // these will be external links, so comment:
+    // $(document)
+    // .on('click','.card',function(){
+    //     var link = $(this).find('a').attr('href');
+    //     window.open(link, '_blank');
+    //     // window.location = link ;
+    // });
+
+    // $( "#search-field" ).keyup(function() {
+    //     $('.card').removeClass('hidden');
+    //     var val = $(this).val();
+    //     val = val.toLowerCase();
+    //     searchString = val;
+    //     filterCards(searchString)
+    // });
+    var filterCards = function(searchString){
+        cards.each(function(){
+            var el = $(this);
+            var title = el.find('.discrete').text();
+            title = title.toLowerCase();
+            if(!title.includes(searchString)){
+                el.addClass('hidden');
+            }
+        });
+    }
+});
+</script>
+</html>
