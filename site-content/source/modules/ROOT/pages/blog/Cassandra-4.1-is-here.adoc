@@ -1,0 +1,121 @@
+= Apache Cassandra 4.1: Rock Solid, Cloud-Native, Strongly Consistent and Highly Scalable
+:page-layout: single-post
+:page-role: blog-post
+:page-post-date: December 13, 2022
+:page-post-author: Cassandra Community
+:description: Apache Cassandra 4.1 released
+
+:!figure-caption:
+
+._Image credit: https://www.pexels.com/@roman-odintsov/[Roman Odintsov on Pexels^]_
+image::blog/cassandra-4.1-is-here.png[Christmas present]
+
+Today, we are excited to announce General Availability (GA) of Apache Cassandra 4.1, the project's major release for 2022 with lots of new features. This release paves the way to a more cloud-native future for the project by externalizing important key functions, extending Apache Cassandra, and enabling an expanded ecosystem without compromising the stable core code.
+
+Cassandra 4.1 also marks the delivery of our commitment to a yearly release.
+
+The release of 4.0 last year laid the foundations for growth. It established an important baseline for any future version of Cassandra while providing the needed infrastructure to ensure future releases maintain high quality and correctness. The 4.0 release was also the most stable GA for the project, and arguably any distributed open source database system, and opened the floodgates to a host of new community-developed features that are either included in 4.1 or in development.
+
+== New Features in 4.1 
+
+A major theme for Apache Cassandra 4.1 is pluggability. With each new framework, we are establishing a straightforward interface to Cassandra internals and an understood contract when using outside code. This theme sits alongside a strong focus on features that provide better control, improved ease of use, and flexibility that benefits developers and operators significantly.
+
+=== For Developers and Users
+
+The community is continuing to improve the performance of the database and make Cassandra both easier to use for end users and easier to onboard key development requests from the community.
+
+==== Paxos Improvements
+
+Cassandra uses a Paxos consensus protocol implementation that creates strong consistency. This is achieved by quorum reads to ensure a single value is selected and executed from all the proposed updates at any given time. Where an action needs to persist based on the current state of the system then Lightweight Transactions (LWTs) are used. Some examples of use cases are selling seats to a concert and where an `INSERT` or `UPDATE` operation must be unique, such as for a customer ID. Historically, Lightweight Transactions (LWTs) have suffered from poor performance, particularly in a WAN setting and under contention. As LWTs used a read-before-write approach, LWTs had more round trips which hurt performance. 
+
+Recognizing these shortcomings, https://cwiki.apache.org/confluence/x/54cjCw[Paxos was optimized^], improving LWT performance by 50%, improving latency, and halving the number of required round-trip to achieve consensus. Linearizability is now guaranteed across range movements in-line with what you would expect from a database with strong consistency.
+
+==== Improved Configuration
+
+Apache Cassandra is a powerful but complex distributed database system with many available configuration parameters. It can be confusing especially for newcomers and our goal with every release is to provide greater clarity and flexibility for developers and users which is why syntax in `cassandra.yaml`, the main configuration file, has had a major overhaul in 4.1. Among many improvements, our new configuration framework introduces unit types and standardizes names with a more intuitive language structure while retaining backward compatibility.
+
+Read the blog xref:blog/Apache-Cassandra-4.1-Configuration-Standardization.adoc[Configuration Standardization in 4.1] to learn more.
+
+=== For CQL Developers
+
+Based on the feedback from the community we have implemented new Cassandra Query Language features:
+
+* Users can now group by time range
+* Users can now use `CONTAINS` and `CONTAINS KEY` conditions in conditional update
+* Users can now use `IF EXISTS` and `IF NOT EXISTS` in `ALTER` statements
+
+Those seeking more query options will appreciate `GROUP BY` as it can be used to output row sets that are the same into a single grouped row, for instance, for marathon time results over a season. This can be used along with `FLOOR()` and `COUNT()` to further aggregate output. For instance, `FLOOR()` could be used to output results for runners over a series of marathons that finished within a specified hour and `COUNT()` could be used to output a column that indicates the number of runners that finished in each hour.
+
+=== Security Enhancements
+
+End users of Apache Cassandra are constantly under pressure to provide better security to their users and safeguard the privacy of data. Apache Cassandra, as one of the most popular NoSQL databases in the world, is constantly testing, researching, and developing ways to make its mission-critical open source product more secure. This release offers several features around making authentication more accessible and data-in-transit more secure.
+
+==== Credentials File Support for CQLSH
+
+In Apache Cassandra 4.1, we have added support for authentication plugins. While Cassandra authentication is already highly extensible, and users can create plugins to add authentication methods, the CQL shell (CQLSH) did not tap into this mechanism. Consequently, developers and users were forced to develop their own tool to interact with a Cassandra DB, but now you can use any Python authentication mechanism in CQLSH.
+
+==== PEM-based Key Material Supported
+
+Making SSLContext creation pluggable and extensible, as mentioned above, overcame previous challenges with a TLS configuration as it allows for specifying custom ways to build SSLContext and the new framework has swiftly led to support for PEM-based security credentials.
+
+Read the blog xref:blog/Tightening-Security-for-Apache-Cassandra-Part-3.adoc[Tightening Security] to learn more.
+
+==== Pre-hashed passwords in CQL Supported
+
+As well as sanitizing any logging for sensitive data before the development of v4.1, a new tool (`tools/bin/hash_password`) now provides a jBCrypt hash for use in Data Definition Language (DDL) commands used for creating, manipulating and modifying objects including creating or altering roles.
+
+Read the blog xref:blog/Apache-Cassandra-4.1-Features-Client-side-Password-Hashing.adoc[Client-side Password Hashing] to learn more.
+
+=== For the Cassandra Ecosystem
+Regarding pluggability, 4.1 provides various structured ways to add powerful features that enhance the Apache Cassandra ecosystem. Prominent examples of this are:
+
+==== Pluggable Memtable Implementation
+Memtables are in-memory structures where Cassandra buffers writes. This feature enables developers to implement new memtable solutions and allows users to select a memtable implementation and configuration for each table in their database. 
+
+Read the blog xref:blog/Apache-Cassandra-4.1-Features-Pluggable-Memtable-Implementations.adoc[Pluggable Memtable Implementation] to learn more.
+
+==== Extensible and Pluggable SSL Context Creation
+
+Another feature that is now pluggable and extensible is https://cwiki.apache.org/confluence/x/9YbOCg[SSLContext creation^]. This feature will appeal to enterprises operating in industries with stricter and more contextual security requirements. Enterprises need the flexibility to load the SSL protocol artifacts from custom resources and this feature makes that possible.
+
+==== Pluggable External Schema Manager Services
+
+The schema management has been completely refactored (https://issues.apache.org/jira/browse/CASSANDRA-17044[CASSANDRA-17044^]) so that schema storage is now pluggable. In practical terms, this means that schema can be stored somewhere other than in the local system tables, for example etcd. Again, this is a feature that enables the extension and customization of Cassandra for different use cases.
+
+=== For Operators
+
+This release sees new tools to assist operators in managing risk, controlling user access, and maintaining performance. A good example of this type of feature is the new Guardrails Framework.
+
+==== Guardrails Framework
+
+The Guardrails Framework enforces soft and hard limits system-wide, disables certain features, and disallows specific values. The framework exists to help operators avoid particular configuration and usage pitfalls that can degrade the performance and availability of an Apache Cassandra cluster when taken to scale. As well as activating available guardrails, developers can use the framework to create their own guardrails. 
+
+Read the blog xref:blog/Apache-Cassandra-4.1-Features-Guardrails-Framework.adoc[Guardrails Framework] to learn more.
+
+==== Partition DenyListing
+
+On a similar theme, the Partition Denylisting tool gives operators new controls to reduce the impact of overloaded partitions. While the community continues to strengthen and widen the tracks on which data models run (for example, previously we added support for large partitions on SSTable 3.0 format), DenyListing is a quick solution to a recognized situation for operators. The tool will protect performance on other partitions that would be adversely affected by a large, problematic partition.
+
+Read the blog xref:blog/Apache-Cassandra-4.1-Denylisting-Partitions.adoc[Denylisting Partitions] to learn more.
+
+==== SSTable Identifiers
+
+As well as introducing the ability to monitor top partitions by size/tombstones and improving `nodetool`, backup and restore, we've introduced new SSTable identifiers which is a naming pattern for files and data directories that are located and organized in SSTables. As each SSTable on any node will have a globally unique identifier, we expect this will eliminate some problems with manual backups.
+
+Read the blog xref:blog/Apache-Cassandra-4.1-New-SSTable-Identifiers.adoc[New SSTable Identifiers in 4.1] to learn more.
+
+=== Validating with Advanced Simulations
+
+The community validated the new, improved Paxos implementation with its new https://cwiki.apache.org/confluence/x/LY7OCg[Cluster and Code Simulator^] which is capable of simulating hundreds of thousands of clusters and millions of queries to assert linearizability. Cassandra's new Simulator can completely control the database and fully control JVM thread scheduling, lock acquisition, and time in the new burn suite. These simulations can be launched in the cloud to validate Paxos at a massive scale or on a laptop, with total deterministic reproducibility. This feature could be used to test other systems or even to test Cassandra with a user application against it, but it is currently a project tool for developers.
+
+== The Future
+
+Many of 4.1's features establish frameworks that the community is now building on and creating exciting new features.
+
+The Code and Cluster Simulator is at the heart of helping the project develop a new consensus protocol called https://cwiki.apache.org/confluence/download/attachments/188744725/Accord.pdf[Accord^] which will reduce linearizable reads/writes to a single round trip. Accord will be a ground-breaking development for the database industry at large enabling multi-partition https://cwiki.apache.org/confluence/x/FQRACw[general-purpose transactions^] in Cassandra.
+
+Elsewhere, the memtable implementation ushers in Trie-based memtable support (https://issues.apache.org/jira/browse/CASSANDRA-17240[CASSANDRA-17240^]) which will offer significant improvements to both performance and garbage collection overheads.
+
+Collectively, this level of community momentum is pushing Apache Cassandra ever forward toward a more cloud-native future.
+
+We encourage you to join us on this journey by subscribing to the mailing lists, introducing yourself on our ASF Slack, and following us on social media -— all the details are available in the xref:community.adoc[Community] section with links at the top of the page.
