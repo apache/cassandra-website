@@ -15,7 +15,7 @@ Background docs::
   * http://www.apache.org/legal/release-policy.html[ASF Release Policy]
   * http://www.apache.org/dev/release-distribution[ASF Release
   Distribution Policy]
-  * http://www.eu.apache.org/dev/release-publishing.html[ASF Release
+  * https://infra.apache.org/release-publishing.html[ASF Release
   Best Practices]
 
 A debian based linux OS is required to run the release steps from.
@@ -25,33 +25,41 @@ management tools.
 ==== Create and publish your GPG key
 
 To create a GPG key, follow the
-http://www.apache.org/dev/openpgp.html[guidelines]. The key must be 4096
-bit RSA. Include your public key in:
+http://www.apache.org/dev/openpgp.html[guidelines]. **The key must be 4096
+bit RSA.**
+
+Publish your GPG key in a PGP key server, such as
+http://pgp.mit.edu/[MIT Keyserver]. Some `gpg` clients are publishing the keys https://keys.openpgp.org/[here]. You are 
+welcome to set the server where the keys will be published by following https://keys.openpgp.org/about/usage[this guide].
+
+Once completed, you need to create a ticket https://issues.apache.org/jira/browse/CASSANDRA-18205[like this] 
+and ask a PMC to add your key to `KEYS` file.
+
+A PMC will include your public key to this file:
 
 [source,none]
 ----
 https://dist.apache.org/repos/dist/release/cassandra/KEYS
 ----
 
-Publish your GPG key in a PGP key server, such as
-http://pgp.mit.edu/[MIT Keyserver].
-
-==== Bintray account with access to Apache organisation
-
-Publishing a successfully voted upon release requires bintray access to
-the Apache organisation. Please verify that you have a bintray account
-and the Apache organisation is listed
-https://bintray.com/profile/edit/organizations[here].
-
 === Create Release Artifacts
 
 Any committer can perform the following steps to create and call a vote
 on a proposed release.
 
-Check that there are no open urgent jira tickets currently being worked
+Check that there are no open urgent Jira tickets currently being worked
 on. Also check with the PMC that there's security vulnerabilities
-currently being worked on in private.' Current project habit is to check
+currently being worked on in private. Current project habit is to check
 the timing for a new release on the dev mailing lists.
+
+For successful building process, install this tooling locally: 
+svn, git, ant, devscripts, reprepro, rpmsign, docker, createrepo (the script is checking this tooling is present 
+before proceeding any further). The names of these "packages" are Debian-centric, 
+but equivalents should be discoverable in other systems too.
+
+There is a package called https://packages.debian.org/bullseye/createrepo-c[createrepo-c] in Debian Bullseye.
+Please beware that `createrepo` package is not located in Ubuntu 20.04 LTS.  `createrepo` package is present in 
+Ubuntu Bionic (18.04), `createrepo-c` is in Ubuntu Jammy (22.04 LTS) and more recent.
 
 ==== Perform the Release
 
@@ -63,19 +71,92 @@ the ASF nexus staging repository and dev distribution location:
 cd ~/git
 git clone https://github.com/apache/cassandra-builds.git
 git clone https://github.com/apache/cassandra.git
+----
 
+[source,none]
+----
 # Edit the variables at the top of the `prepare_release.sh` file
 edit cassandra-builds/cassandra-release/prepare_release.sh
+----
 
+You must specify your ASF username to `asf_username` variable. Next, `gpg_key` environment variable must be 
+set to a fingerprint of your gpg key. Execute `gpg --list-keys` or a similar command to get the value. Finally, you must
+add ASF remote to your cloned repository and `git_asf_remote` variable needs to be set to point to that. For example, when this command is executed:
+
+[source,none]
+----
+git remote add asf https://gitbox.apache.org/repos/asf/cassandra.git
+----
+
+then `git_asf_remote` variable needs to be set to `asf`. 
+NOTE: This is very important step as tags are pushed to ASF repository and they are synchronized to GitHub automatically.
+
+[source,none]
+----
 # Ensure your 4096 RSA key is the default secret key
 edit ~/.gnupg/gpg.conf # update the `default-key` line
-edit ~/.rpmmacros # update the `%gpg_name <key_id>` line
+----
 
+A reference configuration should look like these examples:
+
+[source,none]
+----
+default-key <fingerprint of your key>
+personal-digest-preferences SHA512
+cert-digest-algo SHA512
+default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB BZIP2 ZIP Uncompressed
+----
+
+[source,none]
+----
+edit ~/.rpmmacros # update the `%_gpg_name <key_id>` line
 # Ensure DEBFULLNAME and DEBEMAIL is defined and exported, in the debian scripts configuration
 edit ~/.devscripts
+----
 
-# The prepare_release.sh is run from the actual cassandra git checkout,
-# on the branch/commit that we wish to tag for the tentative release along with version number to tag.
+The reference content of these files is:
+
+[source,none]
+----
+$ cat ~/.rpmmacros 
+%_gpg_name email@youusedforyourkey.org
+$ cat ~/.devscripts 
+DEBFULLNAME="Your Name"
+DEBEMAIL=email@youusedforyourkey.org
+----
+
+Empirical testing shows that you also must have the above `DEB*` environemnt variables exported before proceeding.
+
+Additionally, you must configure `$HOME/.m2/settings.xml` to contain the credentials used to upload artifacts to https://repository.apache.org/[staging repository]. The credentials are your ASF credentials.
+
+[source,none]
+----
+$ cat ~/.m2/settings.xml 
+<settings>
+    <servers>
+        <server>
+            <id>apache.releases.https</id>
+            <username>yourasflogin</username>
+            <password>yourasfpassword</password>
+        </server>
+        <server>
+            <id>apache.snapshots.https</id>
+            <username>yourasflogin</username>
+            <password>yourasfpassword</password>
+        </server>
+    </servers>
+</settings>
+----
+
+The script will eventually ask you for a username and password to push artifacts to SVN. The default prompt for user 
+will be equal to a username of an account at your machine. If your ASF login is not same as your username locally, just error out the prompt 
+(put there wrong password and confirm), and it will ask you for username again without providing any default value.
+
+The `prepare_release.sh` is run from the actual cassandra git checkout, 
+on the branch/commit that we wish to tag for the tentative release along with version number to tag.
+
+[source,none]
+----
 cd cassandra
 git switch cassandra-<version-branch>
 
@@ -85,13 +166,23 @@ git switch cassandra-<version-branch>
 
 Follow the prompts.
 
+Once artifacts are built and pushed to the staging area, the script will pause and require you to go to the
+https://repository.apache.org/#stagingRepositories[Staging repositories], where you will find the repository. 
+Select the Cassandra repository and push the "Close" button. 
+Please take a note of the number of that repository like `orgapachecassandra-1283` - number is 1283. 
+The script will require the repo number to proceed. It will use this number in the rendered e-mail template sent to the dev list, etc.
+
 If building the deb or rpm packages fail, those steps can be repeated
 individually using the [.title-ref]#-d# and [.title-ref]#-r# flags,
 respectively.
 
+Once DEBs and RPMs are also uploaded, do not forget to merge your commit to prepare the release to trunk 
+and push after all artifacts are uploaded finish the process. You will be also reminded to do that by 
+the script itself at the end.
+
 === Call for a Vote
 
-Fill out the following email template and send to the dev mailing list:
+Fill out the following email template you find in `$HOME/Mail` directory and send to the dev mailing list:
 
 [source,none]
 ----
@@ -149,11 +240,6 @@ the next steps that are required.
 * Select the "Releases" repository and click "Promote".
 * Next click on "Repositories", select the "Releases" repository and
 validate that your artifacts exist as you expect them.
-
-Publish the Bintray Uploaded Distribution Packages
---------------------------------------------------
-
-Log into bintray and publish the uploaded artifacts.
 
 === Update and Publish Website
 
@@ -224,8 +310,7 @@ Enjoy!
 Update Slack Cassandra topic ---------------------------
 
 Update topic in `cassandra` `Slack room <slack>`::
-  /topic cassandra.apache.org | Latest releases: 3.11.4, 3.0.18, 2.2.14,
-  2.1.21 | ask, don't ask to ask
+  /topic cassandra.apache.org | Latest releases: 4.1.0, 4.0.7, 3.11.4, 3.0.18 | ask, don't ask to ask
 
 === Tweet from @Cassandra
 
