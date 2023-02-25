@@ -10,35 +10,29 @@ If you are a committer, feel free to pick any process that works for you
 Here is how committing and merging will usually look for merging and
 pushing for tickets that follow the convention (if patch-based):
 
-Hypothetical CASSANDRA-12345 ticket is a cassandra-3.0 based bug fix
-that requires different code for cassandra-3.11, cassandra-4.0, and
+Hypothetical CASSANDRA-12345 ticket is a cassandra-4.0 based bug fix
+that requires different code for cassandra-4.0, cassandra-4.1, and
 trunk. Contributor Jackie supplied a patch for the root branch
-(12345-3.0.patch), and patches for the remaining branches
-(12345-3.11.patch, 12345-4.0.patch, 12345-trunk.patch).
+(12345-4.0.patch), and patches for the remaining branches
+(12345-4.1.patch, 12345-trunk.patch).
 
-On cassandra-3.0:::
-  . `+git am -3 12345-3.0.patch+` (any problem b/c of CHANGES.txt not
-  merging anymore, fix it in place)
-  . `+ant realclean && ant jar build-test+` (rebuild to make sure code
-  compiles)
-On cassandra-3.11:::
-  . `+git merge cassandra-3.0 -s ours+`
-  . `+git apply -3 12345-3.11.patch+` (any issue with CHANGES.txt : fix
-  and [.title-ref]#git add CHANGES.txt#)
-  . `+ant realclean && ant jar build-test+` (rebuild to make sure code
-  compiles)
-  . `+git commit --amend+` (Notice this will squash the 3.11 applied
-  patch into the forward merge commit)
 On cassandra-4.0:::
-  . `+git merge cassandra-3.11 -s ours+`
-  . `+git apply -3 12345-4.0.patch+` (any issue with CHANGES.txt : fix
-  and [.title-ref]#git add CHANGES.txt#)
+  . `+git am -3 12345-4.0.patch+` (any problem b/c of CHANGES.txt not
+  merging anymore, fix it in place)
   . `+ant realclean && ant jar build-test+` (rebuild to make sure code
   compiles)
   . `+git commit --amend+` (Notice this will squash the 4.0 applied
   patch into the forward merge commit)
+On cassandra-4.1:::
+  . `+git merge cassandra-4.0 -s ours --log+`
+  . `+git apply -3 12345-4.1.patch+` (any issue with CHANGES.txt : fix
+  and [.title-ref]#git add CHANGES.txt#)
+  . `+ant realclean && ant jar build-test+` (rebuild to make sure code
+  compiles)
+  . `+git commit --amend+` (Notice this will squash the 4.1 applied
+  patch into the forward merge commit)
 On trunk:::
-  . `+git merge cassandra-4.0 -s ours+`
+  . `+git merge cassandra-4.1 -s ours --log+`
   . `+git apply -3 12345-trunk.patch+` (any issue with CHANGES.txt : fix
   and [.title-ref]#git add CHANGES.txt#)
   . `+ant realclean && ant jar build-test+` (rebuild to make sure code
@@ -46,41 +40,31 @@ On trunk:::
   . `+git commit --amend+` (Notice this will squash the trunk applied
   patch into the forward merge commit)
 On any branch:::
-  . `+git push origin cassandra-3.0 cassandra-3.11 cassandra-4.0 trunk --atomic -n+`
+  . `+git push origin cassandra-4.0 cassandra-4.1 trunk --atomic -n+`
   (dryrun check)
-  . `+git push origin cassandra-3.0 cassandra-3.11 cassandra-4.0 trunk --atomic+`
+  . `+git push origin cassandra-4.0 cassandra-4.1 trunk --atomic+`
 
 == Git branch based Contribution
 
 Same scenario, but a branch-based contribution:
 
-On cassandra-3.0:::
-  . `+git cherry-pick <sha-of-3.0-commit>+` (any problem b/c of
+On cassandra-4.0:::
+  . `+git cherry-pick <sha-of-4.0-commit>+` (any problem b/c of
   CHANGES.txt not merging anymore, fix it in place)
   . `+ant realclean && ant jar build-test+` (rebuild to make sure code
   compiles)
-On cassandra-3.11:::
-  . `+git merge cassandra-3.0 -s ours+`
-  . `+git format-patch -1 <sha-of-3.11-commit>+` (alternative to
-  format-patch and apply is [.title-ref]#cherry-pick -n#)
-  . `+git apply -3 <sha-of-3.11-commit>.patch+` (any issue with
-  CHANGES.txt : fix and [.title-ref]#git add CHANGES.txt#)
-  . `+ant realclean && ant jar build-test+` (rebuild to make sure code
-  compiles)
-  . `+git commit --amend+` (Notice this will squash the 3.11 applied
-  patch into the forward merge commit)
-On cassandra-4.0:::
-  . `+git merge cassandra-3.11 -s ours+`
+On cassandra-4.1:::
+  . `+git merge cassandra-4.0 -s ours --log+`
   . `+git format-patch -1 <sha-of-4.0-commit>+` (alternative to
   format-patch and apply is [.title-ref]#cherry-pick -n#)
-  . `+git apply -3 <sha-of-4.0-commit>.patch+` (any issue with
+  . `+git apply -3 <sha-of-4.1-commit>.patch+` (any issue with
   CHANGES.txt : fix and [.title-ref]#git add CHANGES.txt#)
   . `+ant realclean && ant jar build-test+` (rebuild to make sure code
   compiles)
-  . `+git commit --amend+` (Notice this will squash the 4.0 applied
+  . `+git commit --amend+` (Notice this will squash the 4.1 applied
   patch into the forward merge commit)
 On trunk:::
-  . `+git merge cassandra-4.0 -s ours+`
+  . `+git merge cassandra-4.1 -s ours --log+`
   . `+git format-patch -1 <sha-of-trunk-commit>+` (alternative to
   format-patch and apply is [.title-ref]#cherry-pick -n#)
   . `+git apply -3 <sha-of-trunk-commit>.patch+` (any issue with
@@ -90,36 +74,32 @@ On trunk:::
   . `+git commit --amend+` (Notice this will squash the trunk applied
   patch into the forward merge commit)
 On any branch:::
-  . `+git push origin cassandra-3.0 cassandra-3.11 cassandra-4.0 trunk --atomic -n+`
+  . `+git push origin cassandra-4.0 cassandra-4.1 trunk --atomic -n+`
   (dryrun check)
-  . `+git push origin cassandra-3.0 cassandra-3.11 cassandra-4.0 trunk --atomic+`
+  . `+git push origin cassandra-4.0 cassandra-4.1 trunk --atomic+`
 
 == Contributions only for release branches
 
 If the patch is for an older branch, and doesn't impact later branches
 (such as trunk), we still need to merge up.
 
-On cassandra-3.0:::
-  . `+git cherry-pick <sha-of-3.0-commit>+` (any problem b/c of
+On cassandra-4.0:::
+  . `+git cherry-pick <sha-of-4.0-commit>+` (any problem b/c of
   CHANGES.txt not merging anymore, fix it in place)
   . `+ant realclean && ant jar build-test+` (rebuild to make sure code
   compiles)
-On cassandra-3.11:::
-  . `+git merge cassandra-3.0 -s ours+`
-  . `+ant realclean && ant jar build-test+` (rebuild to make sure code
-  compiles)
-On cassandra-4.0:::
-  . `+git merge cassandra-3.11 -s ours+`
+On cassandra-4.1:::
+  . `+git merge cassandra-4.0 -s ours --log+`
   . `+ant realclean && ant jar build-test+` (rebuild to make sure code
   compiles)
 On trunk:::
-  . `+git merge cassandra-4.0 -s ours+`
+  . `+git merge cassandra-4.1 -s ours --log+`
   . `+ant realclean && ant jar build-test+` (rebuild to make sure code
   compiles)
 On any branch:::
-  . `+git push origin cassandra-3.0 cassandra-3.11 cassandra-4.0 trunk --atomic -n+`
+  . `+git push origin cassandra-4.0 cassandra-4.1 trunk --atomic -n+`
   (dryrun check)
-  . `+git push origin cassandra-3.0 cassandra-3.11 cassandra-4.0 trunk --atomic+`
+  . `+git push origin cassandra-4.0 cassandra-4.1 trunk --atomic+`
 
 == Tips
 
