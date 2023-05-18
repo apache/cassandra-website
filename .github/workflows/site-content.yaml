@@ -1,0 +1,47 @@
+#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+name: Build toplevel website
+
+on:
+  push:
+    paths:
+      - 'site-*/**'
+  release:
+    types:
+      - published
+
+jobs:
+  cassandra-website-content:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - uses: actions/checkout@v3
+
+    - name: Build Website
+      run: |
+        git config --global user.email "gha@cassandra.apache.org"
+        git config --global user.name "GHA for Apache Cassandra Website"
+        git switch -C $(git rev-parse --abbrev-ref HEAD)_generated
+        ./run.sh website-ui bundle -a BUILD_USER_ARG:$(whoami) -a UID_ARG:$(id -u) -a GID_ARG:$(id -g)
+        ./run.sh website container -a BUILD_USER_ARG:$(whoami) -a UID_ARG:$(id -u) -a GID_ARG:$(id -g)
+        ./run.sh website build
+        git add content
+        git commit -am "generate (top-level-only) docs for `git rev-parse --short HEAD`"
+        git push -f --set-upstream origin $(git rev-parse --abbrev-ref HEAD)
