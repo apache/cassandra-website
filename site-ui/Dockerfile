@@ -1,4 +1,5 @@
 FROM ubuntu:18.04
+#
 # Set up non-root user, 'build', with default uid:gid
 # This allows passing --build-arg to use localhost username, and uid:gid:
 #   $ docker build \
@@ -10,6 +11,7 @@ FROM ubuntu:18.04
 #
 # Other container parameters can be overridden at build time as well:
 #  - NODE_VERSION_ARG:              Version of node to use.
+#
 ARG BUILD_USER_ARG="build"
 ARG UID_ARG=1000
 ARG GID_ARG=1000
