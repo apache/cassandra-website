@@ -90,6 +90,7 @@ ENV ANTORA_SITE_START_PAGE="_"
 
 # Build from 3.11.5 as document generation for previous versions is broken.
 ENV ANTORA_CONTENT_SOURCES_CASSANDRA_URL="https://github.com/apache/cassandra.git"
+# changing the next line also needs updates to the move_intree_document_directories calls in prepare_site_html_for_publication in docker-entrypoint.sh
 ENV ANTORA_CONTENT_SOURCES_CASSANDRA_BRANCHES="trunk cassandra-5.0 cassandra-4.1 cassandra-4.0 cassandra-3.11"
 # FIXME – we can't generate tags yet as in-tree doc/antora.yml doesn't specify specifc tag versions
 ENV ANTORA_CONTENT_SOURCES_CASSANDRA_TAGS=""

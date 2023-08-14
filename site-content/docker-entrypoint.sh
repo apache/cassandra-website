@@ -242,8 +242,9 @@ prepare_site_html_for_publication() {
     # FIXME – we can't generate tags yet as in-tree doc/antora.yml doesn't specify specifc tag versions, so just copy them for now (see same fixme in Dockerfile)
     move_intree_document_directories "3.11" "3.11.11" "3.11.12" "3.11.13"
     move_intree_document_directories "4.0" "4.0.0" "4.0.1" "4.0.2" "4.0.3" "4.0.4" "4.0.5" "stable"
-    move_intree_document_directories "4.1" "latest"
-    move_intree_document_directories "trunk" "4.2"
+    move_intree_document_directories "4.1" "4.1.0" "4.1.1" "4.1.2" "4.1.3"
+    move_intree_document_directories "5.0" "5.0"
+    move_intree_document_directories "trunk" "5.1"
   fi
 
   popd > /dev/null
