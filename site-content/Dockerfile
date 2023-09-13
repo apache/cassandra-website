@@ -1,4 +1,5 @@
-FROM ubuntu:18.04
+FROM ubuntu:22.04
+
 # Set up non-root user, 'build', with default uid:gid
 # This allows passing --build-arg to use localhost username, and uid:gid:
 #   $ docker build \
@@ -16,6 +17,9 @@ ARG UID_ARG=1000
 ARG GID_ARG=1000
 ARG NODE_VERSION_ARG="v12.16.2"
 ARG ENTR_VERSION_ARG="4.6"
+ARG TARGETPLATFORM
+
+ENV NPM_CONFIG_LOGLEVEL info
 
 RUN echo "Building with arguments:" \
     && echo " - BUILD_USER_ARG=${BUILD_USER_ARG}" \
@@ -37,15 +41,20 @@ RUN apt update && \
         git \
         gpg \
         wget \
+        gcc \
         sudo
 
 RUN pip3 install jinja2 requests
 
 # INSTALL nodejs and nvm
-ENV NODE_PACKAGE="node-${NODE_VERSION_ARG}-linux-x64.tar.gz"
-RUN wget https://nodejs.org/download/release/${NODE_VERSION_ARG}/${NODE_PACKAGE} && \
-    tar -C /usr/local --strip-components 1 -xzf ${NODE_PACKAGE} && \
-    rm ${NODE_PACKAGE}
+RUN export PLATFORM=$(if [ "$TARGETPLATFORM" = "linux/amd64" ] ; then echo "x64"; else echo "arm64"; fi) \
+  && set -ex \
+  && wget "https://nodejs.org/dist/$NODE_VERSION_ARG/node-$NODE_VERSION_ARG-linux-$PLATFORM.tar.xz" \
+  && tar -xJf "node-$NODE_VERSION_ARG-linux-$PLATFORM.tar.xz" -C /usr/local --strip-components=1 \
+  && rm "node-$NODE_VERSION_ARG-linux-$PLATFORM.tar.xz" \
+  && ln -s /usr/local/bin/node /usr/local/bin/nodejs
+
+CMD [ "npm", "--version" ]
 
 # Use npm to install Antora globally, and antora-lunr for site search, and js-yaml to load YAML files
 RUN npm i -g @antora/cli@2.3 @antora/site-generator-default@2.3 @djencks/asciidoctor-openblock
@@ -64,13 +73,14 @@ RUN groupadd --gid ${GID_ARG} --non-unique ${BUILD_USER} && \
 ENV BUILD_DIR="/home/${BUILD_USER}"
 ENV ENTR_PACKAGE="${ENTR_VERSION_ARG}.tar.gz"
 WORKDIR ${BUILD_DIR}
-RUN wget https://github.com/eradman/entr/archive/${ENTR_PACKAGE} && \
+RUN wget https://github.com/eradman/entr/archive/${ENTR_PACKAGE} --no-check-certificate && \
     mkdir entr && \
     tar -C ${BUILD_DIR}/entr --strip-components 1 -xzf ${ENTR_PACKAGE} && \
     rm ${ENTR_PACKAGE}
 
 WORKDIR ${BUILD_DIR}/entr
 RUN ./configure && \
+    make CC=gcc && \
     make test && \
     make install
 
