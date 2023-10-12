@@ -1,0 +1,230 @@
+= Apache Cassandra 5.0 Features: Dynamic Data Masking
+:page-layout: single-post
+:page-role: blog-post
+:page-post-date: October 11, 2023
+:page-post-author: Mick Semb Wever
+:description: New dynamic data masking capabilities are a feature available in the coming Apache Cassandra 5.0.
+:keywords: 
+
+__Apache Cassandra 5.0 is the project’s major release for 2023, and it promises some of the biggest changes for Cassandra to-date. After more than a decade of engineering work dedicated to stabilizing and building Cassandra as a distributed database, we now look forward to introducing a host of exciting features and enhancements that empower users to take their data-driven applications to the next level - including machine learning and artificial intelligence.__
+
+__This blog series aims to give a deeper dive into some of the key features of Cassandra 5.0.__
+
+Cassandra 5.0 introduces new dynamic data masking (DDM) capabilities which allows you to obscure sensitive information using a concept called masked columns. DDM doesn't change the stored data. Instead, it just presents the data in its redacted form during SELECT queries.
+
+DDM aims to provide some degree of protection against accidental data exposure. For example, the column masks can prevent undesired data exposure when a user shares the results of a query with someone. Or it can limit what users with read access can actually see. However, it's important to know that anyone with direct access to the sstable files will be able to read the clear data.
+
+The data can be partially redacted, for example showing only the four last digits of a credit card number. This partial view of the data can be enough to allow users to do some checks on the data without seeing it entirely. The data can also be fully redacted, making it clear for users that the information is sensitive.
+
+== Masking functions
+
+DDM is based on a set of https://cassandra.apache.org/doc/5.0/cassandra/developing/cql/functions.html[CQL built-in (native) functions^] that obscure sensitive information. The available functions are:
+
+* **mask_null**: Replaces the first argument with a null column. The returned value is always a non-existent column, and not a not-null column representing a null value.
+* **mask_default**: Replaces its argument by an arbitrary, fixed default value of the same type. This will be **** for text values, zero for numeric values, false for booleans, etc.
+* **mask_replace**: Replaces the first argument by the replacement value on the second argument. The replacement value needs to have the same type as the replaced value.
+* **mask_inner**: Returns a copy of the first text, varchar or ascii argument, replacing each character except the first and last ones by a padding character.
+* **mask_outer**: Returns a copy of the first text, varchar or ascii argument, replacing the first and last character by a padding character.
+mask_hash: Returns a blob containing the hash of the first argument.
+
+These functions can be used in any SELECT query to get an obscured view of the data. For example:
+
+----
+CREATE TABLE patients (
+   id timeuuid PRIMARY KEY,
+   name text,
+   birth date
+);
+
+
+INSERT INTO patients(id, name, birth) 
+       VALUES (now(), 'alice', '1982-01-02');
+INSERT INTO patients(id, name, birth) 
+       VALUES (now(), 'bob', '1982-01-02');
+
+
+SELECT mask_inner(name, 1, null), mask_default(birth) FROM patients;
+
+
+  system.mask_inner(name, 1, NULL) | system.mask_default(birth)
+-----------------------------------+----------------------------
+                               b** | 1970-01-01
+                             a**** | 1970-01-01
+----
+
+== Attaching masking functions to table columns
+
+The masking functions can be permanently attached to any column of a table. If a masking function is defined, SELECT queries will always return the column values in their masked form. The masking will be transparent to the users running SELECT queries, so their only way to know that a column is masked will be to consult the table definition.
+
+This is an optional feature that should be enabled with the “dynamic_data_masking_enabled” property in the “cassandra.yaml” config file, since it's disabled by default.
+
+The masks of the columns of a table can be defined on CREATE TABLE queries:
+
+----
+CREATE TABLE patients (
+   id timeuuid PRIMARY KEY,
+   name text MASKED WITH mask_inner(1, null),
+   birth date MASKED WITH mask_default()
+);
+----
+
+Data can be inserted into the masked table as usual. For example:
+
+----
+INSERT INTO patients(id, name, birth) 
+       VALUES (now(), 'alice', '1984-01-02');
+INSERT INTO patients(id, name, birth) 
+       VALUES (now(), 'bob', '1982-02-03');
+----
+
+The attached column masks will make SELECT queries automatically return masked data,
+without the need of including the masking function in the query:
+
+----
+SELECT name, birth FROM patients;
+
+
+  name | birth
+-------+------------
+ a**** | 1970-01-01
+   b** | 1970-01-01
+----
+
+The masking function attached to a column can be changed with an ALTER TABLE query:
+
+----
+ALTER TABLE patients ALTER name MASKED WITH mask_default();
+----
+
+In a similar way, a masking function can be detached from a column with an ALTER TABLE query:
+
+----
+ALTER TABLE patients ALTER name DROP MASKED;
+----
+
+== Permissions
+
+The new UNMASK https://cassandra.apache.org/doc/5.0/cassandra/developing/cql/security.html#cql-permissions[permission^] allows users to retrieve the unmasked values of masked columns. Ordinary users are created without the UNMASK permission and will see masked values. Superusers are created with the UNMASK permission, and will be able to see the unmasked values in a SELECT query results. As an example, suppose that we have a table with masked columns:
+
+----
+CREATE TABLE patients (
+   id timeuuid PRIMARY KEY,
+   name text MASKED WITH mask_inner(1, null),
+   birth date MASKED WITH mask_default()
+);
+
+
+INSERT INTO patients(id, name, birth) 
+       VALUES (now(), 'alice', '1984-01-02');
+INSERT INTO patients(id, name, birth) 
+       VALUES (now(), 'bob', '1982-02-03');
+----
+
+Then we create two users with SELECT permission for the table, but we only grant the UNMASK permission to one of the users:
+
+----
+CRCREATE USER privileged WITH PASSWORD 'xyz';
+GRANT SELECT ON TABLE patients TO privileged;
+GRANT UNMASK ON TABLE patients TO privileged;
+
+
+CREATE USER unprivileged WITH PASSWORD 'xyz';
+GRANT SELECT ON TABLE patients TO unprivileged;
+----
+
+We can now see that the user with the UNMASK permission can see the clear data, unmasked, whereas the user without the UNMASK permission can only see the masked data:
+
+----
+LOGIN privileged
+SELECT name, birth FROM patients;
+
+
+  name | birth
+-------+------------
+ alice | 1984-01-02
+   bob | 1982-02-03
+
+
+LOGIN unprivileged
+SELECT name, birth FROM patients;
+
+
+  name | birth
+-------+------------
+ a**** | 1970-01-01
+   b** | 1970-01-01
+----
+
+Users without the UNMASK permission are not allowed to use masked columns in the WHERE clause of a SELECT query. This prevents malicious users from figuring out the clear data by running exhaustive queries. For example:
+
+----
+CREATE USER untrusted_user WITH PASSWORD 'xyz';
+GRANT SELECT ON TABLE patients TO untrusted_user;
+LOGIN untrusted_user
+
+
+SELECT name, birth FROM patients WHERE name = 'Alice' ALLOW FILTERING;
+
+
+// Unauthorized: Error from server: code=2100 [Unauthorized] message="User untrusted_user has no UNMASK nor SELECT_UNMASK permission on table k.patients"
+----
+
+However, there are some use cases where trusted database users just need a useful way to produce masked data that will be served to untrusted external users. For example, a trusted app can connect to the database and extract masked data that will be served to its end users. In that case the trusted user (the app) can be given the SELECT_MASKED permission. That permission allows us to use masked columns in the WHERE clause of a SELECT query, while still seeing the masked data in the query results. For instance:
+
+----
+CREATE USER trusted_user WITH PASSWORD 'xyz';
+GRANT SELECT, SELECT_MASKED ON TABLE patients TO trusted_user;
+LOGIN trusted_user
+
+
+SELECT name, birth FROM patients WHERE name = 'Alice' ALLOW FILTERING;
+
+
+  name | birth
+-------+------------
+ a**** | 1970-01-01
+----
+
+== Custom functions
+
+https://cassandra.apache.org/doc/5.0/cassandra/developing/cql/functions.html#user-defined-scalar-functions[Cassandra’s user-defined functions (UDFs)^] can be attached to a table column. This allows extending the functionality of DDM beyond the standard native functions. Any UDF can be used as the mask of a column, provided that its first argument and return type have the same type as the column to be masked. For instance:
+
+----
+CREATE FUNCTION redact(input text)
+   CALLED ON NULL INPUT
+   RETURNS text
+   LANGUAGE java
+   AS 'return "redacted"';
+
+
+CREATE TABLE patients (
+   id timeuuid PRIMARY KEY,
+   name text MASKED WITH redact()
+);
+----
+
+Learn More About Apache Cassandra
+
+As we get closer to the General Availability of Cassandra 5.0, there are a host of ways to get more involved in the community and follow project developments: 
+
+Cassandra Summit + Code AI is taking place Dec. 12-13 in San Jose, CA. Cassandra Summit is THE gathering place for Apache Cassandra data practitioners, developers, engineers and enthusiasts, and it’s where we’ll be diving deeper into Cassandra 5.0 features. Submit a talk for the NEW AI Track at Cassandra Summit; CFP closes Monday, October 23 at 9:00 AM PDT (UTC-7). 
+
+For more information about Apache Cassandra or to join the community discussion, you can join us on these channels:
+Apache Cassandra Website
+ASF Slack
+Planet Cassandra Website
+Planet Cassandra Discord
+Planet Cassandra Global Meetup Group
+
+== Learn More About Apache Cassandra
+
+As we get closer to the General Availability of Cassandra 5.0, there are a host of ways to get more involved in the community and follow project developments: 
+
+https://events.linuxfoundation.org/cassandra-summit/[Cassandra Summit + Code AI^] is taking place Dec. 12-13 in San Jose, CA. Cassandra Summit is THE gathering place for Apache Cassandra data practitioners, developers, engineers and enthusiasts, and it’s where we’ll be diving deeper into Cassandra 5.0 features. https://events.linuxfoundation.org/cassandra-summit/program/cfp/#overview[Submit a talk^] for the NEW AI Track at Cassandra Summit; CFP closes Monday, October 23 at 9:00 AM PDT (UTC-7). 
+
+For more information about Apache Cassandra or to join the community discussion, you can join us on these channels:
+
+* https://cassandra.apache.org/_/index.html[Apache Cassandra Website]
+* https://the-asf.slack.com/ssb/redirect[ASF Slack^]
+* https://www.youtube.com/@PlanetCassandra[Planet Cassandra Youtube^]
+* https://www.meetup.com/cassandra-global/[Planet Cassandra Global Meetup Group^]
