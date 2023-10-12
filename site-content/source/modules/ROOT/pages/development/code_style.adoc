@@ -1,5 +1,6 @@
 = Code Style
 :page-layout: basic
+:toc:
 
 The Cassandra project follows
 http://java.sun.com/docs/codeconv/html/CodeConvTOC.doc.html[Sun's Java
@@ -176,3 +177,21 @@ https://gist.github.com/jdsumsion/9ab750a05c2a567c6afc[gist for IntelliJ
 13] (this is a work in progress, still working on javadoc, ternary
 style, line continuations, etc)
 * Eclipse: (https://github.com/tjake/cassandra-style-eclipse)
+
+== JavaDoc
+
+=== Deprecation
+
+To deprecate the old API, we use one of the built-in annotations of the Java language, the `@Deprecated` annotation with a `since` annotation element that points to the version since the API was deprecated. We always use it in conjunction with the `@deprecated` Javadoc tag, which describes the reason for the deprecation and an alternative, if applicable. A JIRA ticket is also worth mentioning in the deprecation message. All of these rules are enforced by the checkstyle.
+
+Consider the following examples:
+
+[source,java]
+----
+/** @deprecated Migrate to {@link DatabaseDescriptor#isClientInitialized()}. See CASSANDRA-1255 */
+@Deprecated(since = "3.10")
+public static boolean isClientMode()
+{
+    return isClientMode;
+}
+----
