@@ -1,0 +1,11 @@
+= row cache
+
+A database component for improving the performance of read-intensive operations.
+In off-heap memory, the row cache holds the most recently read rows from the local <<SSTable,SSTables>>.
+Each local read operation stores its result set in the row cache and sends it to the coordinator node.
+The next read first checks the row cache.
+If the required data is there, the database returns it immediately.
+This initial read can save further seeks in the Bloom filter, partition key cache, partition summary, partition index, and SSTables.
+
+The database uses LRU (least-recently-used) eviction to ensure that the row cache is refreshed with the most frequently accessed rows.
+The size of the row cache can be configured in the cassandra.yaml file.

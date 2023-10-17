@@ -1,0 +1,8 @@
+= LeveledCompactionStrategy (LCS)
+
+This compaction strategy creates SSTables of a fixed, relatively small size that are grouped into levels.
+Within each level, SSTables are guaranteed to be non-overlapping.
+Each level (L0, L1, L2, and so on) is ten times as large as the previous level.
+Disk I/O is more uniform and predictable on higher levels than on lower levels as SSTables are continuously being compacted into progressively larger levels.
+At each level, row keys are merged into non-overlapping SSTables in the next level.
+This process improves performance for reads because the database can determine which SSTables in each level to check for the existence of row key data.
