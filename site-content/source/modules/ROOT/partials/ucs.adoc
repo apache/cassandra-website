@@ -1,0 +1,11 @@
+= UnifiedCompactionStrategy (UCS)
+
+This compaction strategy compacts SSTables based on a series of time windows.
+During the current time window, the SSTables are compacted into one or more SSTables.
+At the end of the current time window, all SSTables are compacted into a single larger SSTable.
+The compaction process repeats at the start of the next time window.
+Each TWCS time window contains data within a specified range and contains varying amounts of data.
+
+Covers the applications of levelled, tiered and time-windowed compaction strategies, including combinations of levelled and tiered in different levels of the compaction hierarchy.
+This compaction can work in modes similar to <<STCS>> (with w = T4 matching STCS's default threshold of 4), LCS (with w = L10 to match LCS's default fan factor of 10), and can also work well enough for time-series workloads when used with a large tiered fan factor (e.g. w = T20). 
+Read-heavy workloads, especially ones that cannot benefit from bloom filters or time order (i.e. wide partition non-time-series) are best served by levelled configurations. Write-heavy, time series or key-value workloads are best served by tiered ones.

@@ -1,0 +1,11 @@
+= zombie
+
+A row or cell that reappears in a database table after deletion.
+This can happen if a node goes down for a long period of time and is then restored without being repaired.
+
+Deleted data is not erased from database tables; it is marked with <<tombstone,tombstones>> until compaction.
+The tombstones created on one node must be propagated to the nodes containing the deleted data.
+If one of these nodes goes down before this happens, the node may not receive the most up-to-date tombstones.
+If the node is not repaired before it comes back online, the database finds the non-tombstoned items and propagates them to other nodes as new data.
+
+To avoid this problem, run nodetool repair on any restored node before rejoining it to its cluster.
