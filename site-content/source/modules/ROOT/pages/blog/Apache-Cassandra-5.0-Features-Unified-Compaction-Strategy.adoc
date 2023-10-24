@@ -1,0 +1,111 @@
+= Apache Cassandra 5.0 Features: Unified Compaction Strategy
+:page-layout: single-post
+:page-role: blog-post
+:page-post-date: October 24, 2023
+:page-post-author: Lorina Poland
+:description: 
+:keywords: 
+
+__Apache Cassandra 5.0 is the project’s major release for 2023, and it promises some of the biggest changes for Cassandra to-date. After more than a decade of engineering work dedicated to stabilizing and building Cassandra as a distributed database, we now look forward to introducing a host of exciting features and enhancements that empower users to take their data-driven applications to the next level - including machine learning and artificial intelligence.__
+
+__This blog series aims to give a deeper dive into some of the key features of Cassandra 5.0.__
+
+== Introduction
+
+Compaction is an essential process in Apache Cassandra® that merges and optimizes data on disk to improve read performance and free disk space. Until now, users had to choose between different compaction strategies upfront, each with its own advantages and drawbacks. Switching later is very difficult. To address these challenges, the Unified Compaction Strategy (UCS) has been introduced as a powerful and adaptive compaction solution.
+
+In this blog post, we will dive into the details of the UCS, demonstrate its usage, and compare it to existing compaction strategies in Cassandra.
+
+== The Unified Compaction Strategy
+
+Unified Compaction Strategy (UCS), is a cutting-edge compaction strategy that harmoniously blends the benefits of tiered and leveled compaction strategies while adding sharding capabilities. UCS enables seamless reconfiguration at any time and serves as the foundation for future compaction improvements, including automatic adaptation to various workloads. By leveraging the similarities between tiered and leveled compactions and utilizing the concept of "density" instead of "size", UCS creates a more versatile and efficient approach to managing SSTables in Cassandra.
+
+UCS offers users the flexibility to choose between leveled and/or tiered strategies based on their unique requirements by adjusting the fanout factor and minimum SSTable size parameters. This tuning capability allows optimal trade-offs between read amplification (RA) and write amplification (WA) to be made, catering to different workloads and performance demands. Moreover, UCS supports the customization of fanout factors for each level, empowering users to define mixed strategies that adapt to their specific use cases. The innovative sharding mechanism utilized by UCS ensures efficient, concurrent compactions while maintaining non-overlap between SSTables, ultimately leading to improved performance and streamlined management of your Apache Cassandra deployment.
+
+== Using the Unified Compaction Strategy
+
+To use UCS even in a currently running cluster, you can update your table's compaction configuration as follows:
+
+`ALTER TABLE your_table WITH compaction = { 'class': 'UnifiedCompactionStrategy', 'scaling_parameters': 'T8, T4, N, L4' };`
+
+In this example, the scaling_parameters option specifies the fan factor and compaction method for each level of the hierarchy. You can customize these parameters to suit your specific workload requirements. If the list is shorter than the number of levels, the last value is repeated for all higher levels.
+
+Remember that higher values of the scaling parameter improve write amplification (WA) at the expense of read amplification (RA), while lower values improve RA at the expense of WA. You can tailor the scaling parameters to your specific workload requirements to optimize the performance of your Apache Cassandra deployment.
+
+The full list of new parameters are listed here: 
+
+:===
+Parameter:Explanation
+
+scaling_parameters
+Specifies per-level scaling parameters, used to define the behavior for all levels of the hierarchy. Determines whether leveled, tiered, or mixed compaction is used. Default value is T4.
+
+target_sstable_size
+Target size for SSTables. Balances streaming and repair efficiency with memory pressure. Default value is 1 GiB.
+
+base_shard_count
+Minimum number of shards for levels with the smallest density. Affects L0 SSTables and write throughput. Default value is 4 (1 for system tables, or when multiple data locations are defined).
+
+expired_sstable_check_frequency_seconds
+Frequency of checking for expired SSTables. Default value is 10 minutes.
+:===
+
+=== Comparing Compaction Strategies
+
+To better understand the benefits of UCS, let's compare it to existing compaction strategies in Apache Cassandra.
+
+:===
+Compaction Strategy:Best Suited For:Read Amplification:Write Amplification:Space Overhead:Complexity:Concurrency
+
+STCS
+Write-heavy, non-time series workloads
+High
+Low
+High
+Moderate
+Moderate
+
+LCS
+Read-heavy workloads, wide partition non-TS
+Low
+Moderate
+Moderate
+High
+Low
+
+TWCS
+Time series workloads
+Moderate
+Moderate
+Moderate
+Moderate
+Moderate
+
+UCS
+Wide range of workloads (adapts based on config)
+Adaptive
+Adaptive
+Adaptive
+Low
+High
+:===
+
+As this table shows, UCS adapts to different workloads, offering better read/write amplification tradeoffs and concurrency while maintaining a lower complexity level.
+Conclusion
+The Unified Compaction Strategy in Apache Cassandra provides an adaptive and flexible solution to the existing challenges of compaction. It simplifies the decision-making process for users while offering better performance and resource utilization. With UCS, users no longer have to worry about suboptimal compaction choices and can instead focus on their application's core functionality.
+
+As the development of UCS continues, the roadmap aims to make the strategy even more adaptive, relieving the user of  the hard task of choosing suitable compaction choices, and making Apache Cassandra an even more powerful solution for database development.
+
+
+== Learn More About Apache Cassandra
+
+As we get closer to the General Availability of Cassandra 5.0, there are a host of ways to get more involved in the community and follow project developments: 
+
+https://events.linuxfoundation.org/cassandra-summit/[Cassandra Summit + Code AI^] is taking place Dec. 12-13 in San Jose, CA. Cassandra Summit is THE gathering place for Apache Cassandra data practitioners, developers, engineers and enthusiasts, and it’s where we’ll be diving deeper into Cassandra 5.0 features. https://events.linuxfoundation.org/cassandra-summit/program/cfp/#overview[Submit a talk^] for the NEW AI Track at Cassandra Summit; CFP closes Monday, October 26 at 9:00 AM PDT (UTC-7). 
+
+For more information about Apache Cassandra or to join the community discussion, you can join us on these channels:
+
+* https://cassandra.apache.org/_/index.html[Apache Cassandra Website]
+* https://the-asf.slack.com/ssb/redirect[ASF Slack^]
+* https://www.youtube.com/@PlanetCassandra[Planet Cassandra Youtube^]
+* https://www.meetup.com/cassandra-global/[Planet Cassandra Global Meetup Group^]
