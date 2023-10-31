@@ -9,60 +9,68 @@ As Cassandra is an Apache product, all included libraries must follow
 Apache's https://www.apache.org/legal/resolved.html[software license
 requirements].
 
-=== Dependency management in Cassandra 4.2 and onwards
+Cassandra uses the Ant build system and Maven POMs for dependency specification.
+In Cassandra 4.2 the format of POMs was moved from within the `build.xml` file to separate POM template files that are processed by Ant.
+In both pre-4.2 and post-4.2 Cassandra, there are several POMs that dependencies can be included in:
 
-In Cassandra 4.2 and onwards, dependencies are managed in Maven POM templates
-in `.build/*-template.xml`. These templates are processed into valid Maven POMs
-with the `ant write-poms` task and copied to `build/*.pom`.
+* *parent-pom*
+    - Contains all dependencies with the respective version. All other poms
+      will refer to the artifacts with specified versions listed here.
+    - Since Cassandra 4.2, the `parent-pom` template is `.build/parent-pom-template.xml`.
+* *build-deps-pom(-sources)* + *coverage-deps-pom*
+    - used by the `ant build` target. Listed dependencies will be resolved and
+      copied to `build/lib/{jar,sources}` by executing the
+      `maven-ant-tasks-retrieve-build` target. This should contain libraries that are
+      required for build tools (grammar, docs, instrumentation), but are not
+      shipped as part of the Cassandra distribution.
+    - Since Cassandra 4.0, `coverage-deps-pom` has been removed and the
+      `build-deps-pom` template is `.build/cassandra-build-deps-template.xml`.
+* *all-pom*
+    - POM for https://mvnrepository.com/artifact/org.apache.cassandra/cassandra-all[cassandra-all.jar]
+      that can be installed or deployed to public maven repos via `ant publish`.
+    - Since Cassandra 4.2, the `all-pom` template is `.build/cassandra-deps-template.xml`.
+* *test-deps-pom*
+    - Referenced by `maven-ant-tasks-retrieve-test` to retrieve and save
+      dependencies to `build/test/lib`. Exclusively used during JUnit test
+      execution.
+    - Since Cassandra 3.0, `test-deps-pom` has been removed.
 
-The following POMs from `build.xml` have been migrated to templates:
-* `parent-pom` is now at `.build/parent-pom-template.xml`
-* `all-pom` is now at `.build/cassandra-deps-template.xml`
-* `build-deps-pom` is now at `.build/cassandra-build-deps-template.xml`
+The `ant write-poms` target produces valid POM files in the `build/` directory.
 
-To add new dependencies in Cassandra 4.2 onwards, add the dependency to
-`parent-pom-template` and `cassandra-deps-template`, and optionally
-`cassandra-build-deps-template` if the dependency is required for build only.
-See
-https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Management[the
-Maven docs] on how to reference dependencies in the parent POM from the child
-POMs.
+=== Dependency management before Cassandra 4.2
+
+To update dependencies, update the parent and child POM definitions in
+`build.xml`. The parent POM should include the `dependency` tag with `groupId`,
+`artifactId`, `version`, and optional `scope` fields. The child POM(s) should
+include the `dependency` tag with `groupId` and `artifactId`. See the
+https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Management[Maven docs]
+for a complete reference on how to reference dependencies across parent and
+child POMs.
+
+Here is
+https://github.com/apache/cassandra/commit/4b3f07fc74089151efeff7a8fdfa9c414a1f0d6a#diff-766797f233c18114f9499750cf1ffbf3829aeea50283850619c01bd173132021[an example]
+of a commit that changes dependency versions pre-4.2.
+
+=== Dependency management in Cassandra 4.2 and later
+
+In Cassandra 4.2 and later, dependencies are managed in Maven POM templates in
+`.build/\*-template.xml`. These templates are processed into valid Maven POMs
+and copied to `build/\*.pom` the `ant write-poms` task.
+
+For new dependencies, add to `parent-pom-template` and
+`cassandra-deps-template`, and optionally `cassandra-build-deps-template` if
+the dependency is required for build only.  See
+https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Management[the Maven docs]
+on how to reference dependencies in the parent POM from the child POMs.
 
 For dependency versions that need to be available in `build.xml` and
 `parent-pom-template`, specify the version as a property in `build.xml`, add it
 to the `ant write-poms` target, then add the property to `parent-pom-template`
 with the value of the template substitution.
 
-For more information on this change, see
-https://issues.apache.org/jira/browse/CASSANDRA-17750[CASSANDRA-17750].
-
-=== Dependency management before Cassandra 4.2
-
-Before Cassandra 4.2, dependencies were managed in `build.xml` and managed with
-Maven Ant Tasks.
-
-* Update dependencies in `build.xml`
-** Add to `parent-pom` with correct version
-** Add to `all-pom` if simple Cassandra dependency (see below)
-
-=== POM file types
-
-* *parent-pom* - contains all dependencies with the respective version.
-All other poms will refer to the artifacts with specified versions
-listed here.
-* *build-deps-pom(-sources)* + *coverage-deps-pom* - used by `ant build`
-compile target. Listed dependenices will be resolved and copied to
-`build/lib/{jar,sources}` by executing the
-`maven-ant-tasks-retrieve-build` target. This should contain libraries
-that are required for build tools (grammar, docs, instrumentation), but
-are not shipped as part of the Cassandra distribution.
-* *test-deps-pom* - refered by `maven-ant-tasks-retrieve-test` to
-retrieve and save dependencies to `build/test/lib`. Exclusively used
-during JUnit test execution.
-* *all-pom* - pom for
-https://mvnrepository.com/artifact/org.apache.cassandra/cassandra-all[cassandra-all.jar]
-that can be installed or deployed to public maven repos via
-`ant publish`
+Here is
+https://github.com/apache/cassandra/commit/b61bd93e574503aff8c29f0efefbe9879d3b32eb[an example]
+of a commit that changes dependency versions since 4.2.
 
 === Troubleshooting and conflict resolution
 
@@ -70,7 +78,7 @@ Here are some useful commands that may help you out resolving conflicts.
 
 * `ant realclean` - gets rid of the build directory, including build
 artifacts.
-* `mvn dependency:tree -f build/apache-cassandra-*-SNAPSHOT.pom -Dverbose -Dincludes=org.slf4j`
+* `mvn dependency:tree -f build/apache-cassandra-\*-SNAPSHOT.pom -Dverbose -Dincludes=org.slf4j`
 - shows transitive dependency tree for artifacts, e.g. org.slf4j. In
 case the command above fails due to a missing parent pom file, try
 running `ant mvn-install`.
