@@ -5,18 +5,19 @@
 New dependencies should not be included without community consensus first being
 obtained via a `[DISCUSS]` thread on the dev@cassandra.apache.org mailing list.
 
-As Cassandra is an ASF project, all included libraries must follow
-Apache's https://www.apache.org/legal/resolved.html[software license
-requirements].
+As Cassandra is an ASF project, all included libraries must follow Apache's
+https://www.apache.org/legal/resolved.html[software license requirements].
 
-Cassandra uses the Ant build system and Maven POMs for dependency specification.
-In Cassandra 4.2 the format of POMs was moved from within the `build.xml` file to separate POM template files that are processed by Ant.
-In both pre-4.2 and post-4.2 Cassandra, there are several POMs that dependencies can be included in:
+Cassandra uses the Ant build system and Maven POMs for dependency
+specification.  In Cassandra 5.0 the format of POMs was moved from within the
+`build.xml` file to separate POM template files that are processed by Ant.  In
+both pre-5.0 and post-5.0 Cassandra, there are several POMs that dependencies
+can be included in:
 
 * *parent-pom*
     - Contains all dependencies with the respective version. All other poms
       will refer to the artifacts with specified versions listed here.
-    - Since Cassandra 4.2, the `parent-pom` template is `.build/parent-pom-template.xml`.
+    - Since Cassandra 5.0, the `parent-pom` template is `.build/parent-pom-template.xml`.
 * *build-deps-pom(-sources)* + *coverage-deps-pom*
     - used by the `ant build` target. Listed dependencies will be resolved and
       copied to `build/lib/{jar,sources}` by executing the
@@ -28,7 +29,7 @@ In both pre-4.2 and post-4.2 Cassandra, there are several POMs that dependencies
 * *all-pom*
     - POM for https://mvnrepository.com/artifact/org.apache.cassandra/cassandra-all[cassandra-all.jar]
       that can be installed or deployed to public maven repos via `ant publish`.
-    - Since Cassandra 4.2, the `all-pom` template is `.build/cassandra-deps-template.xml`.
+    - Since Cassandra 5.0, the `all-pom` template is `.build/cassandra-deps-template.xml`.
 * *test-deps-pom*
     - Referenced by `maven-ant-tasks-retrieve-test` to retrieve and save
       dependencies to `build/test/lib`. Exclusively used during JUnit test
@@ -37,7 +38,7 @@ In both pre-4.2 and post-4.2 Cassandra, there are several POMs that dependencies
 
 The `ant write-poms` target produces valid POM files in the `build/` directory.
 
-=== Dependency management before Cassandra 4.2
+=== Dependency management before Cassandra 5.0
 
 To update dependencies, update the parent and child POM definitions in
 `build.xml`. The parent POM should include the `dependency` tag with `groupId`,
@@ -49,11 +50,11 @@ child POMs.
 
 Here is
 https://github.com/apache/cassandra/commit/4b3f07fc74089151efeff7a8fdfa9c414a1f0d6a#diff-766797f233c18114f9499750cf1ffbf3829aeea50283850619c01bd173132021[an example]
-of a commit that changes dependency versions pre-4.2.
+of a commit that changes dependency versions pre-5.0.
 
-=== Dependency management in Cassandra 4.2 and later
+=== Dependency management in Cassandra 5.0 and later
 
-In Cassandra 4.2 and later, dependencies are managed in Maven POM templates in
+In Cassandra 5.0 and later, dependencies are managed in Maven POM templates in
 `.build/\*-template.xml`. These templates are processed into valid Maven POMs
 and copied to `build/\*.pom` by the `ant write-poms` task.
 
@@ -70,7 +71,7 @@ with the value of the template substitution.
 
 Here is
 https://github.com/apache/cassandra/commit/b61bd93e574503aff8c29f0efefbe9879d3b32eb[an example]
-of a commit that changes dependency versions since 4.2.
+of a commit that changes dependency versions since 5.0.
 
 === Troubleshooting and conflict resolution
 
