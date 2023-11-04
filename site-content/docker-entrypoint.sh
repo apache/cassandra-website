@@ -240,10 +240,10 @@ prepare_site_html_for_publication() {
   then
     log_message "INFO" "Moving versioned documentation HTML to content/doc"
     # FIXME – we can't generate tags yet as in-tree doc/antora.yml doesn't specify specifc tag versions, so just copy them for now (see same fixme in Dockerfile)
-    move_intree_document_directories "3.11" "3.11.11" "3.11.12" "3.11.13" "3.11.14" "3.11.15"
+    move_intree_document_directories "3.11" "3.11.11" "3.11.12" "3.11.13" "3.11.14" "3.11.15" "3.11.16"
     move_intree_document_directories "4.0" "4.0.0" "4.0.1" "4.0.2" "4.0.3" "4.0.4" "4.0.5" "4.0.6" "4.0.7" "4.0.8" "4.0.9" "4.0.10" "4.0.11" 
-    move_intree_document_directories "4.1" "4.1.0" "4.1.1" "4.1.2" "4.1.3" "stable" "latest"
-    move_intree_document_directories "5.0" "5.0"
+    move_intree_document_directories "4.1" "4.1.0" "4.1.1" "4.1.2" "4.1.3" "stable"
+    move_intree_document_directories "5.0" "5.0" "latest"
     move_intree_document_directories "trunk" "5.1"
   fi
 
