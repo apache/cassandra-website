@@ -18,6 +18,12 @@ RewriteRule ^/?Cassandra/(.*)$ /doc/$1 [R=301,L]
 RewriteCond %{REQUEST_URI} ^/doc/latest/development/(.+).html [NC]
 RewriteRule ^/?doc/latest/development/(.+).html$ /_/development/$1.html [R=301,L]
 
+# if versioned docs are not found in latest, try stable
+RewriteCond %{REQUEST_URI} ^/doc/latest/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^/?doc/latest/(.*) /doc/stable/$1 [R=301,L,QSA]
+
 # redirects to new antora in-tree docs
 RewriteCond %{REQUEST_URI} !^/doc/latest/index.html [NC]
 RewriteCond %{REQUEST_URI} !^/doc/latest/cassandra [NC]
