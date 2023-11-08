@@ -1,0 +1,73 @@
+= Apache Cassandra 5.0 Features: Trie Memtables and Trie-Indexed SSTables
+:page-layout: single-post
+:page-role: blog-post
+:page-post-date: November 9, 2023
+:page-post-author: Andrés de la Peña
+:description: New Memtable and SSTable Index implementations coming in Apache Cassandra 5.0
+:keywords: 
+
+__Apache Cassandra 5.0 is the project’s major release for 2023, and it promises some of the biggest changes for Cassandra to-date. After more than a decade of world class engineering building Cassandra as the safest most stable distributed database, we are witness now to a new chapter of innovation introducing a host of exciting features and enhancements that empower users to take their data-driven applications to the next level - including machine learning and artificial intelligence.__
+
+__This blog series aims to give a deeper dive into some of the key features of Cassandra 5.0.__
+
+Apache Cassandra is a widely used open-source NoSQL database known for its ability to handle large volumes of data across distributed clusters. But while it has gained popularity for its robust distributed architecture, one of its lesser-known features is the Trie Memtables and Trie-Indexed SSTables storage format. These features play a crucial role in optimizing data retrieval and storage efficiency.
+
+Cassandra 5.0 introduces new Memtable and SSTable Index implementations for Apache Cassandra which is based on tries (also called prefix trees) and byte-comparable representations of database keys. These features improve upon Cassandra’s performance of modification operations and performance of data lookup (reads) as well as the size of the structure for a given amount of data. Cassandra’s new Trie Memtables and Trie-Indexed SSTables also help reduce garbage collection and general memory management overhead, which is a critical function for large enterprises managing data at scale. 
+
+=== Understanding Apache Cassandra's Data Model
+
+Before diving into https://cwiki.apache.org/confluence/x/kYuqCw[Trie Memtables^] and https://cwiki.apache.org/confluence/x/1Y0ODg[Trie-Indexed SSTables^], it's essential to understand Cassandra's data model. Cassandra is designed to store data in a distributed, fault-tolerant manner. Data is partitioned into clusters and replicated across nodes to ensure high availability and reliability. It's particularly suited for write-intensive workloads and offers tunable consistency levels.
+
+=== The Need for Efficient Data Storage and Retrieval
+
+Efficient data storage and retrieval are essential for any database system, and Apache Cassandra is no exception. To improve read performance, Cassandra uses various techniques, one of which is the Trie Memtables and Trie-Indexed SSTables storage format. These structures optimize data access and improve read and write performance.
+
+=== Trie Memtables 
+
+* **In-Memory Data Structures**: Memtables are a type of in-memory data structure that serves as a staging area for recently updated data. When data is written to Cassandra, it is first stored in Memtables before being flushed to on-disk storage.
+* **Trie-organized**: Trie Memtables use a data structure called a trie to organize data. This makes them very efficient at modifying and querying data, as well as more compact in memory. This results in higher write throughput, lower latency for accessing recently-written data, while fitting more of it.
+* **Garbage-collection-friendly**: Trie Memtables have internal memory management mechanisms, which drastically reduce the amount of work needed for garbage collection, reducing GC-inflicted pauses and higher-percentile latencies.
+* **Reduces Write Amplification**: Memtables reduce write amplification, a common problem in database systems, by buffering and organizing writes until they fill up their allocated memory. By accepting up to 30% more data for the same memory allocation, Trie Memtables reduce write amplification further.
+
+=== Trie-Indexed SSTables
+
+* **Persistent Data Structure**: SSTables, or Sorted String Tables, are used for on-disk storage in Apache Cassandra. They provide a compact and efficient way to store immutable sets of data.
+* **Log-Structured Storage**: SSTables are the building blocks of Cassandra’s log-structured storage, which means that data is only appended to files, not updated or overwritten. When data changes, a new SSTable is created, and old data remains intact. This benefits from the advantages of sequential disk access and makes it possible to use efficient immutable data structures.  
+* **Trie-organized**: Trie-Indexed SSTables employ a trie-based primary index, which is extremely efficient (typically around to 2x better than the previous solution) at locating data and does not require an in-memory key cache or index summary.
+* **Efficient row index**: Trie-Indexed SSTables implement an efficient row index that can properly handle very large numbers of rows per partition.
+* **Disk Friendly Layout**: Trie-Indexed SSTables organize their indexing structure in disk pages, taking advantage of the typical granularity of disk accesses and caching to achieve significantly better access performance. They are built with modern solid-state storage in mind, and are fast enough to take full advantage of the fastest available types of storage.
+
+=== Benefits of Trie Memtables and Trie-Indexed SSTables
+
+* **Improved Write and Read Performance**: Trie Memtables and Trie-indexed SSTables work in tandem to reduce write amplification, enhance read performance and reduce garbage collection overheads. This results in lower latencies for both write and read operations.
+* **Reduced Storage Overhead**: The compact storage format of Trie-Indexed SSTables reduces storage overhead, which is crucial when dealing with large datasets.
+* **Scalability**: Cassandra's architecture allows for easy horizontal scalability, and the efficiency of Trie Memtables and SSTables further supports this scalability by reducing the performance bottlenecks.
+
+=== Giving it a try
+
+If you want to use this in your environment, in addition to using 5.0 there you will have to enable the feature explicitly. This is accomplished in both a `cassandra.yaml` configuration and specified per-table as a parameter. You can get all the details and options https://github.com/apache/cassandra/blob/cassandra-5.0/src/java/org/apache/cassandra/db/memtable/Memtable_API.md[here^] and https://github.com/apache/cassandra/blob/cassandra-5.0/src/java/org/apache/cassandra/io/sstable/SSTable_API.md[here^].  
+
+Apache Cassandra's Trie Memtables and Trie-Indexed SSTables are powerful tools that contribute to its efficient and high-performance data storage and retrieval capabilities. And by working with Cassandra features like SSTables, it provides enhanced data integrity, reducing the risk of data corruption. By reducing write amplification, simplifying compaction, and optimizing read operations, these features play a vital role in making Cassandra a go-to choice for organizations dealing with large-scale distributed data. 
+
+== Additional Resources about Apache Cassandra Trie Memtables and Trie SStables:
+
+* Whitepaper: https://www.vldb.org/pvldb/vol15/p3359-lambov.pdf[Trie Memtables in Cassandra^], by Branimir Lambov, Datastax 
+* Technical documentation: 
+** https://github.com/blambov/cassandra/blob/trunk/src/java/org/apache/cassandra/utils/bytecomparable/ByteComparable.md[byte-comparable translations^];
+** https://github.com/blambov/cassandra/blob/trunk/src/java/org/apache/cassandra/io/sstable/format/bti/BtiFormat.md[BTI format^]; 
+** https://github.com/blambov/cassandra/blob/trunk/src/java/org/apache/cassandra/db/tries/InMemoryTrie.md[in-memory memtable tries^] as well as their https://github.com/blambov/cassandra/blob/trunk/src/java/org/apache/cassandra/db/tries/Trie.md[cursor interface^]. 
+* Presentation: https://docs.google.com/presentation/d/1d9ZslMIA2JM9WWA4F0drvXIezrzplAYs8jhMS3wgGkg/edit#slide=id.p[Improving Cassandra’s performance with byte order and tries^] 		
+* Video: https://www.youtube.com/watch?v=eKxj6s4vzmI[Trie Memtable Implementation (CEP-19) | Apache Cassandra Contributor Meeting^]
+
+== Learn More About Apache Cassandra
+
+As we get closer to the General Availability of Cassandra 5.0, there are a host of ways to get more involved in the community and follow project developments: 
+
+https://events.linuxfoundation.org/cassandra-summit/[Cassandra Summit + Code AI^] is taking place Dec. 12-13 in San Jose, CA. Cassandra Summit is THE gathering place for Apache Cassandra data practitioners, developers, engineers and enthusiasts, and it’s where we’ll be diving deeper into Cassandra 5.0 features.
+
+For more information about Apache Cassandra or to join the community discussion, you can join us on these channels:
+
+* https://cassandra.apache.org/_/index.html[Apache Cassandra Website]
+* https://the-asf.slack.com/ssb/redirect[ASF Slack^]
+* https://www.youtube.com/@PlanetCassandra[Planet Cassandra Youtube^]
+* https://www.meetup.com/cassandra-global/[Planet Cassandra Global Meetup Group^]
