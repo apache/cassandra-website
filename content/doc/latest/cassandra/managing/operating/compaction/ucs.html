@@ -1,0 +1,2047 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Unified Compaction Strategy (UCS) | Apache Cassandra Documentation</title>
+            <link rel="stylesheet" href="../../../../../../assets/css/site.css">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="Cassandra">
+    <meta name="dcterms.identifier" content="5.0">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../../../../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "https://plausible.cassandra.apache.org/js/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>    </head>
+    <body class="docs-wrapper article">
+        <div class="container mx-auto relative">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta property="og:type" content="website" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+         <div class="header-social-icons text-right">
+            <a href="https://twitter.com/cassandra?lang=en" target="_blank" styles="margin-left: 20px;"><img src="../../../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../../../../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+            <div class="hero hero--home grad">
+                <div class="eye"></div>
+                <div id="docs-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                    <h2>Cassandra Documentation</h2>
+                </div>
+            </div>
+            <div class="body px-medium py-medium container">
+    <div class="docs-nav-bar flex flex-space-between mb-medium">
+      <div id="mobile-docs-nav-burger" class="hidden">
+        <svg viewBox="0 0 24 24" width="36" height="36" stroke="#1c81a0" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </div>
+        <div class="docs-nav-item relative">
+          <input id="search-input" type="text" placeholder="Search docs">
+        </div>
+      <div class="versions-wrapper">
+  <h4>Version:</h4>
+  <div class="nav-panel-explore" data-panel="explore">
+
+    <div id="version-toggle" class="context">
+      <span class="version">5.0</span>
+    </div>
+    <ul id="versions-list" class="components">
+      <li class="component">
+        <ul class="versions">
+          <li class="version is-latest">
+            <a href="../../../../../../_/index.html">master</a>
+          </li>
+        </ul>
+      </li>
+      <li class="component is-current">
+        <ul class="versions">
+          <li class="version">
+            <a href="../../../../../trunk/index.html">trunk</a>
+          </li>
+          <li class="version is-current">
+            <a href="../../../../index.html">5.0</a>
+          </li>
+          <li class="version is-latest">
+            <a href="../../../../../4.1/index.html">4.1</a>
+          </li>
+          <li class="version">
+            <a href="../../../../../4.0/index.html">4.0</a>
+          </li>
+          <li class="version">
+            <a href="../../../../../3.11/index.html">3.11</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>    </div>
+    <div class="cf relative">
+        <nav class="nav docs-nav full-800">
+<div class="nav-menu">
+<ul class="nav-list">
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../index.html">Main</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/glossary.html">Glossary</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/bugs.html">How to report bugs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/contactus.html">Contact us</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../../_/development/index.html">Development</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/gettingstarted.html">Getting started</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/ide.html">Building and IDE integration</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/testing.html">Testing</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/patches.html">Contributing code changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/code_style.html">Code style</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/how_to_review.html">Review checklist</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/how_to_commit.html">How to commit</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/documentation.html">Working on documentation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/ci.html">Jenkins CI environment</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/dependencies.html">Dependency management</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/release_process.html">Release process</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <span class="nav-text">Cassandra</span>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../overview/faq/index.html">FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../getting-started/index.html">Getting Started</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../getting-started/cassandra-quickstart.html">Cassandra Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../installing/installing.html">Installing Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../getting-started/configuring.html">Configuring Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../getting-started/querying.html">Inserting and querying</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../getting-started/drivers.html">Client drivers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../getting-started/production.html">Production recommendations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../new/index.html">What&#8217;s new</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../reference/java17.html">Support for Java</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../architecture/index.html">Architecture</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../architecture/overview.html">Overview</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../architecture/dynamo.html">Dynamo</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../architecture/storage-engine.html">Storage Engine</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../architecture/guarantees.html">Guarantees</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../architecture/messaging.html">Improved Internode Messaging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../architecture/streaming.html">Improved Streaming</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../developing/data-modeling/index.html">Data Modeling</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/data-modeling/intro.html">Introduction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/data-modeling/data-modeling_conceptual.html">Conceptual data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/data-modeling/data-modeling_rdbms.html">RDBMS design</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/data-modeling/data-modeling_queries.html">Defining application queries</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/data-modeling/data-modeling_logical.html">Logical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/data-modeling/data-modeling_physical.html">Physical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/data-modeling/data-modeling_refining.html">Evaluating and refining data models</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/data-modeling/data-modeling_schema.html">Defining database schema</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/data-modeling/data-modeling_tools.html">Cassandra data modeling tools</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../developing/cql/index.html">Cassandra Query Language (CQL)</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/definitions.html">Definitions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/types.html">Data types</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/ddl.html">Data definition (DDL)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/dml.html">Data manipulation (DML)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/dynamic-data-masking.html">Dynamic Data Masking (DDM)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/operators.html">Operators</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../developing/cql/indexing/indexing-concepts.html">Indexing concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../developing/cql/indexing/sai/sai-overview.html">SAI Overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/indexing/sai/sai-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/indexing/sai/sai-faq.html">SAI FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/indexing/sai/sai-working-with.html">Working with SAI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/indexing/sai/operations/sai-operations.html">SAI operations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../developing/cql/indexing/2i/2i-overview.html">Secondary indexes (2i) overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/indexing/2i/2i-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/indexing/2i/2i-working-with.html">Working with 2i</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/indexing/2i/operations/2i-build.html">Rebuild 2i</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/mvs.html">Materialized views</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/functions.html">Functions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/json.html">JSON</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/triggers.html">Triggers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/appendices.html">Appendices</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/changes.html">Changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/SASI.html">SASI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/cql_singlefile.html">Single file of CQL information</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../vector-search/overview.html">Vector Search overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../vector-search/concepts.html">Concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../vector-search/data-modeling.html">Data Modeling</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../vector-search/vector-search-working-with.html">Working with Vector Search</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../index.html">Managing</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../configuration/index.html">Configuring</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../configuration/cass_yaml_file.html">cassandra.yaml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../configuration/cass_rackdc_file.html">cassandra-rackdc.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../configuration/cass_env_sh_file.html">cassandra-env.sh</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../configuration/cass_topo_file.html">cassandra-topologies.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../configuration/cass_cl_archive_file.html">commitlog-archiving.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../configuration/cass_logback_xml_file.html">logback.xml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../configuration/cass_jvm_options_file.html">jvm-* files</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../configuration/configuration.html">Liberating cassandra.yaml Parameters' Names from Their Units</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../index.html">Operating</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../backups.html">Backups</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../bloom_filters.html">Bloom filters</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../bulk_loading.html">Bulk loading</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../cdc.html">Change Data Capture (CDC)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="index.html">Compaction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../compression.html">Compression</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../hardware.html">Hardware</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../hints.html">Hints</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../logging.html">Logging</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../auditlogging.html">Audit logging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../audit_logging.html">Audit logging 2</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../fqllogging.html">Full query logging</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../metrics.html">Monitoring metrics</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../repair.html">Repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../read_repair.html">Read repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../snitch.html">Snitches</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../topo_changes.html">Topology changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../transientreplication.html">Transient replication</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../virtualtables.html">Virtual tables</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../tools/index.html">Tools</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../tools/cqlsh.html">cqlsh: the CQL shell</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../tools/nodetool/nodetool.html">nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../tools/sstable/index.html">SSTable tools</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="#cassandra:managing/tools/cassandra_stress.adoc">cassandra-stress</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../troubleshooting/index.html">Troubleshooting</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../troubleshooting/finding_nodes.html">Finding misbehaving nodes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../troubleshooting/reading_logs.html">Reading Cassandra logs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../troubleshooting/use_nodetool.html">Using nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../troubleshooting/use_tools.html">Using external tools to deep-dive</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../reference/index.html">Reference</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../reference/cql-commands/alter-table.html">ALTER TABLE</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../reference/cql-commands/create-index.html">CREATE INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../reference/cql-commands/create-custom-index.html">CREATE CUSTOM INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../reference/cql-commands/create-table.html">CREATE TABLE</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../reference/cql-commands/drop-index.html">DROP INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../reference/cql-commands/drop-table.html">DROP TABLE</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../integrating/plugins/index.html">Plug-ins</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+</div>
+</nav>
+        <aside class="toc sidebar">
+  <div class="toc-menu"></div>
+</aside>
+        <main class="article default-main full-800" data-ceiling="topbar">
+  <div class="article-banner">
+    <p>You are viewing the documentation for a prerelease version.</p>
+  </div>
+    <div class="article-header">
+<nav class="crumbs" aria-label="breadcrumbs">
+  <ul>
+    <li class="crumb"><a href="../../../../index.html">Cassandra</a></li>
+    <li class="crumb"><a href="ucs.html">Unified Compaction Strategy (UCS)</a></li>
+  </ul>
+</nav>
+<div class="tools" role="navigation">
+  <ul>
+    <li class="tool edit"><a href="https://github.com/apache/cassandra/edit/cassandra-5.0/doc/modules/cassandra/pages/managing/operating/compaction/ucs.adoc" title="Edit Page" target="_blank" rel="noopener">Edit</a></li>
+  </ul>
+</div>
+  </div>
+<article class="doc">
+<h1 class="page">Unified Compaction Strategy (UCS)</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div id="ucs" class="paragraph">
+<p>The <code>UnifiedCompactionStrategy (UCS)</code> is recommended for most workloads, whether read-heavy, write-heavy, mixed read-write, or time-series.
+There is no need to use legacy compaction strategies, because UCS can be configured to behave like any of them.</p>
+</div>
+<div class="paragraph">
+<p>UCS is a compaction strategy that combines the best of the other strategies plus new features.
+UCS has been designed to maximize the speed of compactions, which is crucial for high-density nodes, using an unique sharding mechanism that compacts partitioned data in parallel.
+And whereas STCS, LCS, or TWCS will require full compaction of the data if the compaction strategy is changed, UCS can change parameters in flight to switch from one strategy to another.
+In fact, a combination of different compaction strategies can be used at the same time, with different parameters for each level of the hierarchy.
+Finally, UCS is stateless, so it does not rely on any metadata to make compaction decisions.</p>
+</div>
+<div class="paragraph">
+<p>Two key concepts refine the definition of the grouping:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Tiered and levelled compaction can be generalized as equivalent, because both create exponentially-growing levels based on the <strong>size</strong> of SSTables (or non-overlapping SSTable runs).
+Thus, a compaction is triggered when more than a given number of SSTables are present on one level.</p>
+</li>
+<li>
+<p><strong>size</strong> can be replaced by <strong>density</strong>, allowing SSTables to be split at arbitrary points when the output of a compaction is written, while still producing a leveled hierarchy.
+Density is defined as the size of an SSTable divided by the width of the token range it covers.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s look at the first concept in more detail.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="read-and-write-amplification"><a class="anchor" href="#read-and-write-amplification"></a>Read and write amplification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>UCS can adjust the balance between the number of SSTables consulted to serve a read (read amplification,  or RA) versus the number of times a piece of data must be rewritten during its lifetime (write amplification, or WA).
+A single configurable scaling parameter determines how the compaction behaves, from a read-heavy mode to a write-heavy mode.
+The scaling parameter can be changed at any time, and the compaction strategy will adjust accordingly.
+For example, an operator may decide to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>decrease the scaling parameter, lowering the read amplification at the expense of more complex writes when a certain table is read-heavy and could benefit from reduced latencies</p>
+</li>
+<li>
+<p>increase the scaling parameter, reducing the write amplification, when it has been identified that compaction cannot keep up with the number of writes to a table</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Any such change only initiates compactions that are necessary to bring the hierarchy in a state compatible with the new configuration.
+Any additional work already done (for example, when switching from negative parameter to positive), is advantageous and incorporated.</p>
+</div>
+<div class="paragraph">
+<p>In addition, by setting the scaling parameters to simulated a high tiered fanout factor, UCS can accomplish the same compaction as TWCS.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="../../../_images/unified/ucs.png" alt="ucs"></span></p>
+</div>
+<div class="paragraph">
+<p>UCS uses a combination of tiered and leveled compaction, plus sharding, to achieve the desired read and write amplification.
+SSTables are sorted by token range, and then grouped into levels:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="../../../_images/unified/sharding.png" alt="sharding"></span></p>
+</div>
+<div class="paragraph">
+<p>UCS groups SSTables in levels based on the logarithm of the SSTables density, with the fanout factor \(f\) as the base of the logarithm, and with each level triggering a compaction as soon as it has \(t\) overlapping SSTables.</p>
+</div>
+<div class="paragraph">
+<p>The choice of the scaling parameter \(w\), determines the value of the fanout factor \(f\).
+In turn, \(w\) defines the mode as either leveled or tiered, and \(t\) is set as either \(t=2\) for leveled compaction, or \(t=f\) for tiered compaction.
+One last parameter, the minimum SSTable size, is required to determine the complete behaviour of UCS.</p>
+</div>
+<div class="paragraph">
+<p>Three compaction types are possible, based on the value of \(w\), as shown in the diagram of RA and WA above:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Leveled compaction, with high WA, low RA: \(w &lt; 0\), \(f = 2 - w\) and \(t=2\)
+\(L_{f}\) is the shorthand for specifying this range of \(w\) values (e.g., L10 for \(w=-8\)).</p>
+</li>
+<li>
+<p>Tiered compaction, with low WA, high RA: \(w &gt; 0\), \(f = 2 + w\) and \(t=f\).
+\(T_{f}\) is the shorthand (e.g., T4 for \(w = 2\)).</p>
+</li>
+<li>
+<p>Leveled and tiered compaction behave identically in the center: \(w = 0\) and \(f = t = 2\).
+In shorthand, N for \(w = 0\).</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Leveled compaction improves reads at the expense of writes and approaches a sorted array as \(f\) increases, whereas tiered compaction favors writes at the expense of reads and approaches an unsorted log as \(f\) increases.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>UCS permits the value of \(w\) to be defined separately for each level; thus, levels can have different behaviours.
+For example, level zero can use tiered compaction (STCS-like), while higher levels can be leveled (LCS-like), defined with increasing levels of read optimization.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="size-based-leveling"><a class="anchor" href="#size-based-leveling"></a>Size-based leveling</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The strategy splits SSTables at specific shard boundaries whose number grows with the density of an SSTable.
+The non-overlap between SSTables created by the splitting makes concurrent compactions possible.
+However, let&#8217;s ignore density and splitting for a moment and explore how SSTables are grouped into levels if they are never split.</p>
+</div>
+<div class="paragraph">
+<p>Memtables are flushed to level zero (L0), and the memtable flush size \(s_{f}\) is calculated as the average size of all the SSTables
+written when a memtable is flushed.
+This parameter, \(s_{f}\), is intended to form the basis of the hierarchy where all newly-flushed SSTables end up.
+Using a fixed fanout factor \(f\) and \(s_{f}\), the level \(L\) for an SSTable of size \(s\) is calculated as follows:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[L =
+\begin{cases}
+\left \lfloor \log_f {\frac{s}{s_{f}}} \right \rfloor &amp; \text{if } s \ge s_{f} \\
+0 &amp; \text{otherwise}
+\end{cases}\]
+</div>
+</div>
+<div class="paragraph">
+<p>SSTables are assigned to levels based on their size:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Level</th>
+<th class="tableblock halign-left valign-top">Min SSTable size</th>
+<th class="tableblock halign-left valign-top">Max SSTable size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(s_{f} \cdot f\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(s_{f} \cdot f\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(s_{f} \cdot f^2\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(s_{f} \cdot f^2\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(s_{f} \cdot f^3\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(s_{f} \cdot f^3\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(s_{f} \cdot f^4\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">n</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(s_{f} \cdot f^n\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(s_{f} \cdot f^{n+1}\)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Once SSTables start accumulating in levels, compaction is triggered when the number of SSTables in a level exceeds a threshold \(t\) discussed earlier:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>\(t = 2\), leveled compaction:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>An SSTable is promoted to level \(n\) with size \(\ge s_{f} \cdot f^n\).</p>
+</li>
+<li>
+<p>When a second SSTable is promoted to that level (also with size \(\ge s_{f} \cdot f^n\)) they compact and form a new SSTable of size \(\sim 2s_{f} \cdot f^n\) in the same level for \(f &gt; 2\).</p>
+</li>
+<li>
+<p>After this repeats at least \(f-2\) more times (i.e., \(f\) total SSTables enter the level), the compaction result grows to \(\ge  s_{f} \cdot f^{n+1}\) and enters the next level.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>\(t = f\), tiered compaction:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>After \(f\) SSTables enter level \(n\), each of size \(\ge s{f} \cdot f^n\), they are compacted and form a new SSTable of size \(\ge s_{f} \cdot f^{n+1}\) in the next
+level.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Overwrites and deletions are ignored in these schemes, but if an expected proportion of overwrites/deletions are known, the algorithm can be adjusted.
+The current UCS implementation does this adjustment, but doesn&#8217;t expose the adjustment at this time.</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Estimate of RA and WA</div>
+<div class="paragraph">
+<p>The read and write amplification for each compaction strategy are proportional to the number of levels in the hierarchy:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Strategy</th>
+<th class="tableblock halign-left valign-top">Write amplification</th>
+<th class="tableblock halign-left valign-top">Read amplification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Leveled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\varpropto\) \(f-1\) times the number of levels</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\varpropto\) the number of levels</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tiered</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\varpropto\) the number of levels</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\varpropto\) \(f-1\) times the number of levels</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="number-of-levels"><a class="anchor" href="#number-of-levels"></a>Number of levels</h3>
+<div class="paragraph">
+<p>Using the maximal dataset size \(D\), the number of levels can be calculated as follows:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[L =
+\begin{cases}
+\left \lfloor \log_f {\frac {D}{s_{f}}} \right \rfloor &amp; \text{if } D \ge s_{f} \\
+0 &amp; \text{otherwise}
+\end{cases}\]
+</div>
+</div>
+<div class="paragraph">
+<p>This calculation is based on the assumption that the maximal dataset size \(D\) is reached when all levels are full, and the maximal number of levels is inversely proportional to the logarithm of \(f\).</p>
+</div>
+<div class="paragraph">
+<p>Thus, when we try to control the overheads of compaction on the database, we have a space of choices for the strategy that range from:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>leveled compaction ( \(t=2\) ) with high \(f\):</p>
+<div class="ulist">
+<ul>
+<li>
+<p>low number of levels</p>
+</li>
+<li>
+<p>high read efficiency</p>
+</li>
+<li>
+<p>high write cost</p>
+</li>
+<li>
+<p>moving closer to the behaviour of a sorted array as \(f\) increases</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>compaction with \(t = f = 2\) where leveled is the same as tiered and we have a middle ground with logarithmically
+increasing read and write costs;</p>
+</li>
+<li>
+<p>tiered compaction ( \(t=f\) ) with high \(f\):</p>
+<div class="ulist">
+<ul>
+<li>
+<p>very high number of SSTables</p>
+</li>
+<li>
+<p>low read efficiency</p>
+</li>
+<li>
+<p>low write cost</p>
+</li>
+<li>
+<p>moving closer to an unsorted log as \(f\) increases</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This can be easily generalized to varying fan factors, by replacing the exponentiation with the product of the fan
+factors for all lower levels:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Level</th>
+<th class="tableblock halign-left valign-top">Min SSTable size</th>
+<th class="tableblock halign-left valign-top">Max SSTable size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(s_{f} \cdot f_0\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(s_{f} \cdot f_0\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(s_{f} \cdot f_0 \cdot f_1\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(s_{f} \cdot f_0 \cdot f_1\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(s_{f} \cdot f_0 \cdot f_1 \cdot f_2\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">n</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(s_{f} \cdot \prod_{i &lt; n} f_i\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(s_{f} \cdot \prod_{i\le n} f_i\)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="density-based-leveling"><a class="anchor" href="#density-based-leveling"></a>Density-based leveling</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If we replace the size \(s\) in the previous discussion with the density measure</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[d = \frac s v\]
+</div>
+</div>
+<div class="paragraph">
+<p>where \(v\) is the fraction of the token space that the SSTable covers, all formulae and conclusions remain valid.
+However, using density, the output can now be split at arbitrary points.
+If several SSTables are compacted and split, the new resulting SSTables formed will be denser than the original SSTables.
+For example, using a scaling parameter of T4, four input SSTables spanning 1/10 of the token space each, when compacted and split, will form four new SSTables spanning 1/40 of the token space each.</p>
+</div>
+<div class="paragraph">
+<p>These new SSTables will be the same size but denser, and consequently will be moved to the next higher level, due to the higher density value exceeding the maximum density for the original compacted level.
+If we can ensure that the split points are fixed (see below), this process will repeat for each shard (token range), executing independent compactions concurrently.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>It is important to account for locally-owned token share when calculating \(v\).
+Because vnodes mean that the local token ownership of a node is not contiguous, the difference between the first and last token is not sufficient to calculate token share; thus, any non-locally-owned ranges must be excluded.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Using the density measure allows us to control the size of SSTables through sharding, as well as to execute compactions in parallel.
+With size-leveled compaction, we could achieve parallelization by pre-splitting the data in a fixed number of compaction shards, based on the data directories.
+However, that method requires the number of shards to be predetermined and equal for all levels of the hierarchy, and SSTables can become too small or too large.
+Large SSTables complicate streaming and repair and increase the duration of compaction operations, pinning resources to long-running operations and making it more likely that too many SSTables will accumulate on lower levels of the hierarchy.</p>
+</div>
+<div class="paragraph">
+<p>Density-leveled compaction permits a much wider variety of splitting options.
+For instance, the size of SSTables can be kept close to a selected target, allowing UCS to deal with the leveling of both STCS (SSTable size grows with each level) and LCS (token share shrinks with each level).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="sharding"><a class="anchor" href="#sharding"></a>Sharding</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="basic-sharding-scheme"><a class="anchor" href="#basic-sharding-scheme"></a>Basic sharding scheme</h3>
+<div class="paragraph">
+<p>This sharding mechanism is independent of the compaction specification.
+There are a range of choices for splitting SSTables:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Split when a certain output size is reached (like LCS), forming non-overlapping SSTable runs instead of individual SSTables</p>
+</li>
+<li>
+<p>Split the token space into shards at predefined boundary points</p>
+</li>
+<li>
+<p>Split at predefined boundaries, but only if a certain minimum size has been reached</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Splitting only by size results in individual SSTables with start positions that vary.
+To compact SSTables split in this way, you must choose to either compact the entire token range of a level sequentially or compact and copy some of the data more times than necessary, due to overlapping SSTables.
+If predefined boundary points are used, some of the token range can be sparser with fewer inputs and skew the density of the resulting SSTables.
+If that occurs, further splitting may be required.
+In the hybrid option, the density skew can occur less frequently, but can still occur.</p>
+</div>
+<div class="paragraph">
+<p>To avoid these problems and permit concurrent compactions of all levels of the compaction hierarchy, UCS predefines boundary points for every compaction and always splits SSTables at these points.
+The number of boundaries is determined from the density of the input SSTables and the estimated density of the resulting SSTables.
+As the density grows larger, the number of boundaries is increased, keeping the size of individual SSTables close to a predefined target.
+Using power-of-two multiples of a specified base count, i.e., splitting shards in the middle, ensures that any boundary that applies to a given output density also applies to all higher densities.</p>
+</div>
+<div class="paragraph">
+<p>Two sharding parameters can be configured:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>base shard count \(b\)</p>
+</li>
+<li>
+<p>target SSTable size \(s_{t}\)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>At the start of every compaction, recall that the density of the output \(d\) is estimated, based on the input size \(s\) of the SSTables and the token range \(v\):</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[d = \frac s v\]
+</div>
+</div>
+<div class="paragraph">
+<p>where \(v\) is the fraction of the token range covered by the input SSTables, in a value of 0 to 1.
+\(v = 1\) means that the entire token range is covered by the input SSTables, and \(v = 0\) means that the input SSTables cover no token range.</p>
+</div>
+<div class="paragraph">
+<p>When the initial flush of the memtable to L0 occurs, \(v = 1\) since the entire token range is included in the memtable.
+In subsequent compactions, the token range \(v\) is the fraction of the token range covered by the SSTables being compacted.</p>
+</div>
+<div class="paragraph">
+<p>With the calculated density of the output, plus the values of \(b\) and \(s_{t}\), the number of shards \(S\) into which to split the token space can be calculated:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[S =
+\begin{cases}
+b
+  &amp; \text{if } {\frac d s_{t} \cdot \frac 1 b} &lt; 1 \\
+2^{\left\lfloor \log_2 \left( {\frac d s_{t} \cdot \frac 1 b}\right)\right\rceil} \cdot b
+  &amp; \text{if } {\frac d s_{t} \cdot \frac 1 b} \ge 1 \\
+\end{cases}\]
+</div>
+</div>
+<div class="paragraph">
+<p>where \(\lfloor x \rceil\) stands for \(x\) rounded to the nearest integer, i.e. \(\lfloor x + 0.5 \rfloor\).
+Thus, in the second case,the density is divided by the target size and rounded to a power-of-two multiple of \(b\).
+If the result is less than 1, the number of shards will be the base shard count, because the memtable is split into \({2 \cdot b}\), or \(b\) L0 shards.</p>
+</div>
+<div class="paragraph">
+<p>However, the token range is not the only factor that influences if we switch between \(b\) shards or more (where the condition is greater than or equal to 1).
+If the memtable is very large and able to flush several gigabytes at once, \(d\) may be a magnitude larger than \(s_{t}\), and cause SSTables to be split into multiple shards even on L0.
+Conversely, if the memtable is small, \(d\) may still be smaller than \(s_{t}\) on levels above L0, where the condition is less than 1, and thus, there will be stem[b] shards.</p>
+</div>
+<div class="paragraph">
+<p>\(S - 1\) boundaries are generated, splitting the local token space equally into \(S\) shards.
+Splitting the local token space will split the result of the compaction on these boundaries to form a separate SSTable for each shard.
+SSTables produced will have sizes that fall between \(s_{t}/\sqrt 2\) and \(s_{t} \cdot \sqrt 2\).</p>
+</div>
+<div class="paragraph">
+<p>For example, let&#8217;s use a target SSTable size of \(s_{t} = 100MiB\) and \(b = 4\) base shards.
+If a \(s_{f} = 200 MiB\) input memtable is flushed, the condition for calculating the number of shards is:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\frac{200}{100} \cdot \frac{1}{4} = 0.5 &lt; 1\]
+</div>
+</div>
+<div class="paragraph">
+<p>This calculation results in \(0.5 &lt; 1\), because the value of \(v = 1\) on the initial flush.
+Because the result is less than 1, the base shard count is used, and the memtable is split into four L0 shards of approximately 50MiB each.
+Each shard spans 1/4 of the token space.</p>
+</div>
+<div class="paragraph">
+<p>To continue the example, on the next level of compaction, for just one of the four shards, let&#8217;s compact six of these 50 MiB SSTables.
+The estimated density of the output will be:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\left( \frac{6 \cdot 50\, \mathrm{MiB}}{\frac{1}{4}} \right) = 1200 \mathrm{MiB}\]
+</div>
+</div>
+<div class="paragraph">
+<p>using 1/4 as the \(v\) value for the token range covered by the input SSTables.</p>
+</div>
+<div class="paragraph">
+<p>The condition for splitting will be:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[(\frac{1200}{100} \cdot \frac{1}{4}) = 3 &gt; 1\]
+</div>
+</div>
+<div class="paragraph">
+<p>Thus, the number of shards will be calculated as:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[2^{\left\lfloor \log_2 \left( {\frac{1200}{100} \cdot \frac{1}{4}}\right)\right\rceil} \cdot b\]
+</div>
+</div>
+<div class="paragraph">
+<p>or \(2^{\log_2 3}\), rounded to \(2^2 \cdot 4\) shards for the whole local token space, and that compaction covering 1/4 of the token space.
+Assuming no overwrites or deletions, the resulting SSTables will be of size 75 MiB, token share 1/16 and density 1200 MiB.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="full-sharding-scheme"><a class="anchor" href="#full-sharding-scheme"></a>Full sharding scheme</h3>
+<div class="paragraph">
+<p>This sharding scheme can be easily extended.
+There are two extensions currently implemented, SSTable growth and a minimum SSTable size.</p>
+</div>
+<div class="paragraph">
+<p>First, let&#8217;s examine the case when the size of the data set is expected to grow very large.
+To avoid pre-specifying a sufficiently large target size to avoid problems with per-SSTable overhead, an <code>SSTtable growth</code> parameter has been implemented.
+This parameter determines what part of the density growth should be assigned to increased SSTable size, reducing the growth of the number of shards, and hence, non-overlapping SSTables.</p>
+</div>
+<div class="paragraph">
+<p>The second extension is a mode of operation with a fixed number of shards that splits conditionally on reaching a minimum size.
+Defining a <code>minimum SSTable size</code>, the base shard count can be reduced whenever a split would result in SSTables smaller than the provided minimum.</p>
+</div>
+<div class="paragraph">
+<p>There are four user-defined sharding parameters:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>base shard count \(b\)</p>
+</li>
+<li>
+<p>target SSTable size \(s_{t}\)</p>
+</li>
+<li>
+<p>minimum SSTable size \(s_{m}\)</p>
+</li>
+<li>
+<p>SSTable growth component \(\lambda\)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The number of shards \(S\) for a given density \(d\) is then calculated as</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[S =
+\begin{cases}
+1
+    &amp; \text{if } d &lt; s_{m} \\
+\min(2^{\left\lfloor \log_2 \frac {d}{s_{m}}  \right\rfloor}, x)
+    &amp; \text{if } d &lt; s_{m} \cdot b \text{, where } x \text{ is the largest power of 2 divisor of } b \\
+b
+    &amp; \text{if } d &lt; s_{t} \cdot b \\
+2^{\left\lfloor (1-\lambda) \cdot \log_2 \left( {\frac {d}{s_{t}} \cdot \frac 1 b}\right)\right\rceil} \cdot b
+    &amp; \text{otherwise}
+\end{cases}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Some useful combinations of these parameters:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The basic scheme above uses a SSTable growth \(\lambda=0\), and a minimum SSTable size \(s_{m}=0\).
+The graph below illustrates the behaviour for base shard count \(b=4\) and target SSTable size \(s_{t} = 1\, \mathrm{GB}\):</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="../../../_images/unified/shards_graph_lambda_0.svg" alt="Graph with lambda 0"></span></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Using \(\lambda = 0.5\) grows the shard count and SSTable size evenly.
+When the density quadruples, both the shard count and the expected SSTable size for that density band will double.
+The example below uses \(b=8\), \(s_{t} = 1\, \mathrm{GB}\) and also applies a minimal size \(m = 100\, \mathrm{MB}\):</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="../../../_images/unified/shards_graph_lambda_0_5.svg" alt="Graph with lambda 0.5"></span></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Similarly, \(\lambda = 1/3\) makes the the SSTable growth the cubic root of the density growth, i.e. the SSTable size
+grows with the square root of the growth of the shard count.
+The graph below uses \(b=1\) and \(s_{t} = 1\, \mathrm{GB}\) (note: when \(b=1\), the minimal size has no effect):</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="../../../_images/unified/shards_graph_lambda_0_33.svg" alt="Graph with lambda 0.33"></span></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A growth component of 1 constructs a hierarchy with exactly \(b\) shards at every level.
+Combined with a minimum SSTable size, the mode of operation uses a pre-specified number of shards, but splits only after reaching a minimum size.
+Illustrated below for \(b=10\) and \(s_{m} = 100\, \mathrm{MB}\) (note: the target SSTable size is irrelevant when \(\lambda=1\)):</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="../../../_images/unified/shards_graph_lambda_1.svg" alt="Graph with lambda 1"></span></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="choosing-sstables-to-compact"><a class="anchor" href="#choosing-sstables-to-compact"></a>Choosing SSTables to compact</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The density leveling separates SSTables in levels defined by the compaction configuration&#8217;s fan factors.
+However, unlike in size leveling, where SSTables are expected to cover the full token space, the number of SSTables on a level cannot be used as a trigger due to possible non-overlapping SSTables.
+Read queries are less efficient in this situation.
+To deal with this, execute sharding that performs multiple compactions on a level concurrently, and reduces the size of individual compaction operations.
+The non-overlapping section must be separated into different buckets, and the number of overlapping SSTables in a bucket determines what to do.
+A bucket is the selected set of SSTables that will be compacted together.</p>
+</div>
+<div class="paragraph">
+<p>First form a minimal list of overlap sets that satisfy the following requirements:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>two SSTables that do not overlap are never put in the same set</p>
+</li>
+<li>
+<p>if two SSTables overlap, there is a set in the list that contains both</p>
+</li>
+<li>
+<p>SSTables are placed in consecutive positions in the list</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The second condition can also be rephrased to say that for any point in the token range, there is a set in the list that contains all SSTables whose range covers that point.
+In other words, the overlap sets give us the maximum number of SSTables that need to be consulted to read any key, i.e., the read amplification that our trigger \(t\) aims to control.
+We don&#8217;t calculate or store the exact spans the overlapping sets cover, only the participating SSTables.
+The sets can be obtained in \(O(n\log n)\) time.</p>
+</div>
+<div class="paragraph">
+<p>For example, if SSTables A, B, C and D cover, respectively, tokens 0-3, 2-7, 6-9 and 1-8, we compute a list of overlap sets that are ABD and BCD.
+A and C don&#8217;t overlap, so they must be in separate sets.
+A, B and D overlap at token 2 and must thus be present in at least one set, and similarly for B, C and D at 7.
+Only A and D overlap at 1, but the set ABD already includes this combination.</p>
+</div>
+<div class="paragraph">
+<p>These overlap sets are sufficient to decide whether or not a compaction should be carried out, if and only if the number of elements in a set is at least as large as \(s_{t}\).
+However, we may need to include more SSTables in the compaction than this set alone.</p>
+</div>
+<div class="paragraph">
+<p>It is possible for our sharding scheme to end up constructing SSTables spanning differently-sized shards for the same level.
+One clear example is the case of leveled compaction.
+In this case, SSTables enter at some density, and after the first compaction the resulting SSTable is 2x bigger than the initial density, causing the SSTable to split in half at the middle of the token range.
+When another SSTable enters the same level, we will have separate overlap sets between the two older SSTables and the new one.
+For efficiency, the compaction that is triggered next needs to select both of the overlap sets.</p>
+</div>
+<div class="paragraph">
+<p>To deal with cases of partial overlap, the overlap sets will transitively extend with all neighboring ones that share some SSTable.
+Thus, the set of all SSTables that is constructed has some chain of overlapping SSTables that connects it to the initial set.
+This extended set forms the compaction bucket.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>In addition to <code>TRANSITIVE</code>, "overlap inclusion methods" of <code>NONE</code> and <code>SINGLE</code> are also implemented for experimentation, but they are not recommended for the UCS sharding scheme.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In normal operation, we compact all SSTables in the compaction bucket.
+If compaction is very late, we may apply a limit on the number of overlapping sources we compact.
+In that case, we use the collection of oldest SSTables that would select at most limit-many in any included overlap set, making sure that if an SSTable is included in this compaction, all older ones are also included to maintain time order.</p>
+</div>
+<div class="sect2">
+<h3 id="selecting-the-compaction-to-run"><a class="anchor" href="#selecting-the-compaction-to-run"></a>Selecting the compaction to run</h3>
+<div class="paragraph">
+<p>Compaction strategies aim to minimize the read amplification of queries, which is defined by the number of SSTables that overlap on any given key.
+For highest efficiency in situations where compaction is late, a compaction bucket is selected with the highest overlap among the possible choices.
+If there are multiple choices, choose one uniformly and randomly within each level.
+Between the levels, prefer the lowest level, as this is expected to cover a larger fraction of the token space for the same amount of work.</p>
+</div>
+<div class="paragraph">
+<p>Under sustained load, this mechanism prevents the accumulation of SSTables on some level that could sometimes happen with legacy strategies.
+With older strategies, all resources could be consumed by L0 and SSTables accumulating on L1.
+With UCS, a steady state where compactions always use more SSTables than the assigned threshold and fan factor is accomplished, and a tiered hierarchy is maintained based on the lowest overlap they are able to maintain for the load.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="major-compaction"><a class="anchor" href="#major-compaction"></a>Major compaction</h3>
+<div class="paragraph">
+<p>Under the working principles of UCS, a major compaction is an operation which compacts together all SSTables that have (transitive) overlap, and where the output is split on shard boundaries appropriate for the expected resulting density.</p>
+</div>
+<div class="paragraph">
+<p>In other words, a major compaction will result in \(b\) concurrent compactions, each containing all SSTables covered in each of the base shards.
+The result will be split on shard boundaries whose number depends on the total size of data contained in the shard.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="differences-with-stcs-and-lcs"><a class="anchor" href="#differences-with-stcs-and-lcs"></a>Differences with STCS and LCS</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Note that there are some differences between tiered UCS and legacy STCS, and between leveled UCS and legacy LCS.</p>
+</div>
+<div class="sect2">
+<h3 id="tiered-ucs-vs-stcs"><a class="anchor" href="#tiered-ucs-vs-stcs"></a>Tiered UCS vs STCS</h3>
+<div class="paragraph">
+<p>STCS is very similar to UCS.
+However, STCS defines buckets/levels by looking for similarly sized SSTables, rather than using a predefined banding of sizes.
+Thus, STCS can end up with some odd selections of buckets, spanning SSTables of wildly different sizes; UCS&#8217;s selection is more stable and predictable.</p>
+</div>
+<div class="paragraph">
+<p>STCS triggers a compaction when it finds at least <code>min_threshold</code> SSTables on some bucket, and it compacts between <code>min_threshold</code> and <code>max_threshold</code> SSTables from that bucket at a time.
+<code>min_threshold</code> is equivalent to UCS&#8217;s \(t = f = w + 2\).
+UCS drops the upper limit because its compaction is still efficient with very large numbers of SSTables.</p>
+</div>
+<div class="paragraph">
+<p>UCS uses a density measure to split results, in order to keep the size of SSTables and the time for compactions low.
+Within a level, UCS will only consider overlapping SSTables when deciding whether the threshold is hit, and will independently compact sets of SSTables that do not overlap.</p>
+</div>
+<div class="paragraph">
+<p>If there are multiple choices to pick SSTables within a bucket, STCS groups them by size, while UCS groups them by timestamp.
+Because of that, STCS easily loses time order which makes whole table expiration less efficient.
+UCS efficiently tracks time order and whole table expiration.
+Because UCS can apply whole-table expiration, this features also proves useful for time-series data with time-to-live constraints.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ucs-leveled-vs-lcs"><a class="anchor" href="#ucs-leveled-vs-lcs"></a>UCS-leveled vs LCS</h3>
+<div class="paragraph">
+<p>LCS seems very different in behaviour compared to UCS.
+However, the two strategies are, in fact, very similar.</p>
+</div>
+<div class="paragraph">
+<p>LCS uses multiple SSTables per level to form a sorted run of non-overlapping SSTables of small fixed size.
+So physical SSTables on increasing levels increase in number (by a factor of <code>fanout_size</code>) instead of size.
+In this way, LCS reduces space amplification and ensures shorter compaction times.
+When the combined size of a run on a level is higher than expected, it selects some SSTables to compact with overlapping ones from the next level of the hierarchy.
+Eventually, the size of the next level gets pushed over its size limit and triggers higher-level operations.</p>
+</div>
+<div class="paragraph">
+<p>In UCS, SSTables on increasing levels increase in density by a fanout factor \(f\).
+A compaction is triggered when a second overlapping SSTable is located on a sharded level.
+UCS compacts the overlapping bucket on that level, and the result most often ends up on that level, too.
+But eventually, the data reaches sufficient size for the next level.
+Given an even data spread, UCS and LCS behave similarly, with compactions triggered in the same timeframe.</p>
+</div>
+<div class="paragraph">
+<p>The two approaches end up with a very similar effect.
+UCS has the added benefit that compactions cannot affect other levels.
+In LCS, L0-to-L1 compactions can prevent any concurrent L1-to-L2 compactions, an unfortunate situation.
+In UCS, SSTables are structured such that they can be easily switched to tiered UCS or changed with different parameter settings.</p>
+</div>
+<div class="paragraph">
+<p>Because LCS SSTables are based on size only and thus vary on split position,
+when LCS selects SSTables to compact on the next level, some SSTables that only partially overlap are included.
+Consequently, SSTables can be compacted more often than strictly necessary.</p>
+</div>
+<div class="paragraph">
+<p>UCS handles the problem of space amplification by sharding on specific token boundaries.
+LCS splits SSTables based on a fixed size with boundaries usually falling inside SSTables on the next level, kicking off compaction more frequently than necessary. Therefore UCS aids with tight write amplification control.
+Those boundaries guarantee that we can efficiently select higher-density SSTables that exactly match the span of the lower-density ones.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="ucs_options"><a class="anchor" href="#ucs_options"></a>UCS Options</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Subproperty</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables background compaction.</p>
+<p class="tableblock">Default value: true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">only_purge_repaired_tombstone</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enabling this property prevents data from resurrecting when repair is not run within the <code>gc_grace_seconds</code>.</p>
+<p class="tableblock">Default value: false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">scaling_parameters</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A list of per-level scaling parameters, specified as \(L_{f}\), \(T_{f}\), \(N\), or an integer value specifying \(w\) directly.
+If more levels are present than the length of this list, the last value is used for all higher levels.
+Often this will be a single parameter, specifying the behaviour for all levels of the hierarchy.</p>
+<p class="tableblock">Leveled compaction, specified as \(L_{f}\), is preferable for read-heavy workloads, especially if bloom filters are not effective (e.g. with wide partitions); higher levelled fan factors improve read amplification (and hence latency, as well as throughput for read-dominated workloads) at the expense of increased write costs.
+The equivalent of legacy LCS is L10.</p>
+<p class="tableblock">Tiered compaction, specified as \(T_{f}\), is preferable for write-heavy workloads, or ones where bloom filters or time order can be exploited; higher tiered fan factors improve the cost of writes (and hence throughput) at the expense of making reads more difficult.</p>
+<p class="tableblock">\(N\) is the middle ground that has the features of leveled (one SSTable run per level), as well as tiered (one compaction to be promoted to the next level) and a fan factor of 2.
+This value can also be specified as T2 or L2.</p>
+<p class="tableblock">Default value: T4 (STCS with threshold 4)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">target_sstable_size</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The target sstable size \(s_{t}\), specified as a human-friendly size in bytes, such as <a href="https://www.techtarget.com/searchstorage/definition/mebibyte-MiB">MiB</a>.
+The strategy will split data in shards that aim to produce sstables of size between \(s_{t}/\sqrt{2}\) and \(s_{t} \cdot \sqrt{2}\).
+Smaller sstables improve streaming and repair, and make compactions shorter.
+On the other hand, each sstable on disk has a non-trivial in-memory footprint that also affects garbage collection times.
+Increase this if the memory pressure from the number of sstables in the system becomes too high.</p>
+<p class="tableblock">Default: 1 GiB</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">min_sstable_size</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The minimum sstable size, applicable when the base shard count will result is SSTables that are considered too small.
+If set, the strategy will split the space into fewer than the base count shards, to make the estimated SSTables size at least as large as this value.
+A value of 0 disables this feature.</p>
+<p class="tableblock">Default: 100MiB</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">base_shard_count</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The minimum number of shards \(b\), used for levels with the smallest density.
+This gives the minimum compaction concurrency for the lowest levels.
+A low number would result in larger L0 sstables but may limit the overall maximum write throughput (as every piece of data has to go through L0).</p>
+<p class="tableblock">Default: is 4 (1 for system tables, or when multiple data locations are defined)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sstable_growth</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The sstable growth component \(\lambda\), applied as a factor in the shard exponent calculation.
+This is a number between 0 and 1 that controls what part of the density growth should apply to individual sstable size and what part should increase the number of shards.
+Using a value of 1 has the effect of fixing the shard count to the base value.
+Using 0.5 makes the shard count and SSTable size grow with the square root of the density growth.
+This is useful to decrease the sheer number of SSTables created for very large data sets.
+For example, without growth correction, a data set of 10TiB with 1GiB target size would result in over 10K SSTables.
+That many SSTables can result in too much overhead, both for on-heap memory used by per-SSTables structures, as well as lookup-time for intersecting SSTables and tracking overlapping sets during compaction.
+For example, with a base shard count of 4, the growth factor can reduce the potential number of SSTables to ~160 of size ~64GiB, manageable in terms of memory overhead,  individual compaction duration, and space overhead.
+The parameter can be adjusted, increasing the value to get fewer but bigger SSTables on the top level, and decreasing the value to favour a higher count of smaller SSTables.</p>
+<p class="tableblock">Default: 0.333 (SSTable size grows with the square root of the growth of the shard count)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">expired_sstable_check_frequency_seconds</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Determines how often to check for expired SSTables.</p>
+<p class="tableblock">Default: 10 minutes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">max_sstables_to_compact</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum number of sstables to compact in one operation.
+Larger value may reduce write amplification but can cause very long compactions, and thus a very high read amplification overhead while such compactions are processing.
+The default aims to keep the length of operations under control and prevent accumulation of SSTables while compactions are taking place.
+If the fanout factor is larger than the maximum number of SSTables, the strategy will ignore the latter.</p>
+<p class="tableblock">Default: none (although 32 is a good choice)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">overlap_inclusion_method</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies how to extend overlapping sections into buckets.
+TRANSITIVE makes sure that if we choose an SSTable to compact, we also compact the ones that overlap with it.
+SINGLE only does this extension once (i.e. it selects only SSTables that overlap with the original overlapping SSTables section.
+NONE does not add any overlapping sstables.
+NONE is not recommended, SINGLE may offer a little more parallelism at the expense of recompacting some data when upgrading from LCS or during range movements.</p>
+<p class="tableblock">Default: TRANSITIVE</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">unsafe_aggressive_sstable_expiration</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Expired SSTables are dropped without checking if their data is shadowing other SSTables.
+This flag can only be enabled if <code>cassandra.allow_unsafe_aggressive_sstable_expiration</code> is true.
+Turning this flag on can cause correctness issues, such as the reappearance of deleted data.
+See discussions in <a href="https://issues.apache.org/jira/browse/CASSANDRA-13418">CASSANDRA-13418</a> for valid use cases and potential problems.</p>
+<p class="tableblock">Default: false</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>In <code>cassandra.yaml</code>, there is also one parameter that affects compaction:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">concurrent_compactors</dt>
+<dd>
+<p>Number of simultaneous compactions to allow, NOT including validation "compactions" for anti-entropy repair.
+Higher values increase compaction performance but may increase read and write latencies.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</article>
+</main>
+    </div>
+</div>
+            <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../../../../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://twitter.com/cassandra?lang=en" target="_blank"><img src="../../../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../../../../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+    <script src="../../../../../../assets/js/site.js"></script>
+    <script async src="../../../../../../assets/js/vendor/highlight.js"></script>
+    <script src="../../../../../../assets/js/vendor/lunr.js"></script>
+    <script src="../../../../../../assets/js/vendor/search.js" id="search-script" data-base-path="../../../../../.." data-page-path="/Cassandra/5.0/cassandra/managing/operating/compaction/ucs.html"></script>
+    <script async src="../../../../../../assets/../search-index.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]], ignoreClass: "nostem|nolatexmath" },
+  asciimath2jax: { delimiters: [["\\$", "\\$"]], ignoreClass: "nostem|noasciimath" },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+        </div>
+    </body>
+</html>

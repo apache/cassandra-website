@@ -1,0 +1,4121 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>cassandra.yaml file configuration | Apache Cassandra Documentation</title>
+            <link rel="stylesheet" href="../../../../assets/css/site.css">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="Cassandra">
+    <meta name="dcterms.identifier" content="4.0">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "https://plausible.cassandra.apache.org/js/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>    </head>
+    <body class="docs-wrapper article">
+        <div class="container mx-auto relative">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta property="og:type" content="website" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+         <div class="header-social-icons text-right">
+            <a href="https://twitter.com/cassandra?lang=en" target="_blank" styles="margin-left: 20px;"><img src="../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+            <div class="hero hero--home grad">
+                <div class="eye"></div>
+                <div id="docs-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                    <h2>Cassandra Documentation</h2>
+                </div>
+            </div>
+            <div class="body px-medium py-medium container">
+    <div class="docs-nav-bar flex flex-space-between mb-medium">
+      <div id="mobile-docs-nav-burger" class="hidden">
+        <svg viewBox="0 0 24 24" width="36" height="36" stroke="#1c81a0" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </div>
+        <div class="docs-nav-item relative">
+          <input id="search-input" type="text" placeholder="Search docs">
+        </div>
+      <div class="versions-wrapper">
+  <h4>Version:</h4>
+  <div class="nav-panel-explore" data-panel="explore">
+
+    <div id="version-toggle" class="context">
+      <span class="version">4.0</span>
+    </div>
+    <ul id="versions-list" class="components">
+      <li class="component">
+        <ul class="versions">
+          <li class="version is-latest">
+            <a href="../../../../_/index.html">master</a>
+          </li>
+        </ul>
+      </li>
+      <li class="component is-current">
+        <ul class="versions">
+          <li class="version">
+            <a href="../../../trunk/index.html">trunk</a>
+          </li>
+          <li class="version">
+            <a href="../../../5.0/index.html">5.0</a>
+          </li>
+          <li class="version is-latest">
+            <a href="../../../4.1/index.html">4.1</a>
+          </li>
+          <li class="version is-current">
+            <a href="../../index.html">4.0</a>
+          </li>
+          <li class="version">
+            <a href="../../../3.11/index.html">3.11</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>    </div>
+    <div class="cf relative">
+        <nav class="nav docs-nav full-800">
+<div class="nav-menu">
+<ul class="nav-list">
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../index.html">Main</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/glossary.html">Glossary</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/bugs.html">How to report bugs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/contactus.html">Contact us</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item is-current-path is-active" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <span class="nav-text">Cassandra</span>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../getting_started/index.html">Getting Started</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting_started/installing.html">Installing Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting_started/configuring.html">Configuring Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting_started/querying.html">Inserting and querying</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting_started/drivers.html">Client drivers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting_started/production.html">Production recommendations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../new/index.html">What&#8217;s new</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../new/java11.html">Support for Java 11</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../new/virtualtables.html">Virtual tables</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../new/auditlogging.html">Audit logging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../new/fqllogging.html">Full query logging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../new/messaging.html">Improved internode Messaging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../new/streaming.html">Improved streaming</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../new/transientreplication.html">Transient replication</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../architecture/index.html">Architecture</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/overview.html">Overview</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/dynamo.html">Dynamo</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/storage_engine.html">Storage engine</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/guarantees.html">Guarantees</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../data_modeling/index.html">Data modeling</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/intro.html">Introduction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_conceptual.html">Conceptual data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_rdbms.html">RDBMS design</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_queries.html">Defining application queries</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_logical.html">Logical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_physical.html">Physical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_refining.html">Evaluating and refining data models</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_schema.html">Defining database schema</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_tools.html">Cassandra data modeling tools</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../cql/index.html">Cassandra Query Language (CQL)</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/definitions.html">Definitions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/types.html">Data types</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/ddl.html">Data definition (DDL)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/dml.html">Data manipulation (DML)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/operators.html">Operators</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/indexes.html">Secondary indexes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/mvs.html">Materialized views</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/functions.html">Functions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/json.html">JSON</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/triggers.html">Triggers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/appendices.html">Appendices</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/changes.html">Changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/SASI.html">SASI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/cql_singlefile.html">Single file of CQL information</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-path is-active" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="index.html">Configuration</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page is-active" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="cass_yaml_file.html">cassandra.yaml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="cass_rackdc_file.html">cassandra-rackdc.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="cass_env_sh_file.html">cassandra-env.sh</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="cass_topo_file.html">cassandra-topologies.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="cass_cl_archive_file.html">commitlog-archiving.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="cass_logback_xml_file.html">logback.xml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="cass_jvm_options_file.html">jvm-* files</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../operating/index.html">Operating</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="#operating/snitch.adoc">Snitches</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/topo_changes.html">Topology changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/repair.html">Repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/read_repair.html">Read repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/hints.html">Hints</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/bloom_filters.html">Bloom filters</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/compression.html">Compression</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/cdc.html">Change Data Capture (CDC)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/backups.html">Backups</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/bulk_loading.html">Bulk loading</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/metrics.html">Metrics</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/hardware.html">Hardware</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/audit_logging.html">Audit logging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/compaction/index.html">Compaction</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../tools/index.html">Tools</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../tools/cqlsh.html">cqlsh: the CQL shell</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../tools/nodetool/nodetool.html">nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../tools/sstable/index.html">SSTable tools</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../tools/cassandra_stress.html">cassandra-stress</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../troubleshooting/index.html">Troubleshooting</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../troubleshooting/finding_nodes.html">Finding misbehaving nodes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../troubleshooting/reading_logs.html">Reading Cassandra logs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../troubleshooting/use_nodetool.html">Using nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../troubleshooting/use_tools.html">Using external tools to deep-dive</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../_/development/index.html">Development</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/gettingstarted.html">Getting started</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/ide.html">Building and IDE integration</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/testing.html">Testing</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/patches.html">Contributing code changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/code_style.html">Code style</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/how_to_review.html">Review checklist</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/how_to_commit.html">How to commit</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/documentation.html">Working on documentation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/ci.html">Jenkins CI environment</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/dependencies.html">Dependency management</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/release_process.html">Release process</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../faq/index.html">FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../plugins/index.html">Plug-ins</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+</div>
+</nav>
+        <aside class="toc sidebar">
+  <div class="toc-menu"></div>
+</aside>
+        <main class="article default-main full-800" data-ceiling="topbar">
+  <div class="article-banner">
+    <p>A newer version of this documentation is available.</p>
+    <a class="btn" href="../../../4.1/cassandra/configuration/cass_yaml_file.html">View Latest</a>
+  </div>
+  <div class="article-header">
+<nav class="crumbs" aria-label="breadcrumbs">
+  <ul>
+    <li class="crumb">Cassandra</li>
+    <li class="crumb"><a href="index.html">Configuration</a></li>
+    <li class="crumb"><a href="cass_yaml_file.html">cassandra.yaml</a></li>
+  </ul>
+</nav>
+<div class="tools" role="navigation">
+  <ul>
+    <li class="tool edit"><a href="https://github.com/apache/cassandra/edit/cassandra-4.0/doc/modules/cassandra/pages/configuration/cass_yaml_file.adoc" title="Edit Page" target="_blank" rel="noopener">Edit</a></li>
+  </ul>
+</div>
+  </div>
+<article class="doc">
+<h1 class="page">cassandra.yaml file configuration</h1>
+<div class="sect1">
+<h2 id="cluster_name"><a class="anchor" href="#cluster_name"></a><code>cluster_name</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The name of the cluster. This is mainly used to prevent machines in
+one logical cluster from joining another.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 'Test Cluster'</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="num_tokens"><a class="anchor" href="#num_tokens"></a><code>num_tokens</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This defines the number of tokens randomly assigned to this node on the ring
+The more tokens, relative to other nodes, the larger the proportion of data
+that this node will store. You probably want all nodes to have the same number
+of tokens assuming they have equal hardware capability.</p>
+</div>
+<div class="paragraph">
+<p>If you leave this unspecified, Cassandra will use the default of 1 token for legacy compatibility,
+and will use the initial_token as described below.</p>
+</div>
+<div class="paragraph">
+<p>Specifying initial_token will override this setting on the node&#8217;s initial start,
+on subsequent starts, this setting will apply even if initial token is set.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="/doc/latest/getting_started/production.html#tokens" class="bare">cassandra.apache.org/doc/latest/getting_started/production.html#tokens</a> for
+best practice information about num_tokens.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 16</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="allocate_tokens_for_keyspace"><a class="anchor" href="#allocate_tokens_for_keyspace"></a><code>allocate_tokens_for_keyspace</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Triggers automatic allocation of num_tokens tokens for this node. The allocation
+algorithm attempts to choose tokens in a way that optimizes replicated load over
+the nodes in the datacenter for the replica factor.</p>
+</div>
+<div class="paragraph">
+<p>The load assigned to each node will be close to proportional to its number of
+vnodes.</p>
+</div>
+<div class="paragraph">
+<p>Only supported with the Murmur3Partitioner.</p>
+</div>
+<div class="paragraph">
+<p>Replica factor is determined via the replication strategy used by the specified
+keyspace.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> KEYSPACE</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="allocate_tokens_for_local_replication_factor"><a class="anchor" href="#allocate_tokens_for_local_replication_factor"></a><code>allocate_tokens_for_local_replication_factor</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Replica factor is explicitly set, regardless of keyspace or datacenter.
+This is the replica factor within the datacenter, like NTS.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 3</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="initial_token"><a class="anchor" href="#initial_token"></a><code>initial_token</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>initial_token allows you to specify tokens manually.  While you can use it with
+vnodes (num_tokens &gt; 1, above)&#8201;&#8212;&#8201;in which case you should provide a
+comma-separated list&#8201;&#8212;&#8201;it&#8217;s primarily used when adding nodes to legacy clusters
+that do not have vnodes enabled.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="hinted_handoff_enabled"><a class="anchor" href="#hinted_handoff_enabled"></a><code>hinted_handoff_enabled</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>May either be "true" or "false" to enable globally</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> true</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="hinted_handoff_disabled_datacenters"><a class="anchor" href="#hinted_handoff_disabled_datacenters"></a><code>hinted_handoff_disabled_datacenters</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>When hinted_handoff_enabled is true, a black list of data centers that will not
+perform hinted handoff</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value (complex option)</em>:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    #    - DC1
+    #    - DC2</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="max_hint_window_in_ms"><a class="anchor" href="#max_hint_window_in_ms"></a><code>max_hint_window_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>this defines the maximum amount of time a dead host will have hints
+generated.  After it has been dead this long, new hints for it will not be
+created until it has been seen alive and gone down again.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 10800000 # 3 hours</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="hinted_handoff_throttle_in_kb"><a class="anchor" href="#hinted_handoff_throttle_in_kb"></a><code>hinted_handoff_throttle_in_kb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Maximum throttle in KBs per second, per delivery thread.  This will be
+reduced proportionally to the number of nodes in the cluster.  (If there
+are two nodes in the cluster, each delivery thread will use the maximum
+rate; if there are three, each will throttle to half of the maximum,
+since we expect two nodes to be delivering hints simultaneously.)</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 1024</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="max_hints_delivery_threads"><a class="anchor" href="#max_hints_delivery_threads"></a><code>max_hints_delivery_threads</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Number of threads with which to deliver hints;
+Consider increasing this number when you have multi-dc deployments, since
+cross-dc handoff tends to be slower</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 2</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="hints_directory"><a class="anchor" href="#hints_directory"></a><code>hints_directory</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Directory where Cassandra should store hints.
+If not set, the default directory is $CASSANDRA_HOME/data/hints.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em>  /var/lib/cassandra/hints</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="hints_flush_period_in_ms"><a class="anchor" href="#hints_flush_period_in_ms"></a><code>hints_flush_period_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>How often hints should be flushed from the internal buffers to disk.
+Will <strong>not</strong> trigger fsync.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 10000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="max_hints_file_size_in_mb"><a class="anchor" href="#max_hints_file_size_in_mb"></a><code>max_hints_file_size_in_mb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Maximum size for a single hints file, in megabytes.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 128</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="hints_compression"><a class="anchor" href="#hints_compression"></a><code>hints_compression</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Compression to apply to the hint files. If omitted, hints files
+will be written uncompressed. LZ4, Snappy, and Deflate compressors
+are supported.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value (complex option)</em>:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    #   - class_name: LZ4Compressor
+    #     parameters:
+    #         -</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="batchlog_replay_throttle_in_kb"><a class="anchor" href="#batchlog_replay_throttle_in_kb"></a><code>batchlog_replay_throttle_in_kb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Maximum throttle in KBs per second, total. This will be
+reduced proportionally to the number of nodes in the cluster.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 1024</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="authenticator"><a class="anchor" href="#authenticator"></a><code>authenticator</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Authentication backend, implementing IAuthenticator; used to identify users
+Out of the box, Cassandra provides org.apache.cassandra.auth.{AllowAllAuthenticator,
+PasswordAuthenticator}.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>AllowAllAuthenticator performs no checks - set it to disable authentication.</p>
+</li>
+<li>
+<p>PasswordAuthenticator relies on username/password pairs to authenticate
+users. It keeps usernames and hashed passwords in system_auth.roles table.
+Please increase system_auth keyspace replication factor if you use this authenticator.
+If using PasswordAuthenticator, CassandraRoleManager must also be used (see below)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> AllowAllAuthenticator</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="authorizer"><a class="anchor" href="#authorizer"></a><code>authorizer</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Authorization backend, implementing IAuthorizer; used to limit access/provide permissions
+Out of the box, Cassandra provides org.apache.cassandra.auth.{AllowAllAuthorizer,
+CassandraAuthorizer}.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>AllowAllAuthorizer allows any action to any user - set it to disable authorization.</p>
+</li>
+<li>
+<p>CassandraAuthorizer stores permissions in system_auth.role_permissions table. Please
+increase system_auth keyspace replication factor if you use this authorizer.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> AllowAllAuthorizer</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="role_manager"><a class="anchor" href="#role_manager"></a><code>role_manager</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Part of the Authentication &amp; Authorization backend, implementing IRoleManager; used
+to maintain grants and memberships between roles.
+Out of the box, Cassandra provides org.apache.cassandra.auth.CassandraRoleManager,
+which stores role information in the system_auth keyspace. Most functions of the
+IRoleManager require an authenticated login, so unless the configured IAuthenticator
+actually implements authentication, most of this functionality will be unavailable.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>CassandraRoleManager stores role data in the system_auth keyspace. Please
+increase system_auth keyspace replication factor if you use this role manager.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> CassandraRoleManager</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="network_authorizer"><a class="anchor" href="#network_authorizer"></a><code>network_authorizer</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Network authorization backend, implementing INetworkAuthorizer; used to restrict user
+access to certain DCs
+Out of the box, Cassandra provides org.apache.cassandra.auth.{AllowAllNetworkAuthorizer,
+CassandraNetworkAuthorizer}.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>AllowAllNetworkAuthorizer allows access to any DC to any user - set it to disable authorization.</p>
+</li>
+<li>
+<p>CassandraNetworkAuthorizer stores permissions in system_auth.network_permissions table. Please
+increase system_auth keyspace replication factor if you use this authorizer.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> AllowAllNetworkAuthorizer</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="roles_validity_in_ms"><a class="anchor" href="#roles_validity_in_ms"></a><code>roles_validity_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Validity period for roles cache (fetching granted roles can be an expensive
+operation depending on the role manager, CassandraRoleManager is one example)
+Granted roles are cached for authenticated sessions in AuthenticatedUser and
+after the period specified here, become eligible for (async) reload.
+Defaults to 2000, set to 0 to disable caching entirely.
+Will be disabled automatically for AllowAllAuthenticator.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 2000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="roles_update_interval_in_ms"><a class="anchor" href="#roles_update_interval_in_ms"></a><code>roles_update_interval_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Refresh interval for roles cache (if enabled).
+After this interval, cache entries become eligible for refresh. Upon next
+access, an async reload is scheduled and the old value returned until it
+completes. If roles_validity_in_ms is non-zero, then this must be
+also.
+Defaults to the same value as roles_validity_in_ms.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 2000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="permissions_validity_in_ms"><a class="anchor" href="#permissions_validity_in_ms"></a><code>permissions_validity_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Validity period for permissions cache (fetching permissions can be an
+expensive operation depending on the authorizer, CassandraAuthorizer is
+one example). Defaults to 2000, set to 0 to disable.
+Will be disabled automatically for AllowAllAuthorizer.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 2000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="permissions_update_interval_in_ms"><a class="anchor" href="#permissions_update_interval_in_ms"></a><code>permissions_update_interval_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Refresh interval for permissions cache (if enabled).
+After this interval, cache entries become eligible for refresh. Upon next
+access, an async reload is scheduled and the old value returned until it
+completes. If permissions_validity_in_ms is non-zero, then this must be
+also.
+Defaults to the same value as permissions_validity_in_ms.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 2000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="credentials_validity_in_ms"><a class="anchor" href="#credentials_validity_in_ms"></a><code>credentials_validity_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Validity period for credentials cache. This cache is tightly coupled to
+the provided PasswordAuthenticator implementation of IAuthenticator. If
+another IAuthenticator implementation is configured, this cache will not
+be automatically used and so the following settings will have no effect.
+Please note, credentials are cached in their encrypted form, so while
+activating this cache may reduce the number of queries made to the
+underlying table, it may not  bring a significant reduction in the
+latency of individual authentication attempts.
+Defaults to 2000, set to 0 to disable credentials caching.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 2000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="credentials_update_interval_in_ms"><a class="anchor" href="#credentials_update_interval_in_ms"></a><code>credentials_update_interval_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Refresh interval for credentials cache (if enabled).
+After this interval, cache entries become eligible for refresh. Upon next
+access, an async reload is scheduled and the old value returned until it
+completes. If credentials_validity_in_ms is non-zero, then this must be
+also.
+Defaults to the same value as credentials_validity_in_ms.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 2000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="partitioner"><a class="anchor" href="#partitioner"></a><code>partitioner</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The partitioner is responsible for distributing groups of rows (by
+partition key) across nodes in the cluster. The partitioner can NOT be
+changed without reloading all data.  If you are adding nodes or upgrading,
+you should set this to the same partitioner that you are currently using.</p>
+</div>
+<div class="paragraph">
+<p>The default partitioner is the Murmur3Partitioner. Older partitioners
+such as the RandomPartitioner, ByteOrderedPartitioner, and
+OrderPreservingPartitioner have been included for backward compatibility only.
+For new clusters, you should NOT change this value.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> org.apache.cassandra.dht.Murmur3Partitioner</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="data_file_directories"><a class="anchor" href="#data_file_directories"></a><code>data_file_directories</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Directories where Cassandra should store data on disk. If multiple
+directories are specified, Cassandra will spread data evenly across
+them by partitioning the token ranges.
+If not set, the default directory is $CASSANDRA_HOME/data/data.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value (complex option)</em>:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    #     - /var/lib/cassandra/data</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="local_system_data_file_directory"><a class="anchor" href="#local_system_data_file_directory"></a><code>local_system_data_file_directory</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong>
+Directory were Cassandra should store the data of the local system keyspaces.
+By default Cassandra will store the data of the local system keyspaces in the first of the data directories specified
+by data_file_directories.
+This approach ensures that if one of the other disks is lost Cassandra can continue to operate. For extra security
+this setting allows to store those data on a different directory that provides redundancy.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="commitlog_directory"><a class="anchor" href="#commitlog_directory"></a><code>commitlog_directory</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>commit log.  when running on magnetic HDD, this should be a
+separate spindle than the data directories.
+If not set, the default directory is $CASSANDRA_HOME/data/commitlog.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em>  /var/lib/cassandra/commitlog</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cdc_enabled"><a class="anchor" href="#cdc_enabled"></a><code>cdc_enabled</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Enable / disable CDC functionality on a per-node basis. This modifies the logic used
+for write path allocation rejection (standard: never reject. cdc: reject Mutation
+containing a CDC-enabled table if at space limit in cdc_raw_directory).</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> false</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cdc_raw_directory"><a class="anchor" href="#cdc_raw_directory"></a><code>cdc_raw_directory</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>CommitLogSegments are moved to this directory on flush if cdc_enabled: true and the
+segment contains mutations for a CDC-enabled table. This should be placed on a
+separate spindle than the data directories. If not set, the default directory is
+$CASSANDRA_HOME/data/cdc_raw.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em>  /var/lib/cassandra/cdc_raw</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="disk_failure_policy"><a class="anchor" href="#disk_failure_policy"></a><code>disk_failure_policy</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Policy for data disk failures:</p>
+</div>
+<div class="paragraph">
+<p>die
+  shut down gossip and client transports and kill the JVM for any fs errors or
+  single-sstable errors, so the node can be replaced.</p>
+</div>
+<div class="paragraph">
+<p>stop_paranoid
+  shut down gossip and client transports even for single-sstable errors,
+  kill the JVM for errors during startup.</p>
+</div>
+<div class="paragraph">
+<p>stop
+  shut down gossip and client transports, leaving the node effectively dead, but
+  can still be inspected via JMX, kill the JVM for errors during startup.</p>
+</div>
+<div class="paragraph">
+<p>best_effort
+   stop using the failed disk and respond to requests based on
+   remaining available sstables.  This means you WILL see obsolete
+   data at CL.ONE!</p>
+</div>
+<div class="paragraph">
+<p>ignore
+   ignore fatal errors and let requests fail, as in pre-1.2 Cassandra</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> stop</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="commit_failure_policy"><a class="anchor" href="#commit_failure_policy"></a><code>commit_failure_policy</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Policy for commit disk failures:</p>
+</div>
+<div class="paragraph">
+<p>die
+  shut down the node and kill the JVM, so the node can be replaced.</p>
+</div>
+<div class="paragraph">
+<p>stop
+  shut down the node, leaving the node effectively dead, but
+  can still be inspected via JMX.</p>
+</div>
+<div class="paragraph">
+<p>stop_commit
+  shutdown the commit log, letting writes collect but
+  continuing to service reads, as in pre-2.0.5 Cassandra</p>
+</div>
+<div class="paragraph">
+<p>ignore
+  ignore fatal errors and let the batches fail</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> stop</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="prepared_statements_cache_size_mb"><a class="anchor" href="#prepared_statements_cache_size_mb"></a><code>prepared_statements_cache_size_mb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Maximum size of the native protocol prepared statement cache</p>
+</div>
+<div class="paragraph">
+<p>Valid values are either "auto" (omitting the value) or a value greater 0.</p>
+</div>
+<div class="paragraph">
+<p>Note that specifying a too large value will result in long running GCs and possbily
+out-of-memory errors. Keep the value at a small fraction of the heap.</p>
+</div>
+<div class="paragraph">
+<p>If you constantly see "prepared statements discarded in the last minute because
+cache limit reached" messages, the first step is to investigate the root cause
+of these messages and check whether prepared statements are used correctly -
+i.e. use bind markers for variable parts.</p>
+</div>
+<div class="paragraph">
+<p>Do only change the default value, if you really have more prepared statements than
+fit in the cache. In most cases it is not neccessary to change this value.
+Constantly re-preparing statements is a performance penalty.</p>
+</div>
+<div class="paragraph">
+<p>Default value ("auto") is 1/256th of the heap or 10MB, whichever is greater</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="key_cache_size_in_mb"><a class="anchor" href="#key_cache_size_in_mb"></a><code>key_cache_size_in_mb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Maximum size of the key cache in memory.</p>
+</div>
+<div class="paragraph">
+<p>Each key cache hit saves 1 seek and each row cache hit saves 2 seeks at the
+minimum, sometimes more. The key cache is fairly tiny for the amount of
+time it saves, so it&#8217;s worthwhile to use it at large numbers.
+The row cache saves even more time, but must contain the entire row,
+so it is extremely space-intensive. It&#8217;s best to only use the
+row cache if you have hot rows or static rows.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+if you reduce the size, you may not get you hottest keys loaded on startup.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Default value is empty to make it "auto" (min(5% of Heap (in MB), 100MB)). Set to 0 to disable key cache.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="key_cache_save_period"><a class="anchor" href="#key_cache_save_period"></a><code>key_cache_save_period</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Duration in seconds after which Cassandra should
+save the key cache. Caches are saved to saved_caches_directory as
+specified in this configuration file.</p>
+</div>
+<div class="paragraph">
+<p>Saved caches greatly improve cold-start speeds, and is relatively cheap in
+terms of I/O for the key cache. Row cache saving is much more expensive and
+has limited use.</p>
+</div>
+<div class="paragraph">
+<p>Default is 14400 or 4 hours.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 14400</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="key_cache_keys_to_save"><a class="anchor" href="#key_cache_keys_to_save"></a><code>key_cache_keys_to_save</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Number of keys from the key cache to save
+Disabled by default, meaning all keys are going to be saved</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 100</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="row_cache_class_name"><a class="anchor" href="#row_cache_class_name"></a><code>row_cache_class_name</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Row cache implementation class name. Available implementations:</p>
+</div>
+<div class="paragraph">
+<p>org.apache.cassandra.cache.OHCProvider
+  Fully off-heap row cache implementation (default).</p>
+</div>
+<div class="paragraph">
+<p>org.apache.cassandra.cache.SerializingCacheProvider
+  This is the row cache implementation availabile
+  in previous releases of Cassandra.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> org.apache.cassandra.cache.OHCProvider</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="row_cache_size_in_mb"><a class="anchor" href="#row_cache_size_in_mb"></a><code>row_cache_size_in_mb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Maximum size of the row cache in memory.
+Please note that OHC cache implementation requires some additional off-heap memory to manage
+the map structures and some in-flight memory during operations before/after cache entries can be
+accounted against the cache capacity. This overhead is usually small compared to the whole capacity.
+Do not specify more memory that the system can afford in the worst usual situation and leave some
+headroom for OS block level cache. Do never allow your system to swap.</p>
+</div>
+<div class="paragraph">
+<p>Default value is 0, to disable row caching.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 0</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="row_cache_save_period"><a class="anchor" href="#row_cache_save_period"></a><code>row_cache_save_period</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Duration in seconds after which Cassandra should save the row cache.
+Caches are saved to saved_caches_directory as specified in this configuration file.</p>
+</div>
+<div class="paragraph">
+<p>Saved caches greatly improve cold-start speeds, and is relatively cheap in
+terms of I/O for the key cache. Row cache saving is much more expensive and
+has limited use.</p>
+</div>
+<div class="paragraph">
+<p>Default is 0 to disable saving the row cache.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 0</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="row_cache_keys_to_save"><a class="anchor" href="#row_cache_keys_to_save"></a><code>row_cache_keys_to_save</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Number of keys from the row cache to save.
+Specify 0 (which is the default), meaning all keys are going to be saved</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 100</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="counter_cache_size_in_mb"><a class="anchor" href="#counter_cache_size_in_mb"></a><code>counter_cache_size_in_mb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Maximum size of the counter cache in memory.</p>
+</div>
+<div class="paragraph">
+<p>Counter cache helps to reduce counter locks' contention for hot counter cells.
+In case of RF = 1 a counter cache hit will cause Cassandra to skip the read before
+write entirely. With RF &gt; 1 a counter cache hit will still help to reduce the duration
+of the lock hold, helping with hot counter cell updates, but will not allow skipping
+the read entirely. Only the local (clock, count) tuple of a counter cell is kept
+in memory, not the whole counter, so it&#8217;s relatively cheap.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+if you reduce the size, you may not get you hottest keys loaded on startup.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Default value is empty to make it "auto" (min(2.5% of Heap (in MB), 50MB)). Set to 0 to disable counter cache.
+NOTE: if you perform counter deletes and rely on low gcgs, you should disable the counter cache.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="counter_cache_save_period"><a class="anchor" href="#counter_cache_save_period"></a><code>counter_cache_save_period</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Duration in seconds after which Cassandra should
+save the counter cache (keys only). Caches are saved to saved_caches_directory as
+specified in this configuration file.</p>
+</div>
+<div class="paragraph">
+<p>Default is 7200 or 2 hours.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 7200</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="counter_cache_keys_to_save"><a class="anchor" href="#counter_cache_keys_to_save"></a><code>counter_cache_keys_to_save</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Number of keys from the counter cache to save
+Disabled by default, meaning all keys are going to be saved</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 100</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="saved_caches_directory"><a class="anchor" href="#saved_caches_directory"></a><code>saved_caches_directory</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>saved caches
+If not set, the default directory is $CASSANDRA_HOME/data/saved_caches.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em>  /var/lib/cassandra/saved_caches</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cache_load_timeout_seconds"><a class="anchor" href="#cache_load_timeout_seconds"></a><code>cache_load_timeout_seconds</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Number of seconds the server will wait for each cache (row, key, etc &#8230;&#8203;) to load while starting
+the Cassandra process. Setting this to a negative value is equivalent to disabling all cache loading on startup
+while still having the cache during runtime.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 30</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="commitlog_sync_batch_window_in_ms"><a class="anchor" href="#commitlog_sync_batch_window_in_ms"></a><code>commitlog_sync_batch_window_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>commitlog_sync may be either "periodic", "group", or "batch."</p>
+</div>
+<div class="paragraph">
+<p>When in batch mode, Cassandra won&#8217;t ack writes until the commit log
+has been flushed to disk.  Each incoming write will trigger the flush task.
+commitlog_sync_batch_window_in_ms is a deprecated value. Previously it had
+almost no value, and is being removed.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 2</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="commitlog_sync_group_window_in_ms"><a class="anchor" href="#commitlog_sync_group_window_in_ms"></a><code>commitlog_sync_group_window_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>group mode is similar to batch mode, where Cassandra will not ack writes
+until the commit log has been flushed to disk. The difference is group
+mode will wait up to commitlog_sync_group_window_in_ms between flushes.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 1000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="commitlog_sync"><a class="anchor" href="#commitlog_sync"></a><code>commitlog_sync</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>the default option is "periodic" where writes may be acked immediately
+and the CommitLog is simply synced every commitlog_sync_period_in_ms
+milliseconds.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> periodic</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="commitlog_sync_period_in_ms"><a class="anchor" href="#commitlog_sync_period_in_ms"></a><code>commitlog_sync_period_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Default Value:</em> 10000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="periodic_commitlog_sync_lag_block_in_ms"><a class="anchor" href="#periodic_commitlog_sync_lag_block_in_ms"></a><code>periodic_commitlog_sync_lag_block_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>When in periodic commitlog mode, the number of milliseconds to block writes
+while waiting for a slow disk flush to complete.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="commitlog_segment_size_in_mb"><a class="anchor" href="#commitlog_segment_size_in_mb"></a><code>commitlog_segment_size_in_mb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The size of the individual commitlog file segments.  A commitlog
+segment may be archived, deleted, or recycled once all the data
+in it (potentially from each columnfamily in the system) has been
+flushed to sstables.</p>
+</div>
+<div class="paragraph">
+<p>The default size is 32, which is almost always fine, but if you are
+archiving commitlog segments (see commitlog_archiving.properties),
+then you probably want a finer granularity of archiving; 8 or 16 MB
+is reasonable.
+Max mutation size is also configurable via max_mutation_size_in_kb setting in
+cassandra.yaml. The default is half the size commitlog_segment_size_in_mb * 1024.
+This should be positive and less than 2048.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If max_mutation_size_in_kb is set explicitly then commitlog_segment_size_in_mb must
+be set to at least twice the size of max_mutation_size_in_kb / 1024
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 32</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="commitlog_compression"><a class="anchor" href="#commitlog_compression"></a><code>commitlog_compression</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Compression to apply to the commit log. If omitted, the commit log
+will be written uncompressed.  LZ4, Snappy, and Deflate compressors
+are supported.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value (complex option)</em>:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    #   - class_name: LZ4Compressor
+    #     parameters:
+    #         -</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="table"><a class="anchor" href="#table"></a><code>table</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong>
+Compression to apply to SSTables as they flush for compressed tables.
+Note that tables without compression enabled do not respect this flag.</p>
+</div>
+<div class="paragraph">
+<p>As high ratio compressors like LZ4HC, Zstd, and Deflate can potentially
+block flushes for too long, the default is to flush with a known fast
+compressor in those cases. Options are:</p>
+</div>
+<div class="paragraph">
+<p>none : Flush without compressing blocks but while still doing checksums.
+fast : Flush with a fast compressor. If the table is already using a
+       fast compressor that compressor is used.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> Always flush with the same compressor that the table uses. This</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="flush_compression"><a class="anchor" href="#flush_compression"></a><code>flush_compression</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong>
+       was the pre 4.0 behavior.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> fast</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="seed_provider"><a class="anchor" href="#seed_provider"></a><code>seed_provider</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>any class that implements the SeedProvider interface and has a
+constructor that takes a Map&lt;String, String&gt; of parameters will do.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value (complex option)</em>:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>        # Addresses of hosts that are deemed contact points.
+        # Cassandra nodes use this list of hosts to find each other and learn
+        # the topology of the ring.  You must change this if you are running
+        # multiple nodes!
+        - class_name: org.apache.cassandra.locator.SimpleSeedProvider
+          parameters:
+              # seeds is actually a comma-delimited list of addresses.
+              # Ex: "&lt;ip1&gt;,&lt;ip2&gt;,&lt;ip3&gt;"
+              - seeds: "127.0.0.1:7000"</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="concurrent_reads"><a class="anchor" href="#concurrent_reads"></a><code>concurrent_reads</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For workloads with more data than can fit in memory, Cassandra&#8217;s
+bottleneck will be reads that need to fetch data from
+disk. "concurrent_reads" should be set to (16 * number_of_drives) in
+order to allow the operations to enqueue low enough in the stack
+that the OS and drives can reorder them. Same applies to
+"concurrent_counter_writes", since counter writes read the current
+values before incrementing and writing them back.</p>
+</div>
+<div class="paragraph">
+<p>On the other hand, since writes are almost never IO bound, the ideal
+number of "concurrent_writes" is dependent on the number of cores in
+your system; (8 * number_of_cores) is a good rule of thumb.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 32</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="concurrent_writes"><a class="anchor" href="#concurrent_writes"></a><code>concurrent_writes</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Default Value:</em> 32</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="concurrent_counter_writes"><a class="anchor" href="#concurrent_counter_writes"></a><code>concurrent_counter_writes</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Default Value:</em> 32</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="concurrent_materialized_view_writes"><a class="anchor" href="#concurrent_materialized_view_writes"></a><code>concurrent_materialized_view_writes</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For materialized view writes, as there is a read involved, so this should
+be limited by the less of concurrent reads or concurrent writes.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 32</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="networking_cache_size_in_mb"><a class="anchor" href="#networking_cache_size_in_mb"></a><code>networking_cache_size_in_mb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Maximum memory to use for inter-node and client-server networking buffers.</p>
+</div>
+<div class="paragraph">
+<p>Defaults to the smaller of 1/16 of heap or 128MB. This pool is allocated off-heap,
+so is in addition to the memory allocated for heap. The cache also has on-heap
+overhead which is roughly 128 bytes per chunk (i.e. 0.2% of the reserved size
+if the default 64k chunk size is used).
+Memory is only allocated when needed.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 128</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="file_cache_enabled"><a class="anchor" href="#file_cache_enabled"></a><code>file_cache_enabled</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Enable the sstable chunk cache.  The chunk cache will store recently accessed
+sections of the sstable in-memory as uncompressed buffers.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> false</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="file_cache_size_in_mb"><a class="anchor" href="#file_cache_size_in_mb"></a><code>file_cache_size_in_mb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Maximum memory to use for sstable chunk cache and buffer pooling.
+32MB of this are reserved for pooling buffers, the rest is used for chunk cache
+that holds uncompressed sstable chunks.
+Defaults to the smaller of 1/4 of heap or 512MB. This pool is allocated off-heap,
+so is in addition to the memory allocated for heap. The cache also has on-heap
+overhead which is roughly 128 bytes per chunk (i.e. 0.2% of the reserved size
+if the default 64k chunk size is used).
+Memory is only allocated when needed.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 512</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="buffer_pool_use_heap_if_exhausted"><a class="anchor" href="#buffer_pool_use_heap_if_exhausted"></a><code>buffer_pool_use_heap_if_exhausted</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Flag indicating whether to allocate on or off heap when the sstable buffer
+pool is exhausted, that is when it has exceeded the maximum memory
+file_cache_size_in_mb, beyond which it will not cache buffers but allocate on request.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> true</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="disk_optimization_strategy"><a class="anchor" href="#disk_optimization_strategy"></a><code>disk_optimization_strategy</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>The strategy for optimizing disk read
+Possible values are:
+ssd (for solid state disks, the default)
+spinning (for spinning disks)</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> ssd</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="memtable_heap_space_in_mb"><a class="anchor" href="#memtable_heap_space_in_mb"></a><code>memtable_heap_space_in_mb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Total permitted memory to use for memtables. Cassandra will stop
+accepting writes when the limit is exceeded until a flush completes,
+and will trigger a flush based on memtable_cleanup_threshold
+If omitted, Cassandra will set both to 1/4 the size of the heap.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 2048</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="memtable_offheap_space_in_mb"><a class="anchor" href="#memtable_offheap_space_in_mb"></a><code>memtable_offheap_space_in_mb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 2048</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="memtable_cleanup_threshold"><a class="anchor" href="#memtable_cleanup_threshold"></a><code>memtable_cleanup_threshold</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>memtable_cleanup_threshold is deprecated. The default calculation
+is the only reasonable choice. See the comments on  memtable_flush_writers
+for more information.</p>
+</div>
+<div class="paragraph">
+<p>Ratio of occupied non-flushing memtable size to total permitted size
+that will trigger a flush of the largest memtable. Larger mct will
+mean larger flushes and hence less compaction, but also less concurrent
+flush activity which can make it difficult to keep your disks fed
+under heavy write load.</p>
+</div>
+<div class="paragraph">
+<p>memtable_cleanup_threshold defaults to 1 / (memtable_flush_writers + 1)</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 0.11</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="memtable_allocation_type"><a class="anchor" href="#memtable_allocation_type"></a><code>memtable_allocation_type</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Specify the way Cassandra allocates and manages memtable memory.
+Options are:</p>
+</div>
+<div class="paragraph">
+<p>heap_buffers
+  on heap nio buffers</p>
+</div>
+<div class="paragraph">
+<p>offheap_buffers
+  off heap (direct) nio buffers</p>
+</div>
+<div class="paragraph">
+<p>offheap_objects
+   off heap objects</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> heap_buffers</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="repair_session_space_in_mb"><a class="anchor" href="#repair_session_space_in_mb"></a><code>repair_session_space_in_mb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Limit memory usage for Merkle tree calculations during repairs of a certain
+table and common token range. Repair commands targetting multiple tables or
+virtual nodes can exceed this limit depending on concurrent_merkle_tree_requests.</p>
+</div>
+<div class="paragraph">
+<p>The default is 1/16th of the available heap. The main tradeoff is that
+smaller trees have less resolution, which can lead to over-streaming data.
+If you see heap pressure during repairs, consider lowering this, but you
+cannot go below one mebibyte. If you see lots of over-streaming, consider
+raising this or using subrange repair.</p>
+</div>
+<div class="paragraph">
+<p>For more details see <a href="https://issues.apache.org/jira/browse/CASSANDRA-14096" class="bare">issues.apache.org/jira/browse/CASSANDRA-14096</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="concurrent_merkle_tree_requests"><a class="anchor" href="#concurrent_merkle_tree_requests"></a><code>concurrent_merkle_tree_requests</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>The number of simultaneous Merkle tree requests during repairs that can
+be performed by a repair command. The size of each validation request is
+limited by the repair_session_space property, so setting this to 1 will make
+sure that a repair command doesn&#8217;t exceed that limit, even if the repair
+command is repairing multiple tables or multiple virtual nodes.</p>
+</div>
+<div class="paragraph">
+<p>There isn&#8217;t a limit by default for backwards compatibility, but this can
+produce OOM for  commands repairing multiple tables or multiple virtual nodes.
+A limit of just 1 simultaneous Merkle tree request is generally recommended
+with no virtual nodes so repair_session_space, and thereof the Merkle tree
+resolution, can be high. For virtual nodes a value of 1 with the default
+repair_session_space value will produce higher resolution Merkle trees
+at the expense of speed. Alternatively, when working with virtual nodes it
+can make sense to reduce the repair_session_space and increase the value of
+concurrent_merkle_tree_requests because each range will contain fewer data.</p>
+</div>
+<div class="paragraph">
+<p>For more details see <a href="https://issues.apache.org/jira/browse/CASSANDRA-19336" class="bare">issues.apache.org/jira/browse/CASSANDRA-19336</a>.</p>
+</div>
+<div class="paragraph">
+<p>A zero value means no limit.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 0</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="commitlog_total_space_in_mb"><a class="anchor" href="#commitlog_total_space_in_mb"></a><code>commitlog_total_space_in_mb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Total space to use for commit logs on disk.</p>
+</div>
+<div class="paragraph">
+<p>If space gets above this value, Cassandra will flush every dirty CF
+in the oldest segment and remove it.  So a small total commitlog space
+will tend to cause more flush activity on less-active columnfamilies.</p>
+</div>
+<div class="paragraph">
+<p>The default value is the smaller of 8192, and 1/4 of the total space
+of the commitlog volume.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 8192</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="memtable_flush_writers"><a class="anchor" href="#memtable_flush_writers"></a><code>memtable_flush_writers</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>This sets the number of memtable flush writer threads per disk
+as well as the total number of memtables that can be flushed concurrently.
+These are generally a combination of compute and IO bound.</p>
+</div>
+<div class="paragraph">
+<p>Memtable flushing is more CPU efficient than memtable ingest and a single thread
+can keep up with the ingest rate of a whole server on a single fast disk
+until it temporarily becomes IO bound under contention typically with compaction.
+At that point you need multiple flush threads. At some point in the future
+it may become CPU bound all the time.</p>
+</div>
+<div class="paragraph">
+<p>You can tell if flushing is falling behind using the MemtablePool.BlockedOnAllocation
+metric which should be 0, but will be non-zero if threads are blocked waiting on flushing
+to free memory.</p>
+</div>
+<div class="paragraph">
+<p>memtable_flush_writers defaults to two for a single data directory.
+This means that two  memtables can be flushed concurrently to the single data directory.
+If you have multiple data directories the default is one memtable flushing at a time
+but the flush will use a thread per data directory so you will get two or more writers.</p>
+</div>
+<div class="paragraph">
+<p>Two is generally enough to flush on a fast disk [array] mounted as a single data directory.
+Adding more flush writers will result in smaller more frequent flushes that introduce more
+compaction overhead.</p>
+</div>
+<div class="paragraph">
+<p>There is a direct tradeoff between number of memtables that can be flushed concurrently
+and flush size and frequency. More is not better you just need enough flush writers
+to never stall waiting for flushing to free memory.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 2</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cdc_total_space_in_mb"><a class="anchor" href="#cdc_total_space_in_mb"></a><code>cdc_total_space_in_mb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Total space to use for change-data-capture logs on disk.</p>
+</div>
+<div class="paragraph">
+<p>If space gets above this value, Cassandra will throw WriteTimeoutException
+on Mutations including tables with CDC enabled. A CDCCompactor is responsible
+for parsing the raw CDC logs and deleting them when parsing is completed.</p>
+</div>
+<div class="paragraph">
+<p>The default value is the min of 4096 mb and 1/8th of the total space
+of the drive where cdc_raw_directory resides.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 4096</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cdc_free_space_check_interval_ms"><a class="anchor" href="#cdc_free_space_check_interval_ms"></a><code>cdc_free_space_check_interval_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>When we hit our cdc_raw limit and the CDCCompactor is either running behind
+or experiencing backpressure, we check at the following interval to see if any
+new space for cdc-tracked tables has been made available. Default to 250ms</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 250</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="index_summary_capacity_in_mb"><a class="anchor" href="#index_summary_capacity_in_mb"></a><code>index_summary_capacity_in_mb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A fixed memory pool size in MB for for SSTable index summaries. If left
+empty, this will default to 5% of the heap size. If the memory usage of
+all index summaries exceeds this limit, SSTables with low read rates will
+shrink their index summaries in order to meet this limit.  However, this
+is a best-effort process. In extreme conditions Cassandra may need to use
+more than this amount of memory.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="index_summary_resize_interval_in_minutes"><a class="anchor" href="#index_summary_resize_interval_in_minutes"></a><code>index_summary_resize_interval_in_minutes</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>How frequently index summaries should be resampled.  This is done
+periodically to redistribute memory from the fixed-size pool to sstables
+proportional their recent read rates.  Setting to -1 will disable this
+process, leaving existing index summaries at their current sampling level.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 60</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="trickle_fsync"><a class="anchor" href="#trickle_fsync"></a><code>trickle_fsync</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Whether to, when doing sequential writing, fsync() at intervals in
+order to force the operating system to flush the dirty
+buffers. Enable this to avoid sudden dirty buffer flushing from
+impacting read latencies. Almost always a good idea on SSDs; not
+necessarily on platters.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> false</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="trickle_fsync_interval_in_kb"><a class="anchor" href="#trickle_fsync_interval_in_kb"></a><code>trickle_fsync_interval_in_kb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Default Value:</em> 10240</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="storage_port"><a class="anchor" href="#storage_port"></a><code>storage_port</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>TCP port, for commands and data
+For security reasons, you should not expose this port to the internet.  Firewall it if needed.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 7000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="ssl_storage_port"><a class="anchor" href="#ssl_storage_port"></a><code>ssl_storage_port</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>SSL port, for legacy encrypted communication. This property is unused unless enabled in
+server_encryption_options (see below). As of cassandra 4.0, this property is deprecated
+as a single port can be used for either/both secure and insecure connections.
+For security reasons, you should not expose this port to the internet. Firewall it if needed.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 7001</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="listen_address"><a class="anchor" href="#listen_address"></a><code>listen_address</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Address or interface to bind to and tell other Cassandra nodes to connect to.
+You <em>must</em> change this if you want multiple nodes to be able to communicate!</p>
+</div>
+<div class="paragraph">
+<p>Set listen_address OR listen_interface, not both.</p>
+</div>
+<div class="paragraph">
+<p>Leaving it blank leaves it up to InetAddress.getLocalHost(). This
+will always do the Right Thing <em>if</em> the node is properly configured
+(hostname, name resolution, etc), and the Right Thing is to use the
+address associated with the hostname (it might not be). If unresolvable
+it will fall back to InetAddress.getLoopbackAddress(), which is wrong for production systems.</p>
+</div>
+<div class="paragraph">
+<p>Setting listen_address to 0.0.0.0 is always wrong.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> localhost</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="listen_interface"><a class="anchor" href="#listen_interface"></a><code>listen_interface</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Set listen_address OR listen_interface, not both. Interfaces must correspond
+to a single address, IP aliasing is not supported.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> eth0</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="listen_interface_prefer_ipv6"><a class="anchor" href="#listen_interface_prefer_ipv6"></a><code>listen_interface_prefer_ipv6</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>If you choose to specify the interface by name and the interface has an ipv4 and an ipv6 address
+you can specify which should be chosen using listen_interface_prefer_ipv6. If false the first ipv4
+address will be used. If true the first ipv6 address will be used. Defaults to false preferring
+ipv4. If there is only one address it will be selected regardless of ipv4/ipv6.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> false</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="broadcast_address"><a class="anchor" href="#broadcast_address"></a><code>broadcast_address</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Address to broadcast to other Cassandra nodes
+Leaving this blank will set it to the same value as listen_address</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 1.2.3.4</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="listen_on_broadcast_address"><a class="anchor" href="#listen_on_broadcast_address"></a><code>listen_on_broadcast_address</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>When using multiple physical network interfaces, set this
+to true to listen on broadcast_address in addition to
+the listen_address, allowing nodes to communicate in both
+interfaces.
+Ignore this property if the network configuration automatically
+routes  between the public and private networks such as EC2.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> false</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="internode_authenticator"><a class="anchor" href="#internode_authenticator"></a><code>internode_authenticator</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Internode authentication backend, implementing IInternodeAuthenticator;
+used to allow/disallow connections from peer nodes.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> org.apache.cassandra.auth.AllowAllInternodeAuthenticator</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="start_native_transport"><a class="anchor" href="#start_native_transport"></a><code>start_native_transport</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Whether to start the native transport server.
+The address on which the native transport is bound is defined by rpc_address.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> true</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="native_transport_port"><a class="anchor" href="#native_transport_port"></a><code>native_transport_port</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>port for the CQL native transport to listen for clients on
+For security reasons, you should not expose this port to the internet.  Firewall it if needed.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 9042</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="native_transport_port_ssl"><a class="anchor" href="#native_transport_port_ssl"></a><code>native_transport_port_ssl</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong>
+Enabling native transport encryption in client_encryption_options allows you to either use
+encryption for the standard port or to use a dedicated, additional port along with the unencrypted
+standard native_transport_port.
+Enabling client encryption and keeping native_transport_port_ssl disabled will use encryption
+for native_transport_port. Setting native_transport_port_ssl to a different value
+from native_transport_port will use encryption for native_transport_port_ssl while
+keeping native_transport_port unencrypted.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 9142</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="native_transport_max_threads"><a class="anchor" href="#native_transport_max_threads"></a><code>native_transport_max_threads</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong>
+The maximum threads for handling requests (note that idle threads are stopped
+after 30 seconds so there is not corresponding minimum setting).</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 128</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="native_transport_max_frame_size_in_mb"><a class="anchor" href="#native_transport_max_frame_size_in_mb"></a><code>native_transport_max_frame_size_in_mb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>The maximum size of allowed frame. Frame (requests) larger than this will
+be rejected as invalid. The default is 256MB. If you&#8217;re changing this parameter,
+you may want to adjust max_value_size_in_mb accordingly. This should be positive and less than 2048.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 256</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="native_transport_max_concurrent_connections"><a class="anchor" href="#native_transport_max_concurrent_connections"></a><code>native_transport_max_concurrent_connections</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>The maximum number of concurrent client connections.
+The default is -1, which means unlimited.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> -1</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="native_transport_max_concurrent_connections_per_ip"><a class="anchor" href="#native_transport_max_concurrent_connections_per_ip"></a><code>native_transport_max_concurrent_connections_per_ip</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>The maximum number of concurrent client connections per source ip.
+The default is -1, which means unlimited.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> -1</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="native_transport_allow_older_protocols"><a class="anchor" href="#native_transport_allow_older_protocols"></a><code>native_transport_allow_older_protocols</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Controls whether Cassandra honors older, yet currently supported, protocol versions.
+The default is true, which means all supported protocols will be honored.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> true</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="native_transport_idle_timeout_in_ms"><a class="anchor" href="#native_transport_idle_timeout_in_ms"></a><code>native_transport_idle_timeout_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Controls when idle client connections are closed. Idle connections are ones that had neither reads
+nor writes for a time period.</p>
+</div>
+<div class="paragraph">
+<p>Clients may implement heartbeats by sending OPTIONS native protocol message after a timeout, which
+will reset idle timeout timer on the server side. To close idle client connections, corresponding
+values for heartbeat intervals have to be set on the client side.</p>
+</div>
+<div class="paragraph">
+<p>Idle connection timeouts are disabled by default.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 60000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="rpc_address"><a class="anchor" href="#rpc_address"></a><code>rpc_address</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The address or interface to bind the native transport server to.</p>
+</div>
+<div class="paragraph">
+<p>Set rpc_address OR rpc_interface, not both.</p>
+</div>
+<div class="paragraph">
+<p>Leaving rpc_address blank has the same effect as on listen_address
+(i.e. it will be based on the configured hostname of the node).</p>
+</div>
+<div class="paragraph">
+<p>Note that unlike listen_address, you can specify 0.0.0.0, but you must also
+set broadcast_rpc_address to a value other than 0.0.0.0.</p>
+</div>
+<div class="paragraph">
+<p>For security reasons, you should not expose this port to the internet.  Firewall it if needed.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> localhost</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="rpc_interface"><a class="anchor" href="#rpc_interface"></a><code>rpc_interface</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Set rpc_address OR rpc_interface, not both. Interfaces must correspond
+to a single address, IP aliasing is not supported.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> eth1</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="rpc_interface_prefer_ipv6"><a class="anchor" href="#rpc_interface_prefer_ipv6"></a><code>rpc_interface_prefer_ipv6</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>If you choose to specify the interface by name and the interface has an ipv4 and an ipv6 address
+you can specify which should be chosen using rpc_interface_prefer_ipv6. If false the first ipv4
+address will be used. If true the first ipv6 address will be used. Defaults to false preferring
+ipv4. If there is only one address it will be selected regardless of ipv4/ipv6.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> false</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="broadcast_rpc_address"><a class="anchor" href="#broadcast_rpc_address"></a><code>broadcast_rpc_address</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>RPC address to broadcast to drivers and other Cassandra nodes. This cannot
+be set to 0.0.0.0. If left blank, this will be set to the value of
+rpc_address. If rpc_address is set to 0.0.0.0, broadcast_rpc_address must
+be set.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 1.2.3.4</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="rpc_keepalive"><a class="anchor" href="#rpc_keepalive"></a><code>rpc_keepalive</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>enable or disable keepalive on rpc/native connections</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> true</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="internode_socket_send_buffer_size_in_bytes"><a class="anchor" href="#internode_socket_send_buffer_size_in_bytes"></a><code>internode_socket_send_buffer_size_in_bytes</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Uncomment to set socket buffer size for internode communication
+Note that when setting this, the buffer size is limited by net.core.wmem_max
+and when not setting it it is defined by net.ipv4.tcp_wmem
+See also:
+/proc/sys/net/core/wmem_max
+/proc/sys/net/core/rmem_max
+/proc/sys/net/ipv4/tcp_wmem
+/proc/sys/net/ipv4/tcp_wmem
+and 'man tcp'</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="internode_socket_receive_buffer_size_in_bytes"><a class="anchor" href="#internode_socket_receive_buffer_size_in_bytes"></a><code>internode_socket_receive_buffer_size_in_bytes</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Uncomment to set socket buffer size for internode communication
+Note that when setting this, the buffer size is limited by net.core.wmem_max
+and when not setting it it is defined by net.ipv4.tcp_wmem</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="incremental_backups"><a class="anchor" href="#incremental_backups"></a><code>incremental_backups</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Set to true to have Cassandra create a hard link to each sstable
+flushed or streamed locally in a backups/ subdirectory of the
+keyspace data.  Removing these links is the operator&#8217;s
+responsibility.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> false</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="snapshot_before_compaction"><a class="anchor" href="#snapshot_before_compaction"></a><code>snapshot_before_compaction</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Whether or not to take a snapshot before each compaction.  Be
+careful using this option, since Cassandra won&#8217;t clean up the
+snapshots for you.  Mostly useful if you&#8217;re paranoid when there
+is a data format change.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> false</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="auto_snapshot"><a class="anchor" href="#auto_snapshot"></a><code>auto_snapshot</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Whether or not a snapshot is taken of the data before keyspace truncation
+or dropping of column families. The STRONGLY advised default of true
+should be used to provide data safety. If you set this flag to false, you will
+lose data on truncation or drop.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> true</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="snapshot_links_per_second"><a class="anchor" href="#snapshot_links_per_second"></a><code>snapshot_links_per_second</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The act of creating or clearing a snapshot involves creating or removing
+potentially tens of thousands of links, which can cause significant performance
+impact, especially on consumer grade SSDs. A non-zero value here can
+be used to throttle these links to avoid negative performance impact of
+taking and clearing snapshots</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 0</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="column_index_size_in_kb"><a class="anchor" href="#column_index_size_in_kb"></a><code>column_index_size_in_kb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Granularity of the collation index of rows within a partition.
+Increase if your rows are large, or if you have a very large
+number of rows per partition.  The competing goals are these:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a smaller granularity means more index entries are generated
+and looking up rows withing the partition by collation column
+is faster</p>
+</li>
+<li>
+<p>but, Cassandra will keep the collation index in memory for hot
+rows (as part of the key cache), so a larger granularity means
+you can cache more hot rows</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 64</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="column_index_cache_size_in_kb"><a class="anchor" href="#column_index_cache_size_in_kb"></a><code>column_index_cache_size_in_kb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Per sstable indexed key cache entries (the collation index in memory
+mentioned above) exceeding this size will not be held on heap.
+This means that only partition information is held on heap and the
+index entries are read from disk.</p>
+</div>
+<div class="paragraph">
+<p>Note that this size refers to the size of the
+serialized index information and not the size of the partition.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 2</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="concurrent_compactors"><a class="anchor" href="#concurrent_compactors"></a><code>concurrent_compactors</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Number of simultaneous compactions to allow, NOT including
+validation "compactions" for anti-entropy repair.  Simultaneous
+compactions can help preserve read performance in a mixed read/write
+workload, by mitigating the tendency of small sstables to accumulate
+during a single long running compactions. The default is usually
+fine and if you experience problems with compaction running too
+slowly or too fast, you should look at
+compaction_throughput_mb_per_sec first.</p>
+</div>
+<div class="paragraph">
+<p>concurrent_compactors defaults to the smaller of (number of disks,
+number of cores), with a minimum of 2 and a maximum of 8.</p>
+</div>
+<div class="paragraph">
+<p>If your data directories are backed by SSD, you should increase this
+to the number of cores.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 1</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="concurrent_validations"><a class="anchor" href="#concurrent_validations"></a><code>concurrent_validations</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Number of simultaneous repair validations to allow. If not set or set to
+a value less than 1, it defaults to the value of concurrent_compactors.
+To set a value greeater than concurrent_compactors at startup, the system
+property cassandra.allow_unlimited_concurrent_validations must be set to
+true. To dynamically resize to a value &gt; concurrent_compactors on a running
+node, first call the bypassConcurrentValidatorsLimit method on the
+org.apache.cassandra.db:type=StorageService mbean</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 0</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="concurrent_materialized_view_builders"><a class="anchor" href="#concurrent_materialized_view_builders"></a><code>concurrent_materialized_view_builders</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Number of simultaneous materialized view builder tasks to allow.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 1</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="compaction_throughput_mb_per_sec"><a class="anchor" href="#compaction_throughput_mb_per_sec"></a><code>compaction_throughput_mb_per_sec</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Throttles compaction to the given total throughput across the entire
+system. The faster you insert data, the faster you need to compact in
+order to keep the sstable count down, but in general, setting this to
+16 to 32 times the rate you are inserting data is more than sufficient.
+Setting this to 0 disables throttling. Note that this accounts for all types
+of compaction, including validation compaction (building Merkle trees
+for repairs).</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 64</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="sstable_preemptive_open_interval_in_mb"><a class="anchor" href="#sstable_preemptive_open_interval_in_mb"></a><code>sstable_preemptive_open_interval_in_mb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When compacting, the replacement sstable(s) can be opened before they
+are completely written, and used in place of the prior sstables for
+any range that has been written. This helps to smoothly transfer reads
+between the sstables, reducing page cache churn and keeping hot rows hot</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 50</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="stream_entire_sstables"><a class="anchor" href="#stream_entire_sstables"></a><code>stream_entire_sstables</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>When enabled, permits Cassandra to zero-copy stream entire eligible
+SSTables between nodes, including every component.
+This speeds up the network transfer significantly subject to
+throttling specified by stream_throughput_outbound_megabits_per_sec.
+Enabling this will reduce the GC pressure on sending and receiving node.
+When unset, the default is enabled. While this feature tries to keep the
+disks balanced, it cannot guarantee it. This feature will be automatically
+disabled if internode encryption is enabled.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> true</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="stream_throughput_outbound_megabits_per_sec"><a class="anchor" href="#stream_throughput_outbound_megabits_per_sec"></a><code>stream_throughput_outbound_megabits_per_sec</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Throttles all outbound streaming file transfers on this node to the
+given total throughput in Mbps. This is necessary because Cassandra does
+mostly sequential IO when streaming data during bootstrap or repair, which
+can lead to saturating the network connection and degrading rpc performance.
+When unset, the default is 200 Mbps or 25 MB/s.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 200</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="inter_dc_stream_throughput_outbound_megabits_per_sec"><a class="anchor" href="#inter_dc_stream_throughput_outbound_megabits_per_sec"></a><code>inter_dc_stream_throughput_outbound_megabits_per_sec</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Throttles all streaming file transfer between the datacenters,
+this setting allows users to throttle inter dc stream throughput in addition
+to throttling all network stream traffic as configured with
+stream_throughput_outbound_megabits_per_sec
+When unset, the default is 200 Mbps or 25 MB/s</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 200</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="read_request_timeout_in_ms"><a class="anchor" href="#read_request_timeout_in_ms"></a><code>read_request_timeout_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Server side timeouts for requests. The server will return a timeout exception
+to the client if it can&#8217;t complete an operation within the corresponding
+timeout. Those settings are a protection against:
+  1) having client wait on an operation that might never terminate due to some
+     failures.
+  2) operations that use too much CPU/read too much data (leading to memory build
+     up) by putting a limit to how long an operation will execute.
+For this reason, you should avoid putting these settings too high. In other words,
+if you are timing out requests because of underlying resource constraints then
+increasing the timeout will just cause more problems. Of course putting them too
+low is equally ill-advised since clients could get timeouts even for successful
+operations just because the timeout setting is too tight.</p>
+</div>
+<div class="paragraph">
+<p>How long the coordinator should wait for read operations to complete.
+Lowest acceptable value is 10 ms.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 5000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="range_request_timeout_in_ms"><a class="anchor" href="#range_request_timeout_in_ms"></a><code>range_request_timeout_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>How long the coordinator should wait for seq or index scans to complete.
+Lowest acceptable value is 10 ms.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 10000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="write_request_timeout_in_ms"><a class="anchor" href="#write_request_timeout_in_ms"></a><code>write_request_timeout_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>How long the coordinator should wait for writes to complete.
+Lowest acceptable value is 10 ms.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 2000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="counter_write_request_timeout_in_ms"><a class="anchor" href="#counter_write_request_timeout_in_ms"></a><code>counter_write_request_timeout_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>How long the coordinator should wait for counter writes to complete.
+Lowest acceptable value is 10 ms.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 5000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cas_contention_timeout_in_ms"><a class="anchor" href="#cas_contention_timeout_in_ms"></a><code>cas_contention_timeout_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>How long a coordinator should continue to retry a CAS operation
+that contends with other proposals for the same row.
+Lowest acceptable value is 10 ms.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 1000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="truncate_request_timeout_in_ms"><a class="anchor" href="#truncate_request_timeout_in_ms"></a><code>truncate_request_timeout_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>How long the coordinator should wait for truncates to complete
+(This can be much longer, because unless auto_snapshot is disabled
+we need to flush first so we can snapshot before removing the data.)
+Lowest acceptable value is 10 ms.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 60000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="request_timeout_in_ms"><a class="anchor" href="#request_timeout_in_ms"></a><code>request_timeout_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The default timeout for other, miscellaneous operations.
+Lowest acceptable value is 10 ms.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 10000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="internode_tcp_connect_timeout_in_ms"><a class="anchor" href="#internode_tcp_connect_timeout_in_ms"></a><code>internode_tcp_connect_timeout_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Defensive settings for protecting Cassandra from true network partitions.
+See (CASSANDRA-14358) for details.</p>
+</div>
+<div class="paragraph">
+<p>The amount of time to wait for internode tcp connections to establish.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 2000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="internode_tcp_user_timeout_in_ms"><a class="anchor" href="#internode_tcp_user_timeout_in_ms"></a><code>internode_tcp_user_timeout_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>The amount of time unacknowledged data is allowed on a connection before we throw out the connection
+Note this is only supported on Linux + epoll, and it appears to behave oddly above a setting of 30000
+(it takes much longer than 30s) as of Linux 4.12. If you want something that high set this to 0
+which picks up the OS default and configure the net.ipv4.tcp_retries2 sysctl to be ~8.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 30000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="internode_streaming_tcp_user_timeout_in_ms"><a class="anchor" href="#internode_streaming_tcp_user_timeout_in_ms"></a><code>internode_streaming_tcp_user_timeout_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>The amount of time unacknowledged data is allowed on a streaming connection.
+The default is 5 minutes. Increase it or set it to 0 in order to increase the timeout.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 300000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="internode_application_send_queue_capacity_in_bytes"><a class="anchor" href="#internode_application_send_queue_capacity_in_bytes"></a><code>internode_application_send_queue_capacity_in_bytes</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Global, per-endpoint and per-connection limits imposed on messages queued for delivery to other nodes
+and waiting to be processed on arrival from other nodes in the cluster.  These limits are applied to the on-wire
+size of the message being sent or received.</p>
+</div>
+<div class="paragraph">
+<p>The basic per-link limit is consumed in isolation before any endpoint or global limit is imposed.
+Each node-pair has three links: urgent, small and large.  So any given node may have a maximum of
+N*3*(internode_application_send_queue_capacity_in_bytes+internode_application_receive_queue_capacity_in_bytes)
+messages queued without any coordination between them although in practice, with token-aware routing, only RF*tokens
+nodes should need to communicate with significant bandwidth.</p>
+</div>
+<div class="paragraph">
+<p>The per-endpoint limit is imposed on all messages exceeding the per-link limit, simultaneously with the global limit,
+on all links to or from a single node in the cluster.
+The global limit is imposed on all messages exceeding the per-link limit, simultaneously with the per-endpoint limit,
+on all links to or from any node in the cluster.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 4194304                       #4MiB</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="internode_application_send_queue_reserve_endpoint_capacity_in_bytes"><a class="anchor" href="#internode_application_send_queue_reserve_endpoint_capacity_in_bytes"></a><code>internode_application_send_queue_reserve_endpoint_capacity_in_bytes</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 134217728    #128MiB</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="internode_application_send_queue_reserve_global_capacity_in_bytes"><a class="anchor" href="#internode_application_send_queue_reserve_global_capacity_in_bytes"></a><code>internode_application_send_queue_reserve_global_capacity_in_bytes</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 536870912      #512MiB</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="internode_application_receive_queue_capacity_in_bytes"><a class="anchor" href="#internode_application_receive_queue_capacity_in_bytes"></a><code>internode_application_receive_queue_capacity_in_bytes</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 4194304                    #4MiB</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="internode_application_receive_queue_reserve_endpoint_capacity_in_bytes"><a class="anchor" href="#internode_application_receive_queue_reserve_endpoint_capacity_in_bytes"></a><code>internode_application_receive_queue_reserve_endpoint_capacity_in_bytes</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 134217728 #128MiB</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="internode_application_receive_queue_reserve_global_capacity_in_bytes"><a class="anchor" href="#internode_application_receive_queue_reserve_global_capacity_in_bytes"></a><code>internode_application_receive_queue_reserve_global_capacity_in_bytes</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 536870912   #512MiB</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="slow_query_log_timeout_in_ms"><a class="anchor" href="#slow_query_log_timeout_in_ms"></a><code>slow_query_log_timeout_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>How long before a node logs slow queries. Select queries that take longer than
+this timeout to execute, will generate an aggregated log message, so that slow queries
+can be identified. Set this value to zero to disable slow query logging.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 500</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cross_node_timeout"><a class="anchor" href="#cross_node_timeout"></a><code>cross_node_timeout</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Enable operation timeout information exchange between nodes to accurately
+measure request timeouts.  If disabled, replicas will assume that requests
+were forwarded to them instantly by the coordinator, which means that
+under overload conditions we will waste that much extra time processing
+already-timed-out requests.</p>
+</div>
+<div class="paragraph">
+<p>Warning: It is generally assumed that users have setup NTP on their clusters, and that clocks are modestly in sync,
+since this is a requirement for general correctness of last write wins.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> true</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="streaming_keep_alive_period_in_secs"><a class="anchor" href="#streaming_keep_alive_period_in_secs"></a><code>streaming_keep_alive_period_in_secs</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Set keep-alive period for streaming
+This node will send a keep-alive message periodically with this period.
+If the node does not receive a keep-alive message from the peer for
+2 keep-alive cycles the stream session times out and fail
+Default value is 300s (5 minutes), which means stalled stream
+times out in 10 minutes by default</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 300</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="streaming_connections_per_host"><a class="anchor" href="#streaming_connections_per_host"></a><code>streaming_connections_per_host</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Limit number of connections per host for streaming
+Increase this when you notice that joins are CPU-bound rather that network
+bound (for example a few nodes with big files).</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 1</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="phi_convict_threshold"><a class="anchor" href="#phi_convict_threshold"></a><code>phi_convict_threshold</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>phi value that must be reached for a host to be marked down.
+most users should never need to adjust this.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 8</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="endpoint_snitch"><a class="anchor" href="#endpoint_snitch"></a><code>endpoint_snitch</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>endpoint_snitch&#8201;&#8212;&#8201;Set this to a class that implements
+IEndpointSnitch.  The snitch has two functions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>it teaches Cassandra enough about your network topology to route
+requests efficiently</p>
+</li>
+<li>
+<p>it allows Cassandra to spread replicas around your cluster to avoid
+correlated failures. It does this by grouping machines into
+"datacenters" and "racks."  Cassandra will do its best not to have
+more than one replica on the same "rack" (which may not actually
+be a physical location)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>CASSANDRA WILL NOT ALLOW YOU TO SWITCH TO AN INCOMPATIBLE SNITCH
+ONCE DATA IS INSERTED INTO THE CLUSTER.  This would cause data loss.
+This means that if you start with the default SimpleSnitch, which
+locates every node on "rack1" in "datacenter1", your only options
+if you need to add another datacenter are GossipingPropertyFileSnitch
+(and the older PFS).  From there, if you want to migrate to an
+incompatible snitch like Ec2Snitch you can do it by adding new nodes
+under Ec2Snitch (which will locate them in a new "datacenter") and
+decommissioning the old ones.</p>
+</div>
+<div class="paragraph">
+<p>Out of the box, Cassandra provides:</p>
+</div>
+<div class="paragraph">
+<p>SimpleSnitch:
+   Treats Strategy order as proximity. This can improve cache
+   locality when disabling read repair.  Only appropriate for
+   single-datacenter deployments.</p>
+</div>
+<div class="paragraph">
+<p>GossipingPropertyFileSnitch
+   This should be your go-to snitch for production use.  The rack
+   and datacenter for the local node are defined in
+   cassandra-rackdc.properties and propagated to other nodes via
+   gossip.  If cassandra-topology.properties exists, it is used as a
+   fallback, allowing migration from the PropertyFileSnitch.</p>
+</div>
+<div class="paragraph">
+<p>PropertyFileSnitch:
+   Proximity is determined by rack and data center, which are
+   explicitly configured in cassandra-topology.properties.</p>
+</div>
+<div class="paragraph">
+<p>Ec2Snitch:
+   Appropriate for EC2 deployments in a single Region. Loads Region
+   and Availability Zone information from the EC2 API. The Region is
+   treated as the datacenter, and the Availability Zone as the rack.
+   Only private IPs are used, so this will not work across multiple
+   Regions.</p>
+</div>
+<div class="paragraph">
+<p>Ec2MultiRegionSnitch:
+   Uses public IPs as broadcast_address to allow cross-region
+   connectivity.  (Thus, you should set seed addresses to the public
+   IP as well.) You will need to open the storage_port or
+   ssl_storage_port on the public IP firewall.  (For intra-Region
+   traffic, Cassandra will switch to the private IP after
+   establishing a connection.)</p>
+</div>
+<div class="paragraph">
+<p>RackInferringSnitch:
+   Proximity is determined by rack and data center, which are
+   assumed to correspond to the 3rd and 2nd octet of each node&#8217;s IP
+   address, respectively.  Unless this happens to match your
+   deployment conventions, this is best used as an example of
+   writing a custom Snitch class and is provided in that spirit.</p>
+</div>
+<div class="paragraph">
+<p>You can use a custom Snitch by setting this to the full class name
+of the snitch, which will be assumed to be on your classpath.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> SimpleSnitch</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="dynamic_snitch_update_interval_in_ms"><a class="anchor" href="#dynamic_snitch_update_interval_in_ms"></a><code>dynamic_snitch_update_interval_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>controls how often to perform the more expensive part of host score
+calculation</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 100</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="dynamic_snitch_reset_interval_in_ms"><a class="anchor" href="#dynamic_snitch_reset_interval_in_ms"></a><code>dynamic_snitch_reset_interval_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>controls how often to reset all host scores, allowing a bad host to
+possibly recover</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 600000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="dynamic_snitch_badness_threshold"><a class="anchor" href="#dynamic_snitch_badness_threshold"></a><code>dynamic_snitch_badness_threshold</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>if set greater than zero, this will allow
+'pinning' of replicas to hosts in order to increase cache capacity.
+The badness threshold will control how much worse the pinned host has to be
+before the dynamic snitch will prefer other replicas over it.  This is
+expressed as a double which represents a percentage.  Thus, a value of
+0.2 means Cassandra would continue to prefer the static snitch values
+until the pinned host was 20% worse than the fastest.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 1.0</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="server_encryption_options"><a class="anchor" href="#server_encryption_options"></a><code>server_encryption_options</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Configure server-to-server internode encryption</p>
+</div>
+<div class="paragraph">
+<p>JVM and netty defaults for supported SSL socket protocols and cipher suites can
+be replaced using custom encryption options. This is not recommended
+unless you have policies in place that dictate certain settings, or
+need to disable vulnerable ciphers or protocols in case the JVM cannot
+be updated.</p>
+</div>
+<div class="paragraph">
+<p>FIPS compliant settings can be configured at JVM level and should not
+involve changing encryption settings here:
+<a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/FIPS.html" class="bare">docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/FIPS.html</a></p>
+</div>
+<div class="paragraph">
+<p><strong>NOTE</strong> this default configuration is an insecure configuration. If you need to
+enable server-to-server encryption generate server keystores (and truststores for mutual
+authentication) per:
+<a href="http://download.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html#CreateKeystore" class="bare">download.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html#CreateKeystore</a>
+Then perform the following configuration changes:</p>
+</div>
+<div class="paragraph">
+<p>Step 1: Set internode_encryption=&lt;dc|rack|all&gt; and explicitly set optional=true. Restart all nodes</p>
+</div>
+<div class="paragraph">
+<p>Step 2: Set optional=false (or remove it) and if you generated truststores and want to use mutual
+auth set require_client_auth=true. Restart all nodes</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value (complex option)</em>:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>        # On outbound connections, determine which type of peers to securely connect to.
+        #   The available options are :
+        #     none : Do not encrypt outgoing connections
+        #     dc   : Encrypt connections to peers in other datacenters but not within datacenters
+        #     rack : Encrypt connections to peers in other racks but not within racks
+        #     all  : Always use encrypted connections
+        internode_encryption: none
+        # When set to true, encrypted and unencrypted connections are allowed on the storage_port
+        # This should _only be true_ while in unencrypted or transitional operation
+        # optional defaults to true if internode_encryption is none
+        # optional: true
+        # If enabled, will open up an encrypted listening socket on ssl_storage_port. Should only be used
+        # during upgrade to 4.0; otherwise, set to false.
+        enable_legacy_ssl_storage_port: false
+        # Set to a valid keystore if internode_encryption is dc, rack or all
+        keystore: conf/.keystore
+        keystore_password: cassandra
+        # Verify peer server certificates
+        require_client_auth: false
+        # Set to a valid trustore if require_client_auth is true
+        truststore: conf/.truststore
+        truststore_password: cassandra
+        # Verify that the host name in the certificate matches the connected host
+        require_endpoint_verification: false
+        # More advanced defaults:
+        # protocol: TLS
+        # store_type: JKS
+        # cipher_suites: [
+        #   TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+        #   TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
+        #   TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_128_CBC_SHA,
+        #   TLS_RSA_WITH_AES_256_CBC_SHA
+        # ]</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="client_encryption_options"><a class="anchor" href="#client_encryption_options"></a><code>client_encryption_options</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Configure client-to-server encryption.</p>
+</div>
+<div class="paragraph">
+<p><strong>NOTE</strong> this default configuration is an insecure configuration. If you need to
+enable client-to-server encryption generate server keystores (and truststores for mutual
+authentication) per:
+<a href="http://download.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html#CreateKeystore" class="bare">download.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html#CreateKeystore</a>
+Then perform the following configuration changes:</p>
+</div>
+<div class="paragraph">
+<p>Step 1: Set enabled=true and explicitly set optional=true. Restart all nodes</p>
+</div>
+<div class="paragraph">
+<p>Step 2: Set optional=false (or remove it) and if you generated truststores and want to use mutual
+auth set require_client_auth=true. Restart all nodes</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value (complex option)</em>:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>        # Enable client-to-server encryption
+        enabled: false
+        # When set to true, encrypted and unencrypted connections are allowed on the native_transport_port
+        # This should _only be true_ while in unencrypted or transitional operation
+        # optional defaults to true when enabled is false, and false when enabled is true.
+        # optional: true
+        # Set keystore and keystore_password to valid keystores if enabled is true
+        keystore: conf/.keystore
+        keystore_password: cassandra
+        # Verify client certificates
+        require_client_auth: false
+        # Set trustore and truststore_password if require_client_auth is true
+        # truststore: conf/.truststore
+        # truststore_password: cassandra
+        # More advanced defaults:
+        # protocol: TLS
+        # store_type: JKS
+        # cipher_suites: [
+        #   TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+        #   TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
+        #   TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_128_CBC_SHA,
+        #   TLS_RSA_WITH_AES_256_CBC_SHA
+        # ]</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="internode_compression"><a class="anchor" href="#internode_compression"></a><code>internode_compression</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>internode_compression controls whether traffic between nodes is
+compressed.
+Can be:</p>
+</div>
+<div class="paragraph">
+<p>all
+  all traffic is compressed</p>
+</div>
+<div class="paragraph">
+<p>dc
+  traffic between different datacenters is compressed</p>
+</div>
+<div class="paragraph">
+<p>none
+  nothing is compressed.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> dc</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="inter_dc_tcp_nodelay"><a class="anchor" href="#inter_dc_tcp_nodelay"></a><code>inter_dc_tcp_nodelay</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Enable or disable tcp_nodelay for inter-dc communication.
+Disabling it will result in larger (but fewer) network packets being sent,
+reducing overhead from the TCP protocol itself, at the cost of increasing
+latency if you block for cross-datacenter responses.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> false</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="tracetype_query_ttl"><a class="anchor" href="#tracetype_query_ttl"></a><code>tracetype_query_ttl</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>TTL for different trace types used during logging of the repair process.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 86400</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="tracetype_repair_ttl"><a class="anchor" href="#tracetype_repair_ttl"></a><code>tracetype_repair_ttl</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Default Value:</em> 604800</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="enable_user_defined_functions"><a class="anchor" href="#enable_user_defined_functions"></a><code>enable_user_defined_functions</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If unset, all GC Pauses greater than gc_log_threshold_in_ms will log at
+INFO level
+UDFs (user defined functions) are disabled by default.
+As of Cassandra 3.0 there is a sandbox in place that should prevent execution of evil code.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> false</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="enable_scripted_user_defined_functions"><a class="anchor" href="#enable_scripted_user_defined_functions"></a><code>enable_scripted_user_defined_functions</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Enables scripted UDFs (JavaScript UDFs).
+Java UDFs are always enabled, if enable_user_defined_functions is true.
+Enable this option to be able to use UDFs with "language javascript" or any custom JSR-223 provider.
+This option has no effect, if enable_user_defined_functions is false.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> false</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="windows_timer_interval"><a class="anchor" href="#windows_timer_interval"></a><code>windows_timer_interval</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The default Windows kernel timer and scheduling resolution is 15.6ms for power conservation.
+Lowering this value on Windows can provide much tighter latency and better throughput, however
+some virtualized environments may see a negative performance impact from changing this setting
+below their system default. The sysinternals 'clockres' tool can confirm your system&#8217;s default
+setting.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 1</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="transparent_data_encryption_options"><a class="anchor" href="#transparent_data_encryption_options"></a><code>transparent_data_encryption_options</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Enables encrypting data at-rest (on disk). Different key providers can be plugged in, but the default reads from
+a JCE-style keystore. A single keystore can hold multiple keys, but the one referenced by
+the "key_alias" is the only key that will be used for encrypt opertaions; previously used keys
+can still (and should!) be in the keystore and will be used on decrypt operations
+(to handle the case of key rotation).</p>
+</div>
+<div class="paragraph">
+<p>It is strongly recommended to download and install Java Cryptography Extension (JCE)
+Unlimited Strength Jurisdiction Policy Files for your version of the JDK.
+(current link: <a href="http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html" class="bare">www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html</a>)</p>
+</div>
+<div class="paragraph">
+<p>Currently, only the following file types are supported for transparent data encryption, although
+more are coming in future cassandra releases: commitlog, hints</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value (complex option)</em>:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>        enabled: false
+        chunk_length_kb: 64
+        cipher: AES/CBC/PKCS5Padding
+        key_alias: testing:1
+        # CBC IV length for AES needs to be 16 bytes (which is also the default size)
+        # iv_length: 16
+        key_provider:
+          - class_name: org.apache.cassandra.security.JKSKeyProvider
+            parameters:
+              - keystore: conf/.keystore
+                keystore_password: cassandra
+                store_type: JCEKS
+                key_password: cassandra</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="tombstone_warn_threshold"><a class="anchor" href="#tombstone_warn_threshold"></a><code>tombstone_warn_threshold</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><mark><mark></mark><mark></mark></mark><mark><mark></mark><mark></mark></mark>
+SAFETY THRESHOLDS #
+<mark><mark></mark><mark></mark></mark><mark><mark></mark><mark></mark></mark></p>
+</div>
+<div class="paragraph">
+<p>When executing a scan, within or across a partition, we need to keep the
+tombstones seen in memory so we can return them to the coordinator, which
+will use them to make sure other replicas also know about the deleted rows.
+With workloads that generate a lot of tombstones, this can cause performance
+problems and even exaust the server heap.
+(<a href="http://www.datastax.com/dev/blog/cassandra-anti-patterns-queues-and-queue-like-datasets" class="bare">www.datastax.com/dev/blog/cassandra-anti-patterns-queues-and-queue-like-datasets</a>)
+Adjust the thresholds here if you understand the dangers and want to
+scan more tombstones anyway.  These thresholds may also be adjusted at runtime
+using the StorageService mbean.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 1000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="tombstone_failure_threshold"><a class="anchor" href="#tombstone_failure_threshold"></a><code>tombstone_failure_threshold</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Default Value:</em> 100000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="replica_filtering_protection"><a class="anchor" href="#replica_filtering_protection"></a><code>replica_filtering_protection</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Filtering and secondary index queries at read consistency levels above ONE/LOCAL_ONE use a
+mechanism called replica filtering protection to ensure that results from stale replicas do
+not violate consistency. (See CASSANDRA-8272 and CASSANDRA-15907 for more details.) This
+mechanism materializes replica results by partition on-heap at the coordinator. The more possibly
+stale results returned by the replicas, the more rows materialized during the query.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="batch_size_warn_threshold_in_kb"><a class="anchor" href="#batch_size_warn_threshold_in_kb"></a><code>batch_size_warn_threshold_in_kb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Log WARN on any multiple-partition batch size exceeding this value. 5kb per batch by default.
+Caution should be taken on increasing the size of this threshold as it can lead to node instability.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 5</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="batch_size_fail_threshold_in_kb"><a class="anchor" href="#batch_size_fail_threshold_in_kb"></a><code>batch_size_fail_threshold_in_kb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Fail any multiple-partition batch exceeding this value. 50kb (10x warn threshold) by default.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 50</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="unlogged_batch_across_partitions_warn_threshold"><a class="anchor" href="#unlogged_batch_across_partitions_warn_threshold"></a><code>unlogged_batch_across_partitions_warn_threshold</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Log WARN on any batches not of type LOGGED than span across more partitions than this limit</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 10</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="compaction_large_partition_warning_threshold_mb"><a class="anchor" href="#compaction_large_partition_warning_threshold_mb"></a><code>compaction_large_partition_warning_threshold_mb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Log a warning when compacting partitions larger than this value</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 100</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="gc_log_threshold_in_ms"><a class="anchor" href="#gc_log_threshold_in_ms"></a><code>gc_log_threshold_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>GC Pauses greater than 200 ms will be logged at INFO level
+This threshold can be adjusted to minimize logging if necessary</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 200</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="gc_warn_threshold_in_ms"><a class="anchor" href="#gc_warn_threshold_in_ms"></a><code>gc_warn_threshold_in_ms</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>GC Pauses greater than gc_warn_threshold_in_ms will be logged at WARN level
+Adjust the threshold based on your application throughput requirement. Setting to 0
+will deactivate the feature.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 1000</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="max_value_size_in_mb"><a class="anchor" href="#max_value_size_in_mb"></a><code>max_value_size_in_mb</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Maximum size of any value in SSTables. Safety measure to detect SSTable corruption
+early. Any value size larger than this threshold will result into marking an SSTable
+as corrupted. This should be positive and less than 2048.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 256</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="ideal_consistency_level"><a class="anchor" href="#ideal_consistency_level"></a><code>ideal_consistency_level</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Track a metric per keyspace indicating whether replication achieved the ideal consistency
+level for writes without timing out. This is different from the consistency level requested by
+each write which may be lower in order to facilitate availability.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> EACH_QUORUM</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="automatic_sstable_upgrade"><a class="anchor" href="#automatic_sstable_upgrade"></a><code>automatic_sstable_upgrade</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Automatically upgrade sstables after upgrade - if there is no ordinary compaction to do, the
+oldest non-upgraded sstable will get upgraded to the latest version</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> false</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="max_concurrent_automatic_sstable_upgrades"><a class="anchor" href="#max_concurrent_automatic_sstable_upgrades"></a><code>max_concurrent_automatic_sstable_upgrades</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong>
+Limit the number of concurrent sstable upgrades</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 1</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="audit_logging_options"><a class="anchor" href="#audit_logging_options"></a><code>audit_logging_options</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Audit logging - Logs every incoming CQL command request, authentication to a node. See the docs
+on audit_logging for full details about the various configuration options.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="full_query_logging_options"><a class="anchor" href="#full_query_logging_options"></a><code>full_query_logging_options</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>default options for full query logging - these can be overridden from command line when executing
+nodetool enablefullquerylog</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="corrupted_tombstone_strategy"><a class="anchor" href="#corrupted_tombstone_strategy"></a><code>corrupted_tombstone_strategy</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>validate tombstones on reads and compaction
+can be either "disabled", "warn" or "exception"</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> disabled</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="diagnostic_events_enabled"><a class="anchor" href="#diagnostic_events_enabled"></a><code>diagnostic_events_enabled</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Diagnostic Events #
+If enabled, diagnostic events can be helpful for troubleshooting operational issues. Emitted events contain details
+on internal state and temporal relationships across events, accessible by clients via JMX.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> false</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="native_transport_flush_in_batches_legacy"><a class="anchor" href="#native_transport_flush_in_batches_legacy"></a><code>native_transport_flush_in_batches_legacy</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Use native transport TCP message coalescing. If on upgrade to 4.0 you found your throughput decreasing, and in
+particular you run an old kernel or have very fewer client connections, this option might be worth evaluating.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> false</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="repaired_data_tracking_for_range_reads_enabled"><a class="anchor" href="#repaired_data_tracking_for_range_reads_enabled"></a><code>repaired_data_tracking_for_range_reads_enabled</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Enable tracking of repaired state of data during reads and comparison between replicas
+Mismatches between the repaired sets of replicas can be characterized as either confirmed
+or unconfirmed. In this context, unconfirmed indicates that the presence of pending repair
+sessions, unrepaired partition tombstones, or some other condition means that the disparity
+cannot be considered conclusive. Confirmed mismatches should be a trigger for investigation
+as they may be indicative of corruption or data loss.
+There are separate flags for range vs partition reads as single partition reads are only tracked
+when CL &gt; 1 and a digest mismatch occurs. Currently, range queries don&#8217;t use digests so if
+enabled for range reads, all range reads will include repaired data tracking. As this adds
+some overhead, operators may wish to disable it whilst still enabling it for partition reads</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> false</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="repaired_data_tracking_for_partition_reads_enabled"><a class="anchor" href="#repaired_data_tracking_for_partition_reads_enabled"></a><code>repaired_data_tracking_for_partition_reads_enabled</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Default Value:</em> false</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="report_unconfirmed_repaired_data_mismatches"><a class="anchor" href="#report_unconfirmed_repaired_data_mismatches"></a><code>report_unconfirmed_repaired_data_mismatches</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If false, only confirmed mismatches will be reported. If true, a separate metric for unconfirmed
+mismatches will also be recorded. This is to avoid potential signal:noise issues are unconfirmed
+mismatches are less actionable than confirmed ones.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> false</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="table_count_warn_threshold"><a class="anchor" href="#table_count_warn_threshold"></a><code>table_count_warn_threshold</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p>Having many tables and/or keyspaces negatively affects performance of many operations in the
+cluster. When the number of tables/keyspaces in the cluster exceeds the following thresholds
+a client warning will be sent back to the user when creating a table or keyspace.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 150</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="keyspace_count_warn_threshold"><a class="anchor" href="#keyspace_count_warn_threshold"></a><code>keyspace_count_warn_threshold</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>This option is commented out by default.</strong></p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> 40</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="enable_materialized_views"><a class="anchor" href="#enable_materialized_views"></a><code>enable_materialized_views</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><mark><mark></mark><mark></mark></mark><mark><mark></mark><mark></mark></mark><mark><mark>#
+EXPERIMENTAL FEATURES #
+</mark><mark></mark></mark><mark><mark></mark><mark></mark></mark><mark><mark></mark></mark>#</p>
+</div>
+<div class="paragraph">
+<p>Enables materialized view creation on this node.
+Materialized views are considered experimental and are not recommended for production use.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> false</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="enable_sasi_indexes"><a class="anchor" href="#enable_sasi_indexes"></a><code>enable_sasi_indexes</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Enables SASI index creation on this node.
+SASI indexes are considered experimental and are not recommended for production use.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> false</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="enable_transient_replication"><a class="anchor" href="#enable_transient_replication"></a><code>enable_transient_replication</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Enables creation of transiently replicated keyspaces on this node.
+Transient replication is experimental and is not recommended for production use.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> false</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="enable_drop_compact_storage"><a class="anchor" href="#enable_drop_compact_storage"></a><code>enable_drop_compact_storage</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Enables the used of 'ALTER &#8230;&#8203; DROP COMPACT STORAGE' statements on this node.
+'ALTER &#8230;&#8203; DROP COMPACT STORAGE' is considered experimental and is not recommended for production use.</p>
+</div>
+<div class="paragraph">
+<p><em>Default Value:</em> false</p>
+</div>
+</div>
+</div>
+</article>
+</main>
+    </div>
+</div>
+            <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://twitter.com/cassandra?lang=en" target="_blank"><img src="../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+    <script src="../../../../assets/js/site.js"></script>
+    <script async src="../../../../assets/js/vendor/highlight.js"></script>
+    <script src="../../../../assets/js/vendor/lunr.js"></script>
+    <script src="../../../../assets/js/vendor/search.js" id="search-script" data-base-path="../../../.." data-page-path="/Cassandra/4.0/cassandra/configuration/cass_yaml_file.html"></script>
+    <script async src="../../../../assets/../search-index.js"></script>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Storage-attached indexing (SAI) concepts | Apache Cassandra Documentation</title>
+            <link rel="stylesheet" href="../../../../../../../assets/css/site.css">
+    <meta name="description" content="Use Storage-Attached Indexing (SAI) to create multiple secondary indexes on the same table.">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="Cassandra">
+    <meta name="dcterms.identifier" content="trunk">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../../../../../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "https://plausible.cassandra.apache.org/js/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>    </head>
+    <body class="docs-wrapper article">
+        <div class="container mx-auto relative">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta property="og:type" content="website" />
+	<meta property="og:description" content="" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+         <div class="header-social-icons text-right">
+            <a href="https://twitter.com/cassandra?lang=en" target="_blank" styles="margin-left: 20px;"><img src="../../../../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../../../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../../../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../../../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../../../../../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+            <div class="hero hero--home grad">
+                <div class="eye"></div>
+                <div id="docs-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                    <h2>Cassandra Documentation</h2>
+                </div>
+            </div>
+            <div class="body px-medium py-medium container">
+    <div class="docs-nav-bar flex flex-space-between mb-medium">
+      <div id="mobile-docs-nav-burger" class="hidden">
+        <svg viewBox="0 0 24 24" width="36" height="36" stroke="#1c81a0" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </div>
+        <div class="docs-nav-item relative">
+          <input id="search-input" type="text" placeholder="Search docs">
+        </div>
+      <div class="versions-wrapper">
+  <h4>Version:</h4>
+  <div class="nav-panel-explore" data-panel="explore">
+
+    <div id="version-toggle" class="context">
+      <span class="version">trunk</span>
+    </div>
+    <ul id="versions-list" class="components">
+      <li class="component">
+        <ul class="versions">
+          <li class="version is-latest">
+            <a href="../../../../../../../_/index.html">master</a>
+          </li>
+        </ul>
+      </li>
+      <li class="component is-current">
+        <ul class="versions">
+          <li class="version is-current">
+            <a href="../../../../../index.html">trunk</a>
+          </li>
+          <li class="version">
+            <a href="../../../../../../5.0/index.html">5.0</a>
+          </li>
+          <li class="version is-latest">
+            <a href="../../../../../../4.1/index.html">4.1</a>
+          </li>
+          <li class="version">
+            <a href="../../../../../../4.0/index.html">4.0</a>
+          </li>
+          <li class="version">
+            <a href="../../../../../../3.11/index.html">3.11</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>    </div>
+    <div class="cf relative">
+        <nav class="nav docs-nav full-800">
+<div class="nav-menu">
+<ul class="nav-list">
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../index.html">Main</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/glossary.html">Glossary</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/bugs.html">How to report bugs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/contactus.html">Contact us</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../../../_/development/index.html">Development</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/gettingstarted.html">Getting started</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/ide.html">Building and IDE integration</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/testing.html">Testing</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/patches.html">Contributing code changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/code_style.html">Code style</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/how_to_review.html">Review checklist</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/how_to_commit.html">How to commit</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/documentation.html">Working on documentation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/ci.html">Jenkins CI environment</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/dependencies.html">Dependency management</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/release_process.html">Release process</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item is-current-path is-active" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <span class="nav-text">Cassandra</span>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../overview/faq/index.html">FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../getting-started/index.html">Getting Started</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../getting-started/cassandra-quickstart.html">Cassandra Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../installing/installing.html">Installing Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../getting-started/configuring.html">Configuring Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../getting-started/querying.html">Inserting and querying</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../getting-started/drivers.html">Client drivers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../getting-started/production.html">Production recommendations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../new/index.html">What&#8217;s new</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../reference/java17.html">Support for Java</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../architecture/index.html">Architecture</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../architecture/overview.html">Overview</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../architecture/dynamo.html">Dynamo</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../architecture/storage-engine.html">Storage Engine</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../architecture/guarantees.html">Guarantees</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../architecture/messaging.html">Improved Internode Messaging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../architecture/streaming.html">Improved Streaming</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../data-modeling/index.html">Data Modeling</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../data-modeling/intro.html">Introduction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../data-modeling/data-modeling_conceptual.html">Conceptual data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../data-modeling/data-modeling_rdbms.html">RDBMS design</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../data-modeling/data-modeling_queries.html">Defining application queries</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../data-modeling/data-modeling_logical.html">Logical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../data-modeling/data-modeling_physical.html">Physical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../data-modeling/data-modeling_refining.html">Evaluating and refining data models</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../data-modeling/data-modeling_schema.html">Defining database schema</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../data-modeling/data-modeling_tools.html">Cassandra data modeling tools</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-path is-active" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../index.html">Cassandra Query Language (CQL)</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../definitions.html">Definitions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../types.html">Data types</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../ddl.html">Data definition (DDL)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../dml.html">Data manipulation (DML)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../dynamic-data-masking.html">Dynamic Data Masking (DDM)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../operators.html">Operators</a>
+    </span>
+  </li>
+  <li class="nav-item is-current-path is-active" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../indexing-concepts.html">Indexing concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item is-current-path is-active" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="sai-overview.html">SAI Overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page is-active" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="sai-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="sai-faq.html">SAI FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="sai-working-with.html">Working with SAI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="operations/sai-operations.html">SAI operations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../2i/2i-overview.html">Secondary indexes (2i) overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../2i/2i-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../2i/2i-working-with.html">Working with 2i</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../2i/operations/2i-build.html">Rebuild 2i</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../mvs.html">Materialized views</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../functions.html">Functions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../json.html">JSON</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../triggers.html">Triggers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../appendices.html">Appendices</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../changes.html">Changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../SASI.html">SASI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../cql_singlefile.html">Single file of CQL information</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../vector-search/overview.html">Vector Search overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../vector-search/concepts.html">Concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../vector-search/data-modeling.html">Data Modeling</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../vector-search/vector-search-working-with.html">Working with Vector Search</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../managing/index.html">Managing</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../managing/configuration/index.html">Configuring</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/configuration/cass_yaml_file.html">cassandra.yaml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/configuration/cass_rackdc_file.html">cassandra-rackdc.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/configuration/cass_env_sh_file.html">cassandra-env.sh</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/configuration/cass_topo_file.html">cassandra-topologies.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/configuration/cass_cl_archive_file.html">commitlog-archiving.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/configuration/cass_logback_xml_file.html">logback.xml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/configuration/cass_jvm_options_file.html">jvm-* files</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/configuration/configuration.html">Liberating cassandra.yaml Parameters' Names from Their Units</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../managing/operating/index.html">Operating</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/backups.html">Backups</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/bloom_filters.html">Bloom filters</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/bulk_loading.html">Bulk loading</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/cdc.html">Change Data Capture (CDC)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/compaction/index.html">Compaction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/compression.html">Compression</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/hardware.html">Hardware</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/hints.html">Hints</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../managing/operating/logging.html">Logging</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/auditlogging.html">Audit logging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/audit_logging.html">Audit logging 2</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/fqllogging.html">Full query logging</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/metrics.html">Monitoring metrics</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/repair.html">Repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/read_repair.html">Read repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/snitch.html">Snitches</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/topo_changes.html">Topology changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/transientreplication.html">Transient replication</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/virtualtables.html">Virtual tables</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../managing/tools/index.html">Tools</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/tools/cqlsh.html">cqlsh: the CQL shell</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/tools/nodetool/nodetool.html">nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/tools/sstable/index.html">SSTable tools</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="#cassandra:managing/tools/cassandra_stress.adoc">cassandra-stress</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../troubleshooting/index.html">Troubleshooting</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../troubleshooting/finding_nodes.html">Finding misbehaving nodes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../troubleshooting/reading_logs.html">Reading Cassandra logs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../troubleshooting/use_nodetool.html">Using nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../troubleshooting/use_tools.html">Using external tools to deep-dive</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../reference/index.html">Reference</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../reference/cql-commands/alter-table.html">ALTER TABLE</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../reference/cql-commands/create-index.html">CREATE INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../reference/cql-commands/create-custom-index.html">CREATE CUSTOM INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../reference/cql-commands/create-table.html">CREATE TABLE</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../reference/cql-commands/drop-index.html">DROP INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../reference/cql-commands/drop-table.html">DROP TABLE</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../integrating/plugins/index.html">Plug-ins</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+</div>
+</nav>
+        <aside class="toc sidebar">
+  <div class="toc-menu"></div>
+</aside>
+        <main class="article default-main full-800" data-ceiling="topbar">
+  <div class="article-banner">
+    <p>You are viewing the documentation for a prerelease version.</p>
+  </div>
+    <div class="article-header">
+<nav class="crumbs" aria-label="breadcrumbs">
+  <ul>
+    <li class="crumb">Cassandra</li>
+    <li class="crumb"><a href="../../index.html">Cassandra Query Language (CQL)</a></li>
+    <li class="crumb"><a href="../indexing-concepts.html">Indexing concepts</a></li>
+    <li class="crumb"><a href="sai-overview.html">SAI Overview</a></li>
+    <li class="crumb"><a href="sai-concepts.html">Concepts</a></li>
+  </ul>
+</nav>
+<div class="tools" role="navigation">
+  <ul>
+    <li class="tool edit"><a href="https://github.com/apache/cassandra/edit/trunk/doc/modules/cassandra/pages/developing/cql/indexing/sai/sai-concepts.adoc" title="Edit Page" target="_blank" rel="noopener">Edit</a></li>
+  </ul>
+</div>
+  </div>
+<article class="doc">
+<h1 class="page">Storage-attached indexing (SAI) concepts</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Storage-Attached Indexing (SAI) is a highly-scalable, globally-distributed index for
+Cassandra databases.</p>
+</div>
+<div class="paragraph">
+<p>The main advantage of SAI over existing indexes for Apache Cassandra are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>enables vector search for AI applications</p>
+</li>
+<li>
+<p>shares common index data across multiple indexes on same table</p>
+</li>
+<li>
+<p>alleviates write-time scalability issues</p>
+</li>
+<li>
+<p>significantly reduced disk usage</p>
+</li>
+<li>
+<p>great numeric range performance</p>
+</li>
+<li>
+<p>zero copy streaming of indexes</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In fact, SAI provides the most indexing functionality available for Apache Cassandra.
+SAI adds column-level indexes to any CQL table column of almost any CQL data type.</p>
+</div>
+<div class="paragraph">
+<p>SAI enables queries that filter based on:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>vector embeddings</p>
+</li>
+<li>
+<p>AND/OR logic for numeric and text types</p>
+</li>
+<li>
+<p>IN logic (use an array of values) for numeric and text types</p>
+</li>
+<li>
+<p>numeric range</p>
+</li>
+<li>
+<p>non-variable length numeric types</p>
+</li>
+<li>
+<p>text type equality</p>
+</li>
+<li>
+<p>CONTAINs logic (for collections)</p>
+</li>
+<li>
+<p>tokenized data</p>
+</li>
+<li>
+<p>row-aware query path</p>
+</li>
+<li>
+<p>case sensitivity (optional)</p>
+</li>
+<li>
+<p>unicode normalization (optional)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="advantages"><a class="anchor" href="#advantages"></a>Advantages</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Defining one or more SAI indexes based on any column in a database table subsequently gives you the ability to run performant queries that specify the indexed column.
+Especially compared to relational databases and complex indexing schemes, SAI makes you more efficient by accelerating your path to developing apps.</p>
+</div>
+<div class="paragraph">
+<p>SAI is deeply integrated with the storage engine of Cassandra.
+The SAI functionality indexes the in-memory memtables and the on-disk SSTables as they are written, and resolves the differences between those indexes at read time.
+Consequently, the design of SAI has very little operational complexity on top of the core database.
+From snapshot creation, to schema management, to data expiration, SAI integrates tightly with the capabilities and mechanisms that the core database already provides.</p>
+</div>
+<div class="paragraph">
+<p>SAI is also fully compatible with zero-copy streaming (ZCS).
+Thus, when you bootstrap or decommission nodes in a cluster, the indexes are fully streamed with the SSTables and not serialized or rebuilt on the receiving node&#8217;s end.</p>
+</div>
+<div class="paragraph">
+<p>At its core, SAI is a filtering engine, and simplifies data modeling and client applications that would otherwise rely heavily on maintaining multiple query-specific tables.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="performance"><a class="anchor" href="#performance"></a>Performance</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>SAI outperforms any other indexing method available for Apache Cassandra.</p>
+</div>
+<div class="paragraph">
+<p>SAI provides more functionality than secondary indexing (2i), using a fraction of the disk space, and reducing the total cost of ownership (TCO) for disk, infrastructure, and operations.
+For read path performance, SAI performs at least as well as the other indexing methods for throughput and latency.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="sai-write-path-and-read-path"><a class="anchor" href="#sai-write-path-and-read-path"></a>SAI write path and read path</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>SAI is deeply integrated with the storage engine of the underlying database.
+SAI does not abstractly index tables.
+Instead, SAI indexes <strong>Memtables</strong> and Sorted String Tables (<strong>SSTables</strong>) as they are written, resolving the differences between those indexes at read time.
+Each Memtable is an in-memory data structure that is specific to a particular database table.
+A Memtable resembles a write-back cache.
+Each SSTable is an immutable data file to which the database writes Memtables periodically.
+SSTables are stored on disk sequentially and maintained for each database table.</p>
+</div>
+<div class="paragraph">
+<p>This topic discusses the details of the SAI read and write paths, examining the SAI indexing lifecycle.</p>
+</div>
+<div class="sect2">
+<h3 id="sai-write-path"><a class="anchor" href="#sai-write-path"></a>SAI write path</h3>
+<div class="paragraph">
+<p>An SAI index can be created either before any data is written to a CQL table, or after data has been written.
+As a refresher, data written to a CQL table will first be written to a Memtable, and then to an SSTable once the data is flushed from the Memtable.
+After an SAI index is created, SAI is notified of all mutations against the current Memtable.
+Like any other data, SAI updates the indexes for inserts and updates, which Apache Cassandra treats in exactly the same way.
+SAI also supports partition deletions, range tombstones, and row removals.
+If a delete operation is executed in a query, SAI handles index changes in a post-filtering step.
+As a result, SAI imposes no special penalties when indexing frequently deleted columns.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../../../_images/sai/saiWritePath.png" alt="SAI write path overview" width="640" height="480">
+</div>
+</div>
+<div class="paragraph">
+<p>If an insert or update contains valid content for the indexed column, the content is added to a <strong>Memtable index</strong>, and the primary key of the updated row is associated with the indexed value.
+SAI calculates an estimate of the incremental heap consumption of the new entry.
+This estimate counts against the heap usage of the underlying Memtable.
+This feature also means that as more columns are indexed on a table, the Memtable flush rate will increase, and the size of flushed SSTables will decrease.
+The number of total writes and the estimated heap usage of all live Memtable indexes are exposed as metrics.
+See <a href="#cassandra:developing/cql/indexing/sai/monitoring.adoc#saiMonitorMetrics" class="page unresolved">SAI metrics</a>.</p>
+</div>
+<div class="sect3">
+<h4 id="memtable-flush"><a class="anchor" href="#memtable-flush"></a>Memtable flush</h4>
+<div class="paragraph">
+<p>SAI flushes Memtable index contents directly to disk when the flush threshold is reached, rather than creating an additional in-memory representation.
+This is possible because Memtable indexes are sorted by term/value and then by primary key.
+When the flush occurs, SAI writes a new SSTable index for each indexed column, as the SSTable is being written.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../../../_images/sai/saiWritePathFlow.png" alt="Write path flow as detailed in subsequent text" width="640" height="480">
+</div>
+</div>
+<div class="paragraph">
+<p>The flush operation is a two-phase process.
+In the first phase, rows are written to the new SSTable.
+For each row, a row ID is generated and three index components are created.
+The components are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>On-disk mappings of row IDs to their corresponding token values&#8201;&#8212;&#8201;SAI supports the Murmur3Partitioner</p>
+</li>
+<li>
+<p>SSTable partition offsets</p>
+</li>
+<li>
+<p>A temporary mapping of primary keys to their row IDs, which is used in a subsequent phase</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The contents of the first and second component files are compressed arrays whose ordinals correspond to row IDs.</p>
+</div>
+<div class="paragraph">
+<p>In the second phase, after all rows are written to the new SSTable and the shared SSTable-level index components have been completed, SAI begins its indexing work on each indexed column.
+Specifically in the second phase, SAI iterates over the Memtable index to produce pairs of terms and their token-sorted row IDs.
+This iterator translates primary keys to row IDs using the temporary mapping structure built in the first phase.
+The terms iterator (with postings) is then passed to separate writing components based on whether each indexed element is for a string or numeric column.</p>
+</div>
+<div class="paragraph">
+<p>In the string case, the SAI index writer iterates over each term, first writing its postings to disk, and then recording the offset of those postings in the postings file as the payload of a new entry (for the term itself) in an on-disk, byte-ordered trie.
+In the numeric case, SAI separates the writing of a numeric index into two steps:</p>
+</div>
+<div class="paragraph">
+<p>The terms are passed to a balanced kd-tree writer, which writes the kd-tree to disk.
+As the leaf blocks of the tree are written, their postings are recorded temporarily in memory.
+Those temporary postings are then used to build postings on-disk, at the leaves, and at various levels of the index nodes.</p>
+</div>
+<div class="paragraph">
+<p>When a column index flush completes, a special empty marker file is flagged to indicate success.
+This procedure is used on startup and incremental rebuild operations to differentiate case where:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>SSTable index files are missing for a column.</p>
+</li>
+<li>
+<p>There is no indexable data&#8201;&#8212;&#8201;such as when an SSTable only contains tombstones.
+(A tombstone is a marker in a row that indicates a column was deleted.
+During compaction, marked columns are deleted.)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>SAI then increments a counter on the number of Memtable indexes flushed for the column, and adds to a histogram the number of cells flushed per second.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="when-compaction-is-triggered"><a class="anchor" href="#when-compaction-is-triggered"></a>When compaction is triggered</h4>
+<div class="paragraph">
+<p>Recall that Apache Cassandra uses compaction to merge SSTables.
+Compaction collects all versions of each unique row and assembles one complete row, using the most up-to-date version (by timestamp) of each of the row&#8217;s columns from the SSTables.
+The merge process is performant, because rows are sorted by partition key within each SSTable, and the merge process does not use random I/O.
+The new versions of each row is written to a new SSTable.
+The old versions, along with any rows that are ready for deletion, are left in the old SSTables, and are deleted when any pending reads are completed.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../../../_images/sai/dmlCompaction.png" alt="DML compaction" width="640" height="480">
+</div>
+</div>
+<div class="paragraph">
+<p>For SAI, when compaction is triggered, each index group creates an SSTable Flush Observer to coordinate the process of writing all attached column indexes from the newly compacted data in their respective SSTable writer instances.
+Unlike Memtable flush (where indexed terms are already sorted), when iterating merged data during compaction, SAI buffers indexed values and their row ids, which are added in token order.</p>
+</div>
+<div class="paragraph">
+<p>To avoid issues such as exhausting available heap resources, SAI uses an accumulated segment buffer, which is flushed to disk synchronously by using a proprietary calculation.
+Then each segment records a segment row ID <strong>offset</strong> and only stores the segment row ID (SSTable row ID minus segment row ID offset).
+SAI flushes segments into the same file synchronously to avoid the cost of rewriting all segments and to reduce the cost of partition-restricted queries and paging range queries, as it reduces the search space.</p>
+</div>
+<div class="paragraph">
+<p>The on-disk layout from the per-column indexed posting, to the SSTable offset, to the SSTable partition:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../../../_images/sai/saiOnDiskStructureWithOffsets.png" alt="SAI on-disk layout as described in surrounding text" width="640" height="480">
+</div>
+</div>
+<div class="paragraph">
+<p>The actual segment flushing process is very similar to a Memtable flush.
+However, buffered terms are sorted before they can be written with their postings to their respective type-specific on-disk structures.
+At the end of compaction for a given index, a special empty marker file is flagged to indicate success, and the number of segments is recorded in SAI metrics.
+See <a href="#developing:indexing/sai/monitoring.adoc#saiGlobalIndexingMetrics" class="page unresolved">Global indexing metrics</a>.</p>
+</div>
+<div class="paragraph">
+<p>When the entire compaction task finishes, SAI receives an SSTable List Changed Notification that contains the SSTables added and removed during the transaction.
+SSTable Context Manager and Index View Manager are responsible for replacing old SSTable indexes with new ones atomically.
+At this point, new SSTable indexes are available for queries.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sai-read-path"><a class="anchor" href="#sai-read-path"></a>SAI read path</h3>
+<div class="paragraph">
+<p>This section explains how index queries are processed by the SAI coordinator and executed by replicas.
+Unlike legacy secondary indexes, where at most one column index will be used per query, SAI implements a <code>Query Plan</code> that makes it possible to use all available column indexes in a single query.</p>
+</div>
+<div class="paragraph">
+<p>The overall flow of a SAI read operation is as follows:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../../../_images/sai/saiReadpathOverview.png" alt="AI read path as described in subsequent sections" width="640" height="480">
+</div>
+</div>
+<div class="sect3">
+<h4 id="index-selection-and-coordinator-processing"><a class="anchor" href="#index-selection-and-coordinator-processing"></a>Index selection and Coordinator processing</h4>
+<div class="paragraph">
+<p>When presented with a query, the first action the SAI Coordinator performs, to take advantage of one or more indexes, is to identify the most selective index.
+That most selective index is the index that will most aggressively narrow the filtering space and the number of ultimate results by returning the lowest value from an estimated results row calculation.
+If multiple SAI indexes are present (that is, where each SAI index is based on a different column, but the query involves more than one column), it does not matter which SAI index is selected first.</p>
+</div>
+<div class="paragraph">
+<p>Once the best index for the read operation is selected, the index is embedded with the read command, which enters the distributed range read apparatus.
+A distributed range read queries the Apache Cassandra cluster in one or more rounds in token order.
+The SAI Coordinator estimates the <strong>concurrency factor</strong>, the number of rows per range based on local data and the query limit to determine the number of ranges to contact.
+For each round, a concurrency factor determines how many replicas will be queried in parallel.</p>
+</div>
+<div class="paragraph">
+<p>Before the first round commences, SAI estimates the initial concurrency factor via a proprietary calculation, shown here as Step 1.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../../../_images/sai/saiCoordinatorRangeReadEstimateConcurrencyFactor.png" alt="SAI step to estimate a concurrency factor as described in surrounding text" width="640" height="480">
+</div>
+</div>
+<div class="paragraph">
+<p>Once the initial concurrency factor established, the range read begins.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../../../_images/sai/saiCoordinatorRangeReadUpdateConcurrencyFactor.png" alt="SAI iterates through the ranges as described in surrounding text" width="640" height="480">
+</div>
+</div>
+<div class="paragraph">
+<p>In Step 2, the SAI Coordinator sends requests to the required ranges in parallel based on the Concurrency factor.
+In Step 3, the SAI Coordinator waits for the responses from the requested replicas.
+And in Step 4, SAI Coordinator collects the results and recomputes the concurrency factor based on returned rows and query limit.</p>
+</div>
+<div class="paragraph">
+<p>At the completion of each round, if the limit has not been reached, the concurrency factor is adjusted to take into account the shape of the results already read.
+If no results are returned from the first round, the concurrency factor is immediately increased to the minimum calculation of remaining token ranges and the maximum calculation of the concurrency factor.
+If results are returned, the concurrency factor is updated.
+SAI repeats steps 2, 3, and 4 until the query limit is satisfied.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../../../_images/sai/saiCoordinatorRangeReadUntilLimit.png" alt="SAI repeats the steps until the limit is satisfied as described in surrounding text" width="640" height="480">
+</div>
+</div>
+<div class="paragraph">
+<p>To avoid querying replicas with failed indexes, each node propagates its own local index status to peers via gossip.
+At the coordinator, read requests will filter replicas that contain non-queryable indexes used in the request.
+In most cases, the second round of replica queries should return all the necessary results.
+Further rounds may be necessary if the distribution of results around the replicas is extremely imbalanced.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="a-closer-look-replica-query-planning-and-view-acquisition"><a class="anchor" href="#a-closer-look-replica-query-planning-and-view-acquisition"></a>A closer look: replica query planning and view acquisition</h4>
+<div class="paragraph">
+<p>Once a replica receives a token range read request from the SAI Coordinator, the local index query begins.
+SAI implements an index searcher interface via a Query Plan that makes it possible to access all available SAI column indexes in a single query.</p>
+</div>
+<div class="paragraph">
+<p>The Query Plan performs an analysis of the expressions passed to it via the read command.
+SAI determines which indexes should be used to satisfy the query clauses on the given columns.
+Once column expressions are paired with indexes, a view of the active SSTable indexes for each column index is acquired by a Query Controller.
+In order to avoid compaction removing index files used by in-flight queries, before reading any index files, the Query Controller tries to acquire references to the SSTables for index files that intersect with the query&#8217;s token range, and releases them when the read request completes.</p>
+</div>
+<div class="paragraph">
+<p>At this point, a Token Flow is created to stream matches from each column index.
+Those flows, along with the Boolean logic that determines how they are merged, is wrapped up in an Operation, which is returned to the Query Plan component.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="role-of-the-sai-token-flow-framework"><a class="anchor" href="#role-of-the-sai-token-flow-framework"></a>Role of the SAI Token Flow framework</h4>
+<div class="paragraph">
+<p>The SAI query engine revolves around a Token Flow framework that defines how SAI asynchronously iterates over, skips into, and merges streams of matching partitions from both individual SSTable indexes and entire column indexes.
+SAI uses a token to describe a container for partition matches within a Cassandra ring token.</p>
+</div>
+<div class="paragraph">
+<p>Iteration is the simplest of the three operations.
+Specifically, the iteration of postings involves sequential disk access&#8201;&#8212;&#8201;via the chunk cache&#8201;&#8212;&#8201;to row IDs, which are used to lookup ring token and partition key offset information.</p>
+</div>
+<div class="paragraph">
+<p>Token skipping is used to skip unmatched tokens when continuing from the previous paging boundary, or when a larger token is found during token intersection.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="saiMatchStreamingAndPostFiltering"><a class="anchor" href="#saiMatchStreamingAndPostFiltering"></a>Match streaming and post filtering example</h4>
+<div class="paragraph">
+<p>Consider an example with an individual column index (such as <code>age = 44</code>), the flow produced is the union of all Memtable indexes and all SSTable indexes.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>SAI iterates over each Memtable index "lazily" (that is, one at a time) in token order through its individual token range-partitioned instances.
+This feature reduces the overhead that would occur otherwise from unnecessary searches of data toward the end of the ring.</p>
+</li>
+<li>
+<p>On-disk index: SAI returns the union of all matching SSTable index.
+Within one SSTable index, there can be multiple segments because of the memory limit during compaction.
+Similar to the Memtable index, SAI lazily searches segments in token sorted order.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>When there are multiple indexed expressions in the query (such as <code>WHERE age=44 AND state='CA'</code>) connected with <code>AND</code> query operator, the results of indexed expressions are intersected, which returns partition keys that match all indexed expressions.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../../../_images/sai/saiAge44StateCAExample.png" alt="SAI intersection of age and state columns" width="640" height="480">
+</div>
+</div>
+<div class="paragraph">
+<p>After the index search, SAI exposes a flow of partition keys.
+For every single partition key, SAI executes a single partition read operation, which returns the rows in the given partition.
+As rows are materialized, SAI uses a filter tree to apply another round of filtering.
+SAI performs this subsequent filtering step to address the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Partition granularity: SAI keeps track of partition offsets.
+In the case of a wide partition schema, not all rows in the partition will match the index expressions.</p>
+</li>
+<li>
+<p>Tombstones: SAI does not index tombstones.
+It&#8217;s possible that an indexed row has been shadowed by newly added tombstones.</p>
+</li>
+<li>
+<p>Non-indexed expressions: Operations may include non-index expressions for which there are no index structures.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="whats-next"><a class="anchor" href="#whats-next"></a>What&#8217;s next?</h3>
+<div class="paragraph">
+<p>See the blog, <a href="https://www.datastax.com/blog/2020/09/eliminate-trade-offs-between-database-ease-use-and-massive-scale-sai-storage-attached">Better Cassandra Indexes for a Better Data Model: Introducing Storage-Attached Indexing</a>.</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+</main>
+    </div>
+</div>
+            <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../../../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../../../../../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://twitter.com/cassandra?lang=en" target="_blank"><img src="../../../../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../../../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../../../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../../../../../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+    <script src="../../../../../../../assets/js/site.js"></script>
+    <script async src="../../../../../../../assets/js/vendor/highlight.js"></script>
+    <script src="../../../../../../../assets/js/vendor/lunr.js"></script>
+    <script src="../../../../../../../assets/js/vendor/search.js" id="search-script" data-base-path="../../../../../../.." data-page-path="/Cassandra/trunk/cassandra/developing/cql/indexing/sai/sai-concepts.html"></script>
+    <script async src="../../../../../../../assets/../search-index.js"></script>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+        </div>
+    </body>
+</html>

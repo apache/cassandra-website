@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Audit Logging | Apache Cassandra Documentation</title>
+            <link rel="stylesheet" href="../../../../assets/css/site.css">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="Cassandra">
+    <meta name="dcterms.identifier" content="3.11">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "https://plausible.cassandra.apache.org/js/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>    </head>
+    <body class="docs-wrapper article">
+        <div class="container mx-auto relative">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta property="og:type" content="website" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+         <div class="header-social-icons text-right">
+            <a href="https://twitter.com/cassandra?lang=en" target="_blank" styles="margin-left: 20px;"><img src="../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+            <div class="hero hero--home grad">
+                <div class="eye"></div>
+                <div id="docs-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                    <h2>Cassandra Documentation</h2>
+                </div>
+            </div>
+            <div class="body px-medium py-medium container">
+    <div class="docs-nav-bar flex flex-space-between mb-medium">
+      <div id="mobile-docs-nav-burger" class="hidden">
+        <svg viewBox="0 0 24 24" width="36" height="36" stroke="#1c81a0" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </div>
+        <div class="docs-nav-item relative">
+          <input id="search-input" type="text" placeholder="Search docs">
+        </div>
+      <div class="versions-wrapper">
+  <h4>Version:</h4>
+  <div class="nav-panel-explore" data-panel="explore">
+
+    <div id="version-toggle" class="context">
+      <span class="version">3.11</span>
+    </div>
+    <ul id="versions-list" class="components">
+      <li class="component">
+        <ul class="versions">
+          <li class="version is-latest">
+            <a href="../../../../_/index.html">master</a>
+          </li>
+        </ul>
+      </li>
+      <li class="component is-current">
+        <ul class="versions">
+          <li class="version">
+            <a href="../../../trunk/index.html">trunk</a>
+          </li>
+          <li class="version">
+            <a href="../../../5.0/index.html">5.0</a>
+          </li>
+          <li class="version is-latest">
+            <a href="../../../4.1/index.html">4.1</a>
+          </li>
+          <li class="version">
+            <a href="../../../4.0/index.html">4.0</a>
+          </li>
+          <li class="version is-current">
+            <a href="../../index.html">3.11</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>    </div>
+    <div class="cf relative">
+        <nav class="nav docs-nav full-800">
+<div class="nav-menu">
+<ul class="nav-list">
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../index.html">Main</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/glossary.html">Glossary</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/bugs.html">How to report bugs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/contactus.html">Contact us</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item is-current-path is-active" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <span class="nav-text">Cassandra</span>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../getting_started/index.html">Getting Started</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting_started/installing.html">Installing Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting_started/configuring.html">Configuring Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting_started/querying.html">Inserting and querying</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting_started/drivers.html">Client drivers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting_started/production.html">Production recommendations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../architecture/index.html">Architecture</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/overview.html">Overview</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/dynamo.html">Dynamo</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/storage_engine.html">Storage engine</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/guarantees.html">Guarantees</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../data_modeling/index.html">Data modeling</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/intro.html">Introduction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_conceptual.html">Conceptual data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_rdbms.html">RDBMS design</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_queries.html">Defining application queries</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_logical.html">Logical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_physical.html">Physical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_refining.html">Evaluating and refining data models</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_schema.html">Defining database schema</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_tools.html">Cassandra data modeling tools</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../cql/index.html">Cassandra Query Language (CQL)</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/definitions.html">Definitions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/types.html">Data types</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/ddl.html">Data definition (DDL)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/dml.html">Data manipulation (DML)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/operators.html">Operators</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/indexes.html">Secondary indexes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/mvs.html">Materialized views</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/functions.html">Functions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/json.html">JSON</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/triggers.html">Triggers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/appendices.html">Appendices</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/changes.html">Changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/SASI.html">SASI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/cql_singlefile.html">Single file of CQL information</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../configuration/index.html">Configuration</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_yaml_file.html">cassandra.yaml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_rackdc_file.html">cassandra-rackdc.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_env_sh_file.html">cassandra-env.sh</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_topo_file.html">cassandra-topologies.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_cl_archive_file.html">commitlog-archiving.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_logback_xml_file.html">logback.xml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_jvm_options_file.html">jvm-* files</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-path is-active" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="index.html">Operating</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="#operating/snitch.adoc">Snitches</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="topo_changes.html">Topology changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="repair.html">Repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="hints.html">Hints</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="bloom_filters.html">Bloom filters</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="compression.html">Compression</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="cdc.html">Change Data Capture (CDC)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="backups.html">Backups</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="bulk_loading.html">Bulk loading</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="metrics.html">Metrics</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="hardware.html">Hardware</a>
+    </span>
+  </li>
+  <li class="nav-item is-current-page is-active" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="audit_logging.html">Audit logging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="compaction/index.html">Compaction</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../tools/index.html">Tools</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../tools/cqlsh.html">cqlsh: the CQL shell</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../tools/nodetool/nodetool.html">nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../tools/sstable/index.html">SSTable tools</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../tools/cassandra_stress.html">cassandra-stress</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../troubleshooting/index.html">Troubleshooting</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../troubleshooting/finding_nodes.html">Finding misbehaving nodes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../troubleshooting/reading_logs.html">Reading Cassandra logs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../troubleshooting/use_nodetool.html">Using nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../troubleshooting/use_tools.html">Using external tools to deep-dive</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../_/development/index.html">Development</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/gettingstarted.html">Getting started</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/ide.html">Building and IDE integration</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/testing.html">Testing</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/patches.html">Contributing code changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/code_style.html">Code style</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/how_to_review.html">Review checklist</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/how_to_commit.html">How to commit</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/documentation.html">Working on documentation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/ci.html">Jenkins CI environment</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/dependencies.html">Dependency management</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/release_process.html">Release process</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../faq/index.html">FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../plugins/index.html">Plug-ins</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+</div>
+</nav>
+        <aside class="toc sidebar">
+  <div class="toc-menu"></div>
+</aside>
+        <main class="article default-main full-800" data-ceiling="topbar">
+  <div class="article-banner">
+    <p>A newer version of this documentation is available.</p>
+    <a class="btn" href="../../../4.1/cassandra/operating/audit_logging.html">View Latest</a>
+  </div>
+  <div class="article-header">
+<nav class="crumbs" aria-label="breadcrumbs">
+  <ul>
+    <li class="crumb">Cassandra</li>
+    <li class="crumb"><a href="index.html">Operating</a></li>
+    <li class="crumb"><a href="audit_logging.html">Audit logging</a></li>
+  </ul>
+</nav>
+<div class="tools" role="navigation">
+  <ul>
+    <li class="tool edit"><a href="file:///home/jenkins/working/cassandra/doc/modules/cassandra/pages/operating/audit_logging.adoc" title="Edit Page" target="_blank" rel="noopener">Edit</a></li>
+  </ul>
+</div>
+  </div>
+<article class="doc">
+<h1 class="page">Audit Logging</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Audit logging in Cassandra logs every incoming CQL command request,
+as well as authentication (successful/unsuccessful login) to a Cassandra node.
+Currently, there are two implementations provided.
+The custom logger can be implemented and injected with the class name as a parameter in
+the <code>cassandra.yaml</code> file.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>BinAuditLogger</code>: an efficient way to log events to file in a binary
+format (community-recommended logger for performance)</p>
+</li>
+<li>
+<p><code>FileAuditLogger</code>: logs events to <code>audit/audit.log</code> file using slf4j
+logger</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="what-does-audit-logging-captures"><a class="anchor" href="#what-does-audit-logging-captures"></a><a class="link" href="#what-does-audit-logging-captures">What does audit logging captures</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Audit logging captures following events:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Successful as well as unsuccessful login attempts</p>
+</li>
+<li>
+<p>All database commands executed via native CQL protocol attempted or
+successfully executed</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="limitations"><a class="anchor" href="#limitations"></a><a class="link" href="#limitations">Limitations</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Executing prepared statements will log the query as provided by the
+client in the prepare call, along with the execution timestamp and all
+other attributes (see below).
+Actual values bound for prepared statement execution will not show up in the audit log.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="what-does-audit-logging-logs"><a class="anchor" href="#what-does-audit-logging-logs"></a><a class="link" href="#what-does-audit-logging-logs">What does audit logging logs</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Each audit log implementation has access to the following attributes,
+and for the default text based logger these fields are concatenated with
+pipes to yield the final message.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>user</code>: User name(if available)</p>
+</li>
+<li>
+<p><code>host</code>: Host IP, where the command is being executed</p>
+</li>
+<li>
+<p><code>source ip address</code>: Source IP address from where the request initiated</p>
+</li>
+<li>
+<p><code>source port</code>: Source port number from where the request initiated</p>
+</li>
+<li>
+<p><code>timestamp</code>: unix time stamp</p>
+</li>
+<li>
+<p><code>type</code>: Type of the request (SELECT, INSERT, etc.,)</p>
+</li>
+<li>
+<p><code>category</code> - Category of the request (DDL, DML, etc.,)</p>
+</li>
+<li>
+<p><code>keyspace</code> - Keyspace(If applicable) on which request is targeted to
+be executed</p>
+</li>
+<li>
+<p><code>scope</code> - Table/Aggregate name/ function name/ trigger name etc., as
+applicable</p>
+</li>
+<li>
+<p><code>operation</code> - CQL command being executed</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="how-to-configure"><a class="anchor" href="#how-to-configure"></a><a class="link" href="#how-to-configure">How to configure</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Auditlog can be configured using the <code>cassandra.yaml</code> file.
+To use audit logging on one node, either edit that file or enable and configure using <code>nodetool</code>.</p>
+</div>
+<div class="sect2">
+<h3 id="cassandra-yaml-configurations-for-auditlog"><a class="anchor" href="#cassandra-yaml-configurations-for-auditlog"></a><a class="link" href="#cassandra-yaml-configurations-for-auditlog">cassandra.yaml configurations for AuditLog</a></h3>
+<div class="paragraph">
+<p>The following options are supported:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>enabled</code>: This option enables/ disables audit log</p>
+</li>
+<li>
+<p><code>logger</code>: Class name of the logger/ custom logger.</p>
+</li>
+<li>
+<p><code>audit_logs_dir</code>: Auditlogs directory location, if not set, default to
+<span class="title-ref">cassandra.logdir.audit</span> or <span class="title-ref">cassandra.logdir</span><br>
+/audit/</p>
+</li>
+<li>
+<p><code>included_keyspaces</code>: Comma separated list of keyspaces to be included
+in audit log, default - includes all keyspaces</p>
+</li>
+<li>
+<p><code>excluded_keyspaces</code>: Comma separated list of keyspaces to be excluded
+from audit log, default - excludes no keyspace except
+<span class="title-ref">system</span>, <span class="title-ref">system_schema</span> and
+<span class="title-ref">system_virtual_schema</span></p>
+</li>
+<li>
+<p><code>included_categories</code>: Comma separated list of Audit Log Categories to
+be included in audit log, default - includes all categories</p>
+</li>
+<li>
+<p><code>excluded_categories</code>: Comma separated list of Audit Log Categories to
+be excluded from audit log, default - excludes no category</p>
+</li>
+<li>
+<p><code>included_users</code>: Comma separated list of users to be included in
+audit log, default - includes all users</p>
+</li>
+<li>
+<p><code>excluded_users</code>: Comma separated list of users to be excluded from
+audit log, default - excludes no user</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>List of available categories are: QUERY, DML, DDL, DCL, OTHER, AUTH,
+ERROR, PREPARE</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="nodetool-command-to-enable-auditlog"><a class="anchor" href="#nodetool-command-to-enable-auditlog"></a><a class="link" href="#nodetool-command-to-enable-auditlog">NodeTool command to enable AuditLog</a></h3>
+<div class="paragraph">
+<p>The <code>nodetool enableauditlog</code> command enables AuditLog with the <code>cassandra.yaml</code> file defaults.
+Those defaults can be overridden using options with this nodetool command.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">nodetool enableauditlog</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="options"><a class="anchor" href="#options"></a><a class="link" href="#options">Options</a></h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>--excluded-categories</code></dt>
+<dd>
+<p>Comma separated list of Audit Log Categories to be excluded for audit
+log. If not set the value from cassandra.yaml will be used</p>
+</dd>
+<dt class="hdlist1"><code>--excluded-keyspaces</code></dt>
+<dd>
+<p>Comma separated list of keyspaces to be excluded for audit log. If not
+set the value from cassandra.yaml will be used. Please remeber that
+<span class="title-ref">system</span>, <span class="title-ref">system_schema</span> and
+<span class="title-ref">system_virtual_schema</span> are excluded by default, if you
+are overwriting this option via nodetool, remember to add these
+keyspaces back if you dont want them in audit logs</p>
+</dd>
+<dt class="hdlist1"><code>--excluded-users</code></dt>
+<dd>
+<p>Comma separated list of users to be excluded for audit log. If not set
+the value from cassandra.yaml will be used</p>
+</dd>
+<dt class="hdlist1"><code>--included-categories</code></dt>
+<dd>
+<p>Comma separated list of Audit Log Categories to be included for audit
+log. If not set the value from cassandra.yaml will be used</p>
+</dd>
+<dt class="hdlist1"><code>--included-keyspaces</code></dt>
+<dd>
+<p>Comma separated list of keyspaces to be included for audit log. If not
+set the value from cassandra.yaml will be used</p>
+</dd>
+<dt class="hdlist1"><code>--included-users</code></dt>
+<dd>
+<p>Comma separated list of users to be included for audit log. If not set
+the value from cassandra.yaml will be used</p>
+</dd>
+<dt class="hdlist1"><code>--logger</code></dt>
+<dd>
+<p>Logger name to be used for AuditLogging. Default BinAuditLogger. If
+not set the value from cassandra.yaml will be used</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="nodetool-command-to-disable-auditlog"><a class="anchor" href="#nodetool-command-to-disable-auditlog"></a><a class="link" href="#nodetool-command-to-disable-auditlog">NodeTool command to disable AuditLog</a></h3>
+<div class="paragraph">
+<p>The <code>nodetool disableauditlog</code> command disables AuditLog.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">nodetool disableuditlog</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="nodetool-command-to-reload-auditlog-filters"><a class="anchor" href="#nodetool-command-to-reload-auditlog-filters"></a><a class="link" href="#nodetool-command-to-reload-auditlog-filters">NodeTool command to reload AuditLog filters</a></h3>
+<div class="paragraph">
+<p>The <code>nodetool enableauditlog</code> command can be used to reload auditlog filters with either defaults or previous <code>loggername</code> and
+updated filters:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">nodetool enableauditlog --loggername &lt;Default/ existing loggerName&gt; --included-keyspaces &lt;New Filter values&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="view-the-contents-of-auditlog-files"><a class="anchor" href="#view-the-contents-of-auditlog-files"></a><a class="link" href="#view-the-contents-of-auditlog-files">View the contents of AuditLog Files</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>auditlogviewer</code> is used to view the contents of the audit binlog file in human readable text format.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">auditlogviewer &lt;path1&gt; [&lt;path2&gt;...&lt;pathN&gt;] [options]</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="options-2"><a class="anchor" href="#options-2"></a><a class="link" href="#options-2">Options</a></h3>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>-f,--follow</code></dt>
+<dd>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Upon reacahing the end of the log continue indefinitely</dt>
+<dd>
+<p>waiting for more records</p>
+</dd>
+</dl>
+</div>
+</dd>
+<dt class="hdlist1"><code>-r,--roll_cycle</code></dt>
+<dd>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">How often to roll the log file was rolled. May be</dt>
+<dd>
+<p>necessary for Chronicle to correctly parse file names. (MINUTELY,
+HOURLY, DAILY). Default HOURLY.</p>
+</dd>
+</dl>
+</div>
+</dd>
+<dt class="hdlist1"><code>-h,--help</code></dt>
+<dd>
+<p>display this help message</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>For example, to dump the contents of audit log files to the console:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">auditlogviewer /logs/cassandra/audit</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>results in</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">LogMessage: user:anonymous|host:localhost/X.X.X.X|source:/X.X.X.X|port:60878|timestamp:1521158923615|type:USE_KS|category:DDL|ks:dev1|operation:USE "dev1"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuring-binauditlogger"><a class="anchor" href="#configuring-binauditlogger"></a><a class="link" href="#configuring-binauditlogger">Configuring BinAuditLogger</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To use <code>BinAuditLogger</code> as a logger in AuditLogging, set the logger to <code>BinAuditLogger</code> in the <code>cassandra.yaml</code> file
+ under the <code>audit_logging_options</code> section.
+<code>BinAuditLogger</code> can be futher configued using its advanced options in <code>cassandra.yaml</code>.</p>
+</div>
+<div class="sect2">
+<h3 id="advanced-options-for-binauditlogger"><a class="anchor" href="#advanced-options-for-binauditlogger"></a><a class="link" href="#advanced-options-for-binauditlogger">Advanced Options for BinAuditLogger</a></h3>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>block</code></dt>
+<dd>
+<p>Indicates if the AuditLog should block if the it falls behind or
+should drop audit log records. Default is set to <code>true</code> so that
+AuditLog records wont be lost</p>
+</dd>
+<dt class="hdlist1"><code>max_queue_weight</code></dt>
+<dd>
+<p>Maximum weight of in memory queue for records waiting to be written to
+the audit log file before blocking or dropping the log records.
+Default is set to <code>256 * 1024 * 1024</code></p>
+</dd>
+<dt class="hdlist1"><code>max_log_size</code></dt>
+<dd>
+<p>Maximum size of the rolled files to retain on disk before deleting the
+oldest file. Default is set to <code>16L * 1024L * 1024L * 1024L</code></p>
+</dd>
+<dt class="hdlist1"><code>roll_cycle</code></dt>
+<dd>
+<p>How often to roll Audit log segments so they can potentially be
+reclaimed. Available options are: MINUTELY, HOURLY, DAILY,
+LARGE_DAILY, XLARGE_DAILY, HUGE_DAILY.For more options, refer:
+net.openhft.chronicle.queue.RollCycles. Default is set to <code>"HOURLY"</code></p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuring-fileauditlogger"><a class="anchor" href="#configuring-fileauditlogger"></a><a class="link" href="#configuring-fileauditlogger">Configuring FileAuditLogger</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To use <code>FileAuditLogger</code> as a logger in AuditLogging, set the class name in the <code>cassandra.yaml</code> file and configure
+the audit log events to flow through separate log file instead of system.log.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;!-- Audit Logging (FileAuditLogger) rolling file appender to audit.log --&gt;
+&lt;appender name="AUDIT" class="ch.qos.logback.core.rolling.RollingFileAppender"&gt;
+  &lt;file&gt;${cassandra.logdir}/audit/audit.log&lt;/file&gt;
+  &lt;rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy"&gt;
+    &lt;!-- rollover daily --&gt;
+    &lt;fileNamePattern&gt;${cassandra.logdir}/audit/audit.log.%d{yyyy-MM-dd}.%i.zip&lt;/fileNamePattern&gt;
+    &lt;!-- each file should be at most 50MB, keep 30 days worth of history, but at most 5GB --&gt;
+    &lt;maxFileSize&gt;50MB&lt;/maxFileSize&gt;
+    &lt;maxHistory&gt;30&lt;/maxHistory&gt;
+    &lt;totalSizeCap&gt;5GB&lt;/totalSizeCap&gt;
+  &lt;/rollingPolicy&gt;
+  &lt;encoder&gt;
+    &lt;pattern&gt;%-5level [%thread] %date{ISO8601} %F:%L - %msg%n&lt;/pattern&gt;
+  &lt;/encoder&gt;
+&lt;/appender&gt;
+
+&lt;!-- Audit Logging additivity to redirect audt logging events to audit/audit.log --&gt;
+&lt;logger name="org.apache.cassandra.audit" additivity="false" level="INFO"&gt;
+    &lt;appender-ref ref="AUDIT"/&gt;
+&lt;/logger&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</article>
+</main>
+    </div>
+</div>
+            <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://twitter.com/cassandra?lang=en" target="_blank"><img src="../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+    <script src="../../../../assets/js/site.js"></script>
+    <script async src="../../../../assets/js/vendor/highlight.js"></script>
+    <script src="../../../../assets/js/vendor/lunr.js"></script>
+    <script src="../../../../assets/js/vendor/search.js" id="search-script" data-base-path="../../../.." data-page-path="/Cassandra/3.11/cassandra/operating/audit_logging.html"></script>
+    <script async src="../../../../assets/../search-index.js"></script>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+        </div>
+    </body>
+</html>

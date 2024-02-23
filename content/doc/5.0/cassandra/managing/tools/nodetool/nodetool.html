@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Nodetool | Apache Cassandra Documentation</title>
+            <link rel="stylesheet" href="../../../../../../assets/css/site.css">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="Cassandra">
+    <meta name="dcterms.identifier" content="5.0">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../../../../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "https://plausible.cassandra.apache.org/js/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>    </head>
+    <body class="docs-wrapper article">
+        <div class="container mx-auto relative">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta property="og:type" content="website" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+         <div class="header-social-icons text-right">
+            <a href="https://twitter.com/cassandra?lang=en" target="_blank" styles="margin-left: 20px;"><img src="../../../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../../../../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+            <div class="hero hero--home grad">
+                <div class="eye"></div>
+                <div id="docs-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                    <h2>Cassandra Documentation</h2>
+                </div>
+            </div>
+            <div class="body px-medium py-medium container">
+    <div class="docs-nav-bar flex flex-space-between mb-medium">
+      <div id="mobile-docs-nav-burger" class="hidden">
+        <svg viewBox="0 0 24 24" width="36" height="36" stroke="#1c81a0" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </div>
+        <div class="docs-nav-item relative">
+          <input id="search-input" type="text" placeholder="Search docs">
+        </div>
+      <div class="versions-wrapper">
+  <h4>Version:</h4>
+  <div class="nav-panel-explore" data-panel="explore">
+
+    <div id="version-toggle" class="context">
+      <span class="version">5.0</span>
+    </div>
+    <ul id="versions-list" class="components">
+      <li class="component">
+        <ul class="versions">
+          <li class="version is-latest">
+            <a href="../../../../../../_/index.html">master</a>
+          </li>
+        </ul>
+      </li>
+      <li class="component is-current">
+        <ul class="versions">
+          <li class="version">
+            <a href="../../../../../trunk/index.html">trunk</a>
+          </li>
+          <li class="version is-current">
+            <a href="../../../../index.html">5.0</a>
+          </li>
+          <li class="version is-latest">
+            <a href="../../../../../4.1/index.html">4.1</a>
+          </li>
+          <li class="version">
+            <a href="../../../../../4.0/index.html">4.0</a>
+          </li>
+          <li class="version">
+            <a href="../../../../../3.11/index.html">3.11</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>    </div>
+    <div class="cf relative">
+        <nav class="nav docs-nav full-800">
+<div class="nav-menu">
+<ul class="nav-list">
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../index.html">Main</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/glossary.html">Glossary</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/bugs.html">How to report bugs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/contactus.html">Contact us</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../../_/development/index.html">Development</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/gettingstarted.html">Getting started</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/ide.html">Building and IDE integration</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/testing.html">Testing</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/patches.html">Contributing code changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/code_style.html">Code style</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/how_to_review.html">Review checklist</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/how_to_commit.html">How to commit</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/documentation.html">Working on documentation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/ci.html">Jenkins CI environment</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/dependencies.html">Dependency management</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../_/development/release_process.html">Release process</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item is-current-path is-active" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <span class="nav-text">Cassandra</span>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../overview/faq/index.html">FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../getting-started/index.html">Getting Started</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../getting-started/cassandra-quickstart.html">Cassandra Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../installing/installing.html">Installing Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../getting-started/configuring.html">Configuring Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../getting-started/querying.html">Inserting and querying</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../getting-started/drivers.html">Client drivers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../getting-started/production.html">Production recommendations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../new/index.html">What&#8217;s new</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../reference/java17.html">Support for Java</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../architecture/index.html">Architecture</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../architecture/overview.html">Overview</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../architecture/dynamo.html">Dynamo</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../architecture/storage-engine.html">Storage Engine</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../architecture/guarantees.html">Guarantees</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../architecture/messaging.html">Improved Internode Messaging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../architecture/streaming.html">Improved Streaming</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../developing/data-modeling/index.html">Data Modeling</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/data-modeling/intro.html">Introduction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/data-modeling/data-modeling_conceptual.html">Conceptual data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/data-modeling/data-modeling_rdbms.html">RDBMS design</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/data-modeling/data-modeling_queries.html">Defining application queries</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/data-modeling/data-modeling_logical.html">Logical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/data-modeling/data-modeling_physical.html">Physical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/data-modeling/data-modeling_refining.html">Evaluating and refining data models</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/data-modeling/data-modeling_schema.html">Defining database schema</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/data-modeling/data-modeling_tools.html">Cassandra data modeling tools</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../developing/cql/index.html">Cassandra Query Language (CQL)</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/definitions.html">Definitions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/types.html">Data types</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/ddl.html">Data definition (DDL)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/dml.html">Data manipulation (DML)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/dynamic-data-masking.html">Dynamic Data Masking (DDM)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/operators.html">Operators</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../developing/cql/indexing/indexing-concepts.html">Indexing concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../developing/cql/indexing/sai/sai-overview.html">SAI Overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/indexing/sai/sai-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/indexing/sai/sai-faq.html">SAI FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/indexing/sai/sai-working-with.html">Working with SAI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/indexing/sai/operations/sai-operations.html">SAI operations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../developing/cql/indexing/2i/2i-overview.html">Secondary indexes (2i) overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/indexing/2i/2i-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/indexing/2i/2i-working-with.html">Working with 2i</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/indexing/2i/operations/2i-build.html">Rebuild 2i</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/mvs.html">Materialized views</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/functions.html">Functions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/json.html">JSON</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/triggers.html">Triggers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/appendices.html">Appendices</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/changes.html">Changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/SASI.html">SASI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../developing/cql/cql_singlefile.html">Single file of CQL information</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../vector-search/overview.html">Vector Search overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../vector-search/concepts.html">Concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../vector-search/data-modeling.html">Data Modeling</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../vector-search/vector-search-working-with.html">Working with Vector Search</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-path is-active" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../index.html">Managing</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../configuration/index.html">Configuring</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../configuration/cass_yaml_file.html">cassandra.yaml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../configuration/cass_rackdc_file.html">cassandra-rackdc.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../configuration/cass_env_sh_file.html">cassandra-env.sh</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../configuration/cass_topo_file.html">cassandra-topologies.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../configuration/cass_cl_archive_file.html">commitlog-archiving.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../configuration/cass_logback_xml_file.html">logback.xml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../configuration/cass_jvm_options_file.html">jvm-* files</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../configuration/configuration.html">Liberating cassandra.yaml Parameters' Names from Their Units</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../operating/index.html">Operating</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../operating/backups.html">Backups</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../operating/bloom_filters.html">Bloom filters</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../operating/bulk_loading.html">Bulk loading</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../operating/cdc.html">Change Data Capture (CDC)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../operating/compaction/index.html">Compaction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../operating/compression.html">Compression</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../operating/hardware.html">Hardware</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../operating/hints.html">Hints</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../operating/logging.html">Logging</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../operating/auditlogging.html">Audit logging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../operating/audit_logging.html">Audit logging 2</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../operating/fqllogging.html">Full query logging</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../operating/metrics.html">Monitoring metrics</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../operating/repair.html">Repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../operating/read_repair.html">Read repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../operating/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../operating/snitch.html">Snitches</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../operating/topo_changes.html">Topology changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../operating/transientreplication.html">Transient replication</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../operating/virtualtables.html">Virtual tables</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-path is-active" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../index.html">Tools</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../cqlsh.html">cqlsh: the CQL shell</a>
+    </span>
+  </li>
+  <li class="nav-item is-current-page is-active" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="nodetool.html">nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../sstable/index.html">SSTable tools</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="#cassandra:managing/tools/cassandra_stress.adoc">cassandra-stress</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../troubleshooting/index.html">Troubleshooting</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../troubleshooting/finding_nodes.html">Finding misbehaving nodes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../troubleshooting/reading_logs.html">Reading Cassandra logs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../troubleshooting/use_nodetool.html">Using nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../troubleshooting/use_tools.html">Using external tools to deep-dive</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../reference/index.html">Reference</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../reference/cql-commands/alter-table.html">ALTER TABLE</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../reference/cql-commands/create-index.html">CREATE INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../reference/cql-commands/create-custom-index.html">CREATE CUSTOM INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../reference/cql-commands/create-table.html">CREATE TABLE</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../reference/cql-commands/drop-index.html">DROP INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../reference/cql-commands/drop-table.html">DROP TABLE</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../integrating/plugins/index.html">Plug-ins</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+</div>
+</nav>
+        <aside class="toc sidebar">
+  <div class="toc-menu"></div>
+</aside>
+        <main class="article default-main full-800" data-ceiling="topbar">
+  <div class="article-banner">
+    <p>You are viewing the documentation for a prerelease version.</p>
+  </div>
+    <div class="article-header">
+<nav class="crumbs" aria-label="breadcrumbs">
+  <ul>
+    <li class="crumb">Cassandra</li>
+    <li class="crumb"><a href="../../index.html">Managing</a></li>
+    <li class="crumb"><a href="../index.html">Tools</a></li>
+    <li class="crumb"><a href="nodetool.html">nodetool</a></li>
+  </ul>
+</nav>
+<div class="tools" role="navigation">
+  <ul>
+    <li class="tool edit"><a href="https://github.com/apache/cassandra/edit/cassandra-5.0/doc/modules/cassandra/pages/managing/tools/nodetool/nodetool.adoc" title="Edit Page" target="_blank" rel="noopener">Edit</a></li>
+  </ul>
+</div>
+  </div>
+<article class="doc">
+<h1 class="page">Nodetool</h1>
+<div class="sect1">
+<h2 id="usage"><a class="anchor" href="#usage"></a>Usage</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>usage: nodetool [(-pwf &lt;passwordFilePath&gt; | --password-file &lt;passwordFilePath&gt;)]
+        [(-h &lt;host&gt; | --host &lt;host&gt;)] [(-p &lt;port&gt; | --port &lt;port&gt;)]
+        [(-pp | --print-port)] [(-u &lt;username&gt; | --username &lt;username&gt;)]
+        [(-pw &lt;password&gt; | --password &lt;password&gt;)] &lt;command&gt; [&lt;args&gt;]</p>
+</div>
+<div class="paragraph">
+<p>The most commonly used nodetool commands are:</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/assassinate.adoc" class="page unresolved">assassinate</a> -                          Forcefully remove a dead node without re-replicating any data.  Use as a last resort if you cannot removenode</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/bootstrap.adoc" class="page unresolved">bootstrap</a> -                            Monitor/manage node&#8217;s bootstrap process</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/cidrfilteringstats.adoc" class="page unresolved">cidrfilteringstats</a> -                   Print statistics on CIDR filtering</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/cleanup.adoc" class="page unresolved">cleanup</a> -                              Triggers the immediate cleanup of keys no longer belonging to a node. By default, clean all keyspaces</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/clearsnapshot.adoc" class="page unresolved">clearsnapshot</a> -                        Remove the snapshot with the given name from the given keyspaces</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/clientstats.adoc" class="page unresolved">clientstats</a> -                          Print information about connected clients</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/compact.adoc" class="page unresolved">compact</a> -                              Force a (major) compaction on one or more tables or user-defined compaction on given SSTables</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/compactionhistory.adoc" class="page unresolved">compactionhistory</a> -                    Print history of compaction</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/compactionstats.adoc" class="page unresolved">compactionstats</a> -                      Print statistics on compactions</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/datapaths.adoc" class="page unresolved">datapaths</a> -                            Print all directories where data of tables are stored</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/decommission.adoc" class="page unresolved">decommission</a> -                         Decommission the <strong>node I am connecting to</strong></p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/describecluster.adoc" class="page unresolved">describecluster</a> -                      Print the name, snitch, partitioner and schema version of a cluster</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/describering.adoc" class="page unresolved">describering</a> -                         Shows the token ranges info of a given keyspace</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/disableauditlog.adoc" class="page unresolved">disableauditlog</a> -                      Disable the audit log</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/disableautocompaction.adoc" class="page unresolved">disableautocompaction</a> -                Disable autocompaction for the given keyspace and table</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/disablebackup.adoc" class="page unresolved">disablebackup</a> -                        Disable incremental backup</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/disablebinary.adoc" class="page unresolved">disablebinary</a> -                        Disable native transport (binary protocol)</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/disablefullquerylog.adoc" class="page unresolved">disablefullquerylog</a> -                  Disable the full query log</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/disablegossip.adoc" class="page unresolved">disablegossip</a> -                        Disable gossip (effectively marking the node down)</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/disablehandoff.adoc" class="page unresolved">disablehandoff</a> -                       Disable storing hinted handoffs</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/disablehintsfordc.adoc" class="page unresolved">disablehintsfordc</a> -                    Disable hints for a data center</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/disableoldprotocolversions.adoc" class="page unresolved">disableoldprotocolversions</a> -           Disable old protocol versions</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/drain.adoc" class="page unresolved">drain</a> -                                Drain the node (stop accepting writes and flush all tables)</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/dropcidrgroup.adoc" class="page unresolved">dropcidrgroup</a> -                        Drop an existing cidr group</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/enableauditlog.adoc" class="page unresolved">enableauditlog</a> -                       Enable the audit log</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/enableautocompaction.adoc" class="page unresolved">enableautocompaction</a> -                 Enable autocompaction for the given keyspace and table</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/enablebackup.adoc" class="page unresolved">enablebackup</a> -                         Enable incremental backup</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/enablebinary.adoc" class="page unresolved">enablebinary</a> -                         Reenable native transport (binary protocol)</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/enablefullquerylog.adoc" class="page unresolved">enablefullquerylog</a> -                   Enable full query logging, defaults for the options are configured in cassandra.yaml</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/enablegossip.adoc" class="page unresolved">enablegossip</a> -                         Reenable gossip</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/enablehandoff.adoc" class="page unresolved">enablehandoff</a> -                        Reenable future hints storing on the current node</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/enablehintsfordc.adoc" class="page unresolved">enablehintsfordc</a> -                     Enable hints for a data center that was previsouly disabled</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/enableoldprotocolversions.adoc" class="page unresolved">enableoldprotocolversions</a> -            Enable old protocol versions</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/failuredetector.adoc" class="page unresolved">failuredetector</a> -                      Shows the failure detector information for the cluster</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/flush.adoc" class="page unresolved">flush</a> -                                Flush one or more tables</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/forcecompact.adoc" class="page unresolved">forcecompact</a> -                         Force a (major) compaction on a table</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/garbagecollect.adoc" class="page unresolved">garbagecollect</a> -                       Remove deleted data from one or more tables</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/gcstats.adoc" class="page unresolved">gcstats</a> -                              Print GC Statistics</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/getauditlog.adoc" class="page unresolved">getauditlog</a> -                          Print configuration of audit log if enabled, otherwise the configuration reflected in cassandra.yaml</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/getauthcacheconfig.adoc" class="page unresolved">getauthcacheconfig</a> -                   Get configuration of Auth cache</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/getbatchlogreplaythrottle.adoc" class="page unresolved">getbatchlogreplaythrottle</a> -            Print batchlog replay throttle in KB/s. This is reduced proportionally to the number of nodes in the cluster.</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/getcidrgroupsofip.adoc" class="page unresolved">getcidrgroupsofip</a> -                    Print CIDR groups associated with given IP</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/getcolumnindexsize.adoc" class="page unresolved">getcolumnindexsize</a> -                   Print the granularity of the collation index of rows within a partition in KiB</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/getcompactionthreshold.adoc" class="page unresolved">getcompactionthreshold</a> -               Print min and max compaction thresholds for a given table</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/getcompactionthroughput.adoc" class="page unresolved">getcompactionthroughput</a> -              Print the MiB/s throughput cap for compaction in the system as a rounded number</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/getconcurrency.adoc" class="page unresolved">getconcurrency</a> -                       Get maximum concurrency for processing stages</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/getconcurrentcompactors.adoc" class="page unresolved">getconcurrentcompactors</a> -              Get the number of concurrent compactors in the system.</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/getconcurrentviewbuilders.adoc" class="page unresolved">getconcurrentviewbuilders</a> -            Get the number of concurrent view builders in the system</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/getdefaultrf.adoc" class="page unresolved">getdefaultrf</a> -                         Gets default keyspace replication factor.</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/getendpoints.adoc" class="page unresolved">getendpoints</a> -                         Print the end points that owns the key</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/getfullquerylog.adoc" class="page unresolved">getfullquerylog</a> -                      Print configuration of fql if enabled, otherwise the configuration reflected in cassandra.yaml</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/getinterdcstreamthroughput.adoc" class="page unresolved">getinterdcstreamthroughput</a> -           Print the throughput cap for inter-datacenter streaming and entire SSTable inter-datacenter streaming in the systemin rounded megabits. For precise number, please, use option -d</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/getlogginglevels.adoc" class="page unresolved">getlogginglevels</a> -                     Get the runtime logging levels</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/getmaxhintwindow.adoc" class="page unresolved">getmaxhintwindow</a> -                     Print the max hint window in ms</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/getseeds.adoc" class="page unresolved">getseeds</a> -                             Get the currently in use seed node IP list excluding the node IP</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/getsnapshotthrottle.adoc" class="page unresolved">getsnapshotthrottle</a> -                  Print the snapshot_links_per_second throttle for snapshot/clearsnapshot</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/getsstables.adoc" class="page unresolved">getsstables</a> -                          Print the sstable filenames that own the key</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/getstreamthroughput.adoc" class="page unresolved">getstreamthroughput</a> -                  Print the throughput cap for streaming and entire SSTable streaming in the system in rounded megabits. For precise number, please, use option -d</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/gettimeout.adoc" class="page unresolved">gettimeout</a> -                           Print the timeout of the given type in ms</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/gettraceprobability.adoc" class="page unresolved">gettraceprobability</a> -                  Print the current trace probability value</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/gossipinfo.adoc" class="page unresolved">gossipinfo</a> -                           Shows the gossip information for the cluster</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/help.adoc" class="page unresolved">help</a> -                                 Display help information</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/import.adoc" class="page unresolved">import</a> -                               Import new SSTables to the system</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/info.adoc" class="page unresolved">info</a> -                                 Print node information (uptime, load, &#8230;&#8203;)</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/invalidatecidrpermissionscache.adoc" class="page unresolved">invalidatecidrpermissionscache</a> -       Invalidate the cidr permissions cache</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/invalidatecountercache.adoc" class="page unresolved">invalidatecountercache</a> -               Invalidate the counter cache</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/invalidatecredentialscache.adoc" class="page unresolved">invalidatecredentialscache</a> -           Invalidate the credentials cache</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/invalidatejmxpermissionscache.adoc" class="page unresolved">invalidatejmxpermissionscache</a> -        Invalidate the JMX permissions cache</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/invalidatekeycache.adoc" class="page unresolved">invalidatekeycache</a> -                   Invalidate the key cache</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/invalidatenetworkpermissionscache.adoc" class="page unresolved">invalidatenetworkpermissionscache</a> -    Invalidate the network permissions cache</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/invalidatepermissionscache.adoc" class="page unresolved">invalidatepermissionscache</a> -           Invalidate the permissions cache</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/invalidaterolescache.adoc" class="page unresolved">invalidaterolescache</a> -                 Invalidate the roles cache</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/invalidaterowcache.adoc" class="page unresolved">invalidaterowcache</a> -                   Invalidate the row cache</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/join.adoc" class="page unresolved">join</a> -                                 Join the ring</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/listcidrgroups.adoc" class="page unresolved">listcidrgroups</a> -                       List existing cidr groups</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/listpendinghints.adoc" class="page unresolved">listpendinghints</a> -                     Print all pending hints that this node has</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/listsnapshots.adoc" class="page unresolved">listsnapshots</a> -                        Lists all the snapshots along with the size on disk and true size. True size is the total size of all SSTables which are not backed up to disk. Size on disk is total size of the snapshot on disk. Total TrueDiskSpaceUsed does not make any SSTable deduplication.</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/move.adoc" class="page unresolved">move</a> -                                 Move node on the token ring to a new token</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/netstats.adoc" class="page unresolved">netstats</a> -                             Print network information on provided host (connecting node by default)</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/pausehandoff.adoc" class="page unresolved">pausehandoff</a> -                         Pause hints delivery process</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/profileload.adoc" class="page unresolved">profileload</a> -                          Low footprint profiling of activity for a period of time</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/proxyhistograms.adoc" class="page unresolved">proxyhistograms</a> -                      Print statistic histograms for network operations</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/rangekeysample.adoc" class="page unresolved">rangekeysample</a> -                       Shows the sampled keys held across all keyspaces</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/rebuild.adoc" class="page unresolved">rebuild</a> -                              Rebuild data by streaming from other nodes (similarly to bootstrap)</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/rebuild_index.adoc" class="page unresolved">rebuild_index</a> -                        A full rebuild of native secondary indexes for a given table</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/recompress_sstables.adoc" class="page unresolved">recompress_sstables</a> -                  Rewrite sstables (for the requested tables) that have compression configuration different from the current</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/refresh.adoc" class="page unresolved">refresh</a> -                              Load newly placed SSTables to the system without restart</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/refreshsizeestimates.adoc" class="page unresolved">refreshsizeestimates</a> -                 Refresh system.size_estimates</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/reloadcidrgroupscache.adoc" class="page unresolved">reloadcidrgroupscache</a> -                Reload CIDR groups cache with latest entries in cidr_groups table, when CIDR authorizer is enabled</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/reloadlocalschema.adoc" class="page unresolved">reloadlocalschema</a> -                    Reload local node schema from system tables</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/reloadseeds.adoc" class="page unresolved">reloadseeds</a> -                          Reload the seed node list from the seed node provider</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/reloadssl.adoc" class="page unresolved">reloadssl</a> -                            Signals Cassandra to reload SSL certificates</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/reloadtriggers.adoc" class="page unresolved">reloadtriggers</a> -                       Reload trigger classes</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/relocatesstables.adoc" class="page unresolved">relocatesstables</a> -                     Relocates sstables to the correct disk</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/removenode.adoc" class="page unresolved">removenode</a> -                           Show status of current node removal, force completion of pending removal or remove provided ID</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/repair.adoc" class="page unresolved">repair</a> -                               Repair one or more tables</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/repair_admin.adoc" class="page unresolved">repair_admin</a> -
+<a href="#modules/cassandra/pages/managing/tools/nodetool/list.adoc" class="page unresolved">list</a> -  and fail incremental repair sessions</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/replaybatchlog.adoc" class="page unresolved">replaybatchlog</a> -                       Kick off batchlog replay and wait for finish</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/resetfullquerylog.adoc" class="page unresolved">resetfullquerylog</a> -                    Stop the full query log and clean files in the configured full query log directory from cassandra.yaml as well as JMX</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/resetlocalschema.adoc" class="page unresolved">resetlocalschema</a> -                     Reset node&#8217;s local schema and resync</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/resumehandoff.adoc" class="page unresolved">resumehandoff</a> -                        Resume hints delivery process</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/ring.adoc" class="page unresolved">ring</a> -                                 Print information about the token ring</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/scrub.adoc" class="page unresolved">scrub</a> -                                Scrub (rebuild sstables for) one or more tables</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/setauthcacheconfig.adoc" class="page unresolved">setauthcacheconfig</a> -                   Set configuration for Auth cache</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/setbatchlogreplaythrottle.adoc" class="page unresolved">setbatchlogreplaythrottle</a> -            Set batchlog replay throttle in KB per second, or 0 to disable throttling. This will be reduced proportionally to the number of nodes in the cluster.</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/setcachecapacity.adoc" class="page unresolved">setcachecapacity</a> -                     Set global key, row, and counter cache capacities (in MB units)</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/setcachekeystosave.adoc" class="page unresolved">setcachekeystosave</a> -                   Set number of keys saved by each cache for faster post-restart warmup. 0 to disable</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/setcolumnindexsize.adoc" class="page unresolved">setcolumnindexsize</a> -                   Set the granularity of the collation index of rows within a partition in KiB</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/setcompactionthreshold.adoc" class="page unresolved">setcompactionthreshold</a> -               Set min and max compaction thresholds for a given table</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/setcompactionthroughput.adoc" class="page unresolved">setcompactionthroughput</a> -              Set the MiB/s throughput cap for compaction in the system, or 0 to disable throttling</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/setconcurrency.adoc" class="page unresolved">setconcurrency</a> -                       Set maximum concurrency for processing stage</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/setconcurrentcompactors.adoc" class="page unresolved">setconcurrentcompactors</a> -              Set number of concurrent compactors in the system.</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/setconcurrentviewbuilders.adoc" class="page unresolved">setconcurrentviewbuilders</a> -            Set the number of concurrent view builders in the system</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/setdefaultrf.adoc" class="page unresolved">setdefaultrf</a> -                         Sets default keyspace replication factor.</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/sethintedhandoffthrottlekb.adoc" class="page unresolved">sethintedhandoffthrottlekb</a> -           Set hinted handoff throttle in KiB per second, per delivery thread.</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/setinterdcstreamthroughput.adoc" class="page unresolved">setinterdcstreamthroughput</a> -           Set the throughput cap for inter-datacenter streaming and entire SSTable inter-datacenter streaming in the system, or 0 to disable throttling</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/setlogginglevel.adoc" class="page unresolved">setlogginglevel</a> -                      Set the log level threshold for a given component or class. Will reset to the initial configuration if called with no parameters.</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/setmaxhintwindow.adoc" class="page unresolved">setmaxhintwindow</a> -                     Set the specified max hint window in ms</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/setsnapshotthrottle.adoc" class="page unresolved">setsnapshotthrottle</a> -                  Set the snapshot_links_per_second cap for snapshot and clearsnapshot throttling</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/setstreamthroughput.adoc" class="page unresolved">setstreamthroughput</a> -                  Set throughput cap for streaming and entire SSTable streaming in the system, or 0 to disable throttling</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/settimeout.adoc" class="page unresolved">settimeout</a> -                           Set the specified timeout in ms, or 0 to disable timeout</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/settraceprobability.adoc" class="page unresolved">settraceprobability</a> -                  Sets the probability for tracing any given request to value. 0 disables, 1 enables for all requests, 0 is the default</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/sjk.adoc" class="page unresolved">sjk</a> -                                  Run commands of 'Swiss Java Knife'. Run 'nodetool sjk --help' for more information.</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/snapshot.adoc" class="page unresolved">snapshot</a> -                             Take a snapshot of specified keyspaces or a snapshot of the specified table</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/status.adoc" class="page unresolved">status</a> -                               Print cluster information (state, load, IDs, &#8230;&#8203;)</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/statusautocompaction.adoc" class="page unresolved">statusautocompaction</a> -
+<a href="#modules/cassandra/pages/managing/tools/nodetool/status.adoc" class="page unresolved">status</a> -  of autocompaction of the given keyspace and table</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/statusbackup.adoc" class="page unresolved">statusbackup</a> -                         Status of incremental backup</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/statusbinary.adoc" class="page unresolved">statusbinary</a> -                         Status of native transport (binary protocol)</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/statusgossip.adoc" class="page unresolved">statusgossip</a> -                         Status of gossip</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/statushandoff.adoc" class="page unresolved">statushandoff</a> -                        Status of storing future hints on the current node</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/stop.adoc" class="page unresolved">stop</a> -                                 Stop compaction</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/stopdaemon.adoc" class="page unresolved">stopdaemon</a> -                           Stop cassandra daemon</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/tablehistograms.adoc" class="page unresolved">tablehistograms</a> -                      Print statistic histograms for a given table</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/tablestats.adoc" class="page unresolved">tablestats</a> -                           Print statistics on tables</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/toppartitions.adoc" class="page unresolved">toppartitions</a> -                        Sample and print the most active partitions</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/tpstats.adoc" class="page unresolved">tpstats</a> -                              Print usage statistics of thread pools</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/truncatehints.adoc" class="page unresolved">truncatehints</a> -                        Truncate all hints on the local node, or truncate hints for the endpoint(s) specified.</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/updatecidrgroup.adoc" class="page unresolved">updatecidrgroup</a> -                      Insert/Update a cidr group</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/upgradesstables.adoc" class="page unresolved">upgradesstables</a> -                      Rewrite sstables (for the requested tables) that are not on the current version (thus upgrading them to said current version)</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/verify.adoc" class="page unresolved">verify</a> -                               Verify (check data checksum for) one or more tables</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/version.adoc" class="page unresolved">version</a> -                              Print cassandra version</p>
+</div>
+<div class="paragraph">
+<p><a href="#modules/cassandra/pages/managing/tools/nodetool/viewbuildstatus.adoc" class="page unresolved">viewbuildstatus</a> -                      Show progress of a materialized view build</p>
+</div>
+<div class="paragraph">
+<p>See 'nodetool help &lt;command&gt;' for more information on a specific command.</p>
+</div>
+</div>
+</div>
+</article>
+</main>
+    </div>
+</div>
+            <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../../../../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://twitter.com/cassandra?lang=en" target="_blank"><img src="../../../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../../../../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+    <script src="../../../../../../assets/js/site.js"></script>
+    <script async src="../../../../../../assets/js/vendor/highlight.js"></script>
+    <script src="../../../../../../assets/js/vendor/lunr.js"></script>
+    <script src="../../../../../../assets/js/vendor/search.js" id="search-script" data-base-path="../../../../../.." data-page-path="/Cassandra/5.0/cassandra/managing/tools/nodetool/nodetool.html"></script>
+    <script async src="../../../../../../assets/../search-index.js"></script>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+        </div>
+    </body>
+</html>

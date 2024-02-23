@@ -1,0 +1,1916 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>cqlsh: the CQL shell | Apache Cassandra Documentation</title>
+            <link rel="stylesheet" href="../../../../../assets/css/site.css">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="Cassandra">
+    <meta name="dcterms.identifier" content="trunk">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../../../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "https://plausible.cassandra.apache.org/js/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>    </head>
+    <body class="docs-wrapper article">
+        <div class="container mx-auto relative">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta property="og:type" content="website" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+         <div class="header-social-icons text-right">
+            <a href="https://twitter.com/cassandra?lang=en" target="_blank" styles="margin-left: 20px;"><img src="../../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../../../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+            <div class="hero hero--home grad">
+                <div class="eye"></div>
+                <div id="docs-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                    <h2>Cassandra Documentation</h2>
+                </div>
+            </div>
+            <div class="body px-medium py-medium container">
+    <div class="docs-nav-bar flex flex-space-between mb-medium">
+      <div id="mobile-docs-nav-burger" class="hidden">
+        <svg viewBox="0 0 24 24" width="36" height="36" stroke="#1c81a0" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </div>
+        <div class="docs-nav-item relative">
+          <input id="search-input" type="text" placeholder="Search docs">
+        </div>
+      <div class="versions-wrapper">
+  <h4>Version:</h4>
+  <div class="nav-panel-explore" data-panel="explore">
+
+    <div id="version-toggle" class="context">
+      <span class="version">trunk</span>
+    </div>
+    <ul id="versions-list" class="components">
+      <li class="component">
+        <ul class="versions">
+          <li class="version is-latest">
+            <a href="../../../../../_/index.html">master</a>
+          </li>
+        </ul>
+      </li>
+      <li class="component is-current">
+        <ul class="versions">
+          <li class="version is-current">
+            <a href="../../../index.html">trunk</a>
+          </li>
+          <li class="version">
+            <a href="../../../../5.0/index.html">5.0</a>
+          </li>
+          <li class="version is-latest">
+            <a href="../../../../4.1/index.html">4.1</a>
+          </li>
+          <li class="version">
+            <a href="../../../../4.0/index.html">4.0</a>
+          </li>
+          <li class="version">
+            <a href="../../../../3.11/index.html">3.11</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>    </div>
+    <div class="cf relative">
+        <nav class="nav docs-nav full-800">
+<div class="nav-menu">
+<ul class="nav-list">
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../index.html">Main</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/glossary.html">Glossary</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/bugs.html">How to report bugs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/contactus.html">Contact us</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../_/development/index.html">Development</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/gettingstarted.html">Getting started</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/ide.html">Building and IDE integration</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/testing.html">Testing</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/patches.html">Contributing code changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/code_style.html">Code style</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/how_to_review.html">Review checklist</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/how_to_commit.html">How to commit</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/documentation.html">Working on documentation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/ci.html">Jenkins CI environment</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/dependencies.html">Dependency management</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/release_process.html">Release process</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item is-current-path is-active" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <span class="nav-text">Cassandra</span>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../overview/faq/index.html">FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../getting-started/index.html">Getting Started</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/cassandra-quickstart.html">Cassandra Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../installing/installing.html">Installing Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/configuring.html">Configuring Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/querying.html">Inserting and querying</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/drivers.html">Client drivers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/production.html">Production recommendations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../new/index.html">What&#8217;s new</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/java17.html">Support for Java</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../architecture/index.html">Architecture</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/overview.html">Overview</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/dynamo.html">Dynamo</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/storage-engine.html">Storage Engine</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/guarantees.html">Guarantees</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/messaging.html">Improved Internode Messaging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/streaming.html">Improved Streaming</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../developing/data-modeling/index.html">Data Modeling</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/intro.html">Introduction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_conceptual.html">Conceptual data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_rdbms.html">RDBMS design</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_queries.html">Defining application queries</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_logical.html">Logical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_physical.html">Physical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_refining.html">Evaluating and refining data models</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_schema.html">Defining database schema</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_tools.html">Cassandra data modeling tools</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../developing/cql/index.html">Cassandra Query Language (CQL)</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/definitions.html">Definitions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/types.html">Data types</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/ddl.html">Data definition (DDL)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/dml.html">Data manipulation (DML)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/dynamic-data-masking.html">Dynamic Data Masking (DDM)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/operators.html">Operators</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../developing/cql/indexing/indexing-concepts.html">Indexing concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../developing/cql/indexing/sai/sai-overview.html">SAI Overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/indexing/sai/sai-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/indexing/sai/sai-faq.html">SAI FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/indexing/sai/sai-working-with.html">Working with SAI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/indexing/sai/operations/sai-operations.html">SAI operations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../developing/cql/indexing/2i/2i-overview.html">Secondary indexes (2i) overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/indexing/2i/2i-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/indexing/2i/2i-working-with.html">Working with 2i</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/indexing/2i/operations/2i-build.html">Rebuild 2i</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/mvs.html">Materialized views</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/functions.html">Functions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/json.html">JSON</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/triggers.html">Triggers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/appendices.html">Appendices</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/changes.html">Changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/SASI.html">SASI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/cql_singlefile.html">Single file of CQL information</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../vector-search/overview.html">Vector Search overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../vector-search/concepts.html">Concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../vector-search/data-modeling.html">Data Modeling</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../vector-search/vector-search-working-with.html">Working with Vector Search</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-path is-active" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../index.html">Managing</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../configuration/index.html">Configuring</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_yaml_file.html">cassandra.yaml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_rackdc_file.html">cassandra-rackdc.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_env_sh_file.html">cassandra-env.sh</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_topo_file.html">cassandra-topologies.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_cl_archive_file.html">commitlog-archiving.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_logback_xml_file.html">logback.xml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_jvm_options_file.html">jvm-* files</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/configuration.html">Liberating cassandra.yaml Parameters' Names from Their Units</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../operating/index.html">Operating</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/backups.html">Backups</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/bloom_filters.html">Bloom filters</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/bulk_loading.html">Bulk loading</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/cdc.html">Change Data Capture (CDC)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/compaction/index.html">Compaction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/compression.html">Compression</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/hardware.html">Hardware</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/hints.html">Hints</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../operating/logging.html">Logging</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/auditlogging.html">Audit logging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/audit_logging.html">Audit logging 2</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/fqllogging.html">Full query logging</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/metrics.html">Monitoring metrics</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/repair.html">Repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/read_repair.html">Read repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/snitch.html">Snitches</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/topo_changes.html">Topology changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/transientreplication.html">Transient replication</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/virtualtables.html">Virtual tables</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-path is-active" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="index.html">Tools</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page is-active" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="cqlsh.html">cqlsh: the CQL shell</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="nodetool/nodetool.html">nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="sstable/index.html">SSTable tools</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="#cassandra:managing/tools/cassandra_stress.adoc">cassandra-stress</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../troubleshooting/index.html">Troubleshooting</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../troubleshooting/finding_nodes.html">Finding misbehaving nodes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../troubleshooting/reading_logs.html">Reading Cassandra logs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../troubleshooting/use_nodetool.html">Using nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../troubleshooting/use_tools.html">Using external tools to deep-dive</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../reference/index.html">Reference</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/cql-commands/alter-table.html">ALTER TABLE</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/cql-commands/create-index.html">CREATE INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/cql-commands/create-custom-index.html">CREATE CUSTOM INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/cql-commands/create-table.html">CREATE TABLE</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/cql-commands/drop-index.html">DROP INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/cql-commands/drop-table.html">DROP TABLE</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../integrating/plugins/index.html">Plug-ins</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+</div>
+</nav>
+        <aside class="toc sidebar">
+  <div class="toc-menu"></div>
+</aside>
+        <main class="article default-main full-800" data-ceiling="topbar">
+  <div class="article-banner">
+    <p>You are viewing the documentation for a prerelease version.</p>
+  </div>
+    <div class="article-header">
+<nav class="crumbs" aria-label="breadcrumbs">
+  <ul>
+    <li class="crumb">Cassandra</li>
+    <li class="crumb"><a href="../index.html">Managing</a></li>
+    <li class="crumb"><a href="index.html">Tools</a></li>
+    <li class="crumb"><a href="cqlsh.html">cqlsh: the CQL shell</a></li>
+  </ul>
+</nav>
+<div class="tools" role="navigation">
+  <ul>
+    <li class="tool edit"><a href="https://github.com/apache/cassandra/edit/trunk/doc/modules/cassandra/pages/managing/tools/cqlsh.adoc" title="Edit Page" target="_blank" rel="noopener">Edit</a></li>
+  </ul>
+</div>
+  </div>
+<article class="doc">
+<h1 class="page">cqlsh: the CQL shell</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>cqlsh</code> is a command-line interface for interacting with Cassandra using CQL (the Cassandra Query Language).
+It is shipped with every Cassandra package, and can be found in the bin/ directory alongside the cassandra
+executable.
+<code>cqlsh</code> is implemented with the Python native protocol driver, and connects to the single specified node.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="compatibility"><a class="anchor" href="#compatibility"></a>Compatibility</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In general, a given version of <code>cqlsh</code> is only guaranteed to work with the
+version of Cassandra that it was released with.
+In some cases, <code>cqlsh</code> may work with older or newer versions of Cassandra, but this is not
+officially supported.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="optional-dependencies"><a class="anchor" href="#optional-dependencies"></a>Optional Dependencies</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>cqlsh</code> ships with all essential dependencies. However, there are some
+optional dependencies that can be installed to improve the capabilities
+of <code>cqlsh</code>.</p>
+</div>
+<div class="sect2">
+<h3 id="pytz"><a class="anchor" href="#pytz"></a>pytz</h3>
+<div class="paragraph">
+<p>By default, <code>cqlsh</code> displays all timestamps with a UTC timezone.
+For Python 3.9 or higher, timestamps can be displayed in different timezones by modifying the
+<code>timezone</code> option in <a href="#cassandra:developing/cql/tools/cqlsh.adoc#cqlshrc" class="page unresolved">cqlshrc</a> or by setting the environment
+variable <code>TZ</code>.
+Python 3.8 or lower, however, will also require the installation of <a href="http://pytz.sourceforge.net/">pytz</a> library.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="cython"><a class="anchor" href="#cython"></a>cython</h3>
+<div class="paragraph">
+<p>The performance of cqlsh&#8217;s <code>COPY</code> operations can be improved by
+installing <a href="http://cython.org/">cython</a>. This will compile the python
+modules that are central to the performance of <code>COPY</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cqlshrc"><a class="anchor" href="#cqlshrc"></a>cqlshrc</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>cqlshrc</code> file holds configuration options for <code>cqlsh</code>.
+By default, the file is located the user&#8217;s home directory at <code>~/.cassandra/cqlshrc</code>, but a
+custom location can be specified with the <code>--cqlshrc</code> option.</p>
+</div>
+<div class="paragraph">
+<p>Example config values and documentation can be found in the
+<code>conf/cqlshrc.sample</code> file of a tarball installation.
+You can also view the latest version of the
+<a href="https://github.com/apache/cassandra/blob/trunk/conf/cqlshrc.sample">cqlshrc file online</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cql_history"><a class="anchor" href="#cql_history"></a>cql history</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>All CQL commands you execute are written to a history file. By default, CQL history will be written to <code>~/.cassandra/cql_history</code>. You can change this default by setting the environment variable <code>CQL_HISTORY</code> like <code>~/some/other/path/to/cqlsh_history</code> where <code>cqlsh_history</code> is a file. All parent directories to history file will be created if they do not exist. If you do not want to persist history, you can do so by setting CQL_HISTORY to /dev/null.
+This feature is supported from Cassandra 4.1.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="command-line-options"><a class="anchor" href="#command-line-options"></a>Command Line Options</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Usage: <code>cqlsh.py [options] [host [port]]</code></p>
+</div>
+<div class="paragraph">
+<p>CQL Shell for Apache Cassandra</p>
+</div>
+<div class="paragraph">
+<p>Options:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>--version</code></dt>
+<dd>
+<p>show program&#8217;s version number and exit</p>
+</dd>
+<dt class="hdlist1"><code>-h</code> <code>--help</code></dt>
+<dd>
+<p>show this help message and exit</p>
+</dd>
+<dt class="hdlist1"><code>-C</code> <code>--color</code></dt>
+<dd>
+<p>Always use color output</p>
+</dd>
+<dt class="hdlist1"><code>--no-color</code></dt>
+<dd>
+<p>Never use color output</p>
+</dd>
+<dt class="hdlist1"><code>--browser=BROWSER</code></dt>
+<dd>
+<p>The browser to use to display CQL help, where BROWSER can be:
+one of the supported browsers in <a href="https://docs.python.org/3/library/webbrowser.html" class="bare">docs.python.org/3/library/webbrowser.html</a>.
+browser path followed by %s, example: /usr/bin/google-chrome-stable %s</p>
+</dd>
+<dt class="hdlist1"><code>--ssl</code></dt>
+<dd>
+<p>Use SSL</p>
+</dd>
+<dt class="hdlist1"><code>-u USERNAME</code> <code>--username=USERNAME</code></dt>
+<dd>
+<p>Authenticate as user.</p>
+</dd>
+<dt class="hdlist1"><code>-p PASSWORD</code> <code>--password=PASSWORD</code></dt>
+<dd>
+<p>Authenticate using password.</p>
+</dd>
+<dt class="hdlist1"><code>-k KEYSPACE</code> <code>--keyspace=KEYSPACE</code></dt>
+<dd>
+<p>Authenticate to the given keyspace.</p>
+</dd>
+<dt class="hdlist1"><code>-f FILE</code> <code>--file=FILE</code></dt>
+<dd>
+<p>Execute commands from FILE, then exit</p>
+</dd>
+<dt class="hdlist1"><code>--debug</code></dt>
+<dd>
+<p>Show additional debugging information</p>
+</dd>
+<dt class="hdlist1"><code>--coverage</code></dt>
+<dd>
+<p>Collect coverage data</p>
+</dd>
+<dt class="hdlist1"><code>--encoding=ENCODING</code></dt>
+<dd>
+<p>Specify a non-default encoding for output. (Default: utf-8)</p>
+</dd>
+<dt class="hdlist1"><code>--cqlshrc=CQLSHRC</code></dt>
+<dd>
+<p>Specify an alternative cqlshrc file location.</p>
+</dd>
+<dt class="hdlist1"><code>--credentials=CREDENTIALS</code></dt>
+<dd>
+<p>Specify an alternative credentials file location.</p>
+</dd>
+<dt class="hdlist1"><code>--cqlversion=CQLVERSION</code></dt>
+<dd>
+<p>Specify a particular CQL version, by default the
+highest version supported by the server will be used.
+Examples: "3.0.3", "3.1.0"</p>
+</dd>
+<dt class="hdlist1"><code>--protocol-version=PROTOCOL_VERSION</code></dt>
+<dd>
+<p>Specify a specific protcol version otherwise the
+client will default and downgrade as necessary</p>
+</dd>
+<dt class="hdlist1"><code>-e EXECUTE</code> <code>--execute=EXECUTE</code></dt>
+<dd>
+<p>Execute the statement and quit.</p>
+</dd>
+<dt class="hdlist1"><code>--connect-timeout=CONNECT_TIMEOUT</code></dt>
+<dd>
+<p>Specify the connection timeout in seconds (default: 5 seconds).</p>
+</dd>
+<dt class="hdlist1"><code>--request-timeout=REQUEST_TIMEOUT</code></dt>
+<dd>
+<p>Specify the default request timeout in seconds
+(default: 10 seconds).</p>
+</dd>
+<dt class="hdlist1"><code>-t, --tty</code></dt>
+<dd>
+<p>Force tty mode (command prompt).</p>
+</dd>
+<dt class="hdlist1"><code>-v</code> <code>--v</code></dt>
+<dd>
+<p>Print the current version of cqlsh.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="special-commands"><a class="anchor" href="#special-commands"></a>Special Commands</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In addition to supporting regular CQL statements, <code>cqlsh</code> also supports a
+number of special commands that are not part of CQL. These are detailed
+below.</p>
+</div>
+<div class="sect2">
+<h3 id="consistency"><a class="anchor" href="#consistency"></a><code>CONSISTENCY</code></h3>
+<div class="paragraph">
+<p><code>Usage</code>: <code>CONSISTENCY &lt;consistency level&gt;</code></p>
+</div>
+<div class="paragraph">
+<p>Sets the consistency level for operations to follow. Valid arguments
+include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>ANY</code></p>
+</li>
+<li>
+<p><code>ONE</code></p>
+</li>
+<li>
+<p><code>TWO</code></p>
+</li>
+<li>
+<p><code>THREE</code></p>
+</li>
+<li>
+<p><code>QUORUM</code></p>
+</li>
+<li>
+<p><code>ALL</code></p>
+</li>
+<li>
+<p><code>LOCAL_QUORUM</code></p>
+</li>
+<li>
+<p><code>LOCAL_ONE</code></p>
+</li>
+<li>
+<p><code>SERIAL</code></p>
+</li>
+<li>
+<p><code>LOCAL_SERIAL</code></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="serial-consistency"><a class="anchor" href="#serial-consistency"></a><code>SERIAL CONSISTENCY</code></h3>
+<div class="paragraph">
+<p><code>Usage</code>: <code>SERIAL CONSISTENCY &lt;consistency level&gt;</code></p>
+</div>
+<div class="paragraph">
+<p>Sets the serial consistency level for operations to follow. Valid
+arguments include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>SERIAL</code></p>
+</li>
+<li>
+<p><code>LOCAL_SERIAL</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The serial consistency level is only used by conditional updates
+(<code>INSERT</code>, <code>UPDATE</code> and <code>DELETE</code> with an <code>IF</code> condition). For those, the
+serial consistency level defines the consistency level of the serial
+phase (or “paxos” phase) while the normal consistency level defines the
+consistency for the “learn” phase, i.e. what type of reads will be
+guaranteed to see the update right away. For example, if a conditional
+write has a consistency level of <code>QUORUM</code> (and is successful), then a
+<code>QUORUM</code> read is guaranteed to see that write. But if the regular
+consistency level of that write is <code>ANY</code>, then only a read with a
+consistency level of <code>SERIAL</code> is guaranteed to see it (even a read with
+consistency <code>ALL</code> is not guaranteed to be enough).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="show-version"><a class="anchor" href="#show-version"></a><code>SHOW VERSION</code></h3>
+<div class="paragraph">
+<p>Prints the <code>cqlsh</code>, Cassandra, CQL, and native protocol versions in use.
+Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">cqlsh&gt; SHOW VERSION
+[cqlsh 5.0.1 | Cassandra 3.8 | CQL spec 3.4.2 | Native protocol v4]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="show-host"><a class="anchor" href="#show-host"></a><code>SHOW HOST</code></h3>
+<div class="paragraph">
+<p>Prints the IP address and port of the Cassandra node that <code>cqlsh</code> is
+connected to in addition to the cluster name. Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">cqlsh&gt; SHOW HOST
+Connected to Prod_Cluster at 192.0.0.1:9042.</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="show-replicas"><a class="anchor" href="#show-replicas"></a><code>SHOW REPLICAS</code></h3>
+<div class="paragraph">
+<p>Prints the IP addresses of the Cassandra nodes which are replicas for the
+listed given token and keyspace. This command is available from Cassandra 4.2.</p>
+</div>
+<div class="paragraph">
+<p><code>Usage</code>: <code>SHOW REPLICAS &lt;token&gt; (&lt;keyspace&gt;)</code></p>
+</div>
+<div class="paragraph">
+<p>Example usage:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">cqlsh&gt; SHOW REPLICAS 95
+['192.0.0.1', '192.0.0.2']</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="show-session"><a class="anchor" href="#show-session"></a><code>SHOW SESSION</code></h3>
+<div class="paragraph">
+<p>Pretty prints a specific tracing session.</p>
+</div>
+<div class="paragraph">
+<p><code>Usage</code>: <code>SHOW SESSION &lt;session id&gt;</code></p>
+</div>
+<div class="paragraph">
+<p>Example usage:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">cqlsh&gt; SHOW SESSION 95ac6470-327e-11e6-beca-dfb660d92ad8
+
+Tracing session: 95ac6470-327e-11e6-beca-dfb660d92ad8
+
+ activity                                                  | timestamp                  | source    | source_elapsed | client
+-----------------------------------------------------------+----------------------------+-----------+----------------+-----------
+                                        Execute CQL3 query | 2016-06-14 17:23:13.979000 | 127.0.0.1 |              0 | 127.0.0.1
+ Parsing SELECT * FROM system.local; [SharedPool-Worker-1] | 2016-06-14 17:23:13.982000 | 127.0.0.1 |           3843 | 127.0.0.1
+...</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="source"><a class="anchor" href="#source"></a><code>SOURCE</code></h3>
+<div class="paragraph">
+<p>Reads the contents of a file and executes each line as a CQL statement
+or special cqlsh command.</p>
+</div>
+<div class="paragraph">
+<p><code>Usage</code>: <code>SOURCE &lt;string filename&gt;</code></p>
+</div>
+<div class="paragraph">
+<p>Example usage:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">cqlsh&gt; SOURCE '/home/calvinhobbs/commands.cql'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="capture"><a class="anchor" href="#capture"></a><code>CAPTURE</code></h3>
+<div class="paragraph">
+<p>Begins capturing command output and appending it to a specified file.
+Output will not be shown at the console while it is captured.</p>
+</div>
+<div class="paragraph">
+<p><code>Usage</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">CAPTURE '&lt;file&gt;';
+CAPTURE OFF;
+CAPTURE;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>That is, the path to the file to be appended to must be given inside a
+string literal. The path is interpreted relative to the current working
+directory. The tilde shorthand notation (<code>'~/mydir'</code>) is supported for
+referring to <code>$HOME</code>.</p>
+</div>
+<div class="paragraph">
+<p>Only query result output is captured. Errors and output from cqlsh-only
+commands will still be shown in the cqlsh session.</p>
+</div>
+<div class="paragraph">
+<p>To stop capturing output and show it in the cqlsh session again, use
+<code>CAPTURE OFF</code>.</p>
+</div>
+<div class="paragraph">
+<p>To inspect the current capture configuration, use <code>CAPTURE</code> with no
+arguments.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="help"><a class="anchor" href="#help"></a><code>HELP</code></h3>
+<div class="paragraph">
+<p>Gives information about cqlsh commands. To see available topics, enter
+<code>HELP</code> without any arguments. To see help on a topic, use
+<code>HELP &lt;topic&gt;</code>. Also see the <code>--browser</code> argument for controlling what
+browser is used to display help.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="history"><a class="anchor" href="#history"></a><code>HISTORY</code></h3>
+<div class="paragraph">
+<p>Prints to the screen the last <code>n</code> cqlsh commands executed on the server.
+The number of lines defaults to 50 if not specified. <code>n</code> is set for
+the current CQL session so if you set it e.g. to <code>10</code>, from that point
+there will be at most 10 last commands returned to you.</p>
+</div>
+<div class="paragraph">
+<p><code>Usage</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">HISTORY &lt;n&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="tracing"><a class="anchor" href="#tracing"></a><code>TRACING</code></h3>
+<div class="paragraph">
+<p>Enables or disables tracing for queries. When tracing is enabled, once a
+query completes, a trace of the events during the query will be printed.</p>
+</div>
+<div class="paragraph">
+<p><code>Usage</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">TRACING ON
+TRACING OFF</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="paging"><a class="anchor" href="#paging"></a><code>PAGING</code></h3>
+<div class="paragraph">
+<p>Enables paging, disables paging, or sets the page size for read queries.
+When paging is enabled, only one page of data will be fetched at a time
+and a prompt will appear to fetch the next page. Generally, it&#8217;s a good
+idea to leave paging enabled in an interactive session to avoid fetching
+and printing large amounts of data at once.</p>
+</div>
+<div class="paragraph">
+<p><code>Usage</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">PAGING ON
+PAGING OFF
+PAGING &lt;page size in rows&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="expand"><a class="anchor" href="#expand"></a><code>EXPAND</code></h3>
+<div class="paragraph">
+<p>Enables or disables vertical printing of rows. Enabling <code>EXPAND</code> is
+useful when many columns are fetched, or the contents of a single column
+are large.</p>
+</div>
+<div class="paragraph">
+<p><code>Usage</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">EXPAND ON
+EXPAND OFF</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="elapsed"><a class="anchor" href="#elapsed"></a><code>ELAPSED</code></h3>
+<div class="paragraph">
+<p>Enables or disables the printing of the elapsed time for a query. Except a quick evalution
+of how long a CQL statement took, this is also a complementary output to <code>TRACING</code> (if enabled).
+A user can debug if there is a communication delay to a node or not comparing the timestamps as <code>TRACING</code> tracks
+the time elapsed only on the server side.</p>
+</div>
+<div class="paragraph">
+<p><code>Usage</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">cqlsh&gt; ELAPSED ON
+ELAPSED set to ON
+cqlsh&gt; select * from myks.mytb limit 5;
+
+ id | age
+----+-----
+  5 |  10
+ 10 |  10
+ 11 |  10
+  1 |  10
+  8 |  10
+
+(5 rows)
+(6ms elapsed)
+cqlsh&gt; DROP KEYSPACE myks ;
+(510ms elapsed)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="login"><a class="anchor" href="#login"></a><code>LOGIN</code></h3>
+<div class="paragraph">
+<p>Authenticate as a specified Cassandra user for the current session.</p>
+</div>
+<div class="paragraph">
+<p><code>Usage</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">LOGIN &lt;username&gt; [&lt;password&gt;]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="exit"><a class="anchor" href="#exit"></a><code>EXIT</code></h3>
+<div class="paragraph">
+<p>Ends the current session and terminates the cqlsh process.</p>
+</div>
+<div class="paragraph">
+<p><code>Usage</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">EXIT
+QUIT</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="clear"><a class="anchor" href="#clear"></a><code>CLEAR</code></h3>
+<div class="paragraph">
+<p>Clears the console.</p>
+</div>
+<div class="paragraph">
+<p><code>Usage</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">CLEAR
+CLS</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="describe"><a class="anchor" href="#describe"></a><code>DESCRIBE</code></h3>
+<div class="paragraph">
+<p>Prints a description (typically a series of DDL statements) of a schema
+element or the cluster. This is useful for dumping all or portions of
+the schema.</p>
+</div>
+<div class="paragraph">
+<p><code>Usage</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">DESCRIBE CLUSTER
+DESCRIBE SCHEMA
+DESCRIBE KEYSPACES
+DESCRIBE KEYSPACE &lt;keyspace name&gt;
+DESCRIBE TABLES
+DESCRIBE TABLE &lt;table name&gt;
+DESCRIBE INDEX &lt;index name&gt;
+DESCRIBE MATERIALIZED VIEW &lt;view name&gt;
+DESCRIBE TYPES
+DESCRIBE TYPE &lt;type name&gt;
+DESCRIBE FUNCTIONS
+DESCRIBE FUNCTION &lt;function name&gt;
+DESCRIBE AGGREGATES
+DESCRIBE AGGREGATE &lt;aggregate function name&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In any of the commands, <code>DESC</code> may be used in place of <code>DESCRIBE</code>.</p>
+</div>
+<div class="paragraph">
+<p>The <code>DESCRIBE CLUSTER</code> command prints the cluster name and partitioner:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">cqlsh&gt; DESCRIBE CLUSTER
+
+Cluster: Test Cluster
+Partitioner: Murmur3Partitioner</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>DESCRIBE SCHEMA</code> command prints the DDL statements needed to
+recreate the entire schema. This is especially useful for dumping the
+schema in order to clone a cluster or restore from a backup.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="copy-to"><a class="anchor" href="#copy-to"></a><code>COPY TO</code></h3>
+<div class="paragraph">
+<p>Copies data from a table to a CSV file.</p>
+</div>
+<div class="paragraph">
+<p><code>Usage</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">COPY &lt;table name&gt; [(&lt;column&gt;, ...)] TO &lt;file name&gt; WITH &lt;copy option&gt; [AND &lt;copy option&gt; ...]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If no columns are specified, all columns from the table will be copied
+to the CSV file. A subset of columns to copy may be specified by adding
+a comma-separated list of column names surrounded by parenthesis after
+the table name.</p>
+</div>
+<div class="paragraph">
+<p>The <code>&lt;file name&gt;</code> should be a string literal (with single quotes)
+representing a path to the destination file. This can also the special
+value <code>STDOUT</code> (without single quotes) to print the CSV to stdout.</p>
+</div>
+<div class="paragraph">
+<p>See <code>shared-copy-options</code> for options that apply to both <code>COPY TO</code> and
+<code>COPY FROM</code>.</p>
+</div>
+<div class="sect3">
+<h4 id="options-for-copy-to"><a class="anchor" href="#options-for-copy-to"></a>Options for <code>COPY TO</code></h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>MAXREQUESTS</code></dt>
+<dd>
+<p>The maximum number token ranges to fetch simultaneously. Defaults to
+6.</p>
+</dd>
+<dt class="hdlist1"><code>PAGESIZE</code></dt>
+<dd>
+<p>The number of rows to fetch in a single page. Defaults to 1000.</p>
+</dd>
+<dt class="hdlist1"><code>PAGETIMEOUT</code></dt>
+<dd>
+<p>By default the page timeout is 10 seconds per 1000 entries in the page
+size or 10 seconds if pagesize is smaller.</p>
+</dd>
+<dt class="hdlist1"><code>BEGINTOKEN</code>, <code>ENDTOKEN</code></dt>
+<dd>
+<p>Token range to export. Defaults to exporting the full ring.</p>
+</dd>
+<dt class="hdlist1"><code>MAXOUTPUTSIZE</code></dt>
+<dd>
+<p>The maximum size of the output file measured in number of lines;
+beyond this maximum the output file will be split into segments. -1
+means unlimited, and is the default.</p>
+</dd>
+<dt class="hdlist1"><code>ENCODING</code></dt>
+<dd>
+<p>The encoding used for characters. Defaults to <code>utf8</code>.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="copy-from"><a class="anchor" href="#copy-from"></a><code>COPY FROM</code></h3>
+<div class="paragraph">
+<p>Copies data from a CSV file to table.</p>
+</div>
+<div class="paragraph">
+<p><code>Usage</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">COPY &lt;table name&gt; [(&lt;column&gt;, ...)] FROM &lt;file name&gt; WITH &lt;copy option&gt; [AND &lt;copy option&gt; ...]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If no columns are specified, all columns from the CSV file will be
+copied to the table. A subset of columns to copy may be specified by
+adding a comma-separated list of column names surrounded by parenthesis
+after the table name.</p>
+</div>
+<div class="paragraph">
+<p>The <code>&lt;file name&gt;</code> should be a string literal (with single quotes)
+representing a path to the source file. This can also the special value
+<code>STDIN</code> (without single quotes) to read the CSV data from stdin.</p>
+</div>
+<div class="paragraph">
+<p>See <code>shared-copy-options</code> for options that apply to both <code>COPY TO</code> and
+<code>COPY FROM</code>.</p>
+</div>
+<div class="sect3">
+<h4 id="options-for-copy-from"><a class="anchor" href="#options-for-copy-from"></a>Options for <code>COPY FROM</code></h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>INGESTRATE</code></dt>
+<dd>
+<p>The maximum number of rows to process per second. Defaults to 100000.</p>
+</dd>
+<dt class="hdlist1"><code>MAXROWS</code></dt>
+<dd>
+<p>The maximum number of rows to import. -1 means unlimited, and is the
+default.</p>
+</dd>
+<dt class="hdlist1"><code>SKIPROWS</code></dt>
+<dd>
+<p>A number of initial rows to skip. Defaults to 0.</p>
+</dd>
+<dt class="hdlist1"><code>SKIPCOLS</code></dt>
+<dd>
+<p>A comma-separated list of column names to ignore. By default, no
+columns are skipped.</p>
+</dd>
+<dt class="hdlist1"><code>MAXPARSEERRORS</code></dt>
+<dd>
+<p>The maximum global number of parsing errors to ignore. -1 means
+unlimited, and is the default.</p>
+</dd>
+<dt class="hdlist1"><code>MAXINSERTERRORS</code></dt>
+<dd>
+<p>The maximum global number of insert errors to ignore. -1 means
+unlimited. The default is 1000.</p>
+</dd>
+<dt class="hdlist1"><code>ERRFILE</code> =</dt>
+<dd>
+<p>A file to store all rows that could not be imported, by default this
+is <code>import_&lt;ks&gt;_&lt;table&gt;.err</code> where <code>&lt;ks&gt;</code> is your keyspace and
+<code>&lt;table&gt;</code> is your table name.</p>
+</dd>
+<dt class="hdlist1"><code>MAXBATCHSIZE</code></dt>
+<dd>
+<p>The max number of rows inserted in a single batch. Defaults to 20.</p>
+</dd>
+<dt class="hdlist1"><code>MINBATCHSIZE</code></dt>
+<dd>
+<p>The min number of rows inserted in a single batch. Defaults to 10.</p>
+</dd>
+<dt class="hdlist1"><code>CHUNKSIZE</code></dt>
+<dd>
+<p>The number of rows that are passed to child worker processes from the
+main process at a time. Defaults to 5000.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="shared-copy-options"><a class="anchor" href="#shared-copy-options"></a>Shared COPY Options</h4>
+<div class="paragraph">
+<p>Options that are common to both <code>COPY TO</code> and <code>COPY FROM</code>.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>NULLVAL</code></dt>
+<dd>
+<p>The string placeholder for null values. Defaults to <code>null</code>.</p>
+</dd>
+<dt class="hdlist1"><code>HEADER</code></dt>
+<dd>
+<p>For <code>COPY TO</code>, controls whether the first line in the CSV output file
+will contain the column names. For COPY FROM, specifies whether the
+first line in the CSV input file contains column names. Defaults to
+<code>false</code>.</p>
+</dd>
+<dt class="hdlist1"><code>DECIMALSEP</code></dt>
+<dd>
+<p>The character that is used as the decimal point separator. Defaults to
+<code>.</code>.</p>
+</dd>
+<dt class="hdlist1"><code>THOUSANDSSEP</code></dt>
+<dd>
+<p>The character that is used to separate thousands. Defaults to the
+empty string.</p>
+</dd>
+<dt class="hdlist1"><code>BOOLSTYlE</code></dt>
+<dd>
+<p>The string literal format for boolean values. Defaults to
+<code>True,False</code>.</p>
+</dd>
+<dt class="hdlist1"><code>NUMPROCESSES</code></dt>
+<dd>
+<p>The number of child worker processes to create for <code>COPY</code> tasks.
+Defaults to 16 for <code>COPY</code> tasks. However, at most (num_cores - 1)
+processes will be created.</p>
+</dd>
+<dt class="hdlist1"><code>MAXATTEMPTS</code></dt>
+<dd>
+<p>The maximum number of failed attempts to fetch a range of data (when
+using <code>COPY TO</code>) or insert a chunk of data (when using <code>COPY FROM</code>)
+before giving up. Defaults to 5.</p>
+</dd>
+<dt class="hdlist1"><code>REPORTFREQUENCY</code></dt>
+<dd>
+<p>How often status updates are refreshed, in seconds. Defaults to 0.25.</p>
+</dd>
+<dt class="hdlist1"><code>RATEFILE</code></dt>
+<dd>
+<p>An optional file to output rate statistics to. By default, statistics
+are not output to a file.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="escaping-quotes"><a class="anchor" href="#escaping-quotes"></a>Escaping Quotes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Dates, IP addresses, and strings need to be enclosed in single quotation marks. To use a single quotation mark itself in a string literal, escape it using a single quotation mark.</p>
+</div>
+<div class="paragraph">
+<p>When fetching simple text data, <code>cqlsh</code> will return an unquoted string. However, when fetching text data from complex types (collections, user-defined types, etc.) <code>cqlsh</code> will return a quoted string containing the escaped characters. For example:</p>
+</div>
+<div class="paragraph">
+<p>Simple data</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">cqlsh&gt; CREATE TABLE test.simple_data (id int, data text, PRIMARY KEY (id));
+cqlsh&gt; INSERT INTO test.simple_data (id, data) values(1, 'I''m fine');
+cqlsh&gt; SELECT data from test.simple_data; data
+----------
+ I'm fine</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Complex data</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">cqlsh&gt; CREATE TABLE test.complex_data (id int, data map&lt;int, text&gt;, PRIMARY KEY (id));
+cqlsh&gt; INSERT INTO test.complex_data (id, data) values(1, {1:'I''m fine'});
+cqlsh&gt; SELECT data from test.complex_data; data
+------------------
+ {1: 'I''m fine'}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</article>
+</main>
+    </div>
+</div>
+            <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../../../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://twitter.com/cassandra?lang=en" target="_blank"><img src="../../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../../../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+    <script src="../../../../../assets/js/site.js"></script>
+    <script async src="../../../../../assets/js/vendor/highlight.js"></script>
+    <script src="../../../../../assets/js/vendor/lunr.js"></script>
+    <script src="../../../../../assets/js/vendor/search.js" id="search-script" data-base-path="../../../../.." data-page-path="/Cassandra/trunk/cassandra/managing/tools/cqlsh.html"></script>
+    <script async src="../../../../../assets/../search-index.js"></script>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+        </div>
+    </body>
+</html>
