@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Bulk Loading | Apache Cassandra Documentation</title>
+            <link rel="stylesheet" href="../../../../assets/css/site.css">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="Cassandra">
+    <meta name="dcterms.identifier" content="3.11">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "https://plausible.cassandra.apache.org/js/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>    </head>
+    <body class="docs-wrapper article">
+        <div class="container mx-auto relative">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta property="og:type" content="website" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+         <div class="header-social-icons text-right">
+            <a href="https://twitter.com/cassandra?lang=en" target="_blank" styles="margin-left: 20px;"><img src="../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+            <div class="hero hero--home grad">
+                <div class="eye"></div>
+                <div id="docs-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                    <h2>Cassandra Documentation</h2>
+                </div>
+            </div>
+            <div class="body px-medium py-medium container">
+    <div class="docs-nav-bar flex flex-space-between mb-medium">
+      <div id="mobile-docs-nav-burger" class="hidden">
+        <svg viewBox="0 0 24 24" width="36" height="36" stroke="#1c81a0" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </div>
+        <div class="docs-nav-item relative">
+          <input id="search-input" type="text" placeholder="Search docs">
+        </div>
+      <div class="versions-wrapper">
+  <h4>Version:</h4>
+  <div class="nav-panel-explore" data-panel="explore">
+
+    <div id="version-toggle" class="context">
+      <span class="version">3.11</span>
+    </div>
+    <ul id="versions-list" class="components">
+      <li class="component">
+        <ul class="versions">
+          <li class="version is-latest">
+            <a href="../../../../_/index.html">master</a>
+          </li>
+        </ul>
+      </li>
+      <li class="component is-current">
+        <ul class="versions">
+          <li class="version">
+            <a href="../../../trunk/index.html">trunk</a>
+          </li>
+          <li class="version">
+            <a href="../../../5.0/index.html">5.0</a>
+          </li>
+          <li class="version is-latest">
+            <a href="../../../4.1/index.html">4.1</a>
+          </li>
+          <li class="version">
+            <a href="../../../4.0/index.html">4.0</a>
+          </li>
+          <li class="version is-current">
+            <a href="../../index.html">3.11</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>    </div>
+    <div class="cf relative">
+        <nav class="nav docs-nav full-800">
+<div class="nav-menu">
+<ul class="nav-list">
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../index.html">Main</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/glossary.html">Glossary</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/bugs.html">How to report bugs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/contactus.html">Contact us</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item is-current-path is-active" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <span class="nav-text">Cassandra</span>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../getting_started/index.html">Getting Started</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting_started/installing.html">Installing Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting_started/configuring.html">Configuring Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting_started/querying.html">Inserting and querying</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting_started/drivers.html">Client drivers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting_started/production.html">Production recommendations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../architecture/index.html">Architecture</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/overview.html">Overview</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/dynamo.html">Dynamo</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/storage_engine.html">Storage engine</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/guarantees.html">Guarantees</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../data_modeling/index.html">Data modeling</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/intro.html">Introduction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_conceptual.html">Conceptual data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_rdbms.html">RDBMS design</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_queries.html">Defining application queries</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_logical.html">Logical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_physical.html">Physical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_refining.html">Evaluating and refining data models</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_schema.html">Defining database schema</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_tools.html">Cassandra data modeling tools</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../cql/index.html">Cassandra Query Language (CQL)</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/definitions.html">Definitions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/types.html">Data types</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/ddl.html">Data definition (DDL)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/dml.html">Data manipulation (DML)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/operators.html">Operators</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/indexes.html">Secondary indexes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/mvs.html">Materialized views</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/functions.html">Functions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/json.html">JSON</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/triggers.html">Triggers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/appendices.html">Appendices</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/changes.html">Changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/SASI.html">SASI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/cql_singlefile.html">Single file of CQL information</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../configuration/index.html">Configuration</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_yaml_file.html">cassandra.yaml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_rackdc_file.html">cassandra-rackdc.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_env_sh_file.html">cassandra-env.sh</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_topo_file.html">cassandra-topologies.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_cl_archive_file.html">commitlog-archiving.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_logback_xml_file.html">logback.xml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_jvm_options_file.html">jvm-* files</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-path is-active" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="index.html">Operating</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="#operating/snitch.adoc">Snitches</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="topo_changes.html">Topology changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="repair.html">Repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="hints.html">Hints</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="bloom_filters.html">Bloom filters</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="compression.html">Compression</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="cdc.html">Change Data Capture (CDC)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="backups.html">Backups</a>
+    </span>
+  </li>
+  <li class="nav-item is-current-page is-active" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="bulk_loading.html">Bulk loading</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="metrics.html">Metrics</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="hardware.html">Hardware</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="audit_logging.html">Audit logging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="compaction/index.html">Compaction</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../tools/index.html">Tools</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../tools/cqlsh.html">cqlsh: the CQL shell</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../tools/nodetool/nodetool.html">nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../tools/sstable/index.html">SSTable tools</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../tools/cassandra_stress.html">cassandra-stress</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../troubleshooting/index.html">Troubleshooting</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../troubleshooting/finding_nodes.html">Finding misbehaving nodes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../troubleshooting/reading_logs.html">Reading Cassandra logs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../troubleshooting/use_nodetool.html">Using nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../troubleshooting/use_tools.html">Using external tools to deep-dive</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../_/development/index.html">Development</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/gettingstarted.html">Getting started</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/ide.html">Building and IDE integration</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/testing.html">Testing</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/patches.html">Contributing code changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/code_style.html">Code style</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/how_to_review.html">Review checklist</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/how_to_commit.html">How to commit</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/documentation.html">Working on documentation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/ci.html">Jenkins CI environment</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/dependencies.html">Dependency management</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/release_process.html">Release process</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../faq/index.html">FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../plugins/index.html">Plug-ins</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+</div>
+</nav>
+        <aside class="toc sidebar">
+  <div class="toc-menu"></div>
+</aside>
+        <main class="article default-main full-800" data-ceiling="topbar">
+  <div class="article-banner">
+    <p>A newer version of this documentation is available.</p>
+    <a class="btn" href="../../../4.1/cassandra/operating/bulk_loading.html">View Latest</a>
+  </div>
+  <div class="article-header">
+<nav class="crumbs" aria-label="breadcrumbs">
+  <ul>
+    <li class="crumb">Cassandra</li>
+    <li class="crumb"><a href="index.html">Operating</a></li>
+    <li class="crumb"><a href="bulk_loading.html">Bulk loading</a></li>
+  </ul>
+</nav>
+<div class="tools" role="navigation">
+  <ul>
+    <li class="tool edit"><a href="file:///home/jenkins/working/cassandra/doc/modules/cassandra/pages/operating/bulk_loading.adoc" title="Edit Page" target="_blank" rel="noopener">Edit</a></li>
+  </ul>
+</div>
+  </div>
+<article class="doc">
+<h1 class="page">Bulk Loading</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Bulk loading Apache Cassandra data is supported by different tools.
+The data to bulk load must be in the form of SSTables.
+Cassandra does not support loading data in any other format such as CSV,
+JSON, and XML directly.
+Although the cqlsh <code>COPY</code> command can load CSV data, it is not a good option
+for amounts of data.
+Bulk loading is used to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Restore incremental backups and snapshots. Backups and snapshots are
+already in the form of SSTables.</p>
+</li>
+<li>
+<p>Load existing SSTables into another cluster. The data can have a
+different number of nodes or replication strategy.</p>
+</li>
+<li>
+<p>Load external data to a cluster.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="tools-for-bulk-loading"><a class="anchor" href="#tools-for-bulk-loading"></a><a class="link" href="#tools-for-bulk-loading">Tools for Bulk Loading</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Cassandra provides two commands or tools for bulk loading data:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Cassandra Bulk loader, also called <code>sstableloader</code></p>
+</li>
+<li>
+<p>The <code>nodetool import</code> command</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The <code>sstableloader</code> and <code>nodetool import</code> are accessible if the
+Cassandra installation <code>bin</code> directory is in the <code>PATH</code> environment
+variable.
+Or these may be accessed directly from the <code>bin</code> directory.
+The examples use the keyspaces and tables created in <a href="#cql/operating/backups.adoc" class="page unresolved">Backups</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="using-sstableloader"><a class="anchor" href="#using-sstableloader"></a><a class="link" href="#using-sstableloader">Using sstableloader</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>sstableloader</code> is the main tool for bulk uploading data.
+<code>sstableloader</code> streams SSTable data files to a running cluster,
+conforming to the replication strategy and replication factor.
+The table to upload data to does need not to be empty.</p>
+</div>
+<div class="paragraph">
+<p>The only requirements to run <code>sstableloader</code> are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>One or more comma separated initial hosts to connect to and get ring
+information</p>
+</li>
+<li>
+<p>A directory path for the SSTables to load</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sstableloader [options] &lt;dir_path&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Sstableloader bulk loads the SSTables found in the directory
+<code>&lt;dir_path&gt;</code> to the configured cluster.
+The <code>&lt;dir_path&gt;</code> is used as the target <em>keyspace/table</em> name.
+For example, to load an SSTable named <code>Standard1-g-1-Data.db</code> into <code>Keyspace1/Standard1</code>,
+you will need to have the files <code>Standard1-g-1-Data.db</code> and <code>Standard1-g-1-Index.db</code> in a
+directory <code>/path/to/Keyspace1/Standard1/</code>.</p>
+</div>
+<div class="sect2">
+<h3 id="sstableloader-option-to-accept-target-keyspace-name"><a class="anchor" href="#sstableloader-option-to-accept-target-keyspace-name"></a><a class="link" href="#sstableloader-option-to-accept-target-keyspace-name">Sstableloader Option to accept Target keyspace name</a></h3>
+<div class="paragraph">
+<p>Often as part of a backup strategy, some Cassandra DBAs store an entire data directory.
+When corruption in the data is found, restoring data in the same cluster (for large clusters 200 nodes)
+is common, but with a different keyspace name.</p>
+</div>
+<div class="paragraph">
+<p>Currently <code>sstableloader</code> derives keyspace name from the folder structure.
+As an option, to specify target keyspace name as part of <code>sstableloader</code>,
+version 4.0 adds support for the <code>--target-keyspace</code> option
+(<a href="https://issues.apache.org/jira/browse/CASSANDRA-13884">CASSANDRA-13884</a>).</p>
+</div>
+<div class="paragraph">
+<p>The following options are supported, with <code>-d,--nodes &lt;initial hosts&gt;</code> required:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">-alg,--ssl-alg &lt;ALGORITHM&gt;                                   Client SSL: algorithm
+
+-ap,--auth-provider &lt;auth provider&gt;                          Custom
+                                                             AuthProvider class name for
+                                                             cassandra authentication
+-ciphers,--ssl-ciphers &lt;CIPHER-SUITES&gt;                       Client SSL:
+                                                             comma-separated list of
+                                                             encryption suites to use
+-cph,--connections-per-host &lt;connectionsPerHost&gt;             Number of
+                                                             concurrent connections-per-host.
+-d,--nodes &lt;initial hosts&gt;                                   Required.
+                                                             Try to connect to these hosts (comma separated) initially for ring information
+
+-f,--conf-path &lt;path to config file&gt;                         cassandra.yaml file path for streaming throughput and client/server SSL.
+
+-h,--help                                                    Display this help message
+
+-i,--ignore &lt;NODES&gt;                                          Don't stream to this (comma separated) list of nodes
+
+-idct,--inter-dc-throttle &lt;inter-dc-throttle&gt;                Inter-datacenter throttle speed in Mbits (default unlimited)
+
+-k,--target-keyspace &lt;target keyspace name&gt;                  Target
+                                                             keyspace name
+-ks,--keystore &lt;KEYSTORE&gt;                                    Client SSL:
+                                                             full path to keystore
+-kspw,--keystore-password &lt;KEYSTORE-PASSWORD&gt;                Client SSL:
+                                                             password of the keystore
+--no-progress                                                Don't
+                                                             display progress
+-p,--port &lt;native transport port&gt;                            Port used
+                                                             for native connection (default 9042)
+-prtcl,--ssl-protocol &lt;PROTOCOL&gt;                             Client SSL:
+                                                             connections protocol to use (default: TLS)
+-pw,--password &lt;password&gt;                                    Password for
+                                                             cassandra authentication
+-sp,--storage-port &lt;storage port&gt;                            Port used
+                                                             for internode communication (default 7000)
+-spd,--server-port-discovery &lt;allow server port discovery&gt;   Use ports
+                                                             published by server to decide how to connect. With SSL requires StartTLS
+                                                             to be used.
+-ssp,--ssl-storage-port &lt;ssl storage port&gt;                   Port used
+                                                             for TLS internode communication (default 7001)
+-st,--store-type &lt;STORE-TYPE&gt;                                Client SSL:
+                                                             type of store
+-t,--throttle &lt;throttle&gt;                                     Throttle
+                                                             speed in Mbits (default unlimited)
+-ts,--truststore &lt;TRUSTSTORE&gt;                                Client SSL:
+                                                             full path to truststore
+-tspw,--truststore-password &lt;TRUSTSTORE-PASSWORD&gt;            Client SSL:
+                                                             Password of the truststore
+-u,--username &lt;username&gt;                                     Username for
+                                                             cassandra authentication
+-v,--verbose                                                 verbose
+                                                             output</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>cassandra.yaml</code> file can be provided on the command-line with <code>-f</code> option to set up streaming throughput, client and server encryption
+options.
+Only <code>stream_throughput_outbound_megabits_per_sec</code>, <code>server_encryption_options</code> and <code>client_encryption_options</code> are read
+from the <code>cassandra.yaml</code> file.
+You can override options read from <code>cassandra.yaml</code> with corresponding command line options.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="a-sstableloader-demo"><a class="anchor" href="#a-sstableloader-demo"></a><a class="link" href="#a-sstableloader-demo">A sstableloader Demo</a></h3>
+<div class="paragraph">
+<p>An example shows how to use <code>sstableloader</code> to upload incremental backup data for the table <code>catalogkeyspace.magazine</code>.
+In addition, a snapshot of the same table is created to bulk upload, also with <code>sstableloader</code>.</p>
+</div>
+<div class="paragraph">
+<p>The backups and snapshots for the <code>catalogkeyspace.magazine</code> table are listed as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ cd ./cassandra/data/data/catalogkeyspace/magazine-446eae30c22a11e9b1350d927649052c &amp;&amp; ls -l</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>results in</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">total 0
+drwxrwxr-x. 2 ec2-user ec2-user 226 Aug 19 02:38 backups
+drwxrwxr-x. 4 ec2-user ec2-user  40 Aug 19 02:45 snapshots</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The directory path structure of SSTables to be uploaded using
+<code>sstableloader</code> is used as the target keyspace/table.
+You can directly upload from the <code>backups</code> and <code>snapshots</code>
+directories respectively, if the directory structure is in the format
+used by <code>sstableloader</code>.
+But the directory path of backups and snapshots for SSTables is
+<code>/catalogkeyspace/magazine-446eae30c22a11e9b1350d927649052c/backups</code> and
+<code>/catalogkeyspace/magazine-446eae30c22a11e9b1350d927649052c/snapshots</code>
+respectively, and cannot be used to upload SSTables to
+<code>catalogkeyspace.magazine</code> table.
+The directory path structure must be <code>/catalogkeyspace/magazine/</code> to use <code>sstableloader</code>.
+Create a new directory structure to upload SSTables with <code>sstableloader</code>
+located at <code>/catalogkeyspace/magazine</code> and set appropriate permissions.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo mkdir -p /catalogkeyspace/magazine
+$ sudo chmod -R 777 /catalogkeyspace/magazine</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="bulk-loading-from-an-incremental-backup"><a class="anchor" href="#bulk-loading-from-an-incremental-backup"></a><a class="link" href="#bulk-loading-from-an-incremental-backup">Bulk Loading from an Incremental Backup</a></h4>
+<div class="paragraph">
+<p>An incremental backup does not include the DDL for a table; the table must already exist.
+If the table was dropped, it can be created using the <code>schema.cql</code> file generated with every snapshot of a table.
+Prior to using <code>sstableloader</code> to load SSTables to the <code>magazine</code> table, the table must exist.
+The table does not need to be empty but we have used an empty table as indicated by a CQL query:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">SELECT * FROM magazine;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>results in</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">id | name | publisher
+----+------+-----------
+
+(0 rows)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After creating the table to upload to, copy the SSTable files from the <code>backups</code> directory to the <code>/catalogkeyspace/magazine/</code> directory.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo cp ./cassandra/data/data/catalogkeyspace/magazine-446eae30c22a11e9b1350d927649052c/backups/* \
+/catalogkeyspace/magazine/</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run the <code>sstableloader</code> to upload SSTables from the
+<code>/catalogkeyspace/magazine/</code> directory.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sstableloader --nodes 10.0.2.238  /catalogkeyspace/magazine/</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The output from the <code>sstableloader</code> command should be similar to this listing:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sstableloader --nodes 10.0.2.238  /catalogkeyspace/magazine/</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>results in</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">Opening SSTables and calculating sections to stream
+Streaming relevant part of /catalogkeyspace/magazine/na-1-big-Data.db
+/catalogkeyspace/magazine/na-2-big-Data.db  to [35.173.233.153:7000, 10.0.2.238:7000,
+54.158.45.75:7000]
+progress: [35.173.233.153:7000]0:1/2 88 % total: 88% 0.018KiB/s (avg: 0.018KiB/s)
+progress: [35.173.233.153:7000]0:2/2 176% total: 176% 33.807KiB/s (avg: 0.036KiB/s)
+progress: [35.173.233.153:7000]0:2/2 176% total: 176% 0.000KiB/s (avg: 0.029KiB/s)
+progress: [35.173.233.153:7000]0:2/2 176% [10.0.2.238:7000]0:1/2 39 % total: 81% 0.115KiB/s
+(avg: 0.024KiB/s)
+progress: [35.173.233.153:7000]0:2/2 176% [10.0.2.238:7000]0:2/2 78 % total: 108%
+97.683KiB/s (avg: 0.033KiB/s)
+progress: [35.173.233.153:7000]0:2/2 176% [10.0.2.238:7000]0:2/2 78 %
+[54.158.45.75:7000]0:1/2 39 % total: 80% 0.233KiB/s (avg: 0.040KiB/s)
+progress: [35.173.233.153:7000]0:2/2 176% [10.0.2.238:7000]0:2/2 78 %
+[54.158.45.75:7000]0:2/2 78 % total: 96% 88.522KiB/s (avg: 0.049KiB/s)
+progress: [35.173.233.153:7000]0:2/2 176% [10.0.2.238:7000]0:2/2 78 %
+[54.158.45.75:7000]0:2/2 78 % total: 96% 0.000KiB/s (avg: 0.045KiB/s)
+progress: [35.173.233.153:7000]0:2/2 176% [10.0.2.238:7000]0:2/2 78 %
+[54.158.45.75:7000]0:2/2 78 % total: 96% 0.000KiB/s (avg: 0.044KiB/s)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After the <code>sstableloader</code> has finished loading the data, run a query the <code>magazine</code> table to check:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">SELECT * FROM magazine;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>results in</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">id | name                      | publisher
+----+---------------------------+------------------
+ 1 |        Couchbase Magazine |        Couchbase
+ 0 | Apache Cassandra Magazine | Apache Cassandra
+
+(2 rows)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="bulk-loading-from-a-snapshot"><a class="anchor" href="#bulk-loading-from-a-snapshot"></a><a class="link" href="#bulk-loading-from-a-snapshot">Bulk Loading from a Snapshot</a></h4>
+<div class="paragraph">
+<p>Restoring a snapshot of a table to the same table can be easily accomplished:</p>
+</div>
+<div class="paragraph">
+<p>If the directory structure needed to load SSTables to <code>catalogkeyspace.magazine</code> does not exist create the
+directories and set appropriate permissions:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo mkdir -p /catalogkeyspace/magazine
+$ sudo chmod -R 777 /catalogkeyspace/magazine</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Remove any files from the directory, so that the snapshot files can be copied without interference:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo rm /catalogkeyspace/magazine/*
+$ cd /catalogkeyspace/magazine/
+$ ls -l</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>results in</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">total 0</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Copy the snapshot files to the <code>/catalogkeyspace/magazine</code> directory.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo cp ./cassandra/data/data/catalogkeyspace/magazine-446eae30c22a11e9b1350d927649052c/snapshots/magazine/* \
+/catalogkeyspace/magazine</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>List the files in the <code>/catalogkeyspace/magazine</code> directory.
+The <code>schema.cql</code> will also be listed.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ cd /catalogkeyspace/magazine &amp;&amp; ls -l</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>results in</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">total 44
+-rw-r--r--. 1 root root   31 Aug 19 04:13 manifest.json
+-rw-r--r--. 1 root root   47 Aug 19 04:13 na-1-big-CompressionInfo.db
+-rw-r--r--. 1 root root   97 Aug 19 04:13 na-1-big-Data.db
+-rw-r--r--. 1 root root   10 Aug 19 04:13 na-1-big-Digest.crc32
+-rw-r--r--. 1 root root   16 Aug 19 04:13 na-1-big-Filter.db
+-rw-r--r--. 1 root root   16 Aug 19 04:13 na-1-big-Index.db
+-rw-r--r--. 1 root root 4687 Aug 19 04:13 na-1-big-Statistics.db
+-rw-r--r--. 1 root root   56 Aug 19 04:13 na-1-big-Summary.db
+-rw-r--r--. 1 root root   92 Aug 19 04:13 na-1-big-TOC.txt
+-rw-r--r--. 1 root root  815 Aug 19 04:13 schema.cql</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively create symlinks to the snapshot folder instead of copying
+the data:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ mkdir &lt;keyspace_name&gt;
+$ ln -s &lt;path_to_snapshot_folder&gt; &lt;keyspace_name&gt;/&lt;table_name&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the <code>magazine</code> table was dropped, run the DDL in the <code>schema.cql</code> to
+create the table.
+Run the <code>sstableloader</code> with the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sstableloader --nodes 10.0.2.238  /catalogkeyspace/magazine/</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As the output from the command indicates, SSTables get streamed to the
+cluster:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">Established connection to initial hosts
+Opening SSTables and calculating sections to stream
+Streaming relevant part of /catalogkeyspace/magazine/na-1-big-Data.db  to
+[35.173.233.153:7000, 10.0.2.238:7000, 54.158.45.75:7000]
+progress: [35.173.233.153:7000]0:1/1 176% total: 176% 0.017KiB/s (avg: 0.017KiB/s)
+progress: [35.173.233.153:7000]0:1/1 176% total: 176% 0.000KiB/s (avg: 0.014KiB/s)
+progress: [35.173.233.153:7000]0:1/1 176% [10.0.2.238:7000]0:1/1 78 % total: 108% 0.115KiB/s
+(avg: 0.017KiB/s)
+progress: [35.173.233.153:7000]0:1/1 176% [10.0.2.238:7000]0:1/1 78 %
+[54.158.45.75:7000]0:1/1 78 % total: 96% 0.232KiB/s (avg: 0.024KiB/s)
+progress: [35.173.233.153:7000]0:1/1 176% [10.0.2.238:7000]0:1/1 78 %
+[54.158.45.75:7000]0:1/1 78 % total: 96% 0.000KiB/s (avg: 0.022KiB/s)
+progress: [35.173.233.153:7000]0:1/1 176% [10.0.2.238:7000]0:1/1 78 %
+[54.158.45.75:7000]0:1/1 78 % total: 96% 0.000KiB/s (avg: 0.021KiB/s)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Some other requirements of <code>sstableloader</code> that should be kept into
+consideration are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The SSTables loaded must be compatible with the Cassandra
+version being loaded into.</p>
+</li>
+<li>
+<p>Repairing tables that have been loaded into a different cluster does
+not repair the source tables.</p>
+</li>
+<li>
+<p>Sstableloader makes use of port 7000 for internode communication.</p>
+</li>
+<li>
+<p>Before restoring incremental backups, run <code>nodetool flush</code> to backup
+any data in memtables.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="using-nodetool-import"><a class="anchor" href="#using-nodetool-import"></a><a class="link" href="#using-nodetool-import">Using nodetool import</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Importing SSTables into a table using the <code>nodetool import</code> command is recommended instead of the deprecated
+<code>nodetool refresh</code> command.
+The <code>nodetool import</code> command has an option to load new SSTables from a separate directory.</p>
+</div>
+<div class="paragraph">
+<p>The command usage is as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">nodetool [(-h &lt;host&gt; | --host &lt;host&gt;)] [(-p &lt;port&gt; | --port &lt;port&gt;)]
+       [(-pp | --print-port)] [(-pw &lt;password&gt; | --password &lt;password&gt;)]
+       [(-pwf &lt;passwordFilePath&gt; | --password-file &lt;passwordFilePath&gt;)]
+       [(-u &lt;username&gt; | --username &lt;username&gt;)] import
+       [(-c | --no-invalidate-caches)] [(-e | --extended-verify)]
+       [(-l | --keep-level)] [(-q | --quick)] [(-r | --keep-repaired)]
+       [(-t | --no-tokens)] [(-v | --no-verify)] [--] &lt;keyspace&gt; &lt;table&gt;
+       &lt;directory&gt; ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The arguments <code>keyspace</code>, <code>table</code> name and <code>directory</code> are required.</p>
+</div>
+<div class="paragraph">
+<p>The following options are supported:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">-c, --no-invalidate-caches
+    Don't invalidate the row cache when importing
+
+-e, --extended-verify
+    Run an extended verify, verifying all values in the new SSTables
+
+-h &lt;host&gt;, --host &lt;host&gt;
+    Node hostname or ip address
+
+-l, --keep-level
+    Keep the level on the new SSTables
+
+-p &lt;port&gt;, --port &lt;port&gt;
+    Remote jmx agent port number
+
+-pp, --print-port
+    Operate in 4.0 mode with hosts disambiguated by port number
+
+-pw &lt;password&gt;, --password &lt;password&gt;
+    Remote jmx agent password
+
+-pwf &lt;passwordFilePath&gt;, --password-file &lt;passwordFilePath&gt;
+    Path to the JMX password file
+
+-q, --quick
+    Do a quick import without verifying SSTables, clearing row cache or
+    checking in which data directory to put the file
+
+-r, --keep-repaired
+    Keep any repaired information from the SSTables
+
+-t, --no-tokens
+    Don't verify that all tokens in the new SSTable are owned by the
+    current node
+
+-u &lt;username&gt;, --username &lt;username&gt;
+    Remote jmx agent username
+
+-v, --no-verify
+    Don't verify new SSTables
+
+--
+    This option can be used to separate command-line options from the
+    list of argument, (useful when arguments might be mistaken for
+    command-line options</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Because the keyspace and table are specified on the command line for
+<code>nodetool import</code>, there is not the same requirement as with
+<code>sstableloader</code>, to have the SSTables in a specific directory path.
+When importing snapshots or incremental backups with
+<code>nodetool import</code>, the SSTables don’t need to be copied to another
+directory.</p>
+</div>
+<div class="sect2">
+<h3 id="importing-data-from-an-incremental-backup"><a class="anchor" href="#importing-data-from-an-incremental-backup"></a><a class="link" href="#importing-data-from-an-incremental-backup">Importing Data from an Incremental Backup</a></h3>
+<div class="paragraph">
+<p>Using <code>nodetool import</code> to import SSTables from an incremental backup, and restoring
+the table is shown below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">DROP table t;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>An incremental backup for a table does not include the schema definition for the table.
+If the schema definition is not kept as a separate
+backup, the <code>schema.cql</code> from a backup of the table may be used to
+create the table as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">CREATE TABLE IF NOT EXISTS cqlkeyspace.t (
+   id int PRIMARY KEY,
+   k int,
+   v text)
+   WITH ID = d132e240-c217-11e9-bbee-19821dcea330
+   AND bloom_filter_fp_chance = 0.01
+   AND crc_check_chance = 1.0
+   AND default_time_to_live = 0
+   AND gc_grace_seconds = 864000
+   AND min_index_interval = 128
+   AND max_index_interval = 2048
+   AND memtable_flush_period_in_ms = 0
+   AND speculative_retry = '99p'
+   AND additional_write_policy = '99p'
+   AND comment = ''
+   AND caching = { 'keys': 'ALL', 'rows_per_partition': 'NONE' }
+   AND compaction = { 'max_threshold': '32', 'min_threshold': '4',
+   'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy' }
+   AND compression = { 'chunk_length_in_kb': '16', 'class':
+   'org.apache.cassandra.io.compress.LZ4Compressor' }
+   AND cdc = false
+   AND extensions = {  }
+;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Initially the table could be empty, but does not have to be.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">SELECT * FROM t;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">id | k | v
+----+---+---
+
+(0 rows)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run the <code>nodetool import</code> command, providing the keyspace, table and
+the backups directory.
+Don’t copy the table backups to another directory, as with <code>sstableloader</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ nodetool import -- cqlkeyspace t \
+./cassandra/data/data/cqlkeyspace/t-d132e240c21711e9bbee19821dcea330/backups</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The SSTables are imported into the table. Run a query in cqlsh to check:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">SELECT * FROM t;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">id | k | v
+----+---+------
+ 1 | 1 | val1
+ 0 | 0 | val0
+
+(2 rows)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="importing-data-from-a-snapshot"><a class="anchor" href="#importing-data-from-a-snapshot"></a><a class="link" href="#importing-data-from-a-snapshot">Importing Data from a Snapshot</a></h3>
+<div class="paragraph">
+<p>Importing SSTables from a snapshot with the <code>nodetool import</code> command is
+similar to importing SSTables from an incremental backup.
+Shown here is an import of a snapshot for table <code>catalogkeyspace.journal</code>, after
+dropping the table to demonstrate the restore.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">USE CATALOGKEYSPACE;
+DROP TABLE journal;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Use the <code>catalog-ks</code> snapshot for the <code>journal</code> table.
+Check the files in the snapshot, and note the existence of the <code>schema.cql</code> file.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ ls -l</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">total 44
+-rw-rw-r--. 1 ec2-user ec2-user   31 Aug 19 02:44 manifest.json
+-rw-rw-r--. 3 ec2-user ec2-user   47 Aug 19 02:38 na-1-big-CompressionInfo.db
+-rw-rw-r--. 3 ec2-user ec2-user   97 Aug 19 02:38 na-1-big-Data.db
+-rw-rw-r--. 3 ec2-user ec2-user   10 Aug 19 02:38 na-1-big-Digest.crc32
+-rw-rw-r--. 3 ec2-user ec2-user   16 Aug 19 02:38 na-1-big-Filter.db
+-rw-rw-r--. 3 ec2-user ec2-user   16 Aug 19 02:38 na-1-big-Index.db
+-rw-rw-r--. 3 ec2-user ec2-user 4687 Aug 19 02:38 na-1-big-Statistics.db
+-rw-rw-r--. 3 ec2-user ec2-user   56 Aug 19 02:38 na-1-big-Summary.db
+-rw-rw-r--. 3 ec2-user ec2-user   92 Aug 19 02:38 na-1-big-TOC.txt
+-rw-rw-r--. 1 ec2-user ec2-user  814 Aug 19 02:44 schema.cql</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Copy the DDL from the <code>schema.cql</code> and run in cqlsh to create the
+<code>catalogkeyspace.journal</code> table:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">CREATE TABLE IF NOT EXISTS catalogkeyspace.journal (
+   id int PRIMARY KEY,
+   name text,
+   publisher text)
+   WITH ID = 296a2d30-c22a-11e9-b135-0d927649052c
+   AND bloom_filter_fp_chance = 0.01
+   AND crc_check_chance = 1.0
+   AND default_time_to_live = 0
+   AND gc_grace_seconds = 864000
+   AND min_index_interval = 128
+   AND max_index_interval = 2048
+   AND memtable_flush_period_in_ms = 0
+   AND speculative_retry = '99p'
+   AND additional_write_policy = '99p'
+   AND comment = ''
+   AND caching = { 'keys': 'ALL', 'rows_per_partition': 'NONE' }
+   AND compaction = { 'min_threshold': '4', 'max_threshold':
+   '32', 'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy' }
+   AND compression = { 'chunk_length_in_kb': '16', 'class':
+   'org.apache.cassandra.io.compress.LZ4Compressor' }
+   AND cdc = false
+   AND extensions = {  }
+;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run the <code>nodetool import</code> command to import the SSTables for the
+snapshot:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ nodetool import -- catalogkeyspace journal \
+./cassandra/data/data/catalogkeyspace/journal-
+296a2d30c22a11e9b1350d927649052c/snapshots/catalog-ks/</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Subsequently run a CQL query on the <code>journal</code> table to check the imported data:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">SELECT * FROM journal;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">id | name                      | publisher
+----+---------------------------+------------------
+ 1 |        Couchbase Magazine |        Couchbase
+ 0 | Apache Cassandra Magazine | Apache Cassandra
+
+(2 rows)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="bulk-loading-external-data"><a class="anchor" href="#bulk-loading-external-data"></a><a class="link" href="#bulk-loading-external-data">Bulk Loading External Data</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Bulk loading external data directly is not supported by any of the tools
+we have discussed which include <code>sstableloader</code> and <code>nodetool import</code>.
+The <code>sstableloader</code> and <code>nodetool import</code> require data to be in the form
+of SSTables.
+Apache Cassandra supports a Java API for generating SSTables from input data, using the
+<code>org.apache.cassandra.io.sstable.CQLSSTableWriter</code> Java class.
+Subsequently, either <code>sstableloader</code> or <code>nodetool import</code> is used to bulk load the SSTables.</p>
+</div>
+<div class="sect2">
+<h3 id="generating-sstables-with-cqlsstablewriter-java-api"><a class="anchor" href="#generating-sstables-with-cqlsstablewriter-java-api"></a><a class="link" href="#generating-sstables-with-cqlsstablewriter-java-api">Generating SSTables with CQLSSTableWriter Java API</a></h3>
+<div class="paragraph">
+<p>To generate SSTables using the <code>CQLSSTableWriter</code> class the following are required:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>An output directory to generate the SSTable in</p>
+</li>
+<li>
+<p>The schema for the SSTable</p>
+</li>
+<li>
+<p>A prepared statement for the <code>INSERT</code></p>
+</li>
+<li>
+<p>A partitioner</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The output directory must exist before starting. Create a directory
+(<code>/sstables</code> as an example) and set appropriate permissions.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo mkdir /sstables
+$ sudo chmod  777 -R /sstables</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To use <code>CQLSSTableWriter</code> in a Java application, create a Java constant for the output directory.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public static final String OUTPUT_DIR = "./sstables";</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>CQLSSTableWriter</code> Java API can create a user-defined type. Create a new type to store <code>int</code> data:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">String type = "CREATE TYPE CQLKeyspace.intType (a int, b int)";
+// Define a String variable for the SSTable schema.
+String schema = "CREATE TABLE CQLKeyspace.t ("
+                 + "  id int PRIMARY KEY,"
+                 + "  k int,"
+                 + "  v1 text,"
+                 + "  v2 intType,"
+                 + ")";</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Define a <code>String</code> variable for the prepared statement to use:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">String insertStmt = "INSERT INTO CQLKeyspace.t (id, k, v1, v2) VALUES (?, ?, ?, ?)";</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The partitioner to use only needs setting if the default partitioner <code>Murmur3Partitioner</code> is not used.</p>
+</div>
+<div class="paragraph">
+<p>All these variables or settings are used by the builder class
+<code>CQLSSTableWriter.Builder</code> to create a <code>CQLSSTableWriter</code> object.</p>
+</div>
+<div class="paragraph">
+<p>Create a File object for the output directory.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">File outputDir = new File(OUTPUT_DIR + File.separator + "CQLKeyspace" + File.separator + "t");</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Obtain a <code>CQLSSTableWriter.Builder</code> object using <code>static</code> method <code>CQLSSTableWriter.builder()</code>.
+Set the following items:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>output directory <code>File</code> object</p>
+</li>
+<li>
+<p>user-defined type</p>
+</li>
+<li>
+<p>SSTable schema</p>
+</li>
+<li>
+<p>buffer size</p>
+</li>
+<li>
+<p>prepared statement</p>
+</li>
+<li>
+<p>optionally any of the other builder options</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>and invoke the <code>build()</code> method to create a <code>CQLSSTableWriter</code> object:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">CQLSSTableWriter writer = CQLSSTableWriter.builder()
+                                             .inDirectory(outputDir)
+                                             .withType(type)
+                                             .forTable(schema)
+                                             .withBufferSizeInMB(256)
+                                             .using(insertStmt).build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Set the SSTable data. If any user-defined types are used, obtain a
+<code>UserType</code> object for each type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">UserType userType = writer.getUDType("intType");</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Add data rows for the resulting SSTable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">writer.addRow(0, 0, "val0", userType.newValue().setInt("a", 0).setInt("b", 0));
+   writer.addRow(1, 1, "val1", userType.newValue().setInt("a", 1).setInt("b", 1));
+   writer.addRow(2, 2, "val2", userType.newValue().setInt("a", 2).setInt("b", 2));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Close the writer, finalizing the SSTable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">writer.close();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Other public methods the <code>CQLSSTableWriter</code> class provides are:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Method</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">addRow(java.util.List&lt;java.lang.Object&gt; values)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Adds a new row to the
+writer. Returns a CQLSSTableWriter object. Each provided value type
+should correspond to the types of the CQL column the value is for. The
+correspondence between java type and CQL type is the same one than the
+one documented at
+www.datastax.com/drivers/java/2.0/apidocs/com/datastax/driver/core/DataType.Name.html#asJavaC
+lass().</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">addRow(java.util.Map&lt;java.lang.String,java.lang.Object&gt; values)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Adds a
+new row to the writer. Returns a CQLSSTableWriter object. This is
+equivalent to the other addRow methods, but takes a map whose keys are
+the names of the columns to add instead of taking a list of the values
+in the order of the insert statement used during construction of this
+SSTable writer. The column names in the map keys must be in lowercase
+unless the declared column name is a case-sensitive quoted identifier in
+which case the map key must use the exact case of the column. The values
+parameter is a map of column name to column values representing the new
+row to add. If a column is not included in the map, it&#8217;s value will be
+null. If the map contains keys that do not correspond to one of the
+columns of the insert statement used when creating this SSTable writer,
+the corresponding value is ignored.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">addRow(java.lang.Object&#8230;&#8203; values)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Adds a new row to the writer.
+Returns a CQLSSTableWriter object.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CQLSSTableWriter.builder()</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Returns a new builder for a
+CQLSSTableWriter.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">close()</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Closes the writer.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">rawAddRow(java.nio.ByteBuffer&#8230;&#8203; values)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Adds a new row to the writer
+given already serialized binary values. Returns a CQLSSTableWriter
+object. The row values must correspond to the bind variables of the
+insertion statement used when creating by this SSTable writer.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">rawAddRow(java.util.List&lt;java.nio.ByteBuffer&gt; values)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Adds a new row
+to the writer given already serialized binary values. Returns a
+CQLSSTableWriter object. The row values must correspond to the bind
+variables of the insertion statement used when creating by this SSTable
+writer.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">rawAddRow(java.util.Map&lt;java.lang.String, java.nio.ByteBuffer&gt; values)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Adds a new row to the writer given already serialized binary values.
+Returns a CQLSSTableWriter object. The row values must correspond to the
+bind variables of the insertion statement used when creating by this
+SSTable writer.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">getUDType(String dataType)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Returns the User Defined type used in this
+SSTable Writer that can be used to create UDTValue instances.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Other public methods the <code>CQLSSTableWriter.Builder</code> class provides are:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Method</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">inDirectory(String directory)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The directory where to write the
+SSTables. This is a mandatory option. The directory to use should
+already exist and be writable.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">inDirectory(File directory)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The directory where to write the SSTables.
+This is a mandatory option. The directory to use should already exist
+and be writable.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">forTable(String schema)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The schema (CREATE TABLE statement) for the
+table for which SSTable is to be created. The provided CREATE TABLE
+statement must use a fully-qualified table name, one that includes the
+keyspace name. This is a mandatory option.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">withPartitioner(IPartitioner partitioner)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The partitioner to use. By
+default, Murmur3Partitioner will be used. If this is not the partitioner
+used by the cluster for which the SSTables are created, the correct
+partitioner needs to be provided.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">using(String insert)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The INSERT or UPDATE statement defining the order
+of the values to add for a given CQL row. The provided INSERT statement
+must use a fully-qualified table name, one that includes the keyspace
+name. Moreover, said statement must use bind variables since these
+variables will be bound to values by the resulting SSTable writer. This
+is a mandatory option.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">withBufferSizeInMB(int size)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The size of the buffer to use. This
+defines how much data will be buffered before being written as a new
+SSTable. This corresponds roughly to the data size that will have the
+created SSTable. The default is 128MB, which should be reasonable for a
+1GB heap. If OutOfMemory exception gets generated while using the
+SSTable writer, should lower this value.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sorted()</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Creates a CQLSSTableWriter that expects sorted inputs. If
+this option is used, the resulting SSTable writer will expect rows to be
+added in SSTable sorted order (and an exception will be thrown if that
+is not the case during row insertion). The SSTable sorted order means
+that rows are added such that their partition keys respect the
+partitioner order. This option should only be used if the rows can be
+provided in order, which is rarely the case. If the rows can be provided
+in order however, using this sorted might be more efficient. If this
+option is used, some option like withBufferSizeInMB will be ignored.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">build()</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Builds a CQLSSTableWriter object.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</article>
+</main>
+    </div>
+</div>
+            <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://twitter.com/cassandra?lang=en" target="_blank"><img src="../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+    <script src="../../../../assets/js/site.js"></script>
+    <script async src="../../../../assets/js/vendor/highlight.js"></script>
+    <script src="../../../../assets/js/vendor/lunr.js"></script>
+    <script src="../../../../assets/js/vendor/search.js" id="search-script" data-base-path="../../../.." data-page-path="/Cassandra/3.11/cassandra/operating/bulk_loading.html"></script>
+    <script async src="../../../../assets/../search-index.js"></script>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,2336 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Working with Storage-attached indexing (SAI) | Apache Cassandra Documentation</title>
+            <link rel="stylesheet" href="../../../../../../../assets/css/site.css">
+    <meta name="description" content="CRUD operations on SAI + querying with SAI">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="Cassandra">
+    <meta name="dcterms.identifier" content="5.0">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../../../../../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "https://plausible.cassandra.apache.org/js/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>    </head>
+    <body class="docs-wrapper article">
+        <div class="container mx-auto relative">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta property="og:type" content="website" />
+	<meta property="og:description" content="" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+         <div class="header-social-icons text-right">
+            <a href="https://twitter.com/cassandra?lang=en" target="_blank" styles="margin-left: 20px;"><img src="../../../../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../../../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../../../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../../../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../../../../../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+            <div class="hero hero--home grad">
+                <div class="eye"></div>
+                <div id="docs-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                    <h2>Cassandra Documentation</h2>
+                </div>
+            </div>
+            <div class="body px-medium py-medium container">
+    <div class="docs-nav-bar flex flex-space-between mb-medium">
+      <div id="mobile-docs-nav-burger" class="hidden">
+        <svg viewBox="0 0 24 24" width="36" height="36" stroke="#1c81a0" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </div>
+        <div class="docs-nav-item relative">
+          <input id="search-input" type="text" placeholder="Search docs">
+        </div>
+      <div class="versions-wrapper">
+  <h4>Version:</h4>
+  <div class="nav-panel-explore" data-panel="explore">
+
+    <div id="version-toggle" class="context">
+      <span class="version">5.0</span>
+    </div>
+    <ul id="versions-list" class="components">
+      <li class="component">
+        <ul class="versions">
+          <li class="version is-latest">
+            <a href="../../../../../../../_/index.html">master</a>
+          </li>
+        </ul>
+      </li>
+      <li class="component is-current">
+        <ul class="versions">
+          <li class="version">
+            <a href="../../../../../../trunk/index.html">trunk</a>
+          </li>
+          <li class="version is-current">
+            <a href="../../../../../index.html">5.0</a>
+          </li>
+          <li class="version is-latest">
+            <a href="../../../../../../4.1/index.html">4.1</a>
+          </li>
+          <li class="version">
+            <a href="../../../../../../4.0/index.html">4.0</a>
+          </li>
+          <li class="version">
+            <a href="../../../../../../3.11/index.html">3.11</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>    </div>
+    <div class="cf relative">
+        <nav class="nav docs-nav full-800">
+<div class="nav-menu">
+<ul class="nav-list">
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../index.html">Main</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/glossary.html">Glossary</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/bugs.html">How to report bugs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/contactus.html">Contact us</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../../../_/development/index.html">Development</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/gettingstarted.html">Getting started</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/ide.html">Building and IDE integration</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/testing.html">Testing</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/patches.html">Contributing code changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/code_style.html">Code style</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/how_to_review.html">Review checklist</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/how_to_commit.html">How to commit</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/documentation.html">Working on documentation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/ci.html">Jenkins CI environment</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/dependencies.html">Dependency management</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../_/development/release_process.html">Release process</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item is-current-path is-active" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <span class="nav-text">Cassandra</span>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../overview/faq/index.html">FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../getting-started/index.html">Getting Started</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../getting-started/cassandra-quickstart.html">Cassandra Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../installing/installing.html">Installing Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../getting-started/configuring.html">Configuring Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../getting-started/querying.html">Inserting and querying</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../getting-started/drivers.html">Client drivers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../getting-started/production.html">Production recommendations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../new/index.html">What&#8217;s new</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../reference/java17.html">Support for Java</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../architecture/index.html">Architecture</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../architecture/overview.html">Overview</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../architecture/dynamo.html">Dynamo</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../architecture/storage-engine.html">Storage Engine</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../architecture/guarantees.html">Guarantees</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../architecture/messaging.html">Improved Internode Messaging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../architecture/streaming.html">Improved Streaming</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../data-modeling/index.html">Data Modeling</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../data-modeling/intro.html">Introduction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../data-modeling/data-modeling_conceptual.html">Conceptual data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../data-modeling/data-modeling_rdbms.html">RDBMS design</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../data-modeling/data-modeling_queries.html">Defining application queries</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../data-modeling/data-modeling_logical.html">Logical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../data-modeling/data-modeling_physical.html">Physical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../data-modeling/data-modeling_refining.html">Evaluating and refining data models</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../data-modeling/data-modeling_schema.html">Defining database schema</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../data-modeling/data-modeling_tools.html">Cassandra data modeling tools</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-path is-active" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../index.html">Cassandra Query Language (CQL)</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../definitions.html">Definitions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../types.html">Data types</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../ddl.html">Data definition (DDL)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../dml.html">Data manipulation (DML)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../dynamic-data-masking.html">Dynamic Data Masking (DDM)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../operators.html">Operators</a>
+    </span>
+  </li>
+  <li class="nav-item is-current-path is-active" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../indexing-concepts.html">Indexing concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item is-current-path is-active" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="sai-overview.html">SAI Overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="sai-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="sai-faq.html">SAI FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item is-current-page is-active" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="sai-working-with.html">Working with SAI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="operations/sai-operations.html">SAI operations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../2i/2i-overview.html">Secondary indexes (2i) overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../2i/2i-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../2i/2i-working-with.html">Working with 2i</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../2i/operations/2i-build.html">Rebuild 2i</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../mvs.html">Materialized views</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../functions.html">Functions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../json.html">JSON</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../triggers.html">Triggers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../appendices.html">Appendices</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../changes.html">Changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../SASI.html">SASI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../cql_singlefile.html">Single file of CQL information</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../vector-search/overview.html">Vector Search overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../vector-search/concepts.html">Concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../vector-search/data-modeling.html">Data Modeling</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../vector-search/vector-search-working-with.html">Working with Vector Search</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../managing/index.html">Managing</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../managing/configuration/index.html">Configuring</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/configuration/cass_yaml_file.html">cassandra.yaml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/configuration/cass_rackdc_file.html">cassandra-rackdc.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/configuration/cass_env_sh_file.html">cassandra-env.sh</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/configuration/cass_topo_file.html">cassandra-topologies.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/configuration/cass_cl_archive_file.html">commitlog-archiving.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/configuration/cass_logback_xml_file.html">logback.xml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/configuration/cass_jvm_options_file.html">jvm-* files</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/configuration/configuration.html">Liberating cassandra.yaml Parameters' Names from Their Units</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../managing/operating/index.html">Operating</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/backups.html">Backups</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/bloom_filters.html">Bloom filters</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/bulk_loading.html">Bulk loading</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/cdc.html">Change Data Capture (CDC)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/compaction/index.html">Compaction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/compression.html">Compression</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/hardware.html">Hardware</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/hints.html">Hints</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../managing/operating/logging.html">Logging</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/auditlogging.html">Audit logging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/audit_logging.html">Audit logging 2</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/fqllogging.html">Full query logging</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/metrics.html">Monitoring metrics</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/repair.html">Repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/read_repair.html">Read repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/snitch.html">Snitches</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/topo_changes.html">Topology changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/transientreplication.html">Transient replication</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/operating/virtualtables.html">Virtual tables</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../managing/tools/index.html">Tools</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/tools/cqlsh.html">cqlsh: the CQL shell</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/tools/nodetool/nodetool.html">nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../managing/tools/sstable/index.html">SSTable tools</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="#cassandra:managing/tools/cassandra_stress.adoc">cassandra-stress</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../troubleshooting/index.html">Troubleshooting</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../troubleshooting/finding_nodes.html">Finding misbehaving nodes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../troubleshooting/reading_logs.html">Reading Cassandra logs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../troubleshooting/use_nodetool.html">Using nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../troubleshooting/use_tools.html">Using external tools to deep-dive</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../reference/index.html">Reference</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../reference/cql-commands/alter-table.html">ALTER TABLE</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../reference/cql-commands/create-index.html">CREATE INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../reference/cql-commands/create-custom-index.html">CREATE CUSTOM INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../reference/cql-commands/create-table.html">CREATE TABLE</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../reference/cql-commands/drop-index.html">DROP INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../reference/cql-commands/drop-table.html">DROP TABLE</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../integrating/plugins/index.html">Plug-ins</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+</div>
+</nav>
+        <aside class="toc sidebar">
+  <div class="toc-menu"></div>
+</aside>
+        <main class="article default-main full-800" data-ceiling="topbar">
+  <div class="article-banner">
+    <p>You are viewing the documentation for a prerelease version.</p>
+  </div>
+    <div class="article-header">
+<nav class="crumbs" aria-label="breadcrumbs">
+  <ul>
+    <li class="crumb">Cassandra</li>
+    <li class="crumb"><a href="../../index.html">Cassandra Query Language (CQL)</a></li>
+    <li class="crumb"><a href="../indexing-concepts.html">Indexing concepts</a></li>
+    <li class="crumb"><a href="sai-overview.html">SAI Overview</a></li>
+    <li class="crumb"><a href="sai-working-with.html">Working with SAI</a></li>
+  </ul>
+</nav>
+<div class="tools" role="navigation">
+  <ul>
+    <li class="tool edit"><a href="https://github.com/apache/cassandra/edit/cassandra-5.0/doc/modules/cassandra/pages/developing/cql/indexing/sai/sai-working-with.adoc" title="Edit Page" target="_blank" rel="noopener">Edit</a></li>
+  </ul>
+</div>
+  </div>
+<article class="doc">
+<h1 class="page">Working with Storage-attached indexing (SAI)</h1>
+<div class="sect1">
+<h2 id="prerequisites"><a class="anchor" href="#prerequisites"></a>Prerequisites</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#developing/keyspace-create.adoc" class="page unresolved">Keyspace created</a></p>
+</li>
+<li>
+<p><a href="#developing/table-create.adoc" class="page unresolved">Table created</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="create-sai-index"><a class="anchor" href="#create-sai-index"></a>Create SAI index</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To create an SAI index, you must define the index name, table name, and column name for the column to be indexed.</p>
+</div>
+<div class="paragraph">
+<p>To create a simple SAI index:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">CREATE INDEX lastname_sai_idx ON cycling.cyclist_semi_pro (lastname)
+USING 'sai'
+WITH OPTIONS = {'case_sensitive': 'false', 'normalize': 'true', 'ascii': 'true'};
+
+CREATE INDEX age_sai_idx ON cycling.cyclist_semi_pro (age)
+USING 'sai';
+
+CREATE INDEX country_sai_idx ON cycling.cyclist_semi_pro (country)
+USING 'sai'
+WITH OPTIONS = {'case_sensitive': 'false', 'normalize': 'true', 'ascii': 'true'};
+
+CREATE INDEX registration_sai_idx ON cycling.cyclist_semi_pro (registration)
+USING 'sai';</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For most SAI indexes, the column name is defined in the <code>CREATE INDEX</code> statement that also uses <code>USING 'sai'</code>.
+The SAI index options are defined in the <code>WITH OPTIONS</code> clause.
+The <code>case_sensitive</code> option is set to <code>false</code> to allow case-insensitive searches.
+The <code>normalize</code> option is set to <code>true</code> to allow searches to be normalized for Unicode characters.
+The <code>ascii_only</code> option is set to <code>true</code> to allow searches to be limited to ASCII characters.</p>
+</div>
+<div class="paragraph">
+<p>The <code>map</code> collection data type is the one exception, as shown in the <a href="#map-collection-in-sai-index">example below</a>.</p>
+</div>
+<div class="sect2">
+<h3 id="partition-key-sai-error"><a class="anchor" href="#partition-key-sai-error"></a>Partition key SAI error</h3>
+<div class="paragraph">
+<p>SAI indexes cannot be created on the partition key, as a primary index already exists and is used for queries.
+If you attempt to create an SAI on the partition key column, an error will be returned:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset1_cql"></a>CQL</p>
+</li>
+<li>
+<p><a id="tabset1_result"></a>Result</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset1_cql">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">CREATE INDEX ON demo2.person_id_name_primarykey (id)
+  USING 'sai';</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_result">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">InvalidRequest: Error from server: code=2200 [Invalid query] message="Cannot create secondary index on the only partition key column id"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="map-collection-in-sai-index"><a class="anchor" href="#map-collection-in-sai-index"></a><code>map</code> collection in SAI index</h3>
+<div class="paragraph">
+<p>Map collections do have a different format than other SAI indexes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">// Create an index on a map key to find all cyclist/team combos for a year
+// tag::keysidx[]
+CREATE INDEX IF NOT EXISTS team_year_keys_idx
+ON cycling.cyclist_teams ( KEYS (teams) );
+// end::keysidx[]
+
+// Create an index on a map key to find all cyclist/team combos for a year
+// tag::valuesidx[]
+CREATE INDEX IF NOT EXISTS team_year_values_idx
+ON cycling.cyclist_teams ( VALUES (teams) );
+// end::valuesidx[]
+
+// Create an index on a map key to find all cyclist/team combos for a year
+// tag::entriesidx[]
+CREATE INDEX IF NOT EXISTS team_year_entries_idx
+ON cycling.cyclist_teams ( ENTRIES (teams) );
+// end::entriesidx[]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="similarity-function-for-vector-search"><a class="anchor" href="#similarity-function-for-vector-search"></a>similarity-function for vector search</h3>
+<div class="paragraph">
+<p>This example uses the following table:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">CREATE TABLE IF NOT EXISTS cycling.comments_vs (
+  record_id timeuuid,
+  id uuid,
+  commenter text,
+  comment text,
+  comment_vector VECTOR &lt;FLOAT, 5&gt;,
+  created_at timestamp,
+  PRIMARY KEY (id, created_at)
+)
+WITH CLUSTERING ORDER BY (created_at DESC);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To check if <code>comment_vector</code> has a particular similarity function set, use the <code>similarity-function</code> option set to one of the supported similarity functions: DOT_PRODUCT, COSINE, or EUCLIDEAN. The default similarity function is COSINE.</p>
+</div>
+<div class="paragraph">
+<p>This index creates an index on the <code>comment_vector</code> column with the similarity function set to DOT_PRODUCT:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">CREATE INDEX sim_comments_idx
+    ON cycling.comments_vs (comment_vector)
+    USING 'sai'
+    WITH OPTIONS = { 'similarity_function': 'DOT_PRODUCT'};</code></pre>
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>Other resources</p>
+</div>
+<div class="paragraph">
+<p>See <a href="#developing/cql/indexing/create-custom-index.adoc" class="page unresolved">CREATE CUSTOM INDEX</a> for more information about creating SAI indexes.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="alter-sai-index"><a class="anchor" href="#alter-sai-index"></a>Alter SAI index</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>SAI indexes cannot be altered.
+If you need to modify an SAI index, you will need to drop the current index, create a new index, and rebuild the cycling.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Drop index</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">DROP INDEX IF EXISTS cycling.lastname_sai_idx;</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Create new index</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">CREATE INDEX lastname_sai_idx ON cycling.cyclist_semi_pro (lastname)
+USING 'sai'
+WITH OPTIONS = {'case_sensitive': 'false', 'normalize': 'true', 'ascii': 'true'};
+
+CREATE INDEX age_sai_idx ON cycling.cyclist_semi_pro (age)
+USING 'sai';
+
+CREATE INDEX country_sai_idx ON cycling.cyclist_semi_pro (country)
+USING 'sai'
+WITH OPTIONS = {'case_sensitive': 'false', 'normalize': 'true', 'ascii': 'true'};
+
+CREATE INDEX registration_sai_idx ON cycling.cyclist_semi_pro (registration)
+USING 'sai';</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="drop-sai-index"><a class="anchor" href="#drop-sai-index"></a>Drop SAI index</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>SAI indexes can be dropped (deleted).</p>
+</div>
+<div class="paragraph">
+<p>To drop an SAI index:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">DROP INDEX IF EXISTS cycling.lastname_sai_idx;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command does not return a result.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="querying-with-sai"><a class="anchor" href="#querying-with-sai"></a>Querying with SAI</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="../../../../getting-started/sai-quickstart.html" class="page">SAI quickstart</a> focuses only on defining multiple indexes based on non-primary key columns (a very useful feature).
+Let&#8217;s explore other options using some examples of how you can run queries on tables that have differently defined SAI indexes.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>SAI only supports <code>SELECT</code> queries, but not <code>UPDATE</code> or <code>DELETE</code> queries.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="vector-search"><a class="anchor" href="#vector-search"></a>Vector search</h3>
+<div class="paragraph">
+<p>This example uses the following table and index:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">CREATE TABLE IF NOT EXISTS cycling.comments_vs (
+  record_id timeuuid,
+  id uuid,
+  commenter text,
+  comment text,
+  comment_vector VECTOR &lt;FLOAT, 5&gt;,
+  created_at timestamp,
+  PRIMARY KEY (id, created_at)
+)
+WITH CLUSTERING ORDER BY (created_at DESC);
+CREATE INDEX IF NOT EXISTS ann_index
+  ON cycling.comments_vs(comment_vector) USING 'sai';</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="query-vector-data-with-cql"><a class="anchor" href="#query-vector-data-with-cql"></a>Query vector data with CQL</h4>
+<div class="paragraph">
+<p>To query data using Vector Search, use a <code>SELECT</code> query:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset2_cql"></a>CQL</p>
+</li>
+<li>
+<p><a id="tabset2_result"></a>Result</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset2_cql">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">SELECT * FROM cycling.comments_vs
+    ORDER BY comment_vector ANN OF [0.15, 0.1, 0.1, 0.35, 0.55]
+    LIMIT 3;</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_result">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql"> id                                   | created_at                      | comment                                | comment_vector               | commenter | record_id
+--------------------------------------+---------------------------------+----------------------------------------+------------------------------+-----------+--------------------------------------
+ e7ae5cf3-d358-4d99-b900-85902fda9bb0 | 2017-04-01 14:33:02.160000+0000 | LATE RIDERS SHOULD NOT DELAY THE START | [0.9, 0.54, 0.12, 0.1, 0.95] |      Alex | 616e77e0-22a2-11ee-b99d-1f350647414a
+ c7fceba0-c141-4207-9494-a29f9809de6f | 2017-02-17 08:43:20.234000+0000 |      Glad you ran the race in the rain | [0.3, 0.34, 0.2, 0.78, 0.25] |       Amy | 6170c1d0-22a2-11ee-b99d-1f350647414a
+ c7fceba0-c141-4207-9494-a29f9809de6f | 2017-04-01 13:43:08.030000+0000 |                Last climb was a killer |   [0.3, 0.75, 0.2, 0.2, 0.5] |       Amy | 62105d30-22a2-11ee-b99d-1f350647414a</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The limit has to be 1,000 or fewer.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Scrolling to the right on the results shows the comments from the table that most closely matched the embeddings used for the query.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="single-index-match-on-a-column"><a class="anchor" href="#single-index-match-on-a-column"></a>Single index match on a column</h3>
+<div class="paragraph">
+<p>This example uses the following table and indexes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">CREATE TABLE IF NOT EXISTS cycling.comments_vs (
+  record_id timeuuid,
+  id uuid,
+  commenter text,
+  comment text,
+  comment_vector VECTOR &lt;FLOAT, 5&gt;,
+  created_at timestamp,
+  PRIMARY KEY (id, created_at)
+)
+WITH CLUSTERING ORDER BY (created_at DESC);
+CREATE INDEX commenter_idx
+    ON cycling.comments_vs (commenter)
+    USING 'sai';
+CREATE INDEX created_at_idx
+    ON cycling.comments_vs (created_at)
+    USING 'sai';
+CREATE INDEX ann_index
+    ON cycling.comments_vs (comment_vector)
+    USING 'sai';</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The column <code>commenter</code> is not the partition key in this table, so an index is required to query on it.</p>
+</div>
+<div class="paragraph">
+<p>Query for a match on that column:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset3_query"></a>Query</p>
+</li>
+<li>
+<p><a id="tabset3_result"></a>Result</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset3_query">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">    SELECT * FROM cycling.comments_vs
+        WHERE commenter = 'Alex';</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset3_result">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-results hljs" data-lang="results"> id                                   | created_at                      | comment                                | comment_vector               | commenter | record_id
+--------------------------------------+---------------------------------+----------------------------------------+------------------------------+-----------+--------------------------------------
+ e7ae5cf3-d358-4d99-b900-85902fda9bb0 | 2017-04-01 14:33:02.160000+0000 | LATE RIDERS SHOULD NOT DELAY THE START | [0.9, 0.54, 0.12, 0.1, 0.95] |      Alex | 6d0cdaa0-272b-11ee-859f-b9098002fcac
+ e7ae5cf3-d358-4d99-b900-85902fda9bb0 | 2017-03-21 21:11:09.999000+0000 |      Second rest stop was out of water | [0.99, 0.5, 0.99, 0.1, 0.34] |      Alex | 6d0b7b10-272b-11ee-859f-b9098002fcac</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Failure with index</div>
+<div class="paragraph">
+<p>Note that a failure will occur if you try this query before creating the index:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset4_query"></a>Query</p>
+</li>
+<li>
+<p><a id="tabset4_result"></a>Result</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset4_query">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">    SELECT * FROM cycling.comments_vs
+        WHERE commenter = 'Alex';</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset4_result">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-results hljs" data-lang="results">InvalidRequest: Error from server: code=2200
+[Invalid query] message="Cannot execute this query as it might involve data filtering and thus may have unpredictable performance.
+If you want to execute this query despite the performance unpredictability, use ALLOW FILTERING"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="single-index-match-on-a-column-with-options"><a class="anchor" href="#single-index-match-on-a-column-with-options"></a>Single index match on a column with options</h3>
+<div class="paragraph">
+<p>This example uses the following table and indexes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">CREATE TABLE IF NOT EXISTS cycling.comments_vs (
+  record_id timeuuid,
+  id uuid,
+  commenter text,
+  comment text,
+  comment_vector VECTOR &lt;FLOAT, 5&gt;,
+  created_at timestamp,
+  PRIMARY KEY (id, created_at)
+)
+WITH CLUSTERING ORDER BY (created_at DESC);
+CREATE INDEX commenter_cs_idx ON cycling.comments_vs (commenter)
+USING 'sai'
+WITH OPTIONS = {'case_sensitive': 'true', 'normalize': 'true', 'ascii': 'true'};</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="case-sensitivty"><a class="anchor" href="#case-sensitivty"></a>Case-sensitivty</h4>
+<div class="paragraph">
+<p>The column <code>commenter</code> is not the partition key in this table, so an index is required to query on it.
+If we want to check <code>commenter</code> as a case-sensitive value, we can use the <code>case_sensitive</code> option set to <code>true</code>.</p>
+</div>
+<div class="paragraph">
+<p>Note that no results are returned if you use an inappropriately case-sensitive value in the query:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset5_query"></a>Query</p>
+</li>
+<li>
+<p><a id="tabset5_result"></a>Result</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset5_query">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">SELECT * FROM comments_vs WHERE commenter ='alex';</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset5_result">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-results hljs" data-lang="results"> id | created_at | comment | comment_vector | commenter | record_id
+----+------------+---------+----------------+-----------+-----------
+
+(0 rows)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>When we switch the case of the cyclist&#8217;s name to match the case in the index, the query succeeds:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset6_query"></a>Query</p>
+</li>
+<li>
+<p><a id="tabset6_result"></a>Result</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset6_query">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">SELECT comment,commenter FROM comments_vs WHERE commenter ='Alex';</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset6_result">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-results hljs" data-lang="results"> comment                                | commenter
+----------------------------------------+-----------
+ LATE RIDERS SHOULD NOT DELAY THE START |      Alex
+      Second rest stop was out of water |      Alex
+(2 rows)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="index-match-on-a-composite-partition-key-column"><a class="anchor" href="#index-match-on-a-composite-partition-key-column"></a>Index match on a composite partition key column</h3>
+<div class="paragraph">
+<p>This example uses the following table and indexes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">CREATE TABLE IF NOT EXISTS cycling.rank_by_year_and_name (
+  race_year int,
+  race_name text,
+  cyclist_name text,
+  rank int,
+  PRIMARY KEY ((race_year, race_name), rank)
+);
+CREATE INDEX race_name_idx
+    ON cycling.rank_by_year_and_name (race_name)
+    USING 'sai';
+CREATE INDEX race_year_idx
+    ON cycling.rank_by_year_and_name (race_year)
+    USING 'sai';</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Composite partition keys have a partition defined by multiple columns in a table.
+Normally, you would need to specify all the columns in the partition key to query the table with a <code>WHERE</code> clause.
+However, an SAI index makes it possible to define an index using a single column in the table&#8217;s composite partition key.
+You can create an SAI index on each column in the composite partition key, if you need to query based on just one column.</p>
+</div>
+<div class="paragraph">
+<p>SAI indexes also allow you to query tables without using the inefficient <code>ALLOW FILTERING</code> directive.
+The <code>ALLOW FILTERING</code> directive requires scanning all the partitions in a table, leading to poor performance.</p>
+</div>
+<div class="paragraph">
+<p>The <code>race_year</code> and <code>race_name</code> columns comprise the composite partition key for the <code>cycling.rank_by_year_and_name</code> table.</p>
+</div>
+<div class="paragraph">
+<p>Query for a match on the column <code>race_name</code>:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset7_query"></a>Query</p>
+</li>
+<li>
+<p><a id="tabset7_result"></a>Result</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset7_query">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">    SELECT * FROM cycling.rank_by_year_and_name
+        WHERE race_name = 'Tour of Japan - Stage 4 - Minami &gt; Shinshu';</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset7_result">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-results hljs" data-lang="results"> race_year | race_name                                  | rank | cyclist_name
+-----------+--------------------------------------------+------+----------------------
+      2014 | Tour of Japan - Stage 4 - Minami &gt; Shinshu |    1 |        Daniel MARTIN
+      2014 | Tour of Japan - Stage 4 - Minami &gt; Shinshu |    2 | Johan Esteban CHAVES
+      2014 | Tour of Japan - Stage 4 - Minami &gt; Shinshu |    3 |      Benjamin PRADES
+      2015 | Tour of Japan - Stage 4 - Minami &gt; Shinshu |    1 |      Benjamin PRADES
+      2015 | Tour of Japan - Stage 4 - Minami &gt; Shinshu |    2 |          Adam PHELAN
+      2015 | Tour of Japan - Stage 4 - Minami &gt; Shinshu |    3 |         Thomas LEBAS</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Query for a match on the column <code>race_year</code>:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset8_query"></a>Query</p>
+</li>
+<li>
+<p><a id="tabset8_result"></a>Result</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset8_query">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">    SELECT * FROM cycling.rank_by_year_and_name
+        WHERE race_year = 2014;</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset8_result">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-results hljs" data-lang="results"> race_year | race_name                                  | rank | cyclist_name
+-----------+--------------------------------------------+------+----------------------
+      2014 |                        4th Tour of Beijing |    1 |    Phillippe GILBERT
+      2014 |                        4th Tour of Beijing |    2 |        Daniel MARTIN
+      2014 |                        4th Tour of Beijing |    3 | Johan Esteban CHAVES
+      2014 | Tour of Japan - Stage 4 - Minami &gt; Shinshu |    1 |        Daniel MARTIN
+      2014 | Tour of Japan - Stage 4 - Minami &gt; Shinshu |    2 | Johan Esteban CHAVES
+      2014 | Tour of Japan - Stage 4 - Minami &gt; Shinshu |    3 |      Benjamin PRADES</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="multiple-indexes-matched-with-and"><a class="anchor" href="#multiple-indexes-matched-with-and"></a>Multiple indexes matched with AND</h3>
+<div class="paragraph">
+<p>This example uses the following table and indexes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">CREATE TABLE IF NOT EXISTS cycling.comments_vs (
+  record_id timeuuid,
+  id uuid,
+  commenter text,
+  comment text,
+  comment_vector VECTOR &lt;FLOAT, 5&gt;,
+  created_at timestamp,
+  PRIMARY KEY (id, created_at)
+)
+WITH CLUSTERING ORDER BY (created_at DESC);
+CREATE INDEX commenter_idx
+    ON cycling.comments_vs (commenter)
+    USING 'sai';
+CREATE INDEX created_at_idx
+    ON cycling.comments_vs (created_at)
+    USING 'sai';
+CREATE INDEX ann_index
+    ON cycling.comments_vs (comment_vector)
+    USING 'sai';</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Several indexes are created for the table to demonstrate how to query for matches on more than one column.</p>
+</div>
+<div class="paragraph">
+<p>Query for matches on more than one column, and both columns must match:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset9_query"></a>Query</p>
+</li>
+<li>
+<p><a id="tabset9_result"></a>Result</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset9_query">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">SELECT * FROM cycling.comments_vs
+    WHERE
+    created_at='2017-03-21 21:11:09.999000+0000'
+    AND commenter = 'Alex';</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset9_result">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-results hljs" data-lang="results"> id                                   | created_at                      | comment                           | comment_vector               | commenter | record_id
+--------------------------------------+---------------------------------+-----------------------------------+------------------------------+-----------+--------------------------------------
+ e7ae5cf3-d358-4d99-b900-85902fda9bb0 | 2017-03-21 21:11:09.999000+0000 | Second rest stop was out of water | [0.99, 0.5, 0.99, 0.1, 0.34] |      Alex | 6d0b7b10-272b-11ee-859f-b9098002fcac</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="multiple-indexes-matched-with-or"><a class="anchor" href="#multiple-indexes-matched-with-or"></a>Multiple indexes matched with OR</h3>
+<div class="paragraph">
+<p>This example uses the following table and indexes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">CREATE TABLE IF NOT EXISTS cycling.comments_vs (
+  record_id timeuuid,
+  id uuid,
+  commenter text,
+  comment text,
+  comment_vector VECTOR &lt;FLOAT, 5&gt;,
+  created_at timestamp,
+  PRIMARY KEY (id, created_at)
+)
+WITH CLUSTERING ORDER BY (created_at DESC);
+CREATE INDEX commenter_idx
+    ON cycling.comments_vs (commenter)
+    USING 'sai';
+CREATE INDEX created_at_idx
+    ON cycling.comments_vs (created_at)
+    USING 'sai';
+CREATE INDEX ann_index
+    ON cycling.comments_vs (comment_vector)
+    USING 'sai';</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Several indexes are created for the table to demonstrate how to query for matches on more than one column.</p>
+</div>
+<div class="paragraph">
+<p>Query for a match on either one column or the other:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset10_query"></a>Query</p>
+</li>
+<li>
+<p><a id="tabset10_result"></a>Result</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset10_query">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">SELECT * FROM cycling.comments_vs
+    WHERE
+    created_at='2017-03-21 21:11:09.999000+0000'
+    OR created_at='2017-03-22 01:16:59.001000+0000';</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset10_result">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-results hljs" data-lang="results"> id                                   | created_at                      | comment                           | comment_vector               | commenter | record_id
+--------------------------------------+---------------------------------+-----------------------------------+------------------------------+-----------+--------------------------------------
+ e7ae5cf3-d358-4d99-b900-85902fda9bb0 | 2017-03-21 21:11:09.999000+0000 | Second rest stop was out of water | [0.99, 0.5, 0.99, 0.1, 0.34] |      Alex | 6d0b7b10-272b-11ee-859f-b9098002fcac
+ c7fceba0-c141-4207-9494-a29f9809de6f | 2017-03-22 01:16:59.001000+0000 |     Great snacks at all reststops |  [0.1, 0.4, 0.1, 0.52, 0.09] |       Amy | 6d0fc0d0-272b-11ee-859f-b9098002fcac</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="multiple-indexes-matched-with-in"><a class="anchor" href="#multiple-indexes-matched-with-in"></a>Multiple indexes matched with IN</h3>
+<div class="paragraph">
+<p>This example uses the following table and indexes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">CREATE TABLE IF NOT EXISTS cycling.comments_vs (
+  record_id timeuuid,
+  id uuid,
+  commenter text,
+  comment text,
+  comment_vector VECTOR &lt;FLOAT, 5&gt;,
+  created_at timestamp,
+  PRIMARY KEY (id, created_at)
+)
+WITH CLUSTERING ORDER BY (created_at DESC);
+CREATE INDEX commenter_idx
+    ON cycling.comments_vs (commenter)
+    USING 'sai';
+CREATE INDEX created_at_idx
+    ON cycling.comments_vs (created_at)
+    USING 'sai';
+CREATE INDEX ann_index
+    ON cycling.comments_vs (comment_vector)
+    USING 'sai';</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Several indexes are created for the table to demonstrate how to query for matches on more than one column.</p>
+</div>
+<div class="paragraph">
+<p>Query for match with column values in a list of values:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset11_query"></a>Query</p>
+</li>
+<li>
+<p><a id="tabset11_result"></a>Result</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset11_query">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">SELECT * FROM cycling.comments_vs
+    WHERE created_at IN
+    ('2017-03-21 21:11:09.999000+0000'
+    ,'2017-03-22 01:16:59.001000+0000');</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset11_result">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-results hljs" data-lang="results"> id                                   | created_at                      | comment                           | comment_vector               | commenter | record_id
+--------------------------------------+---------------------------------+-----------------------------------+------------------------------+-----------+--------------------------------------
+ e7ae5cf3-d358-4d99-b900-85902fda9bb0 | 2017-03-21 21:11:09.999000+0000 | Second rest stop was out of water | [0.99, 0.5, 0.99, 0.1, 0.34] |      Alex | 6d0b7b10-272b-11ee-859f-b9098002fcac
+ c7fceba0-c141-4207-9494-a29f9809de6f | 2017-03-22 01:16:59.001000+0000 |     Great snacks at all reststops |  [0.1, 0.4, 0.1, 0.52, 0.09] |       Amy | 6d0fc0d0-272b-11ee-859f-b9098002fcac</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="user-defined-type"><a class="anchor" href="#user-defined-type"></a>User-defined type</h3>
+<div class="paragraph">
+<p>SAI can index either a user-defined type (UDT) or a list of UDTs.
+This example shows how to index a list of UDTs.</p>
+</div>
+<div class="paragraph">
+<p>This example uses the following user-defined type (UDT), table and index:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">CREATE TYPE IF NOT EXISTS cycling.race (
+  race_title text,
+  race_date timestamp,
+  race_time text
+);
+CREATE TABLE IF NOT EXISTS cycling.cyclist_races (
+  id UUID PRIMARY KEY,
+  lastname text,
+  firstname text,
+  races list&lt;FROZEN &lt;race&gt;&gt;
+);
+CREATE INDEX races_idx
+    ON cycling.cyclist_races (races)
+    USING 'sai';</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>An index is created on the list of UDTs column <code>races</code> in the <code>cycling.cyclist_races</code> table.</p>
+</div>
+<div class="paragraph">
+<p>Query with <code>CONTAINS</code> from the list <code>races</code> column:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset12_cql"></a>CQL</p>
+</li>
+<li>
+<p><a id="tabset12_result"></a>Result</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset12_cql">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">SELECT * FROM cycling.cyclist_races
+    WHERE races CONTAINS {
+       race_title:'Rabobank 7-Dorpenomloop Aalburg',
+       race_date:'2015-05-09',
+       race_time:'02:58:33'};</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset12_result">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console"> id                                   | firstname | lastname | races
+--------------------------------------+-----------+----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 5b6962dd-3f90-4c93-8f61-eabfa4a803e2 |  Marianne |      VOS | [{race_title: 'Rabobank 7-Dorpenomloop Aalburg', race_date: '2015-05-09 00:00:00.000000+0000', race_time: '02:58:33'}, {race_title: 'Ronde van Gelderland', race_date: '2015-04-19 00:00:00.000000+0000', race_time: '03:22:23'}]
+
+(1 rows)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sai-indexing-with-collections"><a class="anchor" href="#sai-indexing-with-collections"></a>SAI indexing with collections</h3>
+<div id="saiUsingCollections" class="paragraph">
+<p>SAI supports collections of type <code>map</code>, <code>list</code>, and <code>set</code>.
+Collections allow you to group and store data together in a column.</p>
+</div>
+<div class="paragraph">
+<p>In a relational database, a grouping such as a user&#8217;s multiple email addresses is achieved via many-to-one joined relationship between (for example) a <code>user</code> table and an <code>email</code> table.
+Apache Cassandra avoids joins between two tables by storing the user&#8217;s email addresses in a collection column in the <code>user</code> table.
+Each collection specifies the data type of the data held.</p>
+</div>
+<div class="paragraph">
+<p>A collection is appropriate if the data for collection storage is limited.
+If the data has unbounded growth potential, like messages sent or sensor events registered every second, do not use collections.
+Instead, use a table with a compound primary key where data is stored in the clustering columns.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>In CQL queries of database tables with SAI indexes, the <code>CONTAINS</code> clauses are supported with, and specific to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>SAI <strong>collection maps</strong> with <code>keys</code>, <code>values</code>, and <code>entries</code></p>
+</li>
+<li>
+<p>SAI <strong>collections</strong> with <code>list</code> and <code>set</code> types</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="saiUsingCollectionsSetExamples"><a class="anchor" href="#saiUsingCollectionsSetExamples"></a>Using the set type</h4>
+<div class="paragraph">
+<p>This example uses the following table and index:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">CREATE TABLE IF NOT EXISTS cycling.cyclist_career_teams (
+  id UUID PRIMARY KEY,
+  lastname text,
+  teams set&lt;text&gt;
+);
+CREATE INDEX teams_idx
+    ON cycling.cyclist_career_teams (teams)
+    USING 'sai';</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>An index is created on the set column <code>teams</code> in the <code>cyclist_career_teams</code> table.</p>
+</div>
+<div class="paragraph">
+<p>Query with <code>CONTAINS</code> from the set <code>teams</code> column:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset13_cql"></a>CQL</p>
+</li>
+<li>
+<p><a id="tabset13_result"></a>Result</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset13_cql">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">SELECT * FROM cycling.cyclist_career_teams
+   WHERE teams CONTAINS 'Rabobank-Liv Giant';</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset13_result">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console"> id                                   | lastname | teams
+--------------------------------------+----------+------------------------------------------------------------------------------------------------------
+ 5b6962dd-3f90-4c93-8f61-eabfa4a803e2 |      VOS | {'Nederland bloeit', 'Rabobank Women Team', 'Rabobank-Liv Giant', 'Rabobank-Liv Woman Cycling Team'}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="saiUsingCollectionsListExamples"><a class="anchor" href="#saiUsingCollectionsListExamples"></a>Using the list type</h4>
+<div class="paragraph">
+<p>This example uses the following table and index:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">CREATE TABLE IF NOT EXISTS cycling.upcoming_calendar (
+  year int,
+  month int,
+  events list&lt;text&gt;,
+  PRIMARY KEY (year, month)
+);
+CREATE INDEX events_idx
+    ON cycling.upcoming_calendar (events)
+    USING 'sai';</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>An index is created on the list column <code>events</code> in the <code>upcoming_calendar</code> table.</p>
+</div>
+<div class="paragraph">
+<p>Query with <code>CONTAINS</code> from the list <code>events</code> column:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset14_cql"></a>CQL</p>
+</li>
+<li>
+<p><a id="tabset14_result"></a>Result</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset14_cql">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">SELECT * FROM cycling.upcoming_calendar
+   WHERE events CONTAINS 'Criterium du Dauphine';</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset14_result">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console"> year | month | events
+------+-------+-----------------------------------------------
+ 2015 |     6 | ['Criterium du Dauphine', 'Tour de Sui\nsse']</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>A slightly more complex query selects rows that either contain a particular event or have a particular month date:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset15_cql"></a>CQL</p>
+</li>
+<li>
+<p><a id="tabset15_result"></a>Result</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset15_cql">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">SELECT * FROM cycling.upcoming_calendar
+    WHERE events CONTAINS 'Criterium du Dauphine'
+          OR month = 7;</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset15_result">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console"> year | month | events
+------+-------+-----------------------------------------------
+ 2015 |     6 | ['Criterium du Dauphine', 'Tour de Sui\nsse']
+ 2015 |     7 |                            ['Tour de France']</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="saiUsingCollectionsMapExamples"><a class="anchor" href="#saiUsingCollectionsMapExamples"></a>Using the map type</h4>
+<div class="paragraph">
+<p>This example uses the following table and indexes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">CREATE TABLE IF NOT EXISTS cycling.cyclist_teams (
+  id uuid PRIMARY KEY,
+  firstname text,
+  lastname text,
+  teams map&lt;int, text&gt;
+);
+CREATE INDEX IF NOT EXISTS team_year_keys_idx
+ON cycling.cyclist_teams ( KEYS (teams) );
+CREATE INDEX IF NOT EXISTS team_year_entries_idx
+ON cycling.cyclist_teams ( ENTRIES (teams) );
+CREATE INDEX IF NOT EXISTS team_year_values_idx
+ON cycling.cyclist_teams ( VALUES (teams) );</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Indexes created on the map column <code>teams</code> in the <code>cyclist_career_teams</code> table target the keys, values, and full entries of the column data.</p>
+</div>
+<div class="paragraph">
+<p>Query with <code>KEYS</code> from the map <code>teams</code> column:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset16_cql"></a>CQL</p>
+</li>
+<li>
+<p><a id="tabset16_result"></a>Result</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset16_cql">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">SELECT * FROM cyclist_teams WHERE teams CONTAINS KEY 2014;</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset16_result">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console"> id                                   | firstname | lastname   | teams
+--------------------------------------+-----------+------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ cb07baad-eac8-4f65-b28a-bddc06a0de23 | Elizabeth | ARMITSTEAD | {2011: 'Team Garmin - Cervelo', 2012: 'AA Drink - Leontien.nl', 2013: 'Boels:Dolmans Cycling Team', 2014: 'Boels:Dolmans Cycling Team', 2015: 'Boels:Dolmans Cycling Team'}
+ 5b6962dd-3f90-4c93-8f61-eabfa4a803e2 |  Marianne |        VOS |                                                                                          {2014: 'Rabobank-Liv Woman Cycling Team', 2015: 'Rabobank-Liv Woman Cycling Team'}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Query a value from the map <code>teams</code> column, noting that only the keyword <code>CONTAINS</code> is included:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset17_cql"></a>CQL</p>
+</li>
+<li>
+<p><a id="tabset17_result"></a>Result</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset17_cql">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">SELECT * FROM cyclist_teams WHERE teams CONTAINS 'Team Garmin - Cervelo';</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset17_result">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console"> id                                   | firstname | lastname   | teams
+--------------------------------------+-----------+------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ cb07baad-eac8-4f65-b28a-bddc06a0de23 | Elizabeth | ARMITSTEAD | {2011: 'Team Garmin - Cervelo', 2012: 'AA Drink - Leontien.nl', 2013: 'Boels:Dolmans Cycling Team', 2014: 'Boels:Dolmans Cycling Team', 2015: 'Boels:Dolmans Cycling Team'}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Query entries from the map <code>teams</code> column, noting the difference in the <code>WHERE</code> clause:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset18_cql"></a>CQL</p>
+</li>
+<li>
+<p><a id="tabset18_result"></a>Result</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset18_cql">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">SELECT * FROM cyclist_teams
+WHERE
+    teams[2014] = 'Boels:Dolmans Cycling Team'
+    AND teams[2015] = 'Boels:Dolmans Cycling Team';</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset18_result">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console"> id                                   | firstname | lastname   | teams
+--------------------------------------+-----------+------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ cb07baad-eac8-4f65-b28a-bddc06a0de23 | Elizabeth | ARMITSTEAD | {2011: 'Team Garmin - Cervelo', 2012: 'AA Drink - Leontien.nl', 2013: 'Boels:Dolmans Cycling Team', 2014: 'Boels:Dolmans Cycling Team', 2015: 'Boels:Dolmans Cycling Team'}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>This example looks for a row where two entries are present in the map <code>teams</code> column.</p>
+</div>
+<div class="paragraph">
+<p>For more information, see:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="../../create-custom-index.html" class="page">CREATE CUSTOM INDEX</a></p>
+</li>
+<li>
+<p><a href="../../collections/collection-create.html" class="page">Creating collections</a></p>
+</li>
+<li>
+<p><a href="../../collections/set.html" class="page">Using set type</a></p>
+</li>
+<li>
+<p><a href="../../collections/list.html" class="page">Using list type</a></p>
+</li>
+<li>
+<p><a href="../../collections/map.html" class="page">Using map type</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</article>
+</main>
+    </div>
+</div>
+            <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../../../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../../../../../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://twitter.com/cassandra?lang=en" target="_blank"><img src="../../../../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../../../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../../../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../../../../../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+    <script src="../../../../../../../assets/js/site.js"></script>
+    <script async src="../../../../../../../assets/js/vendor/highlight.js"></script>
+    <script src="../../../../../../../assets/js/vendor/lunr.js"></script>
+    <script src="../../../../../../../assets/js/vendor/search.js" id="search-script" data-base-path="../../../../../../.." data-page-path="/Cassandra/5.0/cassandra/developing/cql/indexing/sai/sai-working-with.html"></script>
+    <script async src="../../../../../../../assets/../search-index.js"></script>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+        </div>
+    </body>
+</html>

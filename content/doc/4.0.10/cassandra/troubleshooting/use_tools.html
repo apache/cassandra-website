@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Diving Deep, Use External Tools | Apache Cassandra Documentation</title>
+            <link rel="stylesheet" href="../../../../assets/css/site.css">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="Cassandra">
+    <meta name="dcterms.identifier" content="4.0">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "https://plausible.cassandra.apache.org/js/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>    </head>
+    <body class="docs-wrapper article">
+        <div class="container mx-auto relative">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta property="og:type" content="website" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+         <div class="header-social-icons text-right">
+            <a href="https://twitter.com/cassandra?lang=en" target="_blank" styles="margin-left: 20px;"><img src="../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+            <div class="hero hero--home grad">
+                <div class="eye"></div>
+                <div id="docs-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                    <h2>Cassandra Documentation</h2>
+                </div>
+            </div>
+            <div class="body px-medium py-medium container">
+    <div class="docs-nav-bar flex flex-space-between mb-medium">
+      <div id="mobile-docs-nav-burger" class="hidden">
+        <svg viewBox="0 0 24 24" width="36" height="36" stroke="#1c81a0" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </div>
+        <div class="docs-nav-item relative">
+          <input id="search-input" type="text" placeholder="Search docs">
+        </div>
+      <div class="versions-wrapper">
+  <h4>Version:</h4>
+  <div class="nav-panel-explore" data-panel="explore">
+
+    <div id="version-toggle" class="context">
+      <span class="version">4.0</span>
+    </div>
+    <ul id="versions-list" class="components">
+      <li class="component">
+        <ul class="versions">
+          <li class="version is-latest">
+            <a href="../../../../_/index.html">master</a>
+          </li>
+        </ul>
+      </li>
+      <li class="component is-current">
+        <ul class="versions">
+          <li class="version">
+            <a href="../../../trunk/index.html">trunk</a>
+          </li>
+          <li class="version">
+            <a href="../../../5.0/index.html">5.0</a>
+          </li>
+          <li class="version is-latest">
+            <a href="../../../4.1/index.html">4.1</a>
+          </li>
+          <li class="version is-current">
+            <a href="../../index.html">4.0</a>
+          </li>
+          <li class="version">
+            <a href="../../../3.11/index.html">3.11</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>    </div>
+    <div class="cf relative">
+        <nav class="nav docs-nav full-800">
+<div class="nav-menu">
+<ul class="nav-list">
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../index.html">Main</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/glossary.html">Glossary</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/bugs.html">How to report bugs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/contactus.html">Contact us</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item is-current-path is-active" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <span class="nav-text">Cassandra</span>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../getting_started/index.html">Getting Started</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting_started/installing.html">Installing Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting_started/configuring.html">Configuring Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting_started/querying.html">Inserting and querying</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting_started/drivers.html">Client drivers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting_started/production.html">Production recommendations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../new/index.html">What&#8217;s new</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../new/java11.html">Support for Java 11</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../new/virtualtables.html">Virtual tables</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../new/auditlogging.html">Audit logging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../new/fqllogging.html">Full query logging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../new/messaging.html">Improved internode Messaging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../new/streaming.html">Improved streaming</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../new/transientreplication.html">Transient replication</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../architecture/index.html">Architecture</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/overview.html">Overview</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/dynamo.html">Dynamo</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/storage_engine.html">Storage engine</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/guarantees.html">Guarantees</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../data_modeling/index.html">Data modeling</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/intro.html">Introduction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_conceptual.html">Conceptual data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_rdbms.html">RDBMS design</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_queries.html">Defining application queries</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_logical.html">Logical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_physical.html">Physical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_refining.html">Evaluating and refining data models</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_schema.html">Defining database schema</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data_modeling/data_modeling_tools.html">Cassandra data modeling tools</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../cql/index.html">Cassandra Query Language (CQL)</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/definitions.html">Definitions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/types.html">Data types</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/ddl.html">Data definition (DDL)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/dml.html">Data manipulation (DML)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/operators.html">Operators</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/indexes.html">Secondary indexes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/mvs.html">Materialized views</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/functions.html">Functions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/json.html">JSON</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/triggers.html">Triggers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/appendices.html">Appendices</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/changes.html">Changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/SASI.html">SASI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../cql/cql_singlefile.html">Single file of CQL information</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../configuration/index.html">Configuration</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_yaml_file.html">cassandra.yaml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_rackdc_file.html">cassandra-rackdc.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_env_sh_file.html">cassandra-env.sh</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_topo_file.html">cassandra-topologies.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_cl_archive_file.html">commitlog-archiving.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_logback_xml_file.html">logback.xml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_jvm_options_file.html">jvm-* files</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../operating/index.html">Operating</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="#operating/snitch.adoc">Snitches</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/topo_changes.html">Topology changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/repair.html">Repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/read_repair.html">Read repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/hints.html">Hints</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/bloom_filters.html">Bloom filters</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/compression.html">Compression</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/cdc.html">Change Data Capture (CDC)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/backups.html">Backups</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/bulk_loading.html">Bulk loading</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/metrics.html">Metrics</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/hardware.html">Hardware</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/audit_logging.html">Audit logging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../operating/compaction/index.html">Compaction</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../tools/index.html">Tools</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../tools/cqlsh.html">cqlsh: the CQL shell</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../tools/nodetool/nodetool.html">nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../tools/sstable/index.html">SSTable tools</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../tools/cassandra_stress.html">cassandra-stress</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-path is-active" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="index.html">Troubleshooting</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="finding_nodes.html">Finding misbehaving nodes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="reading_logs.html">Reading Cassandra logs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="use_nodetool.html">Using nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item is-current-page is-active" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="use_tools.html">Using external tools to deep-dive</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../_/development/index.html">Development</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/gettingstarted.html">Getting started</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/ide.html">Building and IDE integration</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/testing.html">Testing</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/patches.html">Contributing code changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/code_style.html">Code style</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/how_to_review.html">Review checklist</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/how_to_commit.html">How to commit</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/documentation.html">Working on documentation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/ci.html">Jenkins CI environment</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/dependencies.html">Dependency management</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/release_process.html">Release process</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../faq/index.html">FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../plugins/index.html">Plug-ins</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+</div>
+</nav>
+        <aside class="toc sidebar">
+  <div class="toc-menu"></div>
+</aside>
+        <main class="article default-main full-800" data-ceiling="topbar">
+  <div class="article-banner">
+    <p>A newer version of this documentation is available.</p>
+    <a class="btn" href="../../../4.1/cassandra/troubleshooting/use_tools.html">View Latest</a>
+  </div>
+  <div class="article-header">
+<nav class="crumbs" aria-label="breadcrumbs">
+  <ul>
+    <li class="crumb">Cassandra</li>
+    <li class="crumb"><a href="index.html">Troubleshooting</a></li>
+    <li class="crumb"><a href="use_tools.html">Using external tools to deep-dive</a></li>
+  </ul>
+</nav>
+<div class="tools" role="navigation">
+  <ul>
+    <li class="tool edit"><a href="https://github.com/apache/cassandra/edit/cassandra-4.0/doc/modules/cassandra/pages/troubleshooting/use_tools.adoc" title="Edit Page" target="_blank" rel="noopener">Edit</a></li>
+  </ul>
+</div>
+  </div>
+<article class="doc">
+<h1 class="page">Diving Deep, Use External Tools</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Machine access allows operators to dive even deeper than logs and
+<code>nodetool</code> allow. While every Cassandra operator may have their personal
+favorite toolsets for troubleshooting issues, this page contains some of
+the most common operator techniques and examples of those tools. Many of
+these commands work only on Linux, but if you are deploying on a
+different operating system you may have access to other substantially
+similar tools that assess similar OS level metrics and processes.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="jvm-tooling"><a class="anchor" href="#jvm-tooling"></a>JVM Tooling</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The JVM ships with a number of useful tools. Some of them are useful for
+debugging Cassandra issues, especially related to heap and execution
+stacks.</p>
+</div>
+<div class="paragraph">
+<p><strong>NOTE</strong>: There are two common gotchas with JVM tooling and Cassandra:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>By default Cassandra ships with <code>-XX:+PerfDisableSharedMem</code> set to
+prevent long pauses (see <code>CASSANDRA-9242</code> and <code>CASSANDRA-9483</code> for
+details). If you want to use JVM tooling you can instead have <code>/tmp</code>
+mounted on an in memory <code>tmpfs</code> which also effectively works around
+<code>CASSANDRA-9242</code>.</p>
+</li>
+<li>
+<p>Make sure you run the tools as the same user as Cassandra is running
+as, e.g. if the database is running as <code>cassandra</code> the tool also has to
+be run as <code>cassandra</code>, e.g. via <code>sudo -u cassandra &lt;cmd&gt;</code>.</p>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="garbage-collection-state-jstat"><a class="anchor" href="#garbage-collection-state-jstat"></a>Garbage Collection State (jstat)</h3>
+<div class="paragraph">
+<p>If you suspect heap pressure you can use <code>jstat</code> to dive deep into the
+garbage collection state of a Cassandra process. This command is always
+safe to run and yields detailed heap information including eden heap
+usage (E), old generation heap usage (O), count of eden collections
+(YGC), time spend in eden collections (YGCT), old/mixed generation
+collections (FGC) and time spent in old/mixed generation collections
+(FGCT):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">jstat -gcutil &lt;cassandra pid&gt; 500ms
+ S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT
+ 0.00   0.00  81.53  31.16  93.07  88.20     12    0.151     3    0.257    0.408
+ 0.00   0.00  82.36  31.16  93.07  88.20     12    0.151     3    0.257    0.408
+ 0.00   0.00  82.36  31.16  93.07  88.20     12    0.151     3    0.257    0.408
+ 0.00   0.00  83.19  31.16  93.07  88.20     12    0.151     3    0.257    0.408
+ 0.00   0.00  83.19  31.16  93.07  88.20     12    0.151     3    0.257    0.408
+ 0.00   0.00  84.19  31.16  93.07  88.20     12    0.151     3    0.257    0.408
+ 0.00   0.00  84.19  31.16  93.07  88.20     12    0.151     3    0.257    0.408
+ 0.00   0.00  85.03  31.16  93.07  88.20     12    0.151     3    0.257    0.408
+ 0.00   0.00  85.03  31.16  93.07  88.20     12    0.151     3    0.257    0.408
+ 0.00   0.00  85.94  31.16  93.07  88.20     12    0.151     3    0.257    0.408</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case we see we have a relatively healthy heap profile, with
+31.16% old generation heap usage and 83% eden. If the old generation
+routinely is above 75% then you probably need more heap (assuming CMS
+with a 75% occupancy threshold). If you do have such persistently high
+old gen that often means you either have under-provisioned the old
+generation heap, or that there is too much live data on heap for
+Cassandra to collect (e.g. because of memtables). Another thing to watch
+for is time between young garbage collections (YGC), which indicate how
+frequently the eden heap is collected. Each young gc pause is about
+20-50ms, so if you have a lot of them your clients will notice in their
+high percentile latencies.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="thread-information-jstack"><a class="anchor" href="#thread-information-jstack"></a>Thread Information (jstack)</h3>
+<div class="paragraph">
+<p>To get a point in time snapshot of exactly what Cassandra is doing, run
+<code>jstack</code> against the Cassandra PID. <strong>Note</strong> that this does pause the JVM
+for a very brief period (&lt;20ms).:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ jstack &lt;cassandra pid&gt; &gt; threaddump
+
+# display the threaddump
+$ cat threaddump
+
+# look at runnable threads
+$grep RUNNABLE threaddump -B 1
+"Attach Listener" #15 daemon prio=9 os_prio=0 tid=0x00007f829c001000 nid=0x3a74 waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+--
+"DestroyJavaVM" #13 prio=5 os_prio=0 tid=0x00007f82e800e000 nid=0x2a19 waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+--
+"JPS thread pool" #10 prio=5 os_prio=0 tid=0x00007f82e84d0800 nid=0x2a2c runnable [0x00007f82d0856000]
+   java.lang.Thread.State: RUNNABLE
+--
+"Service Thread" #9 daemon prio=9 os_prio=0 tid=0x00007f82e80d7000 nid=0x2a2a runnable [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+--
+"C1 CompilerThread3" #8 daemon prio=9 os_prio=0 tid=0x00007f82e80cc000 nid=0x2a29 waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+--
+
+# Note that the nid is the Linux thread id</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Some of the most important information in the threaddumps are
+waiting/blocking threads, including what locks or monitors the thread is
+blocking/waiting on.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="basic-os-tooling"><a class="anchor" href="#basic-os-tooling"></a>Basic OS Tooling</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A great place to start when debugging a Cassandra issue is understanding
+how Cassandra is interacting with system resources. The following are
+all resources that Cassandra makes heavy uses of:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>CPU cores. For executing concurrent user queries</p>
+</li>
+<li>
+<p>CPU processing time. For query activity (data decompression, row
+merging, etc.)</p>
+</li>
+<li>
+<p>CPU processing time (low priority). For background tasks (compaction,
+streaming, etc &#8230;&#8203;)</p>
+</li>
+<li>
+<p>RAM for Java Heap. Used to hold internal data-structures and by
+default the Cassandra memtables. Heap space is a crucial component of
+write performance as well as generally.</p>
+</li>
+<li>
+<p>RAM for OS disk cache. Used to cache frequently accessed SSTable
+blocks. OS disk cache is a crucial component of read performance.</p>
+</li>
+<li>
+<p>Disks. Cassandra cares a lot about disk read latency, disk write
+throughput, and of course disk space.</p>
+</li>
+<li>
+<p>Network latency. Cassandra makes many internode requests, so network
+latency between nodes can directly impact performance.</p>
+</li>
+<li>
+<p>Network throughput. Cassandra (as other databases) frequently have the
+so called "incast" problem where a small request (e.g.
+<code>SELECT * from foo.bar</code>) returns a massively large result set (e.g. the
+entire dataset). In such situations outgoing bandwidth is crucial.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Often troubleshooting Cassandra comes down to troubleshooting what
+resource the machine or cluster is running out of. Then you create more
+of that resource or change the query pattern to make less use of that
+resource.</p>
+</div>
+<div class="sect2">
+<h3 id="high-level-resource-usage-tophtop"><a class="anchor" href="#high-level-resource-usage-tophtop"></a>High Level Resource Usage (top/htop)</h3>
+<div class="paragraph">
+<p>Cassandra makes signifiant use of system resources, and often the very
+first useful action is to run <code>top</code> or <code>htop</code>
+(<a href="https://hisham.hm/htop/">website</a>)to see the state of the machine.</p>
+</div>
+<div class="paragraph">
+<p>Useful things to look at:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>System load levels. While these numbers can be confusing, generally
+speaking if the load average is greater than the number of CPU cores,
+Cassandra probably won&#8217;t have very good (sub 100 millisecond) latencies.
+See
+<a href="http://www.brendangregg.com/blog/2017-08-08/linux-load-averages.html">Linux
+Load Averages</a> for more information.</p>
+</li>
+<li>
+<p>CPU utilization. <code>htop</code> in particular can help break down CPU
+utilization into <code>user</code> (low and normal priority), <code>system</code> (kernel),
+and <code>io-wait</code> . Cassandra query threads execute as normal priority
+<code>user</code> threads, while compaction threads execute as low priority <code>user</code>
+threads. High <code>system</code> time could indicate problems like thread
+contention, and high <code>io-wait</code> may indicate slow disk drives. This can
+help you understand what Cassandra is spending processing resources
+doing.</p>
+</li>
+<li>
+<p>Memory usage. Look for which programs have the most resident memory,
+it is probably Cassandra. The number for Cassandra is likely
+inaccurately high due to how Linux (as of 2018) accounts for memory
+mapped file memory.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="os-iostat"><a class="anchor" href="#os-iostat"></a>IO Usage (iostat)</h3>
+<div class="paragraph">
+<p>Use iostat to determine how data drives are faring, including latency
+distributions, throughput, and utilization:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo iostat -xdm 2
+Linux 4.13.0-13-generic (hostname)     07/03/2018     _x86_64_    (8 CPU)
+
+Device:         rrqm/s   wrqm/s     r/s     w/s    rMB/s    wMB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util
+sda               0.00     0.28    0.32    5.42     0.01     0.13    48.55     0.01    2.21    0.26    2.32   0.64   0.37
+sdb               0.00     0.00    0.00    0.00     0.00     0.00    79.34     0.00    0.20    0.20    0.00   0.16   0.00
+sdc               0.34     0.27    0.76    0.36     0.01     0.02    47.56     0.03   26.90    2.98   77.73   9.21   1.03
+
+Device:         rrqm/s   wrqm/s     r/s     w/s    rMB/s    wMB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util
+sda               0.00     0.00    2.00   32.00     0.01     4.04   244.24     0.54   16.00    0.00   17.00   1.06   3.60
+sdb               0.00     0.00    0.00    0.00     0.00     0.00     0.00     0.00    0.00    0.00    0.00   0.00   0.00
+sdc               0.00    24.50    0.00  114.00     0.00    11.62   208.70     5.56   48.79    0.00   48.79   1.12  12.80</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case we can see that <code>/dev/sdc1</code> is a very slow drive, having an
+<code>await</code> close to 50 milliseconds and an <code>avgqu-sz</code> close to 5 ios. The
+drive is not particularly saturated (utilization is only 12.8%), but we
+should still be concerned about how this would affect our p99 latency
+since 50ms is quite long for typical Cassandra operations. That being
+said, in this case most of the latency is present in writes (typically
+writes are more latent than reads), which due to the LSM nature of
+Cassandra is often hidden from the user.</p>
+</div>
+<div class="paragraph">
+<p>Important metrics to assess using iostat:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Reads and writes per second. These numbers will change with the
+workload, but generally speaking the more reads Cassandra has to do from
+disk the slower Cassandra read latencies are. Large numbers of reads per
+second can be a dead giveaway that the cluster has insufficient memory
+for OS page caching.</p>
+</li>
+<li>
+<p>Write throughput. Cassandra&#8217;s LSM model defers user writes and batches
+them together, which means that throughput to the underlying medium is
+the most important write metric for Cassandra.</p>
+</li>
+<li>
+<p>Read latency (<code>r_await</code>). When Cassandra missed the OS page cache and
+reads from SSTables, the read latency directly determines how fast
+Cassandra can respond with the data.</p>
+</li>
+<li>
+<p>Write latency. Cassandra is less sensitive to write latency except
+when it syncs the commit log. This typically enters into the very high
+percentiles of write latency.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Note that to get detailed latency breakdowns you will need a more
+advanced tool such as <a href="#use_tools.adoc#bcc-tools" class="page unresolved"><code>bcc-tools</code></a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="os-page-cache-usage"><a class="anchor" href="#os-page-cache-usage"></a>OS page Cache Usage</h3>
+<div class="paragraph">
+<p>As Cassandra makes heavy use of memory mapped files, the health of the
+operating system&#8217;s <a href="https://en.wikipedia.org/wiki/Page_cache">Page Cache</a>
+is crucial to performance. Start by finding how much available cache is
+in the system:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ free -g
+              total        used        free      shared  buff/cache   available
+Mem:             15           9           2           0           3           5
+Swap:             0           0           0</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case 9GB of memory is used by user processes (Cassandra heap)
+and 8GB is available for OS page cache. Of that, 3GB is actually used to
+cache files. If most memory is used and unavailable to the page cache,
+Cassandra performance can suffer significantly. This is why Cassandra
+starts with a reasonably small amount of memory reserved for the heap.</p>
+</div>
+<div class="paragraph">
+<p>If you suspect that you are missing the OS page cache frequently you can
+use advanced tools like <a href="#use_tools.adoc#use-bcc-tools" class="page unresolved">cachestat</a> or
+<a href="#use_tools.adoc#use-vmtouch" class="page unresolved">vmtouch</a> to dive deeper.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="network-latency-and-reliability"><a class="anchor" href="#network-latency-and-reliability"></a>Network Latency and Reliability</h3>
+<div class="paragraph">
+<p>Whenever Cassandra does writes or reads that involve other replicas,
+<code>LOCAL_QUORUM</code> reads for example, one of the dominant effects on latency
+is network latency. When trying to debug issues with multi machine
+operations, the network can be an important resource to investigate. You
+can determine internode latency using tools like <code>ping</code> and <code>traceroute</code>
+or most effectively <code>mtr</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ mtr -nr www.google.com
+Start: Sun Jul 22 13:10:28 2018
+HOST: hostname                     Loss%   Snt   Last   Avg  Best  Wrst StDev
+  1.|-- 192.168.1.1                0.0%    10    2.0   1.9   1.1   3.7   0.7
+  2.|-- 96.123.29.15               0.0%    10   11.4  11.0   9.0  16.4   1.9
+  3.|-- 68.86.249.21               0.0%    10   10.6  10.7   9.0  13.7   1.1
+  4.|-- 162.141.78.129             0.0%    10   11.5  10.6   9.6  12.4   0.7
+  5.|-- 162.151.78.253             0.0%    10   10.9  12.1  10.4  20.2   2.8
+  6.|-- 68.86.143.93               0.0%    10   12.4  12.6   9.9  23.1   3.8
+  7.|-- 96.112.146.18              0.0%    10   11.9  12.4  10.6  15.5   1.6
+  9.|-- 209.85.252.250             0.0%    10   13.7  13.2  12.5  13.9   0.0
+ 10.|-- 108.170.242.238            0.0%    10   12.7  12.4  11.1  13.0   0.5
+ 11.|-- 74.125.253.149             0.0%    10   13.4  13.7  11.8  19.2   2.1
+ 12.|-- 216.239.62.40              0.0%    10   13.4  14.7  11.5  26.9   4.6
+ 13.|-- 108.170.242.81             0.0%    10   14.4  13.2  10.9  16.0   1.7
+ 14.|-- 72.14.239.43               0.0%    10   12.2  16.1  11.0  32.8   7.1
+ 15.|-- 216.58.195.68              0.0%    10   25.1  15.3  11.1  25.1   4.8</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example of <code>mtr</code>, we can rapidly assess the path that your
+packets are taking, as well as what their typical loss and latency are.
+Packet loss typically leads to between <code>200ms</code> and <code>3s</code> of additional
+latency, so that can be a common cause of latency issues.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="network-throughput"><a class="anchor" href="#network-throughput"></a>Network Throughput</h3>
+<div class="paragraph">
+<p>As Cassandra is sensitive to outgoing bandwidth limitations, sometimes
+it is useful to determine if network throughput is limited. One handy
+tool to do this is
+<a href="https://www.systutorials.com/docs/linux/man/8-iftop/">iftop</a> which shows
+both bandwidth usage as well as connection information at a glance. An
+example showing traffic during a stress run against a local <code>ccm</code>
+cluster:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ # remove the -t for ncurses instead of pure text
+$ sudo iftop -nNtP -i lo
+interface: lo
+IP address is: 127.0.0.1
+MAC address is: 00:00:00:00:00:00
+Listening on lo
+   # Host name (port/service if enabled)            last 2s   last 10s   last 40s cumulative
+--------------------------------------------------------------------------------------------
+   1 127.0.0.1:58946                          =&gt;      869Kb      869Kb      869Kb      217KB
+     127.0.0.3:9042                           &lt;=         0b         0b         0b         0B
+   2 127.0.0.1:54654                          =&gt;      736Kb      736Kb      736Kb      184KB
+     127.0.0.1:9042                           &lt;=         0b         0b         0b         0B
+   3 127.0.0.1:51186                          =&gt;      669Kb      669Kb      669Kb      167KB
+     127.0.0.2:9042                           &lt;=         0b         0b         0b         0B
+   4 127.0.0.3:9042                           =&gt;     3.30Kb     3.30Kb     3.30Kb       845B
+     127.0.0.1:58946                          &lt;=         0b         0b         0b         0B
+   5 127.0.0.1:9042                           =&gt;     2.79Kb     2.79Kb     2.79Kb       715B
+     127.0.0.1:54654                          &lt;=         0b         0b         0b         0B
+   6 127.0.0.2:9042                           =&gt;     2.54Kb     2.54Kb     2.54Kb       650B
+     127.0.0.1:51186                          &lt;=         0b         0b         0b         0B
+   7 127.0.0.1:36894                          =&gt;     1.65Kb     1.65Kb     1.65Kb       423B
+     127.0.0.5:7000                           &lt;=         0b         0b         0b         0B
+   8 127.0.0.1:38034                          =&gt;     1.50Kb     1.50Kb     1.50Kb       385B
+     127.0.0.2:7000                           &lt;=         0b         0b         0b         0B
+   9 127.0.0.1:56324                          =&gt;     1.50Kb     1.50Kb     1.50Kb       383B
+     127.0.0.1:7000                           &lt;=         0b         0b         0b         0B
+  10 127.0.0.1:53044                          =&gt;     1.43Kb     1.43Kb     1.43Kb       366B
+     127.0.0.4:7000                           &lt;=         0b         0b         0b         0B
+--------------------------------------------------------------------------------------------
+Total send rate:                                     2.25Mb     2.25Mb     2.25Mb
+Total receive rate:                                      0b         0b         0b
+Total send and receive rate:                         2.25Mb     2.25Mb     2.25Mb
+--------------------------------------------------------------------------------------------
+Peak rate (sent/received/total):                     2.25Mb         0b     2.25Mb
+Cumulative (sent/received/total):                     576KB         0B      576KB
+============================================================================================</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case we can see that bandwidth is fairly shared between many
+peers, but if the total was getting close to the rated capacity of the
+NIC or was focussed on a single client, that may indicate a clue as to
+what issue is occurring.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="advanced-tools"><a class="anchor" href="#advanced-tools"></a>Advanced tools</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Sometimes as an operator you may need to really dive deep. This is where
+advanced OS tooling can come in handy.</p>
+</div>
+<div class="sect2">
+<h3 id="use-bcc-tools"><a class="anchor" href="#use-bcc-tools"></a>bcc-tools</h3>
+<div class="paragraph">
+<p>Most modern Linux distributions (kernels newer than <code>4.1</code>) support
+<a href="https://github.com/iovisor/bcc">bcc-tools</a> for diving deep into
+performance problems. First install <code>bcc-tools</code>, e.g. via <code>apt</code> on
+Debian:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ apt install bcc-tools</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then you can use all the tools that <code>bcc-tools</code> contains. One of the
+most useful tools is <code>cachestat</code>
+(<a href="https://github.com/iovisor/bcc/blob/master/tools/cachestat_example.txt">cachestat
+examples</a>) which allows you to determine exactly how many OS page cache
+hits and misses are happening:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo /usr/share/bcc/tools/cachestat -T 1
+TIME        TOTAL   MISSES     HITS  DIRTIES   BUFFERS_MB  CACHED_MB
+18:44:08       66       66        0       64           88       4427
+18:44:09       40       40        0       75           88       4427
+18:44:10     4353       45     4308      203           88       4427
+18:44:11       84       77        7       13           88       4428
+18:44:12     2511       14     2497       14           88       4428
+18:44:13      101       98        3       18           88       4428
+18:44:14    16741        0    16741       58           88       4428
+18:44:15     1935       36     1899       18           88       4428
+18:44:16       89       34       55       18           88       4428</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case there are not too many page cache <code>MISSES</code> which indicates
+a reasonably sized cache. These metrics are the most direct measurement
+of your Cassandra node&#8217;s "hot" dataset. If you don&#8217;t have enough cache,
+<code>MISSES</code> will be high and performance will be slow. If you have enough
+cache, <code>MISSES</code> will be low and performance will be fast (as almost all
+reads are being served out of memory).</p>
+</div>
+<div class="paragraph">
+<p>You can also measure disk latency distributions using <code>biolatency</code>
+(<a href="https://github.com/iovisor/bcc/blob/master/tools/biolatency_example.txt">biolatency
+examples</a>) to get an idea of how slow Cassandra will be when reads miss
+the OS page Cache and have to hit disks:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo /usr/share/bcc/tools/biolatency -D 10
+Tracing block device I/O... Hit Ctrl-C to end.
+
+
+disk = 'sda'
+     usecs               : count     distribution
+         0 -&gt; 1          : 0        |                                        |
+         2 -&gt; 3          : 0        |                                        |
+         4 -&gt; 7          : 0        |                                        |
+         8 -&gt; 15         : 0        |                                        |
+        16 -&gt; 31         : 12       |****************************************|
+        32 -&gt; 63         : 9        |******************************          |
+        64 -&gt; 127        : 1        |***                                     |
+       128 -&gt; 255        : 3        |**********                              |
+       256 -&gt; 511        : 7        |***********************                 |
+       512 -&gt; 1023       : 2        |******                                  |
+
+disk = 'sdc'
+     usecs               : count     distribution
+         0 -&gt; 1          : 0        |                                        |
+         2 -&gt; 3          : 0        |                                        |
+         4 -&gt; 7          : 0        |                                        |
+         8 -&gt; 15         : 0        |                                        |
+        16 -&gt; 31         : 0        |                                        |
+        32 -&gt; 63         : 0        |                                        |
+        64 -&gt; 127        : 41       |************                            |
+       128 -&gt; 255        : 17       |*****                                   |
+       256 -&gt; 511        : 13       |***                                     |
+       512 -&gt; 1023       : 2        |                                        |
+      1024 -&gt; 2047       : 0        |                                        |
+      2048 -&gt; 4095       : 0        |                                        |
+      4096 -&gt; 8191       : 56       |*****************                       |
+      8192 -&gt; 16383      : 131      |****************************************|
+     16384 -&gt; 32767      : 9        |**                                      |</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case most ios on the data drive (<code>sdc</code>) are fast, but many take
+between 8 and 16 milliseconds.</p>
+</div>
+<div class="paragraph">
+<p>Finally <code>biosnoop</code>
+(<a href="https://github.com/iovisor/bcc/blob/master/tools/biosnoop_example.txt">examples</a>)
+can be used to dive even deeper and see per IO latencies:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo /usr/share/bcc/tools/biosnoop | grep java | head
+0.000000000    java           17427  sdc     R  3972458600 4096      13.58
+0.000818000    java           17427  sdc     R  3972459408 4096       0.35
+0.007098000    java           17416  sdc     R  3972401824 4096       5.81
+0.007896000    java           17416  sdc     R  3972489960 4096       0.34
+0.008920000    java           17416  sdc     R  3972489896 4096       0.34
+0.009487000    java           17427  sdc     R  3972401880 4096       0.32
+0.010238000    java           17416  sdc     R  3972488368 4096       0.37
+0.010596000    java           17427  sdc     R  3972488376 4096       0.34
+0.011236000    java           17410  sdc     R  3972488424 4096       0.32
+0.011825000    java           17427  sdc     R  3972488576 16384      0.65
+... time passes
+8.032687000    java           18279  sdc     R  10899712  122880     3.01
+8.033175000    java           18279  sdc     R  10899952  8192       0.46
+8.073295000    java           18279  sdc     R  23384320  122880     3.01
+8.073768000    java           18279  sdc     R  23384560  8192       0.46</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With <code>biosnoop</code> you see every single IO and how long they take. This
+data can be used to construct the latency distributions in <code>biolatency</code>
+but can also be used to better understand how disk latency affects
+performance. For example this particular drive takes ~3ms to service a
+memory mapped read due to the large default value (<code>128kb</code>) of
+<code>read_ahead_kb</code>. To improve point read performance you may may want to
+decrease <code>read_ahead_kb</code> on fast data volumes such as SSDs while keeping
+the a higher value like <code>128kb</code> value is probably right for HDs. There
+are tradeoffs involved, see
+<a href="https://www.kernel.org/doc/Documentation/block/queue-sysfs.txt">queue-sysfs</a>
+docs for more information, but regardless <code>biosnoop</code> is useful for
+understanding <em>how</em> Cassandra uses drives.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="use-vmtouch"><a class="anchor" href="#use-vmtouch"></a>vmtouch</h3>
+<div class="paragraph">
+<p>Sometimes it&#8217;s useful to know how much of the Cassandra data files are
+being cached by the OS. A great tool for answering this question is
+<a href="https://github.com/hoytech/vmtouch">vmtouch</a>.</p>
+</div>
+<div class="paragraph">
+<p>First install it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ git clone https://github.com/hoytech/vmtouch.git
+$ cd vmtouch
+$ make</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then run it on the Cassandra data directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ ./vmtouch /var/lib/cassandra/data/
+           Files: 312
+     Directories: 92
+  Resident Pages: 62503/64308  244M/251M  97.2%
+         Elapsed: 0.005657 seconds</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case almost the entire dataset is hot in OS page Cache.
+Generally speaking the percentage doesn&#8217;t really matter unless reads are
+missing the cache (per e.g. <a href="#cql/troubleshooting/use_tools.adoc#use-bcc-tools" class="page unresolved">cachestat</a> in which case
+having additional memory may help read performance.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="cpu-flamegraphs"><a class="anchor" href="#cpu-flamegraphs"></a>CPU Flamegraphs</h3>
+<div class="paragraph">
+<p>Cassandra often uses a lot of CPU, but telling <em>what</em> it is doing can
+prove difficult. One of the best ways to analyze Cassandra on CPU time
+is to use
+<a href="http://www.brendangregg.com/FlameGraphs/cpuflamegraphs.html">CPU
+Flamegraphs</a> which display in a useful way which areas of Cassandra code
+are using CPU. This may help narrow down a compaction problem to a
+"compaction problem dropping tombstones" or just generally help you
+narrow down what Cassandra is doing while it is having an issue. To get
+CPU flamegraphs follow the instructions for
+<a href="http://www.brendangregg.com/FlameGraphs/cpuflamegraphs.html#Java">Java
+Flamegraphs</a>.</p>
+</div>
+<div class="paragraph">
+<p>Generally:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Enable the <code>-XX:+PreserveFramePointer</code> option in Cassandra&#8217;s
+<code>jvm.options</code> configuation file. This has a negligible performance
+impact but allows you actually see what Cassandra is doing.</p>
+</li>
+<li>
+<p>Run <code>perf</code> to get some data.</p>
+</li>
+<li>
+<p>Send that data through the relevant scripts in the FlameGraph toolset
+and convert the data into a pretty flamegraph. View the resulting SVG
+image in a browser or other image browser.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>For example just cloning straight off github we first install the
+<code>perf-map-agent</code> to the location of our JVMs (assumed to be
+<code>/usr/lib/jvm</code>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo bash
+$ export JAVA_HOME=/usr/lib/jvm/java-8-oracle/
+$ cd /usr/lib/jvm
+$ git clone --depth=1 https://github.com/jvm-profiling-tools/perf-map-agent
+$ cd perf-map-agent
+$ cmake .
+$ make</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now to get a flamegraph:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ git clone --depth=1 https://github.com/brendangregg/FlameGraph
+$ sudo bash
+$ cd FlameGraph
+$ # Record traces of Cassandra and map symbols for all java processes
+$ perf record -F 49 -a -g -p &lt;CASSANDRA PID&gt; -- sleep 30; ./jmaps
+$ # Translate the data
+$ perf script &gt; cassandra_stacks
+$ cat cassandra_stacks | ./stackcollapse-perf.pl | grep -v cpu_idle | \
+    ./flamegraph.pl --color=java --hash &gt; cassandra_flames.svg</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The resulting SVG is searchable, zoomable, and generally easy to
+introspect using a browser.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="packet-capture"><a class="anchor" href="#packet-capture"></a>Packet Capture</h3>
+<div class="paragraph">
+<p>Sometimes you have to understand what queries a Cassandra node is
+performing <em>right now</em> to troubleshoot an issue. For these times trusty
+packet capture tools like <code>tcpdump</code> and
+<a href="https://www.wireshark.org/">Wireshark</a> can be very helpful to dissect
+packet captures. Wireshark even has native
+<a href="https://www.wireshark.org/docs/dfref/c/cql.html">CQL support</a> although it
+sometimes has compatibility issues with newer Cassandra protocol
+releases.</p>
+</div>
+<div class="paragraph">
+<p>To get a packet capture first capture some packets:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo tcpdump -U -s0 -i &lt;INTERFACE&gt; -w cassandra.pcap -n "tcp port 9042"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now open it up with wireshark:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ wireshark cassandra.pcap</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you don&#8217;t see CQL like statements try telling to decode as CQL by
+right clicking on a packet going to 9042 &#8594; <code>Decode as</code> &#8594; select CQL
+from the dropdown for port 9042.</p>
+</div>
+<div class="paragraph">
+<p>If you don&#8217;t want to do this manually or use a GUI, you can also use
+something like <a href="https://github.com/jolynch/cqltrace">cqltrace</a> to ease
+obtaining and parsing CQL packet captures.</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+</main>
+    </div>
+</div>
+            <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://twitter.com/cassandra?lang=en" target="_blank"><img src="../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+    <script src="../../../../assets/js/site.js"></script>
+    <script async src="../../../../assets/js/vendor/highlight.js"></script>
+    <script src="../../../../assets/js/vendor/lunr.js"></script>
+    <script src="../../../../assets/js/vendor/search.js" id="search-script" data-base-path="../../../.." data-page-path="/Cassandra/4.0/cassandra/troubleshooting/use_tools.html"></script>
+    <script async src="../../../../assets/../search-index.js"></script>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+        </div>
+    </body>
+</html>

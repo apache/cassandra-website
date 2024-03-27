@@ -1,0 +1,2138 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Database Roles | Apache Cassandra Documentation</title>
+            <link rel="stylesheet" href="../../../../../assets/css/site.css">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="Cassandra">
+    <meta name="dcterms.identifier" content="5.0">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../../../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "https://plausible.cassandra.apache.org/js/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>    </head>
+    <body class="docs-wrapper article">
+        <div class="container mx-auto relative">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta property="og:type" content="website" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+         <div class="header-social-icons text-right">
+            <a href="https://twitter.com/cassandra?lang=en" target="_blank" styles="margin-left: 20px;"><img src="../../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../../../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+            <div class="hero hero--home grad">
+                <div class="eye"></div>
+                <div id="docs-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                    <h2>Cassandra Documentation</h2>
+                </div>
+            </div>
+            <div class="body px-medium py-medium container">
+    <div class="docs-nav-bar flex flex-space-between mb-medium">
+      <div id="mobile-docs-nav-burger" class="hidden">
+        <svg viewBox="0 0 24 24" width="36" height="36" stroke="#1c81a0" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </div>
+        <div class="docs-nav-item relative">
+          <input id="search-input" type="text" placeholder="Search docs">
+        </div>
+      <div class="versions-wrapper">
+  <h4>Version:</h4>
+  <div class="nav-panel-explore" data-panel="explore">
+
+    <div id="version-toggle" class="context">
+      <span class="version">5.0</span>
+    </div>
+    <ul id="versions-list" class="components">
+      <li class="component">
+        <ul class="versions">
+          <li class="version is-latest">
+            <a href="../../../../../_/index.html">master</a>
+          </li>
+        </ul>
+      </li>
+      <li class="component is-current">
+        <ul class="versions">
+          <li class="version">
+            <a href="../../../../trunk/index.html">trunk</a>
+          </li>
+          <li class="version is-current">
+            <a href="../../../index.html">5.0</a>
+          </li>
+          <li class="version is-latest">
+            <a href="../../../../4.1/index.html">4.1</a>
+          </li>
+          <li class="version">
+            <a href="../../../../4.0/index.html">4.0</a>
+          </li>
+          <li class="version">
+            <a href="../../../../3.11/index.html">3.11</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>    </div>
+    <div class="cf relative">
+        <nav class="nav docs-nav full-800">
+<div class="nav-menu">
+<ul class="nav-list">
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../index.html">Main</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/glossary.html">Glossary</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/bugs.html">How to report bugs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/contactus.html">Contact us</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../_/development/index.html">Development</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/gettingstarted.html">Getting started</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/ide.html">Building and IDE integration</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/testing.html">Testing</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/patches.html">Contributing code changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/code_style.html">Code style</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/how_to_review.html">Review checklist</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/how_to_commit.html">How to commit</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/documentation.html">Working on documentation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/ci.html">Jenkins CI environment</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/dependencies.html">Dependency management</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/release_process.html">Release process</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item is-current-path is-active" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <span class="nav-text">Cassandra</span>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../overview/faq/index.html">FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../getting-started/index.html">Getting Started</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/cassandra-quickstart.html">Cassandra Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../installing/installing.html">Installing Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/configuring.html">Configuring Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/querying.html">Inserting and querying</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/drivers.html">Client drivers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/production.html">Production recommendations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../new/index.html">What&#8217;s new</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/java17.html">Support for Java</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../architecture/index.html">Architecture</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/overview.html">Overview</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/dynamo.html">Dynamo</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/storage-engine.html">Storage Engine</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/guarantees.html">Guarantees</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/messaging.html">Improved Internode Messaging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/streaming.html">Improved Streaming</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../data-modeling/index.html">Data Modeling</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data-modeling/intro.html">Introduction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data-modeling/data-modeling_conceptual.html">Conceptual data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data-modeling/data-modeling_rdbms.html">RDBMS design</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data-modeling/data-modeling_queries.html">Defining application queries</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data-modeling/data-modeling_logical.html">Logical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data-modeling/data-modeling_physical.html">Physical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data-modeling/data-modeling_refining.html">Evaluating and refining data models</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data-modeling/data-modeling_schema.html">Defining database schema</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data-modeling/data-modeling_tools.html">Cassandra data modeling tools</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-path is-active" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="index.html">Cassandra Query Language (CQL)</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="definitions.html">Definitions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="types.html">Data types</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="ddl.html">Data definition (DDL)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="dml.html">Data manipulation (DML)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="dynamic-data-masking.html">Dynamic Data Masking (DDM)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="operators.html">Operators</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="indexing/indexing-concepts.html">Indexing concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="indexing/sai/sai-overview.html">SAI Overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="indexing/sai/sai-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="indexing/sai/sai-faq.html">SAI FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="indexing/sai/sai-working-with.html">Working with SAI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="indexing/sai/operations/sai-operations.html">SAI operations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="indexing/2i/2i-overview.html">Secondary indexes (2i) overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="indexing/2i/2i-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="indexing/2i/2i-working-with.html">Working with 2i</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="indexing/2i/operations/2i-build.html">Rebuild 2i</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="mvs.html">Materialized views</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="functions.html">Functions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="json.html">JSON</a>
+    </span>
+  </li>
+  <li class="nav-item is-current-page is-active" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="triggers.html">Triggers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="appendices.html">Appendices</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="changes.html">Changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="SASI.html">SASI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="cql_singlefile.html">Single file of CQL information</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../vector-search/overview.html">Vector Search overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../vector-search/concepts.html">Concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../vector-search/data-modeling.html">Data Modeling</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../vector-search/vector-search-working-with.html">Working with Vector Search</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../managing/index.html">Managing</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../managing/configuration/index.html">Configuring</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/cass_yaml_file.html">cassandra.yaml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/cass_rackdc_file.html">cassandra-rackdc.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/cass_env_sh_file.html">cassandra-env.sh</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/cass_topo_file.html">cassandra-topologies.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/cass_cl_archive_file.html">commitlog-archiving.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/cass_logback_xml_file.html">logback.xml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/cass_jvm_options_file.html">jvm-* files</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/configuration.html">Liberating cassandra.yaml Parameters' Names from Their Units</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../managing/operating/index.html">Operating</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/backups.html">Backups</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/bloom_filters.html">Bloom filters</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/bulk_loading.html">Bulk loading</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/cdc.html">Change Data Capture (CDC)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/compaction/index.html">Compaction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/compression.html">Compression</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/hardware.html">Hardware</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/hints.html">Hints</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../managing/operating/logging.html">Logging</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/auditlogging.html">Audit logging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/audit_logging.html">Audit logging 2</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/fqllogging.html">Full query logging</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/metrics.html">Monitoring metrics</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/repair.html">Repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/read_repair.html">Read repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/snitch.html">Snitches</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/topo_changes.html">Topology changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/transientreplication.html">Transient replication</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/virtualtables.html">Virtual tables</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../managing/tools/index.html">Tools</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/tools/cqlsh.html">cqlsh: the CQL shell</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/tools/nodetool/nodetool.html">nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/tools/sstable/index.html">SSTable tools</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="#cassandra:managing/tools/cassandra_stress.adoc">cassandra-stress</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../troubleshooting/index.html">Troubleshooting</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../troubleshooting/finding_nodes.html">Finding misbehaving nodes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../troubleshooting/reading_logs.html">Reading Cassandra logs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../troubleshooting/use_nodetool.html">Using nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../troubleshooting/use_tools.html">Using external tools to deep-dive</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../reference/index.html">Reference</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/cql-commands/alter-table.html">ALTER TABLE</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/cql-commands/create-index.html">CREATE INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/cql-commands/create-custom-index.html">CREATE CUSTOM INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/cql-commands/create-table.html">CREATE TABLE</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/cql-commands/drop-index.html">DROP INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/cql-commands/drop-table.html">DROP TABLE</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../integrating/plugins/index.html">Plug-ins</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+</div>
+</nav>
+        <aside class="toc sidebar">
+  <div class="toc-menu"></div>
+</aside>
+        <main class="article default-main full-800" data-ceiling="topbar">
+  <div class="article-banner">
+    <p>You are viewing the documentation for a prerelease version.</p>
+  </div>
+    <div class="article-header">
+<nav class="crumbs" aria-label="breadcrumbs">
+  <ul>
+    <li class="crumb">Cassandra</li>
+    <li class="crumb"><a href="index.html">Cassandra Query Language (CQL)</a></li>
+    <li class="crumb"><a href="security.html">Security</a></li>
+  </ul>
+</nav>
+<div class="tools" role="navigation">
+  <ul>
+    <li class="tool edit"><a href="https://github.com/apache/cassandra/edit/cassandra-5.0/doc/modules/cassandra/pages/developing/cql/security.adoc" title="Edit Page" target="_blank" rel="noopener">Edit</a></li>
+  </ul>
+</div>
+  </div>
+<article class="doc">
+<h1 class="page">Database Roles</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>CQL uses database roles to represent users and group of users.
+Syntactically, a role is defined by:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bnf hljs" data-lang="bnf">role_name ::= identifier | string</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="create-role-statement"><a class="anchor" href="#create-role-statement"></a>CREATE ROLE</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Creating a role uses the <code>CREATE ROLE</code> statement:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bnf hljs" data-lang="bnf">create_role_statement ::= CREATE ROLE [ IF NOT EXISTS ] role_name
+                          [ WITH role_options# ]
+role_options ::= role_option ( AND role_option)*
+role_option ::= PASSWORD '=' string
+                | HASHED PASSWORD '=' string
+                | LOGIN '=' boolean
+                | SUPERUSER '=' boolean
+                | OPTIONS '=' map_literal
+                | ACCESS TO DATACENTERS set_literal
+                | ACCESS TO ALL DATACENTERS
+                | ACCESS FROM CIDRS set_literal
+                | ACCESS FROM ALL CIDRS</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">CREATE ROLE new_role;
+CREATE ROLE alice WITH PASSWORD = 'password_a' AND LOGIN = true;
+CREATE ROLE alice WITH HASHED PASSWORD = '$2a$10$JSJEMFm6GeaW9XxT5JIheuEtPvat6i7uKbnTcxX3c1wshIIsGyUtG' AND LOGIN = true;
+CREATE ROLE bob WITH PASSWORD = 'password_b' AND LOGIN = true AND SUPERUSER = true;
+CREATE ROLE carlos WITH OPTIONS = { 'custom_option1' : 'option1_value', 'custom_option2' : 99 };
+CREATE ROLE alice WITH PASSWORD = 'password_a' AND LOGIN = true AND ACCESS TO DATACENTERS {'DC1', 'DC3'};
+CREATE ROLE alice WITH PASSWORD = 'password_a' AND LOGIN = true AND ACCESS TO ALL DATACENTERS;
+CREATE ROLE bob WITH LOGIN = true and PASSWORD = 'password_d' AND ACCESS FROM CIDRS { 'region1', 'region2' };
+CREATE ROLE hob WITH LOGIN = true and PASSWORD = 'password_c' AND ACCESS FROM ALL CIDRS;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default roles do not possess <code>LOGIN</code> privileges or <code>SUPERUSER</code>
+status.</p>
+</div>
+<div class="paragraph">
+<p><a href="#cql-permissions">Permissions</a> on database resources are granted to
+roles; types of resources include keyspaces, tables, functions and roles
+themselves. Roles may be granted to other roles to create hierarchical
+permissions structures; in these hierarchies, permissions and
+<code>SUPERUSER</code> status are inherited, but the <code>LOGIN</code> privilege is not.</p>
+</div>
+<div class="paragraph">
+<p>If a role has the <code>LOGIN</code> privilege, clients may identify as that role
+when connecting. For the duration of that connection, the client will
+acquire any roles and privileges granted to that role.</p>
+</div>
+<div class="paragraph">
+<p>Only a client with with the <code>CREATE</code> permission on the database roles
+resource may issue <code>CREATE ROLE</code> requests (see the
+<a href="#cql-permissions">relevant section</a>), unless the client is a
+<code>SUPERUSER</code>. Role management in Cassandra is pluggable and custom
+implementations may support only a subset of the listed options.</p>
+</div>
+<div class="paragraph">
+<p>Role names should be quoted if they contain non-alphanumeric characters.</p>
+</div>
+<div class="sect2">
+<h3 id="setting-credentials-for-internal-authentication"><a class="anchor" href="#setting-credentials-for-internal-authentication"></a>Setting credentials for internal authentication</h3>
+<div class="paragraph">
+<p>Use the <code>WITH PASSWORD</code> clause to set a password for internal
+authentication, enclosing the password in single quotation marks.</p>
+</div>
+<div class="paragraph">
+<p>If internal authentication has not been set up or the role does not have
+<code>LOGIN</code> privileges, the <code>WITH PASSWORD</code> clause is not necessary.</p>
+</div>
+<div class="paragraph">
+<p>USE <code>WITH HASHED PASSWORD</code> to provide the jBcrypt hashed password directly. See the <code>hash_password</code> tool.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="restricting-connections-to-specific-datacenters"><a class="anchor" href="#restricting-connections-to-specific-datacenters"></a>Restricting connections to specific datacenters</h3>
+<div class="paragraph">
+<p>If a <code>network_authorizer</code> has been configured, you can restrict login
+roles to specific datacenters with the <code>ACCESS TO DATACENTERS</code> clause
+followed by a set literal of datacenters the user can access. Not
+specifiying datacenters implicitly grants access to all datacenters. The
+clause <code>ACCESS TO ALL DATACENTERS</code> can be used for explicitness, but
+there&#8217;s no functional difference.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="restricting-connections-from-specific-cidr-groups"><a class="anchor" href="#restricting-connections-from-specific-cidr-groups"></a>Restricting connections from specific CIDR groups</h3>
+<div class="paragraph">
+<p>If a <code>cidr_authorizer</code> has been configured, you can restrict roles to login
+only from specific regions, aka CIDR groups, with the <code>ACCESS FROM CIDRS</code> clause
+followed by a set literal of CIDR groups the user can access from. Not
+specifying CIDR groups implicitly grants access from all CIDR groups. The
+clause <code>ACCESS FROM ALL CIDRS</code> can be used for explicitness, but there&#8217;s no
+functional difference. This clause can be also be used to remove any CIDR
+groups restrictions. Valid CIDR groups should be used with <code>ACCESS FROM CIDRS</code>
+clause. <code>nodetool list-cidrgroups</code> command can be used to see available CIDR groups
+in the Cluster.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="creating-a-role-conditionally"><a class="anchor" href="#creating-a-role-conditionally"></a>Creating a role conditionally</h3>
+<div class="paragraph">
+<p>Attempting to create an existing role results in an invalid query
+condition unless the <code>IF NOT EXISTS</code> option is used. If the option is
+used and the role exists, the statement is a no-op:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">CREATE ROLE other_role;
+CREATE ROLE IF NOT EXISTS other_role;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="alter-role-statement"><a class="anchor" href="#alter-role-statement"></a>ALTER ROLE</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Altering a role options uses the <code>ALTER ROLE</code> statement:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bnf hljs" data-lang="bnf">alter_role_statement ::= ALTER ROLE [ IF EXISTS ] role_name WITH role_options</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">ALTER ROLE bob WITH PASSWORD = 'PASSWORD_B' AND SUPERUSER = false;
+ALTER ROLE bob WITH HASHED PASSWORD = '$2a$10$JSJEMFm6GeaW9XxT5JIheuEtPvat6i7uKbnTcxX3c1wshIIsGyUtG' AND SUPERUSER = false;
+ALTER ROLE rob WITH LOGIN = true and PASSWORD = 'password_c' AND ACCESS FROM ALL CIDRS;
+ALTER ROLE hob WITH LOGIN = true and PASSWORD = 'password_d' AND ACCESS FROM CIDRS { 'region1' };</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the role does not exist, the statement will return an error, unless <code>IF EXISTS</code> is used in which case the operation is a no-op.</p>
+</div>
+<div class="paragraph">
+<p>USE <code>WITH HASHED PASSWORD</code> to provide the jBcrypt hashed password directly. See the <code>hash_password</code> tool.</p>
+</div>
+<div class="sect2">
+<h3 id="restricting-connections-to-specific-datacenters-2"><a class="anchor" href="#restricting-connections-to-specific-datacenters-2"></a>Restricting connections to specific datacenters</h3>
+<div class="paragraph">
+<p>If a <code>network_authorizer</code> has been configured, you can restrict login
+roles to specific datacenters with the <code>ACCESS TO DATACENTERS</code> clause
+followed by a set literal of datacenters the user can access. To remove
+any data center restrictions, use the <code>ACCESS TO ALL DATACENTERS</code>
+clause.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="restricting-connections-from-specific-cidr-groups-2"><a class="anchor" href="#restricting-connections-from-specific-cidr-groups-2"></a>Restricting connections from specific CIDR groups</h3>
+<div class="paragraph">
+<p>If a <code>cidr_authorizer</code> has been configured, you can restrict roles to login
+only from specific regions, aka CIDR groups, with the <code>ACCESS FROM CIDRS</code> clause
+followed by a set literal of CIDR groups the user can access from. Not
+specifying CIDR groups implicitly grants access from all CIDR groups. The
+clause <code>ACCESS FROM ALL CIDRS</code> can be used for explicitness, but there&#8217;s no
+functional difference. This clause can be also be used to remove any CIDR
+groups restrictions. Valid CIDR groups should be used with <code>ACCESS FROM CIDRS</code>
+clause. <code>nodetool list-cidrgroups</code> command can be used to see available CIDR groups
+in the Cluster.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="conditions-on-executing-alter-role-statements"><a class="anchor" href="#conditions-on-executing-alter-role-statements"></a>Conditions on executing <code>ALTER ROLE</code> statements:</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>a client must have <code>SUPERUSER</code> status to alter the <code>SUPERUSER</code> status
+of another role</p>
+</li>
+<li>
+<p>a client cannot alter the <code>SUPERUSER</code> status of any role it currently
+holds</p>
+</li>
+<li>
+<p>a client can only modify certain properties of the role with which it
+identified at login (e.g. <code>PASSWORD</code>)</p>
+</li>
+<li>
+<p>to modify properties of a role, the client must be granted <code>ALTER</code>
+<code>permission &lt;cql-permissions&gt;</code> on that role</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="drop-role-statement"><a class="anchor" href="#drop-role-statement"></a>DROP ROLE</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Dropping a role uses the <code>DROP ROLE</code> statement:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bnf hljs" data-lang="bnf">drop_role_statement ::= DROP ROLE [ IF EXISTS ] role_name</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>DROP ROLE</code> requires the client to have <code>DROP</code>
+<code>permission &lt;cql-permissions&gt;</code> on the role in question. In addition,
+client may not <code>DROP</code> the role with which it identified at login.
+Finally, only a client with <code>SUPERUSER</code> status may <code>DROP</code> another
+<code>SUPERUSER</code> role.</p>
+</div>
+<div class="paragraph">
+<p>Attempting to drop a role which does not exist results in an invalid
+query condition unless the <code>IF EXISTS</code> option is used. If the option is
+used and the role does not exist the statement is a no-op.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>DROP ROLE intentionally does not terminate any open user sessions.
+Currently connected sessions will remain connected and will retain the
+ability to perform any database actions which do not require
+<a href="#authorization">authorization</a>.
+However, if authorization is enabled, <a href="#cql-permissions">permissions</a> of the dropped role are also revoked,
+subject to the <a href="#auth-caching">caching options</a> configured in <a href="#cassandra:developing/cql/configuring.adoc#cassandra.yaml" class="page unresolved">cassandra-yaml</a> file.
+Should a dropped role be subsequently recreated and have new <a href="#security.adoc#grant-permission-statement" class="page unresolved">permissions</a> or
+<a href="#security.adoc#grant-role-statement" class="page unresolved">roles</a>` granted to it, any client sessions still
+connected will acquire the newly granted permissions and roles.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="grant-role-statement"><a class="anchor" href="#grant-role-statement"></a>GRANT ROLE</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Granting a role to another uses the <code>GRANT ROLE</code> statement:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bnf hljs" data-lang="bnf">grant_role_statement ::= GRANT role_name TO role_name</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">GRANT report_writer TO alice;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This statement grants the <code>report_writer</code> role to <code>alice</code>. Any
+permissions granted to <code>report_writer</code> are also acquired by <code>alice</code>.</p>
+</div>
+<div class="paragraph">
+<p>Roles are modelled as a directed acyclic graph, so circular grants are
+not permitted. The following examples result in error conditions:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">GRANT role_a TO role_b;
+GRANT role_b TO role_a;
+
+GRANT role_a TO role_b;
+GRANT role_b TO role_c;
+GRANT role_c TO role_a;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="revoke-role-statement"><a class="anchor" href="#revoke-role-statement"></a>REVOKE ROLE</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Revoking a role uses the <code>REVOKE ROLE</code> statement:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bnf hljs" data-lang="bnf">revoke_role_statement ::= REVOKE role_name FROM role_name</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">REVOKE report_writer FROM alice;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This statement revokes the <code>report_writer</code> role from <code>alice</code>. Any
+permissions that <code>alice</code> has acquired via the <code>report_writer</code> role are
+also revoked.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="list-roles-statement"><a class="anchor" href="#list-roles-statement"></a>LIST ROLES</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>All the known roles (in the system or granted to specific role) can be
+listed using the <code>LIST ROLES</code> statement:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bnf hljs" data-lang="bnf">list_roles_statement ::= LIST ROLES [ OF role_name] [ NORECURSIVE ]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">LIST ROLES;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>returns all known roles in the system, this requires <code>DESCRIBE</code>
+permission on the database roles resource.</p>
+</div>
+<div class="paragraph">
+<p>This example enumerates all roles granted to <code>alice</code>, including those transitively
+acquired:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">LIST ROLES OF alice;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This example lists all roles directly granted to <code>bob</code> without including any of the
+transitively acquired ones:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">LIST ROLES OF bob NORECURSIVE;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="users"><a class="anchor" href="#users"></a>Users</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Prior to the introduction of roles in Cassandra 2.2, authentication and
+authorization were based around the concept of a <code>USER</code>. For backward
+compatibility, the legacy syntax has been preserved with <code>USER</code> centric
+statements becoming synonyms for the <code>ROLE</code> based equivalents. In other
+words, creating/updating a user is just a different syntax for
+creating/updating a role.</p>
+</div>
+<div class="sect2">
+<h3 id="create-user-statement"><a class="anchor" href="#create-user-statement"></a>CREATE USER</h3>
+<div class="paragraph">
+<p>Creating a user uses the <code>CREATE USER</code> statement:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bnf hljs" data-lang="bnf">create_user_statement ::= CREATE USER [ IF NOT EXISTS ] role_name
+                          [ WITH [ HASHED ] PASSWORD string ]
+                          [ user_option ]
+user_option: SUPERUSER | NOSUPERUSER</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">CREATE USER alice WITH PASSWORD 'password_a' SUPERUSER;
+CREATE USER bob WITH PASSWORD 'password_b' NOSUPERUSER;
+CREATE USER bob WITH HASHED PASSWORD '$2a$10$JSJEMFm6GeaW9XxT5JIheuEtPvat6i7uKbnTcxX3c1wshIIsGyUtG' NOSUPERUSER;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>CREATE USER</code> command is equivalent to <code>CREATE ROLE</code> where the <code>LOGIN</code> option is <code>true</code>.
+So, the following pairs of statements are equivalent:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">CREATE USER alice WITH PASSWORD 'password_a' SUPERUSER;
+CREATE ROLE alice WITH PASSWORD = 'password_a' AND LOGIN = true AND SUPERUSER = true;
+
+CREATE USER IF NOT EXISTS alice WITH PASSWORD 'password_a' SUPERUSER;
+CREATE ROLE IF NOT EXISTS alice WITH PASSWORD = 'password_a' AND LOGIN = true AND SUPERUSER = true;
+
+CREATE USER alice WITH PASSWORD 'password_a' NOSUPERUSER;
+CREATE ROLE alice WITH PASSWORD = 'password_a' AND LOGIN = true AND SUPERUSER = false;
+
+CREATE USER alice WITH PASSWORD 'password_a' NOSUPERUSER;
+CREATE ROLE alice WITH PASSWORD = 'password_a' AND LOGIN = true;
+
+CREATE USER alice WITH PASSWORD 'password_a';
+CREATE ROLE alice WITH PASSWORD = 'password_a' AND LOGIN = true;
+
+CREATE ROLE rob WITH LOGIN = true and PASSWORD = 'password_c' AND ACCESS FROM ALL CIDRS;
+CREATE ROLE hob WITH LOGIN = true and PASSWORD = 'password_d' AND ACCESS FROM CIDRS { 'region1' };</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="alter-user-statement"><a class="anchor" href="#alter-user-statement"></a>ALTER USER</h3>
+<div class="paragraph">
+<p>Altering the options of a user uses the <code>ALTER USER</code> statement:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bnf hljs" data-lang="bnf">alter_user_statement ::= ALTER USER [ IF EXISTS ] role_name [ WITH [ HASHED ] PASSWORD string] [ user_option]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the role does not exist, the statement will return an error, unless <code>IF EXISTS</code> is used in which case the operation is a no-op.
+For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">ALTER USER alice WITH PASSWORD 'PASSWORD_A';
+ALTER USER alice WITH HASHED PASSWORD '$2a$10$JSJEMFm6GeaW9XxT5JIheuEtPvat6i7uKbnTcxX3c1wshIIsGyUtG';
+ALTER USER bob SUPERUSER;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="drop-user-statement"><a class="anchor" href="#drop-user-statement"></a>DROP USER</h3>
+<div class="paragraph">
+<p>Dropping a user uses the <code>DROP USER</code> statement:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bnf hljs" data-lang="bnf">drop_user_statement ::= DROP USER [ IF EXISTS ] role_name</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="list-users-statement"><a class="anchor" href="#list-users-statement"></a>LIST USERS</h3>
+<div class="paragraph">
+<p>Existing users can be listed using the <code>LIST USERS</code> statement:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bnf hljs" data-lang="bnf">list_users_statement::= LIST USERS</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that this statement is equivalent to <a href="#security.adoc#list-roles-statement" class="page unresolved"><code>LIST ROLES</a>, but only roles with the `LOGIN</code> privilege are included in the output.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="data-control"><a class="anchor" href="#data-control"></a>Data Control</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="cql-permissions"><a class="anchor" href="#cql-permissions"></a>Permissions</h3>
+<div class="paragraph">
+<p>Permissions on resources are granted to roles; there are several
+different types of resources in Cassandra and each type is modelled
+hierarchically:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The hierarchy of Data resources, Keyspaces and Tables has the
+structure <code>ALL KEYSPACES</code> &#8594; <code>KEYSPACE</code> &#8594; <code>TABLE</code>.</p>
+</li>
+<li>
+<p>Function resources have the structure <code>ALL FUNCTIONS</code> &#8594; <code>KEYSPACE</code> &#8594;
+<code>FUNCTION</code></p>
+</li>
+<li>
+<p>Resources representing roles have the structure <code>ALL ROLES</code> &#8594; <code>ROLE</code></p>
+</li>
+<li>
+<p>Resources representing JMX ObjectNames, which map to sets of
+MBeans/MXBeans, have the structure <code>ALL MBEANS</code> &#8594; <code>MBEAN</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Permissions can be granted at any level of these hierarchies and they
+flow downwards. So granting a permission on a resource higher up the
+chain automatically grants that same permission on all resources lower
+down. For example, granting <code>SELECT</code> on a <code>KEYSPACE</code> automatically
+grants it on all <code>TABLES</code> in that <code>KEYSPACE</code>. Likewise, granting a
+permission on <code>ALL FUNCTIONS</code> grants it on every defined function,
+regardless of which keyspace it is scoped in. It is also possible to
+grant permissions on all functions scoped to a particular keyspace.</p>
+</div>
+<div class="paragraph">
+<p>Modifications to permissions are visible to existing client sessions;
+that is, connections need not be re-established following permissions
+changes.</p>
+</div>
+<div class="paragraph">
+<p>The full set of available permissions is:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>CREATE</code></p>
+</li>
+<li>
+<p><code>ALTER</code></p>
+</li>
+<li>
+<p><code>DROP</code></p>
+</li>
+<li>
+<p><code>SELECT</code></p>
+</li>
+<li>
+<p><code>MODIFY</code></p>
+</li>
+<li>
+<p><code>AUTHORIZE</code></p>
+</li>
+<li>
+<p><code>DESCRIBE</code></p>
+</li>
+<li>
+<p><code>EXECUTE</code></p>
+</li>
+<li>
+<p><code>UNMASK</code></p>
+</li>
+<li>
+<p><code>SELECT_MASKED</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Not all permissions are applicable to every type of resource. For
+instance, <code>EXECUTE</code> is only relevant in the context of functions or
+mbeans; granting <code>EXECUTE</code> on a resource representing a table is
+nonsensical. Attempting to <code>GRANT</code> a permission on resource to which it
+cannot be applied results in an error response. The following
+illustrates which permissions can be granted on which types of resource,
+and which statements are enabled by that permission.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Permission</th>
+<th class="tableblock halign-left valign-top">Resource</th>
+<th class="tableblock halign-left valign-top">Operations</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CREATE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL KEYSPACES</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CREATE KEYSPACE</code> and <code>CREATE TABLE</code> in any keyspace</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CREATE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>KEYSPACE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CREATE TABLE</code> in specified keyspace</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CREATE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL FUNCTIONS</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CREATE FUNCTION</code> in any keyspace and <code>CREATE AGGREGATE</code> in any keyspace</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CREATE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL FUNCTIONS IN KEYSPACE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CREATE FUNCTION</code> and <code>CREATE AGGREGATE</code> in specified keyspace</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CREATE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL ROLES</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CREATE ROLE</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALTER</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL KEYSPACES</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALTER KEYSPACE</code> and <code>ALTER TABLE</code> in any keyspace</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALTER</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>KEYSPACE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALTER KEYSPACE</code> and <code>ALTER TABLE</code> in specified keyspace</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALTER</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>TABLE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALTER TABLE</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALTER</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL FUNCTIONS</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CREATE FUNCTION</code> and <code>CREATE AGGREGATE</code>: replacing any existing</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALTER</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL FUNCTIONS IN KEYSPACE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CREATE FUNCTION</code> and <code>CREATE AGGREGATE</code>: replacing existing in specified keyspace</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALTER</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>FUNCTION</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CREATE FUNCTION</code> and <code>CREATE AGGREGATE</code>: replacing existing</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALTER</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL ROLES</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALTER ROLE</code> on any role</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALTER</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ROLE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALTER ROLE</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DROP</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL KEYSPACES</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DROP KEYSPACE</code> and <code>DROP TABLE</code> in any keyspace</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DROP</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>KEYSPACE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DROP TABLE</code> in specified keyspace</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DROP</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>TABLE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DROP TABLE</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DROP</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL FUNCTIONS</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DROP FUNCTION</code> and <code>DROP AGGREGATE</code> in any keyspace</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DROP</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL FUNCTIONS IN KEYSPACE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DROP FUNCTION</code> and <code>DROP AGGREGATE</code> in specified keyspace</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DROP</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>FUNCTION</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DROP FUNCTION</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DROP</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL ROLES</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DROP ROLE</code> on any role</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DROP</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ROLE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DROP ROLE</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SELECT</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL KEYSPACES</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SELECT</code> on any table</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SELECT</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>KEYSPACE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SELECT</code> on any table in specified keyspace</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SELECT</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>TABLE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SELECT</code> on specified table</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SELECT</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL MBEANS</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Call getter methods on any mbean</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SELECT</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MBEANS</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Call getter methods on any mbean matching a wildcard pattern</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SELECT</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MBEAN</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Call getter methods on named mbean</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MODIFY</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL KEYSPACES</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code> and <code>TRUNCATE</code> on any table</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MODIFY</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>KEYSPACE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code> and <code>TRUNCATE</code> on any table in specified
+keyspace</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MODIFY</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>TABLE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code> and <code>TRUNCATE</code> on specified table</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MODIFY</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL MBEANS</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Call setter methods on any mbean</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MODIFY</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MBEANS</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Call setter methods on any mbean matching a wildcard pattern</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MODIFY</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MBEAN</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Call setter methods on named mbean</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AUTHORIZE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL KEYSPACES</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>GRANT PERMISSION</code> and <code>REVOKE PERMISSION</code> on any table</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AUTHORIZE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>KEYSPACE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>GRANT PERMISSION</code> and <code>REVOKE PERMISSION</code> on any table in specified keyspace</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AUTHORIZE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>TABLE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>GRANT PERMISSION</code> and <code>REVOKE PERMISSION</code> on specified table</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AUTHORIZE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL FUNCTIONS</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>GRANT PERMISSION</code> and <code>REVOKE PERMISSION</code> on any function</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AUTHORIZE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL FUNCTIONS IN KEYSPACE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>GRANT PERMISSION</code> and <code>REVOKE PERMISSION</code> in specified keyspace</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AUTHORIZE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>FUNCTION</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>GRANT PERMISSION</code> and <code>REVOKE PERMISSION</code> on specified function</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AUTHORIZE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL MBEANS</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>GRANT PERMISSION</code> and <code>REVOKE PERMISSION</code> on any mbean</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AUTHORIZE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MBEANS</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>GRANT PERMISSION</code> and <code>REVOKE PERMISSION</code> on any mbean matching a wildcard pattern</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AUTHORIZE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MBEAN</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>GRANT PERMISSION</code> and <code>REVOKE PERMISSION</code> on named mbean</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AUTHORIZE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL ROLES</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>GRANT ROLE</code> and <code>REVOKE ROLE</code> on any role</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AUTHORIZE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ROLES</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>GRANT ROLE</code> and <code>REVOKE ROLE</code> on specified roles</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DESCRIBE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL ROLES</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LIST ROLES</code> on all roles or only roles granted to another, specified role</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DESCRIBE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL MBEANS</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Retrieve metadata about any mbean from the platform&#8217;s MBeanServer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DESCRIBE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MBEANS</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Retrieve metadata about any mbean matching a wildcard patter from the
+platform&#8217;s MBeanServer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DESCRIBE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MBEAN</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Retrieve metadata about a named mbean from the platform&#8217;s MBeanServer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>EXECUTE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL FUNCTIONS</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SELECT</code>, <code>INSERT</code> and <code>UPDATE</code> using any function, and use of any
+function in <code>CREATE AGGREGATE</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>EXECUTE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL FUNCTIONS IN KEYSPACE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SELECT</code>, <code>INSERT</code> and <code>UPDATE</code> using any function in specified keyspace
+and use of any function in keyspace in <code>CREATE AGGREGATE</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>EXECUTE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>FUNCTION</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SELECT</code>, <code>INSERT</code> and <code>UPDATE</code> using specified function and use of the function in <code>CREATE AGGREGATE</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>EXECUTE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL MBEANS</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Execute operations on any mbean</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>EXECUTE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MBEANS</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Execute operations on any mbean matching a wildcard pattern</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>EXECUTE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MBEAN</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Execute operations on named mbean</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>UNMASK</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL KEYSPACES</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">See the clear contents of masked columns on any table</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>UNMASK</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>KEYSPACE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">See the clear contents of masked columns on any table in keyspace</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>UNMASK</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>TABLE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">See the clear contents of masked columns on the specified table</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SELECT_MASKED</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL KEYSPACES</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SELECT</code> restricting masked columns on any table</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SELECT_MASKED</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>KEYSPACE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SELECT</code> restricting masked columns on any table in specified keyspace</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SELECT_MASKED</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>TABLE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SELECT</code> restricting masked columns on the specified table</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="grant-permission-statement"><a class="anchor" href="#grant-permission-statement"></a>GRANT PERMISSION</h3>
+<div class="paragraph">
+<p>Granting a permission uses the <code>GRANT PERMISSION</code> statement:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bnf hljs" data-lang="bnf">grant_permission_statement ::= GRANT permissions ON resource TO role_name
+permissions ::= ALL [ PERMISSIONS ] | permission [ PERMISSION ]
+permission ::= CREATE | ALTER | DROP | SELECT | MODIFY | AUTHORIZE | DESCRIBE | EXECUTE | UNMASK | SELECT_MASKED
+resource ::=    ALL KEYSPACES
+                | KEYSPACE keyspace_name
+                | [ TABLE ] table_name
+                | ALL ROLES
+                | ROLE role_name
+                | ALL FUNCTIONS [ IN KEYSPACE keyspace_name ]
+                | FUNCTION function_name '(' [ cql_type( ',' cql_type )* ] ')'
+                | ALL MBEANS
+                | ( MBEAN | MBEANS ) string</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">GRANT SELECT ON ALL KEYSPACES TO data_reader;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This example gives any user with the role <code>data_reader</code> permission to execute
+<code>SELECT</code> statements on any table across all keyspaces:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">GRANT MODIFY ON KEYSPACE keyspace1 TO data_writer;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To give any user with the role <code>data_writer</code> permission to perform
+<code>UPDATE</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code> and <code>TRUNCATE</code> queries on all
+tables in the <code>keyspace1</code> keyspace:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">GRANT DROP ON keyspace1.table1 TO schema_owner;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To give any user with the <code>schema_owner</code> role permissions to <code>DROP</code> a specific
+<code>keyspace1.table1</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">GRANT EXECUTE ON FUNCTION keyspace1.user_function( int ) TO report_writer;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command grants any user with the <code>report_writer</code> role permission to execute
+<code>SELECT</code>, <code>INSERT</code> and <code>UPDATE</code> queries which use the function
+<code>keyspace1.user_function( int )</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">GRANT DESCRIBE ON ALL ROLES TO role_admin;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This grants any user with the <code>role_admin</code> role permission to view any
+and all roles in the system with a <code>LIST ROLES</code> statement.</p>
+</div>
+<div class="sect3">
+<h4 id="grant-all"><a class="anchor" href="#grant-all"></a>GRANT ALL</h4>
+<div class="paragraph">
+<p>When the <code>GRANT ALL</code> form is used, the appropriate set of permissions is
+determined automatically based on the target resource.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="automatic-granting"><a class="anchor" href="#automatic-granting"></a>Automatic Granting</h4>
+<div class="paragraph">
+<p>When a resource is created, via a <code>CREATE KEYSPACE</code>, <code>CREATE TABLE</code>,
+<code>CREATE FUNCTION</code>, <code>CREATE AGGREGATE</code> or <code>CREATE ROLE</code> statement, the
+creator (the role the database user who issues the statement is
+identified as), is automatically granted all applicable permissions on
+the new resource.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="revoke-permission-statement"><a class="anchor" href="#revoke-permission-statement"></a>REVOKE PERMISSION</h3>
+<div class="paragraph">
+<p>Revoking a permission from a role uses the <code>REVOKE PERMISSION</code>
+statement:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bnf hljs" data-lang="bnf">revoke_permission_statement ::= REVOKE permissions ON resource FROM role_name</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">REVOKE SELECT ON ALL KEYSPACES FROM data_reader;
+REVOKE MODIFY ON KEYSPACE keyspace1 FROM data_writer;
+REVOKE DROP ON keyspace1.table1 FROM schema_owner;
+REVOKE EXECUTE ON FUNCTION keyspace1.user_function( int ) FROM report_writer;
+REVOKE DESCRIBE ON ALL ROLES FROM role_admin;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Because of their function in normal driver operations, certain tables
+cannot have their <code>SELECT</code> permissions revoked. The
+following tables will be available to all authorized users regardless of
+their assigned role:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">* `system_schema.keyspaces`
+* `system_schema.columns`
+* `system_schema.tables`
+* `system.local`
+* `system.peers`</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="list-permissions-statement"><a class="anchor" href="#list-permissions-statement"></a>LIST PERMISSIONS</h3>
+<div class="paragraph">
+<p>Listing granted permissions uses the <code>LIST PERMISSIONS</code> statement:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bnf hljs" data-lang="bnf">list_permissions_statement ::= LIST permissions [ ON resource] [ OF role_name[ NORECURSIVE ] ]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">LIST ALL PERMISSIONS OF alice;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Show all permissions granted to <code>alice</code>, including those acquired
+transitively from any other roles:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">LIST ALL PERMISSIONS ON keyspace1.table1 OF bob;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Show all permissions on <code>keyspace1.table1</code> granted to <code>bob</code>, including
+those acquired transitively from any other roles. This also includes any
+permissions higher up the resource hierarchy which can be applied to
+<code>keyspace1.table1</code>. For example, should <code>bob</code> have <code>ALTER</code> permission on
+<code>keyspace1</code>, that would be included in the results of this query. Adding
+the <code>NORECURSIVE</code> switch restricts the results to only those permissions
+which were directly granted to <code>bob</code> or one of `bob&#8217;s roles:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">LIST SELECT PERMISSIONS OF carlos;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Show any permissions granted to <code>carlos</code> or any of <code>carlos&#8217;s roles,
+limited to `SELECT</code> permissions on any resource.</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+</main>
+    </div>
+</div>
+            <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../../../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://twitter.com/cassandra?lang=en" target="_blank"><img src="../../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../../../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+    <script src="../../../../../assets/js/site.js"></script>
+    <script async src="../../../../../assets/js/vendor/highlight.js"></script>
+    <script src="../../../../../assets/js/vendor/lunr.js"></script>
+    <script src="../../../../../assets/js/vendor/search.js" id="search-script" data-base-path="../../../../.." data-page-path="/Cassandra/5.0/cassandra/developing/cql/security.html"></script>
+    <script async src="../../../../../assets/../search-index.js"></script>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+        </div>
+    </body>
+</html>

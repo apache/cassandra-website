@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Monitor SAI indexes | Apache Cassandra Documentation</title>
+            <link rel="stylesheet" href="../../../../../../../../assets/css/site.css">
+    <meta name="description" content="Use metrics to monitor secondary indexes that were created with Storage-Attached Indexing (SAI).">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="Cassandra">
+    <meta name="dcterms.identifier" content="trunk">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../../../../../../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "https://plausible.cassandra.apache.org/js/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>    </head>
+    <body class="docs-wrapper article">
+        <div class="container mx-auto relative">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta property="og:type" content="website" />
+	<meta property="og:description" content="" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+         <div class="header-social-icons text-right">
+            <a href="https://twitter.com/cassandra?lang=en" target="_blank" styles="margin-left: 20px;"><img src="../../../../../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../../../../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../../../../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../../../../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../../../../../../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../../../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+            <div class="hero hero--home grad">
+                <div class="eye"></div>
+                <div id="docs-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                    <h2>Cassandra Documentation</h2>
+                </div>
+            </div>
+            <div class="body px-medium py-medium container">
+    <div class="docs-nav-bar flex flex-space-between mb-medium">
+      <div id="mobile-docs-nav-burger" class="hidden">
+        <svg viewBox="0 0 24 24" width="36" height="36" stroke="#1c81a0" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </div>
+        <div class="docs-nav-item relative">
+          <input id="search-input" type="text" placeholder="Search docs">
+        </div>
+      <div class="versions-wrapper">
+  <h4>Version:</h4>
+  <div class="nav-panel-explore" data-panel="explore">
+
+    <div id="version-toggle" class="context">
+      <span class="version">trunk</span>
+    </div>
+    <ul id="versions-list" class="components">
+      <li class="component">
+        <ul class="versions">
+          <li class="version is-latest">
+            <a href="../../../../../../../../_/index.html">master</a>
+          </li>
+        </ul>
+      </li>
+      <li class="component is-current">
+        <ul class="versions">
+          <li class="version is-current">
+            <a href="../../../../../../index.html">trunk</a>
+          </li>
+          <li class="version">
+            <a href="../../../../../../../5.0/index.html">5.0</a>
+          </li>
+          <li class="version is-latest">
+            <a href="../../../../../../../4.1/index.html">4.1</a>
+          </li>
+          <li class="version">
+            <a href="../../../../../../../4.0/index.html">4.0</a>
+          </li>
+          <li class="version">
+            <a href="../../../../../../../3.11/index.html">3.11</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>    </div>
+    <div class="cf relative">
+        <nav class="nav docs-nav full-800">
+<div class="nav-menu">
+<ul class="nav-list">
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../../index.html">Main</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../../_/glossary.html">Glossary</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../../_/bugs.html">How to report bugs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../../_/contactus.html">Contact us</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../../../../_/development/index.html">Development</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../../_/development/gettingstarted.html">Getting started</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../../_/development/ide.html">Building and IDE integration</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../../_/development/testing.html">Testing</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../../_/development/patches.html">Contributing code changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../../_/development/code_style.html">Code style</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../../_/development/how_to_review.html">Review checklist</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../../_/development/how_to_commit.html">How to commit</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../../_/development/documentation.html">Working on documentation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../../_/development/ci.html">Jenkins CI environment</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../../_/development/dependencies.html">Dependency management</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../../../../_/development/release_process.html">Release process</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <span class="nav-text">Cassandra</span>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../overview/faq/index.html">FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../getting-started/index.html">Getting Started</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../getting-started/cassandra-quickstart.html">Cassandra Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../installing/installing.html">Installing Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../getting-started/configuring.html">Configuring Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../getting-started/querying.html">Inserting and querying</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../getting-started/drivers.html">Client drivers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../getting-started/production.html">Production recommendations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../new/index.html">What&#8217;s new</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../reference/java17.html">Support for Java</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../architecture/index.html">Architecture</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../architecture/overview.html">Overview</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../architecture/dynamo.html">Dynamo</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../architecture/storage-engine.html">Storage Engine</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../architecture/guarantees.html">Guarantees</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../architecture/messaging.html">Improved Internode Messaging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../architecture/streaming.html">Improved Streaming</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../data-modeling/index.html">Data Modeling</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../data-modeling/intro.html">Introduction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../data-modeling/data-modeling_conceptual.html">Conceptual data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../data-modeling/data-modeling_rdbms.html">RDBMS design</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../data-modeling/data-modeling_queries.html">Defining application queries</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../data-modeling/data-modeling_logical.html">Logical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../data-modeling/data-modeling_physical.html">Physical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../data-modeling/data-modeling_refining.html">Evaluating and refining data models</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../data-modeling/data-modeling_schema.html">Defining database schema</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../data-modeling/data-modeling_tools.html">Cassandra data modeling tools</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../index.html">Cassandra Query Language (CQL)</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../definitions.html">Definitions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../types.html">Data types</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../ddl.html">Data definition (DDL)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../dml.html">Data manipulation (DML)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../dynamic-data-masking.html">Dynamic Data Masking (DDM)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../operators.html">Operators</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../indexing-concepts.html">Indexing concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../sai-overview.html">SAI Overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../sai-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../sai-faq.html">SAI FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../sai-working-with.html">Working with SAI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="sai-operations.html">SAI operations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../2i/2i-overview.html">Secondary indexes (2i) overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../2i/2i-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../2i/2i-working-with.html">Working with 2i</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../2i/operations/2i-build.html">Rebuild 2i</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../mvs.html">Materialized views</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../functions.html">Functions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../json.html">JSON</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../triggers.html">Triggers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../appendices.html">Appendices</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../changes.html">Changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../SASI.html">SASI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../cql_singlefile.html">Single file of CQL information</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../vector-search/overview.html">Vector Search overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../vector-search/concepts.html">Concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../vector-search/data-modeling.html">Data Modeling</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../vector-search/vector-search-working-with.html">Working with Vector Search</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../managing/index.html">Managing</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../managing/configuration/index.html">Configuring</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/configuration/cass_yaml_file.html">cassandra.yaml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/configuration/cass_rackdc_file.html">cassandra-rackdc.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/configuration/cass_env_sh_file.html">cassandra-env.sh</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/configuration/cass_topo_file.html">cassandra-topologies.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/configuration/cass_cl_archive_file.html">commitlog-archiving.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/configuration/cass_logback_xml_file.html">logback.xml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/configuration/cass_jvm_options_file.html">jvm-* files</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/configuration/configuration.html">Liberating cassandra.yaml Parameters' Names from Their Units</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../managing/operating/index.html">Operating</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/operating/backups.html">Backups</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/operating/bloom_filters.html">Bloom filters</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/operating/bulk_loading.html">Bulk loading</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/operating/cdc.html">Change Data Capture (CDC)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/operating/compaction/index.html">Compaction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/operating/compression.html">Compression</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/operating/hardware.html">Hardware</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/operating/hints.html">Hints</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../managing/operating/logging.html">Logging</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/operating/auditlogging.html">Audit logging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/operating/audit_logging.html">Audit logging 2</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/operating/fqllogging.html">Full query logging</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/operating/metrics.html">Monitoring metrics</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/operating/repair.html">Repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/operating/read_repair.html">Read repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/operating/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/operating/snitch.html">Snitches</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/operating/topo_changes.html">Topology changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/operating/transientreplication.html">Transient replication</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/operating/virtualtables.html">Virtual tables</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../managing/tools/index.html">Tools</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/tools/cqlsh.html">cqlsh: the CQL shell</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/tools/nodetool/nodetool.html">nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../managing/tools/sstable/index.html">SSTable tools</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="#cassandra:managing/tools/cassandra_stress.adoc">cassandra-stress</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../troubleshooting/index.html">Troubleshooting</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../troubleshooting/finding_nodes.html">Finding misbehaving nodes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../troubleshooting/reading_logs.html">Reading Cassandra logs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../troubleshooting/use_nodetool.html">Using nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../troubleshooting/use_tools.html">Using external tools to deep-dive</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../reference/index.html">Reference</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../reference/cql-commands/alter-table.html">ALTER TABLE</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../reference/cql-commands/create-index.html">CREATE INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../reference/cql-commands/create-custom-index.html">CREATE CUSTOM INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../reference/cql-commands/create-table.html">CREATE TABLE</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../reference/cql-commands/drop-index.html">DROP INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../reference/cql-commands/drop-table.html">DROP TABLE</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../integrating/plugins/index.html">Plug-ins</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+</div>
+</nav>
+        <aside class="toc sidebar">
+  <div class="toc-menu"></div>
+</aside>
+        <main class="article default-main full-800" data-ceiling="topbar">
+  <div class="article-banner">
+    <p>You are viewing the documentation for a prerelease version.</p>
+  </div>
+    <div class="article-header">
+<nav class="crumbs" aria-label="breadcrumbs">
+  <ul>
+    <li class="crumb"><a href="../../../../../../index.html">Cassandra</a></li>
+    <li class="crumb"><a href="monitoring.html">Monitor SAI indexes</a></li>
+  </ul>
+</nav>
+<div class="tools" role="navigation">
+  <ul>
+    <li class="tool edit"><a href="https://github.com/apache/cassandra/edit/trunk/doc/modules/cassandra/pages/developing/cql/indexing/sai/operations/monitoring.adoc" title="Edit Page" target="_blank" rel="noopener">Edit</a></li>
+  </ul>
+</div>
+  </div>
+<article class="doc">
+<h1 class="page">Monitor SAI indexes</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Both virtual tables and JMX-based metrics can be used to monitor the SAI indexes in your cluster.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="saiMonitorVirtualTables"><a class="anchor" href="#saiMonitorVirtualTables"></a>SAI virtual tables</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can refer to data in the following Apache Cassandra virtual tables to determine the status of indexes created with SAI:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>system_views.indexes</code>&#8201;&#8212;&#8201;provides information at the column index level, including the index name, number of indexed SSTables, disk usage, and index state.
+From the index state, the data reveals if the index is currently building, and whether the index can be queried.</p>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>When you <code>DROP</code> / recreate an SAI index, you are not blocked from entering queries that do not use the index.
+However, you cannot use that SAI index (based on the same column) until it has finished building and is queryable.
+To determine the current state of a given index, query the <code>system_views.indexes</code> virtual table.
+Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">SELECT is_queryable,is_building FROM system_views.indexes WHERE keyspace_name='keyspace'
+       AND table_name='table' AND index_name='index';</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p><code>system_views.sstable_indexes</code>&#8201;&#8212;&#8201;describes individual SSTable indexes, and includes information around disk size, min/max row ID, the min/max ring token, and the write-time version of the index.</p>
+</li>
+<li>
+<p><code>system_views.sstable_index_segments</code>&#8201;&#8212;&#8201;describes the segments of the SSTable indexes.
+It exposes the segment row ID offset and most of the information in the SSTable-level virtual table, specifically at a segment granularity.
+For more details, refer to <a href="../../../../../reference/sai-virtual-table-indexes.html" class="page">Virtual tables for SAI indexes and SSTables</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="sai-tracing"><a class="anchor" href="#sai-tracing"></a>SAI tracing</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>SAI provides tracing capability just like other database components.
+Information is captured by the <code>system_traces</code> keyspace.
+You can enable tracing in CQLSH with <code>TRACING ON</code>, or in the Cassandra driver with <code>statement.enableTracing()</code>.</p>
+</div>
+<div class="paragraph">
+<p>The number of rows filtered by a particular query will show up in the CQL query trace.
+Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-no-highlight hljs" data-lang="no-highlight">Index query accessed memtable indexes, 2 SSTable indexes, and 2 segments, post-filtered 14 rows in 14 partitions, and took 88582 microseconds.</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For details about tracing, refer to CQL <a href="../../../../../managing/tools/cqlsh.html#tracing" class="page">TRACING</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="saiMonitorMetrics"><a class="anchor" href="#saiMonitorMetrics"></a>SAI metrics</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>SAI provides a number of metrics to help you monitor the health of your indexes.</p>
+</div>
+<div class="paragraph">
+<p>The categorized data:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Global indexing metrics</p>
+</li>
+<li>
+<p>Table query metrics</p>
+</li>
+<li>
+<p>Per query metrics</p>
+</li>
+<li>
+<p>Key fetch metrics</p>
+</li>
+<li>
+<p>Offset fetch metrics</p>
+</li>
+<li>
+<p>Token fetch metrics</p>
+</li>
+<li>
+<p>Column query metrics per index</p>
+</li>
+<li>
+<p>Terms metrics per index</p>
+</li>
+<li>
+<p>Range slice metrics</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For example, you can use metrics to get the current count of total partition reads since the node started for <code>cycling.cyclist_semi_pro</code>.
+The keyspace and table were defined in <a href="../../../../../getting-started/sai-quickstart.html" class="page">SAI quickstart</a>.
+This metric&#8217;s <code>ObjectName</code>: <code>org.apache.cassandra.metrics:type=StorageAttachedIndex,keyspace=cycling,table=cyclist_semi_pro,scope=TableQueryMetrics,name=TotalPartitionReads</code>.</p>
+</div>
+<div class="paragraph">
+<p>The metrics are exposed via JMX, so any JMX-based tool can be used to monitor.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="saiGlobalIndexingMetrics"><a class="anchor" href="#saiGlobalIndexingMetrics"></a>Global indexing metrics</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre>ObjectName: org.apache.cassandra.metrics,type=StorageAttachedIndex,name=&lt;metric&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The global indexing metrics for this node are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>ColumnIndexBuildsInProgress</code>&#8201;&#8212;&#8201;The number of individual on-disk column indexes currently being built.</p>
+</li>
+<li>
+<p><code>SegmentBufferSpaceLimitBytes</code>&#8201;&#8212;&#8201;The limit on heap used to buffer SSTable index segments during compaction and index builds.</p>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>In cassandra.yaml, <code>segment_write_buffer_space_mb</code> limits the amount of heap used to build on-disk column indexes during compaction and initial builds.
+The default is 1024 MB.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For example, if there is only one column index building, SAI can buffer up to <code>segment_write_buffer_space_mb</code>.
+If there is one column index building per table across 8 compactors, each index will be eligible to flush once it reaches (<code>segment_write_buffer_space_mb / 8</code>) MBs.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>SegmentBufferSpaceUsedBytes</code>&#8201;&#8212;&#8201;The heap currently being used to buffer SSTable index segments during compaction and index builds.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>At any given time, the minimum size for a flushing segment, in bytes, is (<code>SegmentBufferSpaceLimitBytes / ColumnIndexBuildsInProgress</code>).</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="saiIndexGroupMetrics"><a class="anchor" href="#saiIndexGroupMetrics"></a>Index group metrics</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre>ObjectName: org.apache.cassandra.metrics:type=StorageAttachedIndex,keyspace=&lt;keyspace&gt;,table=&lt;table&gt;,scope=IndexGroupMetrics,name=&lt;metric&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The index group metrics for the given keyspace and table:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>DiskUsedBytes</code>&#8201;&#8212;&#8201;Size in bytes on disk for the given table&#8217;s SAI indices.</p>
+</li>
+<li>
+<p><code>IndexFileCacheBytes</code>&#8201;&#8212;&#8201;Size in bytes of memory used by the on-disk data structure of the per-column indices.</p>
+</li>
+<li>
+<p><code>OpenIndexFiles</code>&#8201;&#8212;&#8201;Number of open index files for the given table&#8217;s SAI indices.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="key-fetch-metrics"><a class="anchor" href="#key-fetch-metrics"></a>Key fetch metrics</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre>ObjectName: org.apache.cassandra.metrics:type=StorageAttachedIndex,keyspace=&lt;keyspace&gt;,table=&lt;table&gt;,scope=KeyFetch,name=&lt;metric&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The key fetch metrics for the given keyspace and table:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>ChunkCacheHitRate</code>&#8201;&#8212;&#8201;All-time chunk cache hit rate for keys during queries against the given table.</p>
+</li>
+<li>
+<p><code>TotalChunkCacheLookups</code>&#8201;&#8212;&#8201;All-time chunk cache lookups for keys during queries against the given table.</p>
+</li>
+<li>
+<p><code>TotalChunkCacheMisses</code>&#8201;&#8212;&#8201;All-time chunk cache misses for keys during queries against the given table.</p>
+</li>
+<li>
+<p><code>ChunkCache(One|Five|Fifteen)HitRate</code>&#8201;&#8212;&#8201;&lt;N&gt;-minute chunk cache hit rate for keys during queries against the given table.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="offset-fetch-metrics"><a class="anchor" href="#offset-fetch-metrics"></a>Offset fetch metrics</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre>ObjectName: org.apache.cassandra.metrics:type=StorageAttachedIndex,keyspace=&lt;keyspace&gt;,table=&lt;table&gt;,scope=OffsetFetch,name=&lt;metric&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The offset fetch metrics for the given keyspace and table:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>ChunkCacheHitRate</code>&#8201;&#8212;&#8201;All-time chunk cache hit rate for partition key SSTable offset fetches during queries against the given table.</p>
+</li>
+<li>
+<p><code>TotalChunkCacheLookups</code>&#8201;&#8212;&#8201;All-time chunk cache lookups for partition key SSTable offset fetches during queries against the given table.</p>
+</li>
+<li>
+<p><code>TotalChunkCacheMisses</code>&#8201;&#8212;&#8201;All-time chunk cache misses for partition key SSTable offset fetches during queries against the given table.</p>
+</li>
+<li>
+<p><code>ChunkCache(One|Five|Fifteen)HitRate</code>&#8201;&#8212;&#8201;&lt;N&gt;-minute chunk cache hit rate for partition key SSTable offset fetches during queries against the given table.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="per-query-metrics"><a class="anchor" href="#per-query-metrics"></a>Per query metrics</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre>ObjectName: org.apache.cassandra.metrics:type=StorageAttachedIndex,keyspace=&lt;keyspace&gt;,table=&lt;table&gt;,scope=PerQuery,name=&lt;metric&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The per query metrics for the given keyspace and table include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>RowsFiltered</code>&#8201;&#8212;&#8201;A histogram of the number of rows post-filtered per query since the node started.</p>
+</li>
+<li>
+<p><code>QueryLatency</code>&#8201;&#8212;&#8201;Overall query latency percentiles (in microseconds) and one/five/fifteen minute query throughput.</p>
+</li>
+<li>
+<p><code>PartitionReads</code>&#8201;&#8212;&#8201;Histogram over the number of partitions read per query.</p>
+</li>
+<li>
+<p><code>SSTableIndexesHit</code>&#8201;&#8212;&#8201;Histogram over the number of SSTable indexes read per query.</p>
+</li>
+<li>
+<p><code>KDTreeChunkCacheLookups</code>&#8201;&#8212;&#8201;Histogram over the number of chunk cache lookups while reading kd-tree index files per query.</p>
+</li>
+<li>
+<p><code>KDTreeChunkCacheMisses</code>&#8201;&#8212;&#8201;Histogram over the number of chunk cache misses while reading kd-tree index files per query.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="table-query-metrics"><a class="anchor" href="#table-query-metrics"></a>Table query metrics</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre>ObjectName: org.apache.cassandra.metrics:type=StorageAttachedIndex,keyspace=&lt;keyspace&gt;,table=&lt;table&gt;,scope=TableQueryMetrics,name=&lt;metric&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The table query metrics for the given keyspace and table:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>TotalPartitionReads</code>&#8201;&#8212;&#8201;Total partition reads by all queries since the node started.</p>
+</li>
+<li>
+<p><code>TotalQueriesCompleted</code>&#8201;&#8212;&#8201;Total number of successfully completed queries since the node started.</p>
+</li>
+<li>
+<p><code>TotalQueryTimeouts</code>&#8201;&#8212;&#8201;Total number of timeouts from queries since the node started.</p>
+</li>
+<li>
+<p><code>TotalRowsFiltered</code>&#8201;&#8212;&#8201;Total number of rows post-filtered by all queries since the node started.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="saiTableStateMetrics"><a class="anchor" href="#saiTableStateMetrics"></a>Table state metrics</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre>ObjectName: org.apache.cassandra.metrics:type=StorageAttachedIndex,keyspace=&lt;keyspace&gt;,table=&lt;table&gt;,scope=TableStateMetrics,name=&lt;metric&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The table state metrics for the given keyspace and table:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>DiskPercentageOfBaseTable</code>&#8201;&#8212;&#8201;SAI size on Disk as a percentage of table size per table.</p>
+</li>
+<li>
+<p><code>DiskUsedBytes</code>&#8201;&#8212;&#8201;Size on-disk in bytes of SAI indices per table.</p>
+</li>
+<li>
+<p><code>TotalIndexBuildsInProgress</code>&#8201;&#8212;&#8201;Status of SAI indices per table currently in the <code>is_building</code> state.</p>
+</li>
+<li>
+<p><code>TotalIndexCount</code>&#8201;&#8212;&#8201;Total number of SAI indices per table.</p>
+</li>
+<li>
+<p><code>TotalQueryableIndexCount</code>&#8201;&#8212;&#8201;Status of SAI indices per table currently in the <code>is_querable</code> state.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="token-fetch-metrics"><a class="anchor" href="#token-fetch-metrics"></a>Token fetch metrics</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre>ObjectName: org.apache.cassandra.metrics:type=StorageAttachedIndex,keyspace=&lt;keyspace&gt;,table=&lt;table&gt;,scope=TokenFetch,name=&lt;metric&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The token fetch metrics for the given keyspace and table:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>ChunkCacheHitRate</code>&#8201;&#8212;&#8201;All-time chunk cache hit rate for partition key token fetches during queries against the given table.</p>
+</li>
+<li>
+<p><code>TotalChunkCacheLookups</code>&#8201;&#8212;&#8201;All-time chunk cache lookups for partition key token fetches during queries against the given table.</p>
+</li>
+<li>
+<p><code>TotalChunkCacheMisses</code>&#8201;&#8212;&#8201;All-time chunk cache misses for partition key token fetches during queries against the given table.</p>
+</li>
+<li>
+<p><code>ChunkCache(One|Five|Fifteen)HitRate</code>&#8201;&#8212;&#8201;&lt;N&gt;-minute chunk cache hit rate for partition key token fetches during queries against the given table.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="token-skipping-metrics"><a class="anchor" href="#token-skipping-metrics"></a>Token skipping metrics</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre>ObjectName: org.apache.cassandra.metrics:type=StorageAttachedIndex,keyspace=&lt;keyspace&gt;,table=&lt;table&gt;,scope=TokenSkipping,name=&lt;metric&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The token skippping metrics for the given keyspace and table:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>CacheHits</code>&#8201;&#8212;&#8201;Number of cache hits from token skipping in a multi-index <code>AND</code> query.</p>
+</li>
+<li>
+<p><code>Lookups</code>&#8201;&#8212;&#8201;Number of lookups from token skipping a multi-index <code>AND</code> query.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="column-query-metrics-for-each-numeric-index"><a class="anchor" href="#column-query-metrics-for-each-numeric-index"></a>Column query metrics for each numeric index</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre>ObjectName: org.apache.cassandra.metrics:type=StorageAttachedIndex,keyspace=&lt;keyspace&gt;,table=&lt;table&gt;,index=&lt;index&gt;,scope=ColumnQueryMetrics,name=&lt;metric&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The column query metrics for the given keyspace, table, and index include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>KDTreeNiceTryLatency</code>&#8201;&#8212;&#8201;For numeric indexes, such as <code>age_sai_idx</code> in the <a href="../../../../../getting-started/sai-quickstart.html" class="page">quickstart</a> examples, this metric may be used to present a histogram of the times spent waiting for chunk cache misses during kd-tree intersection (in microseconds) and one/five/fifteen minute chunk miss throughputs.</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The throughputs are zero if there are no cache misses during kd-tree intersection.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="column-query-metrics-for-each-string-index"><a class="anchor" href="#column-query-metrics-for-each-string-index"></a>Column query metrics for each string index</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre>ObjectName: org.apache.cassandra.metrics:type=StorageAttachedIndex,keyspace=&lt;keyspace&gt;,table=&lt;table&gt;,index=&lt;index&gt;,scope=ColumnQueryMetrics,name=&lt;metric&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The column query metrics for the given keyspace, table, and index include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>TermsLookupLatency</code>&#8201;&#8212;&#8201;For string indexes, such as <code>country_sai_idx</code> in the <a href="../../../../../getting-started/sai-quickstart.html" class="page">quickstart</a> examples, this metric shows terms lookup latency percentiles (in microseconds) per one/five/fifteen minute query throughput.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="terms-metrics-for-each-string-index"><a class="anchor" href="#terms-metrics-for-each-string-index"></a>Terms metrics for each string index</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre>ObjectName: org.apache.cassandra.metrics:type=StorageAttachedIndex,keyspace=&lt;keyspace&gt;,table=&lt;table&gt;,index=&lt;index&gt;,scope=Terms,name=&lt;metric&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For string indexes, the terms metrics for the given keyspace, table, and index:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>ChunkCacheHitRate</code>&#8201;&#8212;&#8201;All-time chunk cache hit rate for terms during string index queries that used the given index.</p>
+</li>
+<li>
+<p><code>TotalChunkCacheLookups</code>&#8201;&#8212;&#8201;All-time chunk cache lookups for terms during string index queries that used the given index.</p>
+</li>
+<li>
+<p><code>TotalChunkCacheMisses</code>&#8201;&#8212;&#8201;All-time chunk cache misses for terms during string index queries that used the given index.</p>
+</li>
+<li>
+<p><code>ChunkCache(One|Five|Fifteen)HitRate</code>&#8201;&#8212;&#8201;&lt;N&gt;-minute chunk cache hit rate for terms during string index queries that used the given index.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="range-slice-metrics"><a class="anchor" href="#range-slice-metrics"></a>Range slice metrics</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre>ObjectName: org.apache.cassandra.metrics:type=ClientRequest,scope=RangeSlice,name=&lt;metric&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>RoundTripsPerReadHistogram</code> metric tracks the number of round-trip requests sent for range query commands from the coordinator.
+Fewer requests typically mean the server is operating more efficiently than ones requiring more requests to satisfy the same range queries.</p>
+</div>
+<div class="paragraph">
+<p>Latency metric tracks the min, max, mean as well as a set of percentiles for range read requests latency.
+Timeouts metric tracks the number of timeouts for range read requests.</p>
+</div>
+</div>
+</div>
+</article>
+</main>
+    </div>
+</div>
+            <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../../../../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../../../../../../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://twitter.com/cassandra?lang=en" target="_blank"><img src="../../../../../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../../../../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../../../../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../../../../../../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+    <script src="../../../../../../../../assets/js/site.js"></script>
+    <script async src="../../../../../../../../assets/js/vendor/highlight.js"></script>
+    <script src="../../../../../../../../assets/js/vendor/lunr.js"></script>
+    <script src="../../../../../../../../assets/js/vendor/search.js" id="search-script" data-base-path="../../../../../../../.." data-page-path="/Cassandra/trunk/cassandra/developing/cql/indexing/sai/operations/monitoring.html"></script>
+    <script async src="../../../../../../../../assets/../search-index.js"></script>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+        </div>
+    </body>
+</html>

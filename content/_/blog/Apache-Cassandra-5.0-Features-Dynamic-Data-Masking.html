@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Apache Cassandra | Apache Cassandra Documentation</title>
+    <link rel="stylesheet" href="../../assets/css/site.css">
+    <meta name="description" content="New dynamic data masking capabilities are a feature available in the coming Apache Cassandra 5.0.">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="_">
+    <meta name="dcterms.identifier" content="master">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "https://plausible.cassandra.apache.org/js/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>  </head>
+  <body class="single-post">
+      <div class="container mx-auto relative">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta property="og:type" content="website" />
+	<meta property="og:description" content="" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+        <div class="header-social-icons text-right">
+            <a href="https://twitter.com/cassandra?lang=en" target="_blank" styles="margin-left: 20px;"><img src="../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../assets/img/logo-white-r.png" alt="cassandra logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+        <div class="hero hero--home grad">
+            <div class="eye"></div>
+            <div id="home-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                <h1>Apache Cassandra 5.0 Features: Dynamic Data Masking</h1>
+                <h3>October 11, 2023 | Andrés de la Peña</h3>
+            </div>
+        </div>
+        <div id="blog-post" class="flex-center py-large arrow">
+            <div class="blog-breadcrumb mb-medium">
+                <div class="inner inner--narrow">
+                    <a href="/_/blog.html">« Back to the Apache Cassandra Blog</a>
+                </div>
+            </div>
+            <div class="post-content">
+                <div class="inner inner--narrow">
+                    <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Apache Cassandra 5.0 is the project’s major release for 2023, and it promises some of the biggest changes for Cassandra to-date. After more than a decade of engineering work dedicated to stabilizing and building Cassandra as a distributed database, we now look forward to introducing a host of exciting features and enhancements that empower users to take their data-driven applications to the next level - including machine learning and artificial intelligence.</em></p>
+</div>
+<div class="paragraph">
+<p><em>This blog series aims to give a deeper dive into some of the key features of Cassandra 5.0.</em></p>
+</div>
+<div class="paragraph">
+<p>Cassandra 5.0 introduces new dynamic data masking (DDM) capabilities which allows you to obscure sensitive information using a concept called masked columns. DDM doesn&#8217;t change the stored data. Instead, it just presents the data in its redacted form during SELECT queries.</p>
+</div>
+<div class="paragraph">
+<p>DDM aims to provide some degree of protection against accidental data exposure. For example, the column masks can prevent undesired data exposure when a user shares the results of a query with someone. Or it can limit what users with read access can actually see. However, it&#8217;s important to know that anyone with direct access to the sstable files will be able to read the clear data.</p>
+</div>
+<div class="paragraph">
+<p>The data can be partially redacted, for example showing only the four last digits of a credit card number. This partial view of the data can be enough to allow users to do some checks on the data without seeing it entirely. The data can also be fully redacted, making it clear for users that the information is sensitive.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="masking-functions"><a class="anchor" href="#masking-functions"></a>Masking functions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>DDM is based on a set of <a href="/doc/5.0/cassandra/developing/cql/functions.html" target="_blank" rel="noopener">CQL built-in (native) functions</a> that obscure sensitive information. The available functions are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>mask_null</strong>: Replaces the first argument with a null column. The returned value is always a non-existent column, and not a not-null column representing a null value.</p>
+</li>
+<li>
+<p><strong>mask_default</strong>: Replaces its argument by an arbitrary, fixed default value of the same type. This will be *\**\* for text values, zero for numeric values, false for booleans, etc.</p>
+</li>
+<li>
+<p><strong>mask_replace</strong>: Replaces the first argument by the replacement value on the second argument. The replacement value needs to have the same type as the replaced value.</p>
+</li>
+<li>
+<p><strong>mask_inner</strong>: Returns a copy of the first text, varchar or ascii argument, replacing each character except the first and last ones by a padding character.</p>
+</li>
+<li>
+<p><strong>mask_outer</strong>: Returns a copy of the first text, varchar or ascii argument, replacing the first and last character by a padding character.
+mask_hash: Returns a blob containing the hash of the first argument.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>These functions can be used in any SELECT query to get an obscured view of the data. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>CREATE TABLE patients (
+   id timeuuid PRIMARY KEY,
+   name text,
+   birth date
+);
+
+
+INSERT INTO patients(id, name, birth)
+       VALUES (now(), 'alice', '1982-01-02');
+INSERT INTO patients(id, name, birth)
+       VALUES (now(), 'bob', '1982-01-02');
+
+
+SELECT mask_inner(name, 1, null), mask_default(birth) FROM patients;
+
+
+  system.mask_inner(name, 1, NULL) | system.mask_default(birth)
+-----------------------------------+----------------------------
+                               b** | 1970-01-01
+                             a**** | 1970-01-01</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="attaching-masking-functions-to-table-columns"><a class="anchor" href="#attaching-masking-functions-to-table-columns"></a>Attaching masking functions to table columns</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The masking functions can be permanently attached to any column of a table. If a masking function is defined, SELECT queries will always return the column values in their masked form. The masking will be transparent to the users running SELECT queries, so their only way to know that a column is masked will be to consult the table definition.</p>
+</div>
+<div class="paragraph">
+<p>This is an optional feature that should be enabled with the “dynamic_data_masking_enabled” property in the “cassandra.yaml” config file, since it&#8217;s disabled by default.</p>
+</div>
+<div class="paragraph">
+<p>The masks of the columns of a table can be defined on CREATE TABLE queries:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>CREATE TABLE patients (
+   id timeuuid PRIMARY KEY,
+   name text MASKED WITH mask_inner(1, null),
+   birth date MASKED WITH mask_default()
+);</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Data can be inserted into the masked table as usual. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>INSERT INTO patients(id, name, birth)
+       VALUES (now(), 'alice', '1984-01-02');
+INSERT INTO patients(id, name, birth)
+       VALUES (now(), 'bob', '1982-02-03');</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The attached column masks will make SELECT queries automatically return masked data,
+without the need of including the masking function in the query:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>SELECT name, birth FROM patients;
+
+
+  name | birth
+-------+------------
+ a**** | 1970-01-01
+   b** | 1970-01-01</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The masking function attached to a column can be changed with an ALTER TABLE query:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>ALTER TABLE patients ALTER name MASKED WITH mask_default();</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In a similar way, a masking function can be detached from a column with an ALTER TABLE query:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>ALTER TABLE patients ALTER name DROP MASKED;</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="permissions"><a class="anchor" href="#permissions"></a>Permissions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The new UNMASK <a href="/doc/5.0/cassandra/developing/cql/security.html#cql-permissions" target="_blank" rel="noopener">permission</a> allows users to retrieve the unmasked values of masked columns. Ordinary users are created without the UNMASK permission and will see masked values. Superusers are created with the UNMASK permission, and will be able to see the unmasked values in a SELECT query results. As an example, suppose that we have a table with masked columns:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>CREATE TABLE patients (
+   id timeuuid PRIMARY KEY,
+   name text MASKED WITH mask_inner(1, null),
+   birth date MASKED WITH mask_default()
+);
+
+
+INSERT INTO patients(id, name, birth)
+       VALUES (now(), 'alice', '1984-01-02');
+INSERT INTO patients(id, name, birth)
+       VALUES (now(), 'bob', '1982-02-03');</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then we create two users with SELECT permission for the table, but we only grant the UNMASK permission to one of the users:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>CRCREATE USER privileged WITH PASSWORD 'xyz';
+GRANT SELECT ON TABLE patients TO privileged;
+GRANT UNMASK ON TABLE patients TO privileged;
+
+
+CREATE USER unprivileged WITH PASSWORD 'xyz';
+GRANT SELECT ON TABLE patients TO unprivileged;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can now see that the user with the UNMASK permission can see the clear data, unmasked, whereas the user without the UNMASK permission can only see the masked data:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>LOGIN privileged
+SELECT name, birth FROM patients;
+
+
+  name | birth
+-------+------------
+ alice | 1984-01-02
+   bob | 1982-02-03
+
+
+LOGIN unprivileged
+SELECT name, birth FROM patients;
+
+
+  name | birth
+-------+------------
+ a**** | 1970-01-01
+   b** | 1970-01-01</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Users without the UNMASK permission are not allowed to use masked columns in the WHERE clause of a SELECT query. This prevents malicious users from figuring out the clear data by running exhaustive queries. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>CREATE USER untrusted_user WITH PASSWORD 'xyz';
+GRANT SELECT ON TABLE patients TO untrusted_user;
+LOGIN untrusted_user
+
+
+SELECT name, birth FROM patients WHERE name = 'Alice' ALLOW FILTERING;
+
+
+// Unauthorized: Error from server: code=2100 [Unauthorized] message="User untrusted_user has no UNMASK nor SELECT_UNMASK permission on table k.patients"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However, there are some use cases where trusted database users just need a useful way to produce masked data that will be served to untrusted external users. For example, a trusted app can connect to the database and extract masked data that will be served to its end users. In that case the trusted user (the app) can be given the SELECT_MASKED permission. That permission allows us to use masked columns in the WHERE clause of a SELECT query, while still seeing the masked data in the query results. For instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>CREATE USER trusted_user WITH PASSWORD 'xyz';
+GRANT SELECT, SELECT_MASKED ON TABLE patients TO trusted_user;
+LOGIN trusted_user
+
+
+SELECT name, birth FROM patients WHERE name = 'Alice' ALLOW FILTERING;
+
+
+  name | birth
+-------+------------
+ a**** | 1970-01-01</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="custom-functions"><a class="anchor" href="#custom-functions"></a>Custom functions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="/doc/5.0/cassandra/developing/cql/functions.html#user-defined-scalar-functions" target="_blank" rel="noopener">Cassandra’s user-defined functions (UDFs)</a> can be attached to a table column. This allows extending the functionality of DDM beyond the standard native functions. Any UDF can be used as the mask of a column, provided that its first argument and return type have the same type as the column to be masked. For instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>CREATE FUNCTION redact(input text)
+   CALLED ON NULL INPUT
+   RETURNS text
+   LANGUAGE java
+   AS 'return "redacted"';
+
+
+CREATE TABLE patients (
+   id timeuuid PRIMARY KEY,
+   name text MASKED WITH redact()
+);</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Learn More About Apache Cassandra</p>
+</div>
+<div class="paragraph">
+<p>As we get closer to the General Availability of Cassandra 5.0, there are a host of ways to get more involved in the community and follow project developments:</p>
+</div>
+<div class="paragraph">
+<p>Cassandra Summit + Code AI is taking place Dec. 12-13 in San Jose, CA. Cassandra Summit is THE gathering place for Apache Cassandra data practitioners, developers, engineers and enthusiasts, and it’s where we’ll be diving deeper into Cassandra 5.0 features. Submit a talk for the NEW AI Track at Cassandra Summit; CFP closes Monday, October 23 at 9:00 AM PDT (UTC-7).</p>
+</div>
+<div class="paragraph">
+<p>For more information about Apache Cassandra or to join the community discussion, you can join us on these channels:
+Apache Cassandra Website
+ASF Slack
+Planet Cassandra Website
+Planet Cassandra Discord
+Planet Cassandra Global Meetup Group</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="learn-more-about-apache-cassandra"><a class="anchor" href="#learn-more-about-apache-cassandra"></a>Learn More About Apache Cassandra</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As we get closer to the General Availability of Cassandra 5.0, there are a host of ways to get more involved in the community and follow project developments:</p>
+</div>
+<div class="paragraph">
+<p><a href="https://events.linuxfoundation.org/cassandra-summit/" target="_blank" rel="noopener">Cassandra Summit + Code AI</a> is taking place Dec. 12-13 in San Jose, CA. Cassandra Summit is THE gathering place for Apache Cassandra data practitioners, developers, engineers and enthusiasts, and it’s where we’ll be diving deeper into Cassandra 5.0 features. <a href="https://events.linuxfoundation.org/cassandra-summit/program/cfp/#overview" target="_blank" rel="noopener">Submit a talk</a> for the NEW AI Track at Cassandra Summit; CFP closes Monday, October 23 at 9:00 AM PDT (UTC-7).</p>
+</div>
+<div class="paragraph">
+<p>For more information about Apache Cassandra or to join the community discussion, you can join us on these channels:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="/_/index.html">Apache Cassandra Website</a></p>
+</li>
+<li>
+<p><a href="https://the-asf.slack.com/ssb/redirect" target="_blank" rel="noopener">ASF Slack</a></p>
+</li>
+<li>
+<p><a href="https://www.youtube.com/@PlanetCassandra" target="_blank" rel="noopener">Planet Cassandra Youtube</a></p>
+</li>
+<li>
+<p><a href="https://www.meetup.com/cassandra-global/" target="_blank" rel="noopener">Planet Cassandra Global Meetup Group</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+                </div>
+            </div>
+        </div>
+        <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://twitter.com/cassandra?lang=en" target="_blank"><img src="../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+      </div>
+  </body>
+<script>
+jQuery(function(){
+    
+});
+</script>
+</html>

@@ -1,0 +1,2088 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>ALTER TABLE | Apache Cassandra Documentation</title>
+            <link rel="stylesheet" href="../../../../../assets/css/site.css">
+    <meta name="description" content="Modifies the columns and properties of a table.">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="Cassandra">
+    <meta name="dcterms.identifier" content="5.0">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../../../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "https://plausible.cassandra.apache.org/js/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>    </head>
+    <body class="docs-wrapper article">
+        <div class="container mx-auto relative">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta property="og:type" content="website" />
+	<meta property="og:description" content="" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+         <div class="header-social-icons text-right">
+            <a href="https://twitter.com/cassandra?lang=en" target="_blank" styles="margin-left: 20px;"><img src="../../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../../../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+            <div class="hero hero--home grad">
+                <div class="eye"></div>
+                <div id="docs-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                    <h2>Cassandra Documentation</h2>
+                </div>
+            </div>
+            <div class="body px-medium py-medium container">
+    <div class="docs-nav-bar flex flex-space-between mb-medium">
+      <div id="mobile-docs-nav-burger" class="hidden">
+        <svg viewBox="0 0 24 24" width="36" height="36" stroke="#1c81a0" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </div>
+        <div class="docs-nav-item relative">
+          <input id="search-input" type="text" placeholder="Search docs">
+        </div>
+      <div class="versions-wrapper">
+  <h4>Version:</h4>
+  <div class="nav-panel-explore" data-panel="explore">
+
+    <div id="version-toggle" class="context">
+      <span class="version">5.0</span>
+    </div>
+    <ul id="versions-list" class="components">
+      <li class="component">
+        <ul class="versions">
+          <li class="version is-latest">
+            <a href="../../../../../_/index.html">master</a>
+          </li>
+        </ul>
+      </li>
+      <li class="component is-current">
+        <ul class="versions">
+          <li class="version">
+            <a href="../../../../trunk/index.html">trunk</a>
+          </li>
+          <li class="version is-current">
+            <a href="../../../index.html">5.0</a>
+          </li>
+          <li class="version is-latest">
+            <a href="../../../../4.1/index.html">4.1</a>
+          </li>
+          <li class="version">
+            <a href="../../../../4.0/index.html">4.0</a>
+          </li>
+          <li class="version">
+            <a href="../../../../3.11/index.html">3.11</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>    </div>
+    <div class="cf relative">
+        <nav class="nav docs-nav full-800">
+<div class="nav-menu">
+<ul class="nav-list">
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../index.html">Main</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/glossary.html">Glossary</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/bugs.html">How to report bugs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/contactus.html">Contact us</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../_/development/index.html">Development</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/gettingstarted.html">Getting started</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/ide.html">Building and IDE integration</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/testing.html">Testing</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/patches.html">Contributing code changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/code_style.html">Code style</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/how_to_review.html">Review checklist</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/how_to_commit.html">How to commit</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/documentation.html">Working on documentation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/ci.html">Jenkins CI environment</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/dependencies.html">Dependency management</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/release_process.html">Release process</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item is-current-path is-active" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <span class="nav-text">Cassandra</span>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../overview/faq/index.html">FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../getting-started/index.html">Getting Started</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/cassandra-quickstart.html">Cassandra Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../installing/installing.html">Installing Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/configuring.html">Configuring Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/querying.html">Inserting and querying</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/drivers.html">Client drivers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/production.html">Production recommendations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../new/index.html">What&#8217;s new</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../java17.html">Support for Java</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../architecture/index.html">Architecture</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/overview.html">Overview</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/dynamo.html">Dynamo</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/storage-engine.html">Storage Engine</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/guarantees.html">Guarantees</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/messaging.html">Improved Internode Messaging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/streaming.html">Improved Streaming</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../developing/data-modeling/index.html">Data Modeling</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/intro.html">Introduction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_conceptual.html">Conceptual data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_rdbms.html">RDBMS design</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_queries.html">Defining application queries</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_logical.html">Logical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_physical.html">Physical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_refining.html">Evaluating and refining data models</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_schema.html">Defining database schema</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_tools.html">Cassandra data modeling tools</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../developing/cql/index.html">Cassandra Query Language (CQL)</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/definitions.html">Definitions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/types.html">Data types</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/ddl.html">Data definition (DDL)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/dml.html">Data manipulation (DML)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/dynamic-data-masking.html">Dynamic Data Masking (DDM)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/operators.html">Operators</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../developing/cql/indexing/indexing-concepts.html">Indexing concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../developing/cql/indexing/sai/sai-overview.html">SAI Overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/indexing/sai/sai-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/indexing/sai/sai-faq.html">SAI FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/indexing/sai/sai-working-with.html">Working with SAI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/indexing/sai/operations/sai-operations.html">SAI operations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../developing/cql/indexing/2i/2i-overview.html">Secondary indexes (2i) overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/indexing/2i/2i-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/indexing/2i/2i-working-with.html">Working with 2i</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/indexing/2i/operations/2i-build.html">Rebuild 2i</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/mvs.html">Materialized views</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/functions.html">Functions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/json.html">JSON</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/triggers.html">Triggers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/appendices.html">Appendices</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/changes.html">Changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/SASI.html">SASI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/cql_singlefile.html">Single file of CQL information</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../vector-search/overview.html">Vector Search overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../vector-search/concepts.html">Concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../vector-search/data-modeling.html">Data Modeling</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../vector-search/vector-search-working-with.html">Working with Vector Search</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../managing/index.html">Managing</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../managing/configuration/index.html">Configuring</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/cass_yaml_file.html">cassandra.yaml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/cass_rackdc_file.html">cassandra-rackdc.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/cass_env_sh_file.html">cassandra-env.sh</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/cass_topo_file.html">cassandra-topologies.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/cass_cl_archive_file.html">commitlog-archiving.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/cass_logback_xml_file.html">logback.xml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/cass_jvm_options_file.html">jvm-* files</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/configuration.html">Liberating cassandra.yaml Parameters' Names from Their Units</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../managing/operating/index.html">Operating</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/backups.html">Backups</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/bloom_filters.html">Bloom filters</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/bulk_loading.html">Bulk loading</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/cdc.html">Change Data Capture (CDC)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/compaction/index.html">Compaction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/compression.html">Compression</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/hardware.html">Hardware</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/hints.html">Hints</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../managing/operating/logging.html">Logging</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/auditlogging.html">Audit logging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/audit_logging.html">Audit logging 2</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/fqllogging.html">Full query logging</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/metrics.html">Monitoring metrics</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/repair.html">Repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/read_repair.html">Read repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/snitch.html">Snitches</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/topo_changes.html">Topology changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/transientreplication.html">Transient replication</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/virtualtables.html">Virtual tables</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../managing/tools/index.html">Tools</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/tools/cqlsh.html">cqlsh: the CQL shell</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/tools/nodetool/nodetool.html">nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/tools/sstable/index.html">SSTable tools</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="#cassandra:managing/tools/cassandra_stress.adoc">cassandra-stress</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../troubleshooting/index.html">Troubleshooting</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../troubleshooting/finding_nodes.html">Finding misbehaving nodes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../troubleshooting/reading_logs.html">Reading Cassandra logs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../troubleshooting/use_nodetool.html">Using nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../troubleshooting/use_tools.html">Using external tools to deep-dive</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-path is-active" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../index.html">Reference</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page is-active" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="alter-table.html">ALTER TABLE</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="create-index.html">CREATE INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="create-custom-index.html">CREATE CUSTOM INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="create-table.html">CREATE TABLE</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="drop-index.html">DROP INDEX</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="drop-table.html">DROP TABLE</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../integrating/plugins/index.html">Plug-ins</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+</div>
+</nav>
+        <aside class="toc sidebar">
+  <div class="toc-menu"></div>
+</aside>
+        <main class="article default-main full-800" data-ceiling="topbar">
+  <div class="article-banner">
+    <p>You are viewing the documentation for a prerelease version.</p>
+  </div>
+    <div class="article-header">
+<nav class="crumbs" aria-label="breadcrumbs">
+  <ul>
+    <li class="crumb">Cassandra</li>
+    <li class="crumb"><a href="../index.html">Reference</a></li>
+    <li class="crumb"><a href="alter-table.html">ALTER TABLE</a></li>
+  </ul>
+</nav>
+<div class="tools" role="navigation">
+  <ul>
+    <li class="tool edit"><a href="https://github.com/apache/cassandra/edit/cassandra-5.0/doc/modules/cassandra/pages/reference/cql-commands/alter-table.adoc" title="Edit Page" target="_blank" rel="noopener">Edit</a></li>
+  </ul>
+</div>
+  </div>
+<article class="doc">
+<h1 class="page">ALTER TABLE</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Modifies the columns and properties of a table.</p>
+</div>
+<div class="paragraph">
+<p>Add new columns, drop existing columns, renames columns, and modify table properties.
+The command returns no results.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><code>ALTER COLUMNFAMILY</code> is deprecated.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><strong>See also:</strong> <a href="create-table.html" class="page">CREATE TABLE</a>,
+<a href="drop-table.html" class="page">DROP TABLE</a>,
+<a href="create-custom-index.html" class="page">CREATE CUSTOM INDEX</a> for Storage-Attached Indexes (SAI), <a href="create-index.html" class="page">CREATE INDEX</a> for secondary indexes (2i)</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="syntax"><a class="anchor" href="#syntax"></a>Syntax</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>BNF definition:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bnf hljs" data-lang="bnf">alter_table_statement::= ALTER TABLE [ IF EXISTS ] table_name alter_table_instruction
+alter_table_instruction::= ADD [ IF NOT EXISTS ] column_definition ( ',' column_definition)*
+	| DROP [ IF EXISTS ] column_name ( ',' column_name )*
+	| RENAME [ IF EXISTS ] column_name to column_name (AND column_name to column_name)*
+	| ALTER [ IF EXISTS ] column_name ( column_mask | DROP MASKED )
+	| WITH options
+column_definition::= column_name cql_type [ column_mask]
+column_mask::= MASKED WITH ( DEFAULT | function_name '(' term ( ',' term )* ')' )</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>ALTER TABLE [&lt;keyspace_name&gt;.]&lt;table_name&gt;
+  [ ADD ( &lt;column_definition&gt; | &lt;column_definition_list&gt; ) [ , ... ] ]
+  [ DROP &lt;column_name&gt; [ , ... ] ]
+  [ [ RENAME &lt;column_name&gt; TO &lt;column_name&gt; ] ]
+  [ WITH &lt;table_properties&gt; [ , ... ] ];</pre>
+</div>
+</div>
+<div class="exampleblock">
+<div class="title">Syntax legend</div>
+<div class="content">
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Legend</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Syntax conventions</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UPPERCASE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Literal keyword.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lowercase</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not literal.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&lt; &gt;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Variable value.
+Replace with a user-defined value.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional.
+Square brackets (<code>[]</code>) surround optional command arguments.
+Do not type the square brackets.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>( )</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Group.
+Parentheses ( <code>( )</code> ) identify a group to choose from.
+Do not type the parentheses.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>|</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Or.
+A vertical bar (<code>|</code>) separates alternative elements.
+Type any one of the elements.
+Do not type the vertical bar.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>...</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Repeatable.
+An ellipsis ( <code>...</code> ) indicates that you can repeat the syntax element as often as required.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>'&lt;Literal string&gt;'</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Single quotation (<code>'</code>) marks must surround literal strings in CQL statements.
+Use single quotation marks to preserve upper case.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{ &lt;key&gt; : &lt;value&gt; }</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Map collection.
+Braces (<code>{ }</code>) enclose map collections or key value pairs.
+A colon separates the key and the value.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><a href="#datatype1&gt;">&lt;datatype2</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set, list, map, or tuple.
+Angle brackets ( <code>&lt; &gt;</code> ) enclose data types in a set, list, map, or tuple.
+Separate the data types with a comma.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&lt;cql_statement&gt;;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">End CQL statement.
+A semicolon (<code>;</code>) terminates all CQL statements.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[--]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Separate the command line options from the command arguments with two hyphens ( <code>--</code> ).
+This syntax is useful when arguments might be mistaken for command line options.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>' &lt;&lt;schema\&gt; ...
+&lt;/schema\&gt;&gt; '</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Search CQL only: Single quotation marks (<code>'</code>) surround an entire XML schema declaration.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>@&lt;xml_entity&gt;='&lt;xml_entity_type&gt;'</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Search CQL only: Identify the entity and literal value to overwrite the XML element in the schema and solrConfig files.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="required-parameters"><a class="anchor" href="#required-parameters"></a>Required parameters</h2>
+<div class="sectionbody">
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>table_name</strong></dt>
+<dd>
+<p>Name of the table to alter.</p>
+</dd>
+<dt class="hdlist1"><strong>column_name</strong></dt>
+<dd>
+<p>Name of the column to alter, drop, or add.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="column_definition"><a class="anchor" href="#column_definition"></a>column_definition</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Enclosed in parentheses after the table name, use a comma-separated list to define multiple columns.
+All tables must have at least one <a href="/_/glossary.html#primary-key">primary key</a> column.
+Each column is defined using the following syntax: <code>column_name cql_type_definition [STATIC | PRIMARY KEY] [, ...]</code></p>
+</div>
+<div class="paragraph">
+<p><strong>Restriction:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A table must have at least one <code>PRIMARY KEY</code>.</p>
+</li>
+<li>
+<p>When <code>PRIMARY KEY</code> is at the end of a column definition, that column is the only primary key for the table, and is defined as the <a href="/_/glossary.html#">partition-key</a>[partition key].</p>
+</li>
+<li>
+<p>A static column cannot be a primary key.</p>
+</li>
+<li>
+<p>Primary keys can include frozen collections.</p>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>column_name</strong> </dt>
+<dd>
+<p>Use a unique name for each column in a table.
+To preserve case or use special characters, enclose the name in double-quotes.</p>
+</dd>
+<dt class="hdlist1">cql_type_definition </dt>
+<dd>
+<p>Defines the type of data allowed in the column.
+See <a href="#reference:data-types.adoc" class="page unresolved">CQL data type</a> or a <a href="#reference:user-defined-type.adoc" class="page unresolved">user-defined type</a>.</p>
+</dd>
+<dt class="hdlist1"><strong>STATIC</strong> </dt>
+<dd>
+<p>Optional, the column has a single value.</p>
+</dd>
+<dt class="hdlist1"><strong>PRIMARY KEY</strong> </dt>
+<dd>
+<p>When the <code>PRIMARY KEY</code> is one column, append PRIMARY KEY to the end of the column definition.
+This is only schema information required to create a table.
+When there is one primary key, it is the partition key;
+the data is divided and stored by the unique values in this column: <code>column_name cql_type_definition PRIMARY KEY</code>.</p>
+<div class="paragraph">
+<p>Alternatively, you can declare the primary key consisting of only one column in the same way as you declare a compound primary key.</p>
+</div>
+</dd>
+</dl>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="optional-parameters"><a class="anchor" href="#optional-parameters"></a>Optional parameters</h2>
+<div class="sectionbody">
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>keyspace_name</strong></dt>
+<dd>
+<p>Name of the keyspace that contains the table to alter.
+If no name is specified, the current keyspace is used.</p>
+</dd>
+<dt class="hdlist1"><strong>ADD ( &lt;column_definition&gt; | &lt;column_definition_list&gt; )</strong> </dt>
+<dd>
+<p>Add one or more columns and set the column data types.
+Specify the column names followed by the data types.
+The column value is automatically set to null.
+To add multiple columns, use a comma separated list of columns placed inside parentheses.</p>
+<div class="listingblock">
+<div class="content">
+<pre>&lt;column_name&gt; &lt;cql_type&gt; [ , ]
+[ &lt;column_name&gt; &lt;cql_type&gt; [ , ... ]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Restriction:</strong> Adding columns to a primary key is not supported after a table has been created.</p>
+</div>
+</dd>
+<dt class="hdlist1"><strong>DROP ( &lt;column&gt; | &lt;column_list&gt; )</strong> </dt>
+<dd>
+<p>Drop one or more columns.
+The values contained in the row are also dropped and not recoverable.
+To drop multiple columns, use a comma separated list of columns placed inside parentheses.</p>
+</dd>
+<dt class="hdlist1"><strong>RENAME &lt;column_name&gt; TO &lt;column_name&gt;</strong> </dt>
+<dd>
+<p>Changes the name of a primary key column and preserves the existing values.</p>
+<div class="paragraph">
+<p><strong>Restriction:</strong> Not supported on materialized view base-tables, or tables with secondary indexes.</p>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="table_options"><a class="anchor" href="#table_options"></a>table_options</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Tunes data handling, including I/O operations, compression, and compaction.
+Table property options use the following syntax:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Single values: <code>&lt;option_name&gt; = '&lt;value&gt;'</code></p>
+</li>
+<li>
+<p>Multiple values: <code>&lt;option_name&gt; = { '&lt;subproperty&gt;' : '&lt;value&gt;' [, ...] } [AND ...]</code></p>
+<div class="paragraph">
+<p>Simple JSON format, key-value pairs in a comma-separated list enclosed by curly brackets.</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>When no value is specified, the default is used.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In a CREATE TABLE (or ALTER TABLE) CQL statement, use a <code>WITH</code> clause to define table property options.
+Separate multiple values with <code>AND</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">CREATE TABLE [&lt;keyspace_name&gt;.]&lt;table_name&gt;
+WITH option_name = '&lt;value&gt;'
+AND option_name = {&lt;option_map&gt;};</code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>bloom_filter_fp_chance = &lt;N&gt;</strong> </dt>
+<dd>
+<p>False-positive probability for SSTable <a href="https://en.wikipedia.org/wiki/Bloom_filter">bloom filter</a>.
+When a client requests data, the bloom filter checks if the row exists before executing disk I/O.
+Values range from 0 to 1.0, where: <code>0</code> is the minimum value use to enable the largest possible bloom filter (uses the most memory) and <code>1.0</code> is the maximum value disabling the bloom filter.</p>
+</dd>
+</dl>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Recommended setting: <code>0.1</code>.
+A higher value yields diminishing returns.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><strong>Default</strong>: <code>bloom_filter_fp_chance = '0.01'</code></p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>caching = { 'keys' : 'value', 'rows_per_partition' : 'value'}</strong> </dt>
+<dd>
+<p>Optimizes the use of cache memory without manual tuning.
+Weighs the cached data by size and access frequency.
+Coordinate this setting with the global caching properties in the cassandra.yaml file.
+Valid values:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>ALL</code>-- all primary keys or rows</p>
+</li>
+<li>
+<p><code>NONE</code>-- no primary keys or rows</p>
+</li>
+<li>
+<p><code>&lt;N&gt;</code>: (rows per partition only)&#8201;&#8212;&#8201;specify a whole number <strong>Default</strong>: <code>{ 'keys': 'ALL', 'rows_per_partition': 'NONE' }</code></p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1"><strong>cdc</strong> </dt>
+<dd>
+<p>Creates a Change Data Capture (CDC) log on the table.</p>
+<div class="paragraph">
+<p>Valid values:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>TRUE</code>- create CDC log</p>
+</li>
+<li>
+<p><code>FALSE</code>- do not create CDC log</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1"><strong>comment = 'some text that describes the table'</strong> </dt>
+<dd>
+<p>Provide documentation on the table.</p>
+</dd>
+</dl>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Enter a description of the types of queries the table was designed to satisfy.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><a id="DefaultTTL"></a><strong>default_time_to_live</strong> </dt>
+<dd>
+<p>TTL (Time To Live) in seconds, where zero is disabled.
+The maximum configurable value is <code>630720000</code> (20 years).
+Beginning in 2018, the expiration timestamp can exceed the maximum value supported by the storage engine;
+see the warning below.
+If the value is greater than zero, TTL is enabled for the entire table and an expiration timestamp is added to each column.
+A new TTL timestamp is calculated each time the data is updated and the row is removed after all the data expires.</p>
+<div class="paragraph">
+<p>Default value: <code>0</code> (disabled).</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The database storage engine can only encode TTL timestamps through <code>January 19 2038 03:14:07 UTC</code> due to the <a href="https://en.wikipedia.org/wiki/Year_2038_problem">Year 2038 problem</a>.
+The TTL date overflow policy determines whether requests with expiration timestamps later than the maximum date are rejected or inserted.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</dd>
+<dt class="hdlist1"><a id="gc_grace_seconds"></a><strong>gc_grace_seconds</strong> </dt>
+<dd>
+<p>Seconds after data is marked with a tombstone (deletion marker) before it is eligible for garbage-collection.
+Default value: 864000 (10 days).
+The default value allows time for the database to maximize consistency prior to deletion.</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Tombstoned records within the grace period are excluded from <a href="../../managing/operating/hints.html" class="page">hints</a> or <a href="../../developing/cql/ddl.html#batch_statement" class="page">batched mutations</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In a single-node cluster, this property can safely be set to zero.
+You can also reduce this value for tables whose data is not explicitly deleted&#8201;&#8212;&#8201;for example, tables containing only data with <a href="/_/glossary.html#gloss_ttl">TTL</a> set, or tables with <code>default_time_to_live</code> set.
+However, if you lower the <code>gc_grace_seconds</code> value, consider its interaction with these operations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>hint replays</strong>: When a node goes down and then comes back up, other nodes replay the write operations (called <a href="../../managing/operating/hints.html" class="page">hints</a>) that are queued for that node while it was unresponsive.
+The database does not replay hints older than gc_grace_seconds after creation.
+The <a href="#managing/configuration/configuration/cass_yaml_file.adoc#max_hint_window" class="page unresolved">max_hint_window</a> setting in the
+<a href="#managing/configuration/configuration/cass_yaml_file.adoc" class="page unresolved">cassandra.yaml</a> file sets the time limit (3 hours by default) for collecting hints for the unresponsive node.</p>
+</li>
+<li>
+<p><strong>batch replays</strong>: Like hint queues, <a href="../../developing/cql/ddl.html#batch_statement" class="page">batch operations</a> store database mutations that are replayed in sequence.
+As with hints, the database does not replay a batched mutation older than gc_grace_seconds after creation.
+If your application uses batch operations, consider the possibility that decreasing gc_grace_seconds increases the chance that a batched write operation may restore deleted data.
+The configuration/cass_yaml_file.html#batchlog_replay_throttle[batchlog_replay_throttle] property in the cassandra.yaml file give some control of the batch replay process.
+The most important factors, however, are the size and scope of the batches you use.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1"><strong>memtable_flush_period_in_ms</strong> </dt>
+<dd>
+<p>Milliseconds before <code>memtables</code> associated with the table are flushed.
+When memtable_flush_period_in_ms=0, the memtable will flush when:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>the flush threshold is met</p>
+</li>
+<li>
+<p>on shutdown</p>
+</li>
+<li>
+<p>on nodetool flush</p>
+</li>
+<li>
+<p>when commitlogs get full <strong>Default</strong>: <code>0</code></p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1"><strong>min_index_interval</strong> </dt>
+<dd>
+<p>Minimum gap between index entries in the index summary.
+A lower min_index_interval means the index summary contains more entries from the index, which allows the database to search fewer index entries to execute a read.
+A larger index summary may also use more memory.
+The value for min_index_interval is the densest possible sampling of the index.</p>
+</dd>
+<dt class="hdlist1"><strong>max_index_interval</strong> </dt>
+<dd>
+<p>If the total memory usage of all index summaries reaches this value,
+Apache Cassandra decreases the index summaries for the coldest SSTables to the maximum set by max_index_interval.
+The max_index_interval is the sparsest possible sampling in relation to memory pressure.</p>
+</dd>
+<dt class="hdlist1"><strong>speculative_retry</strong> </dt>
+<dd>
+<p>Configures <a href="https://www.datastax.com/dev/blog/rapid-read-protection-in-cassandra-2-0-2">rapid read protection</a>.
+Normal read requests are sent to just enough replica nodes to satisfy the <a href="/_/glossary.html#gloss_consistency_level">consistency level</a>.
+In rapid read protection, extra read requests are sent to other replicas, even after the consistency level has been met.
+The speculative retry property specifies the trigger for these extra read requests.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>ALWAYS: The coordinator node sends extra read requests to all other replicas after every read of that table.</p>
+</li>
+<li>
+<p>&lt;X&gt;percentile: Track each table&#8217;s typical read latency (in milliseconds).
+Coordinator node retrieves the typical latency time of the table being read and calculates X percent of that figure.
+The coordinator sends redundant read requests if the number of milliseconds it waits without responses exceeds that calculated figure.</p>
+<div class="paragraph">
+<p>For example, if the speculative_retry property for Table_A is set to <code>80percentile</code>, and that table&#8217;s typical latency is 60 milliseconds, the coordinator node handling a read of Table_A would send a normal read request first, and send out redundant read requests if it received no responses within 48ms, which is 80% of 60ms.</p>
+</div>
+</li>
+<li>
+<p>&lt;N&gt;ms: The coordinator node sends extra read requests to all other replicas if the coordinator node has not received any responses within <code>N</code> milliseconds.</p>
+</li>
+<li>
+<p>NONE: The coordinator node does not send extra read requests after any read of that table.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Compaction Strategy</th>
+<th class="tableblock halign-left valign-top"></th>
+<th class="tableblock halign-left valign-top"></th>
+<th class="tableblock halign-left valign-top"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="../../managing/operating/compaction/ucs.html" class="page">UCS</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="../../managing/operating/compaction/lcs.html" class="page">LCS</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="../../managing/operating/compaction/stcs.html" class="page">STCS</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="../../managing/operating/compaction/twcs.html" class="page">TWCS</a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>table_properties</strong> </dt>
+<dd>
+<p>You can modify an existing table&#8217;s properties.
+Some properties are single options that are set to a value:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-no-highlight hljs" data-lang="no-highlight">&lt;option_name&gt; = &lt;value&gt; [ AND ... ]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For example, <code>speculative_retry = '10ms'</code>.
+Enclose the value for a string property in single quotation marks.</p>
+</div>
+<div class="paragraph">
+<p>Other table properties are set using a JSON map: <code>option_name = { &lt;subproperty_name&gt; : &lt;value&gt; [ , ... ] }</code></p>
+</div>
+<div class="paragraph">
+<p>See <a href="#reference:cql-commands/create-table.adoc#table_options" class="page unresolved">table_options</a> for more details.</p>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="usage-notes"><a class="anchor" href="#usage-notes"></a>Usage notes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Restrictions:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Can only rename clustering columns in the primary key.</p>
+</li>
+<li>
+<p>Cannot change the data type of a column.</p>
+</li>
+<li>
+<p>For a table that has a materialized view, cannot drop a column from the table even if the column is not used in the materialized view.</p>
+</li>
+<li>
+<p>Cannot rename or drop columns that have dependent secondary indexes.</p>
+</li>
+<li>
+<p>Do not add a column with the same name as an existing column but with a different data type.
+It will prevent commit log replays and corrupt existing SSTables with old data.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This section uses the <a href="#cassandra:cyclist_races-table.adoc" class="page unresolved">cyclist_races</a> table.</p>
+</div>
+<div class="sect2">
+<h3 id="adding-a-column"><a class="anchor" href="#adding-a-column"></a>Adding a column</h3>
+<div class="paragraph">
+<p>To add a column, use the ADD instruction:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">ALTER TABLE cycling.cyclist_races
+ADD manager UUID;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To add a column of a collection type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">ALTER TABLE cycling.cyclist_races
+ADD completed list&lt;text&gt;;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This operation does not validate the existing data.</p>
+</div>
+<div class="paragraph">
+<p><strong>Restriction:</strong> You cannot use the <code>ADD</code> instruction to add:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A column with the same name as an existing column</p>
+</li>
+<li>
+<p>A static column if the table has no clustering columns.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="dropping-a-column"><a class="anchor" href="#dropping-a-column"></a>Dropping a column</h3>
+<div class="paragraph">
+<p>To remove a column from the table, use the DROP instruction:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">ALTER TABLE cycling.cyclist_races
+DROP manager;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>DROP</code> removes the column from the table definition.
+The column becomes unavailable for queries immediately after it is dropped.
+The database drops the column data during the next compaction.</p>
+</div>
+<div class="paragraph">
+<p><strong>Restriction:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If you drop a column then re-add it, Apache Cassandra
+does not restore the values written before the column was dropped.</p>
+</li>
+<li>
+<p>Do not re-add a dropped column that contained timestamps generated by a client;
+you can re-add columns with timestamps generated by the <a href="#developing/querying/use-write-time.adoc" class="page unresolved">write time</a> facility.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="renaming-a-column"><a class="anchor" href="#renaming-a-column"></a>Renaming a column</h3>
+<div class="paragraph">
+<p>To rename a column in the <a href="#cassandra:race_times-table.adoc" class="page unresolved">race_times</a> table:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">ALTER TABLE cycling.race_times
+RENAME race_date TO date;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Restriction:</strong> The following restrictions apply to <code>RENAME</code>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>You can only rename clustering columns, which are part of the primary key.</p>
+</li>
+<li>
+<p>You cannot rename the partition key because the partition key determines the data storage location on a node.
+If a different partition name is required, the table must be recreated and the data migrated.</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>There are many restrictions when using <code>RENAME</code> because SSTables are immutable.
+To change the state of the data on disk, everything must be rewritten.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>You can index a renamed column.</p>
+</li>
+<li>
+<p>You cannot rename a column if an index has been created on it.</p>
+</li>
+<li>
+<p>You cannot rename a static column.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="modifying-table-properties"><a class="anchor" href="#modifying-table-properties"></a>Modifying table properties</h3>
+<div class="paragraph">
+<p>To change an existing table&#8217;s properties, use <code>ALTER TABLE</code> and <code>WITH</code>.
+You can specify a:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Single property name and value.</p>
+</li>
+<li>
+<p>Property map to set the names and values, as shown in the <a href="#cql-commands/alter-table.adoc#alter-compression" class="page unresolved">next section on compression and compaction</a>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For example, to add a comment to the <a href="#cassandra:cyclist_base-table.adoc" class="page unresolved">cyclist_base</a> table using WITH:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">ALTER TABLE cycling.cyclist_base
+WITH comment = 'basic cyclist information';</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Enclose a text property value in single quotation marks.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="alter-compression"><a class="anchor" href="#alter-compression"></a>Modifying compression and compaction</h3>
+<div class="paragraph">
+<p>Use a property map to alter the <a href="#cassandra:comments-table.adoc" class="page unresolved">comments</a> table&#8217;s compression or compaction setting:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">ALTER TABLE cycling.cyclist_base
+WITH comment = 'basic cyclist information';</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Enclose the name of each key in single quotes.
+If the value is a string, enclose the string in quotes as well.</p>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you change the compaction strategy of a table with existing data, the database rewrites all existing SSTables using the new strategy.
+This can take hours, which can be a major problem for a production system.
+For strategies to minimize this disruption, see <a href="http://blog.alteroot.org/articles/2015-04-20/change-cassandra-compaction-strategy-on-production-cluster.html">How to change the compaction strategy on a production cluster</a> and <a href="https://groups.google.com/forum/#!topic/nosql-databases/iYPoy-06Qvs">Impact of Changing Compaction Strategy</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="changing-caching"><a class="anchor" href="#changing-caching"></a>Changing caching</h3>
+<div class="paragraph">
+<p>Set the number of rows per partition to store in the row cache for the <a href="#cassandra:comments-table.adoc" class="page unresolved">comments</a> table to 10 rows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">ALTER TABLE cycling.comments
+WITH caching = {
+  'keys' : 'NONE',
+  'rows_per_partition' : 10
+};</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="change-the-speculative-retries"><a class="anchor" href="#change-the-speculative-retries"></a>Change the speculative retries</h3>
+<div class="paragraph">
+<p>Modify the <code>cyclist_base</code> table to 95th percentile for speculative retry:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">ALTER TABLE cycling.cyclist_base
+WITH speculative_retry = '95percentile';</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Modify the <code>cyclist_base</code> table to use 10 milliseconds for speculative retry:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">ALTER TABLE cycling.cyclist_base
+WITH speculative_retry = '10ms';</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="enabling-and-disabling-background-compaction"><a class="anchor" href="#enabling-and-disabling-background-compaction"></a>Enabling and disabling background compaction</h3>
+<div class="paragraph">
+<p>The following example sets the <code>enabled</code> property to <code>false</code> to disable background compaction:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">ALTER TABLE cycling.comments
+WITH COMPACTION = {
+  'class' : 'SizeTieredCompactionStrategy',
+  'enabled' : 'false'
+};</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Disabling background compaction can be harmful: without it, the database does not regain disk space, and could allow <a href="https://docs.datastax.com/en/glossary/doc/glossary/gloss_zombie.html">zombies</a> to propagate.
+Although compaction uses I/O, it is better to leave it enabled in most cases.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="reading-extended-compaction-logs"><a class="anchor" href="#reading-extended-compaction-logs"></a>Reading extended compaction logs</h3>
+<div class="paragraph">
+<p>Set the <code>log_all</code> subproperty to <code>true</code> to collect in-depth information about compaction activity on a node in a dedicated log file.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you enable extended compaction logging for any table on any node, it is enabled for all tables on all nodes in the cluster.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When extended compaction is enabled, the database creates a file named compaction-%d.log (where <code>%d</code> is a sequential number) in home/logs.</p>
+</div>
+<div class="paragraph">
+<p>The compaction logging service logs detailed information about the following types of compaction events:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>type:enable</code></p>
+<div class="paragraph">
+<p>Lists SSTables that have been flushed previously.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-no-highlight hljs" data-lang="no-highlight">{"type":"enable","keyspace":"test","table":"t","time":1470071098866,"strategies":
+  [    {"strategyId":"0","type":"LeveledCompactionStrategy","tables":[],"repaired":true,"folders":
+      ["/home/carl/oss/cassandra/bin/../data/data"]},
+    {"strategyId":"1","type":"LeveledCompactionStrategy","tables":[],"repaired":false,"folders":
+      ["/home/carl/oss/cassandra/bin/../data/data"]
+    }
+ ]
+}</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p><code>type: flush</code></p>
+<div class="paragraph">
+<p>Logs a flush event from a memtable to an SSTable on disk, including the CompactionStrategy for each table.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>{"type":"flush","keyspace":"test","table":"t","time":1470083335639,"tables":
+  [    {"strategyId":"1","table":
+      {"generation":1,"version":"mb","size":106846362,"details":
+        {"level":0,"min_token":"-9221834874718566760","max_token":"9221396997139245178"}
+      }
+    }
+ ]
+}</pre>
+</div>
+</div>
+</li>
+<li>
+<p><code>type: compaction</code></p>
+<div class="paragraph">
+<p>Logs a compaction event.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>{"type":"compaction","keyspace":"test","table":"t","time":1470083660267,
+ "start":"1470083660188","end":"1470083660267","input":
+  [    {"strategyId":"1","table":
+      {"generation":1372,"version":"mb","size":1064979,"details":
+        {"level":1,"min_token":"7199305267944662291","max_token":"7323434447996777057"}
+      }
+    }
+ ],"output":
+  [    {"strategyId":"1","table":
+      {"generation":1404,"version":"mb","size":1064306,"details":
+        {"level":2,"min_token":"7199305267944662291","max_token":"7323434447996777057"}
+      }
+    }
+ ]
+}</pre>
+</div>
+</div>
+</li>
+<li>
+<p><code>type: pending</code></p>
+<div class="paragraph">
+<p>Lists the number of pending tasks for a compaction strategy.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>{"type":"pending","keyspace":"test","table":"t",
+ "time":1470083447967,"strategyId":"1","pending":200}</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="reviewing-the-table-definition"><a class="anchor" href="#reviewing-the-table-definition"></a>Reviewing the table definition</h3>
+<div class="paragraph">
+<p>Use <code>DESCRIBE</code> or <code>DESC</code> to view the table definition.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-language-cql hljs" data-lang="language-cql">DESC cycling.comments;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The table details including the column names are returned.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-results hljs" data-lang="results">CREATE TABLE cycling.comments (
+    id uuid,
+    created_at timestamp,
+    comment text,
+    commenter text,
+    record_id timeuuid,
+    PRIMARY KEY (id, created_at)
+) WITH CLUSTERING ORDER BY (created_at DESC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'NONE', 'rows_per_partition': '10'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'enabled': 'true', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.DeflateCompressor'}
+    AND crc_check_chance = 1.0
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND speculative_retry = '99PERCENTILE';</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</article>
+</main>
+    </div>
+</div>
+            <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../../../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://twitter.com/cassandra?lang=en" target="_blank"><img src="../../../../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../../../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+    <script src="../../../../../assets/js/site.js"></script>
+    <script async src="../../../../../assets/js/vendor/highlight.js"></script>
+    <script src="../../../../../assets/js/vendor/lunr.js"></script>
+    <script src="../../../../../assets/js/vendor/search.js" id="search-script" data-base-path="../../../../.." data-page-path="/Cassandra/5.0/cassandra/reference/cql-commands/alter-table.html"></script>
+    <script async src="../../../../../assets/../search-index.js"></script>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+        </div>
+    </body>
+</html>
