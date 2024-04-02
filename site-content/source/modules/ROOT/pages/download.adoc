@@ -156,18 +156,18 @@ Debian's `sources.list` and RedHat's `cassandra.repo` files must be updated to p
 * For the `<release series>` specify the major version number, without dot, and with an appended x.
 * The latest `<release series>` is `41x`.
 * For older releases, the `<release series>` can be one of `40x`, `311`, `30x`, or `22x`.
-* Add the Apache repository of Cassandra to `/etc/apt/sources.list.d/cassandra.sources.list`, for example for the latest 4.0
-
-[source]
---
-echo "deb https://debian.cassandra.apache.org 41x main" | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list
---
-
 * Add the Apache Cassandra repository keys:
 
 [source]
 --
-curl https://downloads.apache.org/cassandra/KEYS | sudo apt-key add -
+curl -o /etc/apt/keyrings/apache-cassandra.asc https://downloads.apache.org/cassandra/KEYS
+--
+
+* Add the Apache repository of Cassandra to `/etc/apt/sources.list.d/cassandra.sources.list`, for example for the latest 4.1
+
+[source]
+--
+echo "deb[signed-by=/etc/apt/keyrings/apache-cassandra.asc] https://debian.cassandra.apache.org 41x main" | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list
 --
 
 * Update the repositories:
@@ -176,21 +176,6 @@ curl https://downloads.apache.org/cassandra/KEYS | sudo apt-key add -
 --
 sudo apt-get update
 --
-
-* If you encounter this error:
-
-[source]
---
-  GPG error: http://www.apache.org 311x InRelease: The following signatures couldn't be verified because the public key is not available: NO_PUBKEY A278B781FE4B2BDA
---
-
-Then add the public key A278B781FE4B2BDA as follows:
-
-[source]
---
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key A278B781FE4B2BDA
---
-and repeat `sudo apt-get update`. The actual key may be different, you get it from the error message itself. For a full list of Apache contributors public keys, you can refer to https://downloads.apache.org/cassandra/KEYS[Cassandra KEYS].
 
 * Install Cassandra:
 
