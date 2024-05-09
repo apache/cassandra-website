@@ -486,44 +486,8 @@ source /home/cassandra/cqlsh-venv/bin/activate
 [#cqlsh_tests]
 === CQLSH tests
 
-CQLSH tests are located in the `pylib/cqlshlib/test` directory. They are
-based on the Nose framework. They require a running Cassandra cluster
-(it can be one or more nodes cluster) as they start a CQL shell
-client which tries to connect to a live node. Each test case starts the
-CQLSH client as a subprocess, issues some commands, and verifies the
-outcome returned by CQLSH to the console.
-
-You need to set up and activate the `virtualenv` for CQLSH tests (see
-<<setup_python_env>> section for details).
-
-So let’s start the cluster first - you can use CCM for that (note that
-CCM gets automatically installed with the `virtualenv` and is
-immediately available once the `virtualenv` is activated):
-
-[source,plaintext]
-----
-ccm create test -n 1 --install-dir=/home/cassandra/cassandra
-ccm updateconf "enable_user_defined_functions: true"
-ccm updateconf "enable_scripted_user_defined_functions: true"
-ccm updateconf "cdc_enabled: true"
-ccm start --wait-for-binary-proto
-----
-
-When those commands complete successfully, there is a cluster up and
-running, and you can run the CQLSH tests. To do so, go to the
-`pylib/cqlshlib` directory (not to the test subdirectory) and call
-the `nosetests` command without any arguments. The tests take around
-5 minutes to complete.
-
-Finally, remember that since you manually started the cluster, you need
-to stop it manually - just call:
-
-[source,plaintext]
-----
-ccm remove test
-----
-
-There is a helper script that does all of those things for you. In
+CQLSH tests are located in the `pylib/cqlshlib/test` directory. 
+There is a helper script that runs the tests for you. In
 particular, it builds the Cassandra project, creates a virtual
 environment, runs the CCM cluster, executes the tests, and eventually
 removes the cluster. You find the script in the `pylib` directory. The
@@ -534,11 +498,7 @@ only argument it requires is the Cassandra project directory:
 cassandra@b69a382da7cd:~/cassandra/pylib$ ./cassandra-cqlsh-tests.sh /home/cassandra/cassandra
 ----
 
-As you noticed, if you have already built Cassandra, the previous method
-of running tests is much faster. Just remember that all the
-`ccm updateconf` calls must be aligned with the Cassandra version you
-are testing, with the supported features enabled. 
-Otherwise, Cassandra won’t start.
+Refer to the https://github.com/apache/cassandra/blob/trunk/pylib/README.asc[README] for further information.
 
 ==== Running selected tests
 
@@ -547,7 +507,7 @@ file as an argument:
 
 [source,plaintext]
 ----
-~/cassandra/pylib/cqlshlib$ nosetests test/test_constants.py
+~/cassandra/pylib/cqlshlib$ pytest test/test_constants.py
 ----
 
 To run a specific test case, you need to specify the module, class name,
@@ -555,11 +515,8 @@ and the test name, for example:
 
 [source,plaintext]
 ----
-~/cassandra/pylib/cqlshlib$ nosetests cqlshlib.test.test_cqlsh_output:TestCqlshOutput.test_boolean_output
+~/cassandra/pylib/cqlshlib$ pytest cqlshlib.test.test_cqlsh_output:TestCqlshOutput.test_boolean_output
 ----
-
-For more information on selecting tests with the Nose framework, see
-https://nose.readthedocs.io/en/latest/usage.html[this] page.
 
 [#python_dtests]
 === Python distributed tests
