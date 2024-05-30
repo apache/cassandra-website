@@ -167,6 +167,26 @@ org.slf4j
 everything else alphabetically
 ----
 
+==== Logging
+
+While logging, it is important to avoid forcing unnecessary work on a hot path. There might be an invocation of a log statement which might not reach a log endpoint hence it is evaluated unnecessarily. 
+The `if` test beforehand should only be done if the log invocation is expected to do unnecessary work, e.g. construct a varargs array or do some costly string translation as part of the parameter construction to the log statement.
+
+[source,java]
+----
+logger.trace("some literal log message");
+
+logger.trace("some non-varargs simple log message with {}, {}", object1, object2);
+
+if (logger.isTraceEnabled())
+    logger.trace("a log message with parameter: {}", object.expensiveToString());
+
+if (logger.isTraceEnabled())
+    logger.trace("a log message with {}, {}, {}, {}", object1, object2, object3, object4);
+----
+
+Other cases should be logged without wrapping it in `if`. 
+
 === Format files for IDEs
 
 * IntelliJ:
