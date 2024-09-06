@@ -3,21 +3,81 @@
 
 == Native Protocol Version 3
 
-[source, plaintext]
-----
-include::example$TEXT/native_protocol_v3.spec[Version 3]
-----
+[source, js]
+++++
+<div id="contentv3" class="doc-container"></div>
+<iframe id="iframev3" src="native_protocol_v3.html" style="display:none;"></iframe>
+++++
 
 == Native Protocol Version 4
 
-[source, plaintext]
-----
-include::example$TEXT/native_protocol_v4.spec[Version 4]
-----
+[source, js]
+++++
+<div id="contentv4" class="doc-container"></div>
+<iframe id="iframev4" src="native_protocol_v4.html" style="display:none;"></iframe>
+++++
 
 == Native Protocol Version 5
 
-[source, plaintext]
-----
-include::example$TEXT/native_protocol_v5.spec[Version 5]
-----
+[source, js]
+++++
+<div id="contentv5" class="doc-container"></div>
+<iframe id="iframev5" src="native_protocol_v5.html" style="display:none;"></iframe>
+++++
+
+[source, js]
+++++
+<script>
+    function copyBodyContent(iframeId, contentId) {
+        var iframe = document.getElementById(iframeId);
+        var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+
+        var navElement = iframeDocument.querySelector('nav.top');
+        if (navElement) {
+            navElement.remove();
+        }
+        var preElements = iframeDocument.querySelectorAll('pre');
+        preElements.forEach(function(preElement) {
+            if (!preElement.textContent.trim()) {
+                preElement.remove();
+            }
+        });
+        var h1Elements = iframeDocument.querySelectorAll('h1');
+        h1Elements.forEach(function(h1Element) {
+            h1Element.remove();
+        });
+
+        var bodyContent = iframeDocument.body.innerHTML;
+        document.getElementById(contentId).innerHTML = bodyContent;
+    }
+
+    function setNavigation() {
+        var containers = document.querySelectorAll('.doc-container');
+
+    containers.forEach(function (container) {
+        var navLinks = container.querySelectorAll('nav a, pre a');
+
+        navLinks.forEach(function (link) {
+            link.addEventListener('click', function (event) {
+
+                event.preventDefault();
+                var section = link.getAttribute('href').replace("#",'');
+
+                var targetSection = container.querySelector('h2[id="' + section + '"]') || container.querySelector('h3[id="' + section + '"]') || container.querySelector('h4[id="' + section + '"]') || container.querySelector('h5[id="' + section + '"]');
+
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    });
+    }
+
+    window.onload = function() {
+        copyBodyContent('iframev3', 'contentv3');
+        copyBodyContent('iframev4', 'contentv4');
+        copyBodyContent('iframev5', 'contentv5');
+        setNavigation()
+    }
+</script>
+++++
