@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Apache Cassandra | Apache Cassandra Documentation</title>
+    <link rel="stylesheet" href="../../assets/css/site.css">
+    <meta name="description" content="Storage Attached Indexes (SAI) are one of the key features within the upcoming Apache Cassandra 5.0 release">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="_">
+    <meta name="dcterms.identifier" content="master">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "https://plausible.cassandra.apache.org/js/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>  </head>
+  <body class="single-post">
+      <div class="container mx-auto relative">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta property="og:type" content="website" />
+	<meta property="og:description" content="" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+        <div class="header-social-icons text-right">
+            <a href="https://twitter.com/cassandra?lang=en" target="_blank" styles="margin-left: 20px;"><img src="../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../assets/img/logo-white-r.png" alt="cassandra logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+        <div class="hero hero--home grad">
+            <div class="eye"></div>
+            <div id="home-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                <h1>Apache Cassandra 5.0 Features: Storage Attached Indexes</h1>
+                <h3>November 14, 2023 | The Apache Cassandra Community</h3>
+            </div>
+        </div>
+        <div id="blog-post" class="flex-center py-large arrow">
+            <div class="blog-breadcrumb mb-medium">
+                <div class="inner inner--narrow">
+                    <a href="/_/blog.html">« Back to the Apache Cassandra Blog</a>
+                </div>
+            </div>
+            <div class="post-content">
+                <div class="inner inner--narrow">
+                    <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Apache Cassandra 5.0 is the project’s major release for 2023, and it promises some of the biggest changes for Cassandra to date. After more than a decade of engineering work dedicated to stabilizing and building Cassandra as a distributed database, we now look forward to introducing a host of exciting features and enhancements that empower users to take their data-driven applications to the next level, including machine learning and artificial intelligence.</em></p>
+</div>
+<div class="paragraph">
+<p><em>This blog series aims to give a deeper dive into some of the key features of Cassandra 5.0.</em></p>
+</div>
+<div class="paragraph">
+<p>When it comes to managing and retrieving large volumes of data at high speeds, Apache Cassandra is one of the top choices for distributed NoSQL databases. Its robust architecture and scalability make it a go-to solution for organizations dealing with vast amounts of data. Storage Attached Indexes (SAI) are one of the key features within the upcoming Apache Cassandra 5.0 release that stand to make Cassandra even more powerful. In this blog post, we&#8217;ll explore what Apache Cassandra Storage Attached Indexes are, why they are valuable, and how they can help you optimize your data retrieval operations.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="what-are-storage-attached-indexes"><a class="anchor" href="#what-are-storage-attached-indexes"></a>What are Storage Attached Indexes?</h3>
+<div class="paragraph">
+<p>Apache Cassandra is designed to handle massive datasets distributed across multiple nodes, making it a popular choice for applications that require high availability and fault tolerance. However, retrieving data from a Cassandra cluster efficiently can be challenging due to its distributed nature and NoSQL data model. This is where Storage Attached Indexes come into play.</p>
+</div>
+<div class="paragraph">
+<p>Storage Attached Indexes, or SAI, are a new feature in Apache Cassandra 5.0. SAI provides an indexing mechanism that is closely integrated with the Cassandra storage engine to make data modeling easier for users. Unlike the traditional Cassandra secondary indexes, which had their limitations, SAI is designed to address these limitations and provide a more efficient and versatile indexing solution.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="the-benefits-of-storage-attached-indexes-with-apache-cassandra"><a class="anchor" href="#the-benefits-of-storage-attached-indexes-with-apache-cassandra"></a>The Benefits of Storage Attached Indexes with Apache Cassandra</h3>
+<div class="sect3">
+<h4 id="1-improved-query-performance"><a class="anchor" href="#1-improved-query-performance"></a>1. Improved Query Performance</h4>
+<div class="paragraph">
+<p>The primary value proposition of SAI is its ability to significantly improve query performance. With traditional secondary indexes, queries often required full scans of the data, resulting in slow response times as the dataset grew. SAI, on the other hand, uses an efficient indexing mechanism that dramatically reduces the amount of data scanned during query execution. (See ‘Reduced Storage Overhead’ below for more on improved legacy index speeds.) SAI achieves this by building a more compact and precise index structure. This allows for faster data retrieval and reduced I/O operations, making it ideal for applications that require low-latency responses.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="2-reduced-storage-overhead"><a class="anchor" href="#2-reduced-storage-overhead"></a>2. Reduced Storage Overhead</h4>
+<div class="paragraph">
+<p>Traditional secondary indexes in Cassandra often result in significant storage overhead, which can become problematic for applications with large datasets as the storage overhead grows linearly as the number of indexed columns on a table increases. SAI addresses this issue by minimizing the storage footprint required for indexing. Because it shares index elements common to an SSTable, SAI disk usage grows only marginally as more columns are indexed on a table/SSTable. By reducing storage overhead, SAI helps organizations save on infrastructure costs while still benefiting from improved query performance.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="3-support-for-a-wide-range-of-queries"><a class="anchor" href="#3-support-for-a-wide-range-of-queries"></a>3. Support for a Wide Range of Queries</h4>
+<div class="paragraph">
+<p>One of the drawbacks of traditional Cassandra secondary indexes was their inability to support a wide range of query types. SAI, however, is designed to support complex queries, including numeric range queries, test suffix/prefix queries and boolean queries, making it a versatile solution for various use cases.</p>
+</div>
+<div class="paragraph">
+<p>Whether you need to retrieve data based on specific criteria or perform analytics on your Cassandra dataset, SAI can handle it efficiently.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="4-seamless-integration"><a class="anchor" href="#4-seamless-integration"></a>4. Seamless Integration</h4>
+<div class="paragraph">
+<p>Apache Cassandra Storage Attached Indexes are designed to seamlessly integrate with existing Cassandra data models. This means that organizations can take advantage of SAI without the need for a complete overhaul of their database design. It offers backward compatibility with existing data structures, making the transition to SAI relatively smooth.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="5-eases-operational-task-burden"><a class="anchor" href="#5-eases-operational-task-burden"></a>5. Eases Operational Task Burden</h4>
+<div class="paragraph">
+<p>Apache Cassandra Storage Attached Indexes are attached to the normal Memtable/SSTable lifecycle, which means the index data mimics the structure/locality of backing table data. This makes operational tasks like streaming, importing data, and partial/resumable bootstrapping ultimately easier to execute.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="how-to-get-started-with-storage-attached-indexes"><a class="anchor" href="#how-to-get-started-with-storage-attached-indexes"></a>How to Get Started with Storage Attached Indexes</h3>
+<div class="paragraph">
+<p>To leverage the value of Apache Cassandra Storage Attached Indexes, you will need to upgrade to Cassandra 5.0. Once you&#8217;ve upgraded, you can start using SAI for your data modeling and query optimization needs.</p>
+</div>
+<div class="paragraph">
+<p>To get started with Storage-Attached Indexing (SAI), we’ll do the following steps:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Create a database and keyspace.</p>
+</li>
+<li>
+<p>Create a table.</p>
+</li>
+<li>
+<p>Create an index using SAI.</p>
+</li>
+<li>
+<p>Add data.</p>
+</li>
+<li>
+<p>Create and run a query using SAI.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The examples in the following quickstart topic show SAI indexes with non-partition key columns.</p>
+</div>
+<div class="sect3">
+<h4 id="create-a-database-and-keyspace"><a class="anchor" href="#create-a-database-and-keyspace"></a>Create a database and keyspace</h4>
+<div class="paragraph">
+<p>Follow the preliminary steps in the Astra DB documentation to create and launch your Astra DB database. In those steps, you’ll specify a keyspace. Name it <code>cycling</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="create-a-table"><a class="anchor" href="#create-a-table"></a>Create a table</h4>
+<div class="paragraph">
+<p>Using <code>cqlsh</code> or the CQL Console, create a <code>cyclist_semi_pro</code> database table in the <code>cycling</code> keyspace or the keyspace name of your choice:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">CREATE TABLE IF NOT EXISTS cycling.cyclist_semi_pro (
+  id int,
+  firstname text,
+  lastname text,
+  age int,
+  affiliation text,
+  country text,
+  registration date,
+  PRIMARY KEY (id));</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="create-an-index-using-sai"><a class="anchor" href="#create-an-index-using-sai"></a>Create an index using SAI</h4>
+<div class="paragraph">
+<p>To test a non-trivial query, you’ll need some SAI indexes. Use <a href="https://docs.datastax.com/en/cql/astra/docs/reference/cql-commands/create-custom-index.html" target="_blank" rel="noopener">CREATE CUSTOM INDEX</a> commands to create SAI indexes on a few non-primary-key columns in the <code>cyclist_semi_pro</code> table:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">CREATE CUSTOM INDEX lastname_sai_idx ON cycling.cyclist_semi_pro (lastname)
+USING 'Sai'
+WITH OPTIONS = {'case_sensitive': 'false', 'normalize': 'true', 'ascii': 'true'};
+
+CREATE CUSTOM INDEX age_sai_idx ON cycling.cyclist_semi_pro (age)
+USING 'Sai';
+
+CREATE CUSTOM INDEX country_sai_idx ON cycling.cyclist_semi_pro (country)
+USING 'Sai'
+WITH OPTIONS = {'case_sensitive': 'false', 'normalize': 'true', 'ascii': 'true'};
+
+CREATE CUSTOM INDEX registration_sai_idx ON cycling.cyclist_semi_pro (registration)
+USING 'Sai';</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Note</strong>: <em>Index names are unique per keyspace. The index name must be a unique identifier for the index for each table within a keyspace. This requirement is true for both vector and non-vector indexes.</em></p>
+</div>
+<div class="paragraph">
+<p>Let’s take a look at the description of the table and its indexes:</p>
+</div>
+<div class="paragraph">
+<p><strong>QUERY</strong></p>
+</div>
+<div class="paragraph">
+<p><code>DESCRIBE TABLE cycling.cyclist_semi_pro;</code></p>
+</div>
+<div class="paragraph">
+<p><strong>RESULT</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">CREATE TABLE cycling.cyclist_semi_pro (
+    id int PRIMARY KEY,
+    affiliation text,
+    age int,
+    country text,
+    firstname text,
+    lastname text,
+    registration date
+) WITH additional_write_policy = '99PERCENTILE'
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND nodesync = {'enabled': 'true', 'incremental': 'true'}
+    AND read_repair = 'BLOCKING'
+    AND speculative_retry = '99PERCENTILE';
+CREATE CUSTOM INDEX registration_sai_idx ON cycling.cyclist_semi_pro (registration) USING 'StorageAttachedIndex';
+CREATE CUSTOM INDEX country_sai_idx ON cycling.cyclist_semi_pro (country) USING 'StorageAttachedIndex' WITH OPTIONS = {'normalize': 'true', 'case_sensitive': 'false', 'ascii': 'true'};
+CREATE CUSTOM INDEX age_sai_idx ON cycling.cyclist_semi_pro (age) USING 'StorageAttachedIndex';
+CREATE CUSTOM INDEX lastname_sai_idx ON cycling.cyclist_semi_pro (lastname) USING 'StorageAttachedIndex' WITH OPTIONS = {'normalize': 'true', 'case_sensitive': 'false', 'ascii': 'true'};</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="add-data-to-your-table"><a class="anchor" href="#add-data-to-your-table"></a>Add data to your table</h4>
+<div class="paragraph">
+<p>Use CQLSH <code>INSERT</code> commands to add some data to the <code>cyclist_semi_pro</code> database table:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">INSERT INTO cycling.cyclist_semi_pro (id, firstname, lastname, age, affiliation, country, registration) VALUES (1, 'Carlos', 'Perotti', 22, 'Recco Club', 'ITA', '2020-01-12');
+INSERT INTO cycling.cyclist_semi_pro (id, firstname, lastname, age, affiliation, country, registration) VALUES (2, 'Giovani', 'Pasi', 19, 'Venezia Velocità', 'ITA', '2016-05-15');
+INSERT INTO cycling.cyclist_semi_pro (id, firstname, lastname, age, affiliation, country, registration) VALUES (3, 'Frances', 'Giardello', 24, 'Menaggio Campioni', 'ITA', '2018-07-29');
+INSERT INTO cycling.cyclist_semi_pro (id, firstname, lastname, age, affiliation, country, registration) VALUES (4, 'Mark', 'Pastore', 19, 'Portofino Ciclisti', 'ITA', '2017-06-16');
+INSERT INTO cycling.cyclist_semi_pro (id, firstname, lastname, age, affiliation, country, registration) VALUES (5, 'Irene', 'Cantona', 24, 'Como Velocità', 'ITA', '2012-07-22');
+INSERT INTO cycling.cyclist_semi_pro (id, firstname, lastname, age, affiliation, country, registration) VALUES (6, 'Hugo', 'Herrera', 23, 'Bellagio Ciclisti', 'ITA', '2004-02-12');
+INSERT INTO cycling.cyclist_semi_pro (id, firstname, lastname, age, affiliation, country, registration) VALUES (7, 'Marcel', 'Silva', 21, 'Paris Cyclistes', 'FRA', '2018-04-28');
+INSERT INTO cycling.cyclist_semi_pro (id, firstname, lastname, age, affiliation, country, registration) VALUES (8, 'Theo', 'Bernat', 19, 'Nice Cavaliers', 'FRA', '2007-05-15');
+INSERT INTO cycling.cyclist_semi_pro (id, firstname, lastname, age, affiliation, country, registration) VALUES (9, 'Richie', 'Draxler', 24, 'Normandy Club', 'FRA', '2011-02-26');
+INSERT INTO cycling.cyclist_semi_pro (id, firstname, lastname, age, affiliation, country, registration) VALUES (10, 'Agnes', 'Cavani', 22, 'Chamonix Hauteurs', 'FRA', '2020-01-02');
+INSERT INTO cycling.cyclist_semi_pro (id, firstname, lastname, age, affiliation, country, registration) VALUES (11, 'Pablo', 'Verratti', 19, 'Chamonix Hauteurs', 'FRA', '2006-05-15');
+INSERT INTO cycling.cyclist_semi_pro (id, firstname, lastname, age, affiliation, country, registration) VALUES (12, 'Charles', 'Eppinger', 24, 'Chamonix Hauteurs', 'FRA', '2018-07-29');
+INSERT INTO cycling.cyclist_semi_pro (id, firstname, lastname, age, affiliation, country, registration) VALUES (13, 'Stanley', 'Trout', 30, 'Bolder Boulder', 'USA', '2016-02-12');
+INSERT INTO cycling.cyclist_semi_pro (id, firstname, lastname, age, affiliation, country, registration) VALUES (14, 'Juan', 'Perez', 31, 'Rutgers Alumni Riders', 'USA', '2017-06-16');
+INSERT INTO cycling.cyclist_semi_pro (id, firstname, lastname, age, affiliation, country, registration) VALUES (15, 'Thomas', 'Fulton', 27, 'Exeter Academy', 'USA', '2012-12-15');
+INSERT INTO cycling.cyclist_semi_pro (id, firstname, lastname, age, affiliation, country, registration) VALUES (16, 'Jenny', 'Hamler', 28, 'CU Alums Crankworkz', 'USA', '2012-07-22');
+INSERT INTO cycling.cyclist_semi_pro (id, firstname, lastname, age, affiliation, country, registration) VALUES (17, 'Alice', 'McCaffrey', 26, 'Pennan Power', 'GBR', '2020-02-12');
+INSERT INTO cycling.cyclist_semi_pro (id, firstname, lastname, age, affiliation, country, registration) VALUES (18, 'Nicholas', 'Burrow', 26, 'Aberdeen Association', 'GBR', '2016-02-12');
+INSERT INTO cycling.cyclist_semi_pro (id, firstname, lastname, age, affiliation, country, registration) VALUES (19, 'Tyler', 'Higgins', 24, 'Highclere Agents', 'GBR', '2019-07-31');
+INSERT INTO cycling.cyclist_semi_pro (id, firstname, lastname, age, affiliation, country, registration) VALUES (20, 'Leslie', 'Boyd', 18, 'London Cyclists', 'GBR', '2012-12-15');</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="create-and-run-a-query-using-sai"><a class="anchor" href="#create-and-run-a-query-using-sai"></a>Create and run a query using SAI.</h4>
+<div class="paragraph">
+<p>To test a non-trivial query, you’ll need some SAI indexes. Use CREATE CUSTOM INDEX commands to create SAI indexes on a few non-primary-key columns in the <code>cyclist_semi_pro</code> table:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">CREATE CUSTOM INDEX lastname_sai_idx ON cycling.cyclist_semi_pro (lastname)
+USING 'StorageAttachedIndex'
+WITH OPTIONS = {'case_sensitive': 'false', 'normalize': 'true', 'ascii': 'true'};
+
+CREATE CUSTOM INDEX age_sai_idx ON cycling.cyclist_semi_pro (age)
+USING 'StorageAttachedIndex';
+
+CREATE CUSTOM INDEX country_sai_idx ON cycling.cyclist_semi_pro (country)
+USING 'StorageAttachedIndex'
+WITH OPTIONS = {'case_sensitive': 'false', 'normalize': 'true', 'ascii': 'true'};
+
+CREATE CUSTOM INDEX registration_sai_idx ON cycling.cyclist_semi_pro (registration)
+USING 'StorageAttachedIndex';</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>To get started with Storage-Attached Indexing (SAI), refer to this <a href="https://docs.datastax.com/en/cql/astra/docs/getting-started/sai-quickstart.html" target="_blank" rel="noopener">Quickstart Guide</a>.</strong></p>
+</div>
+<div class="paragraph">
+<p>Apache Cassandra Storage Attached Indexes (SAI) represent a significant advancement in the world of distributed NoSQL databases. They offer improved query performance, support for a wide range of queries, reduced storage overhead, and seamless integration with existing data models. As organizations continue to deal with ever-growing datasets, SAI becomes a valuable tool in their arsenal for optimizing data retrieval operations and delivering low-latency, high-performance applications.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="additional-resources"><a class="anchor" href="#additional-resources"></a>Additional Resources</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://cwiki.apache.org/confluence/x/7DZ4CQ" target="_blank" rel="noopener">Why Storage Attached Indexes?</a></p>
+</li>
+<li>
+<p><a href="https://www.youtube.com/watch?v=aBuIQSLxtnk&amp;list=PLqcm6qE9lgKKls90MlpejceYUU_0qVnWa&amp;index=13&amp;t=1s" target="_blank" rel="noopener">Storage Attached Index | Apache Cassandra® Contributor Meeting</a></p>
+</li>
+<li>
+<p>GitHub: <a href="https://github.com/apache/cassandra/tree/trunk/src/java/org/apache/cassandra/index/sai" target="_blank" rel="noopener">Introduction to Storage Attached Indexes</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="learn-more-about-apache-cassandra"><a class="anchor" href="#learn-more-about-apache-cassandra"></a>Learn More About Apache Cassandra</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As we get closer to the General Availability of Cassandra 5.0, there are a host of ways to get more involved in the community and follow project developments:</p>
+</div>
+<div class="paragraph">
+<p><a href="https://events.linuxfoundation.org/cassandra-summit/" target="_blank" rel="noopener">Cassandra Summit + Code AI</a> is taking place Dec. 12-13 in San Jose, CA. Cassandra Summit is THE gathering place for Apache Cassandra data practitioners, developers, engineers and enthusiasts, and it’s where we’ll be diving deeper into Cassandra 5.0 features.</p>
+</div>
+<div class="paragraph">
+<p>For more information about Apache Cassandra or to join the community discussion, you can join us on these channels:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="/_/index.html">Apache Cassandra Website</a></p>
+</li>
+<li>
+<p><a href="https://the-asf.slack.com/ssb/redirect" target="_blank" rel="noopener">ASF Slack</a></p>
+</li>
+<li>
+<p><a href="https://www.youtube.com/@PlanetCassandra" target="_blank" rel="noopener">Planet Cassandra Youtube</a></p>
+</li>
+<li>
+<p><a href="https://www.meetup.com/cassandra-global/" target="_blank" rel="noopener">Planet Cassandra Global Meetup Group</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+                </div>
+            </div>
+        </div>
+        <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://twitter.com/cassandra?lang=en" target="_blank"><img src="../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+      </div>
+  </body>
+<script>
+jQuery(function(){
+    
+});
+</script>
+</html>
