@@ -123,6 +123,9 @@ EXPOSE 5151/tcp
 USER ${BUILD_USER}
 WORKDIR ${BUILD_DIR}
 COPY docker-entrypoint.sh /usr/local/bin/
+
+COPY process-native-protocol-specs-in-docker.sh /usr/local/bin/
+
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 # Possible commands are listed below. The entrypoint will accept any combination of these commands.
