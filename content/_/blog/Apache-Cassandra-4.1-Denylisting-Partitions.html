@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Apache Cassandra | Apache Cassandra Documentation</title>
+    <link rel="stylesheet" href="../../assets/css/site.css">
+    <meta name="description" content="New Denylisting Partitions in Apache Cassandra 4.1">
+    <meta name="keywords" content="denylisting partitions, 4.1, apache cassandra">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="_">
+    <meta name="dcterms.identifier" content="master">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "https://plausible.cassandra.apache.org/js/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>  </head>
+  <body class="single-post">
+      <div class="container mx-auto relative">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta property="og:type" content="website" />
+	<meta property="og:description" content="" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+        <div class="header-social-icons text-right">
+            <a href="https://twitter.com/cassandra?lang=en" target="_blank" styles="margin-left: 20px;"><img src="../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../assets/img/logo-white-r.png" alt="cassandra logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+        <div class="hero hero--home grad">
+            <div class="eye"></div>
+            <div id="home-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                <h1>Apache Cassandra 4.1: Denylisting Partitions</h1>
+                <h3>June 30, 2022 | Jordan West</h3>
+            </div>
+        </div>
+        <div id="blog-post" class="flex-center py-large arrow">
+            <div class="blog-breadcrumb mb-medium">
+                <div class="inner inner--narrow">
+                    <a href="/_/blog.html">« Back to the Apache Cassandra Blog</a>
+                </div>
+            </div>
+            <div class="post-content">
+                <div class="inner inner--narrow">
+                    <div id="preamble">
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/apache-cassandra-4.1-denylisting-partitions-unsplash-kyle-glenn.jpg" alt="Denylisting Partitions">
+</div>
+<div class="title">Image credit: <a href="https://unsplash.com/@kylejglenn" target="_blank" rel="noopener">Kyle Glenn on Unsplash</a></div>
+</div>
+<div class="paragraph">
+<p>Like any database, Apache Cassandra can be impacted by data modeling choices gone awry or the unexpected use of even a well-designed data model. This occurs when partitions get too large or have too many rows or tombstones. These problematic partitions can impact the reading and writing of other partitions, which can lead to service-impacting incidents. While the Cassandra community is always actively working to reduce the impact they have, it can be necessary for operators to take immediate action when they are encountered. Apache Cassandra 4.1 introduces a new feature to give operators this control: the <a href="https://issues.apache.org/jira/browse/CASSANDRA-12106" target="_blank" rel="noopener">Partition Denylist</a>.</p>
+</div>
+<div class="paragraph">
+<p>The Partition Denylist allows operators to <a href="https://s3.amazonaws.com/systemsandpapers/papers/FOX_Brewer_99-Harvest_Yield_and_Scalable_Tolerant_Systems.pdf" target="_blank" rel="noopener">make a choice</a> between providing access to the entire data set with reduced performance or reducing the available data set (by preventing reads and writes to specific partitions) to ensure performance is not affected. This choice gives operators new control over how these problematic partitions affect other reads and writes serviced by Cassandra, converting operations that would be slow and eat resources to immediate failures before any resources are consumed. Operators have the choice to prevent reads and/or writes to the partition as well as range reads that include the partition.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-operators-perspective"><a class="anchor" href="#the-operators-perspective"></a>The Operators Perspective</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For operators, JMX is the primary interface to interact with the Denylist. There are four operations available to operators: add a key to the denylist, check if a key is currently in the denylist, remove a key from the denylist, and force a refresh of a node’s local denylist cache. The examples below will use <a href="https://github.com/jiaqi/jmxterm" target="_blank" rel="noopener">jmxterm</a> but any JMX interface will work.</p>
+</div>
+<div class="sect2">
+<h3 id="denylisting-a-key"><a class="anchor" href="#denylisting-a-key"></a>Denylisting a Key</h3>
+<div class="paragraph">
+<p>To add a key to the denylist all that is needed is the keyspace, table, and partition key. In jmxterm denylisting the key <code>baz</code> in the keyspace <code>foo</code> and table <code>bar</code> looks like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>bean org.apache.cassandra.db:type=StorageProxy
+run denylistKey foo bar baz</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All operations are defined on the StorageProxy mbean.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="checking-denylist-status"><a class="anchor" href="#checking-denylist-status"></a>Checking Denylist Status</h3>
+<div class="paragraph">
+<p>To determine if a key (<code>baz</code>) for a particular keyspace and table (<code>foo.bar</code>) is in the denylist use the <code>isKeyDenylisted</code> operation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>bean org.apache.cassandra.db:type=StorageProxy
+run isKeyDenylisted foo bar baz</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="removing-a-key-from-the-denylist"><a class="anchor" href="#removing-a-key-from-the-denylist"></a>Removing a Key from the Denylist</h3>
+<div class="paragraph">
+<p>After mitigation or for other reasons, operators will eventually want to remove a key from the denylist. Like the other operations, all that is needed is the keyspace, table, and key. In this case, to remove the key <code>baz</code> in <code>foo.bar</code> from the denylist:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>bean org.apache.cassandra.db:type=StorageProxy
+run removeDenylistKey foo bar baz</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="refreshing-the-denylist-cache"><a class="anchor" href="#refreshing-the-denylist-cache"></a>Refreshing the Denylist Cache</h3>
+<div class="paragraph">
+<p>For performance purposes, the denylist implementation maintains a local cache on every node. The cache is refreshed periodically (by default every 5 minutes) but it may be necessary to manually refresh it. This can be done with a quick JMX call on the nodes where its necessary (typically on the nodes that own a partition that was recently added):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>bean org.apache.cassandra.db:type=StorageProxy
+run loadPartitionDenylist</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="other-denylist-configuration"><a class="anchor" href="#other-denylist-configuration"></a>Other Denylist Configuration</h3>
+<div class="paragraph">
+<p>Other aspects of the denylist are <a href="/doc/trunk/cassandra/configuration/cass_yaml_file.html" target="_blank" rel="noopener">controlled via properties in <code>cassandra.yaml</code></a>. Operators can control whether reads, range reads, and/or writes fail for partitions listed in the denylist. They can also control the frequency of local node cache refreshes and the consistency level used to load the cache (higher consistency gives more accuracy at the cost of potentially not being able to complete the query while lower consistency increases the chances of a successful load while also increasing the potential to have stale or missed records in the denylist).</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-client-perspective"><a class="anchor" href="#the-client-perspective"></a>The Client Perspective</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For clients of Cassandra, they have no control over what partitions are in the denylist. They will however get an informative exception telling them why the read or write failed. In the example below key 3 has been placed into the denylist while key 9 remains unaffected – both reads and writes are configured to be denied.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>cqlsh&gt; select * from system_distributed.partition_denylist;
+
+ ks_name | table_name | key
+---------+------------+------------
+     foo |        buz | 0x00000003
+
+cqlsh&gt; select * from foo.buz where key=3;
+InvalidRequest: Error from server: code=2200 [Invalid query] message= \
+  "Unable to read denylisted partition [0xDecoratedKey(9010454139840013625, 00000003)] in foo/buz"
+
+cqlsh&gt; select * from foo.buz where key=9;
+
+ key | c1 | c2 | c3 | c4
+-----+----+----+----+----
+   9 |  1 |  3 |  4 |  5
+   9 |  9 |  3 |  4 |  5
+
+cqlsh&gt; insert into foo.buz (key, c1, c2, c3, c4) VALUES (3, 1, 1, 1, 1);
+InvalidRequest: Error from server: code=2200 [Invalid query] message= \
+  "Unable to write to denylisted partition [0xDecoratedKey(9010454139840013625, 00000003)] in foo/buz"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The Partition Denylist provides operators with a powerful tool when data models run off the tracks. The Cassandra community continues to <a href="https://issues.apache.org/jira/browse/CASSANDRA-11206" target="_blank" rel="noopener">strengthen and widen those tracks</a> with the hopes that the need to prevent reads and writes to specific partitions will diminish. However, users always find new ways to surprise database authors and administrators. For those cases, the Partition Denylist provides a quick solution with a significant impact.</p>
+</div>
+</div>
+</div>
+                </div>
+            </div>
+        </div>
+        <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://twitter.com/cassandra?lang=en" target="_blank"><img src="../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+      </div>
+  </body>
+<script>
+jQuery(function(){
+    
+});
+</script>
+</html>
