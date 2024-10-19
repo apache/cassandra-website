@@ -1,0 +1,1 @@
+!function(){"use strict";Math.max(window.screen.availHeight,window.screen.availWidth)<769||window.addEventListener("load",function(){var e=document.createElement("script");e.src="https://issues.apache.org/jira/projects/CASSANDRA/issues",document.body.appendChild(e)})}();
