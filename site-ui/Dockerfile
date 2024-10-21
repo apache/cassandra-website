@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:22.04
 #
 # Set up non-root user, 'build', with default uid:gid
 # This allows passing --build-arg to use localhost username, and uid:gid:
@@ -15,7 +15,7 @@ FROM ubuntu:18.04
 ARG BUILD_USER_ARG="build"
 ARG UID_ARG=1000
 ARG GID_ARG=1000
-ARG NODE_VERSION_ARG="v12.16.2"
+ARG NODE_VERSION_ARG="v20.16.0"
 
 ENV BUILD_USER=${BUILD_USER_ARG}
 

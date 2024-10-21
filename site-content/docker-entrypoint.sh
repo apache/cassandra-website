@@ -206,6 +206,9 @@ render_site_content_to_html() {
 
 
 prepare_site_html_for_publication() {
+  log_message "INFO" "Processing native protocols spec page"
+  sudo /usr/local/bin/process-native-protocol-specs-in-docker.sh
+
   pushd "${CASSANDRA_WEBSITE_DIR}" > /dev/null
 
   # copy everything to content/ directory
