@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Apache Cassandra | Apache Cassandra Documentation</title>
+    <link rel="stylesheet" href="../../assets/css/site.css">
+    <meta name="description" content="New Memtable and SSTable Index implementations coming in Apache Cassandra 5.0">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="_">
+    <meta name="dcterms.identifier" content="master">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "https://plausible.cassandra.apache.org/js/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>  </head>
+  <body class="single-post">
+      <div class="container mx-auto relative">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta property="og:type" content="website" />
+	<meta property="og:description" content="" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+        <div class="header-social-icons text-right">
+            <a href="https://twitter.com/cassandra?lang=en" target="_blank" styles="margin-left: 20px;"><img src="../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../assets/img/logo-white-r.png" alt="cassandra logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+        <div class="hero hero--home grad">
+            <div class="eye"></div>
+            <div id="home-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                <h1>Apache Cassandra 5.0 Features: Trie Memtables and Trie-Indexed SSTables</h1>
+                <h3>November 9, 2023 | Branimir Lambov</h3>
+            </div>
+        </div>
+        <div id="blog-post" class="flex-center py-large arrow">
+            <div class="blog-breadcrumb mb-medium">
+                <div class="inner inner--narrow">
+                    <a href="/_/blog.html">« Back to the Apache Cassandra Blog</a>
+                </div>
+            </div>
+            <div class="post-content">
+                <div class="inner inner--narrow">
+                    <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Apache Cassandra 5.0 is the project’s major release for 2023, and it promises some of the biggest changes for Cassandra to-date. After more than a decade of world class engineering building Cassandra as the safest most stable distributed database, we are witness now to a new chapter of innovation introducing a host of exciting features and enhancements that empower users to take their data-driven applications to the next level - including machine learning and artificial intelligence.</em></p>
+</div>
+<div class="paragraph">
+<p><em>This blog series aims to give a deeper dive into some of the key features of Cassandra 5.0.</em></p>
+</div>
+<div class="paragraph">
+<p>Apache Cassandra is a widely used open-source NoSQL database known for its ability to handle large volumes of data across distributed clusters. But while it has gained popularity for its robust distributed architecture, one of its lesser-known features is the Trie Memtables and Trie-Indexed SSTables storage format. These features play a crucial role in optimizing data retrieval and storage efficiency.</p>
+</div>
+<div class="paragraph">
+<p>Cassandra 5.0 introduces new Memtable and SSTable Index implementations for Apache Cassandra which is based on tries (also called prefix trees) and byte-comparable representations of database keys. These features improve upon Cassandra’s performance of modification operations and performance of data lookup (reads) as well as the size of the structure for a given amount of data. Cassandra’s new Trie Memtables and Trie-Indexed SSTables also help reduce garbage collection and general memory management overhead, which is a critical function for large enterprises managing data at scale.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="understanding-apache-cassandras-data-model"><a class="anchor" href="#understanding-apache-cassandras-data-model"></a>Understanding Apache Cassandra&#8217;s Data Model</h3>
+<div class="paragraph">
+<p>Before diving into <a href="https://cwiki.apache.org/confluence/x/kYuqCw" target="_blank" rel="noopener">Trie Memtables</a> and <a href="https://cwiki.apache.org/confluence/x/1Y0ODg" target="_blank" rel="noopener">Trie-Indexed SSTables</a>, it&#8217;s essential to understand Cassandra&#8217;s data model. Cassandra is designed to store data in a distributed, fault-tolerant manner. Data is partitioned into clusters and replicated across nodes to ensure high availability and reliability. It&#8217;s particularly suited for write-intensive workloads and offers tunable consistency levels.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="the-need-for-efficient-data-storage-and-retrieval"><a class="anchor" href="#the-need-for-efficient-data-storage-and-retrieval"></a>The Need for Efficient Data Storage and Retrieval</h3>
+<div class="paragraph">
+<p>Efficient data storage and retrieval are essential for any database system, and Apache Cassandra is no exception. To improve read performance, Cassandra uses various techniques, one of which is the Trie Memtables and Trie-Indexed SSTables storage format. These structures optimize data access and improve read and write performance.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="trie-memtables"><a class="anchor" href="#trie-memtables"></a>Trie Memtables</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>In-Memory Data Structures</strong>: Memtables are a type of in-memory data structure that serves as a staging area for recently updated data. When data is written to Cassandra, it is first stored in Memtables before being flushed to on-disk storage.</p>
+</li>
+<li>
+<p><strong>Trie-organized</strong>: Trie Memtables use a data structure called a trie to organize data. This makes them very efficient at modifying and querying data, as well as more compact in memory. This results in higher write throughput, lower latency for accessing recently-written data, while fitting more of it.</p>
+</li>
+<li>
+<p><strong>Garbage-collection-friendly</strong>: Trie Memtables have internal memory management mechanisms, which drastically reduce the amount of work needed for garbage collection, reducing GC-inflicted pauses and higher-percentile latencies.</p>
+</li>
+<li>
+<p><strong>Reduces Write Amplification</strong>: Memtables reduce write amplification, a common problem in database systems, by buffering and organizing writes until they fill up their allocated memory. By accepting up to 30% more data for the same memory allocation, Trie Memtables reduce write amplification further.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="trie-indexed-sstables"><a class="anchor" href="#trie-indexed-sstables"></a>Trie-Indexed SSTables</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Persistent Data Structure</strong>: SSTables, or Sorted String Tables, are used for on-disk storage in Apache Cassandra. They provide a compact and efficient way to store immutable sets of data.</p>
+</li>
+<li>
+<p><strong>Log-Structured Storage</strong>: SSTables are the building blocks of Cassandra’s log-structured storage, which means that data is only appended to files, not updated or overwritten. When data changes, a new SSTable is created, and old data remains intact. This benefits from the advantages of sequential disk access and makes it possible to use efficient immutable data structures.</p>
+</li>
+<li>
+<p><strong>Trie-organized</strong>: Trie-Indexed SSTables employ a trie-based primary index, which is extremely efficient (typically around to 2x better than the previous solution) at locating data and does not require an in-memory key cache or index summary.</p>
+</li>
+<li>
+<p><strong>Efficient row index</strong>: Trie-Indexed SSTables implement an efficient row index that can properly handle very large numbers of rows per partition.</p>
+</li>
+<li>
+<p><strong>Disk Friendly Layout</strong>: Trie-Indexed SSTables organize their indexing structure in disk pages, taking advantage of the typical granularity of disk accesses and caching to achieve significantly better access performance. They are built with modern solid-state storage in mind, and are fast enough to take full advantage of the fastest available types of storage.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="benefits-of-trie-memtables-and-trie-indexed-sstables"><a class="anchor" href="#benefits-of-trie-memtables-and-trie-indexed-sstables"></a>Benefits of Trie Memtables and Trie-Indexed SSTables</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Improved Write and Read Performance</strong>: Trie Memtables and Trie-indexed SSTables work in tandem to reduce write amplification, enhance read performance and reduce garbage collection overheads. This results in lower latencies for both write and read operations.</p>
+</li>
+<li>
+<p><strong>Reduced Storage Overhead</strong>: The compact storage format of Trie-Indexed SSTables reduces storage overhead, which is crucial when dealing with large datasets.</p>
+</li>
+<li>
+<p><strong>Scalability</strong>: Cassandra&#8217;s architecture allows for easy horizontal scalability, and the efficiency of Trie Memtables and SSTables further supports this scalability by reducing the performance bottlenecks.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="giving-it-a-try"><a class="anchor" href="#giving-it-a-try"></a>Giving it a try</h3>
+<div class="paragraph">
+<p>If you want to use this in your environment, in addition to using 5.0 there you will have to enable the feature explicitly. This is accomplished in both a <code>cassandra.yaml</code> configuration and specified per-table as a parameter. You can get all the details and options <a href="https://github.com/apache/cassandra/blob/cassandra-5.0/src/java/org/apache/cassandra/db/memtable/Memtable_API.md" target="_blank" rel="noopener">here</a> and <a href="https://github.com/apache/cassandra/blob/cassandra-5.0/src/java/org/apache/cassandra/io/sstable/SSTable_API.md" target="_blank" rel="noopener">here</a>.</p>
+</div>
+<div class="paragraph">
+<p>Apache Cassandra&#8217;s Trie Memtables and Trie-Indexed SSTables are powerful tools that contribute to its efficient and high-performance data storage and retrieval capabilities. And by working with Cassandra features like SSTables, it provides enhanced data integrity, reducing the risk of data corruption. By reducing write amplification, simplifying compaction, and optimizing read operations, these features play a vital role in making Cassandra a go-to choice for organizations dealing with large-scale distributed data.</p>
+</div>
+</div>
+<div class="sect1">
+<h2 id="additional-resources-about-apache-cassandra-trie-memtables-and-trie-sstables"><a class="anchor" href="#additional-resources-about-apache-cassandra-trie-memtables-and-trie-sstables"></a>Additional Resources about Apache Cassandra Trie Memtables and Trie SStables:</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Whitepaper: <a href="https://www.vldb.org/pvldb/vol15/p3359-lambov.pdf" target="_blank" rel="noopener">Trie Memtables in Cassandra</a>, by Branimir Lambov, Datastax</p>
+</li>
+<li>
+<p>Technical documentation:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/blambov/cassandra/blob/trunk/src/java/org/apache/cassandra/utils/bytecomparable/ByteComparable.md" target="_blank" rel="noopener">byte-comparable translations</a>;</p>
+</li>
+<li>
+<p><a href="https://github.com/blambov/cassandra/blob/trunk/src/java/org/apache/cassandra/io/sstable/format/bti/BtiFormat.md" target="_blank" rel="noopener">BTI format</a>;</p>
+</li>
+<li>
+<p><a href="https://github.com/blambov/cassandra/blob/trunk/src/java/org/apache/cassandra/db/tries/InMemoryTrie.md" target="_blank" rel="noopener">in-memory memtable tries</a> as well as their <a href="https://github.com/blambov/cassandra/blob/trunk/src/java/org/apache/cassandra/db/tries/Trie.md" target="_blank" rel="noopener">cursor interface</a>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Presentation: <a href="https://docs.google.com/presentation/d/1d9ZslMIA2JM9WWA4F0drvXIezrzplAYs8jhMS3wgGkg/edit#slide=id.p" target="_blank" rel="noopener">Improving Cassandra’s performance with byte order and tries</a></p>
+</li>
+<li>
+<p>Video: <a href="https://www.youtube.com/watch?v=eKxj6s4vzmI" target="_blank" rel="noopener">Trie Memtable Implementation (CEP-19) | Apache Cassandra Contributor Meeting</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="learn-more-about-apache-cassandra"><a class="anchor" href="#learn-more-about-apache-cassandra"></a>Learn More About Apache Cassandra</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As we get closer to the General Availability of Cassandra 5.0, there are a host of ways to get more involved in the community and follow project developments:</p>
+</div>
+<div class="paragraph">
+<p><a href="https://events.linuxfoundation.org/cassandra-summit/" target="_blank" rel="noopener">Cassandra Summit + Code AI</a> is taking place Dec. 12-13 in San Jose, CA. Cassandra Summit is THE gathering place for Apache Cassandra data practitioners, developers, engineers and enthusiasts, and it’s where we’ll be diving deeper into Cassandra 5.0 features.</p>
+</div>
+<div class="paragraph">
+<p>For more information about Apache Cassandra or to join the community discussion, you can join us on these channels:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="/_/index.html">Apache Cassandra Website</a></p>
+</li>
+<li>
+<p><a href="https://the-asf.slack.com/ssb/redirect" target="_blank" rel="noopener">ASF Slack</a></p>
+</li>
+<li>
+<p><a href="https://www.youtube.com/@PlanetCassandra" target="_blank" rel="noopener">Planet Cassandra Youtube</a></p>
+</li>
+<li>
+<p><a href="https://www.meetup.com/cassandra-global/" target="_blank" rel="noopener">Planet Cassandra Global Meetup Group</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+                </div>
+            </div>
+        </div>
+        <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://twitter.com/cassandra?lang=en" target="_blank"><img src="../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+      </div>
+  </body>
+<script>
+jQuery(function(){
+    
+});
+</script>
+</html>

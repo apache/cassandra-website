@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Apache Cassandra | Apache Cassandra Documentation</title>
+    <link rel="stylesheet" href="../../assets/css/site.css">
+    <meta name="description" content="A Comprehensive Guide to CommitLog">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="_">
+    <meta name="dcterms.identifier" content="master">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "https://plausible.cassandra.apache.org/js/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>  </head>
+  <body class="single-post">
+      <div class="container mx-auto relative">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta property="og:type" content="website" />
+	<meta property="og:description" content="" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+        <div class="header-social-icons text-right">
+            <a href="https://twitter.com/cassandra?lang=en" target="_blank" styles="margin-left: 20px;"><img src="../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../assets/img/logo-white-r.png" alt="cassandra logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+        <div class="hero hero--home grad">
+            <div class="eye"></div>
+            <div id="home-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                <h1>Learn How CommitLog Works in Apache Cassandra</h1>
+                <h3>September 26, 2022 | Alex Sorokoumov</h3>
+            </div>
+        </div>
+        <div id="blog-post" class="flex-center py-large arrow">
+            <div class="blog-breadcrumb mb-medium">
+                <div class="inner inner--narrow">
+                    <a href="/_/blog.html">« Back to the Apache Cassandra Blog</a>
+                </div>
+            </div>
+            <div class="post-content">
+                <div class="inner inner--narrow">
+                    <div id="preamble">
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/Learn-How-CommitLog-Works-in-Apache-Cassandra-unsplash-sandip-roy.jpg" alt="Golden Bridge" width="Hòa Ninh" height="Hòa Vang">
+</div>
+<div class="title"><em>Image credit: <a href="https://unsplash.com/@sandiproy_kolkata" target="_blank" rel="noopener">Sandip Roy on Unsplash</a></em></div>
+</div>
+<div class="paragraph">
+<p>CommitLog (aka write-ahead log, WAL) is a standard component of many databases. In Apache Cassandra, it is an efficient append-only on-disk data structure that guarantees durability.</p>
+</div>
+<div class="paragraph">
+<p>Learning more about how CommitLog works will be helpful to database administrators who want to better understand the guarantees and trade-offs Cassandra provides. This post also serves as an introduction for any users who want to dig into this subsystem. Finally, database enthusiasts and developers might find it interesting to read how Cassandra’s write-ahead log is implemented in practice.</p>
+</div>
+<div class="paragraph">
+<p>As part of our overview of the CommitLog features, we will go through the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A Recap of the Write Path</p>
+</li>
+<li>
+<p>An overview of the CommitLog Lifecycle</p>
+</li>
+<li>
+<p>How to Append to the CommitLog</p>
+</li>
+<li>
+<p>CommitLog Segment Types</p>
+</li>
+<li>
+<p>Segment Recycling</p>
+</li>
+<li>
+<p>CommitLog and Change-Data-Capture(CDC)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="write-path-recap"><a class="anchor" href="#write-path-recap"></a>Write Path Recap</h3>
+<div class="paragraph">
+<p>This section briefly summarizes the Cassandra write path to establish the role CommitLog plays in the database system.</p>
+</div>
+<div class="paragraph">
+<p>When Cassandra accepts new write requests, it saves new mutations to an in-memory write-back cache called a memtable and appends them to the CommitLog. The former allows serving reads without accessing the disk, while the latter guarantees durability. If Cassandra crashes before flushing the memtable, it will restore acknowledged writes by replaying the CommitLog.</p>
+</div>
+<div class="paragraph">
+<p>Once the database flushes a memtable to disk as an <a href="/doc/latest/cassandra/architecture/storage_engine.html#sstables">SSTable</a>, which is an immutable file for persisting data, it can eliminate the corresponding log entries. We are going to learn how this happens in the next section.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="commitlog-lifecycle-explained"><a class="anchor" href="#commitlog-lifecycle-explained"></a>CommitLog Lifecycle Explained</h3>
+<div class="paragraph">
+<p>This section describes the CommitLog structure and how it knows what data to keep or remove.</p>
+</div>
+<div class="paragraph">
+<p>The CommitLog is an append-only data structure comprising a series of segments - files stored on disk. Segments persist <code>mutations</code> - internal objects containing information about new writes. Besides the changed rows, mutations contain relevant metadata - keyspace and table names, creation timestamp, GC grace seconds, etc. Mutations are <a href="https://en.wikipedia.org/wiki/Idempotence" target="_blank" rel="noopener">idempotent</a>, i.e. Mutations can be applied multiple times while changing the state only once.</p>
+</div>
+<div class="paragraph">
+<p>CommitLog segments are shared between tables so that all incoming writes land in the same segment. At any point in time, there is:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>an <code>allocating</code> segment that accepts new mutations</p>
+</li>
+<li>
+<p>an <code>available</code> segment to be used next</p>
+</li>
+<li>
+<p>0 or more <code>active</code> segments to be deleted once the corresponding memtables are flushed.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>As soon as the <code>allocating</code> segment exceeds <code><a href="https://github.com/apache/cassandra/blob/cassandra-4.1/conf/cassandra.yaml#L500-L517" target="_blank" rel="noopener">commitlog_segment_size</a></code> (32MiB by default), the database syncs it to disk and switches to the next available segment. <strong>Figure 1</strong> below illustrates different segment types and their function.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/Allocating-and-active-segments.png" alt="Allocating and active segments">
+</div>
+<div class="title"><strong>Figure 1</strong>. <em>The Segment Lifecycle. The numbers are globally increasing positions in segments. The allocating segment accepts new mutations. Once it is full, CommitLog marks it as active and starts allocating to the pre-baked available segment. As soon as there are no dirty mutations in an active segment, CommitLog removes the segment.</em></div>
+</div>
+<div class="paragraph">
+<p>Cassandra can only delete a segment after all its mutations are persisted in SSTables. Knowing if a file does not hold any mutations that haven’t been flushed yet requires a bit of bookkeeping.</p>
+</div>
+<div class="paragraph">
+<p>Each segment maintains a hash table with <code>dirty</code> intervals. Dirty intervals contain mutation positions that haven’t yet been flushed as SSTables. <strong>Figure 2</strong> illustrates how the CommitLog maintains dirty positions for each segment.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/Dirty-intervals.png" alt="Dirty intervals">
+</div>
+<div class="title"><strong>Figure 2</strong>. <em>Each segment maintains 1 hash map for dirty intervals in the form of</em> <code>[table id &#8594; intervals]</code>. <em>This figure demonstrates a segment with the dirty map equal to</em> <code>{ Table 1: [[9, 11)], Table 2: [[7, 9), [13, 15)] }</code>.</div>
+</div>
+<div class="paragraph">
+<p>Each memtable maintains high and low CommitLog positions to mark the corresponding mutations as clean on flush (see <strong>Figure 3</strong>). The high position is the position of the latest mutation written to CommitLog; memtables update it on each new write. The low position is a high position of a previously flushed memtable. The low position cannot change anymore as that memtable no longer accepts writes.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/Memtables-and-CommitLog.png" alt="Memtables and CommitLog">
+</div>
+<div class="title"><strong>Figure 3</strong>. <em>Memtables maintain low and high CommitLog positions. The low CL position of the i+1th Memtable is a high position in the i-th Memtable.</em></div>
+</div>
+<div class="paragraph">
+<p>On memtable flush, Cassandra marks the corresponding CommitLog positions as clean. As soon as the entire segment is clean, the CommitLog deletes it.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="appending-to-the-commitlog"><a class="anchor" href="#appending-to-the-commitlog"></a>Appending to the CommitLog</h3>
+<div class="paragraph">
+<p>In the previous section, we learned that the CommitLog appends mutations from different tables to the same segment. The benefit of this approach is faster flush due to sequential write I/O. But doesn’t it create contention when concurrent requests write to the same segment? Let’s see now how Cassandra addresses this issue.</p>
+</div>
+<div class="paragraph">
+<p>Appending to the CommitLog takes several steps. First, the CommitLog reserves an in-memory buffer in the allocating segment and writes the serialized mutation to the allocated space. Then the CommitLog flushes the entire segment block to disk by calling <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/FileChannel.html#force-boolean-" target="_blank" rel="noopener">FileChannel.force()</a>.</p>
+</div>
+<div class="paragraph">
+<p>The only contention point for concurrent writes is allocating space in the in-memory buffer, a relatively fast operation.</p>
+</div>
+<div class="paragraph">
+<p>Flushing to disk happens according to the <code><a href="https://github.com/apache/cassandra/blob/cassandra-4.1/conf/cassandra.yaml#L472-L493" target="_blank" rel="noopener">commitlog_sync</a></code> configuration property. It supports the following options:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>periodic</code> (default) - a write is successful after writing to a buffer in memory. Sync to disk happens every <code>commitlog_sync_period_in_ms</code> (10,000ms by default) or after reaching the segment size limit.</p>
+</li>
+<li>
+<p><code>batch</code> - a write is successful only after flushing to disk. Every mutation invokes sync (note: <code>commitlog_sync_batch_window_in_ms</code> is ignored by Apache Cassandra 4.0).</p>
+</li>
+<li>
+<p><code>group</code> - a write is successful only after flushing to disk. Mutations form a group (hence the name) that waits for the same sync that happens every <code>commitlog_sync_group_window_in_ms</code> (1,000ms by default).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>With <code>periodic</code> mode, the server does not wait for the sync to disk and responds to the client after writing Mutation(s) to the in-memory buffer. While <code>commitlog_sync_period_in_ms</code> <strong>acts</strong> as an upper bound for the sync frequency, usually, the main sync trigger in workloads for Cassandra is the allocating segment reaching its maximum size. Accordingly, one can decrease the expected time to sync by reducing the segment size controlled by the <code>commitlog_segment_size</code> option. As a side effect, this will reduce max mutation size.</p>
+</div>
+<div class="paragraph">
+<p>Decoupling of syncing to disk from acknowledging requests reduces an upper bound on throughput and lower bound on latency and provides a trade-off between sync frequency and durability via <code>commitlog_sync_period_in_ms</code> option. A potential data loss scenario for already acknowledged writes is simultaneous OS/hardware crashes on multiple replicas within the sync period.</p>
+</div>
+<div class="paragraph">
+<p>Alternative sync strategies are <code>batch</code> and <code>group</code>. The <code>batch</code> <strong>strategy</strong> is essentially a paranoid option that ensures that every successful write is persisted to disk. Rarely required, thorough evaluation is recommended before using the feature. With the <code>group</code> strategy, write requests will be delayed up to <code>commitlog_sync_group_window_in_ms</code> depending on how long ago the previous sync happened. This option allows balancing throughput and latency by changing the window size. A bigger window improves throughput at higher write concurrency while making latency worse as incoming write requests have to wait longer. See <a href="https://issues.apache.org/jira/browse/CASSANDRA-13530" target="_blank" rel="noopener">CASSANDRA-13530</a> for more details.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="commitlog-segment-types"><a class="anchor" href="#commitlog-segment-types"></a>CommitLog Segment Types</h3>
+<div class="paragraph">
+<p>The previous section described <em>how</em> CommitLog appends and flushes data. In this section, we will go through <em>what</em> the CommitLog writes to disk, i.e., the structure of <a href="https://github.com/apache/cassandra/blob/cassandra-4.1/src/java/org/apache/cassandra/db/commitlog/CommitLogSegment.java#L60" target="_blank" rel="noopener">CommitLog segments</a>.</p>
+</div>
+<div class="paragraph">
+<p>Cassandra supports three segment types: memory-mapped, compressed, and encrypted. The database selects a segment type to use depending on <code>commitlog_compression</code> and <code>transparent_data_encryption_options</code> configuration options in <code>cassandra.yaml</code>. <code>commitlog_compression</code> controls segment compression and supports three compression types: <em>LZ4</em>, <em>Snappy</em>, and <em>Deflate</em>. The latter option controls data encryption on disk, including both CommitLog segments and hints. Cassandra uses encrypted segments that compress data before encryption if both options are set. If only <code>transparent_data_encryption_options</code> is enabled, Cassandra uses encrypted segments. When only <code>commitlog_compression</code> is specified, Cassandra uses compressed segments. If neither option is set, the database uses a memory-mapped segment.</p>
+</div>
+<div class="paragraph">
+<p>Let’s describe a layout of a memory-mapped segment and build on top of it to show how compressed and encrypted segments work. All segment types use the same pattern. Any data in a segment is followed by its checksum so that readers can discard only corrupted data and recover as much information as possible on error. A segment starts with a header that contains information about its version, compression, and encryption. The header format is the same for all segment types. Sync blocks that follow the header are the CommitLog’s units of write to disk. In other words, every flush to disk creates exactly one sync block. A sync block starts with a marker followed by the mutations. <strong>Figure 4</strong> illustrates the segment structure of a memory-mapped segment and describes the purpose of specific fields.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/Mmaped-Segment-layout.png" alt="Mmaped Segment layout">
+</div>
+<div class="title"><strong>Figure 4</strong>. <em>The layout of a memory-mapped segment. The header consists of a version, a segment ID, parameters, and CRC. The version is incremented if there are changes in the CommitLog structure. ID is a unique segment identifier. Parameter length describes how much space the parameters block occupies. The parameters block contains a JSON string with compression and encryption parameters. CRC finishes the header. A sync block starts with a marker followed by the mutations. The sync marker of a memory-mapped segment consists of an offset to the beginning of the next block and its CRC. Each serialized mutation in a memory-mapped segment consists of four parts: mutation size, CRC of mutation size, mutation body, and CRC of mutation size and body.</em></div>
+</div>
+<div class="paragraph">
+<p>While memory-mapped segments maintain a single memory-mapped file that is periodically flushed to disk, compressed and encrypted segments use in-memory fixed-size buffers to serialize, compress, and encrypt mutations. Besides that, sync markers of compressed and encrypted segments contain an additional value: the total size of uncompressed data. The compressed segment compresses the entire in-memory buffer with mutations before writing them to the segment file. See <strong>Figure 5</strong> for the detailed layout of compressed segments.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/Compressed-Segment-layout.png" alt="Compressed Segment layout">
+</div>
+<div class="title"><strong>Figure 5</strong>. <em>The layout of a compressed segment. Sync marker has an additional field - uncompressed size.</em></div>
+</div>
+<div class="paragraph">
+<p>Unlike compressed segments, encrypted segments write mutations in data blocks. These blocks are small chunks whose size is controlled by <code>transparent_data_encryption_options.chunk_length_kb</code>. Each data block is compressed, encrypted, and written to the segment file individually. See <strong>Figure 6</strong> for details on the layout of each data block.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/Encrypted-Segment-layout.png" alt="Encrypted Segment layout">
+</div>
+<div class="title"><strong>Figure 6</strong>. <em>The layout of an encrypted segment. The total block length and length of encrypted compressed data are unencrypted. The length of unencrypted compressed data as well as the data itself are encrypted.</em></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="segment-recycling"><a class="anchor" href="#segment-recycling"></a>Segment Recycling</h3>
+<div class="paragraph">
+<p>At this point, we need to clarify the meaning of the term ‘segment recycling,’ which occurs in the Cassandra <a href="/doc/latest/cassandra/architecture/storage_engine.html" target="_blank" rel="noopener">documentation</a> and the codebase. Segment recycling was introduced in Cassandra 1.1.0 and removed in 2.2.0.</p>
+</div>
+<div class="paragraph">
+<p>Back in version 1.1.0 (<a href="https://issues.apache.org/jira/browse/CASSANDRA-3411" target="_blank" rel="noopener">CASSANDRA-3411</a>), Cassandra pre-allocated empty 128MiB files as Commit Log segments. The idea behind pre-allocation was to avoid changing the metadata on append. Accordingly, recycling old segments amortized pre-allocation overhead for subsequent segments. Instead of deleting clean segments, Cassandra wrote an <code>end-of-segment</code> marker at the file&#8217;s beginning. New writes overwrote the marker. Restoring from an empty recycled segment was a no-op because a segment reader ignored any content that followed the marker.</p>
+</div>
+<div class="paragraph">
+<p>Segment recycling was removed in Cassandra 2.2.0 (<a href="https://issues.apache.org/jira/browse/CASSANDRA-6809" target="_blank" rel="noopener">CASSANDRA-6809</a>). In practice, recycling didn’t demonstrate significant performance improvements (<a href="https://issues.apache.org/jira/browse/CASSANDRA-8771" target="_blank" rel="noopener">CASSANDRA-8771</a>) while complicating segment lifecycle and introducing non-trivial bugs (for example, <a href="https://issues.apache.org/jira/browse/CASSANDRA-8729" target="_blank" rel="noopener">CASSANDRA-8729</a>). Starting from 2.2.0, recycling a segment means closing the file and deleting it.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="change-data-capture-cdc"><a class="anchor" href="#change-data-capture-cdc"></a>Change-Data-Capture (CDC)</h3>
+<div class="paragraph">
+<p>This section describes Change-Data-Capture in the context of the CommitLog and refers to the state of CDC as of C* 4.0 (<a href="https://issues.apache.org/jira/browse/CASSANDRA-12148" target="_blank" rel="noopener">CASSANDRA-12148</a>). For a complete CDC guide, please refer to the <a href="/doc/latest/operating/cdc.html" target="_blank" rel="noopener">documentation</a>. <a href="https://en.wikipedia.org/wiki/Change_data_capture" target="_blank" rel="noopener">Change-Data-Capture</a> allows external consumers to consume new writes that happen on the cluster. CDC is configured per-table by setting <code>WITH cdc=true</code> in the <code>CREATE TABLE</code> or <code>ALTER TABLE</code> statements.</p>
+</div>
+<div class="paragraph">
+<p>CDC in Cassandra exposes synced parts of CommitLog segments to external consumers. On sync, CDC creates a hard link in <code>cdc_raw_directory</code> and a <code>&lt;segment_file&gt;_cdc.idx</code> file. This index file holds the offset for the final byte of the last sync block in the corresponding segment. Consumers should read the segment only until the specified offset as it indicates the point where the segment was safely persisted on disk.</p>
+</div>
+<div class="paragraph">
+<p>Once the segment is discarded, the index file contains the word <code>COMPLETED.</code> It is the responsibility of the consumer to delete hard links to read segments. If the folder fills up to its max allowed space, <code>cdc_free_space_in_mb</code>, new writes on this table are rejected.</p>
+</div>
+<div class="paragraph">
+<p>The CommitLog is one of the key components of Apache Cassandra as it offers one of the most important database guarantees: durability. In this article, we covered the CommitLog from multiple perspectives. First, we presented its role in the write path and its interactions with other database components. Then, we discussed the specifics of the sync mechanism as well as relevant configuration. After that, we looked into different segment types and their on-disk representation, as well as the idea of segment recycling. Finally, we briefly covered CDC as a feature enabled by CommitLog.</p>
+</div>
+<div class="paragraph">
+<p>If you would like to learn more about the CommitLog, you can follow the JIRA issues linked in this article and ask questions on the <a href="../community.html" class="page">Mailing List^</a> and <a href="https://the-asf.slack.com/" target="_blank" rel="noopener">ASF Slack</a> in the #cassandra Slack channel.</p>
+</div>
+<div class="paragraph">
+<p>Thanks to Frank Rosner, Branimir Lambov, and Chris Thornett for their discussions and corrections.</p>
+</div>
+</div>
+                </div>
+            </div>
+        </div>
+        <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://twitter.com/cassandra?lang=en" target="_blank"><img src="../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+      </div>
+  </body>
+<script>
+jQuery(function(){
+    
+});
+</script>
+</html>

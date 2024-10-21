@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Apache Cassandra | Apache Cassandra Documentation</title>
+    <link rel="stylesheet" href="../../assets/css/site.css">
+    <meta name="description" content="New SSTable Identifiers in Apache Cassandra 4.1">
+    <meta name="keywords" content="apache cassandra, 4.1, sstable">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="_">
+    <meta name="dcterms.identifier" content="master">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "https://plausible.cassandra.apache.org/js/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>  </head>
+  <body class="single-post">
+      <div class="container mx-auto relative">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta property="og:type" content="website" />
+	<meta property="og:description" content="" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+        <div class="header-social-icons text-right">
+            <a href="https://twitter.com/cassandra?lang=en" target="_blank" styles="margin-left: 20px;"><img src="../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../assets/img/logo-white-r.png" alt="cassandra logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+        <div class="hero hero--home grad">
+            <div class="eye"></div>
+            <div id="home-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                <h1>Apache Cassandra 4.1: New SSTable Identifiers</h1>
+                <h3>June 16, 2022 | Jacek Lewandowski</h3>
+            </div>
+        </div>
+        <div id="blog-post" class="flex-center py-large arrow">
+            <div class="blog-breadcrumb mb-medium">
+                <div class="inner inner--narrow">
+                    <a href="/_/blog.html">« Back to the Apache Cassandra Blog</a>
+                </div>
+            </div>
+            <div class="post-content">
+                <div class="inner inner--narrow">
+                    <div id="preamble">
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/apache-cassandra-4.1-new-sstable-identifiers-unsplash-maksym-kaharlytskyi.jpg" alt="SSTable Identifiers in Apache Cassandra 4.1">
+</div>
+<div class="title">Image credit: <a href="https://unsplash.com/@qwitka" target="_blank" rel="noopener">Maksym Kaharlytskyi on Unsplash</a></div>
+</div>
+<div class="paragraph">
+<p>Apache Cassandra, like many other databases, stores data in files. These files are located in data directories and organized in SSTables. This post will discuss the directory layout and the naming pattern used for these files and explain the new naming pattern introduced in Apache Cassandra 4.1.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sstables"><a class="anchor" href="#sstables"></a>SSTables</h3>
+<div class="paragraph">
+<p>SSTables are files where Cassandra stores data from tables. In a typical operation, an SSTable is created either as a result of flushing a <a href="http://distributeddatastore.blogspot.com/2020/03/cassandra-memtable.html" target="_blank" rel="noopener">memtable to disk</a> or a <a href="/doc/latest/cassandra/operating/compaction/index.html">compaction process</a>. Each SSTable contains data from a single table, but for a single table, there are usually many SSTables.
+A single SSTable is made of multiple files, called components. These components are generally specific to the SSTable format. BigTable is the only format supported right now, and they are the only type of component you will see being created by Apache Cassandra (at least at the time of writing). For example, a single SSTable can be a set of such files:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">    nb-1-big-CompressionInfo.db
+    nb-1-big-Data.db
+    nb-1-big-Digest.crc32
+    nb-1-big-Filter.db
+    nb-1-big-Index.db
+    nb-1-big-Statistics.db
+    nb-1-big-Summary.db
+    nb-1-big-TOC.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can read more about the particular SSTable components of the BigTable format in the <a href="/doc/latest/cassandra/architecture/storage_engine.html#sstables" target="_blank" rel="noopener">documentation</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="directory-layout-and-file-names"><a class="anchor" href="#directory-layout-and-file-names"></a>Directory Layout and File Names</h3>
+<div class="paragraph">
+<p>SSTable files are stored in data directories. The directory layout consists of a directory per keyspace and a directory per table under the keyspace directory.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">data0/
+  /ks_foo
+    /tab_bar-&lt;id&gt;
+   	/&lt;version&gt;-&lt;generation id&gt;-&lt;format&gt;-&lt;component&gt;.&lt;ext&gt;
+
+data1/
+  /ks_foo
+    /tab_bar-&lt;id&gt;
+   	/&lt;version&gt;-&lt;generation id&gt;-&lt;format&gt;-&lt;component&gt;.&lt;ext&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The table directory name has an identifier <code>&lt;id&gt;</code>, which is unique for that table, and the same identifier is used for each table’s data directory on each Cassandra node.
+SSTable files have a precisely defined file name pattern, enabling Cassandra to determine the SSTable format, version, and order in which SSTables were created:</p>
+</div>
+<div class="paragraph">
+<p><strong>&lt;version&gt;</strong> - The version identifier is made up of two lowercase letters. The letters denote the major and minor format versions (in the ancient Cassandra distributions, the version was denoted by one letter).</p>
+</div>
+<div class="paragraph">
+<p><strong>&lt;generation id&gt;</strong> - This is the identifier that allows SSTables to be distinguished and the order of different SSTables.</p>
+</div>
+<div class="paragraph">
+<p><strong>&lt;format&gt;</strong> - This is the SSTable format identifier. As mentioned, currently, the only existing format is BigTable, and its identifier is ‘big’.</p>
+</div>
+<div class="paragraph">
+<p><strong>&lt;component&gt;.&lt;ext&gt;</strong>	- The component&#8217;s name and the extension specific to that component.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sstable-identifiers"><a class="anchor" href="#sstable-identifiers"></a>SSTable Identifiers</h3>
+<div class="paragraph">
+<p>SSTable identifiers (also known as generation identifiers) are used to distinguish and order different SSTables. Since an SSTable is created every time a table is flushed, many SSTables can exist simultaneously in the same directory. The generation identifier of a newly stored SSTable is guaranteed to be greater than any identifiers of previously-stored SSTables for a certain table on the node.
+Natural numbers are used as generation identifiers. Cassandra scans the directories on start up before any new SSTable is written, and the starting number is obtained by incrementing the largest generation identifier found across the local data directories for a certain table.</p>
+</div>
+<div class="paragraph">
+<p><strong>NOTE:</strong> Cassandra includes live data directories and backup directories but ignores snapshots directories when performing its startup scan. Therefore, there may be SSTables with the same identifier among all the data directories while being different SSTables.
+The general identifiers based on the natural numbers aim to be unique per Cassandra node and table. This means that not only two SSTables of two different tables created on the same node may have the same identifiers and, thus, the same file names, but two different SSTables of the same table created on different nodes.</p>
+</div>
+<div class="paragraph">
+<p>As you might expect, there can be some maintenance problems due to the identifier properties discussed above. For example, as we illustrate below, truncation of a table triggers snapshot creation and removal of all SSTables from data directories. If the node is restarted and there is no SSTable created before that, the sequence is restarted from the beginning because there is no existing SSTable for identifying the last generated identifier:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">  /ks_foo
+    /tab_bar-&lt;id&gt;
+      /nb-1-big-Data.db</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There is a snapshot made before the truncation - that is, Cassandra creates hard links to all the SSTables files in a snapshot directory then files are removed from the live data directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">  /ks_foo
+    /tab_bar-&lt;id&gt;
+      /snapshots
+        /truncated-&lt;timestamp&gt;-tab_bar
+          /nb-1-big-Data.db</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When the node gets restarted, Cassandra forgets about the current sequence and starts it over; when a new SSTable is stored, it gets ‘1’ as the identifier:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">  /ks_foo
+    /tab_bar-&lt;id&gt;
+      /nb-1-big-Data.db
+      /snapshots
+        /truncated-&lt;timestamp&gt;-tab_bar
+          /nb-1-big-Data.db</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see, it is possible to have two SSTables with the same name but with potentially different content. This situation only becomes a problem when a user stores the SSTables in a different location for a backup. The backups of the SSTables will likely clash with the existing ones due to the identical file names.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="introducing-globally-unique-identifiers"><a class="anchor" href="#introducing-globally-unique-identifiers"></a>Introducing Globally Unique Identifiers</h3>
+<div class="paragraph">
+<p>To solve some of the problems with SSTable identifiers based on natural numbers, Cassandra 4.1 introduces the ability to switch to globally unique identifiers. These new identifiers are based on Time UUIDs (UUID type 1), though their string representation is different, making them lexically ordered and providing a little aid for the administrators.
+The structure of a globally unique identifier is as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">&lt;date part&gt;_&lt;time part&gt;_&lt;nano part&gt;&lt;random part&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The identification breaks down into the following components:</p>
+</div>
+<div class="paragraph">
+<p><strong>&lt;date part&gt;</strong> - A date encoded as 4 Base36 characters.</p>
+</div>
+<div class="paragraph">
+<p><strong>&lt;time part&gt;</strong> - A day time in seconds encoded as 4 Base36 characters.</p>
+</div>
+<div class="paragraph">
+<p><strong>&lt;nano part&gt;</strong> - A nano part of the second encoded as 5 Base36 characters.</p>
+</div>
+<div class="paragraph">
+<p><strong>&lt;random part&gt;</strong> - 13 Base36 random characters, fixed for the Cassandra system process on a certain node.</p>
+</div>
+<div class="paragraph">
+<p>This structure is more compact than the native UUID representation and provides the following properties:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Identifiers are lexicographically sortable.</p>
+</li>
+<li>
+<p>It is easy to distinguish SSTables created on the same day.</p>
+</li>
+<li>
+<p>It is easy to distinguish SSTables created by the same process.</p>
+</li>
+<li>
+<p>The identifiers are unique across the whole Cassandra cluster.</p>
+</li>
+<li>
+<p>There is no need to scan the data directories to know which identifier to start with.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For example, consecutive identifiers generated around the same time may look like this:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/apache-cassandra-4.1-new-sstable-identifiers.svg" alt="SSTable Identifiers">
+</div>
+</div>
+<div class="paragraph">
+<p>From those names, we can see that the first component of all the identifiers is <code>3fw2</code>, which means that all the SSTables were created on the same day. The second component varies, and its lexicographical order reflects the order in which the SSTables were created. The next five characters are the nano part of the creation time. The last 13 characters are identical in the first four identifiers, which means that they were created on the same node and even by the same instance of Cassandra server, i.e., the same process. The fifth identifier, which has a different 13 last characters, was created either on a different node or the node got restarted before creating that SSTable (simply, a different process).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="migration"><a class="anchor" href="#migration"></a>Migration</h3>
+<div class="paragraph">
+<p>The globally unique identifier feature is enabled by switching the <code>uuid_sstable_identifiers_enabled</code> flag to <code>true</code> in cassandra.yaml. It is disabled by default because once a node starts with this feature enabled, each newly stored SSTable will have an identifier created using the new mechanism. As a result, this makes downgrading process more difficult because globally unique identifiers are not readable by Apache Cassandra before 4.1. Consequently, all the SSTable files would have to be manually renamed using the old identifier method of natural numbers.</p>
+</div>
+<div class="paragraph">
+<p>Note that setting the flag to <code>true</code> does not make Cassandra immediately rename the existing SSTables according to the new scheme. It only affects newly stored SSTables. Existing SSTables are eventually removed during the regular compaction process.</p>
+</div>
+<div class="paragraph">
+<p>Support for globally unique SSTable identifiers was implemented in <a href="https://issues.apache.org/jira/browse/CASSANDRA-17048" target="_blank" rel="noopener">CASSANDRA-17048</a> and is part of the Apache Cassandra 4.1 release. We expect it will eliminate some problems with manual backups as each SSTable created, for any table, on any node will have a globally unique identifier.</p>
+</div>
+</div>
+                </div>
+            </div>
+        </div>
+        <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://twitter.com/cassandra?lang=en" target="_blank"><img src="../../assets/img/twitter-icon-circle-white.svg" alt="twitter icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+      </div>
+  </body>
+<script>
+jQuery(function(){
+    
+});
+</script>
+</html>
