@@ -12,6 +12,11 @@ FROM ubuntu:22.04
 # Other container parameters can be overridden at build time as well:
 #  - NODE_VERSION_ARG:              Version of node to use.
 #  - ENTR_VERSION_ARG:              Version of entr to use.
+#
+#
+# For developer convenience (to avoid having to run `./run.sh website container`) publish trunk changes to dockerhub with:
+# `docker buildx build --platform linux/amd64,linux/arm64 -f ./site-content/Dockerfile -t apache/cassandra-website:latest --provenance=true --sbom=true --push  ./site-content/`
+#
 ARG BUILD_USER_ARG="build"
 ARG UID_ARG=1000
 ARG GID_ARG=1000
@@ -19,6 +24,12 @@ ARG NODE_VERSION_ARG="v20.16.0"
 ARG ENTR_VERSION_ARG="4.6"
 ARG TARGETPLATFORM
 
+# GO_VERSION_SHAS must contain contain a matching sha256 for the $GO_VERSION download.  there should only be four SHAs listed.
+ARG GO_VERSION="1.24.3"
+ARG GO_VERSION_SHAS="3333f6ea53afa971e9078895eaa4ac7204a8c6b5c68c10e6bc9a33e8e391bdd8 a463cb59382bd7ae7d8f4c68846e73c4d589f223c589ac76871b66811ded7836 13e6fe3fcf65689d77d40e633de1e31c6febbdbcb846eb05fc2434ed2213e92b 64a3fa22142f627e78fac3018ce3d4aeace68b743eff0afda8aae0411df5e4fb"
+
+ENV BUILD_USER=${BUILD_USER_ARG}
+ENV BUILD_DIR="/home/${BUILD_USER}"
 ENV NPM_CONFIG_LOGLEVEL info
 
 RUN echo "Building with arguments:" \
@@ -46,6 +57,23 @@ RUN apt update && \
         gcc \
         sudo
 
+# install golang.  GO_VERSION_SHA must be updated with VERSION
+RUN sh -c '\
+  GO_OS=linux ;\
+  [ $(uname) = "Darwin" ] && GO_OS=darwin ;\
+  GO_PLATFORM=amd64 ;\
+  [ $(uname -m) = "aarch64" ] && GO_PLATFORM=arm64 ;\
+  GO_TAR="go${GO_VERSION}.${GO_OS}-${GO_PLATFORM}.tar.gz" ;\
+  curl -L --fail --silent --retry 2 --retry-delay 5 --max-time 30 https://go.dev/dl/$GO_TAR -o $GO_TAR ;\
+  GO_SHA="$(sha256sum $GO_TAR | cut -d" " -f2)" ;\
+  echo "$GO_VERSION_SHAS" | sed "s/ /\n/g" | grep -q "$GO_SHA" || { echo "SHA256 mismatch for $GO_TAR $GO_SHA"; exit 1; } ;\
+  tar -C /usr/local -xzf $GO_TAR ;\
+  rm $GO_TAR'
+
+ENV GOROOT="/usr/local/go"
+ENV GOPATH="$BUILD_DIR/bin"
+ENV PATH="$PATH:/usr/local/go/bin"
+
 RUN pip3 install jinja2 requests
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
@@ -65,7 +93,6 @@ RUN npm i -g antora-lunr antora-site-generator-lunr
 RUN npm i -g live-server
 
 # Create the build user and make it part of the password-less sudo group
-ENV BUILD_USER=${BUILD_USER_ARG}
 RUN groupadd --gid ${GID_ARG} --non-unique ${BUILD_USER} && \
     useradd --create-home --shell /bin/bash --uid ${UID_ARG} --gid ${GID_ARG} --non-unique ${BUILD_USER} && \
     usermod -aG sudo ${BUILD_USER} && \
@@ -73,7 +100,6 @@ RUN groupadd --gid ${GID_ARG} --non-unique ${BUILD_USER} && \
 
 # Setup directories for building the docs
 # Give the build user rw access to everything in the build directory neccessary for the ASF 'website'.
-ENV BUILD_DIR="/home/${BUILD_USER}"
 ENV ENTR_PACKAGE="${ENTR_VERSION_ARG}.tar.gz"
 WORKDIR ${BUILD_DIR}
 RUN wget https://github.com/eradman/entr/archive/${ENTR_PACKAGE} --no-check-certificate && \
