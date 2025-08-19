@@ -10,9 +10,7 @@ $ cd ./cassandra-website
 
 # make sure you have docker installed
 # build the container image so it is available to run
-```bash
 $ ./run.sh website container
-```
 
 # website content edits are done in ./site-content/source/modules
 # to build the website only using your local edits
