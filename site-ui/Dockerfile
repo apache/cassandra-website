@@ -15,7 +15,7 @@ FROM ubuntu:22.04
 ARG BUILD_USER_ARG="build"
 ARG UID_ARG=1000
 ARG GID_ARG=1000
-ARG NODE_VERSION_ARG="v20.16.0"
+ARG NODE_VERSION_ARG="v24.8.0"
 
 ENV BUILD_USER=${BUILD_USER_ARG}
 
@@ -41,7 +41,8 @@ RUN wget https://nodejs.org/download/release/${NODE_VERSION_ARG}/${NODE_PACKAGE}
     tar -C /usr/local --strip-components 1 -xzf ${NODE_PACKAGE} && \
     rm ${NODE_PACKAGE}
 
-RUN npm install -g gulp-cli
+RUN npm install -g npm@11.6.0
+RUN npm install -g gulp-cli@3.1.0
 
 ENV BUILD_DIR="/home/${BUILD_USER}"
 WORKDIR ${BUILD_DIR}
