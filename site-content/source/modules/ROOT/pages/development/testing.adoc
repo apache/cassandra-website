@@ -79,30 +79,84 @@ public void testBatchAndList() throws Throwable
 [#junit_tests]
 === JUnit tests
 
-To run the unit tests:
+Beginning with Cassandra 5.0, the Cassandra project is migrating from relying on ant targets for executing unit
+tests, to using the `run-tests.sh` utility in `.build` : a single tool for running a wide variety of test types.
+Both approaches are outlined here, but please use `run-tests.sh` when possible.
+
+==== JUnit tests with run-test.sh
+
+See https://github.com/apache/cassandra/blob/trunk/.build/README.md#running-tests[.build/README] for complete
+documentation on `run-tests.sh` and other build/test helper scripts.
+
+To run all of the unit tests:
+
+[source,none]
+----
+.build/run-tests.sh -a test
+----
+
+This is probably not what you want to do though, since this command will run all the unit tests
+under `test/unit`. It will take an hour or more to finish.
+
+To run all the tests in a specific test class or classes:
+
+[source,none]
+----
+.build/run-tests.sh -a test -t <TestClassNameRegex>
+----
+
+The `TestClassNameRegex` parameter can be a simple or fully qualified class name, or a regular expression. For example:
+
+[source,none]
+----
+.build/run-tests.sh -a test -t "MutualTls*"
+----
+
+You can specify multiple test expressions by separating them with a comma:
+
+[source,none]
+----
+.build/run-tests.sh -a test -t "MutualTls*","CassandraCIDR*"
+----
+
+Finally, to run all of the tests in a given package, use:
+
+[source,none]
+----
+.build/run-tests.sh -a test -t <TestPackageName>
+----
+
+==== JUnit tests with ant
+
+To run all of the unit tests using `ant` :
 
 [source,none]
 ----
 ant test
 ----
 
-However, this is probably not what you want to do, since that
-command would run all the unit tests (those from `test/unit`). It would
-take about an hour or more to finish.
+Again, this is probably not what you want to do, since this will run all the unit tests
+(those from `test/unit`) and take a long time.
 
-To run the specific test class or even a method, use the following
-command:
+To run all the tests in a specific test class:
+
+[source,none]
+----
+ant testsome -Dtest.name=<TestClassName>
+----
+
+The `TestClassName` property can be either a simple or fully qualified class name.
+
+To run a specific test in a test class, use the same command with an additional `test.methods` property:
 
 [source,none]
 ----
 ant testsome -Dtest.name=<TestClassName> -Dtest.methods=<testMethodName>
 ----
 
-* `test.name` property is for either a simple or fully qualified class
-name
-* `test.methods` property is optional; if not specified, all test cases
-from the specified class are executed. Though, you can also specify
-multiple methods separating them by comma
+You can specify multiple methods in a class by separating the method names by comma.
+
+==== JUnit tests in your IDE
 
 You can also use the IDE to run the tests - when you generate IDE files and
 properly import the Cassandra project, you can run the
@@ -112,7 +166,7 @@ call `ant jar` to build the distribution artifacts. When
 the test runs some tool as an external process, the tool expects
 Cassandra artifacts to be in the build directory.
 
-Note that those commands apply to the tests in the `test/unit`
+Note that these commands apply to the tests in the `test/unit`
 directory. There are, however, some other test categories that have
 tests in individual directories:
 
