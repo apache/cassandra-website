@@ -3,10 +3,6 @@
 :page-role: tiles
 :!sectids:
 
-
-
-
-
 [openblock,inner inner--narrow]
 ----
 
@@ -25,7 +21,7 @@ Apache Cassandra is also available as a tarball or package xref:download.adoc[do
 
 [source]
 --
-docker pull cassandra:latest
+docker pull cassandra
 --
 ====
 
@@ -44,7 +40,7 @@ docker network create cassandra
 docker run --rm -d --name cassandra --hostname cassandra --network cassandra cassandra
 --
 ====
-// end example 
+// end example
 
 [example]
 ====
@@ -72,12 +68,13 @@ last_update_timestamp timestamp
 INSERT INTO store.shopping_cart
 (userid, item_count, last_update_timestamp)
 VALUES ('9876', 2, toTimeStamp(now()));
+
 INSERT INTO store.shopping_cart
 (userid, item_count, last_update_timestamp)
 VALUES ('1234', 5, toTimeStamp(now()));
 --
 ====
-// end example 
+// end example
 
 [example]
 ====
@@ -89,13 +86,11 @@ The CQL shell, or cqlsh, is one tool to use in interacting with the database. We
 
 [source]
 --
-
-docker run --rm --network cassandra -v "$(pwd)/data.cql:/scripts/data.cql" -e CQLSH_HOST=cassandra -e CQLSH_PORT=9042 -e CQLVERSION=3.4.6 nuvo/docker-cqlsh 
-
+docker run --rm --network cassandra -v ./data.cql:/tmp/data.cql cassandra cqlsh -f /tmp/data.cql cassandra
 --
 Note: The cassandra server itself (the first docker run command you ran) takes a few seconds to start up. The above command will throw an error if the server hasn't finished its init sequence yet, so give it a few seconds to spin up.
 ====
-// end example 
+// end example
 
 [example]
 ====
@@ -107,20 +102,20 @@ Much like an SQL shell, you can also of course use CQLSH to run CQL commands int
 
 [source]
 --
-docker run --rm -it --network cassandra nuvo/docker-cqlsh cqlsh cassandra 9042 --cqlversion='3.4.5' 
+docker run --rm -it --network cassandra cassandra cqlsh cassandra 9042
 --
 
 This should get you a prompt like so:
 
 [source]
 --
-Connected to Test Cluster at cassandra:9042.
-[cqlsh 5.0.1 | Cassandra 4.0.4 | CQL spec 3.4.5 | Native protocol v5]
+Connected to Test Cluster at cassandra:9042
+[cqlsh 6.1.0 | Cassandra 4.1.5 | CQL spec 3.4.6 | Native protocol v5]
 Use HELP for help.
 cqlsh>
 --
 ====
-// end example 
+// end example
 
 [example]
 ====
@@ -130,7 +125,7 @@ cqlsh>
 
 [source]
 --
- SELECT * FROM store.shopping_cart;  
+SELECT * FROM store.shopping_cart;
 --
 ====
 // end example blogk
@@ -142,10 +137,10 @@ cqlsh>
 
 [source]
 --
- INSERT INTO store.shopping_cart (userid, item_count) VALUES ('4567', 20); 
+INSERT INTO store.shopping_cart (userid, item_count) VALUES ('4567', 20);
 --
 ====
-// end example 
+// end example
 
 [example]
 ====
@@ -156,7 +151,8 @@ cqlsh>
 [source]
 --
 docker kill cassandra
-docker network rm cassandra 
+
+docker network rm cassandra
 --
 **CONGRATULATIONS!**
 
@@ -171,7 +167,3 @@ To learn more, we suggest the following next steps:
 ====
 // end example blogk
 ----
-
-
-
-
