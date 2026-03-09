@@ -4,9 +4,44 @@
 
 Commits applicable to multiple versions are atomically pushed forward merges.
 
-The fix lands on the oldest release branch and is then forward-merges it into each newer branch using an ours merge to record branch lineage and amends that merge commit to include the branch-appropriate patch.
+Fixes are applied first on the oldest applicable release branch, and are then forward-merged onto each newer branch using an ours merge strategy to record branch lineage.  Each forward-merge commit contains the branch-appropriate patch.
 
 This keeps a clean, traceable history and a single logical unit of work per ticket per branch, while preventing unintended diffs from being pulled forward automatically.
+
+== Introduction for New Committers
+
+GitHub Pull Requests are merged using Git command-line tools instead of the GitHub UI. The following workflow outlines a standard trunk-only patching process; for contributions involving multiple branches, see the next section.
+
+Development occurs within personal forks, as the upstream `apache/cassandra` repository is strictly reserved for the trunk and official release branches.
+
+Before merging, verify your remotes are set up correctly. The `upstream` remote should point to the official Apache repository:
+[source,shell]
+----
+git remote add upstream https://gitbox.apache.org/repos/asf/cassandra.git
+git remote -v
+----
+
+Use the following Git CLI commands when merging a PR:
+
+Step 1: Fetch the contributor's branch and check it out for testing.
+[source,shell]
+----
+git fetch https://github.com/<github_username>/<repo_name>.git <pr_branch>:<jira_id>/<pr_branch>
+git checkout <jira_id>/<pr_branch>
+----
+
+Step 2: Squash the feature branch, fast-forward merge, and push following the project workflow.
+[source,shell]
+----
+git switch trunk
+# there should only be one commit, squashed
+git cherry-pick <sha-of-commit>
+# update the commit message to match the project's required format
+git commit --amend
+# push as dry-run (-n) and check that it looks correct
+git push --atomic upstream trunk -n
+git push --atomic upstream trunk
+----
 
 == Git branch based Contribution
 
@@ -115,7 +150,7 @@ git commit --amend # this will squash the 4.1 applied patch into the forward mer
 git merge cassandra-4.1 -s ours --log
 git apply -3 12345-5.0.patch
 ant realclean && ant jar check # rebuild to make sure code compiles
-git commit --amend # this will squash the 4.1 applied patch into the forward merge commit
+git commit --amend # this will squash the 5.0 applied patch into the forward merge commit
 ----
 *On trunk*:::
 [source,shell]
@@ -145,7 +180,7 @@ The commit message is to be in the format:
 
 <Optional lengthier description>
 
- patch by <Authors,>; reviewed by <Reviewers,> for CASSANDRA-#####
+ patch by <Authors,>; reviewed by <Reviewers,> for CASSANDRA-#####
 
 
 Co-authored-by: Name1 <email1>
@@ -167,15 +202,15 @@ resolve it manually or invoke git mergetool - for both am and apply.
 `+--atomic+` flag to git push does the obvious thing: pushes all or
 nothing. Without the flag, the command is equivalent to running git push
 once per each branch. This is nifty in case a race condition happens -
-you won’t push half the branches, blocking other committers’ progress
+you won't push half the branches, blocking other committers' progress
 while you are resolving the issue.
 ====
 
 [TIP]
 .Tip
 ====
-The fastest way to get a patch from someone’s commit in a branch on GH -
-if you don’t have their repo in remotes - is to append .patch to the
+The fastest way to get a patch from someone's commit in a branch on GH -
+if you don't have their repo in remotes - is to append .patch to the
 commit url, e.g. `+curl -O https://github.com/apache/cassandra/commit/7374e9b5ab08c1f1e612bf72293ea14c959b0c3c.patch+`
 ====
 
