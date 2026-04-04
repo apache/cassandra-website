@@ -396,6 +396,7 @@ run_docker_website_command() {
   local cassandra_volume_mount_set="false"
   local cassandra_website_volume_mount_set="false"
   local cassandra_website_source_set="false"
+  local cassandra_custom_repo_or_branch_set="false"
 
   if [ -f "${env_file}" ]
   then
@@ -425,6 +426,12 @@ run_docker_website_command() {
         continue
       fi
 
+      # Track if custom cassandra repo or branches are provided (not tags, as those are handled separately)
+      if [ "${repository_name}" = "cassandra" ] && [ "${repository_source_type}" != "tags" ]
+      then
+        cassandra_custom_repo_or_branch_set="true"
+      fi
+
       case "${repository_source_type}" in
         url)
           local url_source_name="${repository_name}"
@@ -452,6 +459,14 @@ run_docker_website_command() {
       env_args+=("-e ${antora_content_source_env_name}=${repository_value}")
     done
   done
+
+  # If custom cassandra repo or branches were provided, set ANTORA_CONTENT_SOURCES_CASSANDRA_TAGS to empty
+  # to prevent auto-generation of tags (unless tags were explicitly provided via -t option)
+  if [ "${cassandra_custom_repo_or_branch_set}" = "true" ] && \
+     ! printf '%s\n' "${env_args[@]}" | grep -q "ANTORA_CONTENT_SOURCES_CASSANDRA_TAGS="
+  then
+    env_args+=("-e ANTORA_CONTENT_SOURCES_CASSANDRA_TAGS=")
+  fi
 
   if [ "${container_command}" = "generate-docs" ]
   then

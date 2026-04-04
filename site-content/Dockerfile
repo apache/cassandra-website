@@ -7,11 +7,6 @@ FROM ubuntu:22.04
 #       --build-arg BUILD_USER_ARG=$(whoami) \
 #       --build-arg UID_ARG=$(id -u) \
 #       --build-arg GID_ARG=$(id -g) \
-#       .
-#
-# Other container parameters can be overridden at build time as well:
-#  - NODE_VERSION_ARG:              Version of node to use.
-#  - ENTR_VERSION_ARG:              Version of entr to use.
 #
 #
 # For developer convenience (to avoid having to run `./run.sh website container`) publish trunk changes to dockerhub with:
@@ -20,13 +15,10 @@ FROM ubuntu:22.04
 ARG BUILD_USER_ARG="build"
 ARG UID_ARG=1000
 ARG GID_ARG=1000
-ARG NODE_VERSION_ARG="v20.16.0"
-ARG ENTR_VERSION_ARG="4.6"
-ARG TARGETPLATFORM
 
 # GO_VERSION_SHAS must contain contain a matching sha256 for the $GO_VERSION download.  there should only be four SHAs listed.
-ARG GO_VERSION="1.24.3"
-ARG GO_VERSION_SHAS="3333f6ea53afa971e9078895eaa4ac7204a8c6b5c68c10e6bc9a33e8e391bdd8 a463cb59382bd7ae7d8f4c68846e73c4d589f223c589ac76871b66811ded7836 13e6fe3fcf65689d77d40e633de1e31c6febbdbcb846eb05fc2434ed2213e92b 64a3fa22142f627e78fac3018ce3d4aeace68b743eff0afda8aae0411df5e4fb"
+ARG GO_VERSION="1.26.1"
+ARG GO_VERSION_SHAS="031f088e5d955bab8657ede27ad4e3bc5b7c1ba281f05f245bcc304f327c987a a290581cfe4fe28ddd737dde3095f3dbeb7f2e4065cab4eae44dfc53b760c2f7 65773dab2f8cc4cd23d93ba6d0a805de150ca0b78378879292be0b903b8cdd08 353df43a7811ce284c8938b5f3c7df40b7bfb6f56cb165b150bc40b5e2dd541f"
 
 ENV BUILD_USER=${BUILD_USER_ARG}
 ENV BUILD_DIR="/home/${BUILD_USER}"
@@ -42,23 +34,13 @@ RUN echo "Building with arguments:" \
 # INSTALL wget, python3, java11, and other tools required to build the docs
 RUN apt update && \
     apt install -y \
-        openjdk-8-jdk \
-        openjdk-11-jdk \
-        openjdk-17-jdk \
-        python3 \
-        python3-pip \
-        ant \
-        ant-optional \
-        make \
-        git \
-        gpg \
-        wget \
-        curl \
-        gcc \
-        sudo
+        openjdk-8-jdk openjdk-11-jdk openjdk-17-jdk openjdk-21-jdk \
+        python3 python3-pip ant ant-optional make git gpg wget curl \
+        gcc sudo pandoc
 
 # install golang.  GO_VERSION_SHA must be updated with VERSION
 RUN sh -c '\
+  set -ex ;\
   GO_OS=linux ;\
   [ $(uname) = "Darwin" ] && GO_OS=darwin ;\
   GO_PLATFORM=amd64 ;\
@@ -77,13 +59,21 @@ ENV PATH="$PATH:/usr/local/go/bin"
 RUN pip3 install jinja2 requests
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
-# INSTALL nodejs and nvm
-RUN export PLATFORM=$(if [ "$TARGETPLATFORM" = "linux/amd64" ] ; then echo "x64"; else echo "arm64"; fi) \
-  && set -ex \
-  && wget "https://nodejs.org/dist/$NODE_VERSION_ARG/node-$NODE_VERSION_ARG-linux-$PLATFORM.tar.xz" \
-  && tar -xJf "node-$NODE_VERSION_ARG-linux-$PLATFORM.tar.xz" -C /usr/local --strip-components=1 \
-  && rm "node-$NODE_VERSION_ARG-linux-$PLATFORM.tar.xz" \
-  && ln -s /usr/local/bin/node /usr/local/bin/nodejs
+
+# Install Node.js for Antora (documentation generation)
+RUN sh -c '\
+  set -ex ;\
+  NODE_VERSION="v20.16.0" ;\
+  NODE_PLATFORM=x64 ;\
+  [ $(uname -m) = "aarch64" ] && NODE_PLATFORM=arm64 ;\
+  NODE_VERSION_SHAS="c30af7dfea46de7d8b9b370fa33b8b15440bc93f0a686af8601bbb48b82f16c0 1d9929e72f692179f884cd676b2dfabd879cb77defa7869dc8cfc802619277fb" ;\
+  NODE_TAR="node-${NODE_VERSION}-linux-${NODE_PLATFORM}.tar.xz" ;\
+  wget -q "https://nodejs.org/dist/${NODE_VERSION}/${NODE_TAR}" --no-check-certificate ;\
+  NODE_SHA="$(sha256sum ${NODE_TAR} | cut -d" " -f1)" ;\
+  echo "$NODE_VERSION_SHAS" | sed "s/ /\n/g" | grep -q "$NODE_SHA" || { echo "SHA256 mismatch for ${NODE_TAR} ${NODE_SHA}"; exit 1; } ;\
+  tar -xJf "${NODE_TAR}" -C /usr/local --strip-components=1 ;\
+  rm "${NODE_TAR}" ;\
+  ln -s /usr/local/bin/node /usr/local/bin/nodejs'
 
 CMD [ "npm", "--version" ]
 
@@ -100,12 +90,19 @@ RUN groupadd --gid ${GID_ARG} --non-unique ${BUILD_USER} && \
 
 # Setup directories for building the docs
 # Give the build user rw access to everything in the build directory neccessary for the ASF 'website'.
-ENV ENTR_PACKAGE="${ENTR_VERSION_ARG}.tar.gz"
 WORKDIR ${BUILD_DIR}
-RUN wget https://github.com/eradman/entr/archive/${ENTR_PACKAGE} --no-check-certificate && \
-    mkdir entr && \
-    tar -C ${BUILD_DIR}/entr --strip-components 1 -xzf ${ENTR_PACKAGE} && \
-    rm ${ENTR_PACKAGE}
+
+# install entr
+RUN sh -c '\
+  set -ex ;\
+  ENTR_VERSION="5.8" ;\
+  ENTR_SHAS="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" ;\
+  wget -q https://github.com/eradman/entr/archive/${ENTR_VERSION}.tar.gz --no-check-certificate ;\
+  ENTR_SHA="$(sha256sum ${NODE_TAR} | cut -d" " -f1)" ;\
+  echo "$ENTR_SHAS" | sed "s/ /\n/g" | grep -q "$ENTR_SHA" || { echo "SHA256 mismatch for ${ENTR_VERSION}.tar.gz ${ENTR_SHA}"; exit 1; } ;\
+  mkdir entr ;\
+  tar -C ${BUILD_DIR}/entr --strip-components 1 -xzf ${ENTR_VERSION}.tar.gz ;\
+  rm ${ENTR_VERSION}.tar.gz'
 
 WORKDIR ${BUILD_DIR}/entr
 RUN ./configure && \
@@ -131,8 +128,7 @@ ENV ANTORA_SITE_START_PAGE="_"
 ENV ANTORA_CONTENT_SOURCES_CASSANDRA_URL="https://github.com/apache/cassandra.git"
 # changing the next line also needs updates to the move_intree_document_directories calls in prepare_site_html_for_publication in docker-entrypoint.sh
 ENV ANTORA_CONTENT_SOURCES_CASSANDRA_BRANCHES="trunk cassandra-5.0 cassandra-4.1 cassandra-4.0 cassandra-3.11"
-# FIXME – we can't generate tags yet as in-tree doc/antora.yml doesn't specify specifc tag versions
-ENV ANTORA_CONTENT_SOURCES_CASSANDRA_TAGS=""
+
 ENV ANTORA_CONTENT_SOURCES_CASSANDRA_START_PATH="doc"
 
 ENV ANTORA_CONTENT_SOURCES_CASSANDRA_WEBSITE_URL="https://github.com/apache/cassandra-website.git"

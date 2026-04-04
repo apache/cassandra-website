@@ -54,14 +54,8 @@ generate_cassandra_versioned_docs() {
 
   # Make sure Antora includes the versioned Cassandra documentation as part of the output.
   ANTORA_CONTENT_SOURCE_REPOSITORIES+=(CASSANDRA)
-
-  local commit_changes_to_branch=""
-  if [ "$(wc -w <<< "${GENERATE_CASSANDRA_VERSIONS}")" -gt 1 ]
-  then
-    commit_changes_to_branch="enabled"
-  else
-    commit_changes_to_branch="disabled"
-  fi
+  # Antora includes the versioned docs via git branches (that are never pushed)
+  local commit_changes_to_branch=$([ "$(wc -w <<< "${GENERATE_CASSANDRA_VERSIONS}")" -gt 1 ] && echo "enabled")
 
   pushd "${CASSANDRA_WORKING_DIR}" > /dev/null
   for version in ${GENERATE_CASSANDRA_VERSIONS}
@@ -255,17 +249,13 @@ prepare_site_html_for_publication() {
     log_message "INFO" "Renaming master dropdown version to website"
     grep -lr 'index.html\">master</a>' content/Cassandra | xargs -I{} sed -i 's|index.html\">master</a>|index.html\">website</a>|' {}
     log_message "INFO" "Moving versioned documentation HTML to content/doc"
-    # FIXME – we can't generate tags yet as in-tree doc/antora.yml doesn't specify specifc tag versions, so just copy them for now (see same fixme in Dockerfile)
-    move_intree_document_directories "3.11" "3.11.11" "3.11.12" "3.11.13" "3.11.14" "3.11.15" "3.11.16" "3.11.17" "3.11.18" "3.11.19"
-    move_intree_document_directories "4.0" "4.0.0" "4.0.1" "4.0.2" "4.0.3" "4.0.4" "4.0.5" "4.0.6" "4.0.7" "4.0.8" "4.0.9" "4.0.10" "4.0.11" "4.0.12" "4.0.13" "4.0.14" "4.0.15" "4.0.16" "4.0.17"
-    move_intree_document_directories "4.1" "4.1.0" "4.1.1" "4.1.2" "4.1.3" "4.1.4" "4.1.5" "4.1.6" "4.1.7" "4.1.8"
-    move_intree_document_directories "5.0" "5.0.1" "5.0.2" "5.0.3" "5.0.4" "stable" "latest"
-    move_intree_document_directories "trunk" "5.1"
+    # move content/Cassandra subdirectories to content/doc, plus aliases
+    move_intree_document_directories "5.0" "stable" "latest"
+    move_remaining_cassandra_subdirectories
   fi
 
   popd > /dev/null
 }
-
 
 move_intree_document_directories() {
     local source_doc_dir="$1"
@@ -290,13 +280,27 @@ move_intree_document_directories() {
       rm -fR ${target_base_dir}/${source_doc_dir}
       mv ${source_base_dir}/${source_doc_dir} ${target_base_dir}/
     fi
+}
 
-    # Check if our source directory is empty and if it is clean it up.
-    # Otherwise, leave it as is so we can see if we have missed a version.
-    if [ -d "${source_base_dir}" ] && [ -z "$(ls -A ${source_base_dir})" ]
+move_remaining_cassandra_subdirectories() {
+    local source_base_dir="content/Cassandra"
+    local target_base_dir="content/doc"
+
+    # Copy all remaining subdirectories from content/Cassandra/ to content/doc/
+    if [ -d "${source_base_dir}" ]
     then
-      rmdir "${source_base_dir}"
+      for subdir in ${source_base_dir}/*
+      do
+        if [ -d "${subdir}" ]
+        then
+          local dir_name=$(basename "${subdir}")
+          log_message "INFO" "Copying remaining directory ${dir_name} to content/doc/"
+          rm -fR ${target_base_dir}/${dir_name}
+          mv ${subdir} ${target_base_dir}/
+        fi
+      done
     fi
+    rmdir "${source_base_dir}"
 }
 
 run_preview_mode() {
@@ -368,7 +372,33 @@ log_message() {
   fi
 }
 
+auto_generate_cassandra_tags() {
+ # list of all release tags (that can have dynamic antora.yml , ref CASSANDRA-17375)
+  TEMP_REPO_DIR=$(mktemp -d)
+  git clone --bare "${ANTORA_CONTENT_SOURCES_CASSANDRA_URL}" "${TEMP_REPO_DIR}" 2>/dev/null || true
+  if [ -d "${TEMP_REPO_DIR}" ]; then
+    AUTO_TAGS=""
+    for tag in $(cd "${TEMP_REPO_DIR}" && git tag -l 'cassandra-*' | sort -V); do
+      major_ver=$(echo "$tag" | sed 's/cassandra-\([0-9]*\).*/\1/')
+      if [ "$major_ver" -ge 5 ]; then
+        if ! (cd "${TEMP_REPO_DIR}" && git show "${tag}:doc/antora.yml" >/dev/null 2>&1); then
+          # This tag is post CASSANDRA-17375, so include in build
+          AUTO_TAGS="${AUTO_TAGS} ${tag}"
+        fi
+      fi
+    done
+    rm -rf "${TEMP_REPO_DIR}"
+    ANTORA_CONTENT_SOURCES_CASSANDRA_TAGS="${AUTO_TAGS}"
+  fi
+}
+
 # ============ MAIN ============
+
+# Auto-generate list of release tags only if ANTORA_CONTENT_SOURCES_CASSANDRA_TAGS is unset
+# (not just empty - empty means custom repos/branches were provided without tags)
+if [ -z "${ANTORA_CONTENT_SOURCES_CASSANDRA_TAGS+x}" ]; then
+  auto_generate_cassandra_tags
+fi
 
 GENERATE_CASSANDRA_VERSIONS=$(sed 's/^[[:space:]]]*//' <<< "${ANTORA_CONTENT_SOURCES_CASSANDRA_BRANCHES} ${ANTORA_CONTENT_SOURCES_CASSANDRA_TAGS}")
 export GENERATE_CASSANDRA_VERSIONS
