@@ -36,10 +36,16 @@ RUN apt-get update && \
         git \
         vim
 
-ENV NODE_PACKAGE="node-${NODE_VERSION_ARG}-linux-x64.tar.gz"
-RUN wget https://nodejs.org/download/release/${NODE_VERSION_ARG}/${NODE_PACKAGE} && \
-    tar -C /usr/local --strip-components 1 -xzf ${NODE_PACKAGE} && \
-    rm ${NODE_PACKAGE}
+# Install Node.js with architecture detection
+RUN sh -c '\
+  set -ex ;\
+  NODE_PLATFORM=x64 ;\
+  [ $(uname -m) = "aarch64" ] && NODE_PLATFORM=arm64 ;\
+  NODE_TAR="node-${NODE_VERSION_ARG}-linux-${NODE_PLATFORM}.tar.gz" ;\
+  wget -q "https://nodejs.org/download/release/${NODE_VERSION_ARG}/${NODE_TAR}" --no-check-certificate ;\
+  tar -xzf "${NODE_TAR}" -C /usr/local --strip-components=1 ;\
+  rm "${NODE_TAR}" ;\
+  ln -s /usr/local/bin/node /usr/local/bin/nodejs'
 
 RUN npm install -g npm@11.6.0
 RUN npm install -g gulp-cli@3.1.0
