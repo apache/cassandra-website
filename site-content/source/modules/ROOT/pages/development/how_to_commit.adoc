@@ -72,7 +72,7 @@ git cherry-pick -n <sha-of-5.0-commit>
 ant realclean && ant jar check # rebuild to make sure code compiles
 git commit --amend # this will squash the 5.0 applied patch into the forward merge commit
 ----
-*On trunk*:::
+*On cassandra-6.0*:::
 [source,shell]
 ----
 git merge cassandra-5.0 -s ours --log
@@ -80,11 +80,19 @@ git cherry-pick -n <sha-of-trunk-commit>
 ant realclean && ant jar check # rebuild to make sure code compiles
 git commit --amend # this will squash the trunk applied patch into the forward merge commit
 ----
+*On trunk*:::
+[source,shell]
+----
+git merge cassandra-6.0 -s ours --log
+git cherry-pick -n <sha-of-trunk-commit>
+ant realclean && ant jar check # rebuild to make sure code compiles
+git commit --amend # this will squash the trunk applied patch into the forward merge commit
+----
 *To Push*:::
 [source,shell]
 ----
-git push origin cassandra-4.0 cassandra-4.1 cassandra-5.0 trunk --atomic -n # dryrun check
-git push origin cassandra-4.0 cassandra-4.1 cassandra-5.0 trunk --atomic
+git push origin cassandra-4.0 cassandra-4.1 cassandra-5.0 cassandra-6.0 trunk --atomic -n # dryrun check
+git push origin cassandra-4.0 cassandra-4.1 cassandra-5.0 cassandra-6.0 trunk --atomic
 ----
 
 == Contributions only for release branches
@@ -110,17 +118,23 @@ ant realclean && ant jar # rebuild to make sure code compiles
 git merge cassandra-4.1 -s ours --log
 ant realclean && ant jar check # rebuild to make sure code compiles
 ----
-*On trunk*:::
+*On cassandra-6.0*:::
 [source,shell]
 ----
 git merge cassandra-5.0 -s ours --log
 ant realclean && ant jar check # rebuild to make sure code compiles
 ----
+*On trunk*:::
+[source,shell]
+----
+git merge cassandra-6.0 -s ours --log
+ant realclean && ant jar check # rebuild to make sure code compiles
+----
 *To Push*:::
 [source,shell]
 ----
-git push origin cassandra-4.0 cassandra-4.1 cassandra-5.0 trunk --atomic -n # dryrun check
-git push origin cassandra-4.0 cassandra-4.1 cassandra-5.0 trunk --atomic
+git push origin cassandra-4.0 cassandra-4.1 cassandra-5.0 cassandra-6.0 trunk --atomic -n # dryrun check
+git push origin cassandra-4.0 cassandra-4.1 cassandra-5.0 cassandra-6.0 trunk --atomic
 ----
 
 == Patch based Contribution
@@ -152,7 +166,7 @@ git apply -3 12345-5.0.patch
 ant realclean && ant jar check # rebuild to make sure code compiles
 git commit --amend # this will squash the 5.0 applied patch into the forward merge commit
 ----
-*On trunk*:::
+*On cassandra-6.0*:::
 [source,shell]
 ----
 git merge cassandra-5.0 -s ours --log
@@ -160,11 +174,19 @@ git apply -3 12345-trunk.patch
 ant realclean && ant jar check # rebuild to make sure code compiles
 git commit --amend # this will squash the trunk applied patch into the forward merge commit
 ----
+*On trunk*:::
+[source,shell]
+----
+git merge cassandra-6.0 -s ours --log
+git apply -3 12345-trunk.patch
+ant realclean && ant jar check # rebuild to make sure code compiles
+git commit --amend # this will squash the trunk applied patch into the forward merge commit
+----
 *To Push*:::
 [source,shell]
 ----
-git push origin cassandra-4.0 cassandra-4.1 cassandra-5.0 trunk --atomic -n # dryrun check
-git push origin cassandra-4.0 cassandra-4.1 cassandra-5.0 trunk --atomic
+git push origin cassandra-4.0 cassandra-4.1 cassandra-5.0 cassandra-6.0 trunk --atomic -n # dryrun check
+git push origin cassandra-4.0 cassandra-4.1 cassandra-5.0 cassandra-6.0 trunk --atomic
 ----
 
 == Commit Message
