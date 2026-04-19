@@ -6,7 +6,6 @@ const buffer = require('vinyl-buffer')
 const concat = require('gulp-concat')
 const cssnano = require('cssnano')
 const fs = require('fs-extra')
-const imagemin = require('gulp-imagemin')
 const merge = require('merge-stream')
 const ospath = require('path')
 const path = ospath.posix
@@ -96,16 +95,7 @@ module.exports = (src, dest, preview) => () => {
       .src(['css/site.css', 'css/vendor/docsearch.css'], { ...opts, sourcemaps })
       .pipe(postcss((file) => ({ plugins: postcssPlugins, options: { file } }))),
     vfs.src('font/*.{ttf,woff*(2)}', opts),
-    vfs
-      .src('img/**/*.{gif,ico,jpg,png,svg}', opts)
-      .pipe(
-        imagemin([
-          imagemin.gifsicle(),
-          imagemin.jpegtran(),
-          imagemin.optipng(),
-          imagemin.svgo({ plugins: [{ removeViewBox: false }] }),
-        ])
-      ),
+    vfs.src('img/**/*.{gif,ico,jpg,png,svg}', opts),
     vfs.src('helpers/*.js', opts),
     vfs.src('layouts/*.hbs', opts),
     vfs.src('partials/*.hbs', opts)
