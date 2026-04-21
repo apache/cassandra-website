@@ -216,7 +216,7 @@ generate_site_yaml() {
 render_site_content_to_html() {
   pushd "${CASSANDRA_WEBSITE_DIR}/site-content" > /dev/null
   log_message "INFO" "Building the site HTML content."
-  antora --generator antora-site-generator-lunr site.yaml
+  NODE_OPTIONS="--max-old-space-size=4096" antora --generator antora-site-generator-lunr site.yaml
   log_message "INFO" "Rendering complete!"
   popd > /dev/null
 }
