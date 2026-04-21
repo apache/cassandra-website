@@ -216,7 +216,7 @@ generate_site_yaml() {
 render_site_content_to_html() {
   pushd "${CASSANDRA_WEBSITE_DIR}/site-content" > /dev/null
   log_message "INFO" "Building the site HTML content."
-  NODE_OPTIONS="--max-old-space-size=4096" antora site.yaml
+  antora --generator antora-site-generator-lunr site.yaml
   log_message "INFO" "Rendering complete!"
   popd > /dev/null
 }
@@ -332,6 +332,12 @@ run_preview_mode() {
   if [ "${COMMAND_BUILD_SITE}" != "run" ]
   then
     generate_site_yaml
+
+    export DOCSEARCH_ENABLED=true
+    export DOCSEARCH_ENGINE=lunr
+    export NODE_PATH="$(npm -g root)"
+    export DOCSEARCH_INDEX_VERSION=latest
+
     render_site_content_to_html
   fi
 
@@ -451,6 +457,12 @@ fi
 if [ "${COMMAND_BUILD_SITE}" = "run" ]
 then
   generate_site_yaml
+
+  export DOCSEARCH_ENABLED=true
+  export DOCSEARCH_ENGINE=lunr
+  export NODE_PATH="$(npm -g root)"
+  export DOCSEARCH_INDEX_VERSION=latest
+
   render_site_content_to_html
   prepare_site_html_for_publication
 fi

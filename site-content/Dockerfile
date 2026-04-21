@@ -63,10 +63,10 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 # Install Node.js for Antora (documentation generation)
 RUN sh -c '\
   set -ex ;\
-  NODE_VERSION="v24.14.1" ;\
+  NODE_VERSION="v20.16.0" ;\
   NODE_PLATFORM=x64 ;\
   [ $(uname -m) = "aarch64" ] && NODE_PLATFORM=arm64 ;\
-  NODE_VERSION_SHAS="84d38715d449447117d05c3e71acd78daa49d5b1bfa8aacf610303920c3322be 71e427e28b78846f201d4d5ecc30cb13d1508ca099ef3871889a1256c7d6f67e" ;\
+  NODE_VERSION_SHAS="c30af7dfea46de7d8b9b370fa33b8b15440bc93f0a686af8601bbb48b82f16c0 1d9929e72f692179f884cd676b2dfabd879cb77defa7869dc8cfc802619277fb" ;\
   NODE_TAR="node-${NODE_VERSION}-linux-${NODE_PLATFORM}.tar.xz" ;\
   wget -q "https://nodejs.org/dist/${NODE_VERSION}/${NODE_TAR}" --no-check-certificate ;\
   NODE_SHA="$(sha256sum ${NODE_TAR} | cut -d" " -f1)" ;\
@@ -77,9 +77,9 @@ RUN sh -c '\
 
 CMD [ "npm", "--version" ]
 
-# Use npm to install Antora globally, with Antora 3 search extension and AsciiDoc extensions
-RUN npm i -g @antora/cli@3.1.14 @antora/site-generator@3.1.14 @djencks/asciidoctor-openblock
-RUN npm i -g @antora/lunr-extension
+# Use npm to install Antora globally, and antora-lunr for site search, and js-yaml to load YAML files
+RUN npm i -g @antora/cli@2.3 @antora/site-generator-default@2.3 @djencks/asciidoctor-openblock
+RUN npm i -g antora-lunr antora-site-generator-lunr
 RUN npm i -g live-server
 
 # Create the build user and make it part of the password-less sudo group
