@@ -1,104 +1,148 @@
 :page-layout: basic
 
-== CI Environments
+== Continuous Integration
 
-=== About CI testing and Apache Cassandra
+The project has three separate CI surfaces.  Knowing which one applies saves a lot of time.
 
-Cassandra can be automatically tested using various test suites, that
-are either implemented based on JUnit or the
-https://github.com/apache/cassandra-dtest[dtest] scripts written in
-Python. As outlined in `testing`, each kind of test suite addresses a
-different way to test Cassandra. Eventually, all of the tests will be
-executed together on the CI platform at
-https://builds.apache.org[builds.apache.org], running
-http://jenkins-ci.org[Jenkins].
+[cols="1,2,2",options="header",]
+|===
+|System |What it runs |When it runs
 
-=== Setting up your own Jenkins server
+|GitHub Actions
+|`ant check`: licence (rat) and checkstyle checks.  +
+Changes under `.build/run-ci*` or `.jenkins/` have their own checks.
+|Automatically, on every push to any branch of any fork
 
-Jenkins is an open source solution that can be installed on a large
-number of platforms. Setting up a custom Jenkins instance for Cassandra
-may be desirable for users who have hardware to spare, or organizations
-that want to run Cassandra tests for custom patches before contribution.
+|Pre-commit CI: +
+https://pre-ci.cassandra.apache.org[pre-ci.cassandra.apache.org], +
+or any clone of it
+|The test pipeline against your branch, at the profile you choose
+|On demand, via UI, or with `.build/run-ci`
 
-Please refer to the Jenkins download and documentation pages for details
-on how to get Jenkins running, possibly also including slave build
-executor instances. The rest of the document will focus on how to setup
-Cassandra jobs in your Jenkins environment.
+|Post-commit CI: +
+https://ci-cassandra.apache.org[ci-cassandra.apache.org]
+|The full `post-commit` pipeline against the official branches
+|Automatically, after every push on an `apache/cassandra` branch
+|===
 
-==== Required plugins
+Testing a patch before it is committed is the author's and the reviewer's job, and it is done with pre-commit CI.
 
-In addition, the following plugins need to be installed along with the standard
-plugins (git, ant, ..).
+[#pre_commit_ci]
+=== Pre-commit CI
 
-You can install any missing plugins using the install manager.
+Pre-commit CI is a clone of ci-cassandra.apache.org that runs in any Kubernetes cluster.  The Jenkinsfile, the docker images, and the test scripts are the same ones used post-commit and locally, so a failure seen in one place is reproducible in the others.
 
-Go to `Manage Jenkins -> Manage Plugins -> Available` and install the
-following plugins and respective dependencies:
+You have three ways to get at one:
 
-* Job DSL
-* Javadoc Plugin
-* description setter plugin
-* Throttle Concurrent Builds Plug-in
-* Test stability history
-* Post Build Script
+* https://pre-ci.cassandra.apache.org[pre-ci.cassandra.apache.org], hosted by the ASF and paid for by a donation of AWS credits from Amazon.  It is intended for committers and trusted contributors who do not have access to a company-private CI clone.  Ask on the https://lists.apache.org/list.html?\dev@cassandra.apache.org[dev mailing list], or contact a PMC member, for an account.
+* Your own cluster, provisioned with `.build/run-ci --only-setup`.  See <<provisioning_your_own>>.
+* A clone operated by your employer.  Several companies run one; the command line and the results are identical.
 
-==== Setup seed job
+Contributors without an account should say so on the ticket.  The reviewer or committer then runs CI on the patch's behalf.
 
-. Config `New Item`
+==== Using `run/ci` – One-time setup
 
-* Name it `Cassandra-Job-DSL`
-* Select `Freestyle project`
+The `.build/run-ci` script needs its Python dependencies:
 
-. Under `Source Code Management` select Git using the repository:
-`https://github.com/apache/cassandra-builds`
+[source,plaintext]
+----
+pip install -r .build/run-ci.d/requirements.txt
+----
 
-. Under `Build`, confirm `Add build step` -> `Process Job DSLs` and enter
-at `Look on Filesystem`: `jenkins-dsl/cassandra_job_dsl_seed.groovy`
+`helm` and `kubectl` are needed only when provisioning a cluster, not when submitting builds to an existing Jenkins.
 
-Generated jobs will be created based on the Groovy script's default
-settings. You may want to override settings by checking
-`This project is parameterized` and add `String Parameter` for on the
-variables that can be found in the top of the script. This will allow
-you to setup jobs for your own repository and branches (e.g. working
-branches).
+The Jenkins URL and user can be kept in `.build/.run-ci.env` (or in the `JENKINS_URL` and `JENKINS_USER` environment variables) instead of being passed on every invocation.  The script prompts for the password.
 
-[arabic, start=4]
-. When done, confirm "Save".
+==== Using `run/ci` – Running a build
 
-You should now find a new entry with the given name in your project
-list. However, building the project will still fail and abort with an
-error message "Processing DSL script
-cassandra_job_dsl_seed.groovy ERROR: script not yet approved for use".
-Go to `Manage Jenkins` -> `In-process Script Approval` to fix this issue.
-Afterwards you should be able to run the script and have it generate
-numerous new jobs based on the found branches and configured templates.
+The script takes the branch of a *pushed* fork, not your working tree; commit and push first.  It defaults to the current branch and its tracking remote.
 
-Jobs are triggered by either changes in Git or are scheduled to execute
-periodically, e.g. on daily basis.
-Jenkins will use any available executor with the label "cassandra", once the job
-is to be run.
-Please make sure to make any executors available by selecting
-`Build Executor Status` -> `Configure` -> Add "`cassandra`" as label and
-save.
+[source,plaintext]
+----
+# run the current branch, on the cluster in your current kubeconfig context
+.build/run-ci
 
-Executors need to have "JDK 1.8 (latest)" installed. This is done under
-`Manage Jenkins -> Global Tool Configuration -> JDK Installations…`.
-Executors also need to have the `virtualenv` package installed on their
-system.
+# run the current branch on a Jenkins you have no kubectl access to
+.build/run-ci --url pre-ci.cassandra.apache.org --user myuser
 
-=== CircleCI
+# a full pre-commit run of someone else's branch
+.build/run-ci -r https://github.com/jrwest/cassandra.git -b jwest/15452-5.0 -p pre-commit
 
-Cassandra ships with a default https://circleci.com[CircleCI]
-configuration to enable running tests on your branches.
-Go to the CircleCI website, click "Login" and log in with your github account.
-Then give CircleCI permission to watch your repositories.
+# only the jvm-dtest and stress stages, on JDK 11
+.build/run-ci -p custom -e 'stress.*|jvm-dtest.*' -j 11
+----
 
-Once you have done that, you can optionally configure CircleCI to run
-tests in parallel if you wish:
+`.build/run-ci --help`, and https://github.com/apache/cassandra/blob/trunk/.build/run-ci.d/README.md[.build/run-ci.d/README.md], list every option.
 
-[arabic,start=1]
-. Click `Projects` and select your github account, and then click the settings for your project.
-. Set the parallelism setting. If you leave the default value of 1
-for Cassandra, only `ant eclipse-warnings` and `ant test` will be run.
-If you change the value to 4, Circle CI also runs `ant long-test`,
-`ant test-compression` and `ant stress-test`.
+==== Profiles
+
+A profile is a named set of pipeline stages.  The definitive list is `pipelineProfiles()` in
+https://github.com/apache/cassandra/blob/trunk/.jenkins/Jenkinsfile[.jenkins/Jenkinsfile].
+
+[cols="1,3",options="header",]
+|===
+|Profile |Purpose
+
+|`skinny`
+|The default.  Lint, unit tests, cqlsh tests, jvm-dtests and dtests: enough to catch the obvious, and quick.
+
+|`packaging`
+|Artifacts, deb and rpm packages, lint.  Used when only the build or packaging changed.
+
+|`pre-commit`
+|What a patch is expected to pass before it is committed.
+
+|`pre-commit w/ upgrades`
+|As above, plus the upgrade tests.  Required whenever the patch could affect upgrades, serialization, or on-disk formats.
+
+|`post-commit`
+|Everything: 140–200k tests, including the large and novnode dtests.  This is what runs on ci-cassandra.apache.org.
+
+|`custom`
+|The stages matching the regexp given with `-e`.  Useful for iterating on one failure.
+|===
+
+Wall-clock time is a function of how far the cluster can scale out, not of the profile alone; a `post-commit` run finishes within a few hours on a cluster that can reach a few hundred nodes.
+
+==== Results
+
+On completion the script writes two files under `build/ci/`:
+
+* `ci_summary_<fork>_<branch>_<build>.html`, an aggregated summary of the run
+* `results_details_<fork>_<branch>_<build>.tar.xz`, the individual test results
+
+Attach both to the Jira ticket.  They are the record that the patch was tested, they outlive any CI instance, and reviewers can read them instead of having to browse your Jenkins instance (which might even be private).  Use `.build/run-ci -o <build number>` to fetch the artefacts of an earlier build.
+
+[#provisioning_your_own]
+==== Provisioning your own instance
+
+`.build/run-ci --only-setup` installs the Jenkins helm chart into the current Kubernetes context.  With this approach you never have to open the Jenkins UI, and the cluster scales back to a single controller node when idle, so the cost tracks what you use.
+
+The one prerequisite is a cluster whose node groups match the agent sizes the pipeline asks for; the commands for GKE and EKS are in
+https://github.com/apache/cassandra/blob/trunk/.jenkins/k8s/README.md[.jenkins/k8s/README.md].
+
+Tear it down with `.build/run-ci --only-tear-down`.
+
+==== Reproducing a failure locally
+
+Because CI runs the in-tree scripts and images, any stage can be run on a laptop:
+
+[source,plaintext]
+----
+.build/docker/run-tests.sh -a test -c 1/64 -j 17
+.build/docker/run-tests.sh -a jvm-dtest -t BooleanTest
+----
+
+See https://github.com/apache/cassandra/blob/trunk/.build/README.md[.build/README.md] and xref:development/testing.adoc[testing].
+
+[#post_commit_ci]
+=== Post-commit CI
+
+https://ci-cassandra.apache.org[ci-cassandra.apache.org] runs the `post-commit` profile against trunk and each supported release branch, on hardware donated by NetApp, DataStax, Huawei and iland.  Its results are archived at https://nightlies.apache.org/cassandra/[nightlies.apache.org/cassandra], and https://butler.cassandra.apache.org[Butler] shows them over time, which is how you tell a new regression from a long-standing flaky test.
+
+When a post-commit failure is not obviously your patch, check Butler and the issue tracker before assuming it is; when it is, a Jira ticket for the failure is expected.
+
+=== Further reading
+
+* https://lists.apache.org/thread/8pjk481f59rtj18v8d95bojxwmzp9jdr[ANNOUNCE: Pre-commit CI @ pre-ci.cassandra.apache.org], the announcement of the AWS donation and of this process
+* https://issues.apache.org/jira/browse/CASSANDRA-18137[CASSANDRA-18137], the epic that made ci-cassandra.apache.org repeatable, and https://issues.apache.org/jira/browse/CASSANDRA-18145[CASSANDRA-18145], provisioning it in any Kubernetes cluster

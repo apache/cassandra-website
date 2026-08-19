@@ -146,12 +146,17 @@ using https://git-scm.com/docs/git-worktree[Git worktrees] feature.
 . Make sure all tests (including yours) pass using ant as described in
 xref:development/testing.adoc[testing]. If you suspect a test failure
 is unrelated to your change, it may be useful to check the test's
-status by searching the issue tracker or looking at
-https://builds.apache.org/[CI] results for the relevant upstream
-version. Note that the full test suites take many hours to complete,
-so it is common to only run specific relevant tests locally before
-uploading a patch. Once a patch has been uploaded, the reviewer or
-committer can help setup CI jobs to run the full test suites.
+status by searching the issue tracker or looking at the
+xref:development/ci.adoc[post-commit CI] results for the relevant
+upstream version. Note that the full test suites take many hours to
+complete, so it is common to only run specific relevant tests locally
+before uploading a patch.
+. Run the patch through xref:development/ci.adoc[pre-commit CI], with
+`.build/run-ci`, and attach the `ci_summary` and `results_details`
+artefacts to the ticket. This is expected of every patch before it is
+committed. Contributors without access to a CI system should say so on
+the ticket; the reviewer or committer then runs CI on the patch's
+behalf.
 . Consider going through the xref:development/how_to_review.adoc[how
 to review] page for your code. This will help you to understand how
 others will consider your change for inclusion.
@@ -164,7 +169,7 @@ stage, especially for incremental review, but once +1d, do either:
 branch), or
 . Squash the commits in-place in your branches into one
 
-[arabic, start=6]
+[arabic, start=7]
 . Include a CHANGES.txt entry (put it at the top of the list), and
 format the commit message appropriately in your patch as below. Please
 note that only user-impacting items
@@ -179,7 +184,7 @@ is necessary.
 <Optional lengthier description>
 patch by <Authors>; reviewed by <Reviewers> for CASSANDRA-#####
 ----
-[arabic, start=7]
+[arabic, start=8]
 . When you're happy with the result, create a patch. We suggest that
 you use a similar format (note blank lines) for the commit log message:
 
@@ -213,7 +218,7 @@ push your branch:
 git push --set-upstream origin 12345-3.0
 ----
 
-[arabic, start=8]
+[arabic, start=9]
 . To make life easier for your reviewer/committer, you may want to make
 sure your patch applies cleanly to later branches and create additional
 patches/branches for later Cassandra versions to which your original
