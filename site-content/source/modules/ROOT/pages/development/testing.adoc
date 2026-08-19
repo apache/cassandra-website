@@ -39,9 +39,9 @@ Cassandra version agnostic. They include upgrade tests.
 In case you want to run DTests with your own version of CCM, please refer to requirements.txt in
 https://github.com/apache/cassandra-dtest[apache/cassandra-dtest] how to do it.
 
-The recipes for running those tests can be found in the cassandra-builds repository https://github.com/apache/cassandra-builds/tree/trunk/build-scripts[here].
+The recipes for running those tests are the scripts under `.build/`, in the Cassandra repository itself; these are the same scripts CI runs.  See https://github.com/apache/cassandra/blob/trunk/.build/README.md[.build/README.md].
 
-Running full test suites locally takes hours, if not days. Beyond running specific tests you know are applicable, or are failing, to the work at hand, it is recommended to rely upon the project's https://cassandra.apache.org/_/development/ci.html[Continuous Integration systems]. If you are not a committer, and don't have access to a premium CircleCI plan, ask one of the committers to test your patch on the project's https://ci-cassandra.apache.org/[ci-cassandra.apache.org].
+Running full test suites locally takes hours, if not days.  Beyond the specific tests that bear on the work at hand, rely upon the project's xref:development/ci.adoc[CI].  Push your branch to your fork, run `.build/run-ci`, and attach the resulting summary and details artefacts to the ticket.  Contributors with neither their own CI system nor an account on https://pre-ci.cassandra.apache.org[pre-ci.cassandra.apache.org] should say so on the ticket, and a committer will run CI on the patch's behalf.
 
 [#java_tests]
 == Java tests
@@ -411,7 +411,21 @@ parameters). The list of all options can be shown by running
 
 The Docker approach is recommended for running Python distributed tests.
 The behavior will be more repeatable, matching the same environment as
-the official testing on https://ci-cassandra.apache.org/[Cassandra CI].
+the project's xref:development/ci.adoc[CI], which runs the very same
+image and scripts.
+
+The simplest route is to let the wrapper script do the work; it builds
+or pulls the image, mounts your working tree, and runs the given test
+target:
+
+[source,plaintext]
+----
+.build/docker/run-tests.sh -a dtest
+.build/docker/run-tests.sh -a dtest -t "test_bootstrap"
+----
+
+The rest of this section covers working inside the container by hand,
+which is useful when iterating on a single test.
 
 ==== Setup Docker
 
@@ -421,58 +435,6 @@ manager.
 If you are on MacOS, you can use either
 https://www.docker.com/products/docker-desktop[Docker Desktop] or some
 https://runnable.com/docker/install-docker-on-macos[other approach].
-
-==== Pull the Docker image
-
-The Docker image used on the official Cassandra CI can be found in
-https://github.com/apache/cassandra-builds[this] repository.
-You can use either
-https://github.com/apache/cassandra-builds/blob/trunk/docker/testing/ubuntu2004_j11.docker[docker/testing/ubuntu2004_j11.docker]
-or
-https://github.com/apache/cassandra-builds/blob/trunk/docker/testing/ubuntu2004_j11_w_dependencies.docker[docker/testing/ubuntu2004_j11_w_dependencies.docker]
-The second choice has prefetched dependencies for building each main
-Cassandra branch. Those images can be either built
-locally (as per instructions in the GitHub repo) or pulled from the
-Docker Hub - see
-https://hub.docker.com/search?q=apache%2Fcassandra-testing&type=image[here].
-
-First, pull the image from Docker Hub (it will either fetch or
-update the image you previously fetched):
-
-[source,plaintext]
-----
-docker pull apache/cassandra-testing-ubuntu2004-java11-w-dependencies
-----
-
-==== Start the container
-
-[source,plaintext]
-----
-docker run -di -m 8G --cpus 4 \
---mount type=bind,source=/path/to/cassandra/project,target=/home/cassandra/cassandra \
---mount type=bind,source=/path/to/cassandra-dtest,target=/home/cassandra/cassandra-dtest \
---name test \
-apache/cassandra-testing-ubuntu2004-java11-w-dependencies \
-dumb-init bash
-----
-
-[TIP]
-.Hint
-====
-Many distributed tests are not that demanding in terms of resources
-- 4G / 2 cores should be enough to start one node. However, some tests
-really run multiple nodes, and some of them are automatically skipped
-if the machine has less than 32G (there is a way to force running them
-though). Usually 8G / 4 cores is a convenient choice which is enough
-for most of the tests.
-====
-
-To log into the container, use the following `docker exec` command:
-
-[source,plaintext]
-----
-docker exec -it `docker container ls -f name=test -q` bash
-----
 
 [#setup_python_env]
 ==== Setup Python environment
