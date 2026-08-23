@@ -316,12 +316,12 @@ run_preview_mode() {
   export -f render_site_content_to_html
 
   local on_change_functions="render_site_content_to_html"
-  local find_paths="${CASSANDRA_WEBSITE_DIR}/${ANTORA_CONTENT_SOURCES_CASSANDRA_WEBSITE_START_PATH}"
+  local find_paths=("${CASSANDRA_WEBSITE_DIR}/${ANTORA_CONTENT_SOURCES_CASSANDRA_WEBSITE_START_PATH}")
 
   if [ "${COMMAND_GENERATE_DOCS}" = "run" ]
   then
     on_change_functions="generate_cassandra_versioned_docs && ${on_change_functions}"
-    find_paths="${find_paths} ${CASSANDRA_WORKING_DIR}/${ANTORA_CONTENT_SOURCES_CASSANDRA_START_PATH}"
+    find_paths+=("${CASSANDRA_WORKING_DIR}/${ANTORA_CONTENT_SOURCES_CASSANDRA_START_PATH}")
 
     export -f generate_cassandra_versioned_docs
 
@@ -345,7 +345,9 @@ run_preview_mode() {
   live-server --port=5151 --host=0.0.0.0 --no-browser --no-css-inject --wait=2000 &
   popd > /dev/null
 
-  find "${find_paths}" -type f | entr /bin/bash -c "${on_change_functions}"
+  # -n keeps entr out of interactive mode; run.sh does not allocate a TTY, so
+  # without it entr aborts with "unable to get terminal attributes"
+  find "${find_paths[@]}" -type f | entr -n /bin/bash -c "${on_change_functions}"
 }
 
 
