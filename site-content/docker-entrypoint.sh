@@ -230,7 +230,9 @@ prepare_site_html_for_publication() {
   cp -r site-content/build/html/* content/
 
   # remove hardcoded domain name, and empty domain names first before we duplicate and documentation
-  content_files_to_change=($(grep -rl 'https://cassandra.apache.org/' content/))
+  # HTML only: search-index.js is a serialized lunr index whose terms must stay sorted, and
+  # rewriting a URL term there makes lunr.Index.load() throw, which kills the docs search box.
+  content_files_to_change=($(grep -rl --include='*.html' 'https://cassandra.apache.org/' content/))
   log_message "INFO" "Removing hardcoded domain names in ${#content_files_to_change[*]} files"
   for content_file in ${content_files_to_change[*]}
   do
@@ -241,7 +243,7 @@ prepare_site_html_for_publication() {
     mv /tmp/tmp_sed ${content_file}
   done
 
-  content_files_to_change=($(grep -rl 'href="//' content/))
+  content_files_to_change=($(grep -rl --include='*.html' 'href="//' content/))
   log_message "INFO" "Removing empty domain names in ${#content_files_to_change[*]} files"
   for content_file in ${content_files_to_change[*]}
   do
