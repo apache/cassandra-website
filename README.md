@@ -16,24 +16,30 @@ $ ./run.sh website container
 # to build the website only using your local edits
 $ ./run.sh website build
 
-# open a browser window and navigate to site-content/build/html/_/index.html
-
-# Cassandra document edits are in the Apache Cassandra project
-$ git clone https://github.com/apache/cassandra.git
-$ cd ./cassandra/
-
-# in-tree Cassandra document edits are done in ./doc/modules
-# to build the website and Cassandra documentation using your local edits
-$ cd ../cassandra-website
-$ ./run.sh website build -g -u cassandra:$(pwd)/../cassandra -b cassandra:<branch-with-your-changes>
-
-# open a browser window and navigate to site-content/build/html/Cassandra/.../index.html
+# open in a browser window
+python3 -m http.server 8111 --directory content
+open http://127.0.0.1:8111/
 ```
 
-e.g.
-
+Cassandra documentation is in the main Apache Cassandra repository, as it comes versioned.
+To build one version alone:
 ```
-$ ./run.sh website build -g -u cassandra:/Users/example/cassandra -b cassandra:example_branch
+git clone https://github.com/apache/cassandra.git
+cd cassandra/
+.build/docker/build-docs.sh
+open build/html/index.html
+```
+
+To build one version of Cassandra documentation as part of cassandra-website:
+```
+cd cassandra-website
+./run.sh website build -g -u cassandra:$(pwd)/../cassandra -b cassandra:<branch-with-your-changes>
+# for example
+# ./run.sh website build -g -u cassandra:/Users/example/cassandra -b cassandra:example_branch
+
+# open in a browser window
+python3 -m http.server 8111 --directory content
+open http://127.0.0.1:8111/
 ```
 
 # Repository Layout
@@ -168,24 +174,6 @@ This will build the website using the contents of the remote repository located 
 :warning: *Tip:* The `HEAD` branch of the Cassandra Website repository is always used by default unless an alternative branch is specified.
 
 In both cases above the `HEAD` branch is used and translates to different branches. In first case where the repository is local, `HEAD` will translate to the currently checked out branch. In the second case where the repository is remote and needs to be cloned, `HEAD` will translate to default branch selected when the repository is cloned. You can specify a different branch using the `-b` option as per the example in [Build a different branch](#build-a-different-branch).
-
-## Previewing the Website
-
-An offline preview mode exists if you want to view the website as you make changes to the content. Preview mode can be launched using the following command.
-
-```bash
-$ ./run.sh website preview
-```
-
-The site can be viewed on [http://localhost:5151](http://localhost:5151).
-
-The `preview` command operates the same as the `build` command. It will build the website content using your local copy of the cassandra-website, and the current checked-out branch. Additionally, it will then start a webserver to serve the HTML and a process that monitors the content files in your local copy of the repository. If a change is made to a content file, the website HTML will automatically be regenerated.
-
-Press `Ctrl+C` to stop the preview server and end the continuous build.
-
-:warning: *Tip:* You may need to refresh your browser when the auto rendering of the site is complete.
-
-All options that are available in the `build` command can be used by the `preview` command. Hence, the options used in the previous examples can be specified when using the `preview` command.
 
 # Developer Advanced Usage Guide
 
@@ -337,19 +325,11 @@ If you need to customise the container user as noted above, you must do this bef
 
 ### Preview UI
 
-An offline preview mode exists if you want to view example website content as you make changes to the UI. Preview mode can be launched using the following command.
-
-```bash
-$ ./run website-ui preview
+After building, viewing the website is best done via a localhost server so that links with absolute urls work:
 ```
-
-The example content can be viewed on [http://localhost:5252](http://localhost:5252).
-
-While preview mode is running, any changes you make to the source files will be instantly reflected in the browser. This works by monitoring the project for changes, running the build task if a change is detected, and sending the updates to the browser.
-
-The files in the *preview-src/* folder provide the sample content that allow you to see the UI in action. In this folder, you will primarily find pages written in AsciiDoc. These pages provide a representative sample and kitchen sink of content from the real site.
-
-Press `Ctrl+C` to stop the preview server and end the continuous build.
+python3 -m http.server 8111 --directory content
+open http://127.0.0.1:8111/
+```
 
 # Merging `asf-staging` to `asf-site`
 
