@@ -1,0 +1,70 @@
+= Upcoming Features: Constraints Framework
+:page-layout: single-post
+:page-role: blog-post
+:page-post-date: February 3, 2025
+:page-post-author: Bernardo Botella Corbi
+:description: The Apache Cassandra Community
+:keywords:
+
+Cassandra has had limited tools to handle value limits and rules when writing data to tables. The Constraints Framework positions itself as a centerpiece, providing an easy approach to define rules that give flexibility to both Cassandra users and operators by adding a framework for generic checks at write time.
+
+Up until now, Cassandra users have relied on limited tools to manage value limits and enforce rules during data writing. Now, with the introduction of the Constraints Framework, Cassandra is able to oﬀer users and operators unprecedented flexibility and control. Here’s everything you need to know about this groundbreaking feature.
+
+== What is the Constraints Framework?
+
+The Constraints Framework, introduced through https://cwiki.apache.org/confluence/display/CASSANDRA/CEP-42:+Constraints+Framework[CEP-42,window=_blank], is designed to allow Cassandra users to define rules that validate data at write time. By incorporating these checks, operators can gain:
+
+* Improved Data Governance: Better control and reasoning about data quality.
+* Predictable Performance: Easier tuning for performance and maintenance due to predictable partition sizes.
+* Future-Ready Extensibility: The framework lays the groundwork for advanced validations in the future.
+* Enhanced Storage Eﬃciency: Potential for smarter decisions in the storage engine based on data size.
+
+If you want to know more details, please follow the https://lists.apache.org/thread/xc2phmxgsc7t3y9b23079vbflrhyyywj[dev thread,window=_blank].
+
+== What's new?
+
+Cassandra Query Language (CQL) now includes syntax for defining, altering, and dropping constraints directly within column definitions. Here are some examples:
+
+----
+CREATE TABLE keyspace.table (
+    name text,
+    i int CHECK (condition)
+    ...,
+);
+----
+
+Altering Existing Constraints:
+----
+ALTER TABLE [IF EXISTS] <table> ALTER [IF EXISTS] <column> CHECK <condition>;
+----
+Dropping Constraints:
+----
+ALTER TABLE [IF EXISTS] <table> ALTER [IF EXISTS] <column> DROP CHECK;
+----
+
+== Built-in Constraints
+
+This initial rollout introduces two powerful constraints.
+
+=== Scalar Constraint
+This Constraint defines comparison against a numeric type input by the Cassandra user. For example, if the table schema was defined with:
+----
+i int CHECK i < 1000
+----
+A Cassandra user trying to write a row with a value for “i” bigger or equal than 1000 would fail. All the regular comparisons between numeric types are supported out of the box.
+
+=== Length Constraint
+Length Constraint allows the owner of the Cassandra schema to define a condition for the length of a field of any text or binary type. For example:
+----
+n text CHECK LENGTH(n) < 256
+----
+Would prevent any Cassandra user from writing a value for “n” which is equal or bigger than 256 characters, allowing schema owners to limit the row sizes being written to the database.
+
+== Why it matters
+The introduction of constraints addresses several long-standing gaps in Cassandra’s feature set. By embedding these validations at the database level, users can reduce application-level checks, streamline operations, and enjoy a smoother experience when managing data integrity. Moreover, it aligns Cassandra closer to other database solutions that already oﬀer such capabilities.
+
+== Conclusion
+
+The Constraints Framework is a new addition to Cassandra, empowering users and operators with the tools they need to maintain healthy, eﬃcient, and reliable databases. Whether you’re tuning performance, enforcing data quality, or preparing for future needs, this new feature oﬀers the flexibility Cassandra users should expect.
+For more details, check out the link:++https://cwiki.apache.org/confluence/display/CASSANDRA/CEP-42:+Constraints+Framework[CEP-42,window=_blank]++[CEP-42] and the link:++https://lists.apache.org/thread/xc2phmxgsc7t3y9b23079vbflrhyyywj[dev thread,window=_blank]++[discussion thread].
+
