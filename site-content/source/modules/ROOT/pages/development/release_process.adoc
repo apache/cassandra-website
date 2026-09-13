@@ -257,6 +257,16 @@ Release the JIRA version.
 
 === Update to Next Development Version
 
+The release manager updates the development version after the vote passes. During the vote, others continue appending to the version under vote in `CHANGES.txt` and JIRA fix versions. This keeps a rollback the easy thing to do, e.g. if the vote fails.
+
+As part of the version update:
+
+* Compare the release branch's `CHANGES.txt` with the final release tag (`git diff <version> HEAD -- CHANGES.txt` on the release branch).
+* Move entries for changes absent from the release tag into the next version's section.
+* For each moved entry, update the corresponding JIRA ticket's fix version from the released version to the next version.
+* Check resolved tickets for placeholder fix versions such as `5.0.x`. Replace each placeholder with the actual release version.
+
+
 Update the codebase to point to the next development version:
 
 [source,none]
@@ -265,7 +275,7 @@ cd ~/git/cassandra/
 git checkout cassandra-<version-branch>
 edit build.xml          # update `<property name="base.version" value="…"/> `
 edit debian/changelog   # add entry for new version
-edit CHANGES.txt        # add entry for new version
+edit CHANGES.txt        # add next version section and move unreleased entries  up to it
 git commit -m "Increment version to <next-version>" build.xml debian/changelog CHANGES.txt
 
 # …and forward merge and push per normal procedure

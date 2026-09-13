@@ -10,11 +10,11 @@
 
 image::events/20261011-coc-glasgow-1024x512.png[Apache Cassandra at Community Over Code 2026, Glasgow, 11-13 October]
 
-=== Twenty talks over three days
+=== Twenty-two talks over three days
 
 The Apache Cassandra® community is running a three-day track at https://communityovercode.apache.org/events/glasgow-2026/[Community Over Code 2026^], the official conference of the Apache Software Foundation, at the Hilton Glasgow.
 
-Twenty sessions, from twenty-seven speakers across a dozen organisations, cover the protocol behind multi-shard transactions and the formal methods used to check it, the storage engine work landing in 6.0, and what it takes to run the database at scale.
+Twenty-two sessions, from twenty-nine speakers across a dozen organisations, cover the protocol behind multi-shard transactions and the formal methods used to check it, the storage engine work landing in 6.0, and what it takes to run the database at scale.
 
 === Event info
 
@@ -45,6 +45,14 @@ image:events/speakers/bernardo-botella-corbi.jpg[Bernardo Botella Corbi,110,role
 
 {jira}/CASSANDRA-20854[CASSANDRA-20854^] introduced a native CPU profiler to the Cassandra toolset. This session covers how to use it and how to read its results, load-testing the features 6.0 is set to introduce, including Accord, change data capture and constraints.
 
+[#vision-to-reality.cf]
+==== 12:00 — From Vision to Reality: Checking In on Cassandra's Future
+
+image:events/speakers/patrick-mcfadin.jpg[Patrick McFadin,110,role=alignleft]
+*Patrick McFadin* — McFadin Data and AI Advisory, Inc
+
+A check-in on where Cassandra is heading, organised around four subcommunities doing the work: Operations, DevEx, Performance and Analytics. Covers where momentum is real, where progress is uneven, and what it will take to turn the long-term plan into shipped software.
+
 [#sidecar]
 ==== 14:20 — Automating Your Cassandra Operations With Apache Cassandra Sidecar
 
@@ -68,6 +76,14 @@ image:events/speakers/fedor-ryabinin.jpg[Fedor Ryabinin,110,role=alignleft]
 *Fedor Ryabinin* — Postdoctoral Researcher, IMDEA Software Institute
 
 Cassandra 6.0 introduces strictly serializable multi-shard transactions that often complete in a single WAN round trip, enabled by Accord ({cep}/CEP-15%3A+General+Purpose+Transactions[CEP-15^]), which replaces Paxos. Rather than covering the implementation, this talk explains the protocol itself and traces the path from Paxos to Accord, the first leaderless protocol deployed in a widely used production system.
+
+[#terabyte-ingestion]
+==== 17:00 — Data Ingestion at Terabyte Scale with Cassandra Analytics
+
+*Serban Teodorescu* and *Bianca Stanciu* — Software Engineers, Adobe +
+*Alexandru Salajan* — Site Reliability Engineer, Adobe
+
+Rearchitecting an ingestion pipeline across 18 clusters, 8 AWS regions and 500+ instances, moving from SSTable loading to direct Spark-to-Cassandra writes. Covers transport options, deployment challenges, cost and performance, and a validation methodology for checking export accuracy against production snapshots.
 
 === Monday 12 October
 
@@ -96,16 +112,6 @@ Moving 400 Cassandra clusters is not 400 versions of the same problem. A purpose
 
 Accord ({cep}/CEP-15%3A+General+Purpose+Transactions[CEP-15^]) is a complex leaderless protocol with multiple subtle optimisations, and it is the only leaderless protocol deployed in a broadly used production system, which makes correctness critical. This talk presents an effort to model and verify Accord in TLA+: the modelling approach, the challenges, and how model checking improved confidence in the protocol.
 
-// fixme duplicate slot 
-[#terabyte-ingestion]
-==== 14:20 — Data Ingestion at Terabyte Scale with Cassandra Analytics
-
-*Serban Teodorescu* and *Bianca Stanciu* — Software Engineers, Adobe +
-*Alexandru Salajan* — Site Reliability Engineer, Adobe
-
-Rearchitecting an ingestion pipeline across 18 clusters, 8 AWS regions and 500+ instances, moving from SSTable loading to direct Spark-to-Cassandra writes. Covers transport options, deployment challenges, cost and performance, and a validation methodology for checking export accuracy against production snapshots.
-
-// fixme duplicate slot 
 [#fuzzing-accord]
 ==== 14:20 — Model Guided Fuzzing of Accord
 
@@ -113,13 +119,13 @@ Rearchitecting an ingestion pipeline across 18 clusters, 8 AWS regions and 500+ 
 
 Leaderless consensus achieves optimal latency at the cost of significant complexity during fault recovery, and non-trivial linearizability bugs can occur in Accord's recovery logic under specific failure conditions. Finding them by standard trace-guided fuzzing is infeasible. This talk presents a model-guided approach that maps concrete executions to abstract TLA+ states, turning an unbounded trace-discovery graph into a usable coverage metric.
 
-[#cep-50.cf]
-==== 15:10 — Authentication Negotiation in Apache Cassandra (CEP-50)
+[#cqlalchemy.cf]
+==== 15:10 — Cassandra 6.0: Introducing CQLAlchemy
 
-image:events/speakers/joel-shepherd.jpg[Joel Shepherd,110,role=alignleft]
-*Joel Shepherd* — Principal Software Engineer, Amazon.com
+image:events/speakers/iroiso-ikpokonte.jpg[Iroiso Ikpokonte,110,role=alignleft]
+*Iroiso Ikpokonte* — Founder and CEO, Metropolis Microfinance Bank
 
-Cassandra currently supports a single authenticator per node, which makes migrating between authentication methods hard and diverse client types harder. {cep}/CEP-50%3A+Authentication+Negotiation[CEP-50^] lets clients advertise the methods they support while the server retains the decision. Covers the current protocol flow, how negotiation extends it, and real implementation problems, including mapping external identities such as AWS IAM principals to database roles.
+CQLAlchemy is a Python toolkit for Cassandra 6.0 modelled on SQLAlchemy. An introduction to the library and to the interface it gives Python applications over CQL.
 
 [#analytics-workloads.cf]
 ==== 16:10 — High-Performance Analytics on Cassandra: Enabling New Workloads
@@ -137,9 +143,16 @@ image:events/speakers/hayato-shimizu.jpg[Hayato Shimizu,110,role=alignleft]
 
 cqlsh has long been the primary interface to Cassandra. CQLAI is an open source alternative, Apache 2.0 licensed, aiming at fast startup, distribution as a single binary, and no Python runtime dependency. Includes a live demo, import and export in CSV, JSON and Parquet, and lessons from building open source tooling around Cassandra.
 
+[#cep-60]
+==== 17:50 — CEP-60: Flexible Placements
+
+*Tejal Chakeres* — Apple +
+*Abhijeet Dubey* — Apple
+
+{cep}/CEP-60%3A+Flexible+Placements[CEP-60^] builds on Transactional Cluster Metadata. Once ownership changes are linearizable metadata operations, bootstrap, decommission and movement need no longer be large all-or-nothing workflows; ownership can instead move in smaller resumable steps. Combined with range-aware compaction and zero-copy streaming, this shortens over-replication windows and makes topology changes more predictable.
+
 === Tuesday 13 October
 
-// fixme duplicate slot 
 [#accord-benchmark.cf]
 ==== 10:20 — Initial Performance Evaluation of Cassandra Accord with NoSQLBench
 
@@ -148,9 +161,8 @@ image:events/speakers/youki-shiraishi.jpg[Youki Shiraishi,110,role=alignleft]
 
 A code-informed benchmark study of Accord using NoSQLBench, with workloads inspired by YCSB-style account-transfer and balance-check patterns. Preliminary findings on how contention affects fast-path success, whether read-modify-write transactions carry substantial overhead over read-only ones, and how much the Ephemeral Read optimisation delivers.
 
-// fixme duplicate slot 
 [#cep-57.cf]
-==== 10:20 — Solving tombstones and partitioning with flat keys and tries (CEP-57)
+==== 11:10 — Solving tombstones and partitioning with flat keys and tries (CEP-57)
 
 image:events/speakers/branimir-lambov.jpg[Branimir Lambov,110,role=alignleft]
 *Branimir Lambov* — Software Engineer, IBM/DataStax +
@@ -159,7 +171,7 @@ image:events/speakers/branimir-lambov.jpg[Branimir Lambov,110,role=alignleft]
 Manual partitioning strategy selection and the inability to sort between partitions cause a great deal of user frustration, and are a stumbling block to efficient materialized views and global secondary indexes. Tombstone handling is a challenge to even experienced users. {cep}/CEP-57%3A+Flat+keys+and+trie+interfaces[CEP-57^] addresses both through byte-comparable key translations that flatten the key hierarchy into a single byte sequence, combined with trie-based access structures.
 
 [#four-to-five]
-==== 11:10 — Much Ado About Nothing: Making Cassandra 4→5 Upgrades Predictable and Low-Risk
+==== 12:00 — Much Ado About Nothing: Making Cassandra 4→5 Upgrades Predictable and Low-Risk
 
 *Mariah McLaughlin* — Developer Advocate, NetApp Instaclustr +
 *Carlos Rolo* — Principal Engineer Open Source, NetApp Instaclustr
@@ -167,14 +179,14 @@ Manual partitioning strategy selection and the inability to sort between partiti
 Cassandra 5.0 brings changes worth upgrading for, and enough architectural change that a naive rolling upgrade carries real risk, particularly for clusters with heavy secondary index usage or customised compaction. This talk covers per-cluster assessment, staged rollout with validation checkpoints, preserved rollback options, and where teams tend to go wrong.
 
 [#zstd-dictionary]
-==== 12:00 — Zstd dictionary compression
+==== 14:20 — Zstd dictionary compression
 
 *Stefan Miklosovic* — Software Engineer, NetApp
 
 Zstd has been Cassandra's go-to compression algorithm since 4.0. Dictionary compression, implemented under {cep}/CEP-54%3A+ZSTD+with+Dictionary+SSTable+Compression[CEP-54^] and available in 6.0, can improve the compression ratio significantly further and reduce storage cost accordingly. An overview of the solution, how it is used in practice, and which data profiles suit it.
 
 [#zero-trust-mtls.cf]
-==== 14:20 — Running Apache Cassandra in a Zero Trust Environment with Mutual TLS
+==== 15:10 — Running Apache Cassandra in a Zero Trust Environment with Mutual TLS
 
 image:events/speakers/francisco-guerrero.jpg[Francisco Guerrero,110,role=alignleft]
 *Francisco Guerrero* — Software Engineer, Apple, Inc.
@@ -182,7 +194,7 @@ image:events/speakers/francisco-guerrero.jpg[Francisco Guerrero,110,role=alignle
 Zero Trust rejects the assumption that traffic inside a network boundary can be trusted. This talk covers running Cassandra, Cassandra Sidecar and Cassandra Analytics under a strict Zero Trust model with mutual TLS: configuration across internode and client-to-node communication, certificate identities as the basis for authentication and authorization, certificate rotation, and migration from password-based authentication.
 
 [#cep-38.cf]
-==== 15:10 — CEP-38: The Management Port Decision: A Live Architecture Trade-off in Apache Cassandra
+==== 16:10 — CEP-38: The Management Port Decision: A Live Architecture Trade-off in Apache Cassandra
 
 image:events/speakers/maxim-muzafarov.jpg[Maxim Muzafarov,110,role=alignleft]
 *Maxim Muzafarov* — Open-source Software Engineer
@@ -190,7 +202,7 @@ image:events/speakers/maxim-muzafarov.jpg[Maxim Muzafarov,110,role=alignleft]
 Cassandra management has always been fragmented across JMX, REST and nodetool, each requiring its own implementation of every operation. {cep}/CEP-38%3A+CQL+Management+API[CEP-38^], accepted in October 2025, introduces a unified CQL-based management API. This talk walks through the port decision: why sharing port 9042 proved impossible, what a dedicated port costs operationally, and how the execution model enforces what is permitted. Ends with a live demo of registering and executing a new command.
 
 [#cep-59.cf]
-==== 16:10 — CEP-59: Graceful Disconnect — Draining Client Connections During Cassandra Node Shutdown
+==== 17:00 — CEP-59: Graceful Disconnect — Draining Client Connections During Cassandra Node Shutdown
 
 image:events/speakers/jane-he.jpg[Jane He,110,role=alignleft]
 *Jane He* — IBM
