@@ -1,0 +1,1975 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Accord Transactions | Apache Cassandra Documentation</title>
+            <link rel="stylesheet" href="../../../../../assets/css/site.css">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="Cassandra">
+    <meta name="dcterms.identifier" content="7.0">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../../../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "../../../../../assets/js/vendor/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>
+<script src="../../../../../assets/js/vendor/jquery.js"></script>
+    </head>
+    <body class="docs-wrapper article">
+        <div class="container mx-auto relative">
+                <meta property="og:type" content="website" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+         <div class="header-social-icons text-right">
+            <a href="https://bsky.app/profile/cassandra.apache.org" target="_blank" styles="margin-left: 20px;"><img src="../../../../../assets/img/bluesky.png" alt="bluesky icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../../../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+            <div class="hero hero--home grad">
+                <div class="eye"></div>
+                <div id="docs-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                    <h2>Cassandra Documentation</h2>
+                </div>
+            </div>
+            <div class="body px-medium py-medium container">
+    <div class="docs-nav-bar flex flex-space-between mb-medium">
+      <div id="mobile-docs-nav-burger" class="hidden">
+        <svg viewBox="0 0 24 24" width="36" height="36" stroke="#1c81a0" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </div>
+        <div class="docs-nav-item relative">
+          <input id="search-input" type="text" placeholder="Search docs">
+        </div>
+      <div class="versions-wrapper">
+  <h4>Version:</h4>
+  <div class="nav-panel-explore" data-panel="explore">
+
+    <div id="version-toggle" class="context">
+      <span class="version">7.0</span>
+    </div>
+    <ul id="versions-list" class="components">
+      <li class="component">
+        <ul class="versions">
+          <li class="version is-latest">
+            <a href="../../../../../_/index.html">website</a>
+          </li>
+        </ul>
+      </li>
+      <li class="component is-current">
+        <ul class="versions">
+          <li class="version is-current">
+            <a href="../../../index.html">7.0</a>
+          </li>
+          <li class="version">
+            <a href="../../../../6.0/index.html">6.0</a>
+          </li>
+          <li class="version is-latest">
+            <a href="../../../../6.0-alpha2/index.html">6.0-alpha2</a>
+          </li>
+          <li class="version">
+            <a href="../../../../5.0.9/index.html">5.0.9</a>
+          </li>
+          <li class="version">
+            <a href="../../../../5.0.8/index.html">5.0.8</a>
+          </li>
+          <li class="version">
+            <a href="../../../../5.0/index.html">5.0</a>
+          </li>
+          <li class="version">
+            <a href="../../../../4.1/index.html">4.1</a>
+          </li>
+          <li class="version">
+            <a href="../../../../4.0/index.html">4.0</a>
+          </li>
+          <li class="version">
+            <a href="../../../../3.11/index.html">3.11</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>    </div>
+    <div class="cf relative">
+        <nav class="nav docs-nav full-800">
+<div class="nav-menu">
+<ul class="nav-list">
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../index.html">Main</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/glossary.html">Glossary</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="#master@_:ROOT:bugs.adoc">How to report bugs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/community.html">Contact us</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../_/development/index.html">Development</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/gettingstarted.html">Getting started</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/ide.html">Building and IDE integration</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/testing.html">Testing</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/patches.html">Contributing code changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/code_style.html">Code style</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/how_to_review.html">Review checklist</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/how_to_commit.html">How to commit</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/documentation.html">Working on documentation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/ci.html">Jenkins CI environment</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/dependencies.html">Dependency management</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/release_process.html">Release process</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item is-current-path is-active" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <span class="nav-text">Cassandra</span>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../overview/faq/index.html">FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../getting-started/index.html">Getting Started</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/cassandra-quickstart.html">Cassandra Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../installing/installing.html">Installing Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/configuring.html">Configuring Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/querying.html">Inserting and querying</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/drivers.html">Client drivers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/production.html">Production recommendations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../new/index.html">What&#8217;s new</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/java17.html">Support for Java</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../architecture/index.html">Architecture</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/overview.html">Overview</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/dynamo.html">Dynamo</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/storage-engine.html">Storage Engine</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/guarantees.html">Guarantees</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/messaging.html">Improved Internode Messaging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/streaming.html">Improved Streaming</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../architecture/accord.html">Accord</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/accord-architecture.html">Accord Architecture</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/cql-on-accord.html">Developers guide to CQL on Accord</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../data-modeling/index.html">Data Modeling</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data-modeling/intro.html">Introduction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data-modeling/data-modeling_conceptual.html">Conceptual data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data-modeling/data-modeling_rdbms.html">RDBMS design</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data-modeling/data-modeling_queries.html">Defining application queries</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data-modeling/data-modeling_logical.html">Logical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data-modeling/data-modeling_physical.html">Physical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data-modeling/data-modeling_refining.html">Evaluating and refining data models</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data-modeling/data-modeling_schema.html">Defining database schema</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../data-modeling/data-modeling_tools.html">Cassandra data modeling tools</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-path is-active" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="index.html">Cassandra Query Language (CQL)</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="definitions.html">Definitions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="types.html">Data types</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="ddl.html">Data definition (DDL)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="dml.html">Data manipulation (DML)</a>
+    </span>
+  </li>
+  <li class="nav-item is-current-page is-active" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="transactions.html">Transactions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="transactions-examples.html">Transaction patterns</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="transactions-migration.html">Transaction migration</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="dynamic-data-masking.html">Dynamic Data Masking (DDM)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="operators.html">Operators</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="indexing/indexing-concepts.html">Indexing concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="indexing/sai/sai-overview.html">SAI Overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="indexing/sai/sai-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="indexing/sai/sai-faq.html">SAI FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="indexing/sai/sai-working-with.html">Working with SAI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="indexing/sai/operations/sai-operations.html">SAI operations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="indexing/2i/2i-overview.html">Secondary indexes (2i) overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="indexing/2i/2i-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="indexing/2i/2i-working-with.html">Working with 2i</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="indexing/2i/operations/2i-build.html">Rebuild 2i</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="mvs.html">Materialized views</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="functions.html">Functions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="json.html">JSON</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="triggers.html">Triggers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="constraints.html">Constraints</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="appendices.html">Appendices</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="changes.html">Changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="SASI.html">SASI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="cql_singlefile.html">Single file of CQL information</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../vector-search/overview.html">Vector Search overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../vector-search/concepts.html">Concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../vector-search/data-modeling.html">Vector Search : Data Modeling</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../vector-search/vector-search-working-with.html">Working with Vector Search</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../managing/index.html">Managing</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../managing/configuration/index.html">Configuring</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/cass_yaml_file.html">cassandra.yaml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/cass_rackdc_file.html">cassandra-rackdc.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/cass_env_sh_file.html">cassandra-env.sh</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/cass_topo_file.html">cassandra-topologies.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/cass_cl_archive_file.html">commitlog-archiving.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/cass_logback_xml_file.html">logback.xml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/cass_jvm_options_file.html">jvm-* files</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/configuration/configuration.html">Liberating cassandra.yaml Parameters' Names from Their Units</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../managing/operating/index.html">Operating</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/backups.html">Backups</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/bloom_filters.html">Bloom filters</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/bulk_loading.html">Bulk loading</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/cdc.html">Change Data Capture (CDC)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/compaction/index.html">Compaction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/compression.html">Compression</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/hardware.html">Hardware</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/hints.html">Hints</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../managing/operating/logging.html">Logging</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/auditlogging.html">Audit logging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/audit_logging.html">Audit logging 2</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/fqllogging.html">Full query logging</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/metrics.html">Monitoring metrics</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/repair.html">Repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/auto_repair.html">Auto Repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/read_repair.html">Read repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/snitch.html">Snitches</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/topo_changes.html">Topology changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/transientreplication.html">Transient replication</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/virtualtables.html">Virtual tables</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/password_validation.html">Password validation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/role_name_generation.html">Role name generation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/onboarding-to-accord.html">Onboarding to Accord</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/operating/async-profiler.html">Async-profiler</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../managing/tools/index.html">Tools</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/tools/cqlsh.html">cqlsh: the CQL shell</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/tools/nodetool/nodetool.html">nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../managing/tools/sstable/index.html">SSTable tools</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../tooling/cassandra-stress.html">cassandra-stress</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../troubleshooting/index.html">Troubleshooting</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../troubleshooting/finding_nodes.html">Finding misbehaving nodes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../troubleshooting/reading_logs.html">Reading Cassandra logs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../troubleshooting/use_nodetool.html">Using nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../troubleshooting/use_tools.html">Using external tools to deep-dive</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../reference/index.html">Reference</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/cql-commands/commands-toc.html">CQL commands</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="cql_singlefile.html">CQL specification</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/java17.html">Java 17</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/native-protocol.html">Native Protocol specification</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/sai-virtual-table-indexes.html">SAI virtual table</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/static.html">Static columns</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/vector-data-type.html">Vector data type</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../integrating/plugins/index.html">Plug-ins</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+</div>
+</nav>
+        <aside class="toc sidebar">
+  <div class="toc-menu"></div>
+</aside>
+        <main class="article default-main full-800" data-ceiling="topbar">
+  <div class="article-banner">
+    <p>You are viewing the documentation for a prerelease version.</p>
+  </div>
+    <div class="article-header">
+<nav class="crumbs" aria-label="breadcrumbs">
+  <ul>
+    <li class="crumb">Cassandra</li>
+    <li class="crumb"><a href="index.html">Cassandra Query Language (CQL)</a></li>
+    <li class="crumb"><a href="transactions.html">Transactions</a></li>
+  </ul>
+</nav>
+<div class="tools" role="navigation">
+  <ul>
+    <li class="tool edit"><a href="https://github.com/apache/cassandra/edit/trunk/doc/modules/cassandra/pages/developing/cql/transactions.adoc" title="Edit Page" target="_blank" rel="noopener">Edit</a></li>
+  </ul>
+</div>
+  </div>
+<article class="doc">
+<h1 class="page">Accord Transactions</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Accord provides strong consistency and ACID guarantees for Cassandra operations.
+When enabled on a table, <strong>all CQL operations automatically execute through Accord</strong> - no code changes required.
+For complex multi-step operations, explicit transaction syntax (<code>BEGIN TRANSACTION &#8230;&#8203; COMMIT TRANSACTION</code>) allows you to read, apply conditions, and write atomically across multiple partitions and tables.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="overview"><a class="anchor" href="#overview"></a>Overview</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="key-benefits"><a class="anchor" href="#key-benefits"></a>Key Benefits</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Automatic Strong Consistency</strong>: Normal CQL reads and writes become linearizable when <code>transactional_mode='full'</code></p>
+</li>
+<li>
+<p><strong>ACID Guarantees</strong>: Atomicity, Consistency, Isolation, and Durability across multiple operations</p>
+</li>
+<li>
+<p><strong>Multi-Partition Consistency</strong>: Coordinate updates across different partition keys</p>
+</li>
+<li>
+<p><strong>Multi-Table Support</strong>: Update multiple tables atomically within a single transaction</p>
+</li>
+<li>
+<p><strong>Complex Business Logic</strong>: Support for conditional operations with multiple steps</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="when-to-use-explicit-transactions"><a class="anchor" href="#when-to-use-explicit-transactions"></a>When to Use Explicit Transactions</h3>
+<div class="paragraph">
+<p>While normal CQL operations are automatically transactional with <code>transactional_mode='full'</code>, use explicit <code>BEGIN TRANSACTION &#8230;&#8203; COMMIT TRANSACTION</code> syntax when you need:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Read-Modify-Write Patterns</strong>: Check a condition before making changes</p>
+</li>
+<li>
+<p><strong>Complex Business Logic</strong>: Multi-step operations that must be atomic</p>
+</li>
+<li>
+<p><strong>Cross-Partition Operations</strong>: Updates that span multiple partition keys</p>
+</li>
+<li>
+<p><strong>Multi-Table Atomicity</strong>: Ensure related changes across tables succeed or fail together</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="safety-consistency"><a class="anchor" href="#safety-consistency"></a>Safety &amp; Consistency</h3>
+<div class="paragraph">
+<p>Accord ensures data integrity through:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Strict Serializability</strong>: Transactions execute as if in a single, total order that respects real-time ordering</p>
+</li>
+<li>
+<p><strong>Conflict Detection</strong>: Automatic handling of concurrent access to the same data</p>
+</li>
+<li>
+<p><strong>Atomic Commitment</strong>: All changes commit together or none at all</p>
+</li>
+<li>
+<p><strong>Durable Writes</strong>: Committed transactions survive node failures</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="getting-started"><a class="anchor" href="#getting-started"></a>Getting Started</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="prerequisites"><a class="anchor" href="#prerequisites"></a>Prerequisites</h3>
+<div class="paragraph">
+<p>Before using transactions:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Enable Accord globally</strong> in <code>cassandra.yaml</code>:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">accord:
+  enabled: true</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p><strong>Enable transactional mode on tables</strong>:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">CREATE TABLE users (
+  id UUID PRIMARY KEY,
+  email text,
+  balance decimal
+) WITH transactional_mode = 'full';</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>See <a href="#transactional-modes">Transactional Modes</a> for detailed mode explanations.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="normal-cql-operations-are-transactional"><a class="anchor" href="#normal-cql-operations-are-transactional"></a>Normal CQL Operations Are Transactional</h3>
+<div class="paragraph">
+<p>When a table has <code>transactional_mode='full'</code>, your existing CQL statements are automatically executed through Accord. <strong>You do not need to rewrite your application code.</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">-- These normal CQL operations are automatically transactional:
+
+-- Reads are executed through Accord
+SELECT id, email, balance FROM users WHERE id = 123e4567-e89b-12d3-a456-426614174000;
+
+-- Writes are executed through Accord
+INSERT INTO users (id, email, balance) VALUES (123e4567-e89b-12d3-a456-426614174000, 'user@example.com', 100.00);
+
+UPDATE users SET balance = 50.00 WHERE id = 123e4567-e89b-12d3-a456-426614174000;
+
+DELETE FROM users WHERE id = 123e4567-e89b-12d3-a456-426614174000;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Each statement executes as an individual Accord transaction, providing linearizability, consistency, and durability. Migrating to Accord can be as simple as enabling <code>transactional_mode='full'</code> on your tables. See <a href="#transactional-modes">Transactional Modes</a> for all available modes.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="transactional-modes"><a class="anchor" href="#transactional-modes"></a>Transactional Modes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Tables must be configured with one of these transactional modes:</p>
+</div>
+<div class="sect2">
+<h3 id="transactional_modeoff-default"><a class="anchor" href="#transactional_modeoff-default"></a>transactional_mode='off' (Default)</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>No Accord transaction support</p>
+</li>
+<li>
+<p>Uses traditional Cassandra behavior</p>
+</li>
+<li>
+<p>Lightweight transactions use Paxos protocol</p>
+</li>
+<li>
+<p>Cannot participate in Accord transactions</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>When to Use:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Tables not ready for transaction migration</p>
+</li>
+<li>
+<p>High-throughput tables where transaction overhead isn&#8217;t justified</p>
+</li>
+<li>
+<p>Tables with existing Paxos-based logic that works well</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">CREATE TABLE tbl (...)
+WITH transactional_mode = 'off';</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="transactional_mode_mixed_reads"><a class="anchor" href="#transactional_mode_mixed_reads"></a>transactional_mode='mixed_reads'</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Most users should migrate directly from <code>off</code> to <code>full</code>. This mode is only needed for specific scenarios where you must mix transactional and non-transactional access on the same table during a transition period.
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Non-SERIAL writes are routed through Accord but committed at the supplied consistency level</p>
+</li>
+<li>
+<p>Allows non-SERIAL reads to see transactionally written data</p>
+</li>
+<li>
+<p>Blocking read repair is routed through Accord to avoid exposing uncommitted data</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>When to Use:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Applications that <strong>require</strong> mixed transactional and non-transactional access on the same table simultaneously</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Trade-offs:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Slower transactions</strong>: Accord cannot perform single-replica read optimization because it must ensure data is readable at the non-SERIAL consistency level</p>
+</li>
+<li>
+<p><strong>Read repair overhead</strong>: Accord must repair stale replicas during reads</p>
+</li>
+<li>
+<p><strong>Not recommended for most users</strong>: Direct migration from <code>off</code> to <code>full</code> is simpler and provides better performance</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">ALTER TABLE tbl WITH transactional_mode = 'mixed_reads';</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="transactional_modefull-recommended"><a class="anchor" href="#transactional_modefull-recommended"></a>transactional_mode='full' (Recommended)</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>All reads and writes must occur through Accord transactions</p>
+</li>
+<li>
+<p>Enables single-replica reads since non-transactional readers don&#8217;t exist</p>
+</li>
+<li>
+<p>Best transaction performance</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>When to Use:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>New tables that will use transactions</p>
+</li>
+<li>
+<p>Tables migrating from <code>off</code> mode (recommended for most users)</p>
+</li>
+<li>
+<p>Maximum transaction performance required</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Why this mode is faster:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Single-replica reads</strong>: Accord can read from a single replica and still provide correct results</p>
+</li>
+<li>
+<p><strong>No read repair overhead</strong>: Accord doesn&#8217;t need to repair data for non-transactional readers</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">CREATE TABLE tbl (...)
+WITH transactional_mode = 'full';</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="transaction-syntax"><a class="anchor" href="#transaction-syntax"></a>Transaction Syntax</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="basic-structure"><a class="anchor" href="#basic-structure"></a>Basic Structure</h3>
+<div class="paragraph">
+<p>All transactions follow this pattern:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">BEGIN TRANSACTION
+  [LET assignments]
+  [SELECT statements]
+  [IF conditions THEN]
+    [modification statements]
+  [END IF]
+COMMIT TRANSACTION</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="let-assignments"><a class="anchor" href="#let-assignments"></a>LET Assignments</h3>
+<div class="paragraph">
+<p>LET statements read data and bind it to variables for use later in the transaction:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">BEGIN TRANSACTION
+  LET user_data = (SELECT id, balance FROM users WHERE id = ?);
+  LET account_data = (SELECT account_type FROM accounts WHERE user_id = ?);
+
+  IF user_data.balance &gt; 100 AND account_data.account_type = 'premium' THEN
+    UPDATE users SET balance = balance - 50 WHERE id = ?;
+  END IF
+COMMIT TRANSACTION</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>LET Requirements:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Each LET must specify a unique variable name</p>
+</li>
+<li>
+<p>SELECT must return exactly one row (use <code>LIMIT 1</code> if needed)</p>
+</li>
+<li>
+<p>All partition key columns must be specified with equality operators</p>
+</li>
+<li>
+<p>Cannot use <code>ORDER BY</code>, <code>GROUP BY</code>, or aggregation functions</p>
+</li>
+<li>
+<p>Cannot use range queries or multi-partition operations</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Valid LET Examples:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">LET user_data = (SELECT balance, status FROM users WHERE id = ?);
+LET order_info = (SELECT total, shipping_fee FROM orders WHERE id = ? LIMIT 1);
+LET static_config = (SELECT max_attempts FROM config WHERE setting_type = 'retry');</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Invalid LET Examples:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">-- Missing LIMIT 1 with potential multiple results
+LET users = (SELECT * FROM users WHERE status = 'active');
+
+-- Range query not allowed
+LET recent = (SELECT * FROM events WHERE id &gt; ? AND id &lt; ?);
+
+-- Aggregation not supported
+LET total = (SELECT COUNT(*) FROM orders WHERE user_id = ?);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="row-references"><a class="anchor" href="#row-references"></a>Row References</h3>
+<div class="paragraph">
+<p>Access fields from LET variables using dot notation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">BEGIN TRANSACTION
+  LET current_user = (SELECT balance, status FROM users WHERE id = ?);
+
+  -- Access fields with dot notation
+  SELECT current_user.balance, current_user.status;
+COMMIT TRANSACTION</code></pre>
+</div>
+</div>
+<div id="row-reference-limitations" class="paragraph">
+<p><strong>Row Reference Limitations:</strong></p>
+</div>
+<div class="paragraph">
+<p>Row reference arithmetic in SET clauses and row references in VALUES are not currently supported. Pass values as parameters instead.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">-- Application code computes values, passes as parameters
+BEGIN TRANSACTION
+  LET user_data = (SELECT balance FROM users WHERE id = ?);
+
+  IF user_data.balance &gt;= ? THEN  -- Pass order_total as parameter
+    UPDATE users SET balance = balance - ? WHERE id = ?;  -- Pass order_total
+  END IF
+COMMIT TRANSACTION</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="returning-results"><a class="anchor" href="#returning-results"></a>Returning Results</h3>
+<div class="paragraph">
+<p>Return data from transactions using SELECT statements that appear before any modifications. You can use either row reference values or a normal single-partition SELECT.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If no SELECT statement is present, the transaction returns an empty result set regardless of whether the IF condition was satisfied. Use a SELECT before modifications to observe transaction state.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="using-row-references"><a class="anchor" href="#using-row-references"></a>Using Row References</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">BEGIN TRANSACTION
+  LET user_data = (SELECT balance, status FROM users WHERE id = ?);
+
+  -- Return row reference values (must come before UPDATE)
+  SELECT user_data.balance, user_data.status;
+
+  UPDATE users SET balance = balance - 50 WHERE id = ?;
+COMMIT TRANSACTION</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="using-a-normal-select"><a class="anchor" href="#using-a-normal-select"></a>Using a Normal SELECT</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">BEGIN TRANSACTION
+  LET user_data = (SELECT balance FROM users WHERE id = ?);
+
+  -- Return data directly from table (must come before UPDATE)
+  SELECT balance, status, email FROM users WHERE id = ?;
+
+  IF user_data.balance &gt;= 50 THEN
+    UPDATE users SET balance = balance - 50 WHERE id = ?;
+  END IF
+COMMIT TRANSACTION</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Important:</strong> SELECT statements must appear before any UPDATE, INSERT, or DELETE statements. To retrieve updated values, query outside the transaction after it commits.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="conditional-logic"><a class="anchor" href="#conditional-logic"></a>Conditional Logic</h3>
+<div class="paragraph">
+<p>Add conditional logic to transactions with IF blocks:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">BEGIN TRANSACTION
+  LET sender = (SELECT balance FROM accounts WHERE user_id = ?);
+
+  IF sender.balance &gt;= 100 THEN
+    UPDATE accounts SET balance = balance - 100 WHERE user_id = ?;
+    UPDATE accounts SET balance = balance + 100 WHERE user_id = ?;
+  END IF
+COMMIT TRANSACTION</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Supported Operators:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Comparison: <code>=</code>, <code>&lt;</code>, <code>&#8656;</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>!=</code></p>
+</li>
+<li>
+<p>Null checks: <code>IS NULL</code>, <code>IS NOT NULL</code></p>
+</li>
+<li>
+<p>Logical: <code>AND</code> only</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Complex Condition Examples:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">-- Multiple conditions with AND
+IF user_data.balance &gt;= 100 AND user_data.status = 'active'
+   AND user_data.credit_limit &gt; 150 THEN
+  -- statements
+END IF
+
+-- Null checking
+IF account_info IS NOT NULL AND account_info.balance &gt; 0 THEN
+  -- statements
+END IF</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Important Notes:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Null handling is strict (any null comparison returns false)</p>
+</li>
+<li>
+<p>All modification statements must be inside the IF block when using conditions</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="restrictions"><a class="anchor" href="#restrictions"></a>Restrictions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following features cannot be used within <code>BEGIN TRANSACTION &#8230;&#8203; COMMIT TRANSACTION</code> blocks:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Counter tables</strong> and counter operations</p>
+</li>
+<li>
+<p><strong>Aggregation functions</strong> (COUNT, SUM, AVG, etc.)</p>
+</li>
+<li>
+<p><strong>ORDER BY</strong> and <strong>GROUP BY</strong> clauses</p>
+</li>
+<li>
+<p><strong>Custom TTL</strong> and <strong>timestamp</strong> specifications (transaction manages timestamps)</p>
+</li>
+<li>
+<p><strong>Range DELETE</strong> operations (must specify complete primary key)</p>
+</li>
+<li>
+<p><strong>Non-equality partition key</strong> restrictions in LET/SELECT</p>
+</li>
+<li>
+<p><strong>Individual statement conditions</strong> (use transaction-level IF blocks instead)</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="schema-requirements"><a class="anchor" href="#schema-requirements"></a>Schema Requirements</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Accord must be enabled in <code>cassandra.yaml</code></p>
+</li>
+<li>
+<p>Tables must have a <code>transactional_mode</code> other than <code>'off'</code></p>
+</li>
+<li>
+<p>Tables being dropped cannot participate in transactions</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="syntax-reference"><a class="anchor" href="#syntax-reference"></a>Syntax Reference</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="complete-grammar"><a class="anchor" href="#complete-grammar"></a>Complete Grammar</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">BEGIN TRANSACTION
+  [LET letStatements]
+  [SELECT selectStatement | SELECT rowDataReferences]
+  [IF conditionalExpression THEN]
+    [modificationStatements]
+  [END IF]
+COMMIT TRANSACTION</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="modification-statements"><a class="anchor" href="#modification-statements"></a>Modification Statements</h3>
+<div class="paragraph">
+<p><strong>INSERT:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">INSERT INTO table (columns) VALUES (values);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>UPDATE:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">UPDATE table SET assignments WHERE conditions;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>DELETE:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">DELETE [columns] FROM table WHERE conditions;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="multi-partition-coordination"><a class="anchor" href="#multi-partition-coordination"></a>Multi-Partition Coordination</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Cross-partition transactions add coordination overhead:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">BEGIN TRANSACTION
+  LET user1 = (SELECT balance FROM accounts WHERE user_id = ?);
+  LET user2 = (SELECT balance FROM accounts WHERE user_id = ?);
+
+  IF user1.balance &gt;= 100 THEN
+    UPDATE accounts SET balance = balance - 100 WHERE user_id = ?;
+    UPDATE accounts SET balance = balance + 100 WHERE user_id = ?;
+  END IF
+COMMIT TRANSACTION</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Performance Impact:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Same-partition transactions: Low overhead</p>
+</li>
+<li>
+<p>Cross-partition transactions: Moderate overhead</p>
+</li>
+<li>
+<p>More partitions = higher coordination cost</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Optimization:</strong> Minimize cross-partition operations; consider data model changes to reduce cross-partition transactions.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="automatic-read-generation"><a class="anchor" href="#automatic-read-generation"></a>Automatic Read Generation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When UPDATE statements reference current column values, Accord automatically reads the current state:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">BEGIN TRANSACTION
+  -- This UPDATE automatically reads current balance
+  UPDATE users SET balance = balance + ? WHERE id = ?;
+COMMIT TRANSACTION</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Triggers:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>SET clauses that reference current column values</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="troubleshooting"><a class="anchor" href="#troubleshooting"></a>Troubleshooting</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="configuration-errors"><a class="anchor" href="#configuration-errors"></a>Configuration Errors</h3>
+<div class="paragraph">
+<p><strong>Accord transactions are disabled</strong></p>
+</div>
+<div class="paragraph">
+<p>Enable in cassandra.yaml:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">accord:
+  enabled: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Accord transactions are disabled on table</strong></p>
+</div>
+<div class="paragraph">
+<p>Enable on table:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">ALTER TABLE tbl WITH transactional_mode = 'full';</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="syntax-errors"><a class="anchor" href="#syntax-errors"></a>Syntax Errors</h3>
+<div class="paragraph">
+<p><strong>Duplicate variable names</strong></p>
+</div>
+<div class="paragraph">
+<p>Use unique variable names:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">-- Bad
+LET user_data = (SELECT balance FROM accounts WHERE user_id = 1);
+LET user_data = (SELECT balance FROM accounts WHERE user_id = 2);
+
+-- Good
+LET sender_data = (SELECT balance FROM accounts WHERE user_id = 1);
+LET receiver_data = (SELECT balance FROM accounts WHERE user_id = 2);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="performance-issues"><a class="anchor" href="#performance-issues"></a>Performance Issues</h3>
+<div class="paragraph">
+<p><strong>High latency investigation:</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Check transaction complexity (LET count, partition count)<sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup></p>
+</li>
+<li>
+<p>Monitor cross-datacenter operations</p>
+</li>
+<li>
+<p>Check for high contention on specific keys</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Large result sets:</strong></p>
+</div>
+<div class="paragraph">
+<p>Select only needed columns:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">-- Bad: Reading entire row
+LET user_history = (SELECT * FROM large_history_table WHERE user_id = ? LIMIT 1);
+
+-- Good: Only read necessary data
+LET user_status = (SELECT status, last_login FROM users WHERE id = ?);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="counter-table-alternative"><a class="anchor" href="#counter-table-alternative"></a>Counter Table Alternative</h3>
+<div class="paragraph">
+<p>Counters cannot be used in transactions. Use regular columns:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">-- Bad: Counter in transaction
+CREATE TABLE page_views (
+  page_id uuid PRIMARY KEY,
+  views counter
+) WITH transactional_mode = 'full';
+
+-- Good: Regular column
+CREATE TABLE page_views (
+  page_id uuid PRIMARY KEY,
+  views bigint
+) WITH transactional_mode = 'full';
+
+BEGIN TRANSACTION
+  UPDATE page_views SET views = views + 1 WHERE page_id = ?;
+COMMIT TRANSACTION</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnotedef_1">
+<a href="#_footnoteref_1">1</a>. Keep LET statements under 5 and partitions under 3 as a starting point. These are suggested guidelines, not empirically derived limits.
+</div>
+</div>
+</article>
+</main>
+    </div>
+</div>
+            <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../../../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://bsky.app/profile/cassandra.apache.org" target="_blank"><img src="../../../../../assets/img/bluesky.png" alt="bluesky icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../../../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+    <script src="../../../../../assets/js/site.js"></script>
+    <script async src="../../../../../assets/js/vendor/highlight.js"></script>
+    <script src="../../../../../assets/js/vendor/lunr.js"></script>
+    <script src="../../../../../assets/js/vendor/search.js" id="search-script" data-base-path="../../../../.." data-page-path="/Cassandra/7.0/cassandra/developing/cql/transactions.html"></script>
+    <script async src="../../../../../assets/../search-index.js"></script>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+        </div>
+    </body>
+</html>
