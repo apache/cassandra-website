@@ -1,0 +1,2436 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Apache Cassandra Security Model | Apache Cassandra Documentation</title>
+            <link rel="stylesheet" href="../../../../assets/css/site.css">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="Cassandra">
+    <meta name="dcterms.identifier" content="7.0">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "../../../../assets/js/vendor/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>
+<script src="../../../../assets/js/vendor/jquery.js"></script>
+    </head>
+    <body class="docs-wrapper article">
+        <div class="container mx-auto relative">
+                <meta property="og:type" content="website" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+         <div class="header-social-icons text-right">
+            <a href="https://bsky.app/profile/cassandra.apache.org" target="_blank" styles="margin-left: 20px;"><img src="../../../../assets/img/bluesky.png" alt="bluesky icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+            <div class="hero hero--home grad">
+                <div class="eye"></div>
+                <div id="docs-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                    <h2>Cassandra Documentation</h2>
+                </div>
+            </div>
+            <div class="body px-medium py-medium container">
+    <div class="docs-nav-bar flex flex-space-between mb-medium">
+      <div id="mobile-docs-nav-burger" class="hidden">
+        <svg viewBox="0 0 24 24" width="36" height="36" stroke="#1c81a0" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </div>
+        <div class="docs-nav-item relative">
+          <input id="search-input" type="text" placeholder="Search docs">
+        </div>
+      <div class="versions-wrapper">
+  <h4>Version:</h4>
+  <div class="nav-panel-explore" data-panel="explore">
+
+    <div id="version-toggle" class="context">
+      <span class="version">7.0</span>
+    </div>
+    <ul id="versions-list" class="components">
+      <li class="component">
+        <ul class="versions">
+          <li class="version is-latest">
+            <a href="../../../../_/index.html">website</a>
+          </li>
+        </ul>
+      </li>
+      <li class="component is-current">
+        <ul class="versions">
+          <li class="version is-current">
+            <a href="../../index.html">7.0</a>
+          </li>
+          <li class="version">
+            <a href="../../../6.0/index.html">6.0</a>
+          </li>
+          <li class="version is-latest">
+            <a href="../../../6.0-alpha2/index.html">6.0-alpha2</a>
+          </li>
+          <li class="version">
+            <a href="../../../5.0.9/index.html">5.0.9</a>
+          </li>
+          <li class="version">
+            <a href="../../../5.0.8/index.html">5.0.8</a>
+          </li>
+          <li class="version">
+            <a href="../../../5.0/index.html">5.0</a>
+          </li>
+          <li class="version">
+            <a href="../../../4.1/index.html">4.1</a>
+          </li>
+          <li class="version">
+            <a href="../../../4.0/index.html">4.0</a>
+          </li>
+          <li class="version">
+            <a href="../../../3.11/index.html">3.11</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>    </div>
+    <div class="cf relative">
+        <nav class="nav docs-nav full-800">
+<div class="nav-menu">
+<ul class="nav-list">
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../index.html">Main</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/glossary.html">Glossary</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="#master@_:ROOT:bugs.adoc">How to report bugs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/community.html">Contact us</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../_/development/index.html">Development</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/gettingstarted.html">Getting started</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/ide.html">Building and IDE integration</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/testing.html">Testing</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/patches.html">Contributing code changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/code_style.html">Code style</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/how_to_review.html">Review checklist</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/how_to_commit.html">How to commit</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/documentation.html">Working on documentation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/ci.html">Jenkins CI environment</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/dependencies.html">Dependency management</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/release_process.html">Release process</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <span class="nav-text">Cassandra</span>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../overview/faq/index.html">FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../getting-started/index.html">Getting Started</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting-started/cassandra-quickstart.html">Cassandra Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../installing/installing.html">Installing Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting-started/configuring.html">Configuring Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting-started/querying.html">Inserting and querying</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting-started/drivers.html">Client drivers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting-started/production.html">Production recommendations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../new/index.html">What&#8217;s new</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="java17.html">Support for Java</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../architecture/index.html">Architecture</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/overview.html">Overview</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/dynamo.html">Dynamo</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/storage-engine.html">Storage Engine</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/guarantees.html">Guarantees</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/messaging.html">Improved Internode Messaging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/streaming.html">Improved Streaming</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../architecture/accord.html">Accord</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/accord-architecture.html">Accord Architecture</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../architecture/cql-on-accord.html">Developers guide to CQL on Accord</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../developing/data-modeling/index.html">Data Modeling</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/data-modeling/intro.html">Introduction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/data-modeling/data-modeling_conceptual.html">Conceptual data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/data-modeling/data-modeling_rdbms.html">RDBMS design</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/data-modeling/data-modeling_queries.html">Defining application queries</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/data-modeling/data-modeling_logical.html">Logical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/data-modeling/data-modeling_physical.html">Physical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/data-modeling/data-modeling_refining.html">Evaluating and refining data models</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/data-modeling/data-modeling_schema.html">Defining database schema</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/data-modeling/data-modeling_tools.html">Cassandra data modeling tools</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../developing/cql/index.html">Cassandra Query Language (CQL)</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/definitions.html">Definitions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/types.html">Data types</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/ddl.html">Data definition (DDL)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/dml.html">Data manipulation (DML)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/transactions.html">Transactions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/transactions-examples.html">Transaction patterns</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/transactions-migration.html">Transaction migration</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/dynamic-data-masking.html">Dynamic Data Masking (DDM)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/operators.html">Operators</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../developing/cql/indexing/indexing-concepts.html">Indexing concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../developing/cql/indexing/sai/sai-overview.html">SAI Overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/indexing/sai/sai-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/indexing/sai/sai-faq.html">SAI FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/indexing/sai/sai-working-with.html">Working with SAI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/indexing/sai/operations/sai-operations.html">SAI operations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../developing/cql/indexing/2i/2i-overview.html">Secondary indexes (2i) overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/indexing/2i/2i-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/indexing/2i/2i-working-with.html">Working with 2i</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/indexing/2i/operations/2i-build.html">Rebuild 2i</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/mvs.html">Materialized views</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/functions.html">Functions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/json.html">JSON</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/triggers.html">Triggers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/constraints.html">Constraints</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/appendices.html">Appendices</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/changes.html">Changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/SASI.html">SASI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/cql_singlefile.html">Single file of CQL information</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../vector-search/overview.html">Vector Search overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../vector-search/concepts.html">Concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../vector-search/data-modeling.html">Vector Search : Data Modeling</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../vector-search/vector-search-working-with.html">Working with Vector Search</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../managing/index.html">Managing</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../managing/configuration/index.html">Configuring</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/configuration/cass_yaml_file.html">cassandra.yaml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/configuration/cass_rackdc_file.html">cassandra-rackdc.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/configuration/cass_env_sh_file.html">cassandra-env.sh</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/configuration/cass_topo_file.html">cassandra-topologies.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/configuration/cass_cl_archive_file.html">commitlog-archiving.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/configuration/cass_logback_xml_file.html">logback.xml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/configuration/cass_jvm_options_file.html">jvm-* files</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/configuration/configuration.html">Liberating cassandra.yaml Parameters' Names from Their Units</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../managing/operating/index.html">Operating</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/backups.html">Backups</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/bloom_filters.html">Bloom filters</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/bulk_loading.html">Bulk loading</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/cdc.html">Change Data Capture (CDC)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/compaction/index.html">Compaction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/compression.html">Compression</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/hardware.html">Hardware</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/hints.html">Hints</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../managing/operating/logging.html">Logging</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/auditlogging.html">Audit logging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/audit_logging.html">Audit logging 2</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/fqllogging.html">Full query logging</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/metrics.html">Monitoring metrics</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/repair.html">Repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/auto_repair.html">Auto Repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/read_repair.html">Read repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/snitch.html">Snitches</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/topo_changes.html">Topology changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/transientreplication.html">Transient replication</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/virtualtables.html">Virtual tables</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/password_validation.html">Password validation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/role_name_generation.html">Role name generation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/onboarding-to-accord.html">Onboarding to Accord</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/async-profiler.html">Async-profiler</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../managing/tools/index.html">Tools</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/tools/cqlsh.html">cqlsh: the CQL shell</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/tools/nodetool/nodetool.html">nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/tools/sstable/index.html">SSTable tools</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../tooling/cassandra-stress.html">cassandra-stress</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../troubleshooting/index.html">Troubleshooting</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../troubleshooting/finding_nodes.html">Finding misbehaving nodes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../troubleshooting/reading_logs.html">Reading Cassandra logs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../troubleshooting/use_nodetool.html">Using nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../troubleshooting/use_tools.html">Using external tools to deep-dive</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="index.html">Reference</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="cql-commands/commands-toc.html">CQL commands</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/cql_singlefile.html">CQL specification</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="java17.html">Java 17</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="native-protocol.html">Native Protocol specification</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="sai-virtual-table-indexes.html">SAI virtual table</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="static.html">Static columns</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="vector-data-type.html">Vector data type</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../integrating/plugins/index.html">Plug-ins</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+</div>
+</nav>
+        <aside class="toc sidebar">
+  <div class="toc-menu"></div>
+</aside>
+        <main class="article default-main full-800" data-ceiling="topbar">
+  <div class="article-banner">
+    <p>You are viewing the documentation for a prerelease version.</p>
+  </div>
+    <div class="article-header">
+<nav class="crumbs" aria-label="breadcrumbs">
+  <ul>
+    <li class="crumb"><a href="../../index.html">Cassandra</a></li>
+    <li class="crumb"><a href="security-model.html">Apache Cassandra Security Model</a></li>
+  </ul>
+</nav>
+<div class="tools" role="navigation">
+  <ul>
+    <li class="tool edit"><a href="https://github.com/apache/cassandra/edit/trunk/doc/modules/cassandra/pages/reference/security-model.adoc" title="Edit Page" target="_blank" rel="noopener">Edit</a></li>
+  </ul>
+</div>
+  </div>
+<article class="doc">
+<h1 class="page">Apache Cassandra Security Model</h1>
+<div class="sect1">
+<h2 id="overview"><a class="anchor" href="#overview"></a>Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This document outlines the security model for Apache Cassandra, identifying potential security threats,
+trust boundaries, and the security controls that protect against them. <strong>This threat model assumes
+that Apache Cassandra has been configured correctly from a security point of view, with its strongest
+security settings applied</strong>, including authentication (password-based or mutual TLS-based),
+authorization (<code>CassandraAuthorizer</code>), TLS encryption for all communication channels
+(client-to-node and node-to-node), and JMX bound to the local interface only with Cassandra integrated
+authentication. Threats are evaluated against this hardened baseline&#8201;&#8212;&#8201;not against Cassandra&#8217;s
+out-of-the-box defaults. Vulnerability reports that do not adhere to the assumptions outlined in this
+document may not be accepted.</p>
+</div>
+<div class="paragraph">
+<p>This threat model is informed by
+<a href="/doc/latest/cassandra/operating/security.html">Cassandra&#8217;s own security documentation</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="system-architecture"><a class="anchor" href="#system-architecture"></a>System Architecture</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Apache Cassandra is a distributed NoSQL database system with the following key components:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Client Applications</strong>: Applications that connect to Cassandra via the CQL binary protocol to
+read/write data</p>
+</li>
+<li>
+<p><strong>Client Drivers</strong>: Official Apache Cassandra drivers (e.g., Java driver, Python driver) that
+implement the CQL binary protocol on behalf of client applications</p>
+</li>
+<li>
+<p><strong>Cassandra Nodes</strong>: Individual database servers forming a peer-to-peer cluster</p>
+</li>
+<li>
+<p><strong>Inter-node Communication</strong>: Gossip protocol and data replication channels between Cassandra nodes</p>
+</li>
+<li>
+<p><strong>Storage Layer</strong>: On-disk SSTables, commit logs, and hints</p>
+</li>
+<li>
+<p><strong>JMX Interface</strong>: Java Management Extensions interface for monitoring and administration</p>
+</li>
+<li>
+<p><strong>System Keyspaces</strong>: Internal keyspaces (e.g., <code>system_auth</code>, <code>system_schema</code>) that store cluster
+metadata, authentication, and authorization data</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="root-of-trust"><a class="anchor" href="#root-of-trust"></a>Root of Trust</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The root of trust for a Cassandra deployment converges to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>The infrastructure operator</strong>: The party responsible for provisioning and maintaining the underlying
+hardware, operating system, JVM, and network infrastructure on which Cassandra runs</p>
+</li>
+<li>
+<p><strong>The Cassandra distribution</strong>: The integrity of the Apache Cassandra software itself, verified through
+official Apache release signatures and checksums (signed with keys from the
+<a href="https://downloads.apache.org/cassandra/KEYS">Apache Cassandra PMC KEYS file</a>)</p>
+</li>
+<li>
+<p><strong>The JVM</strong>: Cassandra runs on the Java Virtual Machine; the security properties of the JVM (including
+its TLS implementation, cryptographic providers, and sandboxing) are assumed to be correct</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Before deploying Cassandra in a security-sensitive environment, operators should verify the authenticity
+of the distribution and ensure the underlying infrastructure meets their trust requirements.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="user-types"><a class="anchor" href="#user-types"></a>User Types</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Apache Cassandra distinguishes the following user types with different trust levels:</p>
+</div>
+<div class="sect2">
+<h3 id="trusted-users"><a class="anchor" href="#trusted-users"></a>Trusted Users</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Infrastructure Operators / Administrators</strong>: Users with OS-level access to nodes running Cassandra.
+They have access to configuration files (<code>cassandra.yaml</code>, <code>cassandra-env.sh</code>), data directories, JMX
+interfaces, and can start/stop nodes. These users are fully trusted. It is the responsibility of the
+organization to restrict who holds this role guided by the principle of least privilege.</p>
+</li>
+<li>
+<p><strong>Database Administrators (Superusers)</strong>: Users with Cassandra superuser roles. They can
+create/alter/drop roles, keyspaces, and tables, and grant/revoke permissions. They are trusted within
+the CQL authorization model but should not require OS-level access.</p>
+</li>
+<li>
+<p><strong>Application Developers</strong>: Users who write applications that connect to Cassandra. They are trusted
+to use the CQL API correctly, construct safe queries, and manage credentials securely within their
+applications.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="untrusted-users"><a class="anchor" href="#untrusted-users"></a>Untrusted Users</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Database Users (Non-superuser Roles)</strong>: Authenticated users with limited, explicitly granted
+permissions. They are not trusted beyond the permissions assigned to their role. The authorization
+subsystem (<code>CassandraAuthorizer</code>) enforces their access boundaries.</p>
+</li>
+<li>
+<p><strong>Unauthenticated Network Actors</strong>: Any party with network access to Cassandra&#8217;s client or
+inter-node ports who has not authenticated. Under this threat model&#8217;s assumed configuration, all
+communication channels require authentication and TLS, and JMX is bound to localhost only, so
+unauthenticated connection attempts are rejected. These actors remain a threat only if they can
+exploit vulnerabilities in the TLS handshake, authentication protocol, or network stack itself.</p>
+</li>
+<li>
+<p><strong>External Clients and End Users</strong>: Users of applications that interact with Cassandra indirectly.
+Their input should never be trusted by the application layer and must be validated before being
+passed to CQL queries.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="data-sources"><a class="anchor" href="#data-sources"></a>Data Sources</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="trusted-sources"><a class="anchor" href="#trusted-sources"></a>Trusted Sources</h3>
+<div class="paragraph">
+<p>Cassandra trusts the following data sources. It is the responsibility of the deployer to protect them:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Configuration files</strong> (<code>cassandra.yaml</code>, <code>cassandra-env.sh</code>, <code>cassandra-rackdc.properties</code>,
+<code>jmxremote.password</code>): These control all security-critical behavior including encryption,
+authentication, and authorization settings. Deployers must ensure that untrusted parties do not
+have write access to these files and that they are transmitted only over confidential channels.</p>
+</li>
+<li>
+<p><strong>System keyspaces</strong> (<code>system_auth</code>, <code>system_schema</code>, <code>system</code>): These internal tables store
+authentication credentials, role definitions, permissions, and schema metadata. Cassandra trusts their
+contents. Deployers must ensure the <code>system_auth</code> keyspace has adequate replication (recommended: RF
+3-5 per datacenter) and that direct manipulation via tools like <code>sstableloader</code> is restricted to
+trusted operators.</p>
+</li>
+<li>
+<p><strong>JMX interface</strong>: Operations performed through JMX are trusted to be legitimate administrative actions.
+JMX is bound to the local interface only, secured with Cassandra integrated authentication and
+authorization, and configured with fine-grained MBean permissions. Deployers must maintain these
+controls and audit JMX access.</p>
+</li>
+<li>
+<p><strong>Environment variables and JVM system properties</strong>: These configure security-critical behaviors such
+as SSL keystore paths, JMX settings, and JAAS configuration. Deployers must protect the execution
+environment.</p>
+</li>
+<li>
+<p><strong>SSL/TLS key material</strong>: Keystores, truststores, and PEM files used for client-to-node, node-to-node,
+and JMX encryption. Deployers must protect these files with appropriate filesystem permissions and
+manage certificate lifecycle (Cassandra supports hot reloading of SSL certificates).</p>
+</li>
+<li>
+<p><strong>Pluggable extension points, service provider interfaces (SPIs), and operator-supplied JARs</strong>:
+Cassandra exposes numerous extension points that operators select via <code>cassandra.yaml</code> or that are
+discovered from the classpath at startup. Examples include authentication and authorization plugins
+(<code>IAuthenticator</code>, <code>IAuthorizer</code>, <code>INetworkAuthorizer</code>, <code>IRoleManager</code>, <code>IInternodeAuthenticator</code>,
+<code>ICIDRAuthorizer</code>), topology, partitioning, and seed selection (<code>IEndpointSnitch</code>, <code>IPartitioner</code>,
+<code>ISeedProvider</code>), TLS material providers (<code>ISslContextFactory</code>), storage and data-path components
+(<code>ICompressor</code>, <code>SSTableFormat.Factory</code>), audit and startup hooks (<code>IAuditLogger</code>, <code>StartupCheck</code>),
+per-table triggers (<code>ITrigger</code>), CQL constraint providers (<code>ConstraintProvider</code>), and any other
+interface or <code>java.util.ServiceLoader</code> SPI that Cassandra resolves at runtime. User-defined functions
+and aggregates loaded as Java code, and any other JAR placed on the Cassandra classpath
+(including the <code>triggers/</code> directory) fall in the same category. These implementations run in-process
+with the full privileges of the Cassandra JVM and can invoke any Cassandra internal, read or modify
+any data the process can access, and observe any in-memory state. The Apache Cassandra project does
+<strong>not</strong> control the security properties of third-party implementations and cannot make guarantees about
+them. Deployers are responsible for sourcing such components only from trusted vendors, reviewing or
+auditing their behavior, restricting who can publish JARs to a node&#8217;s classpath or trigger/UDF
+directories, and treating them with the same care as the Cassandra distribution itself.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="untrusted-sources"><a class="anchor" href="#untrusted-sources"></a>Untrusted Sources</h3>
+<div class="paragraph">
+<p>Cassandra does <strong>not</strong> trust the following, and its security controls are designed to mediate access from
+them:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>CQL queries from client connections</strong>: All client requests are subject to authentication and
+authorization checks. Either <code>PasswordAuthenticator</code>, <code>MutualTlsWithPasswordFallbackAuthenticator</code>, or
+<code>MutualTlsAuthenticator</code> is active alongside <code>CassandraAuthorizer</code>, and all connections require TLS.
+Applications should use parameterized queries and never interpolate untrusted input directly into CQL
+strings.</p>
+</li>
+<li>
+<p><strong>Data content written by clients</strong>: Cassandra does not validate or sanitize the content of data written
+to user tables. It is the application&#8217;s responsibility to validate data before writing.</p>
+</li>
+<li>
+<p><strong>Inter-node messages from unauthorized sources</strong>: With inter-node encryption
+(<code>internode_encryption: all</code>) and mutual TLS active, unauthorized nodes cannot join the cluster or inject
+traffic. The residual threat is exploitation of vulnerabilities in the TLS implementation or certificate
+validation logic.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="client-driver-trust-model"><a class="anchor" href="#client-driver-trust-model"></a>Client Driver Trust Model</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Apache Cassandra client drivers (Java driver, Python driver, and other official drivers) operate under
+a trust model that mirrors the server-side assumptions in this document. Drivers assume they are
+connecting to a properly configured, non-compromised Apache Cassandra server. The trust relationship
+between a driver and a server is bidirectional:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The server authenticates and authorizes the client based on credentials or mutual TLS certificates
+presented by the driver.</p>
+</li>
+<li>
+<p>The driver, in turn, trusts that the server it is connected to is legitimate. With mutual TLS and
+certificate validation against a configured truststore, the driver verifies the server&#8217;s identity
+at the TLS layer before exchanging any CQL traffic.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Once the TLS handshake succeeds and the driver is connected to an authenticated server, the driver
+treats CQL protocol responses (result rows, schema metadata, server events) as well-formed and within
+protocol bounds. Drivers do not, in general, perform exhaustive validation that every length field,
+type code, or value in a server response conforms to the declared schema&#8201;&#8212;&#8201;doing so would duplicate
+the server&#8217;s own correctness guarantees and impose significant overhead on the protocol fast path
+(including native/Cython-accelerated parsing paths).</p>
+</div>
+<div class="paragraph">
+<p>Consequently, scenarios that require a <strong>malicious or compromised Cassandra-compatible server</strong>
+returning crafted protocol responses to attack a connected driver are outside the trust boundary of
+this threat model. If an attacker controls the server endpoint the driver is connected to, the
+attacker already has full access to every read and write the application performs through that
+connection; a client-side process crash, memory corruption, or resource exhaustion triggered by
+crafted response bytes is strictly less severe than the server compromise itself.</p>
+</div>
+<div class="paragraph">
+<p>Bugs of this nature (for example, insufficient bounds checking when parsing server responses,
+mishandling of malformed protocol frames, or driver crashes on out-of-spec server replies) remain
+legitimate correctness and robustness issues and should be reported through the project&#8217;s normal bug
+tracker. They are not, however, treated as security vulnerabilities under this threat model.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="threats"><a class="anchor" href="#threats"></a>Threats</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="1-unauthorized-data-access-cwe-284-improper-access-control"><a class="anchor" href="#1-unauthorized-data-access-cwe-284-improper-access-control"></a>1. Unauthorized Data Access (CWE-284: Improper Access Control)</h3>
+<div class="paragraph">
+<p><strong>Threat</strong>: Attackers gain unauthorized access to data stored in Cassandra despite authentication and
+authorization being active.</p>
+</div>
+<div class="paragraph">
+<p><strong>Attack Vectors</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Compromised or weak credentials allowing an attacker to authenticate as a legitimate user</p>
+</li>
+<li>
+<p>Exploiting overly permissive role grants that expose data beyond intended scope</p>
+</li>
+<li>
+<p>Direct access to SSTable files on disk, bypassing CQL-level access controls</p>
+</li>
+<li>
+<p>Exploiting vulnerabilities in the authentication or authorization subsystem to bypass access checks</p>
+</li>
+<li>
+<p>Compromised JMX credentials exposing data through MBean operations</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Active Controls</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Authentication</strong>: <code>PasswordAuthenticator</code>, <code>MutualTlsWithPasswordFallbackAuthenticator</code>, or
+<code>MutualTlsAuthenticator</code> is active; the default <code>cassandra</code> superuser account has been disabled and
+ replaced with a dedicated superuser. All client connections must authenticate via credentials or
+ mutual TLS client certificates.</p>
+</li>
+<li>
+<p><strong>Authorization</strong>: <code>CassandraAuthorizer</code> enforces role-based access control with keyspace and
+table-level permissions via <code>GRANT</code>/<code>REVOKE</code>. Permissions follow an allowlist model (no access
+unless explicitly granted).</p>
+</li>
+<li>
+<p><strong>File System Permissions</strong>: OS-level access to data directories, commit logs, and saved caches is
+restricted to the Cassandra process user. Where the Apache Cassandra Sidecar (control plane) is
+deployed alongside a node, it shares filesystem access with the Cassandra process for operations
+such as bulk import/export (data directories), CDC consumption (commit log directory), and live
+data migration. The Sidecar process is treated as a co-located trusted component subject to the
+same operator-level protections as the Cassandra process itself.</p>
+</li>
+<li>
+<p><strong>JMX Authentication</strong>: JMX is bound to the local interface only (<code>LOCAL_JMX=yes</code>), eliminating
+remote JMX attack surface. Cassandra integrated auth (<code>CassandraLogin</code> JAAS config) provides
+authentication even for local access.</p>
+</li>
+<li>
+<p><strong>Inter-node Encryption</strong>: <code>server_encryption_options</code> with <code>internode_encryption: all</code> and mutual
+TLS prevents unauthorized cluster participants.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Residual Risks</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Credential theft or brute-force attacks against authenticated accounts</p>
+</li>
+<li>
+<p>Privilege creep through accumulated role grants over time</p>
+</li>
+<li>
+<p>Compromise of an infrastructure operator who has OS-level access to data files</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="2-data-in-transit-interception-cwe-319-cleartext-transmission-of-sensitive-information"><a class="anchor" href="#2-data-in-transit-interception-cwe-319-cleartext-transmission-of-sensitive-information"></a>2. Data in Transit Interception (CWE-319: Cleartext Transmission of Sensitive Information)</h3>
+<div class="paragraph">
+<p><strong>Threat</strong>: Attackers intercept data transmitted between clients and nodes, or between nodes, despite
+TLS being active on all channels.</p>
+</div>
+<div class="paragraph">
+<p><strong>Attack Vectors</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Exploiting vulnerabilities in the TLS implementation or cipher suite negotiation</p>
+</li>
+<li>
+<p>Compromised or weak certificates enabling man-in-the-middle attacks</p>
+</li>
+<li>
+<p>Exploiting certificate validation flaws during SSL hot reloading</p>
+</li>
+<li>
+<p>Attacks against the certificate authority or key material</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Active Controls</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Client-to-Node Encryption</strong>: <code>client_encryption_options</code> is configured with <code>enabled: true</code> and
+<code>optional: false</code>, requiring TLS for all client connections.</p>
+</li>
+<li>
+<p><strong>Node-to-Node Encryption</strong>: <code>server_encryption_options</code> is configured with <code>internode_encryption: all</code>
+and mutual TLS certificate validation.</p>
+</li>
+<li>
+<p><strong>JMX Localhost Binding</strong>: JMX is bound to the local interface only (<code>LOCAL_JMX=yes</code>), so JMX traffic
+does not traverse the network. This eliminates the risk of JMX data-in-transit interception without
+requiring JMX SSL.</p>
+</li>
+<li>
+<p><strong>Certificate Management</strong>: CA-signed certificates are used with properly configured truststores for
+mutual authentication. Cassandra&#8217;s SSL certificate hot reloading (polling every 10 minutes, or
+triggered via <code>nodetool reloadssl</code>) supports certificate rotation without downtime.</p>
+</li>
+<li>
+<p><strong>FIPS Compliance</strong>: Where required, FIPS-compliant settings are configured at the JVM level.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Residual Risks</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Compromise of private key material or certificate authority</p>
+</li>
+<li>
+<p>Vulnerabilities in JVM TLS implementation (e.g., protocol downgrade attacks)</p>
+</li>
+<li>
+<p>Brief window during certificate rotation where old/new certificates coexist</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="3-data-tampering-and-integrity-cwe-345-insufficient-verification-of-data-authenticity"><a class="anchor" href="#3-data-tampering-and-integrity-cwe-345-insufficient-verification-of-data-authenticity"></a>3. Data Tampering and Integrity (CWE-345: Insufficient Verification of Data Authenticity)</h3>
+<div class="paragraph">
+<p><strong>Threat</strong>: Attackers modify data without authorization or corrupt data integrity despite active
+access controls.</p>
+</div>
+<div class="paragraph">
+<p><strong>Attack Vectors</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Authenticated users exploiting overly broad <code>MODIFY</code> permissions to alter data outside their
+intended scope</p>
+</li>
+<li>
+<p>Direct manipulation of SSTable files on disk by a compromised OS-level account</p>
+</li>
+<li>
+<p>Use of offline tools (<code>sstableloader</code>, <code>sstablescrub</code>) by a compromised operator to overwrite
+system or user tables</p>
+</li>
+<li>
+<p>Exploiting vulnerabilities in the authorization subsystem to bypass write restrictions</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Active Controls</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Fine-grained Authorization</strong>: <code>MODIFY</code> permissions are granted only to roles that require write
+access, scoped to specific keyspaces and tables.</p>
+</li>
+<li>
+<p><strong>Audit Logging</strong>: Audit logging is enabled for security-relevant categories that strike a balance
+between compliance and scalability on large systems. The recommended categories to include are
+AUTH, DCL, DDL, ERROR, OTHER, which captures authentication events, data control
+language (<code>GRANT</code>/<code>REVOKE</code>), data definition language (schema changes), errors, and other
+administrative operations. Capturing every <code>DML</code> (data modification) statement is generally not
+tenable at scale; deployers may opt in to <code>DML</code> auditing for specific keyspaces or roles where
+regulatory requirements demand it.</p>
+</li>
+<li>
+<p><strong>File System Permissions</strong>: SSTable files, commit logs, and hints are protected with restrictive
+OS-level permissions. Access to <code>sstableloader</code> and other offline tools is restricted to trusted
+operators or the control plane process (i.e. Cassandra Sidecar).</p>
+</li>
+<li>
+<p><strong>Inter-node Authentication</strong>: Mutual TLS on inter-node channels prevents unauthorized nodes from
+joining the cluster and injecting data.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Residual Risks</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A compromised infrastructure operator can bypass all CQL-level access controls via direct file
+manipulation</p>
+</li>
+<li>
+<p>Application-level logic errors that allow authenticated users to write unintended data within
+their granted permissions</p>
+</li>
+<li>
+<p><strong>Application-level Integrity</strong> <em>(developer responsibility)</em>: Implement checksums or application-level
+signatures where data integrity guarantees beyond Cassandra&#8217;s internal mechanisms are required</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="4-denial-of-service-cwe-400-uncontrolled-resource-consumption"><a class="anchor" href="#4-denial-of-service-cwe-400-uncontrolled-resource-consumption"></a>4. Denial of Service (CWE-400: Uncontrolled Resource Consumption)</h3>
+<div class="paragraph">
+<p><strong>Threat</strong>: Attackers disrupt Cassandra availability despite authentication requirements.</p>
+</div>
+<div class="paragraph">
+<p><strong>Attack Vectors</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Authenticated users executing resource-exhaustive queries (full table scans, unbounded reads,
+excessive tombstone reads)</p>
+</li>
+<li>
+<p>Authenticated users opening excessive connections to exhaust connection pools</p>
+</li>
+<li>
+<p>Compromised JMX credentials used to trigger disruptive operations (e.g., compaction, repair on
+overloaded nodes)&#8201;&#8212;&#8201;requires local access to the node since JMX is localhost-bound</p>
+</li>
+<li>
+<p>TLS handshake abuse to exhaust CPU resources on client or inter-node ports</p>
+</li>
+<li>
+<p>Network-level flooding against gossip or native transport ports (infrastructure-layer attack)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Active Controls</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Authentication Barrier</strong>: All client connections must authenticate, preventing anonymous abuse.
+TLS is required, raising the cost of connection flooding.</p>
+</li>
+<li>
+<p><strong>Rate Limiting</strong>: Client connection limits and native transport request throttling are configured.</p>
+</li>
+<li>
+<p><strong>Resource Limits</strong>: Read/write request timeouts, query result size limits, and tombstone thresholds
+are set in <code>cassandra.yaml</code>.</p>
+</li>
+<li>
+<p><strong>JMX Security</strong>: JMX is bound to the local interface only, eliminating remote JMX attack surface.
+Local JMX access is secured with Cassandra integrated auth.</p>
+</li>
+<li>
+<p><strong>Network Security</strong>: Firewalls and network segmentation are in place. All non-essential ports are
+closed.</p>
+</li>
+<li>
+<p><strong>Monitoring and Alerting</strong>: Unusual traffic patterns, query latency spikes, and resource exhaustion
+conditions are monitored.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Residual Risks</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Authenticated users with legitimate credentials can still craft expensive queries within their
+permissions</p>
+</li>
+<li>
+<p>TLS handshake cost amplification from unauthenticated network actors</p>
+</li>
+<li>
+<p><strong>Query Best Practices</strong> <em>(developer responsibility)</em>: Use prepared statements, avoid <code>ALLOW FILTERING</code>
+in production, set appropriate page sizes, and ensure queries are partition-aware</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="5-privilege-escalation-cwe-269-improper-privilege-management"><a class="anchor" href="#5-privilege-escalation-cwe-269-improper-privilege-management"></a>5. Privilege Escalation (CWE-269: Improper Privilege Management)</h3>
+<div class="paragraph">
+<p><strong>Threat</strong>: Attackers elevate privileges beyond their authorized level despite active RBAC and JMX
+authorization.</p>
+</div>
+<div class="paragraph">
+<p><strong>Attack Vectors</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Exploiting overly permissive role grants that accumulate over time (privilege creep)</p>
+</li>
+<li>
+<p>Credential theft targeting superuser or DBA accounts</p>
+</li>
+<li>
+<p>Exploiting vulnerabilities in the <code>CassandraAuthorizer</code>, <code>PasswordAuthenticator</code>,
+<code>MutualTlsWithPasswordFallbackAuthenticator</code> or <code>MutualTlsAuthenticator</code> to bypass access checks</p>
+</li>
+<li>
+<p>Exploiting inconsistencies between CQL authorization and JMX authorization scopes</p>
+</li>
+<li>
+<p>Exploiting role hierarchy (<code>GRANT role TO role</code>) to gain unintended transitive permissions</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Active Controls</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Default Superuser Disabled</strong>: The default <code>cassandra</code> role has been removed or disabled (<code>ALTER
+ROLE cassandra WITH SUPERUSER = false AND LOGIN = false</code>) and replaced with a dedicated superuser.
+When <code>PasswordAuthenticator</code> (or the password fallback path of
+<code>MutualTlsWithPasswordFallbackAuthenticator</code>) is in use, the dedicated superuser is protected by a
+strong password. When <code>MutualTlsAuthenticator</code> is in use, the dedicated superuser is a passwordless
+role bound to a specific administrative mTLS identity (client certificate) via the configured
+certificate-to-role mapping; password-based login is not required and is not the only acceptable
+hardening for the superuser role.</p>
+</li>
+<li>
+<p><strong>Principle of Least Privilege</strong>: Permissions are granted at the minimum necessary scope using <code>GRANT</code>
+statements scoped to specific keyspaces, tables, or MBeans.</p>
+</li>
+<li>
+<p><strong>Role Separation</strong>: Administrative (superuser), operational (JMX), and application roles are separated.
+Cassandra&#8217;s role hierarchy (<code>GRANT role TO role</code>) is used to manage permissions cleanly.</p>
+</li>
+<li>
+<p><strong>Unified JMX Authorization</strong>: Cassandra integrated JMX auth (<code>CassandraLogin</code> JAAS config<br>
+<code>AuthorizationProxy</code>) unifies CQL and JMX access control with fine-grained MBean permissions.</p>
+</li>
+<li>
+<p><strong>Inter-node Encryption</strong>: Mutual TLS prevents unauthorized manipulation of <code>system_auth</code> tables via
+crafted inter-node messages.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Residual Risks</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Privilege creep if role grants are not periodically audited (<code>LIST ALL PERMISSIONS</code>)</p>
+</li>
+<li>
+<p>Compromise of a superuser account grants full cluster control</p>
+</li>
+<li>
+<p>Complex role hierarchies may create unintended transitive permission paths</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="6-information-disclosure-cwe-200-exposure-of-sensitive-information"><a class="anchor" href="#6-information-disclosure-cwe-200-exposure-of-sensitive-information"></a>6. Information Disclosure (CWE-200: Exposure of Sensitive Information)</h3>
+<div class="paragraph">
+<p><strong>Threat</strong>: Attackers gain access to sensitive system information, metadata, or credentials despite active
+access controls.</p>
+</div>
+<div class="paragraph">
+<p><strong>Attack Vectors</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Authenticated users with overly broad permissions reading <code>system_auth</code> tables (role definitions,
+hashed credentials, permission grants) or other deployment-restricted resources</p>
+</li>
+<li>
+<p>Compromised JMX credentials exposing configuration details, memory state, and operational metrics
+beyond intended scope&#8201;&#8212;&#8201;requires local access to the node since JMX is localhost-bound</p>
+</li>
+<li>
+<p>Log files containing sensitive information (credentials, query data, stack traces) accessible to unauthorized parties</p>
+</li>
+<li>
+<p>CQL error messages revealing internal system details to authenticated non-superuser clients</p>
+</li>
+<li>
+<p>Timing or error-based information leakage through CQL query responses</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Active Controls</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>System Table Permissions</strong>: Access to <code>system_auth</code> (which stores role definitions, hashed
+credentials, and permission grants) is restricted&#8201;&#8212;&#8201;non-superusers must be explicitly granted
+<code>SELECT</code> to read it. DDL against local and replicated system keyspaces is blocked by the
+authorization layer regardless of grants (only replication parameters of replicated system
+keyspaces may be altered by sufficiently privileged users).</p>
+</li>
+<li>
+<p><strong>Schema and Topology Metadata (intentionally exposed)</strong>: <code>system_schema</code> (schema metadata) and the
+topology-bearing tables in the <code>system</code> keyspace (<code>local</code>, <code>peers_v2</code>, size/table estimates) are
+readable by every authenticated user by design. Drivers and CQL tooling depend on this&#8201;&#8212;&#8201;for
+example, <code>DESCRIBE schema;</code> and routine driver bootstrap require it. Schema and cluster topology
+are therefore not treated as confidential under this model; the deployment relies on the trust
+placed in authenticated clients (see the Client Driver Trust Model above).</p>
+</li>
+<li>
+<p><strong>JMX Access Control</strong>: JMX is bound to the local interface only, restricting access to users with
+local access to the node. Fine-grained MBean permissions limit what authenticated JMX users can
+observe. Monitoring roles are granted only <code>SELECT</code> and <code>DESCRIBE</code>.</p>
+</li>
+<li>
+<p><strong>Log Management</strong>: Access to log files is restricted at the OS level. Production log levels are
+configured to avoid logging sensitive data.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Residual Risks</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Schema, keyspace/table/column names, and cluster topology are readable by every authenticated user
+by design; deployers must not encode sensitive information into schema identifiers and should
+treat that metadata as non-confidential</p>
+</li>
+<li>
+<p>Authenticated users may infer data distribution through permitted query patterns</p>
+</li>
+<li>
+<p>Log files may inadvertently contain sensitive data if log levels are changed during debugging</p>
+</li>
+<li>
+<p><strong>Log Hygiene</strong> <em>(developer responsibility)</em>: Do not log credentials, authentication tokens, or
+sensitive user data. Document which log levels may contain sensitive information.</p>
+</li>
+<li>
+<p><strong>Error Handling</strong> <em>(framework responsibility)</em>: Cassandra should avoid exposing internal stack
+traces or system details in CQL error responses to non-superuser clients.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="7-supply-chain-and-dependency-attacks-cwe-1357-reliance-on-insufficiently-trustworthy-component"><a class="anchor" href="#7-supply-chain-and-dependency-attacks-cwe-1357-reliance-on-insufficiently-trustworthy-component"></a>7. Supply Chain and Dependency Attacks (CWE-1357: Reliance on Insufficiently Trustworthy Component)</h3>
+<div class="paragraph">
+<p><strong>Threat</strong>: Attackers compromise Cassandra through malicious or vulnerable dependencies or tampered
+distribution packages.</p>
+</div>
+<div class="paragraph">
+<p><strong>Attack Vectors</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Compromised third-party libraries included in the Cassandra distribution</p>
+</li>
+<li>
+<p>Tampered distribution packages obtained from unofficial sources</p>
+</li>
+<li>
+<p>Vulnerable dependencies with known CVEs</p>
+</li>
+<li>
+<p>Compromised build infrastructure or release process</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Active Controls</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Verified Distribution</strong>: Cassandra is obtained from official Apache distribution channels with
+release signatures verified against the
+<a href="https://downloads.apache.org/cassandra/KEYS">Apache Cassandra PMC KEYS file</a>. Artifacts without
+valid signatures are not used.</p>
+</li>
+<li>
+<p><strong>Dependency Management</strong> <em>(framework)</em>: The Apache Cassandra project checks the quality of its
+dependencies and monitors for known vulnerabilities.</p>
+</li>
+<li>
+<p><strong>Security Patches</strong>: Security updates are applied promptly. The
+<a href="mailto:security@cassandra.apache.org">Cassandra security mailing list</a> is monitored for vulnerability
+announcements.</p>
+</li>
+<li>
+<p><strong>JVM Updates</strong>: The underlying JVM is kept up-to-date with security patches, as Cassandra inherits the
+JVM&#8217;s cryptographic and network security properties.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Residual Risks</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Zero-day vulnerabilities in dependencies that have not yet been disclosed or patched</p>
+</li>
+<li>
+<p>Compromise of the Apache release infrastructure itself</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="8-log-injection-cwe-117-improper-output-neutralization-for-logs"><a class="anchor" href="#8-log-injection-cwe-117-improper-output-neutralization-for-logs"></a>8. Log Injection (CWE-117: Improper Output Neutralization for Logs)</h3>
+<div class="paragraph">
+<p><strong>Threat</strong>: Attackers inject malicious content into log files through crafted input, hiding malicious
+activity or corrupting log analysis. This threat applies even with all security features enabled,
+as authenticated users can submit crafted data through legitimate CQL operations.</p>
+</div>
+<div class="paragraph">
+<p><strong>Attack Vectors</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Crafted CQL query strings or data values that inject log control characters</p>
+</li>
+<li>
+<p>Manipulated client connection metadata (e.g., role names) appearing in log output</p>
+</li>
+<li>
+<p>Exploitation of structured log format parsing through specially crafted values</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Active Controls</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Authentication Barrier</strong>: Only authenticated users can submit queries, limiting the attack surface
+to known identities and providing an audit trail.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Residual Risks</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Authenticated users can still inject log content through legitimate CQL operations</p>
+</li>
+<li>
+<p><strong>Structured Logging</strong> <em>(framework responsibility)</em>: Where possible, use structured log formats (JSON,
+etc.) that properly escape special characters.</p>
+</li>
+<li>
+<p><strong>Log Validation</strong> <em>(deployer responsibility)</em>: Use log aggregation systems that are resilient to
+injection attacks.</p>
+</li>
+<li>
+<p><strong>Input Awareness</strong> <em>(developer responsibility)</em>: Be aware that client-supplied values may appear in
+Cassandra logs. Do not rely on unstructured log output for security-critical decisions.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="9-improper-neutralization-of-special-elements-in-cql-cwe-138"><a class="anchor" href="#9-improper-neutralization-of-special-elements-in-cql-cwe-138"></a>9. Improper Neutralization of Special Elements in CQL (CWE-138)</h3>
+<div class="paragraph">
+<p><strong>Threat</strong>: Attackers exploit improperly constructed CQL queries to execute unauthorized operations.
+This is an application-layer threat that persists regardless of Cassandra&#8217;s security configuration,
+as it targets how client applications construct queries.</p>
+</div>
+<div class="paragraph">
+<p><strong>Attack Vectors</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>CQL injection through string concatenation of untrusted input into queries within client applications</p>
+</li>
+<li>
+<p>Exploitation of application-level query construction flaws to escalate operations within the
+permissions of the application&#8217;s database role</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Active Controls</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Authorization Boundary</strong>: Even if CQL injection succeeds, the injected operations are limited to
+the permissions of the authenticated application role. Fine-grained authorization limits the blast
+radius.</p>
+</li>
+<li>
+<p><strong>Audit Logging</strong>: Injected queries that fall within audited categories (e.g., authentication, DCL,
+DDL, errors) are captured in audit logs, supporting detection and forensic analysis. Detection of
+injection within DML statements requires opting in to DML auditing for the targeted scope.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Residual Risks</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Within the application role&#8217;s permissions, an attacker can read, modify, or delete any data the role
+has access to</p>
+</li>
+<li>
+<p><strong>Parameterized Queries</strong> <em>(developer responsibility)</em>: Always use prepared statements with bound
+parameters.
+Never concatenate untrusted input into CQL query strings.</p>
+</li>
+<li>
+<p><strong>Input Validation</strong> <em>(developer responsibility)</em>: Validate and sanitize all user input at the
+application boundary before constructing CQL queries.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="responsibility-matrix"><a class="anchor" href="#responsibility-matrix"></a>Responsibility Matrix</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 57.1428%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2858%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Responsibility</th>
+<th class="tableblock halign-center valign-top">Deployer</th>
+<th class="tableblock halign-center valign-top">Developer</th>
+<th class="tableblock halign-center valign-top">Framework</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maintain authentication configuration and credential strength</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maintain authorization and role-based access control</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maintain TLS encryption on all channels</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Protect configuration files, key material, and certificates</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Manage firewall rules and network segmentation</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maintain appropriate replication for <code>system_auth</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Rotate credentials and certificates periodically</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Audit role grants and permissions regularly</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maintain JMX security and access restrictions</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Monitor and respond to security events</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Use parameterized CQL queries</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Validate user input before passing to CQL</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Manage application credentials securely</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Avoid logging sensitive data</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prevent log injection in structured log layouts</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Verify integrity of dependencies</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Provide secure defaults and security documentation</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">X</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="security-configuration-baseline"><a class="anchor" href="#security-configuration-baseline"></a>Security Configuration Baseline</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This threat model assumes the following security configuration is active. All threats and residual
+risks are evaluated against this hardened baseline:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Authentication</strong>: <code>PasswordAuthenticator</code>, <code>MutualTlsWithPasswordFallbackAuthenticator</code> or
+<code>MutualTlsAuthenticator</code> is configured (not <code>AllowAllAuthenticator</code>). The default <code>cassandra</code>
+superuser account is removed or disabled. A dedicated superuser is in use. When using
+<code>PasswordAuthenticator</code> (or the password fallback path of
+<code>MutualTlsWithPasswordFallbackAuthenticator</code>), strong passwords are enforced. When using
+<code>MutualTlsAuthenticator</code>, the dedicated superuser is a passwordless role bound to a specific
+administrative mTLS identity, and client certificate validation is enforced through the TLS
+truststore. Either form&#8201;&#8212;&#8201;a strong password under password-based authentication, or a passwordless
+role bound to an administrative certificate identity under mutual TLS&#8201;&#8212;&#8201;satisfies this baseline.</p>
+</li>
+<li>
+<p><strong>Authorization</strong>: <code>CassandraAuthorizer</code> is configured (not <code>AllowAllAuthorizer</code>). Permissions
+follow an allowlist model&#8201;&#8212;&#8201;no access is granted unless explicitly assigned via <code>GRANT</code>.</p>
+</li>
+<li>
+<p><strong>Client-to-Node Encryption</strong>: <code>client_encryption_options</code> is enabled with <code>optional: false</code>,
+requiring TLS for all client connections.</p>
+</li>
+<li>
+<p><strong>Node-to-Node Encryption</strong>: <code>server_encryption_options</code> is configured with
+<code>internode_encryption: all</code> and mutual TLS with certificate validation.</p>
+</li>
+<li>
+<p><strong>JMX Security</strong>: JMX is bound to the local interface only (<code>LOCAL_JMX=yes</code> in <code>cassandra-env.sh</code>),
+restricting access to the localhost. JMX uses Cassandra integrated authentication and authorization
+(<code>CassandraLogin</code> JAAS config + <code>AuthorizationProxy</code>). If remote JMX access is operationally required,
+it must be enabled with SSL and Cassandra integrated auth; however, localhost-only binding is the
+recommended and assumed configuration.</p>
+</li>
+<li>
+<p><strong><code>system_auth</code> Replication</strong>: The <code>system_auth</code> keyspace is configured with <code>NetworkTopologyStrategy</code>
+and a replication factor of 3-5 per datacenter.</p>
+</li>
+<li>
+<p><strong>Audit Logging</strong>: Audit logging is enabled with the <code>AUTH,DCL,DDL,ERROR,OTHER</code> categories to
+capture authentication, authorization changes, schema changes, errors, and administrative operations.
+This baseline balances compliance and scalability; auditing <code>DML</code> is opt-in and should be scoped to
+specific keyspaces or roles where required.</p>
+</li>
+<li>
+<p><strong>Network Security</strong>: Firewalls and network segmentation are in place. All non-essential ports are closed.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="security-assumptions"><a class="anchor" href="#security-assumptions"></a>Security Assumptions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This threat model further assumes:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Cassandra has been configured correctly from a security point of view</strong>, with all security features
+enabled and properly configured as described in the Security Configuration Baseline above</p>
+</li>
+<li>
+<p>Cassandra is deployed on trusted infrastructure with proper OS-level security hardening</p>
+</li>
+<li>
+<p>Network infrastructure is secured with appropriate firewalls and segmentation</p>
+</li>
+<li>
+<p>Infrastructure operators and administrators are trusted and follow security best practices</p>
+</li>
+<li>
+<p>The underlying JVM is kept up-to-date with security patches</p>
+</li>
+<li>
+<p>Physical security of servers is maintained</p>
+</li>
+<li>
+<p>The Cassandra distribution has been obtained from official Apache channels and verified with release signatures</p>
+</li>
+<li>
+<p>SSL/TLS key material is properly generated, stored, and rotated</p>
+</li>
+<li>
+<p>Credentials are strong, unique, and managed through a secure credential management process. For
+password-based authentication this means strong, rotated passwords; for mutual TLS authentication
+this means properly issued, scoped, and rotated client certificates whose subject identity is bound
+to a specific Cassandra role (which may be passwordless)</p>
+</li>
+<li>
+<p>Any pluggable implementation of a Cassandra interface or SPI (authenticators, authorizers, snitches,
+seed providers, partitioners, compressors, SSL context factories, audit loggers, triggers, UDFs,
+startup checks, etc.) and any JAR placed on the Cassandra classpath is sourced from a trusted vendor
+and treated as part of the trusted code base; third-party implementations are outside the control of
+the Apache Cassandra project</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="vulnerability-reporting-scope"><a class="anchor" href="#vulnerability-reporting-scope"></a>Vulnerability Reporting Scope</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Vulnerability reports against Apache Cassandra should adhere to the assumptions and trust boundaries
+defined in this threat model. This model assumes a correctly configured, fully hardened Cassandra
+deployment. Specifically:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Reports that assume a trusted user (administrator, infrastructure operator) is the attacker are
+<strong>out of scope</strong>, as these users are inherently trusted with full system access.</p>
+</li>
+<li>
+<p>Reports that require OS-level or physical access to Cassandra nodes are <strong>out of scope</strong>, as
+infrastructure security is a prerequisite assumption.</p>
+</li>
+<li>
+<p>Reports that require security features to be disabled or misconfigured (e.g., using
+<code>AllowAllAuthenticator</code> or unencrypted connections) are <strong>out of scope</strong>, as this threat model
+assumes correct security configuration.</p>
+</li>
+<li>
+<p>Reports demonstrating bypass of enabled authentication, authorization, or encryption controls
+are <strong>in scope</strong> and will be treated with appropriate severity.</p>
+</li>
+<li>
+<p>Reports demonstrating vulnerabilities that persist despite correct security configuration
+(e.g., flaws in the <code>PasswordAuthenticator</code>, <code>MutualTlsWithPasswordFallbackAuthenticator</code>,
+<code>MutualTlsAuthenticator</code>, <code>CassandraAuthorizer</code>, or TLS implementation) are <strong>in scope</strong>.</p>
+</li>
+<li>
+<p>Reports against Apache Cassandra client drivers (Java, Python, etc.) that require a malicious
+or compromised Cassandra server returning crafted CQL protocol responses are <strong>out of scope</strong>.
+Drivers assume they are connected to a trusted, properly configured Apache Cassandra server,
+with TLS verifying server trust where applicable. Such reports should be filed as correctness
+or robustness bugs through the project&#8217;s normal bug tracker.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To report a vulnerability, follow the <a href="https://www.apache.org/security/">Apache Security Team process</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="out-of-scope"><a class="anchor" href="#out-of-scope"></a>Out of Scope</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following are considered out of scope for this threat model:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Vulnerabilities in the underlying operating system, JVM, or hardware</p>
+</li>
+<li>
+<p>Physical attacks on servers</p>
+</li>
+<li>
+<p>Social engineering attacks targeting administrators</p>
+</li>
+<li>
+<p>Application-level vulnerabilities in client code</p>
+</li>
+<li>
+<p>Backup and disaster recovery security (covered separately)</p>
+</li>
+<li>
+<p>Side-channel attacks: While we acknowledge that timing or resource-usage-based side channels may exist,
+they are out of scope for the current threat model. Where practical, we will adopt software hardening to
+mitigate known side-channel vectors.</p>
+</li>
+<li>
+<p>Log masking: It is the developer&#8217;s responsibility to ensure sensitive data is properly masked before
+passing it to CQL or logging. Third-party frameworks should be used for this purpose.</p>
+</li>
+<li>
+<p>Denial of service at the network/infrastructure layer (e.g., volumetric DDoS)&#8201;&#8212;&#8201;this is an infrastructure
+concern, not a Cassandra application concern.</p>
+</li>
+<li>
+<p>Driver-side bugs triggered by responses from a malicious or compromised Cassandra-compatible server
+(e.g., crashes, buffer overflows, or resource exhaustion in driver protocol parsers when fed crafted server
+replies). Drivers operate under the assumption that they are connected to a trusted, properly configured
+Apache Cassandra server; an attacker who controls the server endpoint is already past the trust boundary
+that drivers protect. These should be filed as correctness bugs rather than security vulnerabilities.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="references"><a class="anchor" href="#references"></a>References</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="/doc/latest/cassandra/operating/security.html">Apache Cassandra Security Documentation</a></p>
+</li>
+<li>
+<p><a href="/doc/latest/cassandra/configuration/">Apache Cassandra Configuration Reference</a></p>
+</li>
+<li>
+<p><a href="https://cve.mitre.org/">CVE Database</a></p>
+</li>
+<li>
+<p><a href="https://www.apache.org/security/">Apache Security Team</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+</main>
+    </div>
+</div>
+            <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://bsky.app/profile/cassandra.apache.org" target="_blank"><img src="../../../../assets/img/bluesky.png" alt="bluesky icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+    <script src="../../../../assets/js/site.js"></script>
+    <script async src="../../../../assets/js/vendor/highlight.js"></script>
+    <script src="../../../../assets/js/vendor/lunr.js"></script>
+    <script src="../../../../assets/js/vendor/search.js" id="search-script" data-base-path="../../../.." data-page-path="/Cassandra/7.0/cassandra/reference/security-model.html"></script>
+    <script async src="../../../../assets/../search-index.js"></script>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+        </div>
+    </body>
+</html>
