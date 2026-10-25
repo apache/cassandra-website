@@ -65,62 +65,59 @@ There are also some fixed rules that you need to be aware::
 
 ==== Choosing the Right Branches to Work on
 
-There are currently multiple Cassandra versions maintained in individual
-branches:
+Each Cassandra version has its own branch. What a branch accepts
+depends on the stage of that version:
 
 [cols=",",options="header",]
 |===
-|Version |Policy
-|4.0     |Code freeze (see below)
-|3.11    |Critical bug fixes only
-|3.0     |Critical bug fixes only
-|2.2     |Critical bug fixes only
-|2.1     |Critical bug fixes only
+|Version stage |What is accepted
+|Released (GA) and still supported
+|Critical bug fixes only
+|Past alpha, but not released yet
+|Code freeze (see below). No new features or improvements. The goal is
+to make the release stable.
+|End of life (EOL)
+|Nothing. These versions are no longer maintained.
 |===
 
-Corresponding branches in git are easy to recognize as they are named
-`cassandra-<release>` (e.g. `cassandra-3.0`). The `trunk` branch is an
-exception, as it contains the most recent commits from all other
-branches and is used for creating new branches for future tick-tock
-releases.
+To see which versions are in each stage, check the
+xref:download.adoc[Downloads] page. It is updated on every release.
 
-==== 4.0 Code Freeze
+Release branches are named `cassandra-<version>`, for example
+`cassandra-5.0`. The `trunk` branch is different: it holds the newest
+work, including new features, and new release branches are created
+from it.
 
-Patches for new features are currently not accepted for 4.0 or any
-earlier versions.
-All efforts should focus on stabilizing the 4.0 branch before the first
-official release. During that time, only the following patches will be
-considered for acceptance:
+==== Code Freeze
+
+When a version is past alpha but not released yet, it is in code
+freeze. New features and improvements are not accepted. Only these
+changes are accepted:
 
 * Bug fixes
-* Measurable performance improvements
-* Changes not distributed as part of the release such as:
-* Testing related improvements and fixes
-* Build and infrastructure related changes
-* Documentation
+* Changes that are not part of the released software, such as:
+** Tests
+** Build and infrastructure changes
+** Documentation
 
 ==== Bug Fixes
 
-Creating patches for bug fixes is a bit more complicated and will
-depend on how many different versions of Cassandra are affected. In each
-case, the order for merging such changes will be `cassandra-2.1` ->
-`cassandra-2.2` -> `cassandra-3.0` -> `cassandra-3.x` -> `trunk`.
-But don't worry, merging from 2.1 would be the worst case for bugs that
-affect all currently supported versions, an uncommon event. As a
-contributor, you're also not expected to provide a single patch for each
-version. What you need to do however is:
+A bug can affect more than one supported version. Fix it in the oldest
+supported version that has the bug, then carry the fix forward to each
+newer supported version, and finally to `trunk`. End-of-life versions
+are skipped. Check the xref:download.adoc[Downloads] page for the
+supported versions.
 
-* Be clear about which versions you could verify to be affected by the
-bug
-* For 2.x: ask if a bug qualifies to be fixed in this release line, as
-this may be handled on case by case bases
-* If possible, create a patch against the lowest version in the branches
-listed above (e.g. if you found the bug in 3.9 you should try to fix it
-already in 3.0)
-* Test if the patch can be merged cleanly across branches in the
-direction listed above
-* Be clear which branches may need attention by the committer or even
-create custom patches for those if you can
+You do not need to write a separate patch for every version. You
+should:
+
+* Say which versions you checked and found the bug in
+* If you can, make the patch on the oldest supported version that has
+the bug
+* Check that the patch applies cleanly to each newer supported version
+and to `trunk`
+* Say which branches may need extra work from the committer, or make
+separate patches for them if you can
 
 === Creating a Patch
 
