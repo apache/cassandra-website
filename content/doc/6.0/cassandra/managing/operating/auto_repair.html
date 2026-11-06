@@ -1,0 +1,1963 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Auto Repair | Apache Cassandra Documentation</title>
+            <link rel="stylesheet" href="../../../../../assets/css/site.css">
+    <meta name="description" content="Auto Repair concepts - How it works, how to configure it, and more.">
+    <meta name="keywords" content="CEP-37, Repair, Incremental, Preview">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="Cassandra">
+    <meta name="dcterms.identifier" content="6.0">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../../../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "../../../../../assets/js/vendor/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>
+<script src="../../../../../assets/js/vendor/jquery.js"></script>
+    </head>
+    <body class="docs-wrapper article">
+        <div class="container mx-auto relative">
+                <meta property="og:type" content="website" />
+	<meta property="og:description" content="" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+         <div class="header-social-icons text-right">
+            <a href="https://bsky.app/profile/cassandra.apache.org" target="_blank" styles="margin-left: 20px;"><img src="../../../../../assets/img/bluesky.png" alt="bluesky icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../../../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+            <div class="hero hero--home grad">
+                <div class="eye"></div>
+                <div id="docs-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                    <h2>Cassandra Documentation</h2>
+                </div>
+            </div>
+            <div class="body px-medium py-medium container">
+    <div class="docs-nav-bar flex flex-space-between mb-medium">
+      <div id="mobile-docs-nav-burger" class="hidden">
+        <svg viewBox="0 0 24 24" width="36" height="36" stroke="#1c81a0" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </div>
+        <div class="docs-nav-item relative">
+          <input id="search-input" type="text" placeholder="Search docs">
+        </div>
+      <div class="versions-wrapper">
+  <h4>Version:</h4>
+  <div class="nav-panel-explore" data-panel="explore">
+
+    <div id="version-toggle" class="context">
+      <span class="version">6.0</span>
+    </div>
+    <ul id="versions-list" class="components">
+      <li class="component">
+        <ul class="versions">
+          <li class="version is-latest">
+            <a href="../../../../../_/index.html">website</a>
+          </li>
+        </ul>
+      </li>
+      <li class="component is-current">
+        <ul class="versions">
+          <li class="version">
+            <a href="../../../../7.0/index.html">7.0</a>
+          </li>
+          <li class="version is-current">
+            <a href="../../../index.html">6.0</a>
+          </li>
+          <li class="version is-latest">
+            <a href="../../../../6.0-alpha2/index.html">6.0-alpha2</a>
+          </li>
+          <li class="version">
+            <a href="../../../../5.0.9/index.html">5.0.9</a>
+          </li>
+          <li class="version">
+            <a href="../../../../5.0.8/index.html">5.0.8</a>
+          </li>
+          <li class="version">
+            <a href="../../../../5.0/index.html">5.0</a>
+          </li>
+          <li class="version">
+            <a href="../../../../4.1/index.html">4.1</a>
+          </li>
+          <li class="version">
+            <a href="../../../../4.0/index.html">4.0</a>
+          </li>
+          <li class="version">
+            <a href="../../../../3.11/index.html">3.11</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>    </div>
+    <div class="cf relative">
+        <nav class="nav docs-nav full-800">
+<div class="nav-menu">
+<ul class="nav-list">
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../index.html">Main</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/glossary.html">Glossary</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="#master@_:ROOT:bugs.adoc">How to report bugs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/community.html">Contact us</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../../_/development/index.html">Development</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/gettingstarted.html">Getting started</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/ide.html">Building and IDE integration</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/testing.html">Testing</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/patches.html">Contributing code changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/code_style.html">Code style</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/how_to_review.html">Review checklist</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/how_to_commit.html">How to commit</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/documentation.html">Working on documentation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/ci.html">Jenkins CI environment</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/dependencies.html">Dependency management</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../../_/development/release_process.html">Release process</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item is-current-path is-active" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <span class="nav-text">Cassandra</span>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../overview/faq/index.html">FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../getting-started/index.html">Getting Started</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/cassandra-quickstart.html">Cassandra Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../installing/installing.html">Installing Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/configuring.html">Configuring Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/querying.html">Inserting and querying</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/drivers.html">Client drivers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/production.html">Production recommendations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../new/index.html">What&#8217;s new</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/java17.html">Support for Java</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../architecture/index.html">Architecture</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/overview.html">Overview</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/dynamo.html">Dynamo</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/storage-engine.html">Storage Engine</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/guarantees.html">Guarantees</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/messaging.html">Improved Internode Messaging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/streaming.html">Improved Streaming</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../architecture/accord.html">Accord</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/accord-architecture.html">Accord Architecture</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../architecture/cql-on-accord.html">Developers guide to CQL on Accord</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../developing/data-modeling/index.html">Data Modeling</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/intro.html">Introduction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_conceptual.html">Conceptual data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_rdbms.html">RDBMS design</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_queries.html">Defining application queries</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_logical.html">Logical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_physical.html">Physical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_refining.html">Evaluating and refining data models</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_schema.html">Defining database schema</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/data-modeling/data-modeling_tools.html">Cassandra data modeling tools</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../developing/cql/index.html">Cassandra Query Language (CQL)</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/definitions.html">Definitions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/types.html">Data types</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/ddl.html">Data definition (DDL)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/dml.html">Data manipulation (DML)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/dynamic-data-masking.html">Dynamic Data Masking (DDM)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/operators.html">Operators</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../developing/cql/indexing/indexing-concepts.html">Indexing concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../developing/cql/indexing/sai/sai-overview.html">SAI Overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/indexing/sai/sai-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/indexing/sai/sai-faq.html">SAI FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/indexing/sai/sai-working-with.html">Working with SAI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/indexing/sai/operations/sai-operations.html">SAI operations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../developing/cql/indexing/2i/2i-overview.html">Secondary indexes (2i) overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/indexing/2i/2i-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/indexing/2i/2i-working-with.html">Working with 2i</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/indexing/2i/operations/2i-build.html">Rebuild 2i</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/mvs.html">Materialized views</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/functions.html">Functions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/json.html">JSON</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/triggers.html">Triggers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/constraints.html">Constraints</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/appendices.html">Appendices</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/changes.html">Changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/SASI.html">SASI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/cql_singlefile.html">Single file of CQL information</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../vector-search/overview.html">Vector Search overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../vector-search/concepts.html">Concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../vector-search/data-modeling.html">Vector Search : Data Modeling</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../vector-search/vector-search-working-with.html">Working with Vector Search</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-path is-active" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../index.html">Managing</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../configuration/index.html">Configuring</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_yaml_file.html">cassandra.yaml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_rackdc_file.html">cassandra-rackdc.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_env_sh_file.html">cassandra-env.sh</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_topo_file.html">cassandra-topologies.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_cl_archive_file.html">commitlog-archiving.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_logback_xml_file.html">logback.xml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/cass_jvm_options_file.html">jvm-* files</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../configuration/configuration.html">Liberating cassandra.yaml Parameters' Names from Their Units</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-path is-active" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="index.html">Operating</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="backups.html">Backups</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="bloom_filters.html">Bloom filters</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="bulk_loading.html">Bulk loading</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="cdc.html">Change Data Capture (CDC)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="compaction/index.html">Compaction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="compression.html">Compression</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="hardware.html">Hardware</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="hints.html">Hints</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="logging.html">Logging</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="auditlogging.html">Audit logging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="audit_logging.html">Audit logging 2</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="fqllogging.html">Full query logging</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="metrics.html">Monitoring metrics</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="repair.html">Repair</a>
+    </span>
+  </li>
+  <li class="nav-item is-current-page is-active" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="auto_repair.html">Auto Repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="read_repair.html">Read repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="snitch.html">Snitches</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="topo_changes.html">Topology changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="transientreplication.html">Transient replication</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="virtualtables.html">Virtual tables</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="password_validation.html">Password validation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="role_name_generation.html">Role name generation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="onboarding-to-accord.html">Onboarding to Accord</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="async-profiler.html">Async-profiler</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../tools/index.html">Tools</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../tools/cqlsh.html">cqlsh: the CQL shell</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../tools/nodetool/nodetool.html">nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../tools/sstable/index.html">SSTable tools</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../../tooling/cassandra-stress.html">cassandra-stress</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../troubleshooting/index.html">Troubleshooting</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../troubleshooting/finding_nodes.html">Finding misbehaving nodes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../troubleshooting/reading_logs.html">Reading Cassandra logs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../troubleshooting/use_nodetool.html">Using nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../troubleshooting/use_tools.html">Using external tools to deep-dive</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../reference/index.html">Reference</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/cql-commands/commands-toc.html">CQL commands</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../developing/cql/cql_singlefile.html">CQL specification</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/java17.html">Java 17</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/native-protocol.html">Native Protocol specification</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/sai-virtual-table-indexes.html">SAI virtual table</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/static.html">Static columns</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../reference/vector-data-type.html">Vector data type</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../integrating/plugins/index.html">Plug-ins</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+</div>
+</nav>
+        <aside class="toc sidebar">
+  <div class="toc-menu"></div>
+</aside>
+        <main class="article default-main full-800" data-ceiling="topbar">
+  <div class="article-banner">
+    <p>You are viewing the documentation for a prerelease version.</p>
+    <a class="btn" href="../../../../6.0-alpha2/cassandra/managing/operating/auto_repair.html">View Latest</a>
+  </div>
+  <div class="article-header">
+<nav class="crumbs" aria-label="breadcrumbs">
+  <ul>
+    <li class="crumb">Cassandra</li>
+    <li class="crumb"><a href="../index.html">Managing</a></li>
+    <li class="crumb"><a href="index.html">Operating</a></li>
+    <li class="crumb"><a href="auto_repair.html">Auto Repair</a></li>
+  </ul>
+</nav>
+<div class="tools" role="navigation">
+  <ul>
+    <li class="tool edit"><a href="https://github.com/apache/cassandra/edit/cassandra-6.0/doc/modules/cassandra/pages/managing/operating/auto_repair.adoc" title="Edit Page" target="_blank" rel="noopener">Edit</a></li>
+  </ul>
+</div>
+  </div>
+<article class="doc">
+<h1 class="page">Auto Repair</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Auto Repair is a fully automated scheduler that provides repair orchestration within Apache Cassandra. This
+significantly reduces operational overhead by eliminating the need for operators to deploy external tools to submit and
+manage repairs.</p>
+</div>
+<div class="paragraph">
+<p>At a high level, a dedicated thread pool is assigned to the repair scheduler. The repair scheduler in Cassandra
+maintains a new replicated table, <code>system_distributed.auto_repair_history</code>, which stores the repair history for all
+nodes, including details such as the last repair time. The scheduler selects the node(s) to begin repairs and
+orchestrates the process to ensure that every table and its token ranges are repaired.</p>
+</div>
+<div class="paragraph">
+<p>The algorithm can run repairs simultaneously on multiple nodes and splits token ranges into subranges, with necessary
+retries to handle transient failures. Automatic repair starts as soon as a Cassandra cluster is launched, similar to
+compaction, and if configured appropriately, does not require human intervention.</p>
+</div>
+<div class="paragraph">
+<p>The scheduler currently supports Full, Incremental, and Preview repair types with the following features. New repair
+types, such as Paxos repair or other future repair mechanisms, can be integrated with minimal development effort!</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="features"><a class="anchor" href="#features"></a>Features</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Capability to run repairs on multiple nodes simultaneously.</p>
+</li>
+<li>
+<p>A default implementation and an interface to override the dataset being repaired per session.</p>
+</li>
+<li>
+<p>Extendable token split algorithms with two implementations readily available:</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Splits token ranges by placing a cap on the size of data repaired in one session and a maximum cap at the schedule
+level using <a href="#repair-token-range-splitter">RepairTokenRangeSplitter</a> (default).</p>
+</li>
+<li>
+<p>Splits tokens evenly based on the specified number of splits using
+<a href="#fixed-split-token-range-splitter">FixedSplitTokenRangeSplitter</a>.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>A new <a href="#table-configuration">CQL table property</a> (<code>auto_repair</code>) offering:</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>The ability to disable specific repair types at the table level, allowing the scheduler to skip one or more tables.</p>
+</li>
+<li>
+<p>Configuring repair priorities for certain tables to prioritize them over others.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Dynamic enablement or disablement of the scheduler for each repair type.</p>
+</li>
+<li>
+<p>Configurable settings tailored to each repair job.</p>
+</li>
+<li>
+<p>Rich configuration options for each repair type (e.g., Full, Incremental, or Preview repairs).</p>
+</li>
+<li>
+<p>Comprehensive observability features that allow operators to configure alarms as needed.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="considerations"><a class="anchor" href="#considerations"></a>Considerations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Before enabling Auto Repair, please consult the <a href="repair.html" class="page">Repair</a> guide to establish a base
+understanding of repairs.</p>
+</div>
+<div class="sect2">
+<h3 id="full-repair"><a class="anchor" href="#full-repair"></a>Full Repair</h3>
+<div class="paragraph">
+<p>Full Repairs operate over all data in the token range being repaired.  It is therefore important to run full repair
+with a longer schedule and with smaller assignments.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="incremental-repair"><a class="anchor" href="#incremental-repair"></a>Incremental Repair</h3>
+<div class="paragraph">
+<p>When enabled from the inception of a cluster, incremental repairs operate over unrepaired data and should finish
+quickly when run more frequently.</p>
+</div>
+<div class="paragraph">
+<p>Once incremental repair has been run, SSTables will be separated between data that have been incrementally repaired
+and data that have not.  Therefore, it is important to continually run incremental repair once it has been enabled so
+newly written data can be compacted together with previously repaired data, allowing overwritten and expired data to
+be eventually purged.</p>
+</div>
+<div class="paragraph">
+<p>Running incremental repair more frequently keeps the unrepaired set smaller and thus causes repairs to operate over
+a smaller set of data, so a shorter <code>min_repair_interval</code> such as <code>1h</code> is recommended for new clusters.</p>
+</div>
+<div class="sect3">
+<h4 id="enabling-incremental-repair-on-existing-clusters-with-a-large-amount-of-data"><a class="anchor" href="#enabling-incremental-repair-on-existing-clusters-with-a-large-amount-of-data"></a>Enabling Incremental Repair on existing clusters with a large amount of data</h4>
+<div id="enabling-ir" class="paragraph">
+<p>One should be careful when enabling incremental repair on a cluster for the first time. While
+<a href="#repair-token-range-splitter">RepairTokenRangeSplitter</a> includes a default configuration to attempt to gracefully
+migrate to incremental repair over time, failure to take proper precaution could overwhelm the cluster with
+<a href="compaction/overview.html#anticompaction" class="page">anticompactions</a>.</p>
+</div>
+<div class="paragraph">
+<p>This happens because incremental repair must keep repaired and unrepaired data in separate SSTables. From the
+operator&#8217;s perspective, a repair runs against a whole table, but Cassandra executes it as sessions over portions of
+the token space. A participating SSTable typically contains both data covered by the repair session and data left
+untouched, so Cassandra cannot simply mark the whole SSTable as repaired. Instead it uses
+<a href="compaction/overview.html#anticompaction" class="page">anticompaction</a> to rewrite each participating SSTable,
+separating data covered by the repair session from data that remains unrepaired. On clusters with large SSTables or
+high partition overlap, rewriting these files can generate substantial disk I/O and overhead.</p>
+</div>
+<div class="paragraph">
+<p>No matter how one goes about enabling and running incremental repair, it is recommended to run a cycle of full repairs
+for the entire cluster as a pre-flight step to running incremental repair. This will put the cluster into a more
+consistent state which will reduce the amount of streaming between replicas when incremental repair initially runs.</p>
+</div>
+<div class="paragraph">
+<p>If you do not have strong data consistency requirements, one may consider using
+<a href="../tools/sstable/sstablerepairedset.html" class="page">nodetool sstablerepairedset</a> to mark all SSTables as repaired
+before enabling incremental repair scheduling using Auto Repair. This will reduce the burden of initially running
+incremental repair because all existing data will be considered as repaired, so subsequent incremental repairs will
+only run against new data.</p>
+</div>
+<div class="paragraph">
+<p>If you do have strong data consistency requirements, then one must treat all data as initially unrepaired and run
+incremental repair against it.  Consult
+<a href="#incremental-repair-defaults">RepairTokenRangeSplitter&#8217;s Incremental repair defaults</a>.</p>
+</div>
+<div class="paragraph">
+<p>The first incremental repair on an existing cluster still has to compare and repair the entire unrepaired data set, so
+it acts identically to a full repair in scope. The difference is what happens afterward: a full repair does not update
+the incremental repair state, while an incremental repair records the repaired ranges so that later incremental
+repairs evaluate only newly written SSTable files.</p>
+</div>
+<div class="paragraph">
+<p>In particular one should be mindful of the <a href="compaction/overview.html" class="page">compaction strategy</a>
+you use for your tables and how it might impact incremental repair before running incremental repair for the first
+time:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Large SSTables</strong>: When using <a href="compaction/stcs.html" class="page">SizeTieredCompactionStrategy</a> or any
+compaction strategy which can create large SSTables including many partitions the amount of
+<a href="compaction/overview.html#anticompaction" class="page">anticompaction</a> that might be required could be
+excessive. Using a small <code>bytes_per_assignment</code> might contribute to repeated anticompactions over the same
+unrepaired data.</p>
+</li>
+<li>
+<p><strong>Partitions overlapping many SSTables</strong>: If partitions overlap between many SSTables, the amount of SSTables included
+in a repair might be large.  Therefore it is important to consider that many SSTables may be included in a repair
+session and must all be anticompacted. <a href="compaction/lcs.html" class="page">LeveledCompactionStrategy</a> is less
+susceptible to this issue as it prevents overlapping of partitions within levels outside of L0, but if SSTables
+start accumulating in L0 between incremental repairs, the cost of anticompaction will increase.
+<a href="compaction/ucs.html#sharding" class="page">UnifiedCompactionStrategy&#8217;s sharding</a> can also be used to avoid
+partitions overlapping SSTables.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The <a href="#repair-token-range-splitter">token_range_splitter</a> configuration for incremental repair includes a default
+configuration that attempts to conservatively migrate 100GiB of compressed data every day per node. Depending on
+requirements, data set and capability of a cluster&#8217;s hardware, one may consider tuning these values to be more
+aggressive or conservative.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="previewing-repaired-data"><a class="anchor" href="#previewing-repaired-data"></a>Previewing Repaired Data</h3>
+<div class="paragraph">
+<p>The <code>preview_repaired</code> repair type executes repairs over the repaired data set to detect possible data inconsistencies.</p>
+</div>
+<div class="paragraph">
+<p>Inconsistencies in the repaired data set should not happen in practice and could indicate a possible bug in incremental
+repair.</p>
+</div>
+<div class="paragraph">
+<p>Running preview repairs is useful when considering using the
+<a href="compaction/tombstones.html#deletion" class="page">only_purge_repaired_tombstones</a> table compaction
+option to prevent data from possibly being resurrected when inconsistent replicas are missing tombstones from deletes.</p>
+</div>
+<div class="paragraph">
+<p>When enabled, the <code>BytesPreviewedDesynchronized</code> and <code>TokenRangesPreviewedDesynchronized</code>
+<a href="metrics.html#table-metrics" class="page">table metrics</a> can be used to detect inconsistencies in the
+repaired data set.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuring-auto-repair-in-cassandra-yaml"><a class="anchor" href="#configuring-auto-repair-in-cassandra-yaml"></a>Configuring Auto Repair in cassandra.yaml</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Configuration for Auto Repair is managed in the <code>cassandra.yaml</code> file by the <code>auto_repair</code> property.</p>
+</div>
+<div class="paragraph">
+<p>A rich set of configuration exists for configuring Auto Repair with sensible defaults.  However, the expectation
+is that some tuning might be needed particulary when it comes to tuning how often repair should run
+(<code>min_repair_interval</code>) and how repair assignments as created (<code>token_range_splitter</code>).</p>
+</div>
+<div class="paragraph">
+<p>The following is a practical example of an auto_repair configuration that one might use.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">auto_repair:
+  enabled: true
+  repair_type_overrides:
+    full:
+      enabled: true
+      min_repair_interval: 5d
+    incremental:
+      enabled: true
+      min_repair_interval: 1h
+      token_range_splitter:
+        parameters:
+          bytes_per_assignment: 50GiB
+          max_bytes_per_schedule: 100GiB
+    preview_repaired:
+      enabled: true
+      min_repair_interval: 1d
+  global_settings:
+    repair_by_keyspace: true
+    parallel_repair_count: 1</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="top-level-settings"><a class="anchor" href="#top-level-settings"></a>Top level settings</h3>
+<div class="paragraph">
+<p>The following settings are defined at the top level of the configuration file and apply universally across all
+repair types.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable/Disable the auto-repair scheduler. If set to false, the scheduler thread will not be started.
+If set to true, the repair scheduler thread will be created. The thread will check for secondary configuration available
+for each repair type (full, incremental, and preview_repaired), and based on that, it will schedule repairs.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">repair_check_interval</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5m</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Time interval between successive checks to see if ongoing repairs are complete or if it
+is time to schedule repairs.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">repair_max_retries</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum number of retries for a repair session.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">history_clear_delete_hosts_buffer_interval</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2h</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The scheduler needs to adjust its order when nodes leave the ring.
+Deleted hosts are tracked in metadata for a specified duration to ensure they are indeed removed before adjustments
+are made to the schedule.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mixed_major_version_repair_enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable/Disable running repairs on the cluster when there are mixed
+major versions detected, which usually occurs when the cluster is being upgraded. Repairs between nodes of
+different major versions is not something that is tested, so this may lead to data compatibility issues.
+It is strongly discouraged to set this to true without doing extensive testing beforehand.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="repair-level-settings"><a class="anchor" href="#repair-level-settings"></a>Repair level settings</h3>
+<div class="paragraph">
+<p>The following settings can be configured globally using <code>global_settings</code> or tailored individually for each repair
+type by using <code>repair_type_overrides</code>.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether the given repair types should be enabled</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">min_repair_interval</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">24h</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Minimum duration between repairing the same node again. This is useful for tiny clusters,
+such as clusters with 5 nodes that finish repairs quickly. This means that if the scheduler completes one round on all
+nodes in less than this duration, it will not start a new repair round on a given node until this much time has
+passed since the last repair completed. Consider increasing to a larger value to reduce the impact of repairs,
+however note that one should attempt to run repairs at a smaller interval than gc_grace_seconds to
+avoid <a href="compaction/tombstones.html#zombies" class="page">data resurrection</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">token_range_splitter.class_name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">org.apache.cassandra.repair.autorepair.RepairTokenRangeSplitter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Implementation of
+IAutoRepairTokenRangeSplitter to use; responsible for splitting token ranges for repair assignments. Out of the box,
+Cassandra provides org.apache.cassandra.repair.autorepair.{RepairTokenRangeSplitter,FixedTokenRangeSplitter}.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">repair_by_keyspace</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If true, attempts to group tables in the same keyspace into one repair; otherwise,
+each table is repaired individually.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number_of_repair_threads</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number of threads to use for each repair job scheduled by the scheduler. Similar to
+the -j option in nodetool repair.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">parallel_repair_count</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number of nodes running repair in parallel. If <code>parallel_repair_percentage</code> is set, the
+larger value is used.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">parallel_repair_percentage</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Percentage of nodes in the cluster running repair in parallel. If
+<code>parallel_repair_count is set</code>, the larger value is used.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">allow_parallel_replica_repair</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to allow a node to take its turn running repair while one or more of
+its replicas are running repair. Defaults to false, as running repairs concurrently on replicas can increase load and
+also cause anticompaction conflicts while running incremental repair.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">allow_parallel_replica_repair_across_schedules</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">An addition to allow_parallel_repair that also blocks repairs
+when replicas (including this node itself) are repairing in any schedule.
+For example, if a replica is executing full repairs, a value of false will prevent starting incremental repairs for this
+node. Defaults to true and is only evaluated when allow_parallel_replica_repair is false.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">materialized_view_repair_enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Repairs materialized views if true.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">initial_scheduler_delay</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5m</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Delay before starting repairs after a node restarts to avoid repairs starting
+immediately after a restart.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">repair_session_timeout</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3h</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timeout for retrying stuck repair sessions.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">force_repair_new_node</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Force immediate repair on new nodes after they join the ring.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sstable_upper_threshold</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">50000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Threshold to skip repairing tables with too many SSTables.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">table_max_repair_time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6h</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum time allowed for repairing one table on a given node. If exceeded, the repair
+proceeds to the next table.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ignore_dcs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Avoid running repairs in specific data centers. By default, repairs run in all data centers. Specify
+data centers to exclude in this list. Note that repair sessions will still consider all replicas from excluded data
+centers. Useful if you have keyspaces that are not replicated in certain data centers, and you want to not run repair
+schedule in certain data centers.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">repair_primary_token_range_only</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Repair only the primary ranges owned by a node. Equivalent to the -pr option
+in nodetool repair. General advice is to keep this true.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">repair_retry_backoff</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">30s</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Backoff time before retrying a repair session.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">repair_task_min_duration</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5s</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Minimum duration for the execution of a single repair task. This prevents the
+scheduler from overwhelming the node by scheduling too many repair tasks in a short period of time.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="repairtokenrangesplitter-configuration"><a class="anchor" href="#repairtokenrangesplitter-configuration"></a><code>RepairTokenRangeSplitter</code> configuration</h3>
+<div id="repair-token-range-splitter" class="paragraph">
+<p><code>RepairTokenRangeSplitter</code> is the default implementation of <code>IAutoRepairTokenRangeSplitter</code> that attempts to create
+token range assignments meeting the following goals:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Create smaller, consistent repair times</strong>: Long repairs, such as those lasting 15 hours, can be problematic. If a
+node fails 14 hours into the repair, the entire process must be restarted. The goal is to reduce the impact of
+disturbances or failures. However, making the repairs too short can lead to overhead from repair orchestration becoming
+the main bottleneck.</p>
+</li>
+<li>
+<p><strong>Minimize the impact on hosts</strong>: Repairs should not heavily affect the host systems. For incremental repairs, this
+might involve anti-compaction work. In full repairs, streaming large amounts of data—especially with wide partitions
+can lead to issues with disk usage and higher compaction costs.</p>
+</li>
+<li>
+<p><strong>Reduce overstreaming</strong>: The Merkle tree, which represents data within each partition and range, has a maximum size.
+If a repair covers too many partitions, the tree’s leaves represent larger data ranges. Even a small change in a leaf
+can trigger excessive data streaming, making the process inefficient.</p>
+</li>
+<li>
+<p><strong>Reduce number of repairs</strong>: If there are many small tables, it&#8217;s beneficial to batch these tables together under a
+single parent repair. This prevents the repair overhead from becoming a bottleneck, especially when dealing with
+hundreds of tables. Running individual repairs for each table can significantly impact performance and efficiency.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To achieve these goals, this implementation inspects SSTable metadata to estimate the bytes and number of partitions
+within a range and splits it accordingly to bound the size of the token ranges used for repair assignments.</p>
+</div>
+<div class="sect3">
+<h4 id="parameter-defaults"><a class="anchor" href="#parameter-defaults"></a>Parameter defaults</h4>
+<div class="paragraph">
+<p>The following <code>parameters</code> include the same defaults for all repair types.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">partitions_per_assignment</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1048576</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum number of partitions to include in a repair
+assignment. Used to reduce number of partitions present in merkle tree leaf nodes to avoid overstreaming.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">max_tables_per_assignment</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">64</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum number of tables to include in a repair assignment.
+This reduces the number of repairs, especially in keyspaces with many tables. The splitter avoids batching tables
+together if they exceed other configuration parameters like <code>bytes_per_assignment</code> or <code>partitions_per_assignment</code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="full-preview-repaired-repair-defaults"><a class="anchor" href="#full-preview-repaired-repair-defaults"></a>Full &amp; Preview Repaired repair defaults</h4>
+<div class="paragraph">
+<p>The following <code>parameters</code> defaults are established for both <code>full</code> and <code>preview_repaired</code> repair scheduling:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bytes_per_assignment</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">50GiB</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The target and maximum amount of <strong>compressed</strong> bytes that should be included in a
+repair assignment.  <strong>Note</strong>: For full and preview_repaired, only the portion of an SSTable that covers the ranges
+being repaired are accounted for in this calculation.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">max_bytes_per_schedule</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">100000GiB</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum number of bytes to cover in an individual
+schedule. This serves as a mechanism to throttle the work done in each repair cycle. You may reduce this value if the
+impact of repairs is causing too much load on the cluster or increase it if writes outpace the amount of data being
+repaired. Alternatively, adjust the <code>min_repair_interval</code>. This is set to a large value for full repair to attempt to
+repair all data per repair schedule.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="incremental-repair-defaults"><a class="anchor" href="#incremental-repair-defaults"></a>Incremental repair defaults</h4>
+<div class="paragraph">
+<p>The following <code>parameters</code> defaults are established for <code>incremental</code> repair scheduling:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bytes_per_assignment</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">50GiB</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The target and maximum amount of <strong>compressed</strong> bytes that should be
+included in a repair assignment. <strong>Note</strong>: For incremental repair, the <strong>entire size</strong> of <strong>unrepaired</strong> SSTables
+including ranges being repaired are accounted for in this calculation.  This is to account for the anticompaction
+work required to split the candidate data to repair from the data that won&#8217;t be repaired.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">max_bytes_per_schedule</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">100GiB</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum number of bytes to cover in an individual schedule.
+Consider increasing if more data is written than this limit within the <code>min_repair_interval</code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="fixedsplittokenrangesplitter-configuration"><a class="anchor" href="#fixedsplittokenrangesplitter-configuration"></a><code>FixedSplitTokenRangeSplitter</code> configuration</h3>
+<div id="fixed-split-token-range-splitter" class="paragraph">
+<p><code>FixedSplitTokenRangeSplitter</code> is a more simple implementation of <code>IAutoRepairTokenRangeSplitter</code> that creates repair
+assignments by splitting a node&#8217;s token ranges into an even number of splits.</p>
+</div>
+<div class="paragraph">
+<p>The following <code>parameters</code> apply for <code>FixedSplitTokenRangeSplitter</code> configuration:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number_of_subranges</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">32</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number of evenly split subranges to create for each node that repair runs for.
+If vnodes are configured using <code>num_tokens</code>, attempts to evenly subdivide subranges by each range.  For example, for
+<code>num_tokens: 16</code> and <code>number_of_subranges: 32</code>, 2 (32/16) repair assignments will be created for each token range.  At
+least one repair assignment will be created for each token range.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="other-cassandra-yaml-considerations"><a class="anchor" href="#other-cassandra-yaml-considerations"></a>Other cassandra.yaml Considerations</h3>
+<div class="sect3">
+<h4 id="enable-reject_repair_compaction_threshold"><a class="anchor" href="#enable-reject_repair_compaction_threshold"></a>Enable <code>reject_repair_compaction_threshold</code></h4>
+<div class="paragraph">
+<p>When enabling auto_repair, it is advisable to configure the top level <code>reject_repair_compaction_threshold</code>
+configuration in cassandra.yaml as a backpressure mechanism to reject new repairs on instances that have many
+pending compactions.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="tune-repair_disk_headroom_reject_ratio"><a class="anchor" href="#tune-repair_disk_headroom_reject_ratio"></a>Tune <code>repair_disk_headroom_reject_ratio</code></h4>
+<div class="paragraph">
+<p>By default, repairs will be rejected if less than 20% of disk is available.  If one wishes to be
+conservative this top level configuration could be increased to a larger value to prevent filling your data directories.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="table-configuration"><a class="anchor" href="#table-configuration"></a>Table configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If Auto Repair is enabled in cassandra.yaml, the <code>auto_repair</code> property may be optionally configured at the table
+level, e.g.:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cql hljs" data-lang="cql">ALTER TABLE cycling.cyclist_races
+WITH auto_repair = {'incremental_enabled': 'false', 'priority': '0'};</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">priority</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indicates the priority at which this table should be given when issuing repairs.  The higher the number
+the more priority will be given to repair the table (e.g. 3 will be repaired before 2).  When <code>repair_by_keyspace</code> is
+set to <code>true</code> tables sharing the same priority may be grouped in the same repair assignment.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">full_enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether full repair is enabled for this table.  If full.enabled is not true in cassandra.yaml
+this will not be evaluated.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">incremental_enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether incremental repair is enabled for this table.  If incremental.enabled is not
+true in cassandra.yaml this will not be evaluated.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">preview_repaired_enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether preview repair is enabled for this table.  If preview_repaired.enabled is
+not true in cassandra.yaml this will not be evaluated.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="nodetool-configuration"><a class="anchor" href="#nodetool-configuration"></a>Nodetool Configuration</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="nodetool-getautorepairconfig"><a class="anchor" href="#nodetool-getautorepairconfig"></a>nodetool getautorepairconfig</h3>
+<div class="paragraph">
+<p>Retrieves the runtime configuration of Auto Repair for the targeted node.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">$&gt; nodetool getautorepairconfig
+repair scheduler configuration:
+	repair_check_interval: 5m
+	repair_max_retries: 3
+	history_clear_delete_hosts_buffer_interval: 2h
+configuration for repair_type: full
+	enabled: true
+	min_repair_interval: 24h
+	repair_by_keyspace: true
+	number_of_repair_threads: 1
+	sstable_upper_threshold: 50000
+	table_max_repair_time: 6h
+	ignore_dcs: []
+	repair_primary_token_range_only: true
+	parallel_repair_count: 3
+	parallel_repair_percentage: 3
+	materialized_view_repair_enabled: false
+	initial_scheduler_delay: 5m
+	repair_session_timeout: 3h
+	force_repair_new_node: false
+	repair_retry_backoff: 30s
+	repair_task_min_duration: 5s
+	token_range_splitter: org.apache.cassandra.repair.autorepair.RepairTokenRangeSplitter
+	token_range_splitter.bytes_per_assignment: 50GiB
+	token_range_splitter.partitions_per_assignment: 1048576
+	token_range_splitter.max_tables_per_assignment: 64
+	token_range_splitter.max_bytes_per_schedule: 100000GiB
+configuration for repair_type: incremental
+	enabled: true
+	min_repair_interval: 1h
+	repair_by_keyspace: true
+	number_of_repair_threads: 1
+	sstable_upper_threshold: 50000
+	table_max_repair_time: 6h
+	ignore_dcs: []
+	repair_primary_token_range_only: true
+	parallel_repair_count: 3
+	parallel_repair_percentage: 3
+	materialized_view_repair_enabled: false
+	initial_scheduler_delay: 5m
+	repair_session_timeout: 3h
+	force_repair_new_node: false
+	repair_retry_backoff: 30s
+	repair_task_min_duration: 5s
+	token_range_splitter: org.apache.cassandra.repair.autorepair.RepairTokenRangeSplitter
+	token_range_splitter.bytes_per_assignment: 50GiB
+	token_range_splitter.partitions_per_assignment: 1048576
+	token_range_splitter.max_tables_per_assignment: 64
+	token_range_splitter.max_bytes_per_schedule: 100GiB
+configuration for repair_type: preview_repaired
+	enabled: false</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="nodetool-autorepairstatus"><a class="anchor" href="#nodetool-autorepairstatus"></a>nodetool autorepairstatus</h3>
+<div class="paragraph">
+<p>Provides currently running Auto Repair status.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">$&gt; nodetool autorepairstatus -t incremental
+Active Repairs
+425cea55-09aa-46e0-8911-9f37a4424574
+
+
+$&gt; nodetool autorepairstatus -t full
+Active Repairs
+NONE</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="nodetool-setautorepairconfig"><a class="anchor" href="#nodetool-setautorepairconfig"></a>nodetool setautorepairconfig</h3>
+<div class="paragraph">
+<p>Dynamic configuration changes can be made by using <code>setautorepairconfig</code>.  Note that this only applies on the node being
+targeted and these changes are not retained when a node is bounced.</p>
+</div>
+<div class="paragraph">
+<p>The following disables the <code>incremental</code> repair schedule:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">$&gt; nodetool setautorepairconfig -t incremental enabled false</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following adjusts the <code>min_repair_interval</code> option to <code>5d</code> specifically for the <code>full</code> repair schedule:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">$&gt; nodetool setautorepairconfig -t full min_repair_interval 5d</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following configures the <code>bytes_per_assignment</code> parameter for <code>incremental</code> repair&#8217;s <code>token_range_splitter</code> to
+<code>10GiB</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs" data-lang="none">$&gt; nodetool setautorepairconfig -t incremental token_range_splitter.bytes_per_assignment 10GiB</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="more-details"><a class="anchor" href="#more-details"></a>More details</h4>
+<div class="paragraph">
+<p><a href="https://cwiki.apache.org/confluence/display/CASSANDRA/CEP-37+Apache+Cassandra+Unified+Repair+Solution">CEP-37</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</article>
+</main>
+    </div>
+</div>
+            <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../../../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://bsky.app/profile/cassandra.apache.org" target="_blank"><img src="../../../../../assets/img/bluesky.png" alt="bluesky icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../../../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+    <script src="../../../../../assets/js/site.js"></script>
+    <script async src="../../../../../assets/js/vendor/highlight.js"></script>
+    <script src="../../../../../assets/js/vendor/lunr.js"></script>
+    <script src="../../../../../assets/js/vendor/search.js" id="search-script" data-base-path="../../../../.." data-page-path="/Cassandra/6.0/cassandra/managing/operating/auto_repair.html"></script>
+    <script async src="../../../../../assets/../search-index.js"></script>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+        </div>
+    </body>
+</html>
