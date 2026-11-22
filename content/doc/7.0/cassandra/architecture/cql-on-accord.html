@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Developers guide to CQL on Accord | Apache Cassandra Documentation</title>
+            <link rel="stylesheet" href="../../../../assets/css/site.css">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="Cassandra">
+    <meta name="dcterms.identifier" content="7.0">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "../../../../assets/js/vendor/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>
+<script src="../../../../assets/js/vendor/jquery.js"></script>
+    </head>
+    <body class="docs-wrapper article">
+        <div class="container mx-auto relative">
+                <meta property="og:type" content="website" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+         <div class="header-social-icons text-right">
+            <a href="https://bsky.app/profile/cassandra.apache.org" target="_blank" styles="margin-left: 20px;"><img src="../../../../assets/img/bluesky.png" alt="bluesky icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+            <div class="hero hero--home grad">
+                <div class="eye"></div>
+                <div id="docs-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                    <h2>Cassandra Documentation</h2>
+                </div>
+            </div>
+            <div class="body px-medium py-medium container">
+    <div class="docs-nav-bar flex flex-space-between mb-medium">
+      <div id="mobile-docs-nav-burger" class="hidden">
+        <svg viewBox="0 0 24 24" width="36" height="36" stroke="#1c81a0" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </div>
+        <div class="docs-nav-item relative">
+          <input id="search-input" type="text" placeholder="Search docs">
+        </div>
+      <div class="versions-wrapper">
+  <h4>Version:</h4>
+  <div class="nav-panel-explore" data-panel="explore">
+
+    <div id="version-toggle" class="context">
+      <span class="version">7.0</span>
+    </div>
+    <ul id="versions-list" class="components">
+      <li class="component">
+        <ul class="versions">
+          <li class="version is-latest">
+            <a href="../../../../_/index.html">website</a>
+          </li>
+        </ul>
+      </li>
+      <li class="component is-current">
+        <ul class="versions">
+          <li class="version is-current">
+            <a href="../../index.html">7.0</a>
+          </li>
+          <li class="version">
+            <a href="../../../6.0/index.html">6.0</a>
+          </li>
+          <li class="version is-latest">
+            <a href="../../../6.0-alpha2/index.html">6.0-alpha2</a>
+          </li>
+          <li class="version">
+            <a href="../../../5.0.9/index.html">5.0.9</a>
+          </li>
+          <li class="version">
+            <a href="../../../5.0.8/index.html">5.0.8</a>
+          </li>
+          <li class="version">
+            <a href="../../../5.0/index.html">5.0</a>
+          </li>
+          <li class="version">
+            <a href="../../../4.1/index.html">4.1</a>
+          </li>
+          <li class="version">
+            <a href="../../../4.0/index.html">4.0</a>
+          </li>
+          <li class="version">
+            <a href="../../../3.11/index.html">3.11</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>    </div>
+    <div class="cf relative">
+        <nav class="nav docs-nav full-800">
+<div class="nav-menu">
+<ul class="nav-list">
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../index.html">Main</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/glossary.html">Glossary</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="#master@_:ROOT:bugs.adoc">How to report bugs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/community.html">Contact us</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../../../../_/development/index.html">Development</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/gettingstarted.html">Getting started</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/ide.html">Building and IDE integration</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/testing.html">Testing</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/patches.html">Contributing code changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/code_style.html">Code style</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/how_to_review.html">Review checklist</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/how_to_commit.html">How to commit</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/documentation.html">Working on documentation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/ci.html">Jenkins CI environment</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/dependencies.html">Dependency management</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../../../_/development/release_process.html">Release process</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-active" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item is-current-path is-active" data-depth="1">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <span class="nav-text">Cassandra</span>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../overview/faq/index.html">FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../getting-started/index.html">Getting Started</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting-started/cassandra-quickstart.html">Cassandra Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../installing/installing.html">Installing Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting-started/configuring.html">Configuring Cassandra</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting-started/querying.html">Inserting and querying</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting-started/drivers.html">Client drivers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting-started/production.html">Production recommendations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../new/index.html">What&#8217;s new</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../reference/java17.html">Support for Java</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-path is-active" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="index.html">Architecture</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="overview.html">Overview</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="dynamo.html">Dynamo</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="storage-engine.html">Storage Engine</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="guarantees.html">Guarantees</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="messaging.html">Improved Internode Messaging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="streaming.html">Improved Streaming</a>
+    </span>
+  </li>
+  <li class="nav-item is-current-path is-active" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="accord.html">Accord</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="accord-architecture.html">Accord Architecture</a>
+    </span>
+  </li>
+  <li class="nav-item is-current-page is-active" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="cql-on-accord.html">Developers guide to CQL on Accord</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../developing/data-modeling/index.html">Data Modeling</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/data-modeling/intro.html">Introduction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/data-modeling/data-modeling_conceptual.html">Conceptual data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/data-modeling/data-modeling_rdbms.html">RDBMS design</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/data-modeling/data-modeling_queries.html">Defining application queries</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/data-modeling/data-modeling_logical.html">Logical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/data-modeling/data-modeling_physical.html">Physical data modeling</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/data-modeling/data-modeling_refining.html">Evaluating and refining data models</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/data-modeling/data-modeling_schema.html">Defining database schema</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/data-modeling/data-modeling_tools.html">Cassandra data modeling tools</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../developing/cql/index.html">Cassandra Query Language (CQL)</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/definitions.html">Definitions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/types.html">Data types</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/ddl.html">Data definition (DDL)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/dml.html">Data manipulation (DML)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/transactions.html">Transactions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/transactions-examples.html">Transaction patterns</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/transactions-migration.html">Transaction migration</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/dynamic-data-masking.html">Dynamic Data Masking (DDM)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/operators.html">Operators</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../developing/cql/indexing/indexing-concepts.html">Indexing concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../developing/cql/indexing/sai/sai-overview.html">SAI Overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/indexing/sai/sai-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting-started/sai-quickstart.html">SAI Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/indexing/sai/sai-faq.html">SAI FAQ</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/indexing/sai/sai-working-with.html">Working with SAI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/indexing/sai/operations/sai-operations.html">SAI operations</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../developing/cql/indexing/2i/2i-overview.html">Secondary indexes (2i) overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/indexing/2i/2i-concepts.html">Concepts</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/indexing/2i/2i-working-with.html">Working with 2i</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/indexing/2i/operations/2i-build.html">Rebuild 2i</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/mvs.html">Materialized views</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/functions.html">Functions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/json.html">JSON</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/triggers.html">Triggers</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/constraints.html">Constraints</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/appendices.html">Appendices</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/changes.html">Changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/SASI.html">SASI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/cql_singlefile.html">Single file of CQL information</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../vector-search/overview.html">Vector Search overview</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../vector-search/concepts.html">Concepts</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../vector-search/data-modeling.html">Vector Search : Data Modeling</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../getting-started/vector-search-quickstart.html">Vector Search Quickstart</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../vector-search/vector-search-working-with.html">Working with Vector Search</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../managing/index.html">Managing</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../managing/configuration/index.html">Configuring</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/configuration/cass_yaml_file.html">cassandra.yaml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/configuration/cass_rackdc_file.html">cassandra-rackdc.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/configuration/cass_env_sh_file.html">cassandra-env.sh</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/configuration/cass_topo_file.html">cassandra-topologies.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/configuration/cass_cl_archive_file.html">commitlog-archiving.properties</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/configuration/cass_logback_xml_file.html">logback.xml</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/configuration/cass_jvm_options_file.html">jvm-* files</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/configuration/configuration.html">Liberating cassandra.yaml Parameters' Names from Their Units</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../managing/operating/index.html">Operating</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/backups.html">Backups</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/bloom_filters.html">Bloom filters</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/bulk_loading.html">Bulk loading</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/cdc.html">Change Data Capture (CDC)</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/compaction/index.html">Compaction</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/compression.html">Compression</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/hardware.html">Hardware</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/hints.html">Hints</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../managing/operating/logging.html">Logging</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/auditlogging.html">Audit logging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/audit_logging.html">Audit logging 2</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="5">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/fqllogging.html">Full query logging</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/metrics.html">Monitoring metrics</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/repair.html">Repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/auto_repair.html">Auto Repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/read_repair.html">Read repair</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/security.html">Security</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/snitch.html">Snitches</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/topo_changes.html">Topology changes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/transientreplication.html">Transient replication</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/virtualtables.html">Virtual tables</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/password_validation.html">Password validation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/role_name_generation.html">Role name generation</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/onboarding-to-accord.html">Onboarding to Accord</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/operating/async-profiler.html">Async-profiler</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../managing/tools/index.html">Tools</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/tools/cqlsh.html">cqlsh: the CQL shell</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/tools/nodetool/nodetool.html">nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../managing/tools/sstable/index.html">SSTable tools</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <span class="nav-line">
+    <a class="nav-link" href="../tooling/cassandra-stress.html">cassandra-stress</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../troubleshooting/index.html">Troubleshooting</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../troubleshooting/finding_nodes.html">Finding misbehaving nodes</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../troubleshooting/reading_logs.html">Reading Cassandra logs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../troubleshooting/use_nodetool.html">Using nodetool</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../troubleshooting/use_tools.html">Using external tools to deep-dive</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="../reference/index.html">Reference</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../reference/cql-commands/commands-toc.html">CQL commands</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../developing/cql/cql_singlefile.html">CQL specification</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../reference/java17.html">Java 17</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../reference/native-protocol.html">Native Protocol specification</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../reference/sai-virtual-table-indexes.html">SAI virtual table</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../reference/static.html">Static columns</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../reference/vector-data-type.html">Vector data type</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../integrating/plugins/index.html">Plug-ins</a>
+    </span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+</div>
+</nav>
+        <aside class="toc sidebar">
+  <div class="toc-menu"></div>
+</aside>
+        <main class="article default-main full-800" data-ceiling="topbar">
+  <div class="article-banner">
+    <p>You are viewing the documentation for a prerelease version.</p>
+    <a class="btn" href="../../../6.0-alpha2/cassandra/architecture/cql-on-accord.html">View Latest</a>
+  </div>
+  <div class="article-header">
+<nav class="crumbs" aria-label="breadcrumbs">
+  <ul>
+    <li class="crumb">Cassandra</li>
+    <li class="crumb"><a href="index.html">Architecture</a></li>
+    <li class="crumb"><a href="accord.html">Accord</a></li>
+    <li class="crumb"><a href="cql-on-accord.html">Developers guide to CQL on Accord</a></li>
+  </ul>
+</nav>
+<div class="tools" role="navigation">
+  <ul>
+    <li class="tool edit"><a href="https://github.com/apache/cassandra/edit/trunk/doc/modules/cassandra/pages/architecture/cql-on-accord.adoc" title="Edit Page" target="_blank" rel="noopener">Edit</a></li>
+  </ul>
+</div>
+  </div>
+<article class="doc">
+<h1 class="page">Developers guide to CQL on Accord</h1>
+<div class="sect1">
+<h2 id="intro"><a class="anchor" href="#intro"></a>Intro</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Accord is implemented as a library that is agnostic to the underlying
+database it integrates with. It has little to no awareness of schema,
+query language, messaging, threading etc. Instead it presents interfaces
+for the database to implement that describe the configuration and
+topology of the database, what reads and writes need to execute and what
+their dependencies are, and how to actually execute reads and writes at
+the configured locations.</p>
+</div>
+<div class="paragraph">
+<p>This guide describes how Cassandra goes about leveraging those
+interfaces to implement reading and writing CQL as well as live
+migrating from CQL running on Cassandra to CQL running on Accord.</p>
+</div>
+<div class="paragraph">
+<p>This guide doesn&#8217;t cover how Accord works and doesn&#8217;t cover all parts of
+Accord that are implemented in Cassandra like threading, caching,
+persistence, and messaging. It also isn&#8217;t intended to be a user guide
+and doesn&#8217;t fully overlap with the <a href="../managing/operating/onboarding-to-accord.html" class="page">user guide</a>. You should start with the
+<a href="../managing/operating/onboarding-to-accord.html" class="page">user guide</a> to get any context that may be missing here.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="anatomy-of-a-transaction"><a class="anchor" href="#anatomy-of-a-transaction"></a>Anatomy of a transaction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The primary way of interacting with Accord is to define a transaction
+using
+<a href="https://github.com/apache/cassandra-accord/blob/134df57677bbd5092994923a4dc2f15cd1d033d1/accord-core/src/main/java/accord/primitives/Txn.java#L42">Txn/Txn.InMemory</a>
+and then asking Accord to execute the transaction. Transactions express
+what they touch by declaring a set of keys or ranges that will be
+read/written to. This set needs to be declared up front and can&#8217;t change
+during transaction execution and the transaction can be either a key
+transaction or range transaction but not both.</p>
+</div>
+<div class="paragraph">
+<p>Range transactions are more expensive for Accord to execute as the
+dependency tracking work Accord has to do is more CPU and memory
+intensive and the transactions are more likely to conflict and block
+execution of other transactions.</p>
+</div>
+<div class="paragraph">
+<p>Accord is not aware of tables only ranges and keys. Keys and ranges can
+span any tables managed by Accord and the keys and ranges encode the
+tables they apply to. So a range transaction covering multiple tables
+would have a range per table and from Accord&#8217;s perspective these are
+completely different ranges.</p>
+</div>
+<div class="paragraph">
+<p>Transactions also declare a <code>Kind</code> which can be <code>Read</code>, <code>Write</code>
+(Read/Write), <code>EphemeralRead</code>, and <code>ExclusiveSyncPoint</code>. <code>Read</code>, and
+<code>Write</code> are what you would expect. <code>EphemeralRead</code> is a read that only
+provides per key linearizability, but offers better performance compared
+to <code>Read</code> .</p>
+</div>
+<div class="paragraph">
+<p><code>ExclusiveSyncPoint</code> is transaction that can be used to establish a
+happens before relationship with its dependencies without interfering
+with their execution. <code>ExclusiveSyncPoint</code> is used for live migration
+and repair to ensure the visibility at <code>ALL</code> of all committed Accord
+transactions to non-transactional reads.</p>
+</div>
+<div class="sect2">
+<h3 id="keys-and-ranges"><a class="anchor" href="#keys-and-ranges"></a>Keys and Ranges</h3>
+<div class="paragraph">
+<p><code>Keys</code> and <code>Ranges</code> are prefixed with <code>TableId</code> in the most significant
+position to allow Accord to interact with multiple tables without
+knowing anything about schema. From Accord&#8217;s perspective there is just a
+set of ranges that it is responsible for replicating and transacting
+over, and they can be compared, sorted, and split, but beyond that they
+are completely opaque. A follow on effect from this is that token ranges
+(or token ring) are per table.</p>
+</div>
+<div class="paragraph">
+<p><code>Key</code> is conceptually similar to <code>DecoratedKey</code> and is implemented by
+<code><a href="https://github.com/apache/cassandra/blob/63d3538ba7352635b7b61a205b40e035e62b8d5d/src/java/org/apache/cassandra/service/accord/api/PartitionKey.java#L43">PartitionKey</a></code>
+. <code>RoutingKey</code> is conceptually similar to <code>Token</code> and is implemented by
+<code><a href="https://github.com/apache/cassandra/blob/63d3538ba7352635b7b61a205b40e035e62b8d5d/src/java/org/apache/cassandra/service/accord/api/TokenKey.java#L51">TokenKey</a></code>
+.</p>
+</div>
+<div class="paragraph">
+<p>Accord <code>Range</code> is conceptually equivalent to Cassandra&#8217;s
+<code>Range&lt;RingPosition&gt;</code> and is implemented by
+<code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/accord/TokenRange.java">TokenRange</a></code>.
+Accord <code>Range</code> is start exclusive and end inclusive just like
+Cassandra&#8217;s <code>Range</code> and we use it exclusively in that mode. There are no
+other forms of inclusive/exclusive bound or range used directly by
+<code>Accord</code>. Accord <code>Range&#8217;s implementation suggests support for other
+forms of bounds but it&#8217;s not currently supported. It&#8217;s theoretically
+possible to use something similar to `Range&lt;PartitionPosition&gt;</code>
+as the implementation of Accord&#8217;s <code>Range</code> but we don&#8217;t do that because
+Cassandra doesn&#8217;t support splitting partitions.</p>
+</div>
+<div class="paragraph">
+<p>To integrate Cassandra with Accord it&#8217;s necessary to have a few
+different versions of <code>TokenKey</code> that make it possible to describe
+cluster topology and perform query routing to Accord across a range of
+partitioners. A <code>TokenKey</code> can be a sentinel for a given table which
+maps to <code>-inf</code> or <code>&#43;inf</code> for that table and it&#8217;s possible to create
+a minimum sentinel that is &lt; <code>-inf</code> or &gt; <code>&#43;inf</code> .
+Additionally it&#8217;s possible to declare a <code>TokenKey</code> that is between
+<code>token</code> and either <code>token - 1</code> or <code>token &#43; 1</code> .</p>
+</div>
+<div class="paragraph">
+<p>Accord expects to be able to convert a <code>RoutingKey</code> to a <code>Range</code> which
+is facilitated by being able to create these in between tokens without
+requiring the partitioner to support increment or decrement on token.
+Partition range reads also leverage these in between tokens to convert
+<code>Range</code> bounds from inclusive to exclusive and vice versa to match the
+inclusivity/exclusivity of the query that is being executed.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="seekable-unseekable-routable"><a class="anchor" href="#seekable-unseekable-routable"></a>Seekable, Unseekable, Routable</h3>
+<div class="paragraph">
+<p>The implementations of these interfaces are always prefixed with
+<code>TableId</code> most of which were just discussed.</p>
+</div>
+<div class="paragraph">
+<p>A <code>Seekable</code> has enough information that it can be used to both route a
+query and then execute it because it identifies what exactly to read and
+write. An <code>Unseekable</code> is more compact (just a token) for Accord to work
+with and can be used to route and schedule transaction execution. A
+<code>Routable</code> could be either <code>Seekable</code> or <code>Unseekable</code> and is generally
+used when you need to handle both.</p>
+</div>
+<div class="paragraph">
+<p><code>Seekable</code> can be either a <code>Key</code> or an Accord <code>Range</code>. <code>Key</code> has both
+routing (token) and partition key/clustering information. <code>Range</code> is
+<code>Seekable</code> but its bounds are only <code>Routable</code>. <code>Range</code> is in an odd
+place in terms of being <code>Seekable</code> . It&#8217;s helpful because APIs can
+accept <code>Seekable</code> and then handle both <code>Key</code> and <code>Range</code> domains.</p>
+</div>
+<div class="paragraph">
+<p><code>Seekables</code> is the collection version of <code>Seekable</code> and can be either
+<code>Keys</code> or <code>Ranges</code>.</p>
+</div>
+<div class="paragraph">
+<p><code>Unseekable</code> can either a <code>RoutingKey</code> (<code>TokenKey</code>) or <code>Range</code>
+(<code>TokenRange</code>) and <code>Unseekables</code> is either <code>RoutingKeys</code> or <code>Ranges</code>.
+<code>Route</code> and various kinds of <code>Routables</code> exists, but are primarily used
+inside Accord.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="data"><a class="anchor" href="#data"></a>Data</h3>
+<div class="paragraph">
+<p><code><a href="https://github.com/apache/cassandra-accord/blob/134df57677bbd5092994923a4dc2f15cd1d033d1/accord-core/src/main/java/accord/api/Data.java#L28">Data</a></code>
+is an opaque container for data that has been read during execution of a
+transaction. Accord doesn&#8217;t know anything about the contents and the
+only required interface for <code>Data</code> is that they can be merged since
+Accord will execute multiple reads at different command stores and will
+need to merge the result.</p>
+</div>
+<div class="paragraph">
+<p><code>Data</code> is implemented by
+<code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/accord/txn/TxnData.java#L47">TxnData</a></code>
+which is a glorified map from a unique integer identifying each piece of
+data read to <code>TxnDataValue</code> which can be either
+<code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/accord/txn/TxnDataKeyValue.java">TxnDataKeyValue</a></code>
+or
+<code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/accord/txn/TxnDataRangeValue.java">TxnDataRangeValue</a></code>
+. <code>TxnDataKeyValue</code> doesn&#8217;t support merging because Accord only reads
+from a single replica, but <code>TxnDataRangeValue</code> does because the integer
+key for <code>TxnData</code> identifies the logical read in the transaction, but
+the actual execution of the range read could touch an arbitrary number
+of command stores covered by the range and each will produce their own
+<code>TxnDataRangeValue</code> for their portion of the read.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="result"><a class="anchor" href="#result"></a>Result</h3>
+<div class="paragraph">
+<p><code><a href="https://github.com/apache/cassandra-accord/blob/134df57677bbd5092994923a4dc2f15cd1d033d1/accord-core/src/main/java/accord/api/Result.java">Result</a></code>
+is the interface for what is returned by <code>Query</code> and ends up being
+returned as the non-error result by Accord to the coordinator of a
+transaction. This is also implemented by <code>TxnData</code> for key read results
+and by <code>TxnRangeReadResult</code> for range reads.</p>
+</div>
+<div class="paragraph">
+<p>There is also <code>RetryNewProtocolResult</code> which can be returned by
+Cassandra&#8217;s integration with Accord during live migration. This retry
+error indicates that Accord determined the transaction&#8217;s execute time is
+in an epoch where Accord does not manage some or all of that data for
+read or write so the transaction should be retried on whatever system
+currently manages that data.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="read"><a class="anchor" href="#read"></a>Read</h3>
+<div class="paragraph">
+<p><code><a href="https://github.com/apache/cassandra-accord/blob/trunk/accord-core/src/main/java/accord/api/Read.java#L32">Read</a></code>
+is where a transaction defines how data should be read during execution
+in order to return a result, and it will have its <code>read</code> method invoked
+along with specific keys to be read at command stores.</p>
+</div>
+<div class="paragraph">
+<p>A <code>Read</code> has to define all the keys it will access up front and needs to
+support <code>slice/intersecting/merge</code> so Accord can send only the relevant
+parts of a transactions reads to the command stores that are responsible
+for persisting metadata about the transaction and executing the read.</p>
+</div>
+<div class="paragraph">
+<p><code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/accord/txn/TxnRead.java">TxnRead</a></code>
+implements <code>Read</code> and is a sorted collection of
+<code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/accord/txn/TxnNamedRead.java#L77">TxnNamedRead</a></code>.
+The name in <code>TxnNamedRead</code> refers to what is now the integer identifier
+for each logical read in the transaction. <code>TxnNamedRead</code> supports both
+key and range reads although not both in the same transaction.</p>
+</div>
+<div class="paragraph">
+<p>The name for a read is an incrementing integer encoded at planning time with the higher order bits storing
+the kind of read and the lower order bits storing the index of the read. Kinds of reads include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>USER - let statements</p>
+</li>
+<li>
+<p>RETURNING - Returning select in <code>TransactionStatement</code></p>
+</li>
+<li>
+<p>AUTO_READ - Automatically generated reads like list index set</p>
+</li>
+<li>
+<p>CAS_READ - Read for CAS statements</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Every read in a transaction is executed concurrently in the read stage
+threadpool and the resulting <code>Data</code> (<code>TxnData</code>) is merged into a single
+value.</p>
+</div>
+<div class="paragraph">
+<p><code>TxnRead</code> contains a read consistency level that is not visible to
+Accord that is used to declare the read consistency level that a
+transaction requires. This will be discussed more later when we cover
+interoperability, but if this is set then the transaction will actually
+read from multiple replicas complete with short read protection and
+blocking read repair.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="query"><a class="anchor" href="#query"></a>Query</h3>
+<div class="paragraph">
+<p><code><a href="https://github.com/apache/cassandra-accord/blob/trunk/accord-core/src/main/java/accord/api/Query.java#L31">Query</a></code>
+is the portion of the transaction definition responsible for computing
+the <code>Result</code> of the transaction that will be returned at the
+coordinator. It&#8217;s implemented by
+<code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/accord/txn/TxnQuery.java">TxnQuery</a></code>
+which has several different modes it can operate in.</p>
+</div>
+<div class="paragraph">
+<p><code>Query</code> only has one method <code>compute</code> to compute the result and is run
+on the coordinator of a transaction. There are few things <code>TxnQuery</code> is
+responsible for such as validating the query is accessing data managed
+by Accord generating a retry error if needed. For CAS statements it&#8217;s
+also responsible for checking the CAS condition and returning the
+appropriate result. For range reads it&#8217;s also responsible for merging
+the range read results and reapplying the limit.</p>
+</div>
+<div class="paragraph">
+<p><code>TxnQuery</code> also has an implementation, <code>UNSAFE_EMPTY</code>, used for
+Accord system transactions that does no validation that Accord owns the
+ranges in question. This is because from Accord&#8217;s perspective it
+immediately adopts all the ranges in a table when that table begins
+migration to Accord, but from live migration&#8217;s perspective (which Accord
+can&#8217;t see) there is a
+<code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/consensus/migration/TableMigrationState.java">TableMigrationState</a></code>
+that specifies which ranges within a table are managed by Accord.</p>
+</div>
+<div class="paragraph">
+<p>Accord system transactions only impact Accord metadata so “they don&#8217;t
+exist” from the perspective of live migration and concurrent reading and
+writing to data.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="update"><a class="anchor" href="#update"></a>Update</h3>
+<div class="paragraph">
+<p><code><a href="https://github.com/apache/cassandra-accord/blob/trunk/accord-core/src/main/java/accord/api/Update.java">Update</a></code>
+is invoked via the <code>apply</code> method on the Accord coordinator and is
+responsible for taking in the <code>Data</code> from <code>Read</code> and producing the
+<code>Write</code> that contains all the writes that we applied as part of
+committing the transaction.</p>
+</div>
+<div class="paragraph">
+<p><code>Update</code> requires support for <code>slice</code>/<code>intersecting</code>/<code>merge</code> so that
+Accord only needs to distribute and persist the potentially sizable
+partial or complete updates to the shards that actually need them.</p>
+</div>
+<div class="paragraph">
+<p><code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/accord/txn/TxnUpdate.java">TxnUpdate</a></code>
+implements <code>Update</code> and can contain completed or partial updates which
+are completed when <code>apply</code> is called with the <code>TxnData</code> from <code>TxnRead</code>.
+Updates that are not data dependent (blind writes) are handled
+differently from non-data dependent updates. Data dependent updates are
+computed at the coordinator and returned in the <code>TxnWrite</code> but non-data
+dependent updates are omitted and instead are retrieved from <code>TxnUpdate</code>
+at each replica when <code>TxnWrite.apply</code> is called.</p>
+</div>
+<div class="paragraph">
+<p><code>TxnUpdate</code> is also responsible for populating the update with the
+monotonic transactional hybrid logical clock for the execution time of
+the transaction. During migration, normal CQL operations will use the
+Accord timestamp once a range starts migration, but will fall back to
+server timestamp when migrating away from Accord. For normal CQL operations,
+<code>USING TIMESTAMP</code> is supported and will cause the data to use the user
+timestamp instead of the Accord one, though this breaks linearizability
+and should be avoided when possible.</p>
+</div>
+<div class="paragraph">
+<p>For BATCH operations, timestamp handling is more complex: if the batch
+uses <code>USING TIMESTAMP</code>, the user timestamp will be used. If all mutations
+in a BATCH use <code>USING TIMESTAMP</code>, the user timestamp will be used. If not
+using <code>USING TIMESTAMP</code> and all partition keys are on Accord, the Accord
+timestamp is used. If the BATCH has some partitions on Accord and others
+not on Accord, the server timestamp will be used (writes to the Accord table will not be linearizable for multi-table
+batches where one table is not migrating to Accord). If a batch mixes
+server timestamp and <code>USING TIMESTAMP</code> mutations, the default behavior
+is to reject the batch, configurable via <code>accord.mixed_time_source_handling</code>
+with values: <code>reject</code> (default), <code>log</code> (accept and log operations where writes to the Accord table will not be linearizable),
+or <code>ignore</code> (accept silently).</p>
+</div>
+<div class="paragraph">
+<p><code>TxnUpdate</code> has a write consistency level that is not visible to Accord
+and is it similar to the commit consistency level for CAS writes. If the
+write consistency level is set then Accord will do synchronous commit at
+the specified consistency level. Otherwise Accord defaults to
+asynchronous commit. How consistency levels are handled will be covered
+in interoperability and live migration.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="write"><a class="anchor" href="#write"></a>Write</h3>
+<div class="paragraph">
+<p><code><a href="https://github.com/apache/cassandra-accord/blob/trunk/accord-core/src/main/java/accord/api/Write.java">Write</a></code>
+is produced by invoking <code>Update.apply</code> and is not required to be
+splittable/mergeable because all writes are sent to all shards. <code>Write</code>
+is implemented by
+<code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/accord/txn/TxnWrite.java#L74">TxnWrite</a></code>
+which each command store will invoke via <code>apply</code> for each intersecting
+key. This will cause all writes in a transaction to run concurrently on
+the mutation stage.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="putting-it-all-together"><a class="anchor" href="#putting-it-all-together"></a>Putting it all together</h3>
+<div class="paragraph">
+<p>With all the components of a transaction available they can be assembled
+and provided to Accord to coordinate to implement all the existing CQL
+interfaces as well as the new <code>TransactionStatement</code> interface.</p>
+</div>
+<div class="paragraph">
+<p>See
+<code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/cql3/statements/TransactionStatement.java#L435">TransactionStatement.createTxn</a></code>
+,
+<code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/cql3/statements/CQL3CasRequest.java#L484">CQL3CasRequest.toAccordTxn</a></code>,
+<code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/consensus/migration/ConsensusMigrationMutationHelper.java#L236">ConsensusMigrationHelper.mutateWithAccordAsync</a></code>,
+<code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/StorageProxy.java#L2206">StorageProxy.readWithAccord</a></code>,
+and
+<code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/reads/repair/BlockingReadRepair.java#L219">BlockingReadRepair.repairViaAccordTransaction</a></code>
+.</p>
+</div>
+<div class="paragraph">
+<p>There isn&#8217;t as much magic as you would think in how Accord executes
+transactions when operating with exclusive access to a table. Accord is
+able to mostly execute <code>ReadCommands</code> unmodified with some
+accommodations for the fact that reads are strongly consistent from a
+single replica so filtering can be pushed down. The majority of the work
+is just making the description of things like CAS serializable so it can
+be persisted by Accord for transaction recovery.</p>
+</div>
+<div class="paragraph">
+<p>Where things get complicated is live migrating to Accord and supporting
+interoperability with non-Accord reads and writes.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="live-migration"><a class="anchor" href="#live-migration"></a>Live migration</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="core-challenges"><a class="anchor" href="#core-challenges"></a>Core challenges</h3>
+<div class="paragraph">
+<p>Accord and Paxos operate fundamentally different in terms of what they
+perform consensus on and how the transactions are recovered. Paxos
+performs consensus on the exact set of writes to apply and recovering a
+transaction only requires the writes to be applied. Accord consensus is
+on the transaction definition, a superset of the dependencies, and the
+execution timestamp of the transaction.</p>
+</div>
+<div class="paragraph">
+<p>Accord needs to recompute the writes during transaction recovery which
+means it may need to repeat any reads necessary to compute those writes
+which means Accord needs reads to be repeatable during transaction
+execution and recovery. Non-Accord writes cause non-determinism for
+Accord reads. Accord also reads at <code>ONE</code> so it would miss <code>QUORUM</code>
+writes.</p>
+</div>
+<div class="paragraph">
+<p>The big hammer we use to deal with this is to avoid ever requiring
+Accord to read data that is not replicated at <code>ALL</code>. If we did it would
+lead to non-deterministic transaction recovery. This isn&#8217;t something
+that can be addressed by having Accord read at <code>QUORUM</code> and then
+performing blocking read repair because different Accord coordinators
+can still witness different sets of non-Accord writes.</p>
+</div>
+<div class="paragraph">
+<p>Accord also defaults to asynchronous commit so when migrating away from
+Accord it&#8217;s not safe for Paxos and non-SERIAL reads to read committed
+Accord writes</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="bridging-the-gap"><a class="anchor" href="#bridging-the-gap"></a>Bridging the gap</h3>
+<div class="paragraph">
+<p>Cassandra needs to be highly available while transitioning, but
+operations that propagate data at <code>ALL</code> like Cassandra&#8217;s Data Repair
+&#43; Paxos Repair, or Accord&#8217;s repair syncs are not highly available.
+Going forward these will be referred to as range barriers.</p>
+</div>
+<div class="paragraph">
+<p>At every point during migration there has to be some system safely
+capable of executing every operation type. Highly available key barriers
+solve this problem by allowing the migration of a single key at <code>QUORUM</code>
+to meet the requirements for execution on the migration target system.</p>
+</div>
+<div class="paragraph">
+<p>A key barrier on Paxos uses the existing Paxos repair mechanism to apply
+any partially committed transactions at <code>QUORUM</code> which can then be
+safely read by Accord if Accord read&#8217;s at <code>QUORUM</code>. A key barrier on
+Accord uses Accord&#8217;s sync mechanism to wait until all transactions in an
+epoch that could have modified the key are applied at <code>QUORUM</code>.</p>
+</div>
+<div class="paragraph">
+<p>There is a system table and small in memory cache for key barriers to
+avoid repeatedly performing key migrations, but the key migration is
+only recorded if the coordinator is a replica to avoid the cache growing
+too large.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="no-non-serial-key-migration"><a class="anchor" href="#no-non-serial-key-migration"></a>No non-SERIAL key migration</h3>
+<div class="paragraph">
+<p>One wrinkle is that it is not possible to do key migration for
+non-SERIAL Cassandra writes because there is no metadata to check for
+uncommitted operations like there is with Paxos and Accord. Non-SERIAL
+writes include <em>all</em> sources of non-SERIAL writes such as read repair,
+logged batches, and hints. Accord doesn&#8217;t have this issue as any data
+managed by Accord always has metadata available since all operations are
+routed through Accord.</p>
+</div>
+<div class="paragraph">
+<p>Splitting migration to Accord into two phases solves this issue
+because while Accord is unable to safely read non-SERIAL writes it can
+safely apply non-SERIAL writes as recovery of blind write transactions
+is still deterministic in Accord. In the first phase of migration to
+Accord all non-SERIAL writes are executed on Accord and synchronously
+applied at the requested consistency level while a data repair (full or
+incremental) runs and makes it safe for Accord to read non-SERIAL
+writes. Paxos continues to execute all SERIAL writes because Accord is
+unable to execute SERIAL writes since it can&#8217;t read yet.</p>
+</div>
+<div class="paragraph">
+<p>After a data repair completes the second phase of migration to Accord
+begins and all operations are executed on Accord after Paxos key
+migration is run to ensure that the key being read by Accord has no
+unapplied Paxos transactions. After a Paxos repair &#43; data repair
+(full only) the remaining Paxos writes will be visible at <code>ALL</code> and
+Accord can begin executing reads at <code>ONE</code> instead of the requested
+consistency level and performing asynchronous commit and ignore the
+requested commit/write consistency level.</p>
+</div>
+<div class="paragraph">
+<p>A quirk of incremental repair is that it flushes memtables before Paxos
+repair runs and as a result it doesn&#8217;t replicate at <code>ALL</code> the data that
+Paxos repair propagated at <code>QUORUM</code>. Thus a full repair is required for
+the second phase of migration to Accord so that the Paxos data ends up
+repaired at <code>ALL</code>. It&#8217;s possible, but difficult, to make the
+migration three phases and track the Paxos repair independently so that
+you could do Paxos repair and then use IR, but this is not currently
+implemented.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="supported-consistency-levels"><a class="anchor" href="#supported-consistency-levels"></a>Supported consistency levels</h3>
+<div class="paragraph">
+<p>Live migration to/from Accord requires Accord to honor requested
+consistency levels for read and write. Cassandra&#8217;s Accord integration
+only adds support for a subset of consistency levels listed in
+<code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/accord/IAccordService.java#L75">IAccordService</a></code>
+. DC aware consistency levels are not supported along with <code>TWO</code> and
+<code>THREE</code>.</p>
+</div>
+<div class="paragraph">
+<p>Accord will always reject unsupported consistency levels even if it will
+not actually be honoring them during execution to ensure that your
+application remains ready to migrate away from Accord in the future.</p>
+</div>
+<div class="paragraph">
+<p>In the case of <code>ONE</code> as a write/commit consistency level the commit will
+silently be performed at <code>QUORUM</code></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="interoperability-support"><a class="anchor" href="#interoperability-support"></a>Interoperability support</h3>
+<div class="paragraph">
+<p>Interoperability aims to extend Accord to support reading and writing at
+configurable consistency levels as well as to add support for
+synchronous commit. This is facilitated by extension points in Accord
+that allow injecting custom implementations for various protocol steps
+via
+<code><a href="https://github.com/apache/cassandra-accord/blob/134df57677bbd5092994923a4dc2f15cd1d033d1/accord-core/src/main/java/accord/coordinate/CoordinationAdapter.java#L64">CoordinationAdapter</a></code>
+and
+<code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/accord/interop/AccordInteropAdapter.java">AccordInteropAdapter</a></code>.</p>
+</div>
+<div class="paragraph">
+<p><code>AccordInteropAdapter</code> can inject custom versions of the <code>execute</code> and
+<code>persist</code> phases and does conditionally at transaction execution time
+based on the read and write consistency levels provided by <code>TxnRead</code> and
+<code>TxnUpdate</code> . These consistency levels can differ from the ones
+requested by the application because live migration may choose to ignore
+the consistency levels when they aren&#8217;t needed.</p>
+</div>
+<div class="paragraph">
+<p><code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/accord/interop/AccordInteropExecution.java">AccordInteropExecution</a></code>
+allows reading at a requested consistency level. It largely inverts
+control of reading in Accord and uses Cassandra&#8217;s existing Read Executor
+functionality to determine what nodes to contact and what commands to
+send them while providing short read protection and blocking read
+repair. Read executors interface with Accord via the
+<code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/reads/ReadCoordinator.java#L37">ReadCoordinator</a></code>
+interface which can either send a regular read message or go through
+Accord to send an Accord specific read message which causes the read to
+execute at the appropriate command store in the appropriate
+transactional context after all dependencies have been applied.</p>
+</div>
+<div class="paragraph">
+<p><code>ReadCoordinator</code> also intercepts blocking read repair during execution
+of an Accord transaction and executes it through the appropriate command
+store. The only legitimate way for this to occur is after Paxos key
+migration the data is only propagated at <code>QUORUM</code> so it is possible that
+Accord reading at <code>QUORUM</code> will find replicas to read repair. It&#8217;s not
+strictly necessary as we already know the data is propagated at
+<code>QUORUM</code>, but the support is there.</p>
+</div>
+<div class="paragraph">
+<p><code>ReadCoordinator</code> also helps apply read repair mutations via Accord in
+<code>TransactionalMode.MIXED</code> and during migration by applying the read
+repair mutations in Accord&#8217;s execute phase instead of waiting for apply.
+This is safe because read repair only proposes already committed Accord
+writes or already unsafe non-SERIAL writes which aren&#8217;t allowed anyways.</p>
+</div>
+<div class="paragraph">
+<p><code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/accord/interop/AccordInteropPersist.java#L48">AccordInteropPersist</a></code>
+adds support for synchronous commit and commit at a requested
+consistency level. It sends <code>AccordInteropApply</code> which is a synchronous
+apply message that only responds once application is complete.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/consensus/TransactionalMode.java#L34"><code>TransactionalMode</code></a>
+defines the supported modes and
+<code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/consensus/TransactionalMode.java#L140">commitCLForMode</a></code>
+determines the commit consistency level and
+<code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/consensus/TransactionalMode.java#L170">readCLForMode</a></code>
+determines the read consistency level. These two methods take into
+account both the requested consistency level, the table specific
+migration state, the current transactional mode, and the target
+transactional mode in order to decide whether to honor the requested
+consistency level.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="routing-requests-during-migration"><a class="anchor" href="#routing-requests-during-migration"></a>Routing requests during migration</h3>
+<div class="paragraph">
+<p>During migration, requests race with changes to
+<a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/consensus/migration/TableMigrationState.java"><code>TableMigrationState</code></a>
+to execute and may complete or partially complete on the system they
+were originally routed to. This race is resolved by allowing requests to
+return a new retry on different system error response that has to be
+handled by the coordinator. It&#8217;s possible that a request may still
+complete after receiving a retry different system error because the
+target consistency level was still met.</p>
+</div>
+<div class="paragraph">
+<p>Migration is per table and per token range so it&#8217;s possible for part of
+a table to be running on Accord and part of it to be running on Paxos.
+Requests can end up executing partially on Cassandra and partially on
+Accord.</p>
+</div>
+<div class="sect3">
+<h4 id="detecting-misrouted-requests"><a class="anchor" href="#detecting-misrouted-requests"></a>Detecting misrouted requests</h4>
+<div class="paragraph">
+<p>For Paxos this is resolved in the prepare phase where a failure to meet
+the required consistency level at the prepare phase means the operation
+does not run on Paxos. If the prepare phase is being performed to
+recover an existing transaction then it is allowed to proceed because
+recovery will deterministically create the same state every time it runs
+so it&#8217;s safe to repeat even after key or range migration has occurred
+since those would have already recovered the transaction.</p>
+</div>
+<div class="paragraph">
+<p>Accord determines an <code>executeAt</code> timestamp, that is deterministic even
+during transaction recovery, for each transaction that includes an epoch
+that corresponds to the epoch used by <code>TableMigrationState</code> and this is
+used to check all the tables and keys being touched in a transaction.
+<code>TxnQuery</code> then returns a retry on different system error if the any
+part of the transaction is not eligible to run on Accord.</p>
+</div>
+<div class="paragraph">
+<p><code>ColumnFamilyStore</code> checks every <code>Mutation</code> to see if it is marked as
+allowing potential transaction conflicts. Paxos and Accord always mark
+their <code>Mutation`s as allowing potential transaction conflicts because
+they do the work to check for them directly, but non-SERIAL sources of
+`Mutation`s will be subject to that check and a
+`RetryOnDifferentSystemException</code> is thrown if the mutation is detected
+to be misrouted according to the latest cluster metadata available at
+the node attempting to apply that mutation.</p>
+</div>
+<div class="paragraph">
+<p><code>ReadCommand</code> has a similar arrangement where each read command is
+marked with whether it allows potential transaction conflicts and when
+<code>executeLocally</code> is run the check is done against cluster metadata to
+determine whether or not to throw <code>RetryOnDifferentSystemException</code>.
+Accord always allows potential transaction conflicts on its read
+commands, but Paxos does not because Paxos does not need to read data in
+order to recover transactions.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="splitting-write-requests"><a class="anchor" href="#splitting-write-requests"></a>Splitting write requests</h4>
+<div class="paragraph">
+<p>For non-SERIAL writes the <code>Mutation</code> is split into the portion that will
+execute on Accord and the portion that will execute on Cassandra and the
+Accord portion is executed asynchronously while the Cassandra portion is
+executed synchronously. If either attempt fails due to misrouting the
+write is re-split with updated cluster metadata and retried without
+raising an error.</p>
+</div>
+<div class="paragraph">
+<p>Logged batches are currently always written to the system table and then
+split for execution, and if part of the batch fails then batchlog replay
+will replay the entire batch and re-split it in the process. Batchlog
+replay only makes a single attempt to replay before converting the batch
+contents to hints. If part of the batch was routed to Accord then there
+is no node to hint so there is a fake node that a hint is written to and
+when that hint is dispatched it will be split and then executed
+appropriately. Single token batch that span both Accord and non-Accord tables
+are written to the batch log to preserve all or nothing application.
+This incurs an additional performance cost because normally these
+single token batches would not be written to the batch log.</p>
+</div>
+<div class="paragraph">
+<p>Hints can be for multiple tables some of which may be Accord and some
+non-Accord so splitting occurs. It&#8217;s also possible a hint will be for an
+operation that was sent to Accord (not a real node) via the batchlog and
+it&#8217;s possible that splitting discovers the hint now needs to be executed
+without Accord. In that scenario the hint is converted to a hint for
+every replica. This conversion can only occur once so the write
+amplification is bounded.</p>
+</div>
+<div class="paragraph">
+<p>Splitting of mutations is done in
+<code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/consensus/migration/ConsensusMigrationMutationHelper.java#L219">ConsensusMigrationMutationHelper</a></code>
+with the retry loop being implemented at each caller (batch mutation,
+mutation, batch log, hints).</p>
+</div>
+<div class="paragraph">
+<p>Paxos has a retry loop but does not do any splitting because Paxos only
+supports a single key.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="partition-range-reads"><a class="anchor" href="#partition-range-reads"></a>Partition range reads</h4>
+<div class="paragraph">
+<p>Partition range reads are managed by
+<code><a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/reads/range/RangeCommandIterator.java#L75">RangeCommandIterator</a></code>
+which continues to split range reads using the existing algorithm that
+is agnostic as to how the range command will be executed. Each generated
+range read
+<a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/reads/range/RangeCommandIterator.java#L247">is
+then split on the boundaries of which system is responsible for reading
+that range</a> and that is wrapped in a
+<a href="https://github.com/apache/cassandra/blob/122f5300855d56131948575f80ce0594547c9040/src/java/org/apache/cassandra/service/reads/range/RangeCommandIterator.java#L378">retrying
+iterator</a> which repeats the splitting if any part of the range read ends
+up routed to the wrong system.</p>
+</div>
+<div class="paragraph">
+<p>Range reads do not execute any key barriers and when migrating away from
+Accord you will see weaker consistency compared to Paxos because Accord
+does not necessarily honor commit consistency levels and does
+asynchronous commit. As things currently stand it&#8217;s uncertain the key
+barriers would run fast enough to avoid timing out range read requests
+so they are not done.</p>
+</div>
+<div class="paragraph">
+<p>Range reads also consume more memory when executed on Accord when a
+limit is used. A single range read command is split into intersecting
+command store number of range read commands that execute concurrently
+and each one can return up to the limit number of results before they
+are merged at the coordinator and the limit is re-applied. This could be
+improved by applying the limit again before serializing or by executing
+the reads serially at command stores until the limit is met.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="transactional-modes"><a class="anchor" href="#transactional-modes"></a>Transactional modes</h3>
+<div class="paragraph">
+<p>Transactional modes are set per table and define how Accord, Paxos, and
+non-SERIAL operations will execute. The three supported modes are
+<code>FULL</code>, <code>MIXED_READS</code>, and <code>OFF</code>.</p>
+</div>
+<div class="paragraph">
+<p><code>FULL</code> routes all reads and writes through Accord once migration is
+complete and allows Accord to ignore read and write consistency levels.
+This allows Accord to perform asynchronous commit reducing the number of
+WAN roundtrips from 2 to 1.</p>
+</div>
+<div class="paragraph">
+<p><code>MIXED_READS</code> routes all writes through Accord once migration is
+complete, but allows non-SERIAL reads to safely execute outside of
+Accord and still read Accord writes because Accord will honor the
+provided commit consistency level. This means Accord will need to
+perform synchronous commit requiring an 1 extra WAN roundtrips for 2
+total.</p>
+</div>
+<div class="paragraph">
+<p><code>OFF</code> is the default where everything runs either on Paxos if it is
+<code>SERIAL</code> or on the usual eventually consistent paths for everything
+else.</p>
+</div>
+<div class="paragraph">
+<p>Other modes exist for testing purposes and are disabled by default
+unless unlocked via system property.</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+</main>
+    </div>
+</div>
+            <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://bsky.app/profile/cassandra.apache.org" target="_blank"><img src="../../../../assets/img/bluesky.png" alt="bluesky icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+    <script src="../../../../assets/js/site.js"></script>
+    <script async src="../../../../assets/js/vendor/highlight.js"></script>
+    <script src="../../../../assets/js/vendor/lunr.js"></script>
+    <script src="../../../../assets/js/vendor/search.js" id="search-script" data-base-path="../../../.." data-page-path="/Cassandra/7.0/cassandra/architecture/cql-on-accord.html"></script>
+    <script async src="../../../../assets/../search-index.js"></script>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+        </div>
+    </body>
+</html>

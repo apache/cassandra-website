@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Apache Cassandra | Apache Cassandra Documentation</title>
+    <link rel="stylesheet" href="../../assets/css/site.css">
+    <meta name="description" content="2024 Apache Cassandra User Survey Results Analysis">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.subject" content="_">
+    <meta name="dcterms.identifier" content="master">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="icon" href="../../assets/img/favicon.ico" type="image/x-icon">
+<script>
+  const script = document.createElement("script");
+  const domain = window.location.hostname;
+  script.type = "text/javascript";
+  script.src = "../../assets/js/vendor/plausible.js";
+  script.setAttribute("data-domain",domain);
+  script.setAttribute("defer",'true');
+  script.setAttribute("async",'true');
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>
+<script src="../../assets/js/vendor/jquery.js"></script>
+  </head>
+  <body class="single-post">
+      <div class="container mx-auto relative">
+            <meta property="og:type" content="website" />
+	<meta property="og:description" content="" />
+	<meta property="og:url" content="/" />
+	<meta property="og:site_name" content="Apache Cassandra" />
+
+<header id="top-nav">
+    <div class="inner relative">
+        <div class="header-social-icons text-right">
+            <a href="https://bsky.app/profile/cassandra.apache.org" target="_blank" styles="margin-left: 20px;"><img src="../../assets/img/bluesky.png" alt="bluesky icon" width="24"></a>
+            <a href="https://www.linkedin.com/company/apache-cassandra/"  target="_blank" styles="margin-left: 20px;"><img src="../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+            <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank" styles="margin-left: 20px;"><img src="../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+        </div>
+        <div class="cf">
+            <div class="logo left"><a href="/"><img src="../../assets/img/logo-white-r.png" alt="cassandra logo"></a></div>
+            <div class="mobile-nav-icon right">
+                <img class="toggle-icon" src="../../assets/img/hamburger-nav.svg">
+            </div>
+            <ul class="main-nav nav-links right flex flex-vert-center flex-space-between">
+    <li>
+        <a class="nav-link hide-mobile">Get Started</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/cassandra-basics.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-basics.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra Basics
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/quickstart.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-rocket.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Quickstart
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/ecosystem.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-ecosystem.png" alt="cassandra basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Ecosystem
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link" href="/doc/latest/">Documentation</a></li>
+    <li>
+        <a class="nav-link" href="/_/community.html">Community</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/community.html#code-of-conduct">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-welcome.png" alt="welcome icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Welcome
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#discussions">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-discussions.png" alt="discussions icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Discussions
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#project-governance">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-governance.png" alt="Governance icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Governance
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#how-to-contribute">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-contribute.png" alt="Contribute icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Contribute
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/community.html#meet-the-community">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-community.png" alt="Meet the Community icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Meet the Community
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/cassandra-catalyst-program.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-catalyst.png" alt="Catalyst icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Catalyst Program
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro hide-mobile">
+                <a href="/_/events.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-events.png" alt="Events icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Events
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="nav-link hide-mobile">Learn</a>
+        <ul class="sub-menu bg-white">
+            <li class="pa-micro">
+                <a href="/_/Apache-Cassandra-5.0-Moving-Toward-an-AI-Driven-Future.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-basics.png" alt="Basics icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Cassandra 5.0
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/case-studies.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-case-study.png" alt="Case Studies icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Case Studies
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/resources.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-resources.png" alt="Resources icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Resources
+                    </div>
+                </a>
+            </li>
+            <li class="pa-micro">
+                <a href="/_/blog.html">
+                    <div class="sub-nav-icon">
+                        <img src="../../assets/img/sub-menu-blog.png" alt="Blog icon">
+                    </div>
+                    <div class="sub-nav-text teal py-small">
+                        Blog
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a class="nav-link btn btn--filled" href="/_/download.html">Download Now</a></li>
+</ul>
+        </div>
+    </div>
+</header>
+
+        <div class="hero hero--home grad">
+            <div class="eye"></div>
+            <div id="home-content" class="text-center flex flex-center flex-column relative z2 ma-xlarge">
+                <h1>Survey Results Analysis</h1>
+                <h3>October 25, 2024 | The Apache Cassandra Community</h3>
+            </div>
+        </div>
+        <div id="blog-post" class="flex-center py-large arrow">
+            <div class="blog-breadcrumb mb-medium">
+                <div class="inner inner--narrow">
+                    <a href="/_/blog.html">« Back to the Apache Cassandra Blog</a>
+                </div>
+            </div>
+            <div class="post-content">
+                <div class="inner inner--narrow">
+                    <div class="sect1">
+<h2 id="2024-user-survey-results"><a class="anchor" href="#2024-user-survey-results"></a>2024 User Survey Results</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="1-what-use-cases-are-you-using-cassandra-for-today"><a class="anchor" href="#1-what-use-cases-are-you-using-cassandra-for-today"></a>1. What Use Case(s) are you using Cassandra for today?</h3>
+<div class="paragraph">
+<p><em>Total responses: 140</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/000_What_Use_Case(s)_are_you_using.png" alt="What Use Case(s) are you using Cassandra for today?">
+</div>
+</div>
+<div class="ulist">
+<div class="title">Responses that appeared once:</div>
+<ul>
+<li>
+<p>Everything</p>
+</li>
+<li>
+<p>Chat Application</p>
+</li>
+<li>
+<p>Multi-tenant tables for SaaS applicwtion</p>
+</li>
+<li>
+<p>I haven&#8217;t used it before so I&#8217;m learning all about it!</p>
+</li>
+<li>
+<p>Request Management System</p>
+</li>
+<li>
+<p>primary datastore of multiple large online services</p>
+</li>
+<li>
+<p>Internal service discovery application</p>
+</li>
+<li>
+<p>Video games!</p>
+</li>
+<li>
+<p>Maintaining and contributing to the Cassandra project</p>
+</li>
+<li>
+<p>All of the above</p>
+</li>
+<li>
+<p>Generally used for storing application data</p>
+</li>
+<li>
+<p>Financial</p>
+</li>
+<li>
+<p>Online charging</p>
+</li>
+<li>
+<p>Customer 360</p>
+</li>
+<li>
+<p>API Management</p>
+</li>
+<li>
+<p>business intelligence</p>
+</li>
+<li>
+<p>entitlements</p>
+</li>
+<li>
+<p>game stats</p>
+</li>
+<li>
+<p>game saves</p>
+</li>
+<li>
+<p>Web profiles</p>
+</li>
+<li>
+<p>Genomic Data Storage Collection: <a href="https://en.wikipedia.org/wiki/GenBank" class="bare">en.wikipedia.org/wiki/GenBank</a></p>
+</li>
+<li>
+<p>Full text search using Solr on top of Cassandra</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="2-what-use-cases-are-you-planning-to-use-cassandra-for-in-the-future"><a class="anchor" href="#2-what-use-cases-are-you-planning-to-use-cassandra-for-in-the-future"></a>2. What Use Case(s) are you planning to use Cassandra for in the future?</h3>
+<div class="paragraph">
+<p><em>Total responses: 140</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/001_What_Use_Case(s)_are_you_plann.png" alt="What Use Case(s) are you planning to use Cassandra for in the future?">
+</div>
+</div>
+<div class="ulist">
+<div class="title">Responses that appeared once:</div>
+<ul>
+<li>
+<p>Keep adding features</p>
+</li>
+<li>
+<p>Request Management Workflow</p>
+</li>
+<li>
+<p>for all )</p>
+</li>
+<li>
+<p>using cassandra as a general purpose database for further products&#8230;&#8203;</p>
+</li>
+<li>
+<p>well</p>
+</li>
+<li>
+<p>More games!</p>
+</li>
+<li>
+<p>Everything</p>
+</li>
+<li>
+<p>All of the above</p>
+</li>
+<li>
+<p>Not yet</p>
+</li>
+<li>
+<p>More of the same above.</p>
+</li>
+<li>
+<p>Financial data analytics</p>
+</li>
+<li>
+<p>No other cases planned</p>
+</li>
+<li>
+<p>Online charging</p>
+</li>
+<li>
+<p>I&#8217;m not sure yet but I&#8217;m cooking up ideas of what I could use it for in my personal projects or future employers!</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="3-what-was-your-primary-reason-for-choosing-cassandra-over-other-databases"><a class="anchor" href="#3-what-was-your-primary-reason-for-choosing-cassandra-over-other-databases"></a>3. What was your primary reason for choosing Cassandra over other databases?</h3>
+<div class="paragraph">
+<p><em>Total responses: 139</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/002_What_was_your_primary_reason_f.png" alt="What was your primary reason for choosing Cassandra over other databases?">
+</div>
+</div>
+<div class="ulist">
+<div class="title">Responses that appeared once:</div>
+<ul>
+<li>
+<p>Big data management</p>
+</li>
+<li>
+<p>Availability
+*</p>
+</li>
+<li>
+<p>High availability</p>
+</li>
+<li>
+<p>write performance</p>
+</li>
+<li>
+<p>Data structure</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="4-how-would-you-rate-your-overall-experience-with-apache-cassandra-on-a-scale-of-1-10"><a class="anchor" href="#4-how-would-you-rate-your-overall-experience-with-apache-cassandra-on-a-scale-of-1-10"></a>4. How would you rate your overall experience with Apache Cassandra on a scale of 1-10?</h3>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/003_How_would_you_rate_your_overal.png" alt="How would you rate your overall experience with Apache Cassandra on a scale of 1-10?">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="5-have-you-recommended-apache-cassandra-to-others"><a class="anchor" href="#5-have-you-recommended-apache-cassandra-to-others"></a>5. Have you recommended Apache Cassandra to others?</h3>
+<div class="paragraph">
+<p><em>Total responses: 140</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/004_Have_you_recommended_Apache_Ca.png" alt="Have you recommended Apache Cassandra to others?">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="6-how-do-you-run-cassandra-today"><a class="anchor" href="#6-how-do-you-run-cassandra-today"></a>6. How do you run Cassandra today?</h3>
+<div class="paragraph">
+<p><em>Total responses: 138</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/005_How_do_you_run_Cassandra_today.png" alt="How do you run Cassandra today?">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="7-if-self-managed-where-do-you-run-cassandra"><a class="anchor" href="#7-if-self-managed-where-do-you-run-cassandra"></a>7. If self-managed, where do you run Cassandra?</h3>
+<div class="paragraph">
+<p><em>Total responses: 134</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/006_If_self-managed,_where_do_you_.png" alt="If self-managed" width="where do you run Cassandra?">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="8-if-planning-a-change-where-will-you-run-cassandra"><a class="anchor" href="#8-if-planning-a-change-where-will-you-run-cassandra"></a>8. If planning a change, where will you run Cassandra?</h3>
+<div class="paragraph">
+<p><em>Total responses: 105</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/007_If_planning_a_change,_where_wi.png" alt="If planning a change" width="where will you run Cassandra?">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="9-which-version-of-cassandra-are-you-using"><a class="anchor" href="#9-which-version-of-cassandra-are-you-using"></a>9. Which version of Cassandra are you using?</h3>
+<div class="paragraph">
+<p><em>Total responses: 137</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/008_Which_version_of_Cassandra_are.png" alt="Which version of Cassandra are you using?">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="10-what-is-your-approximate-total-data-volume"><a class="anchor" href="#10-what-is-your-approximate-total-data-volume"></a>10. What is your approximate total data volume?</h3>
+<div class="paragraph">
+<p><em>Total responses: 135</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/009_What_is_your_approximate_total.png" alt="What is your approximate total data volume?">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="11-how-large-is-your-c-deployment"><a class="anchor" href="#11-how-large-is-your-c-deployment"></a>11. How large is your C* deployment?</h3>
+<div class="paragraph">
+<p><em>Total responses: 136</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/010_How_large_is_your_C_deploymen.png" alt="How large is your C* deployment?">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="12-what-programming-languages-do-you-use-to-connect-to-cassandra"><a class="anchor" href="#12-what-programming-languages-do-you-use-to-connect-to-cassandra"></a>12. What programming languages do you use to connect to Cassandra?</h3>
+<div class="paragraph">
+<p><em>Total responses: 138</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/011_What_programming_languages_do_.png" alt="What programming languages do you use to connect to Cassandra?">
+</div>
+</div>
+<div class="ulist">
+<div class="title">Responses that appeared once:</div>
+<ul>
+<li>
+<p>Angular 17</p>
+</li>
+<li>
+<p>Kotlin</p>
+</li>
+<li>
+<p>Ruby</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="13-how-does-cassandra-fit-into-your-overall-data-management-strategy"><a class="anchor" href="#13-how-does-cassandra-fit-into-your-overall-data-management-strategy"></a>13. How does Cassandra fit into your overall data management strategy?</h3>
+<div class="paragraph">
+<p><em>Total responses: 135</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/012_How_does_Cassandra_fit_into_yo.png" alt="How does Cassandra fit into your overall data management strategy?">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="14-whats-the-longest-continuous-service-youve-had-on-any-cluster-years-months"><a class="anchor" href="#14-whats-the-longest-continuous-service-youve-had-on-any-cluster-years-months"></a>14. What’s the longest continuous service you’ve had on any cluster? (years-months)</h3>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/longest_uptime_box.png" alt="What’s the longest continuous service you’ve had on any cluster? (years-months)">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="15-what-features-of-apache-cassandra-do-you-use-the-most"><a class="anchor" href="#15-what-features-of-apache-cassandra-do-you-use-the-most"></a>15. What features of Apache Cassandra do you use the most?</h3>
+<div class="paragraph">
+<p><em>Total responses: 134</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/015_What_features_of_Apache_Cassan.png" alt="What features of Apache Cassandra do you use the most?">
+</div>
+</div>
+<div class="ulist">
+<div class="title">Responses that appeared once:</div>
+<ul>
+<li>
+<p>DSE Search</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="16-have-you-integrated-apache-cassandra-with-other-technologies-if-so-which-ones"><a class="anchor" href="#16-have-you-integrated-apache-cassandra-with-other-technologies-if-so-which-ones"></a>16. Have you integrated Apache Cassandra with other technologies? If so, which ones?</h3>
+<div class="paragraph">
+<p><em>Total responses: 112</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/Have_you_integrated_cassandra.jpeg" alt="Have you integrated Apache Cassandra with other technologies? If so" width="which ones?">
+</div>
+</div>
+<div class="ulist">
+<div class="title">Responses that appeared once:</div>
+<ul>
+<li>
+<p>Lucene inddex plugin</p>
+</li>
+<li>
+<p>DSE Search</p>
+</li>
+<li>
+<p>No</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="17-if-self-managed-how-do-you-deploy-and-manage-your-cassandra-clusters"><a class="anchor" href="#17-if-self-managed-how-do-you-deploy-and-manage-your-cassandra-clusters"></a>17. If self-managed, how do you deploy and manage your Cassandra clusters?</h3>
+<div class="paragraph">
+<p><em>Total responses: 132</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/017_If_self-managed,_how_do_you_de.png" alt="If self-managed" width="how do you deploy and manage your Cassandra clusters?">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="18-if-planning-a-change-how-will-you-deploy-and-manage-your-cassandra-clusters"><a class="anchor" href="#18-if-planning-a-change-how-will-you-deploy-and-manage-your-cassandra-clusters"></a>18. If planning a change, how will you deploy and manage your Cassandra clusters?</h3>
+<div class="paragraph">
+<p><em>Total responses: 103</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/018_If_planning_a_change,_how_will.png" alt="If planning a change" width="how will you deploy and manage your Cassandra clusters?">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="19-current-trends-are-you-using-apache-cassandra-for-generative-ai-apps"><a class="anchor" href="#19-current-trends-are-you-using-apache-cassandra-for-generative-ai-apps"></a>19. Current trends: Are you using Apache Cassandra for Generative AI Apps?</h3>
+<div class="paragraph">
+<p><em>Total responses: 130</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/019_Current_trends_Are_you_using_.png" alt="Current trends: Are you using Apache Cassandra for Generative AI Apps?">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="20-current-trends-do-you-currently-have-generative-ai-use-cases-in-your-apps-in-production"><a class="anchor" href="#20-current-trends-do-you-currently-have-generative-ai-use-cases-in-your-apps-in-production"></a>20. Current trends: Do you currently have Generative AI use cases in your apps in production?</h3>
+<div class="paragraph">
+<p><em>Total responses: 130</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/020_Current_trends_Do_you_current.png" alt="Current trends: Do you currently have Generative AI use cases in your apps in production?">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="21-how-likely-are-you-to-continue-using-apache-cassandra-in-the-future"><a class="anchor" href="#21-how-likely-are-you-to-continue-using-apache-cassandra-in-the-future"></a>21. How likely are you to continue using Apache Cassandra in the future?</h3>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/021_How_likely_are_you_to_continue.png" alt="How likely are you to continue using Apache Cassandra in the future?">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="22-if-you-are-considering-no-longer-using-cassandra-in-the-future-what-are-the-reasons"><a class="anchor" href="#22-if-you-are-considering-no-longer-using-cassandra-in-the-future-what-are-the-reasons"></a>22. If you are considering no longer using Cassandra in the future, what are the reasons?</h3>
+<div class="paragraph">
+<p><em>Total responses: 56</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/022_If_you_are_considering_no_long.png" alt="If you are considering no longer using Cassandra in the future" width="what are the reasons?">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="23-if-running-an-older-version-of-cassandra-what-timeframe-do-you-have-for-upgrading-to-the-next-major-version"><a class="anchor" href="#23-if-running-an-older-version-of-cassandra-what-timeframe-do-you-have-for-upgrading-to-the-next-major-version"></a>23. If running an older version of Cassandra, what timeframe do you have for upgrading to the next major version?</h3>
+<div class="paragraph">
+<p><em>Total responses: 120</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/023_If_running_an_older_version_of.png" alt="If running an older version of Cassandra" width="what timeframe do you have for upgrading to the next major version?">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="24-what-percentage-of-your-c-workloads-will-you-be-migrating-to-the-cloud-in-the-next-12-months"><a class="anchor" href="#24-what-percentage-of-your-c-workloads-will-you-be-migrating-to-the-cloud-in-the-next-12-months"></a>24. What percentage of your C* workloads will you be migrating to the cloud in the next 12 months?</h3>
+<div class="paragraph">
+<p><em>Total responses: 119</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/024_What_percentage_of_your_C_wor.png" alt="What percentage of your C* workloads will you be migrating to the cloud in the next 12 months?">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="25-what-proposed-features-are-you-most-interested-in-the-upcoming-versions-details-here"><a class="anchor" href="#25-what-proposed-features-are-you-most-interested-in-the-upcoming-versions-details-here"></a>25. What proposed features are you most interested in the upcoming versions? (Details here)</h3>
+<div class="paragraph">
+<p><em>Total responses: 123</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/025_What_proposed_features_are_you.png" alt="What proposed features are you most interested in the upcoming versions? (Details here)">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="26-which-of-these-most-closely-matches-your-job-description"><a class="anchor" href="#26-which-of-these-most-closely-matches-your-job-description"></a>26. Which of these most closely matches your job description?</h3>
+<div class="paragraph">
+<p><em>Total responses: 136</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/026_Which_of_these_most_closely_ma.png" alt="Which of these most closely matches your job description?">
+</div>
+</div>
+<div class="ulist">
+<div class="title">Responses that appeared once:</div>
+<ul>
+<li>
+<p>data engineer</p>
+</li>
+<li>
+<p>IT Consultant</p>
+</li>
+<li>
+<p>Full stack</p>
+</li>
+<li>
+<p>Executive</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="27-how-long-have-you-been-using-cassandra"><a class="anchor" href="#27-how-long-have-you-been-using-cassandra"></a>27. How long have you been using Cassandra?</h3>
+<div class="paragraph">
+<p><em>Total responses: 136</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/027_How_long_have_you_been_using_C.png" alt="How long have you been using Cassandra?">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="28-have-you-used-cassandras-community-forums-such-as-the-cassandra-mailing-list-or-stack-overflow-if-so-how-was-your-experience"><a class="anchor" href="#28-have-you-used-cassandras-community-forums-such-as-the-cassandra-mailing-list-or-stack-overflow-if-so-how-was-your-experience"></a>28. Have you used Cassandra&#8217;s community forums, such as the Cassandra mailing list or Stack Overflow? If so, how was your experience?</h3>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/028_Have_you_used_Cassandra's_comm.png" alt="Have you used Cassandra&#8217;s community forums" width="such as the Cassandra mailing list or Stack Overflow? If so" height="how was your experience?">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="29-where-do-you-prefer-to-connect-with-others-in-the-cassandra-community"><a class="anchor" href="#29-where-do-you-prefer-to-connect-with-others-in-the-cassandra-community"></a>29. Where do you prefer to connect with others in the Cassandra community?</h3>
+<div class="paragraph">
+<p><em>Total responses: 129</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/029_Where_do_you_prefer_to_connect.png" alt="Where do you prefer to connect with others in the Cassandra community?">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="30-how-easy-or-difficult-was-it-for-you-to-learn-how-to-use-cassandra"><a class="anchor" href="#30-how-easy-or-difficult-was-it-for-you-to-learn-how-to-use-cassandra"></a>30. How easy or difficult was it for you to learn how to use Cassandra?</h3>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/030_How_easy_or_difficult_was_it_f.png" alt="How easy or difficult was it for you to learn how to use Cassandra?">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="31-which-of-the-following-methods-do-you-use-to-keep-up-to-date-on-cassandra"><a class="anchor" href="#31-which-of-the-following-methods-do-you-use-to-keep-up-to-date-on-cassandra"></a>31. Which of the following methods do you use to keep up to date on Cassandra?</h3>
+<div class="paragraph">
+<p><em>Total responses: 131</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/031_Which_of_the_following_methods.png" alt="Which of the following methods do you use to keep up to date on Cassandra?">
+</div>
+</div>
+<div class="ulist">
+<div class="title">Responses that appeared once:</div>
+<ul>
+<li>
+<p>source code</p>
+</li>
+<li>
+<p>GitHub - PRs and after that test features by my self</p>
+</li>
+<li>
+<p>Twitter/LinkedIn</p>
+</li>
+<li>
+<p>PMC / Committer</p>
+</li>
+<li>
+<p>Mailing List</p>
+</li>
+<li>
+<p>mailing list</p>
+</li>
+<li>
+<p>Source code</p>
+</li>
+<li>
+<p>easy-cass-lab</p>
+</li>
+<li>
+<p>Datastax</p>
+</li>
+<li>
+<p>Jira/github</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="32-how-would-you-rate-the-documentation-and-resources-available-for-cassandra"><a class="anchor" href="#32-how-would-you-rate-the-documentation-and-resources-available-for-cassandra"></a>32. How would you rate the documentation and resources available for Cassandra?</h3>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/blog/2024_survey_images/032_How_would_you_rate_the_documen.png" alt="How would you rate the documentation and resources available for Cassandra?">
+</div>
+</div>
+</div>
+</div>
+</div>
+                </div>
+            </div>
+        </div>
+        <footer class="grad grad--two flex-center pb-xlarge">
+    <div class="inner text-center z2 relative">
+        <h2 class="white py-small">Get started with Cassandra, fast.</h2>
+        <a id="footer-cta" href="/_/quickstart.html" class="btn btn--filled ma-medium">Quickstart Guide</a>
+    </div>
+    <div class="inner flex flex-distribute-items mt-xlarge z2 relative">
+        <div class="col-2">
+            <div id="footer-logo" class="logo logo--footer mb-medium"><img src="../../assets/img/logo-white-r.png" alt="Cassandra Logo"></div>
+            <p>Apache Cassandra<img src="../../assets/img/registered.svg" alt="®" style="width:18px;"> powers mission-critical deployments with improved performance and unparalleled levels of scale in the cloud.</p>
+            <div class="footer-social-icons">
+                <a href="https://bsky.app/profile/cassandra.apache.org" target="_blank"><img src="../../assets/img/bluesky.png" alt="bluesky icon" width="24"></a>
+                <a href="https://www.linkedin.com/company/apache-cassandra/" target="_blank"><img src="../../assets/img/LI-In-Bug.png" alt="linked-in icon" width="24"></a>
+                 <a href="https://www.youtube.com/c/PlanetCassandra" target="_blank"><img src="../../assets/img/youtube-icon.png" alt="youtube icon" width="24"></a>
+            </div>
+        </div>
+        <div class="col-2 flex flex-center">
+            <ul class="columns-2">
+                <li class="mb-small"><a href="/">Home</a></li>
+                <li class="mb-small"><a href="/_/cassandra-basics.html">Cassandra Basics</a></li>
+                <li class="mb-small"><a href="/_/quickstart.html">Quickstart</a></li>
+                <li class="mb-small"><a href="/_/ecosystem.html">Ecosystem</a></li>
+                <li class="mb-small"><a href="/doc/latest/">Documentation</a></li>
+                <li class="mb-small"><a href="/_/community.html">Community</a></li>
+                <li class="mb-small"><a href="/_/case-studies.html">Case Studies</a></li>
+                <li class="mb-small"><a href="/_/resources.html">Resources</a></li>
+                <li class="mb-small"><a href="/_/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="lower-footer bg-white pa-medium">
+    <div class="flex flex-row flex-vert-center">
+        <div class="pr-medium"><img src="../../assets/img//feather-small.png" alt="ASF" width="20"></div>
+        <div class="pr-medium"><a href="http://www.apache.org/" target="_blank">Foundation</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/events/current-event.html" target="_blank">Events</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/licenses/" target="_blank">License</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/thanks" target="_blank">Thanks</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/security" target="_blank">Security</a></div>
+        <div class="pr-medium"><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank">Privacy</a></div>
+        <div class="pr-medium"><a href="https://www.apache.org/foundation/sponsorship" target="_blank">Sponsorship</a></div>
+    </div>
+    <p class="my-medium">© 2009-<script>document.write(new Date().getFullYear())</script> <a href="https://apache.org" target="_blank">The Apache Software Foundation</a> under the terms of the Apache License 2.0.  Apache, the Apache feather logo, Apache Cassandra, Cassandra, and the Cassandra logo, are either registered trademarks or trademarks of The Apache Software Foundation.</p>
+</div>
+<div id="fade" class="hidden"></div>
+<div id="modal" class="hidden">
+  <div id="close-modal" class="cursor-pointer"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+  <div id="mod-content" class="vid-mod-content resp-container"></div>
+</div>
+<script>
+jQuery(function(){
+    var windowW = $(window).width();
+    $(document)
+    .on('click','.mobile-nav-icon',function(){
+        $('.main-nav').fadeIn();
+    })
+    .on('click','.main-nav',function(){
+        if(windowW <= 1000){
+            $(this).fadeOut();
+        }
+    })
+    .on('click','#version-toggle',function(){
+      $(this).toggleClass('active');
+      $(this).next().fadeToggle();
+    })
+    .on('click','#mobile-docs-nav-burger', function(){
+      $(this).toggleClass('active');
+      $('.docs-nav').toggleClass('active');
+    });
+    var url = window.location.pathname;
+    var isQuickstart = url.includes('quickstart.html');
+    if(isQuickstart){
+      var footerCTA = document.getElementById('footer-cta');
+      footerCTA.innerHTML = 'Get latest updates';
+      footerCTA.setAttribute('href', '/_/blog.html');
+    }
+});
+</script>
+      </div>
+  </body>
+<script>
+jQuery(function(){
+    
+});
+</script>
+</html>
